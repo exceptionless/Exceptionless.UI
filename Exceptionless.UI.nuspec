@@ -13,6 +13,6 @@
     <releaseNotes>http://exceptionless.com/category/versions/</releaseNotes>
   </metadata>
   <files>
-    <file src="dist\**\*.*" target="" />
+    <file src="src\dist\**\*.*" target="" />
   </files>
 </package>
