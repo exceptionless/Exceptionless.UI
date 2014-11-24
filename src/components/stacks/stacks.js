@@ -3,10 +3,11 @@
 
   angular.module('exceptionless.stacks', [
     'checklist-model',
-    'exceptionless.refresh',
+    'exceptionless.filter',
     'exceptionless.link',
     'exceptionless.notification',
     'exceptionless.pagination',
+    'exceptionless.refresh',
     'exceptionless.summary',
     'exceptionless.timeago',
 

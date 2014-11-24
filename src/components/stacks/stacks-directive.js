@@ -8,10 +8,10 @@
         restrict: 'E',
         replace: true,
         scope: {
-          settings: "="
+          settings: '='
         },
         templateUrl: 'components/stacks/stacks-directive.tpl.html',
-        controller: ['$window', '$state', '$stateParams', 'linkService', 'notificationService', 'paginationService', 'stacksActionsService', function ($window, $state, $stateParams, linkService, notificationService, paginationService, stacksActionsService) {
+        controller: ['$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', 'stacksActionsService', function ($window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
           var vm = this;
 
           function get(options) {
@@ -81,7 +81,7 @@
           vm.previousPage = previousPage;
           vm.save = save;
           vm.selectedIds = [];
-          vm.showType = !$stateParams.type;
+          vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
           vm.updateSelection = updateSelection;
 
           get();

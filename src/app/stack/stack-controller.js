@@ -296,6 +296,9 @@
         get: function (options) {
           return eventService.getByStackId(stackId, options);
         },
+        summary: {
+          showType: false
+        },
         options: {
           limit: 10,
           mode: 'summary'

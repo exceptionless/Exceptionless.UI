@@ -8,10 +8,10 @@
         restrict: 'E',
         replace: true,
         scope: {
-          settings: "="
+          settings: '='
         },
         templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'notificationService', 'paginationService', function ($window, $state, $stateParams, eventsActionsService, linkService, notificationService, paginationService) {
+        controller: ['$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($window, $state, $stateParams, eventsActionsService, linkService, filterService, notificationService, paginationService) {
           var vm = this;
 
           function get(options) {
@@ -80,7 +80,7 @@
           vm.previousPage = previousPage;
           vm.save = save;
           vm.selectedIds = [];
-          vm.showType = !$stateParams.type;
+          vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
           vm.updateSelection = updateSelection;
 
           get();
