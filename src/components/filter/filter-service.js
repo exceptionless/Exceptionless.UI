@@ -16,7 +16,9 @@
         var filters = [];
         // TODO: This needs to be fixed in the stack repository.
         //filters.push('fixed:'.concat(_includeFixed === true));
-        filters.push('hidden:'.concat(_includeHidden === true));
+        if (!_includeHidden) {
+          filters.push('hidden:false');
+        }
 
         if (_organizationId) {
           filters.push('organization:' + _organizationId);
