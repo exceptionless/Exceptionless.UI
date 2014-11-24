@@ -112,7 +112,7 @@
           </tr>
           <tr ng-if="vm.hasTags()">
             <th>Tags</th>
-            <td><span class="label label-success" ng-repeat="tag in vm.stack.tags track by tag">{{tag}}</span></td>
+            <td><span class="label label-info" ng-repeat="tag in vm.stack.tags track by tag">{{tag}}</span></td>
           </tr>
           <tr ng-if="vm.hasReference()">
             <th>{{vm.hasReferences() ? 'Reference Links' : 'Reference Link'}}</th>
