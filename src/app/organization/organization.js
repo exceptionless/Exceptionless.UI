@@ -4,6 +4,7 @@
   angular.module('app.organization', [
     'exceptionless.dialog',
     'exceptionless.organization',
+    'exceptionless.pagination',
     'exceptionless.project',
     'exceptionless.projects',
     'exceptionless.refresh',

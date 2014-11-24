@@ -11,7 +11,7 @@
           settings: "="
         },
         templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$window', '$state', '$stateParams', 'linkService', 'notificationService', 'eventsActionsService', function ($window, $state, $stateParams, linkService, notificationService, eventsActionsService) {
+        controller: ['$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'notificationService', 'paginationService', function ($window, $state, $stateParams, eventsActionsService, linkService, notificationService, paginationService) {
           var vm = this;
 
           function get(options) {
@@ -21,6 +21,9 @@
               var links = linkService.getLinksQueryParameters(response.headers('link'));
               vm.previous = links['previous'];
               vm.next = links['next'];
+
+              var current = paginationService.getCurrentOptions(options || vm.settings.options, vm.previous, vm.next);
+              vm.pageSummary = paginationService.getCurrentPageSummary(response.data, current.page, current.limit);
             });
           }
 

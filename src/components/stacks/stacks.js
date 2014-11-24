@@ -6,6 +6,7 @@
     'exceptionless.refresh',
     'exceptionless.link',
     'exceptionless.notification',
+    'exceptionless.pagination',
     'exceptionless.summary',
     'exceptionless.timeago',
 
