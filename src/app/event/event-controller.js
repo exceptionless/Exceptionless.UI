@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$state', '$stateParams', 'errorService', 'eventService', 'notificationService', 'projectService', 'urlService', 'userAgentService', function ($state, $stateParams, errorService, eventService, notificationService, projectService, urlService, userAgentService) {
+    .controller('Event', ['$state', '$stateParams', 'errorService', 'eventService', 'linkService', 'notificationService', 'projectService', 'urlService', 'userAgentService', function ($state, $stateParams, errorService, eventService, linkService, notificationService, projectService, urlService, userAgentService) {
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'trace', 'environment', 'user', 'user_description', 'version'];
       var vm = this;
@@ -99,6 +99,11 @@
       function getEvent() {
         function onSuccess(response) {
           vm.event = response.data.plain();
+
+          var links = linkService.getLinks(response.headers('link'));
+          vm.previous = links['previous'] ? links['previous'].split('/').pop() : null;
+          vm.next = links['next'] ? links['next'].split('/').pop() : null;
+
           return vm.event;
         }
 

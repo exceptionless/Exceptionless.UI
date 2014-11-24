@@ -11,7 +11,7 @@
       }
 
       function getById(id) {
-        return Restangular.one('events', id).get();
+        return Restangular.one('events', id).get({ time: filterService.getTime() });
       }
 
       function getByStackId(id, options) {

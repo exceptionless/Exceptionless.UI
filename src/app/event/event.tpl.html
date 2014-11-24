@@ -1,13 +1,28 @@
 <div class="hbox hbox-auto-xs hbox-auto-sm">
   <div class="wrapper-md">
     <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-calendar"></i> Event Occurrence</div>
+      <div class="panel-heading">
+        <i class="fa fa-calendar"></i> Event Occurrence
+
+        <div class="pull-right hidden-print">
+          <a ui-sref="app.stack({ id: vm.event.stack_id })" type="button" class="btn btn-dark btn-xs" role="button" title="Go To Stack"><i class="fa fa-fw fa-caret-up"></i></a>
+          <a ui-sref="app.event({ id: vm.previous })" ng-class="{'disabled': !vm.previous}" type="button" class="btn btn-dark btn-xs" role="button" title="Previous Occurrence"><i class="fa fa-fw fa-caret-left"></i></a>
+          <a ui-sref="app.event({ id: vm.next })" ng-class="{'disabled': !vm.next}" type="button" class="btn btn-dark btn-xs" role="button" title="Next Occurrence"><i class="fa fa-fw fa fa-caret-right"></i></a>
+        </div>
+      </div>
       <div class="panel-body">
         <tabset class="tab-container">
           <tab ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" active="tab.active">
             <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
           </tab>
         </tabset>
+      </div>
+      <div class="panel-footer hidden-xs">
+        <a ui-sref="app.stack({ id: vm.event.stack_id })" type="button" class="btn btn-default" role="button">Go To Stack</a>
+        <div class="pull-right">
+          <a ui-sref="app.event({ id: vm.previous })" ng-class="{'disabled': !vm.previous}" type="button" class="btn btn-primary" role="button">Previous Occurrence</a>
+          <a ui-sref="app.event({ id: vm.next })" ng-class="{'disabled': !vm.next}" type="button" class="btn btn-primary" role="button">Next Occurrence</a>
+        </div>
       </div>
     </div>
   </div>

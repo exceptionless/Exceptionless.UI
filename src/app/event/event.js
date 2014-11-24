@@ -6,6 +6,7 @@
     'angular-filters',
     'exceptionless.error',
     'exceptionless.event',
+    'exceptionless.link',
     'exceptionless.notification',
     'exceptionless.object-dump',
     'exceptionless.simple-error',
