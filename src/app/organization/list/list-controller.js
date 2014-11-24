@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.List', ['$rootScope', '$scope', '$window', '$state', 'dialogs', 'dialogService', 'linkService', 'notificationService', 'organizationService', function ($rootScope, $scope, $window, $state, dialogs, dialogService, linkService, notificationService, organizationService) {
+    .controller('organization.List', ['$rootScope', '$scope', '$window', '$state', 'dialogs', 'dialogService', 'linkService', 'notificationService', 'organizationService', 'paginationService', function ($rootScope, $scope, $window, $state, dialogs, dialogService, linkService, notificationService, organizationService, paginationService) {
       var settings = {limit: 10, mode: 'summary'};
       var vm = this;
 
@@ -27,6 +27,9 @@
           var links = linkService.getLinksQueryParameters(response.headers('link'));
           vm.previous = links['previous'];
           vm.next = links['next'];
+
+          var current = paginationService.getCurrentOptions(options || settings, vm.previous, vm.next);
+          vm.pageSummary = paginationService.getCurrentPageSummary(response.data, current.page, current.limit);
         });
       }
 

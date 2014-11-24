@@ -3,10 +3,11 @@
 
   angular.module('exceptionless.projects', [
     'exceptionless.dialog',
-    'exceptionless.refresh',
     'exceptionless.link',
     'exceptionless.notification',
-    'exceptionless.project'
+    'exceptionless.pagination',
+    'exceptionless.project',
+    'exceptionless.refresh'
   ])
     .directive('projects', function () {
       return {
@@ -17,7 +18,7 @@
           settings: "="
         },
         templateUrl: 'components/projects/projects-directive.tpl.html',
-        controller: ['$window', '$state', 'dialogService', 'linkService', 'notificationService', 'projectService', function ($window, $state, dialogService, linkService, notificationService, projectService) {
+        controller: ['$window', '$state', 'dialogService', 'linkService', 'notificationService', 'paginationService', 'projectService', function ($window, $state, dialogService, linkService, notificationService, paginationService, projectService) {
           var vm = this;
 
           function get(options) {
@@ -27,6 +28,10 @@
               var links = linkService.getLinksQueryParameters(response.headers('link'));
               vm.previous = links['previous'];
               vm.next = links['next'];
+
+              var current = paginationService.getCurrentOptions(options || vm.settings.options, vm.previous, vm.next);
+              vm.pageSummary = paginationService.getCurrentPageSummary(response.data, current.page, current.limit);
+
             });
           }
 

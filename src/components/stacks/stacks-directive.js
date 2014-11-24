@@ -11,7 +11,7 @@
           settings: "="
         },
         templateUrl: 'components/stacks/stacks-directive.tpl.html',
-        controller: ['$window', '$state', '$stateParams', 'linkService', 'notificationService', 'stacksActionsService', function ($window, $state, $stateParams, linkService, notificationService, stacksActionsService) {
+        controller: ['$window', '$state', '$stateParams', 'linkService', 'notificationService', 'paginationService', 'stacksActionsService', function ($window, $state, $stateParams, linkService, notificationService, paginationService, stacksActionsService) {
           var vm = this;
 
           function get(options) {
@@ -22,6 +22,9 @@
               var links = linkService.getLinksQueryParameters(response.headers('link'));
               vm.previous = links['previous'];
               vm.next = links['next'];
+
+              var current = paginationService.getCurrentOptions(options || vm.settings.options, vm.previous, vm.next);
+              vm.pageSummary = paginationService.getCurrentPageSummary(response.data, current.page, current.limit);
             });
           }
 

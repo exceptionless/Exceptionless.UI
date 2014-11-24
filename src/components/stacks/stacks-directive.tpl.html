@@ -39,7 +39,7 @@
 
   <div class="table-footer">
     <div class=" row">
-      <div class="col-sm-8 hidden-xs">
+      <div class="col-sm-4 hidden-xs">
         <div class="dropdown">
           <button id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
             Bulk Action
@@ -49,6 +49,9 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name}}</a></li>
           </ul>
         </div>
+      </div>
+      <div class="col-sm-4 text-right" ng-if="vm.pageSummary">
+        <small class="text-muted inline m-t-sm m-b-sm">{{vm.pageSummary}}</small>
       </div>
       <div class="col-sm-4 col-xs-12 text-right" ng-if="vm.previous || vm.next">
         <ul class="pagination pagination-sm m-t-none m-b-none">
