@@ -2,10 +2,42 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$state', '$stateParams', 'errorService', 'eventService', 'linkService', 'notificationService', 'projectService', 'urlService', 'userAgentService', function ($state, $stateParams, errorService, eventService, linkService, notificationService, projectService, urlService, userAgentService) {
+    .controller('Event', ['$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', 'userAgentService', function ($scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService, userAgentService) {
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'trace', 'environment', 'user', 'user_description', 'version'];
       var vm = this;
+
+      function addHotKeys() {
+        console.log('add hot keys');
+        hotkeys.add({
+          combo: 'ctrl+up',
+          description: 'Go To Stack',
+          callback: function () {
+            $state.go('app.stack', { id: vm.event.stack_id });
+          }
+        });
+
+        if (vm.previous) {
+          hotkeys.add({
+            combo: 'ctrl+left',
+            description: 'Previous Occurrence',
+            callback: function () {
+              $state.go('app.event', { id: vm.previous });
+            }
+          });
+        }
+
+        if (vm.next) {
+          hotkeys.add({
+            combo: 'ctrl+right',
+            description: 'Next Occurrence',
+            callback: function () {
+              $state.go('app.event', { id: vm.next });
+            }
+          });
+        }
+
+      }
 
       function buildTabs(tabNameToActivate) {
         var tabs = [{title: 'Overview', template_key: 'overview'}];
@@ -97,12 +129,16 @@
       }
 
       function getEvent() {
+        removeHotKeys();
+
         function onSuccess(response) {
           vm.event = response.data.plain();
 
           var links = linkService.getLinks(response.headers('link'));
           vm.previous = links['previous'] ? links['previous'].split('/').pop() : null;
           vm.next = links['next'] ? links['next'].split('/').pop() : null;
+
+          addHotKeys();
 
           return vm.event;
         }
@@ -228,6 +264,14 @@
 
         return projectService.promoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
+
+      function removeHotKeys() {
+        hotkeys.del('ctrl+up');
+        hotkeys.del('ctrl+left');
+        hotkeys.del('ctrl+right');
+      }
+
+      $scope.$on('$destroy', removeHotKeys);
 
       vm.demoteTab = demoteTab;
       vm.event = {};

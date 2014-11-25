@@ -4,6 +4,7 @@
   angular.module('app.event', [
     'ui.router',
     'angular-filters',
+    'cfp.hotkeys',
     'exceptionless.error',
     'exceptionless.event',
     'exceptionless.link',

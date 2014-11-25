@@ -2,15 +2,16 @@
   'use strict';
 
   angular.module('app', [
+    'angular-filters',
+    'angular-rickshaw',
+    'cfp.hotkeys',
+    'checklist-model',
+    'debounce',
     'ngAnimate',
+    'restangular',
     'ui.bootstrap',
     'ui.utils',
     'ui.router',
-    'restangular',
-    'angular-filters',
-    'angular-rickshaw',
-    'checklist-model',
-    'debounce',
 
     'exceptionless.auto-active',
     'exceptionless.date-filter',
