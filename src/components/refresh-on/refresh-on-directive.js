@@ -2,10 +2,9 @@
   'use strict';
 
   angular.module('exceptionless.refresh', [
-    'debounce',
-    'exceptionless.throttle'
+    'debounce'
   ])
-  .directive('refreshOn', ['$parse', '$rootScope', 'debounce', 'throttle', function ($parse, $rootScope, debounce, throttle) {
+  .directive('refreshOn', ['$parse', '$rootScope', 'debounce', function ($parse, $rootScope, debounce) {
     return {
       restrict: 'AE',
       link: function (scope, element, attrs) {
