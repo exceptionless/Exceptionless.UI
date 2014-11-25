@@ -31,7 +31,7 @@
 
               vm.pageSummary = paginationService.getCurrentPageSummary(response.data, vm.currentOptions.page, vm.currentOptions.limit);
 
-              if (vm.projects.length == 0 && vm.currentOptions.page && vm.currentOptions.page > 1) {
+              if (vm.projects.length === 0 && vm.currentOptions.page && vm.currentOptions.page > 1) {
                 return get();
               }
 
