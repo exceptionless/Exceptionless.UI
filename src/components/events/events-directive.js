@@ -15,16 +15,24 @@
           var vm = this;
 
           function get(options) {
-            vm.settings.get(options || vm.settings.options).then(function (response) {
+            function onSuccess(response) {
               vm.events = response.data.plain();
 
               var links = linkService.getLinksQueryParameters(response.headers('link'));
               vm.previous = links['previous'];
               vm.next = links['next'];
 
-              var current = paginationService.getCurrentOptions(options || vm.settings.options, vm.previous, vm.next);
-              vm.pageSummary = paginationService.getCurrentPageSummary(response.data, current.page, current.limit);
-            });
+              vm.pageSummary = paginationService.getCurrentPageSummary(response.data, vm.currentOptions.page, vm.currentOptions.limit);
+
+              if (vm.events.length == 0 && vm.currentOptions.page && vm.currentOptions.page > 1) {
+                return get();
+              }
+
+              return vm.events;
+            }
+
+            vm.currentOptions = options || vm.settings.options;
+            return vm.settings.get(vm.currentOptions).then(onSuccess);
           }
 
           function hasEvents() {
@@ -44,11 +52,11 @@
           }
 
           function nextPage() {
-            get(vm.next);
+            return get(vm.next);
           }
 
           function previousPage() {
-            get(vm.previous);
+            return get(vm.previous);
           }
 
           function save(action) {

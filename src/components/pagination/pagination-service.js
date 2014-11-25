@@ -3,23 +3,8 @@
 
   angular.module('exceptionless.pagination', [])
     .factory('paginationService', [function () {
-      function getCurrentOptions(options, previous, next) {
-        if (previous && previous.page) {
-          return angular.extend({}, previous, { page: parseInt(previous.page) + 1 });
-        }
-
-        if (next && next.page) {
-          return angular.extend({}, next, { page: parseInt(next.page) - 1 });
-        }
-
-        return angular.extend({}, options, { page: 1 });
-      }
-
       function getCurrentPageSummary(data, page, limit) {
-        if (!page) {
-          return null;
-        }
-
+        page = page ? parseInt(page) : 1;
         limit = limit ? parseInt(limit) : 100;
 
         var from = ((page - 1) * limit) + 1;
@@ -29,7 +14,6 @@
       }
 
       var service = {
-        getCurrentOptions: getCurrentOptions,
         getCurrentPageSummary: getCurrentPageSummary
       };
 

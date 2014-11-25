@@ -16,21 +16,29 @@
             notificationService.error('An error occurred while creating the organization.');
           }
 
-          organizationService.create(name).then(onSuccess, onFailure);
+          return organizationService.create(name).then(onSuccess, onFailure);
         });
       }
 
       function get(options) {
-        organizationService.getAll(options || settings).then(function (response) {
+        function onSuccess(response) {
           vm.organizations = response.data.plain();
 
           var links = linkService.getLinksQueryParameters(response.headers('link'));
           vm.previous = links['previous'];
           vm.next = links['next'];
 
-          var current = paginationService.getCurrentOptions(options || settings, vm.previous, vm.next);
-          vm.pageSummary = paginationService.getCurrentPageSummary(response.data, current.page, current.limit);
-        });
+          vm.pageSummary = paginationService.getCurrentPageSummary(response.data, vm.currentOptions.page, vm.currentOptions.limit);
+
+          if (vm.organizations.length == 0 && vm.currentOptions.page && vm.currentOptions.page > 1) {
+            return get();
+          }
+
+          return vm.organizations;
+        }
+
+        vm.currentOptions = options || settings;
+        return organizationService.getAll(vm.currentOptions).then(onSuccess);
       }
 
       function leave(organization) {
@@ -63,11 +71,11 @@
       }
 
       function nextPage() {
-        get(vm.next);
+        return get(vm.next);
       }
 
       function previousPage() {
-        get(vm.previous);
+        return get(vm.previous);
       }
 
       function remove(organization) {
