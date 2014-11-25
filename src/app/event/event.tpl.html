@@ -11,11 +11,17 @@
         </div>
       </div>
       <div class="panel-body">
-        <tabset class="tab-container">
+        <tabset class="tab-container hidden-xs">
           <tab ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" active="tab.active">
             <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
           </tab>
         </tabset>
+
+        <accordion class="visible-xs">
+          <accordion-group ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" is-open="tab.active">
+            <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
+          </accordion-group>
+        </accordion>
       </div>
       <div class="panel-footer hidden-xs">
         <a ui-sref="app.stack({ id: vm.event.stack_id })" type="button" class="btn btn-default" role="button">Go To Stack</a>
