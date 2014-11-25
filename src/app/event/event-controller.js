@@ -8,7 +8,6 @@
       var vm = this;
 
       function addHotKeys() {
-        console.log('add hot keys');
         hotkeys.add({
           combo: 'ctrl+up',
           description: 'Go To Stack',

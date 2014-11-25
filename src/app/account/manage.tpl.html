@@ -81,8 +81,7 @@
 
                   <div class="checkbox">
                     <label class="i-checks">
-                      <input type="checkbox" ng-model="vm.currentProject.report_critical_events"
-                             ng-disabled="!vm.hasPremiumFeatures()">
+                      <input type="checkbox" ng-model="vm.currentProject.report_critical_events" ng-disabled="!vm.hasPremiumFeatures()">
                       <i></i>
                       Notify me on critical events
                     </label>
@@ -90,8 +89,7 @@
 
                   <div class="checkbox">
                     <label class="i-checks">
-                      <input type="checkbox" ng-model="vm.currentProject.report_regressions"
-                             ng-disabled="!vm.hasPremiumFeatures()">
+                      <input type="checkbox" ng-model="vm.currentProject.report_regressions" ng-disabled="!vm.hasPremiumFeatures()">
                       <i></i>
                       Notify me on event regressions
                     </label>
@@ -103,20 +101,16 @@
 
                   <div class="form-group">
                     <div class="btn-group">
-                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'0'"
-                             ng-disabled="!vm.hasPremiumFeatures()" uncheckable>Never</label>
-                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'1'"
-                             ng-disabled="!vm.hasPremiumFeatures()" uncheckable>New Only</label>
-                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'2'"
-                             ng-disabled="!vm.hasPremiumFeatures()" uncheckable>All Occurrences</label>
+                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'0'" ng-disabled="!vm.hasPremiumFeatures()" uncheckable>Never</label>
+                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'1'" ng-disabled="!vm.hasPremiumFeatures()" uncheckable>New Only</label>
+                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'2'" ng-disabled="!vm.hasPremiumFeatures()" uncheckable>All Occurrences</label>
                     </div>
                   </div>
 
                   <div ng-if="vm.currentProject.mode > 0">
                     <div class="checkbox">
                       <label class="i-checks">
-                        <input type="checkbox" ng-model="vm.currentProject.report_known_bot_events"
-                               ng-disabled="!vm.hasPremiumFeatures()">
+                        <input type="checkbox" ng-model="vm.currentProject.report_known_bot_events" ng-disabled="!vm.hasPremiumFeatures()">
                         <i></i>
                         Notify me on events from known bots
                       </label>
@@ -124,8 +118,7 @@
 
                     <div class="checkbox">
                       <label class="i-checks">
-                        <input type="checkbox" ng-model="vm.currentProject.report_404_events"
-                               ng-disabled="!vm.hasPremiumFeatures()">
+                        <input type="checkbox" ng-model="vm.currentProject.report_404_events" ng-disabled="!vm.hasPremiumFeatures()">
                         <i></i>
                         Notify me on 404 events
                       </label>
