@@ -3,6 +3,7 @@
 
   angular.module('app', [
     'angular-filters',
+    'angular-loading-bar',
     'angular-rickshaw',
     'cfp.hotkeys',
     'checklist-model',
