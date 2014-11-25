@@ -29,7 +29,7 @@
         if (attrs.refreshDebounce) {
           action = debounce(action, attrs.refreshDebounce, true);
         } else if (attrs.refreshThrottle) {
-          action = throttle(action, attrs.refreshThrottle);
+          action = throttle(action, attrs.refreshThrottle, false);
         }
 
         if (attrs.refreshOn) {
