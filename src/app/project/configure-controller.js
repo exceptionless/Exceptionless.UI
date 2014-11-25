@@ -5,6 +5,10 @@
     .controller('project.Configure', ['$state', '$stateParams', 'notificationService', 'tokenService', function ($state, $stateParams, notificationService, tokenService) {
       var projectId = $stateParams.id;
 
+      function copied() {
+        notificationService.success('Copied!');
+      }
+
       function getDefaultApiKey() {
         function onSuccess(response) {
           vm.apiKey = response.data.id;
@@ -39,6 +43,7 @@
       }
 
       var vm = this;
+      vm.copied = copied;
       vm.apiKey = null;
       vm.currentProjectType = null;
       vm.hasProjectData = hasProjectData;

@@ -5,6 +5,8 @@
     'ui.router',
     'angular-filters',
     'cfp.hotkeys',
+    'ngClipboard',
+
     'exceptionless.error',
     'exceptionless.event',
     'exceptionless.link',

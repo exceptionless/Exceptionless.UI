@@ -15,8 +15,12 @@
         title: '='
       },
       templateUrl: 'app/event/extended-data-item-directive.tpl.html',
-      controller: ['$scope', function ($scope) {
+      controller: ['$scope', 'notificationService', function ($scope, notificationService) {
         var vm = this;
+
+        function copied() {
+          notificationService.success('Copied!');
+        }
 
         function demoteTab() {
           return $scope.demoteTab({ tabName: vm.title });
@@ -37,6 +41,10 @@
           return result;
         }
 
+        function getDataAsJson() {
+          return angular.toJson(vm.data);
+        }
+
         function hasData() {
           return vm.data && !angular.equals({}, vm.data);
         }
@@ -45,9 +53,11 @@
           return $scope.promoteTab({ tabName: vm.title });
         }
 
+        vm.copied = copied;
         vm.canPromote = $scope.canPromote !== false;
         vm.data = getData($scope.data, $scope.excludedKeys);
         vm.demoteTab =  demoteTab;
+        vm.getDataAsJson = getDataAsJson;
         vm.hasData = hasData;
         vm.isPromoted =  $scope.isPromoted === true;
         vm.promoteTab = promoteTab;

@@ -8,17 +8,12 @@
           <ol>
             <li style="margin-bottom: 30px;">
               <p>Select your project type:</p>
-              <select class="form-control" ng-init="vm.currentProjectType = vm.projectTypes[0]"
-                      ng-model="vm.currentProjectType"
-                      ng-options="projectType.name for projectType in vm.projectTypes"></select>
+              <select class="form-control" ng-init="vm.currentProjectType = vm.projectTypes[0]" ng-model="vm.currentProjectType" ng-options="projectType.name for projectType in vm.projectTypes"></select>
             </li>
             <li style="margin-bottom: 30px;">
               <p>Add the Exceptionless <a href="http://nuget.org" target="_blank">NuGet</a> package to your Visual
-                Studio project by running this command in the <a
-                  href="http://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager
-                  Console</a>:</p>
-              <pre><a ng-href="http://nuget.org/packages/{{vm.currentProjectType.key}}" target="_blank">Install-Package
-                {{vm.currentProjectType.key}}</a></pre>
+                Studio project by running this command in the <a href="http://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
+              <pre><a ng-href="http://nuget.org/packages/{{vm.currentProjectType.key}}" target="_blank">Install-Package {{vm.currentProjectType.key}}</a></pre>
             </li>
             <li>
               <p>Update the <code>&lt;exceptionless apiKey="API_KEY_HERE" /&gt;</code> section located in the project's
@@ -26,7 +21,7 @@
 
               <div class="input-group">
                 <input class="form-control" type="text" ng-model="vm.apiKey"/>
-                <a class="input-group-addon " title="Copy to Clipboard"><i class="fa fa-copy"></i></a>
+                <a class="input-group-addon " title="Copy to Clipboard"><i class="fa fa-copy" clip-copy="vm.apiKey" clip-click="vm.copied()" clip-hide-on-no-flash></i></a>
               </div>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless'">

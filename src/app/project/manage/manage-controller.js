@@ -60,6 +60,10 @@
         });
       }
 
+      function copied() {
+        notificationService.success('Copied!');
+      }
+
       function get() {
         function onSuccess(response) {
           vm.project = response.plain();
@@ -214,6 +218,7 @@
       vm.addConfiguration = addConfiguration;
       vm.addWebHook = addWebHook;
       vm.config = [];
+      vm.copied = copied;
       vm.data_exclusions = null;
       vm.hasConfiguration = hasConfiguration;
       vm.hasPremiumFeatures = hasPremiumFeatures;

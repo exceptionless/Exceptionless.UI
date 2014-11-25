@@ -54,9 +54,8 @@
                 <tr ng-repeat="token in vm.tokens track by token.id">
                   <td>{{::token.id}}</td>
                   <td>
-                    <button class="btn btn-sm clipboard" title="Copy to Clipboard"><i class="fa fa-copy"></i></button>
-                    <button ng-click="vm.removeToken(token)" class="btn btn-sm" title="Delete"><i
-                      class="fa fa-times"></i></button>
+                    <button class="btn btn-sm" title="Copy to Clipboard" clip-copy="token.id" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></button>
+                    <button ng-click="vm.removeToken(token)" class="btn btn-sm" title="Delete"><i class="fa fa-times"></i></button>
                   </td>
                 </tr>
                 <tr ng-if="!vm.hasTokens()">
