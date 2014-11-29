@@ -23,6 +23,10 @@
         return Restangular.one('organizations', id).all('invoices').getList(options || {});
       }
 
+      function isNameAvailable(name) {
+        return Restangular.one('organizations', 'check-name').one(name).get();
+      }
+
       function remove(id) {
         return Restangular.one('organizations', id).remove();
       }
@@ -41,6 +45,7 @@
         getAll: getAll,
         getById: getById,
         getInvoices: getInvoices,
+        isNameAvailable: isNameAvailable,
         remove: remove,
         removeUser: removeUser,
         update: update

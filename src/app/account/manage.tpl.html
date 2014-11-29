@@ -6,18 +6,18 @@
         <div class="panel-body">
           <tabset class="tab-container">
             <tab heading="General">
-              <form name="profileForm" role="form">
+              <form name="userForm" role="form">
                 <div class="form-group">
                   <label>Full Name</label>
                   <input name="name" type="text" class="form-control"
                          placeholder="Your first and last name"
-                         ng-model="vm.profile.full_name"
+                         ng-model="vm.user.full_name"
                          ng-model-options="{ debounce: 1000 }"
-                         ng-change="vm.saveProfile(profileForm.$valid)"
+                         ng-change="vm.saveUser(userForm.$valid)"
                          required />
 
-                  <div class="error" ng-if="profileForm.name.$touched || profileForm.$submitted">
-                    <small ng-if="profileForm.name.$error.required">
+                  <div class="error" ng-if="userForm.name.$touched || userForm.$submitted">
+                    <small ng-if="userForm.name.$error.required">
                       Full Name is required.
                     </small>
                   </div>
@@ -27,21 +27,21 @@
                   <label>Email Address</label>
                   <input name="email" type="email" class="form-control"
                          placeholder="Email Address"
-                         ng-model="vm.profile.email_address"
+                         ng-model="vm.user.email_address"
                          ng-model-options="{ debounce: 1000 }"
-                         ng-change="vm.saveProfile(profileForm.$valid)"
+                         ng-change="vm.saveEmailAddress(userForm.$valid)"
                          required/>
 
-                  <div class="error" ng-if="profileForm.email.$touched || profileForm.$submitted">
-                    <small ng-if="profileForm.email.$error.required">
+                  <div class="error" ng-if="userForm.email.$touched || userForm.$submitted">
+                    <small ng-if="userForm.email.$error.required">
                       Email Address is required.
                     </small>
-                    <small ng-if="profileForm.email.$error.unique">
+                    <small ng-if="userForm.email.$error.unique">
                       A user already exists with this email address.
                     </small>
                   </div>
-                  <p ng-if="vm.isVerified()" class="help-block">Email not verified. <a
-                    ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</p>
+                  <p ng-if="!vm.user.is_email_address_verified" class="help-block">Email not verified.
+                    <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</p>
                 </div>
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
@@ -54,7 +54,10 @@
               <form role="form">
                 <div class="checkbox">
                   <label class="i-checks">
-                    <input type="checkbox" ng-model="vm.profile.enable_email_notifications">
+                    <input type="checkbox"
+                           ng-model="vm.user.enable_email_notifications"
+                           ng-model-options="{ debounce: 1000 }"
+                           ng-change="vm.saveEmailNotificationSetting()">
                     <i></i>
                     Enable email notifications
                   </label>
@@ -62,12 +65,19 @@
 
                 <div ng-if="vm.hasProjects()">
                   <hr/>
-                  <select class="form-control" ng-init="vm.currentProject = vm.projects[0]" ng-model="vm.currentProject"
+                  <select class="form-control"
+                          ng-init="vm.currentProject = vm.projects[0]"
+                          ng-model="vm.currentProject"
+                          ng-change="vm.getEmailNotificationSettings()"
                           ng-options="project.name group by project.organization_name for project in vm.projects"></select>
 
                   <div class="checkbox">
                     <label class="i-checks">
-                      <input type="checkbox" ng-model="vm.currentProject.send_daily_summary">
+                      <input type="checkbox"
+                             ng-model="vm.emailNotificationSettings.send_daily_summary"
+                             ng-model-options="{ debounce: 1000 }"
+                             ng-change="vm.saveEmailNotificationSettings()"
+                             ng-disabled="vm.hasEmailNotifications()">
                       <i></i>
                       Send daily project summary
                     </label>
@@ -81,7 +91,11 @@
 
                   <div class="checkbox">
                     <label class="i-checks">
-                      <input type="checkbox" ng-model="vm.currentProject.report_critical_events" ng-disabled="!vm.hasPremiumFeatures()">
+                      <input type="checkbox"
+                             ng-model="vm.emailNotificationSettings.report_critical_events"
+                             ng-model-options="{ debounce: 1000 }"
+                             ng-change="vm.saveEmailNotificationSettings()"
+                             ng-disabled="!vm.hasPremiumEmailNotifications()">
                       <i></i>
                       Notify me on critical events
                     </label>
@@ -89,7 +103,11 @@
 
                   <div class="checkbox">
                     <label class="i-checks">
-                      <input type="checkbox" ng-model="vm.currentProject.report_regressions" ng-disabled="!vm.hasPremiumFeatures()">
+                      <input type="checkbox"
+                             ng-model="vm.emailNotificationSettings.report_regressions"
+                             ng-model-options="{ debounce: 1000 }"
+                             ng-change="vm.saveEmailNotificationSettings()"
+                             ng-disabled="!vm.hasPremiumEmailNotifications()">
                       <i></i>
                       Notify me on event regressions
                     </label>
@@ -101,16 +119,34 @@
 
                   <div class="form-group">
                     <div class="btn-group">
-                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'0'" ng-disabled="!vm.hasPremiumFeatures()" uncheckable>Never</label>
-                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'1'" ng-disabled="!vm.hasPremiumFeatures()" uncheckable>New Only</label>
-                      <label class="btn btn-default" ng-model="vm.currentProject.mode" btn-radio="'2'" ng-disabled="!vm.hasPremiumFeatures()" uncheckable>All Occurrences</label>
+                      <label class="btn btn-default"
+                             btn-radio="'0'"
+                             ng-model="vm.emailNotificationSettings.mode"
+                             ng-model-options="{ debounce: 1000 }"
+                             ng-change="vm.saveEmailNotificationSettings()"
+                             ng-disabled="!vm.hasPremiumEmailNotifications()"
+                             uncheckable>Never</label>
+                      <label class="btn btn-default"
+                             btn-radio="'1'"
+                             ng-model="vm.emailNotificationSettings.mode"
+                             ng-disabled="!vm.hasPremiumEmailNotifications()"
+                             uncheckable>New Only</label>
+                      <label class="btn btn-default"
+                             btn-radio="'2'"
+                             ng-model="vm.emailNotificationSettings.mode"
+                             ng-disabled="!vm.hasPremiumEmailNotifications()"
+                             uncheckable>All Occurrences</label>
                     </div>
                   </div>
 
                   <div ng-if="vm.currentProject.mode > 0">
                     <div class="checkbox">
                       <label class="i-checks">
-                        <input type="checkbox" ng-model="vm.currentProject.report_known_bot_events" ng-disabled="!vm.hasPremiumFeatures()">
+                        <input type="checkbox"
+                               ng-model="vm.emailNotificationSettings.report_known_bot_events"
+                               ng-model-options="{ debounce: 1000 }"
+                               ng-change="vm.saveEmailNotificationSettings()"
+                               ng-disabled="!vm.hasPremiumEmailNotifications()">
                         <i></i>
                         Notify me on events from known bots
                       </label>
@@ -118,7 +154,11 @@
 
                     <div class="checkbox">
                       <label class="i-checks">
-                        <input type="checkbox" ng-model="vm.currentProject.report_404_events" ng-disabled="!vm.hasPremiumFeatures()">
+                        <input type="checkbox"
+                               ng-model="vm.emailNotificationSettings.report_404_events"
+                               ng-model-options="{ debounce: 1000 }"
+                               ng-change="vm.saveEmailNotificationSettings()"
+                               ng-disabled="!vm.hasPremiumEmailNotifications()">
                         <i></i>
                         Notify me on 404 events
                       </label>
@@ -128,9 +168,6 @@
                   <div class="line line-dashed b-b line-lg pull-in"></div>
                   <div class="form-group">
                     <button ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" type="button" class="btn btn-default">Go To Dashboard</button>
-                    <div class="pull-right">
-                      <button type="submit" ng-click="vm.saveNotificationSettings()" class="btn btn-primary">Save</button>
-                    </div>
                   </div>
                 </div>
               </form>

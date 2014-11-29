@@ -37,6 +37,10 @@
         return Restangular.one('projects', id).one('notifications', userId).get();
       }
 
+      function isNameAvailable(name) {
+        return Restangular.one('projects', 'check-name').one(name).get();
+      }
+
       function promoteTab(id, name) {
         return Restangular.one('projects', id).one('promotedtabs', name).post();
       }
@@ -77,6 +81,7 @@
         getByOrganizationId: getByOrganizationId,
         getConfig: getConfig,
         getNotificationSettings: getNotificationSettings,
+        isNameAvailable: isNameAvailable,
         promoteTab: promoteTab,
         remove: remove,
         removeConfig: removeConfig,

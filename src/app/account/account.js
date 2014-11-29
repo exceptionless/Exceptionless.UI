@@ -5,7 +5,8 @@
     'ui.router',
 
     'exceptionless.dialog',
-    'exceptionless.project'
+    'exceptionless.project',
+    'exceptionless.user'
   ])
     .config(['$stateProvider', function ($stateProvider) {
       $stateProvider.state('app.account', {
