@@ -40,8 +40,7 @@
                       A user already exists with this email address.
                     </small>
                   </div>
-                  <p ng-if="!vm.user.is_email_address_verified" class="help-block">Email not verified.
-                    <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</p>
+                  <p ng-if="!vm.user.is_email_address_verified" class="help-block">Email not verified. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</p>
                 </div>
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
@@ -52,12 +51,15 @@
             </tab>
             <tab heading="Notifications">
               <form role="form">
+                <div class="alert in fade alert-info" ng-if="!vm.user.email_notifications_enabled">
+                  Email notifications are currently disabled.
+                </div>
                 <div class="checkbox">
                   <label class="i-checks">
                     <input type="checkbox"
-                           ng-model="vm.user.enable_email_notifications"
+                           ng-model="vm.user.email_notifications_enabled"
                            ng-model-options="{ debounce: 1000 }"
-                           ng-change="vm.saveEmailNotificationSetting()">
+                           ng-change="vm.saveEnableEmailNotification()">
                     <i></i>
                     Enable email notifications
                   </label>
@@ -66,7 +68,6 @@
                 <div ng-if="vm.hasProjects()">
                   <hr/>
                   <select class="form-control"
-                          ng-init="vm.currentProject = vm.projects[0]"
                           ng-model="vm.currentProject"
                           ng-change="vm.getEmailNotificationSettings()"
                           ng-options="project.name group by project.organization_name for project in vm.projects"></select>
@@ -77,7 +78,7 @@
                              ng-model="vm.emailNotificationSettings.send_daily_summary"
                              ng-model-options="{ debounce: 1000 }"
                              ng-change="vm.saveEmailNotificationSettings()"
-                             ng-disabled="vm.hasEmailNotifications()">
+                             ng-disabled="!vm.hasEmailNotifications()">
                       <i></i>
                       Send daily project summary
                     </label>
@@ -92,7 +93,7 @@
                   <div class="checkbox">
                     <label class="i-checks">
                       <input type="checkbox"
-                             ng-model="vm.emailNotificationSettings.report_critical_events"
+                             ng-model="vm.emailNotificationSettings.report_critical_errors"
                              ng-model-options="{ debounce: 1000 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()">
@@ -120,20 +121,21 @@
                   <div class="form-group">
                     <div class="btn-group">
                       <label class="btn btn-default"
-                             btn-radio="'0'"
+                             btn-radio="0"
                              ng-model="vm.emailNotificationSettings.mode"
-                             ng-model-options="{ debounce: 1000 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()"
                              uncheckable>Never</label>
                       <label class="btn btn-default"
-                             btn-radio="'1'"
+                             btn-radio="1"
                              ng-model="vm.emailNotificationSettings.mode"
+                             ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()"
                              uncheckable>New Only</label>
                       <label class="btn btn-default"
-                             btn-radio="'2'"
+                             btn-radio="2"
                              ng-model="vm.emailNotificationSettings.mode"
+                             ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()"
                              uncheckable>All Occurrences</label>
                     </div>

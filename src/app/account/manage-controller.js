@@ -30,6 +30,14 @@
       function getProjects() {
         function onSuccess(response) {
           vm.projects = response.data.plain();
+
+          if (vm.currentProject.id) {
+            var projects = response.data.filter(function(project) { return project.id === vm.currentProject.id; });
+            vm.currentProject = projects.length > 0 ? projects[0] : {};
+          } else {
+            vm.currentProject = vm.projects.length > 0 ? vm.projects[0] : {};
+          }
+
           return vm.projects;
         }
 
@@ -50,7 +58,7 @@
           notificationService.error('An error occurred while loading your user profile.');
         }
 
-        return userService.get().then(onSuccess, onFailure);
+        return userService.getCurrentUser().then(onSuccess, onFailure);
       }
 
       function hasPremiumFeatures() {
@@ -62,7 +70,7 @@
       }
 
       function hasEmailNotifications() {
-        return vm.user.enable_email_notifications && vm.emailNotificationSettings;
+        return vm.user.email_notifications_enabled && vm.emailNotificationSettings;
       }
 
       function hasPremiumEmailNotifications() {
@@ -106,7 +114,7 @@
           notificationService.error('An error occurred while saving your email notification preferences.');
         }
 
-        return userService.update(vm.user.id, { enable_email_notifications: vm.user.enable_email_notifications }).catch(onFailure);
+        return userService.update(vm.user.id, { email_notifications_enabled: vm.user.email_notifications_enabled }).catch(onFailure);
       }
 
 
@@ -139,6 +147,6 @@
       vm.saveUser = saveUser;
       vm.user = {};
 
-      getUser().then(getProjects);
+      getUser().then(getProjects).then(getEmailNotificationSettings);
     }]);
 }());

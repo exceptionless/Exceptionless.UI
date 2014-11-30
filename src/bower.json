@@ -32,7 +32,7 @@
     "font-awesome": "~4.2.0",
     "handlebars": "~2.0.0",
     "jquery": "~2.1.1",
-    "less.js": "~2.1.0",
+    "less.js": "~2.1.1",
     "li": "https://github.com/jfromaniello/li.git",
     "moment": "~2.8.4",
     "moment-timezone": "~0.2.5",

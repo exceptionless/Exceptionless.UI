@@ -12,7 +12,7 @@
       }
 
       function getAll(options) {
-        return Restangular.all('projects').getList(options || {});
+        return Restangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
       }
 
       function getById(id) {
@@ -70,7 +70,7 @@
       }
 
       function setNotificationSettings(id, userId, settings) {
-        return Restangular.one('projects', id).one('notifications', userId).post(settings);
+        return Restangular.one('projects', id).one('notifications', userId).customPOST(settings);
       }
 
       var service = {
