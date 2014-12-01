@@ -21,5 +21,12 @@
         controllerAs: 'vm',
         templateUrl: 'app/account/manage.tpl.html'
       });
+
+      $stateProvider.state('signup', {
+        url: '/signup',
+        controller: 'account.Signup',
+        controllerAs: 'vm',
+        templateUrl: 'app/account/signup.tpl.html'
+      });
     }]);
 }());

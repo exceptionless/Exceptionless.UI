@@ -4,7 +4,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-asterisk"></i> Project Information</div>
         <div class="panel-body">
-          <form name="addForm" role="form">
+          <form name="addForm" role="form" class="form-validation">
             <div class="form-group" ng-if="vm.hasOrganizations()">
               <label>Organization Name</label>
               <select class="form-control" ng-init="vm.currentOrganization = vm.organizations[0]"

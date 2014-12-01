@@ -6,7 +6,7 @@
         <div class="panel-body">
           <tabset class="tab-container">
             <tab heading="General">
-              <form name="userForm" role="form">
+              <form name="userForm" role="form" class="form-validation">
                 <div class="form-group">
                   <label>Full Name</label>
                   <input name="name" type="text" class="form-control"
@@ -50,7 +50,7 @@
               </form>
             </tab>
             <tab heading="Notifications">
-              <form role="form">
+              <form role="form" class="form-validation">
                 <div class="alert in fade alert-info" ng-if="!vm.user.email_notifications_enabled">
                   Email notifications are currently disabled.
                 </div>
@@ -175,7 +175,7 @@
               </form>
             </tab>
             <tab heading="Password">
-              <form name="passwordForm" role="form">
+              <form name="passwordForm" role="form" class="form-validation">
                 <div class="form-group">
                   <label>Current Password</label>
                   <input name="current" type="password" class="form-control" ng-model="vm.password.current" required/>

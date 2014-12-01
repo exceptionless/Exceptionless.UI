@@ -6,7 +6,7 @@
 
     <div class="dropdown-menu w-md" style="padding: 10px;" role="menu">
       <div class="panel bg-white">
-        <form role="form">
+        <form role="form" class="form-validation">
           <div class="form-group">
             <label for="search">Filter</label>
             <input id="search" type="search" class="form-control" placeholder="Criteria" ng-model="vm.filter" ng-model-options="{ debounce: 500 }" ng-change="vm.setFilter(vm.filter)">
