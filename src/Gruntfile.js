@@ -115,7 +115,7 @@ module.exports = function (grunt) {
           dest: 'dist/app.config.js',
           constants: {
             VERSION: process.env.BUILD_NUMBER ? process.env.BUILD_NUMBER : '2.0.0',
-            BASE_URL: process.env.API_URL ? process.env.API_URL : 'http://localhost:50000'
+            BASE_URL: process.env.API_URL ? process.env.API_URL : 'http://localhost:50000/api/v2'
           }
         },
         build: {}

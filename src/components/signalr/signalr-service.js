@@ -5,13 +5,13 @@
     .factory('signalRService', ['$rootScope', '$timeout', '$log', 'Hub', function ($rootScope, $timeout, $log, Hub) {
       var signalR;
 
-      function startDelayed(baseUrl, accessToken) {
+      function startDelayed(baseUrl) {
         if (signalR)
           stop();
 
         signalR = $timeout(function () {
           var hub = new Hub('message-bus', {
-            rootPath: baseUrl + '/signalr/hubs',
+            rootPath: baseUrl + '/push-messages',
 
 
             // client side methods
@@ -31,11 +31,6 @@
               'planChanged': function (planChanged) {
                 $rootScope.$emit('planChanged', planChanged);
               }
-            },
-
-            // query params sent on initial connection
-            queryParams: {
-              'access_token': accessToken // TODO: Inject this.
             },
 
             // handle connection error

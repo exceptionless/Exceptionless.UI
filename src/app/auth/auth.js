@@ -3,6 +3,7 @@
 
   angular.module('app.auth', [
     'ui.router',
+    'satellizer',
     'exceptionless.user'
   ])
   .config(['$stateProvider', function ($stateProvider) {
@@ -23,6 +24,12 @@
       controller: 'auth.Login',
       controllerAs: 'vm',
       templateUrl: 'app/auth/login.tpl.html'
+    });
+
+    $stateProvider.state('auth.logout', {
+      url: '/logout',
+      template: null,
+      controller: 'auth.Logout'
     });
 
     $stateProvider.state('auth.signup', {

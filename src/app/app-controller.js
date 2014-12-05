@@ -79,7 +79,8 @@
         });
 
       // NOTE: we don't dispose of the SignalR timeout because it should never be disposed..
-      signalRService.startDelayed(BASE_URL, 'd795c4406f6b4bc6ae8d787c65d0274d');
+      // TODO: This should be started and stopped when a user logs in and logs out
+      signalRService.startDelayed(BASE_URL);
 
       var vm = this;
       vm.getDashboardUrl = getDashboardUrl;
