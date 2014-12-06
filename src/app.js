@@ -40,7 +40,7 @@
     'app.project',
     'app.stack'
   ])
-  .config(['$authProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'RestangularProvider', 'AUTH_CLIENT_IDS', 'BASE_URL', function ($authProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, RestangularProvider, AUTH_CLIENT_IDS, BASE_URL) {
+  .config(['$authProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'RestangularProvider', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'BASE_URL', function ($authProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, RestangularProvider, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, BASE_URL) {
     $uiViewScrollProvider.useAnchorScroll();
 
     RestangularProvider.setBaseUrl(BASE_URL);
@@ -53,22 +53,22 @@
     $authProvider.unlinkUrl = BASE_URL + '/auth/unlink/';
 
     $authProvider.facebook({
-      clientId: AUTH_CLIENT_IDS.facebook,
+      clientId: FACEBOOK_APPID,
       url: BASE_URL + '/auth/facebook'
     });
 
     $authProvider.google({
-      clientId: AUTH_CLIENT_IDS.google,
+      clientId: GOOGLE_APPID,
       url: BASE_URL + '/auth/google'
     });
 
     $authProvider.github({
-      clientId: AUTH_CLIENT_IDS.github,
+      clientId: GITHUB_APPID,
       url: BASE_URL + '/auth/github'
     });
 
     $authProvider.live({
-      clientId: AUTH_CLIENT_IDS.live,
+      clientId: LIVE_APPID,
       url: BASE_URL + '/auth/live'
     });
 

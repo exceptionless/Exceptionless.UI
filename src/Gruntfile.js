@@ -114,7 +114,10 @@ module.exports = function (grunt) {
           wrap: '(function () {\n  "use strict";\n\n  {%= __ngModule %}\n}());',
           dest: 'dist/app.config.js',
           constants: {
-            AUTH_CLIENT_IDS: process.env.AUTH_CLIENT_IDS ? process.env.AUTH_CLIENT_IDS : "{ facebook: '395178683904310', google: '86088244242-6ihnf99upp3a2g5sp13joerdo1i5f29l.apps.googleusercontent.com', github: 'fdb0fdc666419c4cd3e9', live: '0000000044132A07' }",
+            FACEBOOK_APPID: process.env.FACEBOOK_APPID ? process.env.FACEBOOK_APPID : '395178683904310',
+            GOOGLE_APPID: process.env.GOOGLE_APPID ? process.env.GOOGLE_APPID :  '86088244242-6ihnf99upp3a2g5sp13joerdo1i5f29l.apps.googleusercontent.com',
+            GITHUB_APPID: process.env.GITHUB_APPID ? process.env.GITHUB_APPID : 'fdb0fdc666419c4cd3e9',
+            LIVE_APPID: process.env.LIVE_APPID ? process.env.LIVE_APPID : '0000000044132A07',
             VERSION: process.env.BUILD_NUMBER ? process.env.BUILD_NUMBER : '2.0.0',
             BASE_URL: process.env.API_URL ? process.env.API_URL : 'http://localhost:50000/api/v2'
           }
