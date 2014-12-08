@@ -45,9 +45,7 @@
     $uiViewScrollProvider.useAnchorScroll();
 
     RestangularProvider.setBaseUrl(BASE_URL);
-    //RestangularProvider.setDefaultHttpFields({withCredentials: true});
     RestangularProvider.setFullResponse(true);
-    //RestangularProvider.setDefaultHeaders({ 'Content-Type': 'application/json' });
 
     $authProvider.loginUrl = BASE_URL + '/auth/login';
     $authProvider.signupUrl = BASE_URL + '/auth/signup';
@@ -375,5 +373,15 @@
         filterService.setEventType(null, true);
       }]
     });
+  }])
+  .run(['$state', 'Restangular', function($state, Restangular) {
+      Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
+        if(response.status !== 401) {
+          return true;
+        }
+
+        $state.go('auth.login');
+        return false;
+      });
   }]);
 }());

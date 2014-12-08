@@ -2,19 +2,23 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', ['$auth', function ($auth) {
+    .controller('auth.Login', ['$auth', 'notificationService', function ($auth, notificationService) {
       var vm = this;
 
+      function getMessage(response) {
+        var message = 'An error occurred while logging in.';
+        if (response.data && response.data.message)
+          message += ' Message: ' + response.data.message;
+
+        return message;
+      }
+
       function authenticate(provider) {
-        function onSuccess() {
-          console.log('authenticated!');
-        }
-
         function onFailure(response) {
-          console.log('failed to authenticate: ' + response.data.message);
+          notificationService.error(getMessage(response));
         }
 
-        return $auth.authenticate(provider).then(onSuccess, onFailure);
+        return $auth.authenticate(provider).catch(onFailure);
       }
 
       function login(isValid) {
@@ -22,15 +26,11 @@
           return;
         }
 
-        function onSuccess() {
-          console.log('logged in!');
-        }
-
         function onFailure(response) {
-          console.log('failed to login: ' + response.data.message);
+          notificationService.error(getMessage(response));
         }
 
-        return $auth.login(vm.user).then(onSuccess, onFailure);
+        return $auth.login(vm.user).catch(onFailure);
       }
 
       vm.authenticate = authenticate;

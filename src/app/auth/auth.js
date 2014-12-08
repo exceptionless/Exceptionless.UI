@@ -4,6 +4,8 @@
   angular.module('app.auth', [
     'ui.router',
     'satellizer',
+
+    'exceptionless.notification',
     'exceptionless.user'
   ])
   .config(['$stateProvider', function ($stateProvider) {
