@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.signalr', ['SignalR'])
-    .factory('signalRService', ['$rootScope', '$timeout', '$log', 'Hub', function ($rootScope, $timeout, $log, Hub) {
+    .factory('signalRService', ['$rootScope', '$timeout', '$log', 'Hub', '$auth', function ($rootScope, $timeout, $log, Hub, $auth) {
       var signalR;
 
       function startDelayed(baseUrl) {
@@ -10,9 +10,8 @@
           stop();
 
         signalR = $timeout(function () {
-          var hub = new Hub('message-bus', {
-            rootPath: baseUrl + '/push-messages',
-
+          var hub = new Hub('messages', {
+            rootPath: baseUrl + '/push',
 
             // client side methods
             listeners: {
@@ -31,6 +30,10 @@
               'planChanged': function (planChanged) {
                 $rootScope.$emit('planChanged', planChanged);
               }
+            },
+
+            queryParams: {
+              'access_token': $auth.getToken()
             },
 
             // handle connection error
