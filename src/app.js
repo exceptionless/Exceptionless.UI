@@ -10,6 +10,7 @@
     'debounce',
     'ngAnimate',
     'restangular',
+    'satellizer',
     'ui.bootstrap',
     'ui.utils',
     'ui.router',
