@@ -27,7 +27,6 @@
         return authService.forgotPassword(vm.email).then(onSuccess, onFailure);
       }
 
-      var vm = this;
       vm.email = null;
       vm.resetPassword = resetPassword;
     }]);

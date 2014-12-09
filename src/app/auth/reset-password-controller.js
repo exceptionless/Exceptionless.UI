@@ -27,7 +27,6 @@
         return authService.resetPassword(vm.data).then(onSuccess, onFailure);
       }
 
-      var vm = this;
       vm.changePassword = changePassword;
       vm.data = { password_reset_token: $stateParams.token };
     }]);
