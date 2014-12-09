@@ -1,62 +1,66 @@
 ﻿(function () {
   'use strict';
 
-  angular.module('exceptionless.signalr', ['SignalR'])
-    .factory('signalRService', ['$rootScope', '$timeout', '$log', 'Hub', '$auth', function ($rootScope, $timeout, $log, Hub, $auth) {
-      var signalR;
+  angular.module('exceptionless.signalr', [
+    'SignalR',
 
-      function startDelayed(baseUrl) {
-        if (signalR)
-          stop();
+    'exceptionless.auth'
+  ])
+  .factory('signalRService', ['$rootScope', '$timeout', '$log', 'authService', 'Hub', function ($rootScope, $timeout, $log, authService, Hub) {
+    var signalR;
 
-        signalR = $timeout(function () {
-          var hub = new Hub('messages', {
-            rootPath: baseUrl + '/push',
+    function startDelayed(baseUrl) {
+      if (signalR)
+        stop();
 
-            // client side methods
-            listeners: {
-              'entityChanged': function (entityChanged) {
-                $rootScope.$emit(entityChanged.type + 'Changed', entityChanged);
-              },
-              'eventOccurrence': function (eventOccurrence) {
-                $rootScope.$emit('eventOccurrence', eventOccurrence);
-              },
-              'stackUpdated': function (stackUpdated) {
-                $rootScope.$emit('stackUpdated', stackUpdated);
-              },
-              'planOverage': function (planOverage) {
-                $rootScope.$emit('planOverage', planOverage);
-              },
-              'planChanged': function (planChanged) {
-                $rootScope.$emit('planChanged', planChanged);
-              }
+      signalR = $timeout(function () {
+        var hub = new Hub('messages', {
+          rootPath: baseUrl + '/push',
+
+          // client side methods
+          listeners: {
+            'entityChanged': function (entityChanged) {
+              $rootScope.$emit(entityChanged.type + 'Changed', entityChanged);
             },
-
-            queryParams: {
-              'access_token': $auth.getToken()
+            'eventOccurrence': function (eventOccurrence) {
+              $rootScope.$emit('eventOccurrence', eventOccurrence);
             },
-
-            // handle connection error
-            errorHandler: function (error) {
-              $log.error(error);
+            'stackUpdated': function (stackUpdated) {
+              $rootScope.$emit('stackUpdated', stackUpdated);
+            },
+            'planOverage': function (planOverage) {
+              $rootScope.$emit('planOverage', planOverage);
+            },
+            'planChanged': function (planChanged) {
+              $rootScope.$emit('planChanged', planChanged);
             }
-          });
-        }, 1000);
-      }
+          },
 
-      function stop() {
-        if (!signalR)
-          return;
+          queryParams: {
+            'access_token': authService.getToken()
+          },
 
-        $timeout.cancel(signalR);
-        signalR = null;
-      }
+          // handle connection error
+          errorHandler: function (error) {
+            $log.error(error);
+          }
+        });
+      }, 1000);
+    }
 
-      var service = {
-        startDelayed: startDelayed,
-        stop: stop
-      };
+    function stop() {
+      if (!signalR)
+        return;
 
-      return service;
-    }]);
+      $timeout.cancel(signalR);
+      signalR = null;
+    }
+
+    var service = {
+      startDelayed: startDelayed,
+      stop: stop
+    };
+
+    return service;
+  }]);
 }());

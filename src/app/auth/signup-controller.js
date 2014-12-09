@@ -2,10 +2,9 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', ['$auth', 'authService', 'notificationService', function ($auth, authService, notificationService) {
-      if ($auth.isAuthenticated()) {
-        authService.clearPreviousState();
-        $auth.logout();
+    .controller('auth.Signup', ['authService', 'notificationService', function (authService, notificationService) {
+      if (authService.isAuthenticated()) {
+        authService.logout();
       }
 
       var vm = this;
@@ -27,7 +26,7 @@
           notificationService.error(getMessage(response));
         }
 
-        return $auth.authenticate(provider).then(onSuccess, onFailure);
+        return authService.authenticate(provider).then(onSuccess, onFailure);
       }
 
       function signup(isValid) {
@@ -43,7 +42,7 @@
           notificationService.error(getMessage(response));
         }
 
-        return $auth.signup(vm.user).then(onSuccess, onFailure);
+        return authService.signup(vm.user).then(onSuccess, onFailure);
       }
 
       vm.authenticate = authenticate;

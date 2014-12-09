@@ -15,10 +15,6 @@
         return Restangular.one('organizations', id).all('users').getList(options || {});
       }
 
-      function isEmailAddressAvailable(email) {
-        return Restangular.one('users', 'check-email-address').one(email).get();
-      }
-
       function resendVerificationEmail(id) {
         return Restangular.one('users', id).one('resend-verification-email').get();
       }
@@ -39,7 +35,6 @@
         getCurrentUser: getCurrentUser,
         getById: getById,
         getByOrganizationId: getByOrganizationId,
-        isEmailAddressAvailable: isEmailAddressAvailable,
         resendVerificationEmail: resendVerificationEmail,
         update: update,
         updateEmailAddress: updateEmailAddress,

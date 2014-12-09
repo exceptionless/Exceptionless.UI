@@ -42,37 +42,11 @@
     'app.project',
     'app.stack'
   ])
-  .config(['$authProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'RestangularProvider', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'BASE_URL', function ($authProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, RestangularProvider, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, BASE_URL) {
+  .config(['$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'RestangularProvider', 'BASE_URL', function ($stateProvider, $uiViewScrollProvider, $urlRouterProvider, RestangularProvider, BASE_URL) {
     $uiViewScrollProvider.useAnchorScroll();
 
     RestangularProvider.setBaseUrl(BASE_URL);
     RestangularProvider.setFullResponse(true);
-
-    $authProvider.loginUrl = BASE_URL + '/auth/login';
-    $authProvider.loginRedirect = null;
-    $authProvider.logoutRedirect = '/login';
-    $authProvider.signupUrl = BASE_URL + '/auth/signup';
-    $authProvider.unlinkUrl = BASE_URL + '/auth/unlink/';
-
-    $authProvider.facebook({
-      clientId: FACEBOOK_APPID,
-      url: BASE_URL + '/auth/facebook'
-    });
-
-    $authProvider.google({
-      clientId: GOOGLE_APPID,
-      url: BASE_URL + '/auth/google'
-    });
-
-    $authProvider.github({
-      clientId: GITHUB_APPID,
-      url: BASE_URL + '/auth/github'
-    });
-
-    $authProvider.live({
-      clientId: LIVE_APPID,
-      url: BASE_URL + '/auth/live'
-    });
 
     $urlRouterProvider.otherwise('/type/error/dashboard');
     $stateProvider.state('app', {
@@ -376,18 +350,5 @@
         filterService.setEventType(null, true);
       }]
     });
-  }])
-  .run(['$state', 'authService', 'Restangular', function($state, authService, Restangular) {
-      Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
-        console.log('error');
-        if(response.status !== 401) {
-          return true;
-        }
-
-        authService.saveCurrentState();
-        $state.go('auth.login');
-        deferred.reject(response);
-        return false;
-      });
   }]);
 }());

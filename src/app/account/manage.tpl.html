@@ -189,8 +189,7 @@
 
                 <div class="form-group">
                   <label>New Password</label>
-                  <input name="newPassword" type="password" class="form-control" ng-model="vm.password.newPassword"
-                         min="6" required/>
+                  <input name="newPassword" type="password" class="form-control" ng-model="vm.password.newPassword" min="6" required/>
 
                   <div class="error" ng-if="passwordForm.newPassword.$touched || passwordForm.$submitted">
                     <small ng-if="passwordForm.newPassword.$error.required">

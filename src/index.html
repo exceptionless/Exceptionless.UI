@@ -39,6 +39,7 @@
     </head>
     <body ng-controller="App as appVm">
         <div class="app" id="app" ng-class="{'app-header-fixed': appVm.settings.headerFixed, 'app-aside-fixed': appVm.settings.asideFixed, 'app-aside-folded': appVm.settings.asideFolded}" ui-view autoscroll="true"></div>
+        <toaster-container toaster-options="{'position-class': 'toast-bottom-right'}"></toaster-container>
 
         <script src="//code.jquery.com/jquery-2.1.1.min.js" data-concat="false" data-remove="false"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js" data-concat="false" data-remove="false"></script>
@@ -96,6 +97,7 @@
         <script src="app.js"></script>
         <script src="app.config.js" data-concat="false"></script>
 
+        <script src="components/auth/auth.js"></script>
         <script src="components/auth/auth-service.js"></script>
         <script src="components/auto-active/auto-active-directive.js"></script>
         <script src="components/date-filter/date-filter.js"></script>
@@ -165,6 +167,7 @@
         <script src="app/auth/forgot-password-controller.js"></script>
         <script src="app/auth/login-controller.js"></script>
         <script src="app/auth/logout-controller.js"></script>
+        <script src="app/auth/reset-password-controller.js"></script>
         <script src="app/auth/signup-controller.js"></script>
 
         <script src="app/account/account.js"></script>

@@ -2,9 +2,9 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Logout', ['$auth', '$state', function ($auth, $state) {
-      if ($auth.isAuthenticated()) {
-        return $auth.logout();
+    .controller('auth.Logout', ['$state', 'authService', function ($state, authService) {
+      if (authService.isAuthenticated()) {
+        authService.logout();
       }
 
       $state.go('auth.login');

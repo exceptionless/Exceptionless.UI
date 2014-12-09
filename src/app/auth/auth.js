@@ -3,7 +3,6 @@
 
   angular.module('app.auth', [
     'ui.router',
-    'satellizer',
 
     'exceptionless.auth',
     'exceptionless.notification',
@@ -33,6 +32,13 @@
       url: '/logout',
       template: null,
       controller: 'auth.Logout'
+    });
+
+    $stateProvider.state('auth.reset-password', {
+      url: '/reset-password/:token',
+      controller: 'auth.ResetPassword',
+      controllerAs: 'vm',
+      templateUrl: 'app/auth/reset-password.tpl.html'
     });
 
     $stateProvider.state('auth.signup', {
