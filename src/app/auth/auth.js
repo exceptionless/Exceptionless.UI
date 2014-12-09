@@ -5,6 +5,7 @@
     'ui.router',
     'satellizer',
 
+    'exceptionless.auth',
     'exceptionless.notification',
     'exceptionless.user'
   ])

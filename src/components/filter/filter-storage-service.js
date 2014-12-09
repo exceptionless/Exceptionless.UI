@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('exceptionless.filter')
-    .factory('filterStoreService', ['$window', 'store', function ($window, store) {
-      var _store = store.getNamespacedStore('filter');
+    .factory('filterStoreService', ['$window', 'locker', function ($window, locker) {
+      var _store = locker.driver('local').namespace('filter');
 
       function getIncludeFixed() {
         return _store.get('fixed');
@@ -17,16 +17,16 @@
         return _store.get('time');
       }
 
-      function setIncludeFixed(includeFixed, options) {
-        _store.set('fixed', includeFixed);
+      function setIncludeFixed(includeFixed) {
+        _store.put('fixed', includeFixed);
       }
 
-      function setIncludeHidden(includeHidden, options) {
-        _store.set('hidden', includeHidden);
+      function setIncludeHidden(includeHidden) {
+        _store.put('hidden', includeHidden);
       }
 
-      function setTimeFilter(timeFilter, options) {
-        _store.set('time', timeFilter);
+      function setTimeFilter(timeFilter) {
+        _store.put('time', timeFilter);
       }
 
       var service = {

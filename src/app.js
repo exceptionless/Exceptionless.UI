@@ -15,6 +15,7 @@
     'ui.utils',
     'ui.router',
 
+    'exceptionless.auth',
     'exceptionless.auto-active',
     'exceptionless.date-filter',
     'exceptionless.event',
@@ -48,6 +49,8 @@
     RestangularProvider.setFullResponse(true);
 
     $authProvider.loginUrl = BASE_URL + '/auth/login';
+    $authProvider.loginRedirect = null;
+    $authProvider.logoutRedirect = '/login';
     $authProvider.signupUrl = BASE_URL + '/auth/signup';
     $authProvider.unlinkUrl = BASE_URL + '/auth/unlink/';
 
@@ -374,13 +377,16 @@
       }]
     });
   }])
-  .run(['$state', 'Restangular', function($state, Restangular) {
+  .run(['$state', 'authService', 'Restangular', function($state, authService, Restangular) {
       Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
+        console.log('error');
         if(response.status !== 401) {
           return true;
         }
 
+        authService.saveCurrentState();
         $state.go('auth.login');
+        deferred.reject(response);
         return false;
       });
   }]);

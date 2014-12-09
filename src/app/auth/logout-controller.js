@@ -4,7 +4,7 @@
   angular.module('app.auth')
     .controller('auth.Logout', ['$auth', '$state', function ($auth, $state) {
       if ($auth.isAuthenticated()) {
-        $auth.logout();
+        return $auth.logout();
       }
 
       $state.go('auth.login');
