@@ -244,7 +244,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="account in vm.user.o_auth_accounts track by account.provider_user_id" ng-if="vm.hasProjects()">
+                    <tr ng-repeat="account in vm.user.o_auth_accounts track by account.provider_user_id" ng-if="vm.hasOAuthAccounts()">
                       <td>{{::account.provider}} ({{::account.username || account.provider_user_id}})</td>
                       <td ng-hide="!vm.canRemoveOAuthAccount()">
                         <button type="button" role="button" class="btn btn-sm" title="Remove" ng-click="vm.unlink(account)">
