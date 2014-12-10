@@ -4,16 +4,16 @@
       <div class="dropdown wrapper">
         <a ui-sref="app.page.profile">
           <span class="thumb-lg w-auto-folded avatar m-t-sm">
-            <img ng-src="{{appVm.user.avatar_url}}" class="img-full" alt="{{appVm.user.name}}">
+            <img gravatar-src="appVm.user.email_address" gravatar-size="40" class="img-full" alt="{{appVm.user.full_name}}">
           </span>
         </a>
         <a href="javascript:void(0);" class="dropdown-toggle hidden-folded">
           <span class="clear">
               <span class="block m-t-sm">
-                  <strong class="font-bold text-lt">{{appVm.user.name}}</strong>
+                  <strong class="font-bold text-lt">{{appVm.user.full_name}}</strong>
                   <b class="caret"></b>
               </span>
-              <span class="text-muted text-xs block">{{appVm.user.name}}</span>
+              <span class="text-muted text-xs block">{{appVm.user.full_name}}</span>
           </span>
         </a>
         <ul class="dropdown-menu w hidden-folded">

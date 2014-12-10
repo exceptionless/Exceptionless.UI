@@ -54,8 +54,13 @@
           return vm.user;
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while loading your user profile.');
+        function onFailure(response) {
+          var message = 'An error occurred while loading your user profile.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return userService.getCurrentUser().then(onSuccess, onFailure);
@@ -78,15 +83,20 @@
       }
 
       function resendVerificationEmail() {
-        function onFailure() {
-          notificationService.error('An error occurred while sending your verification email.');
+        function onFailure(response) {
+          var message = 'An error occurred while sending your verification email.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return userService.resendVerificationEmail(vm.user.id).catch(onFailure);
       }
 
       function saveEmailAddress(isValid) {
-        if (isValid) {
+        if (!isValid) {
           return;
         }
 
@@ -94,24 +104,39 @@
           vm.user.is_email_address_verified = response.data.is_verified;
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while saving your email address.');
+        function onFailure(response) {
+          var message = 'An error occurred while saving your email address.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return userService.updateEmailAddress(vm.user.id, vm.user.email_address).then(onSuccess, onFailure);
       }
 
       function saveEmailNotificationSettings() {
-        function onFailure() {
-          notificationService.error('An error occurred while saving your notification settings.');
+        function onFailure(response) {
+          var message = 'An error occurred while saving your notification settings.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return projectService.setNotificationSettings(vm.currentProject.id, vm.user.id, vm.emailNotificationSettings).catch(onFailure);
       }
 
       function saveEnableEmailNotification() {
-        function onFailure() {
-          notificationService.error('An error occurred while saving your email notification preferences.');
+        function onFailure(response) {
+          var message = 'An error occurred while saving your email notification preferences.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return userService.update(vm.user.id, { email_notifications_enabled: vm.user.email_notifications_enabled }).catch(onFailure);
@@ -123,8 +148,13 @@
           return;
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while saving your full name.');
+        function onFailure(response) {
+          var message = 'An error occurred while saving your full name.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return userService.update(vm.user.id, vm.user).catch(onFailure);

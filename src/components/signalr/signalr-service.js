@@ -4,18 +4,23 @@
   angular.module('exceptionless.signalr', [
     'SignalR',
 
-    'exceptionless.auth'
+    'exceptionless.auth',
+    'app.config'
   ])
-  .factory('signalRService', ['$rootScope', '$timeout', '$log', 'authService', 'Hub', function ($rootScope, $timeout, $log, authService, Hub) {
+  .factory('signalRService', ['$rootScope', '$timeout', '$log', 'authService', 'BASE_URL', 'Hub', function ($rootScope, $timeout, $log, authService, BASE_URL, Hub) {
     var signalR;
 
-    function startDelayed(baseUrl) {
+    function start() {
+      startDelayed(0);
+    }
+
+    function startDelayed(delay) {
       if (signalR)
         stop();
 
-      signalR = $timeout(function () {
+      signalR = $timeout(function (){
         var hub = new Hub('messages', {
-          rootPath: baseUrl + '/push',
+          rootPath: BASE_URL + '/push',
 
           // client side methods
           listeners: {
@@ -45,7 +50,7 @@
             $log.error(error);
           }
         });
-      }, 1000);
+      }, delay || 1000);
     }
 
     function stop() {
@@ -57,6 +62,7 @@
     }
 
     var service = {
+      start: start,
       startDelayed: startDelayed,
       stop: stop
     };

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'BASE_URL', 'filterService', 'hotkeys', 'signalRService', 'urlService', 'VERSION', function ($scope, $state, $stateParams, $window, BASE_URL, filterService, hotkeys, signalRService, urlService, VERSION) {
+    .controller('App', ['$rootScope', '$scope', '$state', '$stateParams', '$window', 'authService', 'filterService', 'hotkeys', 'signalRService', 'urlService', 'userService', 'VERSION', function ($rootScope, $scope, $state, $stateParams, $window, authService, filterService, hotkeys, signalRService, urlService, userService, VERSION) {
       function isSmartDevice($window) {
         var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
         return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
@@ -22,6 +22,15 @@
 
       function getNewUrl(type){
         return urlService.buildFilterUrl({ route: 'new', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+      }
+
+      function getUser() {
+        function onSuccess(response) {
+          vm.user = response.data.plain();
+          return response;
+        }
+
+        return userService.getCurrentUser().then(onSuccess);
       }
 
       function isAllMenuActive() {
@@ -63,6 +72,10 @@
           $state.includes('app.organization-type-recent', params);
       }
 
+      function startSignalR() {
+        return signalRService.startDelayed(1000);
+      }
+
       if (!!navigator.userAgent.match(/MSIE/i))
         angular.element($window.document.body).addClass('ie');
 
@@ -78,28 +91,38 @@
           }
         });
 
-      // NOTE: we don't dispose of the SignalR timeout because it should never be disposed..
-      // TODO: This should be started and stopped when a user logs in and logs out
-      signalRService.startDelayed(BASE_URL);
+      if (authService.isAuthenticated()) {
+        getUser().then(startSignalR);
+      }
+
+      var onAuthLogin = $rootScope.$on('auth:login', function() {
+        return getUser().then(startSignalR);
+      });
+
+      $scope.$on('$destroy', onAuthLogin);
+
+      var onAuthLogout = $rootScope.$on('auth:logout', function() {
+        vm.user = {};
+        signalRService.stop();
+      });
+
+      $scope.$on('$destroy', onAuthLogout);
 
       var vm = this;
       vm.getDashboardUrl = getDashboardUrl;
       vm.getRecentUrl = getRecentUrl;
       vm.getFrequentUrl = getFrequentUrl;
       vm.getNewUrl = getNewUrl;
+      vm.getUser = getUser;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
       vm.isTypeMenuActive = isTypeMenuActive;
-      vm.project = {id: '537650f3b77efe23a47914f4'};
       vm.settings = {
         headerFixed: true,
         asideFixed: true,
         asideFolded: false
       };
-      vm.user = {
-        name: 'Eric J. Smith',
-        avatar_url: '//www.gravatar.com/avatar/3f307a0eedda99476af09a6568c16c14.png'
-      };
+      vm.user = {};
       vm.version = VERSION;
     }]);
 }());
