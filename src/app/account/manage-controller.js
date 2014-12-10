@@ -41,6 +41,8 @@
         function onSuccess() {
           notificationService.info('You have successfully changed your password.');
           vm.password = {};
+          vm.passwordForm.$setUntouched(true);
+          vm.passwordForm.$setPristine(true);
         }
 
         function onFailure(response) {
@@ -236,6 +238,7 @@
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.hasProjects = hasProjects;
       vm.password = {};
+      vm.passwordForm = {};
       vm.projects = [];
       vm.resendVerificationEmail = resendVerificationEmail;
       vm.saveEmailAddress = saveEmailAddress;

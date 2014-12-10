@@ -182,12 +182,12 @@
               </form>
             </tab>
             <tab heading="Password">
-              <form name="passwordForm" role="form" class="form-validation">
+              <form name="vm.passwordForm" role="form" class="form-validation">
                 <div class="form-group" ng-if="vm.user.has_local_account">
                   <label for="current">Current Password</label>
                   <input id="current" name="current" type="password" class="form-control" ng-model="vm.password.current_password" required />
 
-                  <div class="error" ng-messages="passwordForm.current.$error" ng-if="passwordForm.$submitted || passwordForm.current.$touched">
+                  <div class="error" ng-messages="vm.passwordForm.current.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.current.$touched">
                     <small ng-message="required">Current Password is required.</small>
                   </div>
                 </div>
@@ -196,7 +196,7 @@
                   <label for="newPassword">New Password</label>
                   <input id="newPassword" name="newPassword" type="password" class="form-control" ng-model="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
 
-                  <div class="error" ng-messages="passwordForm.newPassword.$error" ng-if="passwordForm.$submitted || passwordForm.newPassword.$touched">
+                  <div class="error" ng-messages="vm.passwordForm.newPassword.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.newPassword.$touched">
                     <small ng-message="required">New Password is required.</small>
                     <small ng-message="minlength">New Password must be at least 6 characters long.</small>
                     <small ng-message="maxlength">New Password must be less than 101 characters long.</small>
@@ -207,9 +207,9 @@
                   <label for="confirmPassword">Confirm password</label>
                   <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" ng-model="vm.password.confirm_password" match="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
 
-                  <div class="error" ng-messages="passwordForm.confirmPassword.$error" ng-if="passwordForm.$submitted || passwordForm.confirmPassword.$touched">
-                    <small ng-message="required">Confirm Password is required.</small>
+                  <div class="error" ng-messages="vm.passwordForm.confirmPassword.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.confirmPassword.$touched">
                     <small ng-message="match">New Password and Confirmation Password fields do not match.</small>
+                    <small ng-message="required">Confirm Password is required.</small>
                     <small ng-message="minlength">Confirm Password must be at least 6 characters long.</small>
                     <small ng-message="maxlength">Confirm Password must be less than 101 characters long.</small>
                   </div>
@@ -219,7 +219,7 @@
                 <div class="form-group">
                   <button ui-sref="app.dashboard" type="button" class="btn btn-default">Go To Dashboard</button>
                   <div class="pull-right">
-                    <input ng-click="vm.changePassword(passwordForm.$valid)" type="submit" class="btn btn-primary" value="Change Password" />
+                    <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" class="btn btn-primary" value="Change Password" />
                   </div>
                 </div>
               </form>
