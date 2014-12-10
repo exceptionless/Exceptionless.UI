@@ -26,11 +26,7 @@
       }
 
       function canRemoveOAuthAccount() {
-        if (!vm.user) {
-          return false;
-        }
-
-        return vm.user.has_local_account === true || (vm.user.o_auth_accounts && vm.user.o_auth_accounts.length > 1);
+        return hasLocalAccount() || (vm.user.o_auth_accounts && vm.user.o_auth_accounts.length > 1);
       }
 
       function changePassword(isValid) {
@@ -112,6 +108,10 @@
 
       function hasEmailNotifications() {
         return vm.user.email_notifications_enabled && vm.emailNotificationSettings;
+      }
+
+      function hasLocalAccount() {
+        return vm.user.has_local_account === true;
       }
 
       function hasOAuthAccounts() {
@@ -232,6 +232,7 @@
       vm.emailNotificationSettings = null;
       vm.getEmailNotificationSettings = getEmailNotificationSettings;
       vm.hasEmailNotifications = hasEmailNotifications;
+      vm.hasLocalAccount = hasLocalAccount;
       vm.getUser = getUser;
       vm.hasOAuthAccounts = hasOAuthAccounts;
       vm.hasPremiumEmailNotifications = hasPremiumEmailNotifications;

@@ -183,7 +183,7 @@
             </tab>
             <tab heading="Password">
               <form name="vm.passwordForm" role="form" class="form-validation">
-                <div class="form-group" ng-if="vm.user.has_local_account">
+                <div class="form-group" ng-if="vm.hasLocalAccount()">
                   <label for="current">Current Password</label>
                   <input id="current" name="current" type="password" class="form-control" ng-model="vm.password.current_password" required />
 
@@ -219,7 +219,7 @@
                 <div class="form-group">
                   <button ui-sref="app.dashboard" type="button" class="btn btn-default">Go To Dashboard</button>
                   <div class="pull-right">
-                    <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" class="btn btn-primary" value="Change Password" />
+                    <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" class="btn btn-primary" value="{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}" />
                   </div>
                 </div>
               </form>
