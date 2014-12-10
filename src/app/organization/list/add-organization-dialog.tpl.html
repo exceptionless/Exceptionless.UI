@@ -8,7 +8,7 @@
     <div class="form-group">
       <label for="name">Organization Name</label>
       <input id="name" name="name" type="text" class="form-control input-lg" ng-model="vm.data.name" placeholder="Organization Name" required />
-      <div class="error" ng-messages="addOrganizationForm.name.$error">
+      <div class="error" ng-messages="addOrganizationForm.name.$error" ng-if="addOrganizationForm.$submitted || addOrganizationForm.name.$touched">
         <small ng-message="required">Organization Name is required.</small>
       </div>
     </div>

@@ -17,7 +17,7 @@
                      ng-model="vm.organization_name"
                      ng-required="vm.canCreateOrganization()" />
 
-              <div class="error" ng-messages="addForm.organization_name.$error">
+              <div class="error" ng-messages="addForm.organization_name.$error" ng-if="addForm.$submitted || addForm.organization_name.$touched">
                 <small ng-message="required">Organization Name is required.</small>
               </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="form-group">
               <label for="project_name">Project Name</label>
               <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name" ng-model="vm.project_name" required />
-              <div class="error" ng-messages="addForm.project_name.$error">
+              <div class="error" ng-messages="addForm.project_name.$error" ng-if="addForm.$submitted || addForm.project_name.$touched">
                 <small ng-message="required">Project Name is required.</small>
               </div>
             </div>

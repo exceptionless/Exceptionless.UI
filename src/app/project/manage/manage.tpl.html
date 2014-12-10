@@ -14,7 +14,7 @@
                          ng-change="vm.save(projectForm.$valid)"
                          required />
 
-                  <div class="error" ng-messages="projectForm.name.$error">
+                  <div class="error" ng-messages="projectForm.name.$error" ng-if="projectForm.$submitted || projectForm.name.$touched">
                     <small ng-message="required">Project Name is required.</small>
                   </div>
                 </div>

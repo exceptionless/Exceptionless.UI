@@ -8,7 +8,7 @@
     <div class="form-group">
       <label for="email">Email Address</label>
       <input id="email" name="email" type="email" class="form-control input-lg" ng-model="vm.data.email" placeholder="Email Address" required />
-      <div class="error" ng-messages="addUserForm.email.$error">
+      <div class="error" ng-messages="addUserForm.email.$error" ng-if="addUserForm.$submitted || addUserForm.email.$touched">
         <small ng-message="required">Email Address is required.</small>
         <small ng-message="email">Email Address is required.</small>
       </div>

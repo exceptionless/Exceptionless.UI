@@ -25,7 +25,7 @@
                          ng-change="vm.saveUser(userForm.$valid)"
                          required />
 
-                  <div class="error" ng-messages="userForm.name.$error">
+                  <div class="error" ng-messages="userForm.name.$error" ng-if="userForm.$submitted || userForm.name.$touched">
                     <small ng-message="required">Full Name is required.</small>
                   </div>
                 </div>
@@ -39,7 +39,7 @@
                          ng-change="vm.saveEmailAddress(userForm.$valid)"
                          required/>
 
-                  <div class="error" ng-messages="userForm.email.$error">
+                  <div class="error" ng-messages="userForm.email.$error" ng-if="userForm.$submitted || userForm.email.$touched">
                     <small ng-message="required">Email Address is required.</small>
                     <small ng-message="email">Email Address is required.</small>
                     <small ng-message="unique">A user already exists with this email address.</small>
@@ -187,7 +187,7 @@
                   <label for="current">Current Password</label>
                   <input id="current" name="current" type="password" class="form-control" ng-model="vm.password.current_password" required />
 
-                  <div class="error" ng-messages="passwordForm.current.$error">
+                  <div class="error" ng-messages="passwordForm.current.$error" ng-if="passwordForm.$submitted || passwordForm.current.$touched">
                     <small ng-message="required">Current Password is required.</small>
                   </div>
                 </div>
@@ -196,7 +196,7 @@
                   <label for="newPassword">New Password</label>
                   <input id="newPassword" name="newPassword" type="password" class="form-control" ng-model="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
 
-                  <div class="error" ng-messages="passwordForm.newPassword.$error">
+                  <div class="error" ng-messages="passwordForm.newPassword.$error" ng-if="passwordForm.$submitted || passwordForm.newPassword.$touched">
                     <small ng-message="required">New Password is required.</small>
                     <small ng-message="minlength">New Password must be at least 6 characters long.</small>
                     <small ng-message="maxlength">New Password must be less than 101 characters long.</small>
@@ -207,7 +207,7 @@
                   <label for="confirmPassword">Confirm password</label>
                   <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" ng-model="vm.password.confirm_password" match="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
 
-                  <div class="error" ng-messages="passwordForm.confirmPassword.$error">
+                  <div class="error" ng-messages="passwordForm.confirmPassword.$error" ng-if="passwordForm.$submitted || passwordForm.confirmPassword.$touched">
                     <small ng-message="required">Confirm Password is required.</small>
                     <small ng-message="match">New Password and Confirmation Password fields do not match.</small>
                     <small ng-message="minlength">Confirm Password must be at least 6 characters long.</small>

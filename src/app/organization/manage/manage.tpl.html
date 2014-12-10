@@ -15,7 +15,7 @@
                          ng-change="vm.save(organizationForm.$valid)"
                          required />
 
-                  <div class="error" ng-messages="organizationForm.name.$error">
+                  <div class="error" ng-messages="organizationForm.name.$error" ng-if="organizationForm.$submitted || organizationForm.name.$touched">
                     <small ng-message="required">Organization Name is required.</small>
                   </div>
                 </div>
