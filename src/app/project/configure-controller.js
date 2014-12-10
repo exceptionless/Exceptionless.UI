@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Configure', ['$state', '$stateParams', 'notificationService', 'tokenService', function ($state, $stateParams, notificationService, tokenService) {
+    .controller('project.Configure', ['$state', '$stateParams', 'notificationService', 'projectService', 'tokenService', function ($state, $stateParams, notificationService, projectService, tokenService) {
       var projectId = $stateParams.id;
 
       function copied() {
@@ -12,13 +12,28 @@
       function getDefaultApiKey() {
         function onSuccess(response) {
           vm.apiKey = response.data.id;
+          return vm.apiKey;
         }
 
         function onFailure() {
           notificationService.error('An error occurred while getting the API key for your project.');
         }
 
-        tokenService.getProjectDefault(projectId).then(onSuccess, onFailure);
+        return tokenService.getProjectDefault(projectId).then(onSuccess, onFailure);
+      }
+
+      function getProject() {
+        function onSuccess(response) {
+          vm.project = response.plain();
+          return vm.project;
+        }
+
+        function onFailure() {
+          $state.go('app.dashboard');
+          notificationService.error('The project "' + projectId + '" could not be found.');
+        }
+
+        return projectService.getById(projectId).then(onSuccess, onFailure);
       }
 
       function getProjectTypes() {
@@ -34,8 +49,7 @@
       }
 
       function hasProjectData() {
-        // TODO: Implement this.
-        return false;
+        return vm.project.total_event_count > 0;
       }
 
       function navigateToDashboard() {
@@ -48,9 +62,9 @@
       vm.currentProjectType = {};
       vm.hasProjectData = hasProjectData;
       vm.navigateToDashboard = navigateToDashboard;
-      vm.projectId = projectId;
+      vm.project = {};
       vm.projectTypes = getProjectTypes();
 
-      getDefaultApiKey();
+      getDefaultApiKey().then(getProject);
     }]);
 }());

@@ -64,7 +64,7 @@
         notificationService.success('Copied!');
       }
 
-      function get() {
+      function getProject() {
         function onSuccess(response) {
           vm.project = response.plain();
           return vm.project;
@@ -72,7 +72,7 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The project "' + $stateParams.id + '" could not be found.');
+          notificationService.error('The project "' + projectId + '" could not be found.');
         }
 
         return projectService.getById(projectId).then(onSuccess, onFailure);
@@ -234,8 +234,6 @@
       vm.saveDeleteBotDataEnabled = saveDeleteBotDataEnabled;
       vm.tokens = [];
       vm.webHooks = [];
-
-      get().then(getTokens).then(getConfiguration).then(getWebHooks);
-    }
-    ]);
+      getProject().then(getTokens).then(getConfiguration).then(getWebHooks);
+    }]);
 }());
