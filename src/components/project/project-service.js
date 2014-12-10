@@ -34,7 +34,7 @@
       }
 
       function getNotificationSettings(id, userId) {
-        return Restangular.one('projects', id).one('notifications', userId).get();
+        return Restangular.one('users', userId).one('projects', id).one('notifications').get();
       }
 
       function isNameAvailable(name) {
@@ -54,7 +54,7 @@
       }
 
       function removeNotificationSettings(id, userId) {
-        return Restangular.one('projects', id).one('notifications', userId).remove();
+        return Restangular.one('users', userId).one('projects', id).one('notifications').remove();
       }
 
       function resetData(id) {
@@ -70,7 +70,7 @@
       }
 
       function setNotificationSettings(id, userId, settings) {
-        return Restangular.one('projects', id).one('notifications', userId).customPOST(settings);
+        return Restangular.one('users', userId).one('projects', id).one('notifications').customPOST(settings);
       }
 
       var service = {

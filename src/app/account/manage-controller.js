@@ -64,6 +64,10 @@
         }
 
         vm.emailNotificationSettings = null;
+        if (!vm.currentProject.id) {
+          return;
+        }
+
         return projectService.getNotificationSettings(vm.currentProject.id, vm.user.id).then(onSuccess, onFailure);
       }
 
