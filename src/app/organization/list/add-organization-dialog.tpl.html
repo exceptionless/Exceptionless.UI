@@ -7,19 +7,15 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="name">Organization Name</label>
-      <input type="text" class="form-control input-lg" id="name" name="name" ng-model="vm.data.name"
-             placeholder="Organization Name" required>
-
-      <div class="error" ng-if="addOrganizationForm.name.$touched || addOrganizationForm.$submitted">
-        <small ng-if="addOrganizationForm.name.$error.name">
-          Please enter a valid organization name.
-        </small>
+      <input id="name" name="name" type="text" class="form-control input-lg" ng-model="vm.data.name" placeholder="Organization Name" required />
+      <div class="error" ng-messages="addOrganizationForm.name.$error">
+        <small ng-message="required">Organization Name is required.</small>
       </div>
     </div>
   </div>
 
   <div class="modal-footer">
-    <button type="submit" class="btn btn-default" ng-click="vm.save(addOrganizationForm.$valid)">Save</button>
+    <input type="submit" class="btn btn-default" ng-click="vm.save(addOrganizationForm.$valid)" value="Save" />
     <button type="button" class="btn btn-primary" ng-click="vm.cancel()">Cancel</button>
   </div>
 </form>

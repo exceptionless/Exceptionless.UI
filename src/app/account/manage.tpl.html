@@ -17,39 +17,37 @@
                 </div>
 
                 <div class="form-group">
-                  <label>Full Name</label>
-                  <input name="name" type="text" class="form-control"
+                  <label for="name">Full Name</label>
+                  <input id="name" name="name" type="text" class="form-control"
                          placeholder="Your first and last name"
                          ng-model="vm.user.full_name"
                          ng-model-options="{ debounce: 1000 }"
                          ng-change="vm.saveUser(userForm.$valid)"
                          required />
 
-                  <div class="error" ng-if="userForm.name.$touched || userForm.$submitted">
-                    <small ng-if="userForm.name.$error.required">
-                      Full Name is required.
-                    </small>
+                  <div class="error" ng-messages="userForm.name.$error">
+                    <small ng-message="required">Full Name is required.</small>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label>Email Address</label>
-                  <input name="email" type="email" class="form-control"
+                  <label for="email">Email Address</label>
+                  <input id="email" name="email" type="email" class="form-control"
                          placeholder="Email Address"
                          ng-model="vm.user.email_address"
                          ng-model-options="{ debounce: 1000 }"
                          ng-change="vm.saveEmailAddress(userForm.$valid)"
                          required/>
 
-                  <div class="error" ng-if="userForm.email.$touched || userForm.$submitted">
-                    <small ng-if="userForm.email.$error.required">
-                      Email Address is required.
-                    </small>
-                    <small ng-if="userForm.email.$error.unique">
-                      A user already exists with this email address.
-                    </small>
+                  <div class="error" ng-messages="userForm.email.$error">
+                    <small ng-message="required">Email Address is required.</small>
+                    <small ng-message="email">Email Address is required.</small>
+                    <small ng-message="unique">A user already exists with this email address.</small>
                   </div>
-                  <p ng-if="!vm.user.is_email_address_verified" class="help-block">Email not verified. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</p>
+
+                  <p ng-if="!vm.user.is_email_address_verified" class="help-block">
+                    Email not verified. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.
+                  </p>
                 </div>
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
@@ -186,41 +184,34 @@
             <tab heading="Password">
               <form name="passwordForm" role="form" class="form-validation">
                 <div class="form-group" ng-if="vm.user.has_local_account">
-                  <label>Current Password</label>
-                  <input name="current" type="password" class="form-control" ng-model="vm.password.current_password" required/>
+                  <label for="current">Current Password</label>
+                  <input id="current" name="current" type="password" class="form-control" ng-model="vm.password.current_password" required />
 
-                  <div class="error" ng-if="passwordForm.current.$touched || passwordForm.$submitted">
-                    <small ng-if="passwordForm.current.$error.required">
-                      The current password is required.
-                    </small>
+                  <div class="error" ng-messages="passwordForm.current.$error">
+                    <small ng-message="required">Current Password is required.</small>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label>New Password</label>
-                  <input name="newPassword" type="password" class="form-control" ng-model="vm.password.password" min="6" required/>
+                  <label for="newPassword">New Password</label>
+                  <input id="newPassword" name="newPassword" type="password" class="form-control" ng-model="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
 
-                  <div class="error" ng-if="passwordForm.newPassword.$touched || passwordForm.$submitted">
-                    <small ng-if="passwordForm.newPassword.$error.required">
-                      The new password is required.
-                    </small>
-                    <small ng-if="passwordForm.newPassword.$error.min">
-                      The new password must be at least 6 characters long.
-                    </small>
+                  <div class="error" ng-messages="passwordForm.newPassword.$error">
+                    <small ng-message="required">New Password is required.</small>
+                    <small ng-message="minlength">New Password must be at least 6 characters long.</small>
+                    <small ng-message="maxlength">New Password must be less than 101 characters long.</small>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label>Confirm password</label>
-                  <input name="confirmPassword" type="password" class="form-control" ng-model="vm.password.confirm_password" match="vm.password.password" required>
+                  <label for="confirmPassword">Confirm password</label>
+                  <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" ng-model="vm.password.confirm_password" match="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
 
-                  <div class="error" ng-if="passwordForm.confirmPassword.$touched || passwordForm.$submitted">
-                    <small ng-if="passwordForm.confirmPassword.$error.required">
-                      The confirm password is required.
-                    </small>
-                    <small ng-if="passwordForm.confirmPassword.$error.match">
-                      The new password and confirmation password do not match.
-                    </small>
+                  <div class="error" ng-messages="passwordForm.confirmPassword.$error">
+                    <small ng-message="required">Confirm Password is required.</small>
+                    <small ng-message="match">New Password and Confirmation Password fields do not match.</small>
+                    <small ng-message="minlength">Confirm Password must be at least 6 characters long.</small>
+                    <small ng-message="maxlength">Confirm Password must be less than 101 characters long.</small>
                   </div>
                 </div>
 
@@ -228,9 +219,7 @@
                 <div class="form-group">
                   <button ui-sref="app.dashboard" type="button" class="btn btn-default">Go To Dashboard</button>
                   <div class="pull-right">
-                    <button ng-click="vm.changePassword(passwordForm.$valid)" type="submit" class="btn btn-primary">
-                      Change Password
-                    </button>
+                    <input ng-click="vm.changePassword(passwordForm.$valid)" type="submit" class="btn btn-primary" value="Change Password" />
                   </div>
                 </div>
               </form>
@@ -258,8 +247,8 @@
                     <tr ng-repeat="account in vm.user.o_auth_accounts track by account.provider_user_id" ng-if="vm.hasProjects()">
                       <td>{{::account.provider}} ({{::account.username || account.provider_user_id}})</td>
                       <td ng-hide="!vm.canRemoveOAuthAccount()">
-                        <button type="button" role="button" class="btn btn-xs btn-danger" title="Remove" ng-click="vm.unlink(account)">
-                          <i class="fa fa-fw fa-times"></i>
+                        <button type="button" role="button" class="btn btn-sm" title="Remove" ng-click="vm.unlink(account)">
+                          <i class="fa fa-times"></i>
                         </button>
                       </td>
                     </tr>

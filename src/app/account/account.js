@@ -2,6 +2,8 @@
   'use strict';
 
   angular.module('app.account', [
+    'directives.inputMatch',
+    'ngMessages',
     'ui.router',
 
     'exceptionless.auth',

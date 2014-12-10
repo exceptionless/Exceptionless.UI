@@ -2,6 +2,8 @@
   'use strict';
 
   angular.module('app.project', [
+    'ngMessages',
+
     'exceptionless.dialog',
     'exceptionless.project',
     'exceptionless.organization',

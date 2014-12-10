@@ -6,41 +6,35 @@
         <div class="panel-body">
           <form name="addForm" role="form" class="form-validation">
             <div class="form-group" ng-if="vm.hasOrganizations()">
-              <label>Organization Name</label>
-              <select class="form-control" ng-init="vm.currentOrganization = vm.organizations[0]"
+              <label for="organization">Organization Name</label>
+              <select id="organization" class="form-control" ng-init="vm.currentOrganization = vm.organizations[0]"
                       ng-model="vm.currentOrganization"
                       ng-options="organization.name for organization in vm.organizations"></select>
             </div>
 
             <div class="form-group" ng-if="vm.canCreateOrganization()">
               <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
-                     ng-model="vm.organization_name" ng-required="vm.canCreateOrganization()"/>
+                     ng-model="vm.organization_name"
+                     ng-required="vm.canCreateOrganization()" />
 
-              <div class="error" ng-if="addForm.organization_name.$touched">
-                <small ng-if="addForm.organization_name.$error.required">
-                  Please enter a valid organization name.
-                </small>
+              <div class="error" ng-messages="addForm.organization_name.$error">
+                <small ng-message="required">Organization Name is required.</small>
               </div>
             </div>
 
             <div class="form-group">
-              <label>Project Name</label>
-              <input name="project_name" type="text" class="form-control" placeholder="New Project Name"
-                     ng-model="vm.project_name" required/>
-
-              <div class="error" ng-if="addForm.project_name.$touched">
-                <small ng-if="addForm.project_name.$error.required">
-                  Please enter a valid project name.
-                </small>
+              <label for="project_name">Project Name</label>
+              <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name" ng-model="vm.project_name" required />
+              <div class="error" ng-messages="addForm.project_name.$error">
+                <small ng-message="required">Project Name is required.</small>
               </div>
             </div>
 
             <div class="line line-dashed b-b line-lg pull-in"></div>
             <div class="form-group">
-              <button ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" type="button" class="btn btn-default">Go To Dashboard
-              </button>
+              <button ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" type="button" class="btn btn-default">Go To Dashboard</button>
               <div class="pull-right">
-                <button ng-click="vm.add(addForm.$valid)" type="submit" class="btn btn-primary">Add Project</button>
+                <input ng-click="vm.add(addForm.$valid)" type="submit" class="btn btn-primary" value="Add Project" />
               </div>
             </div>
           </form>

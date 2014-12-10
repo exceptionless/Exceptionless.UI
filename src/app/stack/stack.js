@@ -2,7 +2,9 @@
   'use strict';
 
   angular.module('app.stack', [
+    'ngMessages',
     'ui.router',
+
     'exceptionless.dialog',
     'exceptionless.event',
     'exceptionless.events',

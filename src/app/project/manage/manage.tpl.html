@@ -8,28 +8,25 @@
             <tab heading="Project">
               <form name="projectForm" role="form" class="form-validation">
                 <div class="form-group">
-                  <label>Project Name</label>
-                  <input name="name" type="text" class="form-control" placeholder="Project Name"
-                         ng-model="vm.project.name" ng-change="vm.save(projectForm.$valid)" required/>
+                  <label for="name">Project Name</label>
+                  <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
+                         ng-model="vm.project.name"
+                         ng-change="vm.save(projectForm.$valid)"
+                         required />
 
-                  <div class="error" ng-if="projectForm.name.$touched">
-                    <small ng-if="projectForm.name.$error.required">
-                      Please enter a valid project name.
-                    </small>
+                  <div class="error" ng-messages="projectForm.name.$error">
+                    <small ng-message="required">Project Name is required.</small>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label>Organization Name</label>
-                  <input type="text" class="form-control" placeholder="Organization Name"
-                         ng-model="vm.project.organization_name" readonly/>
+                  <input type="text" class="form-control" placeholder="Organization Name" ng-model="vm.project.organization_name" readonly />
                 </div>
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
                 <div class="form-group">
-                  <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">
-                    Go To Dashboard
-                  </button>
+                  <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go To Dashboard</button>
                   <div class="pull-right">
                     <button ng-click="vm.resetData()" class="btn btn-danger">Delete All Project Data</button>
                   </div>
@@ -69,14 +66,16 @@
               </div>
             </tab>
             <tab heading="Settings">
-              <form role="form">
+              <form name="settingsForm" role="form" class="form-validation">
                 <p>If the system detects a high volume of events coming from the same client IP address, it will
                   automatically delete the data to reduce system noise.</p>
 
                 <div class="checkbox">
                   <label class="i-checks">
-                    <input type="checkbox" ng-model="vm.project.delete_bot_data_enabled"
-                           ng-model-options="{ debounce: 1000 }" ng-change="vm.saveDeleteBotDataEnabled()">
+                    <input type="checkbox"
+                           ng-model="vm.project.delete_bot_data_enabled"
+                           ng-model-options="{ debounce: 1000 }"
+                           ng-change="vm.saveDeleteBotDataEnabled()">
                     <i></i>
                     Automatically delete bot data
                   </label>
@@ -92,7 +91,8 @@
                   to specify starts with, ends with, or contains just to be extra safe.
                 </p>
                 <input type="text" class="form-control" placeholder="Example: *Password*, CreditCard*, SSN"
-                       ng-model="vm.data_exclusions" ng-model-options="{ debounce: 1000 }"
+                       ng-model="vm.data_exclusions"
+                       ng-model-options="{ debounce: 1000 }"
                        ng-change="vm.saveDataExclusion()"/>
 
                 <h5>Client Configuration</h5>
@@ -118,8 +118,7 @@
                       <div class="control-group" style="margin-bottom: 0">{{::conf.value}}</div>
                     </td>
                     <td>
-                      <button class="btn btn-sm" title="Delete" ng-click="vm.removeConfig(conf)"><i
-                        class="fa fa-times"></i></button>
+                      <button class="btn btn-sm" title="Delete" ng-click="vm.removeConfig(conf)"><i class="fa fa-times"></i></button>
                     </td>
                   </tr>
                   <tr ng-if="!vm.hasConfiguration()">
@@ -130,9 +129,7 @@
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
                 <div class="form-group">
-                  <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">
-                    Go To Dashboard
-                  </button>
+                  <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go To Dashboard</button>
                   <div class="pull-right">
                     <button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
                   </div>
@@ -179,9 +176,7 @@
 
               <div class="line line-dashed b-b line-lg pull-in"></div>
               <div class="form-group">
-                <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go
-                  To Dashboard
-                </button>
+                <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go To Dashboard</button>
                 <div class="pull-right">
                   <button ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
                 </div>

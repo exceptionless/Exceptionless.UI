@@ -8,15 +8,15 @@
             <tab heading="General">
               <form name="organizationForm" role="form" class="form-validation">
                 <div class="form-group">
-                  <label>Organization Name</label>
-                  <input name="name" type="text" class="form-control" placeholder="Organization Name"
-                         ng-model="vm.organization.name" ng-model-options="{ debounce: 1000 }"
-                         ng-change="vm.save(organizationForm.$valid)" required/>
+                  <label for="name">Organization Name</label>
+                  <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
+                         ng-model="vm.organization.name"
+                         ng-model-options="{ debounce: 1000 }"
+                         ng-change="vm.save(organizationForm.$valid)"
+                         required />
 
-                  <div class="error" ng-if="organizationForm.name.$touched">
-                    <small ng-if="organizationForm.name.$error.required">
-                      Please enter a valid organization name.
-                    </small>
+                  <div class="error" ng-messages="organizationForm.name.$error">
+                    <small ng-message="required">Organization Name is required.</small>
                   </div>
                 </div>
                 <div class="line line-dashed b-b line-lg pull-in"></div>

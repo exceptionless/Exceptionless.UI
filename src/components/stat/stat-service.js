@@ -2,8 +2,9 @@
   'use strict';
 
   angular.module('exceptionless.stat', [
-    'exceptionless.filter',
-    'restangular'
+    'restangular',
+
+    'exceptionless.filter'
   ])
     .factory('statService', ['filterService', 'Restangular', function (filterService, Restangular) {
       function get(options) {

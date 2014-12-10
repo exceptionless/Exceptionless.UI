@@ -2,12 +2,11 @@
   'use strict';
 
   angular.module('exceptionless.web-hook', [
-    'checklist-model',
-    'restangular',
-
-    // Custom dialog dependencies
-    'ui.bootstrap',
+    'dialogs.default-translations',
     'dialogs.main',
-    'dialogs.default-translations'
+    'checklist-model',
+    'ngMessages',
+    'restangular',
+    'ui.bootstrap'
   ]);
 }());

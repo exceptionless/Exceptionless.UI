@@ -2,6 +2,8 @@
   'use strict';
 
   angular.module('app.organization', [
+    'ngMessages',
+
     'exceptionless.dialog',
     'exceptionless.organization',
     'exceptionless.pagination',

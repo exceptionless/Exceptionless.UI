@@ -9,6 +9,8 @@
         scope: true,
         templateUrl: 'components/date-filter/date-filter-directive.tpl.html',
         controller: ['$interval', '$scope', 'dialogs', 'filterService', function ($interval, $scope, dialogs, filterService) {
+          var vm = this;
+
           function getFilterName() {
             var time = filterService.getTime();
             if (time === 'last hour') {
@@ -74,7 +76,6 @@
             $interval.cancel(interval);
           });
 
-          var vm = this;
           vm.hasFilter = hasFilter;
           vm.isActive = isActive;
           vm.filterName = getFilterName();

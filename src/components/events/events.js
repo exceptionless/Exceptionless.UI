@@ -2,18 +2,17 @@
   'use strict';
 
   angular.module('exceptionless.events', [
+    'dialogs.default-translations',
+    'dialogs.main',
     'checklist-model',
+    'ui.bootstrap',
+
     'exceptionless.filter',
     'exceptionless.link',
     'exceptionless.notification',
     'exceptionless.pagination',
     'exceptionless.refresh',
     'exceptionless.summary',
-    'exceptionless.timeago',
-
-    // Custom dialog dependencies
-    'ui.bootstrap',
-    'dialogs.main',
-    'dialogs.default-translations'
+    'exceptionless.timeago'
   ]);
 }());
