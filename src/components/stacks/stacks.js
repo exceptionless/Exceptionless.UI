@@ -3,9 +3,10 @@
 
   angular.module('exceptionless.stacks', [
     'checklist-model',
-    'dialogs.default-translations',
-    'dialogs.main',
     'ui.bootstrap',
+
+    'dialogs.main',
+    'dialogs.default-translations',
 
     'exceptionless.filter',
     'exceptionless.link',

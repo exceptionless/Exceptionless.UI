@@ -2,8 +2,9 @@
   'use strict';
 
   angular.module('exceptionless.dialog', [
-    'dialogs.default-translations',
+    'ui.bootstrap',
+
     'dialogs.main',
-    'ui.bootstrap'
+    'dialogs.default-translations'
   ]);
 }());

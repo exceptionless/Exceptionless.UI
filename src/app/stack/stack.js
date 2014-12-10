@@ -3,7 +3,11 @@
 
   angular.module('app.stack', [
     'ngMessages',
+    'ui.bootstrap',
     'ui.router',
+
+    'dialogs.main',
+    'dialogs.default-translations',
 
     'exceptionless.dialog',
     'exceptionless.event',
@@ -14,19 +18,14 @@
     'exceptionless.refresh',
     'exceptionless.stack',
     'exceptionless.stack-trace',
-    'exceptionless.stat',
-
-    // Custom dialog dependencies
-    'ui.bootstrap',
-    'dialogs.main',
-    'dialogs.default-translations'
+    'exceptionless.stat'
   ])
-    .config(['$stateProvider', function ($stateProvider) {
-      $stateProvider.state('app.stack', {
-        url: '/stack/:id',
-        controller: 'Stack',
-        controllerAs: 'vm',
-        templateUrl: 'app/stack/stack.tpl.html'
-      });
-    }]);
+  .config(['$stateProvider', function ($stateProvider) {
+    $stateProvider.state('app.stack', {
+      url: '/stack/:id',
+      controller: 'Stack',
+      controllerAs: 'vm',
+      templateUrl: 'app/stack/stack.tpl.html'
+    });
+  }]);
 }());

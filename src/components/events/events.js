@@ -2,10 +2,11 @@
   'use strict';
 
   angular.module('exceptionless.events', [
-    'dialogs.default-translations',
-    'dialogs.main',
     'checklist-model',
     'ui.bootstrap',
+
+    'dialogs.main',
+    'dialogs.default-translations',
 
     'exceptionless.filter',
     'exceptionless.link',

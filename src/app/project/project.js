@@ -3,19 +3,17 @@
 
   angular.module('app.project', [
     'ngMessages',
+    'ui.bootstrap',
+    'ui.router',
+
+    'dialogs.main',
+    'dialogs.default-translations',
 
     'exceptionless.dialog',
     'exceptionless.project',
     'exceptionless.organization',
     'exceptionless.notification',
-    'exceptionless.token',
-
-    'ui.router',
-
-    // Custom dialog dependencies
-    'ui.bootstrap',
-    'dialogs.main',
-    'dialogs.default-translations'
+    'exceptionless.token'
   ])
   .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
     $stateProvider.state('app.project', {
