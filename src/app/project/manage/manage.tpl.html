@@ -26,7 +26,7 @@
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
                 <div class="form-group">
-                  <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go To Dashboard</button>
+                  <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
                   <div class="pull-right">
                     <button ng-click="vm.resetData()" class="btn btn-danger">Delete All Project Data</button>
                   </div>
@@ -57,9 +57,7 @@
 
               <div class="line line-dashed b-b line-lg pull-in"></div>
               <div class="form-group">
-                <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go
-                  To Dashboard
-                </button>
+                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
                 <div class="pull-right">
                   <button ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
                 </div>
@@ -129,7 +127,7 @@
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
                 <div class="form-group">
-                  <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go To Dashboard</button>
+                  <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
                   <div class="pull-right">
                     <button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
                   </div>
@@ -176,7 +174,7 @@
 
               <div class="line line-dashed b-b line-lg pull-in"></div>
               <div class="form-group">
-                <button ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="submit" class="btn btn-default">Go To Dashboard</button>
+                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
                 <div class="pull-right">
                   <button ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
                 </div>
