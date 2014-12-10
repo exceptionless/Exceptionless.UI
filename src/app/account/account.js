@@ -4,6 +4,7 @@
   angular.module('app.account', [
     'ui.router',
 
+    'exceptionless.auth',
     'exceptionless.dialog',
     'exceptionless.project',
     'exceptionless.user'

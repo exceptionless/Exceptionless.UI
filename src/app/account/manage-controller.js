@@ -2,15 +2,57 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', ['featureService', 'notificationService', 'projectService', 'userService', function (featureService, notificationService, projectService, userService) {
+    .controller('account.Manage', ['authService', 'featureService', 'notificationService', 'projectService', 'userService', function (authService, featureService, notificationService, projectService, userService) {
       var vm = this;
+
+      function getMessage(response) {
+        var message = 'An error occurred while logging in.';
+        if (response.data && response.data.message)
+          message += ' Message: ' + response.data.message;
+
+        return message;
+      }
+
+      function authenticate(provider) {
+        function onFailure(response) {
+          var message = 'An error occurred while adding external login.';
+          if (response.data && response.data.message)
+            message += ' Message: ' + response.data.message;
+
+          notificationService.error(message);
+        }
+
+        return authService.authenticate(provider).catch(onFailure);
+      }
+
+      function canRemoveOAuthAccount() {
+        if (!vm.user) {
+          return false;
+        }
+
+        return vm.user.has_local_account === true || (vm.user.o_auth_accounts && vm.user.o_auth_accounts.length > 1);
+      }
 
       function changePassword(isValid) {
         if (!isValid) {
           return;
         }
 
-        // TODO: implement change password.
+        function onSuccess() {
+          notificationService.info('You have successfully changed your password.');
+          vm.password = {};
+        }
+
+        function onFailure(response) {
+          var message = 'An error occurred while trying to change your password.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
+        }
+
+        return authService.changePassword(vm.password).then(onSuccess, onFailure);
       }
 
       function getEmailNotificationSettings() {
@@ -66,16 +108,20 @@
         return userService.getCurrentUser().then(onSuccess, onFailure);
       }
 
+      function hasEmailNotifications() {
+        return vm.user.email_notifications_enabled && vm.emailNotificationSettings;
+      }
+
+      function hasOAuthAccounts() {
+        return vm.user && vm.user.o_auth_accounts && vm.user.o_auth_accounts.length > 0;
+      }
+
       function hasPremiumFeatures() {
         return featureService.hasPremium();
       }
 
       function hasProjects() {
         return vm.projects.length > 0;
-      }
-
-      function hasEmailNotifications() {
-        return vm.user.email_notifications_enabled && vm.emailNotificationSettings;
       }
 
       function hasPremiumEmailNotifications() {
@@ -160,11 +206,32 @@
         return userService.update(vm.user.id, vm.user).catch(onFailure);
       }
 
+      function unlink(account) {
+        function onSuccess() {
+          vm.user.o_auth_accounts.splice(vm.user.o_auth_accounts.indexOf(account), 1);
+        }
+
+        function onFailure(response) {
+          var message = 'An error occurred while removing the external login.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
+        }
+
+        return authService.unlink(account.provider, account.provider_user_id).then(onSuccess, onFailure);
+      }
+
+      vm.authenticate = authenticate;
+      vm.canRemoveOAuthAccount = canRemoveOAuthAccount;
       vm.changePassword = changePassword;
       vm.currentProject = {};
       vm.emailNotificationSettings = null;
       vm.getEmailNotificationSettings = getEmailNotificationSettings;
       vm.hasEmailNotifications = hasEmailNotifications;
+      vm.getUser = getUser;
+      vm.hasOAuthAccounts = hasOAuthAccounts;
       vm.hasPremiumEmailNotifications = hasPremiumEmailNotifications;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.hasProjects = hasProjects;
@@ -175,6 +242,7 @@
       vm.saveEmailNotificationSettings = saveEmailNotificationSettings;
       vm.saveEnableEmailNotification = saveEnableEmailNotification;
       vm.saveUser = saveUser;
+      vm.unlink = unlink;
       vm.user = {};
 
       getUser().then(getProjects).then(getEmailNotificationSettings);

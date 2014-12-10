@@ -9,6 +9,10 @@
         return $auth.authenticate(provider);
       }
 
+      function changePassword(changePasswordModel) {
+        return Restangular.one('auth', 'change-password').customPOST(changePasswordModel);
+      }
+
       function clearPreviousState() {
         _store.forget(['name', 'params']);
       }
@@ -87,6 +91,7 @@
 
       var service = {
         authenticate: authenticate,
+        changePassword: changePassword,
         forgotPassword: forgotPassword,
         getToken: getToken,
         isAuthenticated: isAuthenticated,

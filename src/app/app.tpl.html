@@ -2,7 +2,7 @@
 
 <div ng-include="'app/blocks/sidebar.tpl.html'" class="app-aside hidden-xs bg-dark"></div>
 
-<div class="app-content" refresh-on="UserChanged" refresh-action="appVm.getUser()"  refresh-debounce="1000">
+<div class="app-content" refresh-on="UserChanged" refresh-action="appVm.getUser()" refresh-debounce="1000">
   <button class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside"></button>
 
   <div class="app-content-body fade-in" ui-view autoscroll="true"></div>
