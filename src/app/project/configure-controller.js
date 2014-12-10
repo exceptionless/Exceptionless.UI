@@ -23,13 +23,13 @@
 
       function getProjectTypes() {
         return [
-          {key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config'},
-          {key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config'},
-          {key: 'Exceptionless.Web', name: 'ASP.NET Web Forms', config: 'web.config'},
-          {key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config'},
-          {key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config'},
-          {key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config'},
-          {key: 'Exceptionless', name: 'Console', config: 'app.config'}
+          { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config' },
+          { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config' },
+          { key: 'Exceptionless.Web', name: 'ASP.NET Web Forms', config: 'web.config' },
+          { key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config' },
+          { key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config' },
+          { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config' },
+          { key: 'Exceptionless', name: 'Console', config: 'app.config' }
         ];
       }
 
@@ -45,7 +45,7 @@
       var vm = this;
       vm.copied = copied;
       vm.apiKey = null;
-      vm.currentProjectType = null;
+      vm.currentProjectType = {};
       vm.hasProjectData = hasProjectData;
       vm.navigateToDashboard = navigateToDashboard;
       vm.projectId = projectId;
