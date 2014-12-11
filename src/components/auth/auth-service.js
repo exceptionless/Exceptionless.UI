@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.auth')
-    .factory('authService', ['$auth', '$location', '$rootScope', '$state', 'Restangular', 'locker', function ($auth, $location, $rootScope, $state, Restangular, locker) {
+    .factory('authService', ['$auth', '$location', '$state', 'Restangular', 'locker', function ($auth, $location, $state, Restangular, locker) {
       var _store = locker.driver('session').namespace('auth');
 
       function authenticate(provider) {
@@ -34,23 +34,12 @@
       }
 
       function login(user) {
-        function onSuccess(response) {
-          $rootScope.$emit('auth:login');
-          return response;
-        }
-
-        return $auth.login(user).then(onSuccess);
+        return $auth.login(user);
       }
 
       function logout() {
         clearPreviousState();
-
-        function onSuccess(response) {
-          $rootScope.$emit('auth:logout');
-          return response;
-        }
-
-        return $auth.logout().then(onSuccess);
+        return $auth.logout();
       }
 
       function redirectToPreviousState() {

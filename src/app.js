@@ -53,7 +53,9 @@
     $urlRouterProvider.otherwise('/type/error/dashboard');
     $stateProvider.state('app', {
       abstract: true,
-      templateUrl: 'app/app.tpl.html'
+      templateUrl: 'app/app.tpl.html',
+      controller: 'App',
+      controllerAs: 'appVm'
     });
 
     $stateProvider.state('app.dashboard', {

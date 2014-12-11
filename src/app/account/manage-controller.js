@@ -5,14 +5,6 @@
     .controller('account.Manage', ['authService', 'featureService', 'notificationService', 'projectService', 'userService', function (authService, featureService, notificationService, projectService, userService) {
       var vm = this;
 
-      function getMessage(response) {
-        var message = 'An error occurred while logging in.';
-        if (response.data && response.data.message)
-          message += ' Message: ' + response.data.message;
-
-        return message;
-      }
-
       function authenticate(provider) {
         function onFailure(response) {
           var message = 'An error occurred while adding external login.';
@@ -53,6 +45,10 @@
         return authService.changePassword(vm.password).then(onSuccess, onFailure);
       }
 
+      function get() {
+        return getUser().then(getProjects).then(getEmailNotificationSettings);
+      }
+
       function getEmailNotificationSettings() {
         function onSuccess(response) {
           vm.emailNotificationSettings = response.data.plain();
@@ -75,10 +71,8 @@
         function onSuccess(response) {
           vm.projects = response.data.plain();
 
-          if (vm.currentProject.id) {
-            var projects = response.data.filter(function(project) { return project.id === vm.currentProject.id; });
-            vm.currentProject = projects.length > 0 ? projects[0] : {};
-          } else {
+          vm.currentProject = vm.projects.filter(function(p) { return p.id === vm.currentProject.id; })[0];
+          if (!vm.currentProject) {
             vm.currentProject = vm.projects.length > 0 ? vm.projects[0] : {};
           }
 
@@ -194,7 +188,6 @@
         return userService.update(vm.user.id, { email_notifications_enabled: vm.user.email_notifications_enabled }).catch(onFailure);
       }
 
-
       function saveUser(isValid) {
         if (!isValid) {
           return;
@@ -237,7 +230,7 @@
       vm.getEmailNotificationSettings = getEmailNotificationSettings;
       vm.hasEmailNotifications = hasEmailNotifications;
       vm.hasLocalAccount = hasLocalAccount;
-      vm.getUser = getUser;
+      vm.get = get;
       vm.hasOAuthAccounts = hasOAuthAccounts;
       vm.hasPremiumEmailNotifications = hasPremiumEmailNotifications;
       vm.hasPremiumFeatures = hasPremiumFeatures;
@@ -253,6 +246,6 @@
       vm.unlink = unlink;
       vm.user = {};
 
-      getUser().then(getProjects).then(getEmailNotificationSettings);
+      get();
     }]);
 }());

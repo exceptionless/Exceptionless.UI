@@ -11,6 +11,7 @@
                   <label for="name">Project Name</label>
                   <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
                          ng-model="vm.project.name"
+                         ng-model-options="{ debounce: 1000 }"
                          ng-change="vm.save(projectForm.$valid)"
                          required />
 

@@ -2,7 +2,9 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$rootScope', '$scope', '$state', '$stateParams', '$window', 'authService', 'filterService', 'hotkeys', 'signalRService', 'urlService', 'userService', 'VERSION', function ($rootScope, $scope, $state, $stateParams, $window, authService, filterService, hotkeys, signalRService, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'filterService', 'hotkeys', 'signalRService', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, filterService, hotkeys, signalRService, urlService, userService, VERSION) {
+      var vm = this;
+
       function isSmartDevice($window) {
         var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
         return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
@@ -76,11 +78,17 @@
         return signalRService.startDelayed(1000);
       }
 
-      if (!!navigator.userAgent.match(/MSIE/i))
-        angular.element($window.document.body).addClass('ie');
+      if (!authService.isAuthenticated()) {
+        return $state.go('auth.login');
+      }
 
-      if (isSmartDevice($window))
+      if (!!navigator.userAgent.match(/MSIE/i)) {
+        angular.element($window.document.body).addClass('ie');
+      }
+
+      if (isSmartDevice($window)) {
         angular.element($window.document.body).addClass('smart');
+      }
 
       hotkeys.bindTo($scope)
         .add({
@@ -91,24 +99,9 @@
           }
         });
 
-      if (authService.isAuthenticated()) {
-        getUser().then(startSignalR);
-      }
 
-      var onAuthLogin = $rootScope.$on('auth:login', function() {
-        return getUser().then(startSignalR);
-      });
+      $scope.$on('$destroy', signalRService.stop);
 
-      $scope.$on('$destroy', onAuthLogin);
-
-      var onAuthLogout = $rootScope.$on('auth:logout', function() {
-        vm.user = {};
-        signalRService.stop();
-      });
-
-      $scope.$on('$destroy', onAuthLogout);
-
-      var vm = this;
       vm.getDashboardUrl = getDashboardUrl;
       vm.getRecentUrl = getRecentUrl;
       vm.getFrequentUrl = getFrequentUrl;
@@ -118,11 +111,11 @@
       vm.isAdminMenuActive = isAdminMenuActive;
       vm.isTypeMenuActive = isTypeMenuActive;
       vm.settings = {
-        headerFixed: true,
-        asideFixed: true,
         asideFolded: false
       };
       vm.user = {};
       vm.version = VERSION;
+
+      getUser().then(startSignalR);
     }]);
 }());
