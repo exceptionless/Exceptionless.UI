@@ -1,3 +1,4 @@
+/*global Stripe:false */
 (function () {
   'use strict';
 
@@ -15,6 +16,9 @@
     'ui.gravatar',
     'ui.utils',
     'ui.router',
+
+    'dialogs.main',
+    'dialogs.default-translations',
 
     'exceptionless.auth',
     'exceptionless.auto-active',
@@ -45,11 +49,15 @@
     'app.project',
     'app.stack'
   ])
-  .config(['$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'RestangularProvider', 'BASE_URL', function ($stateProvider, $uiViewScrollProvider, $urlRouterProvider, RestangularProvider, BASE_URL) {
+  .config(['$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'STRIPE_PUBLISHABLE_KEY', function ($stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, STRIPE_PUBLISHABLE_KEY) {
     $uiViewScrollProvider.useAnchorScroll();
+
+    dialogsProvider.setSize('md');
 
     RestangularProvider.setBaseUrl(BASE_URL);
     RestangularProvider.setFullResponse(true);
+
+    Stripe.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
 
     $urlRouterProvider.otherwise('/type/error/dashboard');
     $stateProvider.state('app', {

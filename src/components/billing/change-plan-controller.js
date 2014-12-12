@@ -90,6 +90,10 @@
         return vm.user && vm.user.roles && vm.user.roles['global'];
       }
 
+      function hasExistingCard() {
+        return vm.currentOrganization.card_last4;
+      }
+
       function isNewCard() {
         return vm.card && vm.card.mode === 'new';
       }
@@ -105,6 +109,7 @@
       vm.changePlan = changePlan;
       vm.getPlans = getPlans;
       vm.hasAdminRole = hasAdminRole;
+      vm.hasExistingCard = hasExistingCard;
       vm.isNewCard = isNewCard;
       vm.isPaidPlan = isPaidPlan;
       vm.organizations = [];

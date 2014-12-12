@@ -29,7 +29,7 @@
 
     <div ng-if="vm.isPaidPlan() && !vm.hasAdminRole()">
       <h4>Credit Card</h4>
-      <div ng-if="vm.currentOrganization.card_last4">
+      <div ng-if="vm.hasExistingCard()">
         <div class="form-group">
           <div class="checkbox">
             <label class="i-checks">
@@ -53,13 +53,16 @@
         <div class="row">
           <div class="form-group col-xs-8">
             <label for="cardNumber">Card number</label>
-            <input id="cardNumber" type="text" class="form-control" ng-class="vm.changePlanForm.cardNumber.$card.type" placeholder="•••• •••• •••• ••••"
-                   x-autocompletetype="cc-number"
-                   ng-model="vm.card.number"
-                   payments-validate="card"
-                   payments-format="card"
-                   payments-type-model="vm.card.type"
-                   required />
+            <div class="input-group">
+              <input id="cardNumber" type="text" class="form-control" placeholder="•••• •••• •••• ••••"
+                     x-autocompletetype="cc-number"
+                     ng-model="vm.card.number"
+                     payments-validate="card"
+                     payments-format="card"
+                     payments-type-model="vm.card.type"
+                     required />
+                <span class="input-group-addon"><img ng-src="/img/cards/{{ vm.card.type ? vm.card.type : 'placeholder' }}.png" /></span>
+              </div>
           </div>
 
           <div class="form-group col-xs-4">
@@ -96,9 +99,9 @@
       </div>
     </div>
 
-    <div class="form-group"  ng-if="vm.currentOrganization.card_last4">
+    <div class="form-group"  ng-if="!vm.hasExistingCard()">
       <label for="couponId">Coupon code</label>
-      <input id="couponId" type="text" placeholder="Coupon Code" ng-model="vm.coupon" />
+      <input id="couponId" type="text" class="form-control" placeholder="Coupon Code" ng-model="vm.coupon" />
     </div>
   </div>
 
