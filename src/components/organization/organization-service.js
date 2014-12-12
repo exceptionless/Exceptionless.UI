@@ -11,6 +11,10 @@
         return Restangular.all('organizations').post({'name': name});
       }
 
+      function changePlan(id, options) {
+        return Restangular.one('organizations', id).customPOST(null, 'change-plan', options);
+      }
+
       function getAll(options) {
         return Restangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
       }
@@ -46,6 +50,7 @@
       var service = {
         addUser: addUser,
         create: create,
+        changePlan: changePlan,
         getAll: getAll,
         getById: getById,
         getInvoices: getInvoices,
@@ -56,6 +61,5 @@
         update: update
       };
       return service;
-    }
-    ]);
+    }]);
 }());

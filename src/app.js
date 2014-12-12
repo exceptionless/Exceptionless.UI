@@ -1,4 +1,3 @@
-/*global Stripe:false */
 (function () {
   'use strict';
 
@@ -6,6 +5,7 @@
     'angular-filters',
     'angular-loading-bar',
     'angular-rickshaw',
+    'angular-stripe',
     'cfp.hotkeys',
     'checklist-model',
     'debounce',
@@ -49,7 +49,7 @@
     'app.project',
     'app.stack'
   ])
-  .config(['$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'STRIPE_PUBLISHABLE_KEY', function ($stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, STRIPE_PUBLISHABLE_KEY) {
+  .config(['$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', function ($stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, stripeProvider, STRIPE_PUBLISHABLE_KEY) {
     $uiViewScrollProvider.useAnchorScroll();
 
     dialogsProvider.setSize('md');
@@ -57,7 +57,7 @@
     RestangularProvider.setBaseUrl(BASE_URL);
     RestangularProvider.setFullResponse(true);
 
-    Stripe.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
+    stripeProvider.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
 
     $urlRouterProvider.otherwise('/type/error/dashboard');
     $stateProvider.state('app', {

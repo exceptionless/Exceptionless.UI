@@ -2,19 +2,81 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$modalInstance', 'notificationService', 'organizationService', 'userService', function ($modalInstance, notificationService, organizationService, userService, organizationId) {
+    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', 'notificationService', 'organizationService', 'stripe', 'userService', function ($modalInstance, adminService, Common, notificationService, organizationService, stripe, userService, organizationId) {
       var vm = this;
 
       function cancel() {
         $modalInstance.dismiss('cancel');
       }
 
-      function changePlan(isValid) {
+      function createStripeToken() {
+        var expiration = Common.parseExpiry(vm.card.expiry);
+        var payload = {
+          number: vm.card.number,
+          cvc: vm.card.cvc,
+          exp_month: expiration.month,
+          exp_year: expiration.year,
+          name: vm.card.name
+        };
+
+        return stripe.card.createToken(payload);
+      }
+
+      function save(isValid) {
+        function onSuccess(response) {
+          if(!response.data.success) {
+            vm.paymentMessage = 'An error occurred while changing plans. Message: ' + response.data.message;
+            return;
+          }
+
+          $modalInstance.close(vm.currentPlan);
+          notificationService.success('Thanks! Your billing plan has been successfully changed.');
+        }
+
+        function onFailure(response) {
+          if (response.error.message) {
+            vm.paymentMessage = response.error.message;
+          } else {
+            vm.paymentMessage = 'An error occurred while changing plans.';
+          }
+        }
+
         if (!isValid) {
           return;
         }
 
-        $modalInstance.close(vm.currentPlan);
+        vm.paymentMessage = null;
+        if (vm.currentOrganization.plan_id === 'EX_FREE' && vm.currentPlan.id === 'EX_FREE') {
+          cancel();
+          return;
+        }
+
+        if (hasAdminRole() || vm.currentPlan.id === 'EX_FREE') {
+          return changePlan(hasAdminRole()).then(onSuccess, onFailure);
+        }
+
+        if (isNewCard()) {
+          return createStripeToken()
+            .then(function (response) {
+              return changePlan(false, { stripeToken: response.id, last4: response.card.last4, couponId: vm.coupon });
+            })
+            .then(onSuccess, onFailure);
+        } else {
+          return changePlan(false, { couponId: vm.coupon }).then(onSuccess, onFailure);
+        }
+      }
+
+      function changeOrganization() {
+        vm.card.mode = hasExistingCard() ? 'existing' : 'new';
+        return getPlans();
+      }
+
+      function changePlan(isAdmin, options) {
+        if (isAdmin) {
+          return adminService.changePlan(vm.currentOrganization.id, { planId: vm.currentPlan.id });
+        } else {
+          return organizationService.changePlan(vm.currentOrganization.id, angular.extend({}, { planId: vm.currentPlan.id }, options));
+        }
       }
 
       function getOrganizations() {
@@ -47,6 +109,8 @@
           if (!vm.currentOrganization) {
             vm.currentOrganization = vm.organizations.length > 0 ? vm.organizations[0] : {};
           }
+
+          vm.card.mode = hasExistingCard() ? 'existing' : 'new';
         }
 
         function onFailure() {
@@ -60,7 +124,11 @@
       function getPlans() {
         function onSuccess(response) {
           vm.plans = response.data.plain();
-          vm.currentPlan = vm.plans.filter(function(p) { return p.id === vm.currentOrganization.plan_id; })[0];
+
+          // Upsell to the next plan.
+          var currentPlan = vm.plans.filter(function(p) { return p.id === vm.currentOrganization.plan_id; })[0] || vm.plans[0];
+          var currentPlanIndex = vm.plans.indexOf(currentPlan);
+          vm.currentPlan = vm.plans.length > currentPlanIndex + 1 ? vm.plans[currentPlanIndex + 1] : currentPlan;
 
           return vm.plans;
         }
@@ -91,30 +159,31 @@
       }
 
       function hasExistingCard() {
-        return vm.currentOrganization.card_last4;
+        return !!vm.currentOrganization.card_last4;
       }
 
       function isNewCard() {
         return vm.card && vm.card.mode === 'new';
       }
-
       function isPaidPlan() {
         return vm.currentPlan && vm.currentPlan.price !== 0;
       }
 
       vm.cancel = cancel;
-      vm.card = { mode: 'new' };
+      vm.card = { };
+      vm.changeOrganization = changeOrganization;
+      vm.coupon = null;
       vm.currentOrganization = {};
       vm.currentPlan = {};
-      vm.changePlan = changePlan;
       vm.getPlans = getPlans;
       vm.hasAdminRole = hasAdminRole;
       vm.hasExistingCard = hasExistingCard;
-      vm.isNewCard = isNewCard;
-      vm.isPaidPlan = isPaidPlan;
+      vm.isNewCard = isNewCard;      vm.isPaidPlan = isPaidPlan;
       vm.organizations = [];
       vm.paymentMessage = null;
       vm.plans = [];
+      vm.save = save;
+      vm.stripe = {};
 
       getOrganizations().then(getPlans).then(getUser);
     }]);

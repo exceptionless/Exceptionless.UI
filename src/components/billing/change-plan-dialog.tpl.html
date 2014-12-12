@@ -8,10 +8,15 @@
   </div>
 
   <div class="modal-body">
+    <div class="alert alert-danger" role="alert" ng-if="vm.paymentMessage">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      {{vm.paymentMessage}}
+    </div>
+
     <div class="form-group" ng-if="vm.organizations.length > 1">
       <label for="organization">Organization to change</label>
       <select id="organization" class="form-control"
-              ng-change="vm.getPlans()"
+              ng-change="vm.changeOrganization()"
               ng-model="vm.currentOrganization"
               ng-options="organization.name for organization in vm.organizations track by organization.id"></select>
     </div>
@@ -29,27 +34,25 @@
 
     <div ng-if="vm.isPaidPlan() && !vm.hasAdminRole()">
       <h4>Credit Card</h4>
-      <div ng-if="vm.hasExistingCard()">
-        <div class="form-group">
-          <div class="checkbox">
+      <div class="row" ng-if="vm.hasExistingCard()">
+        <div class="form-group col-sm-6">
+          <div class="radio">
             <label class="i-checks">
-              <input type="checkbox" ng-model="vm.card.mode" btn-radio="'existing'" uncheckable><i></i> Use credit card ending in {{vm.currentOrganization.card_last4}}
+              <input type="radio" class="form-control" ng-model="vm.card.mode" value="existing"><i></i> Use credit card ending in {{vm.currentOrganization.card_last4}}
             </label>
           </div>
         </div>
 
-        <div class="form-group">
-          <div class="checkbox">
+        <div class="form-group col-sm-6">
+          <div class="radio">
             <label class="i-checks">
-              <input type="checkbox" ng-model="vm.card.mode" btn-radio="'new'" uncheckable><i></i> Use a new credit card
+              <input type="radio" class="form-control" ng-model="vm.card.mode" value="new"><i></i> Use a new credit card
             </label>
           </div>
         </div>
       </div>
 
       <div ng-if="vm.isNewCard()">
-        <div>{{vm.paymentMessage}}</div>
-
         <div class="row">
           <div class="form-group col-xs-8">
             <label for="cardNumber">Card number</label>
@@ -107,6 +110,6 @@
 
   <div class="modal-footer">
     <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.changePlan(vm.changePlanForm.$valid)" value="Change Plan" />
+    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.save(vm.changePlanForm.$valid)" value="Change Plan" />
   </div>
 </form>
