@@ -9,7 +9,7 @@
       <div class="wrapper-md">
         <div class="panel panel-default">
           <div class="panel-body">
-            <form name="loginForm" class="form-horizontal" role="form" class="form-validation">
+            <form name="loginForm" class="form-horizontal" role="form" class="form-validation" autocomplete="on">
               <div class="form-horizontal col-sm-offset-2">
                 <h4>Login with</h4>
 
@@ -31,7 +31,7 @@
               <div class="form-group">
                 <label for="email" class="col-sm-2 control-label">Email</label>
                 <div class="col-sm-10">
-                  <input id="email" name="email" type="email" class="form-control" placeholder="Email address" ng-model="vm.user.email" required />
+                  <input id="email" name="email" type="email" class="form-control" placeholder="Email address" x-autocompletetype="email" autocorrect="off" spellcheck="off" ng-model="vm.user.email" required />
                   <div class="error" ng-messages="loginForm.email.$error" ng-if="loginForm.$submitted || loginForm.email.$touched">
                     <small ng-message="required">Email Address is required.</small>
                     <small ng-message="email">Email Address is required.</small>

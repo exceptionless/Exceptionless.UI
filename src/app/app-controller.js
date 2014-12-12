@@ -2,12 +2,11 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'filterService', 'hotkeys', 'signalRService', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, filterService, hotkeys, signalRService, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'signalRService', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, signalRService, urlService, userService, VERSION) {
       var vm = this;
 
-      function isSmartDevice($window) {
-        var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
-        return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
+      function changePlan(organizationId) {
+        return billingService.changePlan(organizationId);
       }
 
       function getDashboardUrl(type){
@@ -57,6 +56,11 @@
           $state.includes('app.admin.dashboard', $stateParams);
       }
 
+      function isSmartDevice($window) {
+        var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
+        return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
+      }
+
       function isTypeMenuActive(type) {
         var params = angular.extend({}, $stateParams, { type: type });
 
@@ -102,6 +106,7 @@
 
       $scope.$on('$destroy', signalRService.stop);
 
+      vm.changePlan = changePlan;
       vm.getDashboardUrl = getDashboardUrl;
       vm.getRecentUrl = getRecentUrl;
       vm.getFrequentUrl = getFrequentUrl;

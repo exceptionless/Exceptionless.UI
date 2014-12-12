@@ -18,6 +18,7 @@
 
     'exceptionless.auth',
     'exceptionless.auto-active',
+    'exceptionless.billing',
     'exceptionless.date-filter',
     'exceptionless.event',
     'exceptionless.events',

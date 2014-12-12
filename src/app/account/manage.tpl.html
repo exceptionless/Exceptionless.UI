@@ -6,7 +6,7 @@
         <div class="panel-body">
           <tabset class="tab-container">
             <tab heading="General">
-              <form name="userForm" role="form" class="form-validation">
+              <form name="userForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
                   <img gravatar-src="vm.user.email_address" gravatar-size="100" alt="{{vm.user.full_name}}">
                   <div>
@@ -18,7 +18,7 @@
 
                 <div class="form-group">
                   <label for="name">Full Name</label>
-                  <input id="name" name="name" type="text" class="form-control"
+                  <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="off"
                          placeholder="Your first and last name"
                          ng-model="vm.user.full_name"
                          ng-model-options="{ debounce: 1000 }"
@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                   <label for="email">Email Address</label>
-                  <input id="email" name="email" type="email" class="form-control"
+                  <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="off"
                          placeholder="Email Address"
                          ng-model="vm.user.email_address"
                          ng-model-options="{ debounce: 1000 }"

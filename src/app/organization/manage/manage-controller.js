@@ -22,31 +22,40 @@
       }
 
       function get() {
-        return organizationService.getById(organizationId)
-          .then(function (response) {
-            vm.organization = response.data;
-          }, function () {
-            $state.go('app.dashboard');
-            notificationService.error('The organization "' + $stateParams.id + '" could not be found.');
-          });
+        function onSuccess(response) {
+          vm.organization = response.data.plain();
+        }
+
+        function onFailure() {
+          $state.go('app.dashboard');
+          notificationService.error('The organization "' + organizationId + '" could not be found.');
+        }
+
+        return organizationService.getById(organizationId).then(onSuccess, onFailure);
       }
 
       function getInvoices() {
-        return organizationService.getInvoices(organizationId, options)
-          .then(function (response) {
-            vm.invoices = response.data;
-          }, function () {
-            notificationService.error('The invoices for this organization could not be loaded.');
-          });
+        function onSuccess(response) {
+          vm.invoices = response.data.plain();
+        }
+
+        function onFailure() {
+          notificationService.error('The invoices for this organization could not be loaded.');
+        }
+
+        return organizationService.getInvoices(organizationId, options).then(onSuccess, onFailure);
       }
 
       function getUsers() {
-        return userService.getByOrganizationId(organizationId, options)
-          .then(function (response) {
-            vm.users = response.data;
-          }, function () {
-            notificationService.error('The users for this organization could not be loaded.');
-          });
+        function onSuccess(response) {
+          vm.users = response.data.plain();
+        }
+
+        function onFailure() {
+          notificationService.error('The users for this organization could not be loaded.');
+        }
+
+        return userService.getByOrganizationId(organizationId, options).then(onSuccess, onFailure);
       }
 
       function hasInvoices() {

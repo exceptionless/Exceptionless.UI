@@ -1,0 +1,109 @@
+<form name="vm.changePlanForm" role="form" class="form-validation" autocomplete="on">
+  <div class="modal-header dialog-header-notify">
+    <button type="button" class="close" ng-click="vm.cancel()">&times;</button>
+    <h4 class="modal-title">Exceptionless Plan</h4>
+    <div>
+      <img src="/img/exceptionless-48.png" />
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <div class="form-group" ng-if="vm.organizations.length > 1">
+      <label for="organization">Organization to change</label>
+      <select id="organization" class="form-control"
+              ng-change="vm.getPlans()"
+              ng-model="vm.currentOrganization"
+              ng-options="organization.name for organization in vm.organizations track by organization.id"></select>
+    </div>
+
+    <p><strong>{{vm.currentOrganization.name}}</strong> is currently on the <strong>{{vm.currentOrganization.plan_name}}</strong> plan.</p>
+
+    <div class="form-group">
+      <label for="plan">Select new plan (<a href="http://exceptionless.com/pricing" target="_blank">view plan information</a>)</label>
+
+      <select id="plan" class="form-control"
+              ng-init="vm.currentPlan = vm.plans[0]"
+              ng-model="vm.currentPlan"
+              ng-options="plan.description for plan in vm.plans track by plan.id"></select>
+    </div>
+
+    <div ng-if="vm.isPaidPlan() && !vm.hasAdminRole()">
+      <h4>Credit Card</h4>
+      <div ng-if="vm.currentOrganization.card_last4">
+        <div class="form-group">
+          <div class="checkbox">
+            <label class="i-checks">
+              <input type="checkbox" ng-model="vm.card.mode" btn-radio="'existing'" uncheckable><i></i> Use credit card ending in {{vm.currentOrganization.card_last4}}
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="checkbox">
+            <label class="i-checks">
+              <input type="checkbox" ng-model="vm.card.mode" btn-radio="'new'" uncheckable><i></i> Use a new credit card
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="vm.isNewCard()">
+        <div>{{vm.paymentMessage}}</div>
+
+        <div class="row">
+          <div class="form-group col-xs-8">
+            <label for="cardNumber">Card number</label>
+            <input id="cardNumber" type="text" class="form-control" ng-class="vm.changePlanForm.cardNumber.$card.type" placeholder="•••• •••• •••• ••••"
+                   x-autocompletetype="cc-number"
+                   ng-model="vm.card.number"
+                   payments-validate="card"
+                   payments-format="card"
+                   payments-type-model="vm.card.type"
+                   required />
+          </div>
+
+          <div class="form-group col-xs-4">
+            <label for="cardExpiry">Expires</label>
+            <input id="cardExpiry" type="text" class="form-control" placeholder="MM / YY"
+                   x-autocompletetype="cc-exp"
+                   ng-model="vm.card.expiry"
+                   payments-validate="expiry"
+                   payments-format="expiry"
+                   required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-xs-8">
+            <label for="cardName">Name on card</label>
+            <input id="cardName" type="text" class="form-control" placeholder="Name on card"
+                   x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="off"
+                   ng-model="vm.card.name"
+                   required />
+          </div>
+
+          <div class="form-group col-xs-4">
+            <label for="cardCVC">Card code</label>
+            <input id="cardCVC" type="text" class="form-control" placeholder="CVC"
+                   x-autocompletetype="cc-csc" autocomplete="off"
+                   ng-model="vm.card.cvc"
+                   payments-validate="cvc"
+                   payments-format="cvc"
+                   payments-type-model="vm.card.type"
+                   required />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group"  ng-if="vm.currentOrganization.card_last4">
+      <label for="couponId">Coupon code</label>
+      <input id="couponId" type="text" placeholder="Coupon Code" ng-model="vm.coupon" />
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.changePlan(vm.changePlanForm.$valid)" value="Change Plan" />
+  </div>
+</form>

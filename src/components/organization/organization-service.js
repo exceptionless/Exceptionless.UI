@@ -12,7 +12,7 @@
       }
 
       function getAll(options) {
-        return Restangular.all('organizations').getList(options || {});
+        return Restangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
       }
 
       function getById(id) {
@@ -21,6 +21,10 @@
 
       function getInvoices(id, options) {
         return Restangular.one('organizations', id).all('invoices').getList(options || {});
+      }
+
+      function getPlans(id) {
+        return Restangular.one('organizations', id).all('plans').getList();
       }
 
       function isNameAvailable(name) {
@@ -45,6 +49,7 @@
         getAll: getAll,
         getById: getById,
         getInvoices: getInvoices,
+        getPlans: getPlans,
         isNameAvailable: isNameAvailable,
         remove: remove,
         removeUser: removeUser,
