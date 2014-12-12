@@ -32,7 +32,7 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The stack "' + $stateParams.id + '" could not be found.');
+          notificationService.error('The stack "' + stackId + '" could not be found.');
         }
 
         return stackService.getById(stackId).then(onSuccess, onFailure);

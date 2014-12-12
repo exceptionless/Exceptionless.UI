@@ -23,6 +23,10 @@
         return Restangular.one('organizations', id).get();
       }
 
+      function getInvoice(id) {
+        return Restangular.one('organizations', 'invoice').one(id).get();
+      }
+
       function getInvoices(id, options) {
         return Restangular.one('organizations', id).all('invoices').getList(options || {});
       }
@@ -53,6 +57,7 @@
         changePlan: changePlan,
         getAll: getAll,
         getById: getById,
+        getInvoice: getInvoice,
         getInvoices: getInvoices,
         getPlans: getPlans,
         isNameAvailable: isNameAvailable,

@@ -46,6 +46,7 @@
     'app.config',
     'app.event',
     'app.organization',
+    'app.payment',
     'app.project',
     'app.stack'
   ])

@@ -41,7 +41,7 @@
                 <thead>
                 <tr>
                   <th>Email Address</th>
-                  <th>&nbsp;</th>
+                  <th class="action">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -52,18 +52,22 @@
                     <span ng-if="user.is_invite" class="label label-success">Invited</span>
                   </td>
                   <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                        <li><a ng-click="vm.resendNotification(user)"><i class="fa fa-envelope"></i> Resend Invite Email</a></li>
+                        <li><a ng-click="vm.removeUser(user)"><i class="fa fa-times"></i> {{user.is_invite ? 'Revoke Invite' : 'Remove User' }}</a></li>
+                      </ul>
+                    </div>
+
                     <!--
                     TODO: Implement admin roles.
                     <a class="btn btn-sm" data-bind="visible: !isInvite() && exceptionless.App.user().hasAdminRole(), click: $parent.updateAdminRole, attr: { title: !hasAdminRole() ? 'Add Admin Role' : 'Remove Admin Role' }">
                         <i class="fa fa-user"></i>
                     </a>
                     -->
-                    <a class="btn btn-sm" ng-click="vm.resendNotification(user)" title="Resend Invite Email">
-                      <i class="fa fa-envelope"></i>
-                    </a>
-                    <a class="btn btn-sm" ng-click="vm.removeUser(user)" title="{{user.is_invite ? 'Revoke Invite' : 'Remove User' }}">
-                      <i class="fa fa-times"></i>
-                    </a>
                   </td>
                 </tr>
                 </tbody>
@@ -84,16 +88,16 @@
                   <th>Payment Number</th>
                   <th>Date</th>
                   <th class="number">Status</th>
-                  <th>&nbsp;</th>
+                  <th class="action">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="row-clickable" ng-repeat="invoice in vm.invoices track by invoice.id">
-                  <td ng-click="vm.open(invoice.id, $event)">{{::invoice.id}}</td>
-                  <td ng-click="vm.open(invoice.id, $event)">{{::invoice.date | date: 'medium'}}</td>
-                  <td ng-click="vm.open(invoice.id, $event)">{{::invoice.paid ? 'Paid' : 'Unpaid'}}</td>
+                <tr ng-repeat="invoice in vm.invoices track by invoice.id">
+                  <td class="row-clickable" ng-click="vm.open(invoice.id, $event)">{{::invoice.id}}</td>
+                  <td class="row-clickable" ng-click="vm.open(invoice.id, $event)">{{::invoice.date | date: 'medium'}}</td>
+                  <td class="row-clickable" ng-click="vm.open(invoice.id, $event)">{{::invoice.paid ? 'Paid' : 'Unpaid'}}</td>
                   <td>
-                    <a ui-sref="app.organization.payment({id: invoice.id})" title="View Payment" class="btn btn-sm">
+                    <a ui-sref="payment({id: invoice.id})" title="View Payment" class="btn btn-sm">
                       <i class="fa fa-file"></i>
                     </a>
                     <!--

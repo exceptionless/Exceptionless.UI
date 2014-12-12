@@ -90,9 +90,9 @@
 
       function open(id, event) {
         if (event.ctrlKey || event.which === 2) {
-          $window.open('/#/organization/payment/' + id, '_blank');
+          $window.open('/#/payment/' + id, '_blank');
         } else {
-          $state.go('app.organization.payment', {id: id});
+          $state.go('payment', {id: id});
         }
       }
 
