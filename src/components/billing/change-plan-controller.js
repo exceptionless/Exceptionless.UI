@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$modalInstance', 'organizationService', 'userService', function ($modalInstance, organizationService, userService, organizationId) {
+    .controller('ChangePlanDialog', ['$modalInstance', 'notificationService', 'organizationService', 'userService', function ($modalInstance, notificationService, organizationService, userService, organizationId) {
       var vm = this;
 
       function cancel() {
@@ -60,7 +60,7 @@
       function getPlans() {
         function onSuccess(response) {
           vm.plans = response.data.plain();
-          vm.currentPlan = vm.plans.filter(function(p) { return p.id === vm.currentOrganization.plan_id; })[0]
+          vm.currentPlan = vm.plans.filter(function(p) { return p.id === vm.currentOrganization.plan_id; })[0];
 
           return vm.plans;
         }

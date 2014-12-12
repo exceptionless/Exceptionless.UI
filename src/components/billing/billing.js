@@ -8,6 +8,9 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'exceptionless.notification',
+    'exceptionless.organization',
+    'exceptionless.user',
     'exceptionless.refresh'
   ]);
 }());
