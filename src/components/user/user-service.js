@@ -3,6 +3,10 @@
 
   angular.module('exceptionless.user', ['restangular'])
     .factory('userService', ['Restangular', function (Restangular) {
+      function addAdminRole(id) {
+        return Restangular.one('users', id).one('admin-role').post();
+      }
+
       function getCurrentUser() {
         return Restangular.one('users', 'me').get();
       }
@@ -13,6 +17,18 @@
 
       function getByOrganizationId(id, options) {
         return Restangular.one('organizations', id).all('users').getList(options || {});
+      }
+
+      function hasAdminRole(user) {
+        return hasRole(user, 'global');
+      }
+
+      function hasRole(user, role) {
+        return user && user.roles[role];
+      }
+
+      function removeAdminRole(id) {
+        return Restangular.one('users', id).one('admin-role').remove();
       }
 
       function resendVerificationEmail(id) {
@@ -32,9 +48,13 @@
       }
 
       var service = {
+        addAdminRole: addAdminRole,
         getCurrentUser: getCurrentUser,
         getById: getById,
         getByOrganizationId: getByOrganizationId,
+        hasAdminRole: hasAdminRole,
+        hasRole: hasRole,
+        removeAdminRole: removeAdminRole,
         resendVerificationEmail: resendVerificationEmail,
         update: update,
         updateEmailAddress: updateEmailAddress,

@@ -41,14 +41,13 @@
         return organizationService.getAll(vm.currentOptions).then(onSuccess);
       }
 
-      function leave(organization) {
+      function leave(organization, user) {
         return dialogService.confirmDanger('Are you sure you want to leave this organization?', 'LEAVE ORGANIZATION').then(function () {
           function onSuccess() {
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
           }
 
           function onFailure(response) {
-            // TODO: Show upgrade dialog.
             var message = 'An error occurred while trying to leave the organization.';
             if (response.status === 400) {
               message += ' Message: ' + response.data.message;
@@ -57,8 +56,7 @@
             notificationService.error(message);
           }
 
-          // TODO: Inject the current user.
-          return organizationService.removeUser(organization.id, 'test@exceptionless.com').then(onSuccess, onFailure);
+          return organizationService.removeUser(organization.id, user.email_address).then(onSuccess, onFailure);
         });
       }
 

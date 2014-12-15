@@ -48,7 +48,7 @@
               return;
             }
 
-            if (organization.name === 'Acme' || organization.is_over_monthly_limit === true){
+            if (organization.is_over_monthly_limit === true){
               vm.monthlyOverageOrganizations.push(organization);
             } else if (organization.is_over_hourly_limit === true) {
               vm.hourlyOverageOrganizations.push(organization);

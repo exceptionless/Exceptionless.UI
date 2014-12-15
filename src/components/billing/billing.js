@@ -10,6 +10,7 @@
     'dialogs.default-translations',
 
     'exceptionless.admin',
+    'exceptionless.dialog',
     'exceptionless.notification',
     'exceptionless.organization',
     'exceptionless.user',

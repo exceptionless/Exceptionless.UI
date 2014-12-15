@@ -9,6 +9,7 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'exceptionless.billing',
     'exceptionless.dialog',
     'exceptionless.organization-notifications',
     'exceptionless.project',

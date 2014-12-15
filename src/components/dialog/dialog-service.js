@@ -18,18 +18,9 @@
         }).result;
       }
 
-      function confirmUpgradePlan(message) {
-        return confirm(message, 'Upgrade Plan').then(changePlan);
-      }
-
-      function changePlan() {
-      }
-
       var service = {
         confirm: confirm,
-        confirmDanger: confirmDanger,
-        confirmUpgradePlan: confirmUpgradePlan,
-        changePlan: changePlan
+        confirmDanger: confirmDanger
       };
 
       return service;

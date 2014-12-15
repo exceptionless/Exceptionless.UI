@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', 'dialogService', function ($state, $stateParams, $window, organizationService, projectService, userService, notificationService, featureService, dialogs, dialogService) {
+    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', function ($state, $stateParams, $window, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs) {
       var organizationId = $stateParams.id;
       var options = {limit: 5};
       var vm = this;
@@ -21,7 +21,7 @@
         });
       }
 
-      function get() {
+      function getOrganization() {
         function onSuccess(response) {
           vm.organization = response.data.plain();
         }
@@ -56,6 +56,10 @@
         }
 
         return userService.getByOrganizationId(organizationId, options).then(onSuccess, onFailure);
+      }
+
+      function hasAdminRole(user) {
+        return userService.hasAdminRole(user);
       }
 
       function hasInvoices() {
@@ -108,7 +112,23 @@
         return organizationService.update(organizationId, vm.organization).catch(onFailure);
       }
 
+      function updateAdminRole(user) {
+        var message = 'Are you sure you want to ' + (!userService.hasAdminRole(user) ? 'add' : 'remove') + ' the admin role for this user?';
+        return dialogService.confirmDanger(message, (!userService.hasAdminRole(user) ? 'ADD' : 'REMOVE')).then(function () {
+          function onFailure() {
+            notificationService.error('An error occurred while ' + (!userService.hasAdminRole(user) ? 'add' : 'remove') + ' the admin role.');
+          }
+
+          if (!userService.hasAdminRole(user)) {
+            return userService.addAdminRole(user.id).then(getUsers, onFailure);
+          }
+
+          return userService.removeAdminRole(user.id).then(getUsers, onFailure);
+        });
+      }
+
       vm.addUser = addUser;
+      vm.hasAdminRole = hasAdminRole;
       vm.hasInvoices = hasInvoices;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.invoices = [];
@@ -126,9 +146,9 @@
       vm.removeUser = removeUser;
       vm.resendNotification = resendNotification;
       vm.save = save;
+      vm.updateAdminRole = updateAdminRole;
       vm.users = [];
 
-      get().then(getUsers).then(getInvoices);
-    }
-    ]);
+      getOrganization().then(getUsers).then(getInvoices);
+    }]);
 }());

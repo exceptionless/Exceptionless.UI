@@ -47,7 +47,6 @@
           }
 
           function open(id, event) {
-            // TODO: implement this.
             if (event.ctrlKey || event.which === 2) {
               $window.open('/#/project/' + id + '/manage', '_blank');
             } else {

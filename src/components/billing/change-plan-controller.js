@@ -155,7 +155,7 @@
       }
 
       function hasAdminRole() {
-        return vm.user && vm.user.roles && vm.user.roles['global'];
+        return userService.hasAdminRole(vm.user);
       }
 
       function hasExistingCard() {

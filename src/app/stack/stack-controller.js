@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', ['$filter', '$state', '$stateParams', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'stackService', 'statService', function ($filter, $state, $stateParams, dialogs, dialogService, eventService, featureService, filterService, notificationService, stackService, statService) {
+    .controller('Stack', ['$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'stackService', 'statService', function ($filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, stackService, statService) {
       var stackId = $stateParams.id;
       var vm = this;
 
@@ -89,7 +89,8 @@
 
       function promoteToExternal() {
         if (!featureService.hasPremium()) {
-          return dialogService.confirmUpgradePlan('Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.').then(function () {
+          var message = 'Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.';
+          return billingService.confirmUpgradePlan(message, vm.stack.organization_id).then(function () {
             return promoteToExternal();
           });
         }
@@ -99,8 +100,8 @@
         }
 
         function onFailure(response) {
-          if (response.status === 426) { // TODO: Move this to an interceptor.
-            return dialogService.confirmUpgradePlan(response.data.message).then(function () {
+          if (response.status === 426) {
+            return billingService.confirmUpgradePlan(response.data.message, vm.stack.organization_id).then(function () {
               return promoteToExternal();
             });
           }

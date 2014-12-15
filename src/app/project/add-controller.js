@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Add', ['$state', 'dialogService', 'organizationService', 'projectService', 'notificationService', function ($state, dialogService, organizationService, projectService, notificationService) {
+    .controller('project.Add', ['$state', 'billingService', 'organizationService', 'projectService', 'notificationService', function ($state, billingService, organizationService, projectService, notificationService) {
       var newOrganizationId = '__newOrganization';
       var vm = this;
 
@@ -31,7 +31,7 @@
 
         function onFailure(response) {
           if (response.status === 426) {
-            return dialogService.confirmUpgradePlan(response.data.message).then(function () {
+            return billingService.confirmUpgradePlan(response.data.message).then(function () {
               return createOrganization(name);
             });
           }
