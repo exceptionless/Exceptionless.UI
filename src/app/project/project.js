@@ -10,6 +10,7 @@
     'dialogs.default-translations',
 
     'exceptionless.dialog',
+    'exceptionless.organization-notifications',
     'exceptionless.project',
     'exceptionless.organization',
     'exceptionless.notification',

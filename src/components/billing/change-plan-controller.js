@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', 'notificationService', 'organizationService', 'stripe', 'userService', function ($modalInstance, adminService, Common, notificationService, organizationService, stripe, userService, organizationId) {
+    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', 'notificationService', 'organizationService', 'stripe', 'userService', 'data', function ($modalInstance, adminService, Common, notificationService, organizationService, stripe, userService, organizationId) {
       var vm = this;
 
       function cancel() {

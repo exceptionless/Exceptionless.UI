@@ -14,6 +14,7 @@
     'exceptionless.events',
     'exceptionless.feature',
     'exceptionless.filter',
+    'exceptionless.organization-notifications',
     'exceptionless.notification',
     'exceptionless.refresh',
     'exceptionless.stack',

@@ -27,6 +27,7 @@
     'exceptionless.event',
     'exceptionless.events',
     'exceptionless.filter',
+    'exceptionless.organization-notifications',
     'exceptionless.notification',
     'exceptionless.project-filter',
     'exceptionless.refresh',

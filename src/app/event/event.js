@@ -9,6 +9,7 @@
 
     'exceptionless.error',
     'exceptionless.event',
+    'exceptionless.organization-notifications',
     'exceptionless.link',
     'exceptionless.notification',
     'exceptionless.object-dump',
