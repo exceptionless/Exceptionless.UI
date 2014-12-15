@@ -9,19 +9,19 @@
         return billingService.changePlan(organizationId);
       }
 
-      function getDashboardUrl(type){
+      function getDashboardUrl(type) {
         return urlService.buildFilterUrl({ route: 'dashboard', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
       }
 
-      function getRecentUrl(type){
+      function getRecentUrl(type) {
         return urlService.buildFilterUrl({ route: 'recent', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
       }
 
-      function getFrequentUrl(type){
+      function getFrequentUrl(type) {
         return urlService.buildFilterUrl({ route: 'frequent', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
       }
 
-      function getNewUrl(type){
+      function getNewUrl(type) {
         return urlService.buildFilterUrl({ route: 'new', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
       }
 
@@ -57,7 +57,7 @@
       }
 
       function isSmartDevice($window) {
-        var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
+        var ua = $window.navigator.userAgent || $window.navigator.vendor || $window.opera;
         return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
 
@@ -98,7 +98,7 @@
         .add({
           combo: 'f1',
           description: 'Documentation',
-          callback: function() {
+          callback: function openDocumention() {
             $window.open('http://docs.exceptionless.com', '_blank');
           }
         });

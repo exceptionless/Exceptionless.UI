@@ -5,9 +5,9 @@
         <i class="fa fa-calendar"></i> Event Occurrence
 
         <div class="pull-right hidden-print">
-          <a ui-sref="app.stack({ id: vm.event.stack_id })" type="button" class="btn btn-dark btn-xs fa fa-fw fa-caret-up" role="button" title="Go To Stack"></a>
-          <a ui-sref="app.event({ id: vm.previous })" ng-class="{'disabled': !vm.previous}" type="button" class="btn btn-dark btn-xs fa fa-fw fa-caret-left" role="button" title="Previous Occurrence"></a>
-          <a ui-sref="app.event({ id: vm.next })" ng-class="{'disabled': !vm.next}" type="button" class="btn btn-dark btn-xs fa fa-fw fa-caret-right" role="button" title="Next Occurrence"></a>
+          <a ui-sref="app.stack({ id: vm.event.stack_id })" class="btn btn-dark btn-xs fa fa-fw fa-caret-up" title="Go To Stack"></a>
+          <a ui-sref="app.event({ id: vm.previous })" ng-class="{'disabled': !vm.previous}" class="btn btn-dark btn-xs fa fa-fw fa-caret-left" title="Previous Occurrence"></a>
+          <a ui-sref="app.event({ id: vm.next })" ng-class="{'disabled': !vm.next}" class="btn btn-dark btn-xs fa fa-fw fa-caret-right" title="Next Occurrence"></a>
         </div>
       </div>
       <div class="panel-body">
@@ -24,10 +24,10 @@
         </accordion>
       </div>
       <div class="panel-footer hidden-xs">
-        <a ui-sref="app.stack({ id: vm.event.stack_id })" type="button" class="btn btn-default" role="button">Go To Stack</a>
+        <a ui-sref="app.stack({ id: vm.event.stack_id })" class="btn btn-default">Go To Stack</a>
         <div class="pull-right">
-          <a ui-sref="app.event({ id: vm.previous })" ng-class="{'disabled': !vm.previous}" type="button" class="btn btn-primary" role="button">Previous Occurrence</a>
-          <a ui-sref="app.event({ id: vm.next })" ng-class="{'disabled': !vm.next}" type="button" class="btn btn-primary" role="button">Next Occurrence</a>
+          <a ui-sref="app.event({ id: vm.previous })" ng-class="{'disabled': !vm.previous}" class="btn btn-primary">Previous Occurrence</a>
+          <a ui-sref="app.event({ id: vm.next })" ng-class="{'disabled': !vm.next}" class="btn btn-primary">Next Occurrence</a>
         </div>
       </div>
     </div>

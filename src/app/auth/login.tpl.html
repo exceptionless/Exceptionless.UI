@@ -1,7 +1,7 @@
 <div class="container w-auto-xs">
   <div class="text-center">
     <a href="http://exceptionless.com">
-      <img src="/img/exceptionless-350.png" />
+      <img src="/img/exceptionless-350.png" alt="logo" />
     </a>
   </div>
   <div class="hbox hbox-auto-xs hbox-auto-sm">
@@ -9,7 +9,7 @@
       <div class="wrapper-md">
         <div class="panel panel-default">
           <div class="panel-body">
-            <form name="loginForm" class="form-horizontal" role="form" class="form-validation" autocomplete="on">
+            <form name="loginForm" role="form" class="form-horizontal form-validation" autocomplete="on">
               <div class="form-horizontal col-sm-offset-2">
                 <h4>Login with</h4>
 
@@ -31,7 +31,7 @@
               <div class="form-group">
                 <label for="email" class="col-sm-2 control-label">Email</label>
                 <div class="col-sm-10">
-                  <input id="email" name="email" type="email" class="form-control" placeholder="Email address" x-autocompletetype="email" autocorrect="off" spellcheck="off" ng-model="vm.user.email" required />
+                  <input id="email" name="email" type="email" class="form-control" placeholder="Email address" x-autocompletetype="email" autocorrect="off" spellcheck="false" ng-model="vm.user.email" required />
                   <div class="error" ng-messages="loginForm.email.$error" ng-if="loginForm.$submitted || loginForm.email.$touched">
                     <small ng-message="required">Email Address is required.</small>
                     <small ng-message="email">Email Address is required.</small>
@@ -63,7 +63,7 @@
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <input type="submit" ng-click="vm.login(loginForm.$valid)" class="btn btn-primary" value="Log in" />
-                  <a type="button" role="button" class="btn btn-default" ui-sref="auth.signup">Signup</a>
+                  <a class="btn btn-default" ui-sref="auth.signup">Signup</a>
                   <p><a ui-sref="auth.forgot-password">Forgot password?</a></p>
                 </div>
               </div>

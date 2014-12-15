@@ -3,7 +3,7 @@
     <button type="button" class="close" ng-click="vm.cancel()">&times;</button>
     <h4 class="modal-title">Exceptionless Plan</h4>
     <div>
-      <img src="/img/exceptionless-48.png" />
+      <img src="/img/exceptionless-48.png" alt="logo" />
     </div>
   </div>
 
@@ -64,7 +64,7 @@
                      payments-format="card"
                      payments-type-model="vm.card.type"
                      required />
-                <span class="input-group-addon"><img ng-src="/img/cards/{{ vm.card.type ? vm.card.type : 'placeholder' }}.png" /></span>
+                <span class="input-group-addon"><img ng-src="/img/cards/{{ vm.card.type ? vm.card.type : 'placeholder' }}.png" alt="Card Type" /></span>
               </div>
           </div>
 
@@ -83,7 +83,7 @@
           <div class="form-group col-xs-8">
             <label for="cardName">Name on card</label>
             <input id="cardName" type="text" class="form-control" placeholder="Name on card"
-                   x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="off"
+                   x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                    ng-model="vm.card.name"
                    required />
           </div>

@@ -18,7 +18,7 @@
 
                 <div class="form-group">
                   <label for="name">Full Name</label>
-                  <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="off"
+                  <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                          placeholder="Your first and last name"
                          ng-model="vm.user.full_name"
                          ng-model-options="{ debounce: 1000 }"
@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                   <label for="email">Email Address</label>
-                  <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="off"
+                  <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                          placeholder="Email Address"
                          ng-model="vm.user.email_address"
                          ng-model-options="{ debounce: 1000 }"

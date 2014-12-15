@@ -8,8 +8,9 @@
       function authenticate(provider) {
         function onFailure(response) {
           var message = 'An error occurred while adding external login.';
-          if (response.data && response.data.message)
+          if (response.data && response.data.message) {
             message += ' Message: ' + response.data.message;
+          }
 
           notificationService.error(message);
         }

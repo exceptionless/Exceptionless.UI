@@ -1,4 +1,4 @@
-/*jslint node: true */
+/* jslint node: true */
 'use strict';
 
 var pkg = require('./package.json');
@@ -67,15 +67,43 @@ module.exports = function (grunt) {
     htmlangular: {
       main: {
         options: {
-          customtags: ['date-*', 'events', 'progressbar', 'project-filter', 'projects', 'rickshaw', 'search-filter', 'simple-stack-trace', 'stacks', 'stack-trace', 'summary', 'timeago', 'toaster-container'],
+          customtags: [
+            'accordion',
+            'date-*',
+            'events',
+            'extended-data-item',
+            'object-dump',
+            'progressbar',
+            'project-filter',
+            'projects',
+            'rickshaw',
+            'search-filter',
+            'simple-stack-trace',
+            'stacks',
+            'stack-trace',
+            'summary',
+            'timeago',
+            'toaster-container'
+          ],
           customattrs: [
-            'is-*',
-            'ui-*',
+            'auto-active',
+            'autocapitalize',
+            'autocorrect',
+            'autoscroll',
             'checklist-*',
+            'clip-*',
+            'dropdown',
+            'dropdown-*',
+            'gravatar-*',
+            'is-*',
+            'lines',
+            'match',
+            'payments-*',
             'refresh-*',
             'typeahead',
             'truncate',
-            'lines'
+            'ui-*',
+            'x-autocompletetype'
           ],
           tmplext: 'tpl.html',
           reportpath: null,
@@ -114,13 +142,13 @@ module.exports = function (grunt) {
           wrap: '(function () {\n  "use strict";\n\n  {%= __ngModule %}\n}());',
           dest: 'dist/app.config.js',
           constants: {
-            BASE_URL: process.env.API_URL ? process.env.API_URL : 'http://localhost:50000/api/v2',
-            FACEBOOK_APPID: process.env.FACEBOOK_APPID ? process.env.FACEBOOK_APPID : '395178683904310',
-            GITHUB_APPID: process.env.GITHUB_APPID ? process.env.GITHUB_APPID : 'fdb0fdc666419c4cd3e9',
-            GOOGLE_APPID: process.env.GOOGLE_APPID ? process.env.GOOGLE_APPID :  '86088244242-6ihnf99upp3a2g5sp13joerdo1i5f29l.apps.googleusercontent.com',
-            LIVE_APPID: process.env.LIVE_APPID ? process.env.LIVE_APPID : '0000000044132A07',
+            BASE_URL: process.env.API_URL || 'http://localhost:50000/api/v2',
+            FACEBOOK_APPID: process.env.FACEBOOK_APPID || '395178683904310',
+            GITHUB_APPID: process.env.GITHUB_APPID || 'fdb0fdc666419c4cd3e9',
+            GOOGLE_APPID: process.env.GOOGLE_APPID || '86088244242-6ihnf99upp3a2g5sp13joerdo1i5f29l.apps.googleusercontent.com',
+            LIVE_APPID: process.env.LIVE_APPID || '0000000044132A07',
             STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
-            VERSION: process.env.BUILD_NUMBER ? process.env.BUILD_NUMBER : '2.0.0'
+            VERSION: process.env.BUILD_NUMBER || '2.0.0'
           }
         },
         build: {}
