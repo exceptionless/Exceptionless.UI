@@ -66,6 +66,9 @@
           vm.hourlyOverageOrganizations = [];
           vm.monthlyOverageOrganizations = [];
           vm.projectsRequiringConfiguration = [];
+          vm.suspendedForBillingOrganizations = [];
+          vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
+          vm.suspendedOrganizations = [];
 
           var currentOrganizationId = getCurrentOrganizationId();
           var currentProjects = getCurrentProjects();
@@ -74,7 +77,17 @@
               return;
             }
 
-            if (organization.is_over_monthly_limit === true){
+            if (organization.is_suspended === true) {
+              vm.suspendedOrganizations.push(organization);
+
+              if (organization.suspension_code === 'Billing') {
+                vm.suspendedForBillingOrganizations.push(organization);
+              } else if (organization.billing_status !== 1 || organization.suspension_code === 'Abuse' || organization.suspension_code === 'Overage') {
+                vm.suspendedForAbuseOrOverageOrNotActiveOrganizations.push(organization);
+              }
+            }
+
+            if (organization.is_over_monthly_limit === true) {
               vm.monthlyOverageOrganizations.push(organization);
               return;
             }
@@ -85,7 +98,6 @@
             }
 
             if (!$scope.ignoreConfigureProjects) {
-              console.log('adsfasd');
               var hasProjectsRequiringConfiguration = false;
               angular.forEach(currentProjects, function (project) {
                 if (project.organization_id !== organization.id) {
@@ -159,6 +171,18 @@
           return vm.monthlyOverageOrganizations && vm.monthlyOverageOrganizations.length > 0;
         }
 
+        function hasSuspendedForBillingOrganizations() {
+          return vm.suspendedForBillingOrganizations && vm.suspendedForBillingOrganizations.length > 0;
+        }
+
+        function hasSuspendedForAbuseOrOverageOrNotActiveOrganizations() {
+          return vm.suspendedForAbuseOrOverageOrNotActiveOrganizations && vm.suspendedForAbuseOrOverageOrNotActiveOrganizations.length > 0;
+        }
+
+        function hasSuspendedOrganizations() {
+          return vm.suspendedOrganizations && vm.suspendedOrganizations.length > 0;
+        }
+
         function hasProjectsRequiringConfiguration() {
           return vm.projectsRequiringConfiguration && vm.projectsRequiringConfiguration.length > 0;
         }
@@ -187,12 +211,18 @@
         vm.hasHourlyOverageOrganizations = hasHourlyOverageOrganizations;
         vm.hasMonthlyOverageOrganizations = hasMonthlyOverageOrganizations;
         vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
+        vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
+        vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
+        vm.hasSuspendedOrganizations = hasSuspendedOrganizations;
         vm.organizations = [];
         vm.hourlyOverageOrganizations = [];
         vm.monthlyOverageOrganizations = [];
         vm.projects = [];
         vm.projectsRequiringConfiguration = [];
         vm.showChangePlanDialog = showChangePlanDialog;
+        vm.suspendedForBillingOrganizations = [];
+        vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
+        vm.suspendedOrganizations = [];
 
         get();
       }],

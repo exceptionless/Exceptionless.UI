@@ -1,5 +1,40 @@
 <div refresh-on="filterChanged" refresh-action="vm.getOrganizationNotifications()">
   <div refresh-on="OrganizationChanged ProjectChanged planChanged planOverage" refresh-action="vm.get()"></div>
+
+
+  <div class="alert alert-danger m-b-none" ng-if="vm.hasSuspendedOrganizations()">
+    <h4>
+      <span ng-repeat="organization in vm.suspendedOrganizations">
+        <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
+      </span> has been suspended.
+    </h4>
+    <p><em>Please note that while your account is suspended all new client events will be discarded.</em></p>
+
+    <p ng-if="vm.hasSuspendedForBillingOrganizations()">
+      To unsuspend
+      <strong ng-repeat="organization in vm.suspendedForBillingOrganizations">
+        <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
+      </strong>
+      , please <a ng-click="vm.showChangePlanDialog(vm.suspendedForBillingOrganizations[0].id)">update your billing information</a>.
+    </p>
+
+    <p ng-if="vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations()">
+      <strong ng-repeat="organization in vm.suspendedForAbuseOrOverageOrNotActiveOrganizations">
+        <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
+      </strong>
+      has exceeded the plan limits. To unsuspend your account, please
+      <a ng-click="vm.showChangePlanDialog(vm.suspendedForAbuseOrOverageOrNotActiveOrganizations[0].id)">upgrade your plan</a>.
+    </p>
+
+    <!-- TODO: Integrate with Intercom  @if (Settings.Current.EnableIntercom) {
+    <p>
+      Please <a id="intercom" href="mailto:6c0d76e0bec950052459f5cb4b727a949aeabbe1@incoming.intercom.io">contact us</a>
+      for more information on why your account was suspended.
+    </p>
+    }
+    -->
+  </div>
+
   <div class="alert alert-danger m-b-none" ng-if="vm.hasHourlyOverageOrganizations()">
     Events are currently being throttled for
     <strong ng-repeat="organization in vm.hourlyOverageOrganizations">
@@ -29,7 +64,7 @@
     <h4>We haven't received any data!</h4>
     Please configure your clients for
     <strong ng-repeat="project in vm.projectsRequiringConfiguration">
-      <span ng-if="!$first">, </span><a ui-sref="app.project.configure({ id: project.id })">{{project.name}}</a>
+      <span ng-if="!$first">, </span><a ui-sref="app.project.configure({ id: project.id })" title="Configure {{project.name}} ({{project.organization_name}})">{{project.name}}</a>
     </strong>
     and start becoming exceptionless in less than 60 seconds!
   </div>
