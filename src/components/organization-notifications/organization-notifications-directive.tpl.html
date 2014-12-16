@@ -24,4 +24,13 @@
 
     <a ng-click="vm.showChangePlanDialog(vm.freeOrganizations[0].id)">Upgrade now</a> to enable premium features and extra storage!
   </div>
+
+  <div class="alert alert-success m-b-none" ng-if="vm.hasProjectsRequiringConfiguration()">
+    <h4>We haven't received any data!</h4>
+    Please configure your clients for
+    <strong ng-repeat="project in vm.projectsRequiringConfiguration">
+      <span ng-if="!$first">, </span><a ui-sref="app.project.configure({ id: project.id })">{{project.name}}</a>
+    </strong>
+    and start becoming exceptionless in less than 60 seconds!
+  </div>
 </div>

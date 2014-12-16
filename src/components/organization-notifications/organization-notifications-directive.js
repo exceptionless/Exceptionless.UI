@@ -14,7 +14,8 @@
       replace: true,
       scope: {
         organizationId: '=',
-        ignoreFree: '='
+        ignoreFree: '=',
+        ignoreConfigureProjects: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
       controller: ['$scope', 'billingService', 'filterService', 'organizationService', 'projectService', function($scope, billingService, filterService, organizationService, projectService) {
@@ -37,12 +38,37 @@
           return $scope.organizationId || filterService.getOrganizationId() || getOrganizationFromProjectFilter();
         }
 
+        function getCurrentProjects() {
+          var projects = [];
+          angular.forEach(vm.projects, function(project) {
+            if (filterService.getProjectId()) {
+              if (project.id === filterService.getProjectId()) {
+                projects.push(project);
+              }
+
+              return;
+            }
+
+            if (filterService.getOrganizationId()) {
+              if (project.organization_id === filterService.getOrganizationId()) {
+                projects.push(project);
+              }
+            } else {
+              projects.push(project);
+            }
+          });
+
+          return projects;
+        }
+
         function getOrganizationNotifications() {
           vm.freeOrganizations = [];
           vm.hourlyOverageOrganizations = [];
           vm.monthlyOverageOrganizations = [];
+          vm.projectsRequiringConfiguration = [];
 
           var currentOrganizationId = getCurrentOrganizationId();
+          var currentProjects = getCurrentProjects();
           angular.forEach(vm.organizations, function(organization) {
             if (currentOrganizationId && organization.id !== currentOrganizationId) {
               return;
@@ -50,14 +76,37 @@
 
             if (organization.is_over_monthly_limit === true){
               vm.monthlyOverageOrganizations.push(organization);
-            } else if (organization.is_over_hourly_limit === true) {
+              return;
+            }
+
+            if (organization.is_over_hourly_limit === true) {
               vm.hourlyOverageOrganizations.push(organization);
-            } else if (!$scope.ignoreFree && organization.plan_id === 'EX_FREE') {
+              return;
+            }
+
+            if (!$scope.ignoreConfigureProjects) {
+              console.log('adsfasd');
+              var hasProjectsRequiringConfiguration = false;
+              angular.forEach(currentProjects, function (project) {
+                if (project.organization_id !== organization.id) {
+                  return;
+                }
+
+                if (project.total_event_count === 0) {
+                  vm.projectsRequiringConfiguration.push(project);
+                  hasProjectsRequiringConfiguration = true;
+                }
+              });
+
+              if (hasProjectsRequiringConfiguration) {
+                return;
+              }
+            }
+
+            if (!$scope.ignoreFree && organization.plan_id === 'EX_FREE') {
               vm.freeOrganizations.push(organization);
             }
           });
-
-          return vm.organizations.filter(function(o) { return o.is_over_monthly_limit === true || o.is_over_hourly_limit === true; });
         }
 
         function getOrganizations() {
@@ -110,6 +159,10 @@
           return vm.monthlyOverageOrganizations && vm.monthlyOverageOrganizations.length > 0;
         }
 
+        function hasProjectsRequiringConfiguration() {
+          return vm.projectsRequiringConfiguration && vm.projectsRequiringConfiguration.length > 0;
+        }
+
         function showChangePlanDialog(organizationId) {
           organizationId = organizationId || getCurrentOrganizationId();
           if (!organizationId && hasHourlyOverageOrganizations()) {
@@ -133,10 +186,12 @@
         vm.hasFreeOrganizations = hasFreeOrganizations;
         vm.hasHourlyOverageOrganizations = hasHourlyOverageOrganizations;
         vm.hasMonthlyOverageOrganizations = hasMonthlyOverageOrganizations;
+        vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
         vm.organizations = [];
         vm.hourlyOverageOrganizations = [];
         vm.monthlyOverageOrganizations = [];
         vm.projects = [];
+        vm.projectsRequiringConfiguration = [];
         vm.showChangePlanDialog = showChangePlanDialog;
 
         get();
