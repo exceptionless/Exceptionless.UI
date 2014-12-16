@@ -4,7 +4,7 @@
   angular.module('app.event')
     .controller('Event', ['$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', 'userAgentService', function ($scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService, userAgentService) {
       var _eventId = $stateParams.id;
-      var _knownDataKeys = ['error', 'simple_error', 'request', 'trace', 'environment', 'user', 'user_description', 'version'];
+      var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'version'];
       var vm = this;
 
       function addHotKeys() {
