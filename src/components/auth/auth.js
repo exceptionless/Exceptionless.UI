@@ -44,7 +44,6 @@
 
       authService.saveCurrentState();
       $state.go('auth.login');
-      deferred.reject(response);
       return false;
     });
   }]);
