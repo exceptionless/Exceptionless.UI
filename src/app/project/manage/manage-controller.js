@@ -64,9 +64,13 @@
         notificationService.success('Copied!');
       }
 
+      function get() {
+        return getProject().then(getTokens).then(getConfiguration).then(getWebHooks);
+      }
+
       function getProject() {
         function onSuccess(response) {
-          vm.project = response.plain();
+          vm.project = response.data.plain();
           return vm.project;
         }
 
@@ -93,6 +97,9 @@
 
       function getConfiguration() {
         function onSuccess(response) {
+          vm.config = [];
+          vm.data_exclusions = null;
+
           angular.forEach(response.data.settings, function (value, key) {
             if (key === '@@DataExclusions') {
               vm.data_exclusions = value;
@@ -220,6 +227,7 @@
       vm.config = [];
       vm.copied = copied;
       vm.data_exclusions = null;
+      vm.get = get;
       vm.hasConfiguration = hasConfiguration;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.hasTokens = hasTokens;
@@ -234,6 +242,6 @@
       vm.saveDeleteBotDataEnabled = saveDeleteBotDataEnabled;
       vm.tokens = [];
       vm.webHooks = [];
-      getProject().then(getTokens).then(getConfiguration).then(getWebHooks);
+      get();
     }]);
 }());

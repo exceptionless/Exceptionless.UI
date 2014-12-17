@@ -24,7 +24,7 @@
 
       function getProject() {
         function onSuccess(response) {
-          vm.project = response.plain();
+          vm.project = response.data.plain();
           return vm.project;
         }
 
@@ -33,7 +33,7 @@
           notificationService.error('The project "' + projectId + '" could not be found.');
         }
 
-        return projectService.getById(projectId).then(onSuccess, onFailure);
+        return projectService.getById(projectId, true).then(onSuccess, onFailure);
       }
 
       function getProjectTypes() {

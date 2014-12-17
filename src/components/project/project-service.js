@@ -2,7 +2,15 @@
   'use strict';
 
   angular.module('exceptionless.project', ['restangular'])
-    .factory('projectService', ['Restangular', function (Restangular) {
+    .factory('projectService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
+      var _cache = $cacheFactory('http:project');
+      $rootScope.$on('auth:logout', _cache.removeAll);
+      $rootScope.$on('ProjectChanged', _cache.removeAll);
+
+      var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
+        RestangularConfigurer.setDefaultHttpFields({ cache: _cache });
+      });
+
       function create(organizationId, name) {
         return Restangular.all('projects').post({'organization_id': organizationId, 'name': name});
       }
@@ -12,29 +20,27 @@
       }
 
       function getAll(options) {
-        return Restangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
+        return _cachedRestangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
       }
 
-      function getById(id) {
-        function onSuccess(response) {
-          var projects = response.data.filter(function(project) { return project.id === id; });
-          return projects.length > 0 ? projects[0] : null;
+      function getById(id, useCache) {
+        if (useCache) {
+          _cachedRestangular.one('projects', id).get();
         }
 
-        // NOTE: getById calls getAll because this will always be cached throughout the site..
-        return getAll().then(onSuccess);
+        return Restangular.one('projects', id).get();
       }
 
       function getByOrganizationId(id, options) {
-        return Restangular.one('organizations', id).all('projects').getList(options || {});
+        return _cachedRestangular.one('organizations', id).all('projects').getList(options || {});
       }
 
       function getConfig(id) {
-        return Restangular.one('projects', id).one('config').get();
+        return _cachedRestangular.one('projects', id).one('config').get();
       }
 
       function getNotificationSettings(id, userId) {
-        return Restangular.one('users', userId).one('projects', id).one('notifications').get();
+        return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
       }
 
       function isNameAvailable(name) {

@@ -2,7 +2,15 @@
   'use strict';
 
   angular.module('exceptionless.organization', ['restangular'])
-    .factory('organizationService', ['Restangular', function (Restangular) {
+    .factory('organizationService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
+      var _cache = $cacheFactory('http:organization');
+      $rootScope.$on('auth:logout', _cache.removeAll);
+      $rootScope.$on('OrganizationChanged', _cache.removeAll);
+
+      var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
+        RestangularConfigurer.setDefaultHttpFields({ cache: _cache });
+      });
+
       function addUser(id, email) {
         return Restangular.one('organizations', id).one('users', email).remove();
       }
@@ -16,7 +24,7 @@
       }
 
       function getAll(options) {
-        return Restangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
+        return _cachedRestangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
       }
 
       function getById(id) {
@@ -32,7 +40,7 @@
       }
 
       function getPlans(id) {
-        return Restangular.one('organizations', id).all('plans').getList();
+        return _cachedRestangular.one('organizations', id).all('plans').getList();
       }
 
       function isNameAvailable(name) {

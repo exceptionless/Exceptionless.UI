@@ -2,11 +2,15 @@
   'use strict';
 
   angular.module('exceptionless.auth')
-    .factory('authService', ['$auth', '$location', '$state', 'Restangular', 'locker', function ($auth, $location, $state, Restangular, locker) {
+    .factory('authService', ['$auth', '$location', '$rootScope', '$state', 'Restangular', 'locker', function ($auth, $location, $rootScope, $state, Restangular, locker) {
       var _store = locker.driver('session').namespace('auth');
 
       function authenticate(provider) {
-        return $auth.authenticate(provider);
+        function onSuccess() {
+          $rootScope.$emit('auth:login', {});
+        }
+
+        return $auth.authenticate(provider).then(onSuccess);
       }
 
       function changePassword(changePasswordModel) {
@@ -34,12 +38,20 @@
       }
 
       function login(user) {
-        return $auth.login(user);
+        function onSuccess() {
+          $rootScope.$emit('auth:login', {});
+        }
+
+        return $auth.login(user).then(onSuccess);
       }
 
       function logout() {
+        function onSuccess() {
+          $rootScope.$emit('auth:logout', {});
+        }
+
         clearPreviousState();
-        return $auth.logout();
+        return $auth.logout().then(onSuccess);
       }
 
       function redirectToPreviousState(secondaryStateNameToRedirect, secondaryStateParams) {
