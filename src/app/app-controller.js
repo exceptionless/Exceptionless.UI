@@ -83,6 +83,7 @@
       }
 
       if (!authService.isAuthenticated()) {
+        authService.saveCurrentState();
         return $state.go('auth.login');
       }
 

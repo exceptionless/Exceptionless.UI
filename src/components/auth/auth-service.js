@@ -42,7 +42,7 @@
         return $auth.logout();
       }
 
-      function redirectToPreviousState() {
+      function redirectToPreviousState(secondaryStateNameToRedirect, secondaryStateParams) {
         var name = _store.pull('name');
         var params = _store.pull('params') || {};
 
@@ -50,7 +50,7 @@
           return $state.go(name, params);
         }
 
-        return $location.path('/');
+        return secondaryStateNameToRedirect ? $state.go(secondaryStateNameToRedirect, secondaryStateParams || {}) : $location.path('/');
       }
 
       function resetPassword(resetPasswordModel) {
@@ -58,7 +58,7 @@
       }
 
       function saveCurrentState() {
-        if (_store.has('name')) {
+        if (_store.has('name') || $state.current.name.startsWith('auth.')) {
           return;
         }
 
@@ -81,6 +81,7 @@
       var service = {
         authenticate: authenticate,
         changePassword: changePassword,
+        clearPreviousState: clearPreviousState,
         forgotPassword: forgotPassword,
         getToken: getToken,
         isAuthenticated: isAuthenticated,

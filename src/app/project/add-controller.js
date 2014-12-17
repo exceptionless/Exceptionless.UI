@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Add', ['$state', 'billingService', 'organizationService', 'projectService', 'notificationService', function ($state, billingService, organizationService, projectService, notificationService) {
+    .controller('project.Add', ['$state', '$stateParams', 'billingService', 'organizationService', 'projectService', 'notificationService', function ($state, $stateParams, billingService, organizationService, projectService, notificationService) {
       var newOrganizationId = '__newOrganization';
       var vm = this;
 
@@ -59,10 +59,17 @@
       }
 
       function getOrganizations() {
-        organizationService.getAll().then(function (response) {
+        function onSuccess(response) {
           vm.organizations = response.data;
           vm.organizations.push({id: newOrganizationId, name: '<New Organization>'});
-        });
+
+          vm.currentOrganization = vm.organizations.filter(function(o) { return o.id === (vm.currentOrganization.id); })[0];
+          if (!vm.currentOrganization) {
+            vm.currentOrganization = vm.organizations.length > 0 ? vm.organizations[0] : {};
+          }
+        }
+
+        organizationService.getAll().then(onSuccess);
       }
 
       function hasOrganizations() {
@@ -74,6 +81,7 @@
       vm.add = add;
       vm.canCreateOrganization = canCreateOrganization;
       vm.currentOrganization = {};
+      vm.getOrganizations = getOrganizations;
       vm.hasOrganizations = hasOrganizations;
       vm.organizations = [];
 

@@ -1,12 +1,33 @@
 <div refresh-on="filterChanged" refresh-action="vm.getOrganizationNotifications()">
   <div refresh-on="OrganizationChanged ProjectChanged planChanged planOverage" refresh-action="vm.get()"></div>
 
+  <div class="alert alert-success m-b-none" ng-if="!vm.hasOrganizations() || vm.hasOrganizationsWithNoProjects() || vm.hasProjectsRequiringConfiguration()">
+    <h4>We haven't received any data!</h4>
+    <p ng-if="!vm.hasOrganizations()">
+      Please <a ui-sref="app.project.add">add a new project</a> and start becoming exceptionless in less than 60 seconds!
+    </p>
+
+    <p ng-if="vm.hasOrganizationsWithNoProjects()">
+      <strong ng-repeat="organization in vm.organizationsWithNoProjects">
+        <span ng-if="!$first">, </span><a ui-sref="app.project.add">{{organization.name}}</a>
+      </strong>
+      currently has no projects. <a ui-sref="app.project.add">Add a new project</a> and start becoming exceptionless in less than 60 seconds!
+    </p>
+
+    <p ng-if="vm.hasProjectsRequiringConfiguration()">
+      Please configure your clients for
+      <strong ng-repeat="project in vm.projectsRequiringConfiguration">
+        <span ng-if="!$first">, </span><a ui-sref="app.project.configure({ id: project.id })" title="Configure {{project.name}} ({{project.organization_name}})">{{project.name}}</a>
+      </strong>
+      projects and start becoming exceptionless in less than 60 seconds!
+    </p>
+  </div>
 
   <div class="alert alert-danger m-b-none" ng-if="vm.hasSuspendedOrganizations()">
     <h4>
-      <span ng-repeat="organization in vm.suspendedOrganizations">
+      <strong ng-repeat="organization in vm.suspendedOrganizations">
         <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
-      </span> has been suspended.
+      </strong> has been suspended.
     </h4>
     <p><em>Please note that while your account is suspended all new client events will be discarded.</em></p>
 
@@ -51,21 +72,10 @@
   </div>
 
   <div class="alert alert-success m-b-none" ng-if="vm.hasFreeOrganizations()">
-    <strong>
-      <span ng-repeat="organization in vm.freeOrganizations">
-        <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
-      </span> is currently on a free plan.
-    </strong>
+    <strong ng-repeat="organization in vm.freeOrganizations">
+      <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
+    </strong> is currently on a free plan.
 
     <a ng-click="vm.showChangePlanDialog(vm.freeOrganizations[0].id)">Upgrade now</a> to enable premium features and extra storage!
-  </div>
-
-  <div class="alert alert-success m-b-none" ng-if="vm.hasProjectsRequiringConfiguration()">
-    <h4>We haven't received any data!</h4>
-    Please configure your clients for
-    <strong ng-repeat="project in vm.projectsRequiringConfiguration">
-      <span ng-if="!$first">, </span><a ui-sref="app.project.configure({ id: project.id })" title="Configure {{project.name}} ({{project.organization_name}})">{{project.name}}</a>
-    </strong>
-    and start becoming exceptionless in less than 60 seconds!
   </div>
 </div>

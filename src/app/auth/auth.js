@@ -8,6 +8,7 @@
 
     'exceptionless.auth',
     'exceptionless.notification',
+    'exceptionless.project',
     'exceptionless.user'
   ])
   .config(['$stateProvider', function ($stateProvider) {

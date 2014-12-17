@@ -66,6 +66,7 @@
           vm.hourlyOverageOrganizations = [];
           vm.monthlyOverageOrganizations = [];
           vm.projectsRequiringConfiguration = [];
+          vm.organizationsWithNoProjects = [];
           vm.suspendedForBillingOrganizations = [];
           vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
           vm.suspendedOrganizations = [];
@@ -94,6 +95,11 @@
 
             if (organization.is_over_hourly_limit === true) {
               vm.hourlyOverageOrganizations.push(organization);
+              return;
+            }
+
+            if (!vm.projects.filter(function(o) { return organization.id === o.organization_id; })[0]) {
+              vm.organizationsWithNoProjects.push(organization);
               return;
             }
 
@@ -171,6 +177,18 @@
           return vm.monthlyOverageOrganizations && vm.monthlyOverageOrganizations.length > 0;
         }
 
+        function hasProjectsRequiringConfiguration() {
+          return vm.projectsRequiringConfiguration && vm.projectsRequiringConfiguration.length > 0;
+        }
+
+        function hasOrganizations() {
+          return vm.organizations && vm.organizations.length > 0;
+        }
+
+        function hasOrganizationsWithNoProjects() {
+          return vm.organizationsWithNoProjects && vm.organizationsWithNoProjects.length > 0;
+        }
+
         function hasSuspendedForBillingOrganizations() {
           return vm.suspendedForBillingOrganizations && vm.suspendedForBillingOrganizations.length > 0;
         }
@@ -181,10 +199,6 @@
 
         function hasSuspendedOrganizations() {
           return vm.suspendedOrganizations && vm.suspendedOrganizations.length > 0;
-        }
-
-        function hasProjectsRequiringConfiguration() {
-          return vm.projectsRequiringConfiguration && vm.projectsRequiringConfiguration.length > 0;
         }
 
         function showChangePlanDialog(organizationId) {
@@ -211,10 +225,13 @@
         vm.hasHourlyOverageOrganizations = hasHourlyOverageOrganizations;
         vm.hasMonthlyOverageOrganizations = hasMonthlyOverageOrganizations;
         vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
+        vm.hasOrganizations = hasOrganizations;
+        vm.hasOrganizationsWithNoProjects = hasOrganizationsWithNoProjects;
         vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
         vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
         vm.hasSuspendedOrganizations = hasSuspendedOrganizations;
         vm.organizations = [];
+        vm.organizationsWithNoProjects = [];
         vm.hourlyOverageOrganizations = [];
         vm.monthlyOverageOrganizations = [];
         vm.projects = [];
