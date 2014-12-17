@@ -51,8 +51,19 @@
           $state.go('app.project.configure', {id: response.data.id});
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while creating the project');
+        function onFailure(response) {
+          if (response.status === 426) {
+            return billingService.confirmUpgradePlan(response.data.message).then(function () {
+              return createProject(organization);
+            });
+          }
+
+          var message = 'An error occurred while creating the project.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return projectService.create(organization.id, vm.project_name).then(onSuccess, onFailure);

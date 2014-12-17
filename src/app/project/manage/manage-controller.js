@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Manage', ['$state', '$stateParams', 'projectService', 'tokenService', 'webHookService', 'notificationService', 'featureService', 'dialogs', 'dialogService', function ($state, $stateParams, projectService, tokenService, webHookService, notificationService, featureService, dialogs, dialogService) {
+    .controller('project.Manage', ['$state', '$stateParams', 'billingService', 'projectService', 'tokenService', 'webHookService', 'notificationService', 'featureService', 'dialogs', 'dialogService', function ($state, $stateParams, billingService, projectService, tokenService, webHookService, notificationService, featureService, dialogs, dialogService) {
       var projectId = $stateParams.id;
       var vm = this;
 
@@ -45,19 +45,29 @@
 
       function addWebHook() {
         dialogs.create('components/web-hook/add-web-hook-dialog.tpl.html', 'AddWebHookDialog as vm').result.then(function (data) {
-          function onSuccess(response) {
-            vm.webHooks.push(response.data);
-            return response.data.plain();
-          }
-
-          function onFailure() {
-            notificationService.error('An error occurred while saving the configuration setting.');
-          }
-
           data.organization_id = vm.project.organization_id;
           data.project_id = projectId;
-          return webHookService.create(data).then(onSuccess, onFailure);
+          return createWebHook(data);
         });
+      }
+
+      function createWebHook(data) {
+        function onSuccess(response) {
+          vm.webHooks.push(response.data);
+          return response.data.plain();
+        }
+
+        function onFailure(response) {
+          if (response.status === 426) {
+            return billingService.confirmUpgradePlan(response.data.message).then(function () {
+              return createWebHook(data);
+            });
+          }
+
+          notificationService.error('An error occurred while saving the configuration setting.');
+        }
+
+        return webHookService.create(data).then(onSuccess, onFailure);
       }
 
       function copied() {

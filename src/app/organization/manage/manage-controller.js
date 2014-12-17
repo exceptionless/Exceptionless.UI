@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', function ($state, $stateParams, $window, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs) {
+    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', function ($state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs) {
       var organizationId = $stateParams.id;
       var options = {limit: 5};
       var vm = this;
@@ -13,7 +13,13 @@
             vm.users.push(response.data);
           }
 
-          function onFailure() {
+          function onFailure(response) {
+            if (response.status === 426) {
+              return billingService.confirmUpgradePlan(response.data.message).then(function () {
+                return addUser(name);
+              });
+            }
+
             notificationService.error('An error occurred while inviting the user.');
           }
 
