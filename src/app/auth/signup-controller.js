@@ -36,7 +36,7 @@
           return $state.go('app.project.add');
         }
 
-        function onFailure(response) {
+        function onFailure() {
           return authService.redirectToPreviousState('app.project.add');
         }
 

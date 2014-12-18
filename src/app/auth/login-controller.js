@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', ['authService', 'notificationService', function (authService, notificationService) {
+    .controller('auth.Login', ['$state', 'authService', 'notificationService', 'projectService', function ($state, authService, notificationService, projectService) {
       if (authService.isAuthenticated()) {
         authService.logout();
       }
@@ -18,15 +18,11 @@
       }
 
       function authenticate(provider) {
-        function onSuccess() {
-          return authService.redirectToPreviousState();
-        }
-
         function onFailure(response) {
           notificationService.error(getMessage(response));
         }
 
-        return authService.authenticate(provider).then(onSuccess, onFailure);
+        return authService.authenticate(provider).then(redirectOnSignup, onFailure);
       }
 
       function login(isValid) {
@@ -34,15 +30,29 @@
           return;
         }
 
-        function onSuccess() {
-          return authService.redirectToPreviousState();
-        }
-
         function onFailure(response) {
           notificationService.error(getMessage(response));
         }
 
-        return authService.login(vm.user).then(onSuccess, onFailure);
+        return authService.login(vm.user).then(redirectOnSignup, onFailure);
+      }
+
+      function redirectOnSignup() {
+        function onSuccess(response) {
+          console.log(response.data.plain());
+          if (response.data && response.data.length > 0) {
+            return authService.redirectToPreviousState();
+          }
+
+          authService.clearPreviousState();
+          return $state.go('app.project.add');
+        }
+
+        function onFailure() {
+          return authService.redirectToPreviousState('app.project.add');
+        }
+
+        return projectService.getAll().then(onSuccess, onFailure);
       }
 
       vm.authenticate = authenticate;

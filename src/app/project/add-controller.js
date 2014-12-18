@@ -48,7 +48,7 @@
         }
 
         function onSuccess(response) {
-          $state.go('app.project.configure', {id: response.data.id});
+          $state.go('app.project.configure', { id: response.data.id });
         }
 
         function onFailure(response) {
@@ -97,6 +97,5 @@
       vm.organizations = [];
 
       getOrganizations();
-    }
-    ]);
+    }]);
 }());
