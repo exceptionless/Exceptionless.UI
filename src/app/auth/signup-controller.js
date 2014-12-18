@@ -27,7 +27,6 @@
 
       function redirectOnSignup() {
         function onSuccess(response) {
-          console.log(response.data.plain());
           if (response.data && response.data.length > 0) {
             return authService.redirectToPreviousState();
           }

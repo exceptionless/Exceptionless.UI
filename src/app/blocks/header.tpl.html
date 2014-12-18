@@ -37,7 +37,7 @@
             My Account
           </a>
         </li>
-        <li>
+        <li ng-if="appVm.canChangePlan()">
           <a ng-click="appVm.changePlan()">
             <i class="fa fa-credit-card fa-fw"></i>
             Change Plan

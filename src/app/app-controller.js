@@ -2,8 +2,12 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'signalRService', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, signalRService, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'organizationService', 'signalRService', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, organizationService, signalRService, urlService, userService, VERSION) {
       var vm = this;
+
+      function canChangePlan() {
+        return vm.organizations && vm.organizations.length > 0;
+      }
 
       function changePlan(organizationId) {
         return billingService.changePlan(organizationId);
@@ -23,6 +27,15 @@
 
       function getNewUrl(type) {
         return urlService.buildFilterUrl({ route: 'new', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+      }
+
+      function getOrganizations() {
+        function onSuccess(response) {
+          vm.organizations = response.data.plain();
+          return response;
+        }
+
+        return organizationService.getAll().then(onSuccess);
       }
 
       function getUser() {
@@ -112,16 +125,18 @@
       vm.getRecentUrl = getRecentUrl;
       vm.getFrequentUrl = getFrequentUrl;
       vm.getNewUrl = getNewUrl;
+      vm.getOrganizations = getOrganizations;
       vm.getUser = getUser;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
       vm.isTypeMenuActive = isTypeMenuActive;
+      vm.organizations = [];
       vm.settings = {
         asideFolded: false
       };
       vm.user = {};
       vm.version = VERSION;
 
-      getUser().then(startSignalR);
+      getUser().then(getOrganizations).then(startSignalR);
     }]);
 }());

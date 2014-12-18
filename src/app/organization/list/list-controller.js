@@ -8,16 +8,32 @@
 
       function add() {
         dialogs.create('app/organization/list/add-organization-dialog.tpl.html', 'AddOrganizationDialog as vm').result.then(function (name) {
-          function onSuccess(response) {
-            vm.organizations.push(response.data);
-          }
-
-          function onFailure() {
-            notificationService.error('An error occurred while creating the organization.');
-          }
-
-          return organizationService.create(name).then(onSuccess, onFailure);
+          return createOrganization(name);
         });
+      }
+
+      function createOrganization(name) {
+        function onSuccess(response) {
+          vm.organizations.push(response.data.plain());
+        }
+
+        function onFailure(response) {
+          if (response.status === 426) {
+            return billingService.confirmUpgradePlan(response.data.message).then(function () {
+              return createOrganization(name);
+            });
+          }
+
+          var message = 'An error occurred while creating the organization.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
+        }
+
+        return organizationService.create(name).then(onSuccess, onFailure);
+
       }
 
       function get(options) {
