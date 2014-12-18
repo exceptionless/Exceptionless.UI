@@ -38,6 +38,13 @@
             },
             'planChanged': function (planChanged) {
               $rootScope.$emit('planChanged', planChanged);
+            },
+            'userMembershipChanged': function (userMembershipChanged) {
+              // This event is fired when a user is added or removed from an organization.
+              if (userMembershipChanged && userMembershipChanged.organization_id){
+                $rootScope.$emit('OrganizationChanged', userMembershipChanged);
+                $rootScope.$emit('ProjectChanged', userMembershipChanged);
+              }
             }
           },
 
