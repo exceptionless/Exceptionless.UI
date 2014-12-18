@@ -36,7 +36,12 @@
             });
           }
 
-          notificationService.error('An error occurred while creating the organization');
+          var message = 'An error occurred while creating the organization.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
+          }
+
+          notificationService.error(message);
         }
 
         return organizationService.create(name).then(onSuccess, onFailure);

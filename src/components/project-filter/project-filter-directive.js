@@ -5,6 +5,7 @@
     'angular.filter',
 
     'exceptionless.auto-active',
+    'exceptionless.organization',
     'exceptionless.project',
     'exceptionless.refresh'
   ])
@@ -14,8 +15,54 @@
       replace: true,
       scope: true,
       templateUrl: 'components/project-filter/project-filter-directive.tpl.html',
-      controller: ['$scope', '$state', '$stateParams', 'filterService', 'notificationService', 'projectService', 'urlService', function ($scope, $state, $stateParams, filterService, notificationService, projectService, urlService) {
+      controller: ['$scope', '$state', '$stateParams', 'filterService', 'notificationService', 'organizationService', 'projectService', 'urlService', function ($scope, $state, $stateParams, filterService, notificationService, organizationService, projectService, urlService) {
         function get() {
+          console.log('get');
+          return getOrganizations().then(getProjects);
+        }
+
+        function getAllProjectsUrl() {
+          return urlService.buildFilterUrl({ route: getStateName(), type: $stateParams.type });
+        }
+
+        function getFilterName() {
+          var organizationId = filterService.getOrganizationId();
+          if (organizationId) {
+            var organization = vm.organizations.filter(function(o) { return o.id === organizationId; })[0];
+            if (organization) {
+              return organization.name;
+            }
+          }
+
+          var projectId = filterService.getProjectId();
+          if (projectId) {
+            var project = vm.projects.filter(function(p) { return p.id === projectId; })[0];
+            if (project) {
+              return project.name;
+            }
+          }
+
+          return 'All Projects';
+        }
+
+        function getOrganizations() {
+          function onSuccess(response) {
+            vm.organizations = response.data.plain();
+            vm.filterName = getFilterName();
+          }
+
+          function onFailure() {
+            notificationService.error('An error occurred while loading your organizations.');
+          }
+
+          return organizationService.getAll().then(onSuccess, onFailure);
+        }
+
+        function getOrganizationUrl(organization) {
+          return urlService.buildFilterUrl({ route: getStateName(), organizationId: organization.id, type: $stateParams.type });
+        }
+
+        function getProjects() {
           function onSuccess(response) {
             vm.projects = response.data.plain();
             vm.filterName = getFilterName();
@@ -26,36 +73,6 @@
           }
 
           return projectService.getAll().then(onSuccess, onFailure);
-        }
-
-        function getAllProjectsUrl() {
-          return urlService.buildFilterUrl({ route: getStateName(), type: $stateParams.type });
-        }
-
-        function getFilterName() {
-          var organizationId = filterService.getOrganizationId();
-          if (organizationId) {
-            for (var index = 0; index < vm.projects.length; index++) {
-              if (vm.projects[index].organization_id === organizationId) {
-                return vm.projects[index].organization_name;
-              }
-            }
-          }
-
-          var projectId = filterService.getProjectId();
-          if (projectId) {
-            for (var index2 = 0; index2 < vm.projects.length; index2++) {
-              if (vm.projects[index2].id === projectId) {
-                return vm.projects[index2].name;
-              }
-            }
-          }
-
-          return 'All Projects';
-        }
-
-        function getOrganizationUrl(project) {
-          return urlService.buildFilterUrl({ route: getStateName(), organizationId: project.organization_id, type: $stateParams.type });
         }
 
         function getProjectUrl(project) {
@@ -92,6 +109,7 @@
         vm.getFilterName = getFilterName;
         vm.getOrganizationUrl = getOrganizationUrl;
         vm.getProjectUrl = getProjectUrl;
+        vm.organizations = [];
         vm.projects = [];
 
         get();
