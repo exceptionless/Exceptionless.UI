@@ -15,10 +15,13 @@
                          ng-model="vm.project.name"
                          ng-model-options="{ debounce: 1000 }"
                          ng-change="vm.save(projectForm.$valid)"
+                         project-name-available-validator
                          required />
 
+                  <div ng-if="projectForm.$pending">Checking Project Name</div>
                   <div class="error" ng-messages="projectForm.name.$error" ng-if="projectForm.$submitted || projectForm.name.$touched">
                     <small ng-message="required">Project Name is required.</small>
+                    <small ng-message="unique">A project with this name already exists.</small>
                   </div>
                 </div>
 

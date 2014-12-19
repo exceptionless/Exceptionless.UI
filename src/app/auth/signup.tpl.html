@@ -43,7 +43,14 @@
               <div class="form-group">
                 <label for="email" class="col-sm-2 control-label">Email</label>
                 <div class="col-sm-10">
-                  <input id="email" name="email" type="email" class="form-control" placeholder="Email address (no spam)" x-autocompletetype="email" autocorrect="off" spellcheck="false" ng-model="vm.user.email" required />
+                  <input id="email" name="email" type="email" class="form-control" placeholder="Email address (no spam)"
+                         x-autocompletetype="email" autocorrect="off" spellcheck="false"
+                         ng-model="vm.user.email"
+                         ng-model-options="{ debounce: 1000 }"
+                         email-address-available-validator
+                         required />
+
+                  <div ng-if="signupForm.$pending">Checking Email Address</div>
                   <div class="error" ng-messages="signupForm.email.$error" ng-if="signupForm.$submitted || signupForm.email.$touched">
                     <small ng-message="required">Email Address is required.</small>
                     <small ng-message="email">Email Address is required.</small>

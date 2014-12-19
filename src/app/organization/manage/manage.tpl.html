@@ -15,10 +15,13 @@
                          ng-model="vm.organization.name"
                          ng-model-options="{ debounce: 1000 }"
                          ng-change="vm.save(organizationForm.$valid)"
+                         organization-name-available-validator
                          required />
 
+                  <div ng-if="organizationForm.$pending">Checking Organization Name</div>
                   <div class="error" ng-messages="organizationForm.name.$error" ng-if="organizationForm.$submitted || organizationForm.name.$touched">
                     <small ng-message="required">Organization Name is required.</small>
+                    <small ng-message="unique">A organizations with this name already exists.</small>
                   </div>
                 </div>
                 <div class="line line-dashed b-b line-lg pull-in"></div>

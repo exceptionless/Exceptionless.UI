@@ -5,6 +5,8 @@
         <div class="panel-heading"><i class="fa fa-asterisk"></i> Project Information</div>
         <div class="panel-body">
           <form name="addForm" role="form" class="form-validation">
+            <div ng-if="addForm.$pending">Checking...</div>
+
             <div class="form-group" ng-if="vm.hasOrganizations()">
               <label for="organization">Organization Name</label>
               <select id="organization" class="form-control"
@@ -16,18 +18,27 @@
             <div class="form-group" ng-if="vm.canCreateOrganization()">
               <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
                      ng-model="vm.organization_name"
+                     ng-model-options="{ debounce: 1000 }"
+                     organization-name-available-validator
                      ng-required="vm.canCreateOrganization()" />
 
               <div class="error" ng-messages="addForm.organization_name.$error" ng-if="addForm.$submitted || addForm.organization_name.$touched">
                 <small ng-message="required">Organization Name is required.</small>
+                <small ng-message="unique">A organizations with this name already exists.</small>
               </div>
             </div>
 
             <div class="form-group">
               <label for="project_name">Project Name</label>
-              <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name" ng-model="vm.project_name" required />
+              <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name"
+                     ng-model="vm.project_name"
+                     ng-model-options="{ debounce: 1000 }"
+                     project-name-available-validator
+                     required />
+
               <div class="error" ng-messages="addForm.project_name.$error" ng-if="addForm.$submitted || addForm.project_name.$touched">
                 <small ng-message="required">Project Name is required.</small>
+                <small ng-message="unique">A project with this name already exists.</small>
               </div>
             </div>
 

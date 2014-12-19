@@ -16,7 +16,8 @@
     'exceptionless.organization',
     'exceptionless.notification',
     'exceptionless.refresh',
-    'exceptionless.token'
+    'exceptionless.token',
+    'exceptionless.validators'
   ])
   .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
     $stateProvider.state('app.project', {

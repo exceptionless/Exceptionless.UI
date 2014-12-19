@@ -9,7 +9,8 @@
     'exceptionless.auth',
     'exceptionless.dialog',
     'exceptionless.project',
-    'exceptionless.user'
+    'exceptionless.user',
+    'exceptionless.validators'
   ])
     .config(['$stateProvider', function ($stateProvider) {
       $stateProvider.state('app.account', {

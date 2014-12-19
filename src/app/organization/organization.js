@@ -18,6 +18,7 @@
     'exceptionless.refresh',
     'exceptionless.token',
     'exceptionless.user',
+    'exceptionless.validators',
     'exceptionless.web-hook'
   ])
   .config(['$stateProvider', function ($stateProvider) {

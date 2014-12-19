@@ -7,9 +7,16 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="name">Organization Name</label>
-      <input id="name" name="name" type="text" class="form-control input-lg" ng-model="vm.data.name" placeholder="Organization Name" required />
+      <input id="name" name="name" type="text" class="form-control input-lg" placeholder="Organization Name"
+             ng-model="vm.data.name"
+             ng-model-options="{ debounce: 1000 }"
+             organization-name-available-validator
+             required />
+
+      <div ng-if="addOrganizationForm.$pending">Checking Organization Name</div>
       <div class="error" ng-messages="addOrganizationForm.name.$error" ng-if="addOrganizationForm.$submitted || addOrganizationForm.name.$touched">
         <small ng-message="required">Organization Name is required.</small>
+        <small ng-message="unique">A organizations with this name already exists.</small>
       </div>
     </div>
   </div>

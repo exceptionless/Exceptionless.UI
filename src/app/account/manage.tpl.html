@@ -37,8 +37,10 @@
                          ng-model="vm.user.email_address"
                          ng-model-options="{ debounce: 1000 }"
                          ng-change="vm.saveEmailAddress(userForm.$valid)"
+                         email-address-available-validator
                          required/>
 
+                  <div ng-if="userForm.$pending">Checking Email Address</div>
                   <div class="error" ng-messages="userForm.email.$error" ng-if="userForm.$submitted || userForm.email.$touched">
                     <small ng-message="required">Email Address is required.</small>
                     <small ng-message="email">Email Address is required.</small>
