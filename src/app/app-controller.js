@@ -2,11 +2,11 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'organizationService', 'signalRService', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, organizationService, signalRService, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'organizationService', 'signalRService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, organizationService, signalRService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
       var vm = this;
 
       function canChangePlan() {
-        return vm.organizations && vm.organizations.length > 0;
+        return STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
       }
 
       function changePlan(organizationId) {
@@ -120,6 +120,7 @@
 
       $scope.$on('$destroy', signalRService.stop);
 
+      vm.canChangePlan = canChangePlan;
       vm.changePlan = changePlan;
       vm.getDashboardUrl = getDashboardUrl;
       vm.getRecentUrl = getRecentUrl;

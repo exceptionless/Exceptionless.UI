@@ -1,4 +1,4 @@
-﻿/*global li:false, queryString: false */
+﻿/* global li:false, queryString: false */
 (function () {
   'use strict';
 

@@ -2,8 +2,11 @@
   'use strict';
 
   angular.module('exceptionless.organization-notifications', [
+    'app.config',
+
     'exceptionless.billing',
     'exceptionless.filter',
+    'exceptionless.notification',
     'exceptionless.organization',
     'exceptionless.project',
     'exceptionless.refresh'
@@ -18,7 +21,7 @@
         ignoreConfigureProjects: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
-      controller: ['$scope', 'billingService', 'filterService', 'organizationService', 'projectService', function($scope, billingService, filterService, organizationService, projectService) {
+      controller: ['$scope', 'billingService', 'filterService', 'notificationService', 'organizationService', 'projectService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, notificationService, organizationService, projectService, STRIPE_PUBLISHABLE_KEY) {
         var vm = this;
 
         function get() {
@@ -160,6 +163,7 @@
         function getProjects() {
           function onSuccess(response) {
             vm.projects = response.data.plain();
+            return vm.projects;
           }
 
           return projectService.getAll().then(onSuccess);
@@ -202,13 +206,22 @@
         }
 
         function showChangePlanDialog(organizationId) {
+          if (!STRIPE_PUBLISHABLE_KEY) {
+            notificationService.error('Billing is currently disabled.');
+            return;
+          }
+
           organizationId = organizationId || getCurrentOrganizationId();
-          if (!organizationId && hasHourlyOverageOrganizations()) {
-            organizationId = vm.hourlyOverageOrganizations[0].id;
+          if (!organizationId && hasSuspendedOrganizations()) {
+            organizationId = vm.suspendedOrganizations[0].id;
           }
 
           if (!organizationId && hasMonthlyOverageOrganizations()) {
             organizationId = vm.monthlyOverageOrganizations[0].id;
+          }
+
+          if (!organizationId && hasHourlyOverageOrganizations()) {
+            organizationId = vm.hourlyOverageOrganizations[0].id;
           }
 
           if (!organizationId && hasFreeOrganizations()) {
