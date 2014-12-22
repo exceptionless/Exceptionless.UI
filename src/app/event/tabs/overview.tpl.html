@@ -6,6 +6,10 @@
       )
     </td>
   </tr>
+  <tr>
+    <th>Project</th>
+    <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
+  </tr>
   <tr class="hidden-print">
     <th>Event Type</th>
     <td><span truncate>{{::vm.event.type}}</span></td>

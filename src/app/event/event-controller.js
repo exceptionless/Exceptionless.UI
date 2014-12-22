@@ -166,8 +166,8 @@
       }
 
       function getProject() {
-        function onSuccess(project) {
-          vm.project = project;
+        function onSuccess(response) {
+          vm.project = response.data.plain();
           return vm.project;
         }
 
@@ -179,7 +179,7 @@
           onFailure();
         }
 
-        return projectService.getById(vm.event.project_id).then(onSuccess, onFailure);
+        return projectService.getById(vm.event.project_id, true).then(onSuccess, onFailure);
       }
 
       function getRequestUrl() {
@@ -293,6 +293,7 @@
       vm.hasVersion = hasVersion;
       vm.isError = isError;
       vm.isPromoted = isPromoted;
+      vm.project = {};
       vm.promoteTab = promoteTab;
       vm.tabs = [];
 

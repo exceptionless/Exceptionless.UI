@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', ['$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'stackService', 'statService', function ($filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, stackService, statService) {
+    .controller('Stack', ['$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, projectService, stackService, statService) {
       var stackId = $stateParams.id;
       var vm = this;
 
@@ -22,7 +22,16 @@
       }
 
       function get() {
-        return getStack().then(getStats);
+        return getStack().then(getStats).then(getProject);
+      }
+
+      function getProject() {
+        function onSuccess(response) {
+          vm.project = response.data.plain();
+          return vm.project;
+        }
+
+        return projectService.getById(vm.stack.project_id, true).then(onSuccess);
       }
 
       function getStack() {
@@ -291,6 +300,7 @@
       vm.isRegressed = isRegressed;
       vm.notificationsDisabled = notificationsDisabled;
       vm.promoteToExternal = promoteToExternal;
+      vm.project = {};
       vm.remove = remove;
       vm.removeReferenceLink = removeReferenceLink;
       vm.recentOccurrences = {

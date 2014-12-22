@@ -92,39 +92,43 @@
       <div class="panel-body">
         <table class="table table-striped table-bordered table-fixed table-key-value b-t b-light">
           <tbody>
-          <tr>
-            <th>Title</th>
-            <td><span truncate lines="3">{{vm.stack.title}}</span></td>
-          </tr>
-          <tr ng-if="vm.isFixed()">
-            <th>Date Fixed</th>
-            <td><span>{{vm.stack.date_fixed | date: 'medium'}}</span></td>
-          </tr>
-          <tr ng-if="vm.stack.description">
-            <th>Description</th>
-            <td><span truncate lines="2">{{vm.stack.description}}</span></td>
-          </tr>
-          <tr ng-if="vm.hasTags()">
-            <th>Tags</th>
-            <td><span class="label label-info" ng-repeat="tag in vm.stack.tags track by tag">{{tag}}</span></td>
-          </tr>
-          <tr ng-if="vm.hasReference()">
-            <th>{{vm.hasReferences() ? 'Reference Links' : 'Reference Link'}}</th>
-            <td>
-              <ul ng-if="vm.hasReferences()" class="fa fa-fw-ul">
-                <li ng-repeat="reference in vm.stack.references track by reference">
-                  <a ng-href="{{::reference}}" target="_blank">{{::reference}}</a>
-                  <a class="delete-link" ng-click="vm.removeReferenceLink(reference)"><i class="fa fa-fw fa-times"></i></a>
-                </li>
-              </ul>
+            <tr>
+              <th>Title</th>
+              <td><span truncate lines="3">{{vm.stack.title}}</span></td>
+            </tr>
+            <tr>
+              <th>Project</th>
+              <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
+            </tr>
+            <tr ng-if="vm.isFixed()">
+              <th>Date Fixed</th>
+              <td><span>{{vm.stack.date_fixed | date: 'medium'}}</span></td>
+            </tr>
+            <tr ng-if="vm.stack.description">
+              <th>Description</th>
+              <td><span truncate lines="2">{{vm.stack.description}}</span></td>
+            </tr>
+            <tr ng-if="vm.hasTags()">
+              <th>Tags</th>
+              <td><span class="label label-info" ng-repeat="tag in vm.stack.tags track by tag">{{tag}}</span></td>
+            </tr>
+            <tr ng-if="vm.hasReference()">
+              <th>{{vm.hasReferences() ? 'Reference Links' : 'Reference Link'}}</th>
+              <td>
+                <ul ng-if="vm.hasReferences()" class="fa fa-fw-ul">
+                  <li ng-repeat="reference in vm.stack.references track by reference">
+                    <a ng-href="{{::reference}}" target="_blank">{{::reference}}</a>
+                    <a class="delete-link" ng-click="vm.removeReferenceLink(reference)"><i class="fa fa-fw fa-times"></i></a>
+                  </li>
+                </ul>
 
-              <div ng-if="!vm.hasReferences()">
-                <a ng-href="{{::vm.stack.references[0]}}" target="_blank">{{::vm.stack.references[0]}}</a>
-                <a class="delete-link" ng-click="vm.removeReferenceLink(vm.stack.references[0])"><i
-                  class="fa fa-fw fa-times"></i></a>
-              </div>
-            </td>
-          </tr>
+                <div ng-if="!vm.hasReferences()">
+                  <a ng-href="{{::vm.stack.references[0]}}" target="_blank">{{::vm.stack.references[0]}}</a>
+                  <a class="delete-link" ng-click="vm.removeReferenceLink(vm.stack.references[0])"><i
+                    class="fa fa-fw fa-times"></i></a>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
 
