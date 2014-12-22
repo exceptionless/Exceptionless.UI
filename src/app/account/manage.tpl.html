@@ -96,7 +96,7 @@
 
                   <hr ng-if="!vm.hasPremiumFeatures()"/>
                   <div class="alert in fade alert-success" ng-if="!vm.hasPremiumFeatures()">
-                    <a href="javascript:void(0);">Upgrade now</a> to enable occurrence level notifications!
+                    <a ng-click="vm.showChangePlanDialog()">Upgrade now</a> to enable occurrence level notifications!
                   </div>
 
                   <div class="checkbox">

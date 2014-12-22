@@ -8,25 +8,7 @@
 
       function addConfiguration() {
         dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm').result.then(function (data) {
-          function onSuccess() {
-            var found = false;
-            vm.config.forEach(function (conf) {
-              if (conf.key === data.key) {
-                found = true;
-                conf.value = data.value;
-              }
-            });
-
-            if (!found) {
-              vm.config.push(data);
-            }
-          }
-
-          function onFailure() {
-            notificationService.error('An error occurred while saving the configuration setting.');
-          }
-
-          return projectService.setConfig(projectId, data.key, data.value).then(onSuccess, onFailure);
+          return saveClientConfiguration(data);
         });
       }
 
@@ -211,6 +193,28 @@
         return projectService.update(projectId, vm.project).catch(onFailure);
       }
 
+      function saveClientConfiguration(data) {
+        function onSuccess() {
+          var found = false;
+          vm.config.forEach(function (conf) {
+            if (conf.key === data.key) {
+              found = true;
+              conf.value = data.value;
+            }
+          });
+
+          if (!found) {
+            vm.config.push(data);
+          }
+        }
+
+        function onFailure() {
+          notificationService.error('An error occurred while saving the configuration setting.');
+        }
+
+        return projectService.setConfig(projectId, data.key, data.value).then(onSuccess, onFailure);
+      }
+
       function saveDataExclusion() {
         function onFailure() {
           notificationService.error('An error occurred while saving the the data exclusion.');
@@ -231,6 +235,18 @@
         return projectService.update(projectId, {'delete_bot_data_enabled': vm.project.delete_bot_data_enabled}).catch(onFailure);
       }
 
+      function showChangePlanDialog() {
+        return billingService.changePlan(vm.project.organization_id);
+      }
+
+      function validateClientConfiguration(original, data) {
+        if (original === data) {
+          return false;
+        }
+
+        return !data ? 'Please enter a valid value.' : null;
+      }
+
       vm.addToken = addToken;
       vm.addConfiguration = addConfiguration;
       vm.addWebHook = addWebHook;
@@ -248,9 +264,12 @@
       vm.removeWebHook = removeWebHook;
       vm.resetData = resetData;
       vm.save = save;
+      vm.saveClientConfiguration = saveClientConfiguration;
       vm.saveDataExclusion = saveDataExclusion;
       vm.saveDeleteBotDataEnabled = saveDeleteBotDataEnabled;
+      vm.showChangePlanDialog = showChangePlanDialog;
       vm.tokens = [];
+      vm.validateClientConfiguration = validateClientConfiguration;
       vm.webHooks = [];
       get();
     }]);

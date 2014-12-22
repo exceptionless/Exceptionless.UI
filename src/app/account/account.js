@@ -7,6 +7,7 @@
     'ui.router',
 
     'exceptionless.auth',
+    'exceptionless.billing',
     'exceptionless.dialog',
     'exceptionless.project',
     'exceptionless.user',

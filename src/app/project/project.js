@@ -8,6 +8,7 @@
 
     'dialogs.main',
     'dialogs.default-translations',
+    'xeditable',
 
     'exceptionless.billing',
     'exceptionless.dialog',

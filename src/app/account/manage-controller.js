@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', ['authService', 'featureService', 'notificationService', 'projectService', 'userService', function (authService, featureService, notificationService, projectService, userService) {
+    .controller('account.Manage', ['authService', 'billingService', 'featureService', 'notificationService', 'projectService', 'userService', function (authService, billingService, featureService, notificationService, projectService, userService) {
       var vm = this;
 
       function authenticate(provider) {
@@ -206,6 +206,10 @@
         return userService.update(vm.user.id, vm.user).catch(onFailure);
       }
 
+      function showChangePlanDialog() {
+        return billingService.changePlan(vm.currentProject ? vm.currentProject.organization_id : null);
+      }
+
       function unlink(account) {
         function onSuccess() {
           vm.user.o_auth_accounts.splice(vm.user.o_auth_accounts.indexOf(account), 1);
@@ -244,6 +248,7 @@
       vm.saveEmailNotificationSettings = saveEmailNotificationSettings;
       vm.saveEnableEmailNotification = saveEnableEmailNotification;
       vm.saveUser = saveUser;
+      vm.showChangePlanDialog = showChangePlanDialog;
       vm.unlink = unlink;
       vm.user = {};
 

@@ -16,6 +16,7 @@
     'ui.gravatar',
     'ui.utils',
     'ui.router',
+    'xeditable',
 
     'dialogs.main',
     'dialogs.default-translations',
@@ -367,5 +368,8 @@
         filterService.setEventType(null, true);
       }]
     });
+  }])
+  .run(['editableOptions', function(editableOptions) {
+    editableOptions.theme = 'bs3';
   }]);
 }());
