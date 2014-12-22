@@ -146,6 +146,7 @@ module.exports = function (grunt) {
             FACEBOOK_APPID: process.env.FACEBOOK_APPID || '395178683904310',
             GITHUB_APPID: process.env.GITHUB_APPID || 'fdb0fdc666419c4cd3e9',
             GOOGLE_APPID: process.env.GOOGLE_APPID || '86088244242-6ihnf99upp3a2g5sp13joerdo1i5f29l.apps.googleusercontent.com',
+            INTERCOM_APPID: process.env.INTERCOM_APPID,
             LIVE_APPID: process.env.LIVE_APPID || '0000000044132A07',
             STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
             VERSION: process.env.BUILD_NUMBER || '2.0.0'
