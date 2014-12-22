@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'organizationService', 'signalRService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, organizationService, signalRService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', 'intercomService', 'organizationService', 'signalRService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, intercomService, organizationService, signalRService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
       var vm = this;
 
       function canChangePlan() {
@@ -69,6 +69,10 @@
           $state.includes('app.admin.dashboard', $stateParams);
       }
 
+      function isIntercomEnabled() {
+        return authService.isAuthenticated() && INTERCOM_APPID;
+      }
+
       function isSmartDevice($window) {
         var ua = $window.navigator.userAgent || $window.navigator.vendor || $window.opera;
         return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
@@ -108,6 +112,10 @@
         angular.element($window.document.body).addClass('smart');
       }
 
+      function showIntercom() {
+        intercomService.show();
+      }
+
       hotkeys.bindTo($scope)
         .add({
           combo: 'f1',
@@ -116,7 +124,6 @@
             $window.open('http://docs.exceptionless.com', '_blank');
           }
         });
-
 
       $scope.$on('$destroy', signalRService.stop);
 
@@ -128,13 +135,16 @@
       vm.getNewUrl = getNewUrl;
       vm.getOrganizations = getOrganizations;
       vm.getUser = getUser;
+      vm.intercomAppId = INTERCOM_APPID;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
+      vm.isIntercomEnabled = isIntercomEnabled;
       vm.isTypeMenuActive = isTypeMenuActive;
       vm.organizations = [];
       vm.settings = {
         asideFolded: false
       };
+      vm.showIntercom = showIntercom;
       vm.user = {};
       vm.version = VERSION;
 

@@ -4,13 +4,13 @@
   'use strict';
 
   angular.module('exceptionless.intercom')
-    .directive('intercom', ['intercomService', function (intercomService) {
+    .directive('intercom', [function () {
       return {
         bindToController: true,
         restrict: 'E',
         replace: true,
         templateUrl: 'components/intercom/intercom-directive.tpl.html',
-        controller: ['authService', 'filterService', 'intercomService', 'organizationService', 'projectService', 'userService', function (authService, filterService, intercomService, organizationService, projectService, userService) {
+        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', 'intercomService', 'organizationService', 'projectService', 'userService', function ($interval, $scope, authService, filterService, INTERCOM_APPID, intercomService, organizationService, projectService, userService) {
           if (!authService.isAuthenticated()) {
             return;
           }
@@ -57,16 +57,17 @@
             var data = {
               user_id: vm.user.id,
               user_hash: vm.user.hash,
+              name: vm.user.full_name,
               email: vm.user.email_address,
-              created_at: new ObjectId(vm.user.id).timestamp
+              remote_created_at: new ObjectId(vm.user.id).timestamp
             };
 
             var currentOrganization = getCurrentOrganization();
             if (currentOrganization) {
               data.company = {
-                id: currentOrganization.id,
+                company_id: currentOrganization.id,
                 name: currentOrganization.name,
-                created_at: new ObjectId(currentOrganization.id).timestamp,
+                remote_created_at: new ObjectId(currentOrganization.id).timestamp,
                 plan: currentOrganization.plan_id,
                 monthly_spend: currentOrganization.billing_price,
                 total_errors: currentOrganization.total_event_count
@@ -122,17 +123,37 @@
             return userService.getCurrentUser().then(onSuccess);
           }
 
+          function hide() {
+            intercomService.hide();
+          }
+
           function initializeIntercom() {
             return intercomService.boot(getIntercomData());
           }
 
-          function updateIntercom() {
+          function shutdown() {
+            return intercomService.shutdown();
+          }
+
+          function updateIntercom(hide) {
+            if (hide === true) {
+              hide();
+            }
+
             return intercomService.update(getIntercomData());
           }
+
+          var interval = $interval(updateIntercom, 90000);
+          $scope.$on('$destroy', function () {
+            $interval.cancel(intercomService);
+          });
 
           vm.getOrganizations = getOrganizations;
           vm.getProjects = getProjects;
           vm.getUser = getUser;
+          vm.hide = hide;
+          vm.IntercomAppId = INTERCOM_APPID;
+          vm.shutdown = shutdown;
           vm.updateIntercom = updateIntercom;
 
           get().then(initializeIntercom);

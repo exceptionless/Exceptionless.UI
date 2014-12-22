@@ -52,7 +52,13 @@
         <li>
           <a href="http://docs.exceptionless.com" target="_blank">
             <i class="fa fa-book fa-fw"></i>
-            Help
+            Documentation
+          </a>
+        </li>
+        <li ng-if="appVm.isIntercomEnabled()">
+          <a ng-click="appVm.showIntercom()" ng-href="mailto:{{appVm.intercomAppId}}@incoming.intercom.io">
+            <i class="fa fa-envelope fa-fw"></i>
+            Support
           </a>
         </li>
         <li class="divider"></li>
