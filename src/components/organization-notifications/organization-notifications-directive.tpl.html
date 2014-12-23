@@ -1,4 +1,4 @@
-<div refresh-on="filterChanged" refresh-action="vm.getOrganizationNotifications()">
+<div ng-if="vm.hasNotifications" refresh-on="filterChanged" refresh-action="vm.getOrganizationNotifications()">
   <div refresh-on="OrganizationChanged ProjectChanged planChanged planOverage" refresh-action="vm.get()"></div>
 
   <div class="alert alert-success m-b-none" ng-if="!vm.hasOrganizations() || vm.hasOrganizationsWithNoProjects() || vm.hasProjectsRequiringConfiguration()">
@@ -47,13 +47,10 @@
       <a ng-click="vm.showChangePlanDialog(vm.suspendedForAbuseOrOverageOrNotActiveOrganizations[0].id)">upgrade your plan</a>.
     </p>
 
-    <!-- TODO: Integrate with Intercom  @if (Settings.Current.EnableIntercom) {
-    <p>
-      Please <a id="intercom" href="mailto:6c0d76e0bec950052459f5cb4b727a949aeabbe1@incoming.intercom.io">contact us</a>
+    <p ng-if="vm.isIntercomEnabled()">
+      Please <a ng-click="appVm.showIntercom()" ng-href="mailto:{{appVm.intercomAppId}}@incoming.intercom.io">contact us</a>
       for more information on why your account was suspended.
     </p>
-    }
-    -->
   </div>
 
   <div class="alert alert-danger m-b-none" ng-if="vm.hasHourlyOverageOrganizations()">

@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.organization-notifications', [
+    'angular-intercom',
     'app.config',
 
     'exceptionless.billing',
@@ -21,7 +22,7 @@
         ignoreConfigureProjects: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
-      controller: ['$scope', 'billingService', 'filterService', 'notificationService', 'organizationService', 'projectService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, notificationService, organizationService, projectService, STRIPE_PUBLISHABLE_KEY) {
+      controller: ['$scope', 'billingService', 'filterService', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, STRIPE_PUBLISHABLE_KEY) {
         var vm = this;
 
         function get() {
@@ -128,6 +129,8 @@
               vm.freeOrganizations.push(organization);
             }
           });
+
+          vm.hasNotifications = true;
         }
 
         function getOrganizations() {
@@ -205,6 +208,10 @@
           return vm.suspendedOrganizations && vm.suspendedOrganizations.length > 0;
         }
 
+        function isIntercomEnabled() {
+          return INTERCOM_APPID;
+        }
+
         function showChangePlanDialog(organizationId) {
           if (!STRIPE_PUBLISHABLE_KEY) {
             notificationService.error('Billing is currently disabled.');
@@ -231,18 +238,25 @@
           return billingService.changePlan(organizationId);
         }
 
+        function showIntercom() {
+          $intercom.show();
+        }
+
         vm.freeOrganizations = [];
         vm.get = get;
         vm.getOrganizationNotifications = getOrganizationNotifications;
         vm.hasFreeOrganizations = hasFreeOrganizations;
         vm.hasHourlyOverageOrganizations = hasHourlyOverageOrganizations;
         vm.hasMonthlyOverageOrganizations = hasMonthlyOverageOrganizations;
+        vm.hasNotifications = false;
         vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
         vm.hasOrganizations = hasOrganizations;
         vm.hasOrganizationsWithNoProjects = hasOrganizationsWithNoProjects;
         vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
         vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
         vm.hasSuspendedOrganizations = hasSuspendedOrganizations;
+        vm.intercomAppId = INTERCOM_APPID;
+        vm.isIntercomEnabled = isIntercomEnabled;
         vm.organizations = [];
         vm.organizationsWithNoProjects = [];
         vm.hourlyOverageOrganizations = [];
@@ -250,6 +264,7 @@
         vm.projects = [];
         vm.projectsRequiringConfiguration = [];
         vm.showChangePlanDialog = showChangePlanDialog;
+        vm.showIntercom = showIntercom;
         vm.suspendedForBillingOrganizations = [];
         vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
         vm.suspendedOrganizations = [];
