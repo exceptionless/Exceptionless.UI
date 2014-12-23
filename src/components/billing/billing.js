@@ -9,6 +9,7 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'app.config',
     'exceptionless.admin',
     'exceptionless.dialog',
     'exceptionless.notification',

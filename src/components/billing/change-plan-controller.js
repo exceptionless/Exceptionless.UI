@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', 'notificationService', 'organizationService', 'stripe', 'userService', 'data', function ($modalInstance, adminService, Common, notificationService, organizationService, stripe, userService, organizationId) {
+    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', 'data', function ($modalInstance, adminService, Common, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, organizationId) {
       var vm = this;
 
       function cancel() {
@@ -23,6 +23,10 @@
       }
 
       function save(isValid) {
+        function onCreateTokenSuccess(response) {
+          return changePlan(false, { stripeToken: response.id, last4: response.card.last4, couponId: vm.coupon }).then(onSuccess, onFailure);
+        }
+
         function onSuccess(response) {
           if(!response.data.success) {
             vm.paymentMessage = 'An error occurred while changing plans. Message: ' + response.data.message;
@@ -56,14 +60,15 @@
         }
 
         if (isNewCard()) {
-          return createStripeToken()
-            .then(function (response) {
-              return changePlan(false, { stripeToken: response.id, last4: response.card.last4, couponId: vm.coupon });
-            })
-            .then(onSuccess, onFailure);
-        } else {
-          return changePlan(false, { couponId: vm.coupon }).then(onSuccess, onFailure);
+          try {
+            return createStripeToken().then(onCreateTokenSuccess, onFailure);
+          } catch (error) {
+            vm.paymentMessage = 'An error occurred while changing plans.';
+            return null;
+          }
         }
+
+        return changePlan(false, { couponId: vm.coupon }).then(onSuccess, onFailure);
       }
 
       function changeOrganization() {
@@ -162,6 +167,10 @@
         return !!vm.currentOrganization.card_last4;
       }
 
+      function isBillingEnabled() {
+        return !!STRIPE_PUBLISHABLE_KEY;
+      }
+
       function isNewCard() {
         return vm.card && vm.card.mode === 'new';
       }
@@ -178,9 +187,11 @@
       vm.getPlans = getPlans;
       vm.hasAdminRole = hasAdminRole;
       vm.hasExistingCard = hasExistingCard;
-      vm.isNewCard = isNewCard;      vm.isPaidPlan = isPaidPlan;
+      vm.isBillingEnabled = isBillingEnabled;
+      vm.isNewCard = isNewCard;
+      vm.isPaidPlan = isPaidPlan;
       vm.organizations = [];
-      vm.paymentMessage = null;
+      vm.paymentMessage = !isBillingEnabled() ? 'Billing is currently disabled.' : null;
       vm.plans = [];
       vm.save = save;
       vm.stripe = {};

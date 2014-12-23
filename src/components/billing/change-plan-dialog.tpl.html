@@ -18,6 +18,7 @@
       <select id="organization" class="form-control"
               ng-change="vm.changeOrganization()"
               ng-model="vm.currentOrganization"
+              ng-disabled="!vm.isBillingEnabled()"
               ng-options="organization.name for organization in vm.organizations track by organization.id"></select>
     </div>
 
@@ -29,6 +30,7 @@
       <select id="plan" class="form-control"
               ng-init="vm.currentPlan = vm.plans[0]"
               ng-model="vm.currentPlan"
+              ng-disabled="!vm.isBillingEnabled()"
               ng-options="plan.description for plan in vm.plans track by plan.id"></select>
     </div>
 
@@ -38,7 +40,7 @@
         <div class="form-group col-sm-6">
           <div class="radio">
             <label class="i-checks">
-              <input type="radio" class="form-control" ng-model="vm.card.mode" value="existing"><i></i> Use credit card ending in {{vm.currentOrganization.card_last4}}
+              <input type="radio" class="form-control" ng-model="vm.card.mode" ng-disabled="!vm.isBillingEnabled()" value="existing"><i></i> Use credit card ending in {{vm.currentOrganization.card_last4}}
             </label>
           </div>
         </div>
@@ -46,7 +48,7 @@
         <div class="form-group col-sm-6">
           <div class="radio">
             <label class="i-checks">
-              <input type="radio" class="form-control" ng-model="vm.card.mode" value="new"><i></i> Use a new credit card
+              <input type="radio" class="form-control" ng-model="vm.card.mode"  ng-disabled="!vm.isBillingEnabled()" value="new"><i></i> Use a new credit card
             </label>
           </div>
         </div>
@@ -63,6 +65,7 @@
                      payments-validate="card"
                      payments-format="card"
                      payments-type-model="vm.card.type"
+                     ng-disabled="!vm.isBillingEnabled()"
                      required />
                 <span class="input-group-addon"><img ng-src="/img/cards/{{ vm.card.type ? vm.card.type : 'placeholder' }}.png" alt="Card Type" /></span>
               </div>
@@ -73,6 +76,7 @@
             <input id="cardExpiry" type="text" class="form-control" placeholder="MM / YY"
                    x-autocompletetype="cc-exp"
                    ng-model="vm.card.expiry"
+                   ng-disabled="!vm.isBillingEnabled()"
                    payments-validate="expiry"
                    payments-format="expiry"
                    required />
@@ -85,6 +89,7 @@
             <input id="cardName" type="text" class="form-control" placeholder="Name on card"
                    x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                    ng-model="vm.card.name"
+                   ng-disabled="!vm.isBillingEnabled()"
                    required />
           </div>
 
@@ -93,6 +98,7 @@
             <input id="cardCVC" type="text" class="form-control" placeholder="CVC"
                    x-autocompletetype="cc-csc" autocomplete="off"
                    ng-model="vm.card.cvc"
+                   ng-disabled="!vm.isBillingEnabled()"
                    payments-validate="cvc"
                    payments-format="cvc"
                    payments-type-model="vm.card.type"
@@ -104,12 +110,12 @@
 
     <div class="form-group"  ng-if="!vm.hasExistingCard()">
       <label for="couponId">Coupon code</label>
-      <input id="couponId" type="text" class="form-control" placeholder="Coupon Code" ng-model="vm.coupon" />
+      <input id="couponId" type="text" class="form-control" placeholder="Coupon Code" ng-model="vm.coupon" ng-disabled="!vm.isBillingEnabled()" />
     </div>
   </div>
 
   <div class="modal-footer">
+    <input type="submit" role="button" class="btn btn-primary" ng-disabled="!vm.isBillingEnabled()" ng-click="vm.save(vm.changePlanForm.$valid)" value="Change Plan" />
     <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.save(vm.changePlanForm.$valid)" value="Change Plan" />
   </div>
 </form>
