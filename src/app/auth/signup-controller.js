@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', ['$state', 'authService', 'notificationService', 'projectService', function ($state, authService, notificationService, projectService) {
+    .controller('auth.Signup', ['$state', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, authService, notificationService, projectService, stateService) {
       if (authService.isAuthenticated()) {
         authService.logout();
       }

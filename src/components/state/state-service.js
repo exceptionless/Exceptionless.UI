@@ -23,7 +23,7 @@
     }
 
     function save(exclusions) {
-      if (exclusions && exclusions.filter(function (e) { $state.current.name.startsWith(e) })) {
+      if (exclusions && exclusions.filter(function (e) { return $state.current.name.startsWith(e); })[0]) {
         return;
       }
 

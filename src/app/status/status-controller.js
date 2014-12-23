@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.status')
-    .controller('Status', ['$interval', '$scope', '$state', '$stateParams', 'stateService', 'Restangular', function ($interval, $scope, $state, $stateParams, stateService, Restangular) {
+    .controller('Status', ['$interval', '$scope', '$state', '$stateParams', 'authService', 'stateService', 'Restangular', function ($interval, $scope, $state, $stateParams, authService, stateService, Restangular) {
       var redirect = $stateParams.redirect === true;
       var vm = this;
 
