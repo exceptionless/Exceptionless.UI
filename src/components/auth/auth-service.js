@@ -2,9 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.auth')
-    .factory('authService', ['$auth', '$location', '$rootScope', '$state', 'Restangular', 'locker', function ($auth, $location, $rootScope, $state, Restangular, locker) {
-      var _store = locker.driver('session').namespace('auth');
-
+    .factory('authService', ['$auth', '$location', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $location, $rootScope, $state, stateService, Restangular) {
       function authenticate(provider) {
         function onSuccess() {
           $rootScope.$emit('auth:login', {});
@@ -15,10 +13,6 @@
 
       function changePassword(changePasswordModel) {
         return Restangular.one('auth', 'change-password').customPOST(changePasswordModel);
-      }
-
-      function clearPreviousState() {
-        _store.forget(['name', 'params']);
       }
 
       function forgotPassword(email) {
@@ -50,32 +44,12 @@
           $rootScope.$emit('auth:logout', {});
         }
 
-        clearPreviousState();
+        stateService.clear();
         return $auth.logout().then(onSuccess);
-      }
-
-      function redirectToPreviousState(secondaryStateNameToRedirect, secondaryStateParams) {
-        var name = _store.pull('name');
-        var params = _store.pull('params') || {};
-
-        if (name) {
-          return $state.go(name, params);
-        }
-
-        return secondaryStateNameToRedirect ? $state.go(secondaryStateNameToRedirect, secondaryStateParams || {}) : $location.path('/');
       }
 
       function resetPassword(resetPasswordModel) {
         return Restangular.one('auth', 'reset-password').customPOST(resetPasswordModel);
-      }
-
-      function saveCurrentState() {
-        if (_store.has('name') || $state.current.name.startsWith('auth.')) {
-          return;
-        }
-
-        _store.put('name', $state.current.name);
-        _store.put('params', $state.params);
       }
 
       function signup(user) {
@@ -93,16 +67,13 @@
       var service = {
         authenticate: authenticate,
         changePassword: changePassword,
-        clearPreviousState: clearPreviousState,
         forgotPassword: forgotPassword,
         getToken: getToken,
         isAuthenticated: isAuthenticated,
         isEmailAddressAvailable: isEmailAddressAvailable,
         login: login,
         logout: logout,
-        redirectToPreviousState: redirectToPreviousState,
         resetPassword: resetPassword,
-        saveCurrentState: saveCurrentState,
         signup: signup,
         unlink: unlink,
         verifyEmailAddress: verifyEmailAddress

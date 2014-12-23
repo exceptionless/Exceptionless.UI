@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', ['$state', 'authService', 'notificationService', 'projectService', function ($state, authService, notificationService, projectService) {
+    .controller('auth.Login', ['$state', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, authService, notificationService, projectService, stateService) {
       if (authService.isAuthenticated()) {
         authService.logout();
       }
@@ -40,15 +40,15 @@
       function redirectOnSignup() {
         function onSuccess(response) {
           if (response.data && response.data.length > 0) {
-            return authService.redirectToPreviousState();
+            return stateService.restore();
           }
 
-          authService.clearPreviousState();
+          stateService.clear();
           return $state.go('app.project.add');
         }
 
         function onFailure() {
-          return authService.redirectToPreviousState('app.project.add');
+          return stateService.restore('app.project.add');
         }
 
         return projectService.getAll().then(onSuccess, onFailure);

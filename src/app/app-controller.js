@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'organizationService', 'signalRService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, organizationService, signalRService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'organizationService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
       var vm = this;
 
       function canChangePlan() {
@@ -100,7 +100,7 @@
       }
 
       if (!authService.isAuthenticated()) {
-        authService.saveCurrentState();
+        stateService.save(['auth.']);
         return $state.go('auth.login');
       }
 

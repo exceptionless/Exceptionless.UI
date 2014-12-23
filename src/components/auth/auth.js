@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('exceptionless.auth', [
-    'angular-locker',
     'restangular',
     'satellizer',
     'ui.router',
 
-    'app.config'
+    'app.config',
+    'exceptionless.state'
   ])
-  .config(['$authProvider', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'BASE_URL', function ($authProvider, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, BASE_URL) {
+  .config(['$authProvider', 'BASE_URL', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', function ($authProvider, BASE_URL, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID) {
     $authProvider.loginUrl = BASE_URL + '/auth/login';
     $authProvider.loginRedirect = null;
     $authProvider.logoutRedirect = '/login';
@@ -36,13 +36,13 @@
       url: BASE_URL + '/auth/live'
     });
   }])
-  .run(['$state', 'authService', 'Restangular', function($state, authService, Restangular) {
-    Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
+  .run(['$state', 'Restangular', 'stateService', function($state, Restangular, stateService) {
+    Restangular.setErrorInterceptor(function(response) {
       if(response.status !== 401) {
         return true;
       }
 
-      authService.saveCurrentState();
+      stateService.save(['auth.']);
       $state.go('auth.login');
       return false;
     });

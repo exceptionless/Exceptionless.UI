@@ -40,6 +40,7 @@
     'exceptionless.stack',
     'exceptionless.stacks',
     'exceptionless.stat',
+    'exceptionless.state',
     'exceptionless.ui-nav',
     'exceptionless.ui-scroll',
     'exceptionless.ui-shift',
@@ -53,7 +54,8 @@
     'app.organization',
     'app.payment',
     'app.project',
-    'app.stack'
+    'app.stack',
+    'app.status'
   ])
   .config(['$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', function ($stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, stripeProvider, STRIPE_PUBLISHABLE_KEY) {
     $uiViewScrollProvider.useAnchorScroll();
