@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', 'intercomService', 'organizationService', 'signalRService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, intercomService, organizationService, signalRService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'organizationService', 'signalRService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, organizationService, signalRService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
       var vm = this;
 
       function canChangePlan() {
@@ -113,7 +113,7 @@
       }
 
       function showIntercom() {
-        intercomService.show();
+        $intercom.show();
       }
 
       hotkeys.bindTo($scope)

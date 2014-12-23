@@ -4,6 +4,7 @@
   angular.module('app', [
     'angular-filters',
     'angular-loading-bar',
+    'angular-intercom',
     'angular-rickshaw',
     'angular-stripe',
     'cfp.hotkeys',

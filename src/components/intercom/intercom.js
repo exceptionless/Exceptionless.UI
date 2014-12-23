@@ -2,15 +2,16 @@
   'use strict';
 
   angular.module('exceptionless.intercom', [
-    'ngIntercom',
+    'angular-intercom',
 
     'app.config'
   ])
-  .config(['IntercomServiceProvider', 'INTERCOM_APPID', function (IntercomServiceProvider, INTERCOM_APPID) {
+  .config(['$intercomProvider', 'INTERCOM_APPID', function ($intercomProvider, INTERCOM_APPID) {
       if (!INTERCOM_APPID) {
         return;
       }
 
-      IntercomServiceProvider.asyncLoading(true).scriptUrl('https://widget.intercom.io/widget/' + INTERCOM_APPID);
+      $intercomProvider.appID(INTERCOM_APPID);
+      $intercomProvider.asyncLoading(true);
   }]);
 }());

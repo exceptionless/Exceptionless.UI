@@ -10,7 +10,7 @@
         restrict: 'E',
         replace: true,
         templateUrl: 'components/intercom/intercom-directive.tpl.html',
-        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', 'intercomService', 'organizationService', 'projectService', 'userService', function ($interval, $scope, authService, filterService, INTERCOM_APPID, intercomService, organizationService, projectService, userService) {
+        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', '$intercom', 'organizationService', 'projectService', 'userService', function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, organizationService, projectService, userService) {
           if (!authService.isAuthenticated()) {
             return;
           }
@@ -124,15 +124,15 @@
           }
 
           function hide() {
-            intercomService.hide();
+            $intercom.hide();
           }
 
           function initializeIntercom() {
-            return intercomService.boot(getIntercomData());
+            return $intercom.boot(getIntercomData());
           }
 
           function shutdown() {
-            return intercomService.shutdown();
+            return $intercom.shutdown();
           }
 
           function updateIntercom(hide) {
@@ -140,12 +140,12 @@
               hide();
             }
 
-            return intercomService.update(getIntercomData());
+            return $intercom.update(getIntercomData());
           }
 
           var interval = $interval(updateIntercom, 90000);
           $scope.$on('$destroy', function () {
-            $interval.cancel(intercomService);
+            $interval.cancel(interval);
           });
 
           vm.getOrganizations = getOrganizations;
