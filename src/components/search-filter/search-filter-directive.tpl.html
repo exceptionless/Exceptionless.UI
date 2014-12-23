@@ -4,8 +4,8 @@
       <i class="fa fa-fw fa-search fa-lg" ng-class="{'text-success': vm.hasFilter() }"></i>
     </a>
 
-    <div class="dropdown-menu w-md" style="padding: 10px;" role="menu">
-      <div class="panel bg-white">
+    <div class="dropdown-menu w-md" role="menu">
+      <div class="panel search-panel bg-dark">
         <form name="searchFilterForm" role="form" class="form-validation">
           <div class="form-group">
             <label for="search">Filter</label>
@@ -24,7 +24,11 @@
             </label>
           </div>
 
-          <input type="submit" class="btn btn-default pull-right" ng-click="vm.clearFilter()" value="Clear" />
+          <div class="pull-right">
+            <input type="submit" class="btn btn-primary" ng-click="vm.clearFilter()" value="Clear" />
+          </div>
+
+          <div class="clearfix"></div>
         </form>
       </div>
     </div>

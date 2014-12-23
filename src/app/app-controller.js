@@ -135,7 +135,6 @@
       vm.getNewUrl = getNewUrl;
       vm.getOrganizations = getOrganizations;
       vm.getUser = getUser;
-      vm.intercomAppId = INTERCOM_APPID;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
       vm.isIntercomEnabled = isIntercomEnabled;

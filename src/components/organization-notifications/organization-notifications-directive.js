@@ -255,7 +255,6 @@
         vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
         vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
         vm.hasSuspendedOrganizations = hasSuspendedOrganizations;
-        vm.intercomAppId = INTERCOM_APPID;
         vm.isIntercomEnabled = isIntercomEnabled;
         vm.organizations = [];
         vm.organizationsWithNoProjects = [];
