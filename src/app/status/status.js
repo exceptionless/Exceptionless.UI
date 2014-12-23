@@ -18,7 +18,7 @@
   }])
   .run(['$state', 'Restangular', 'stateService', function($state, Restangular, stateService) {
     Restangular.setErrorInterceptor(function(response) {
-      if(response.status !== 0 || $state.current.name === 'status') {
+      if (response.status !== 0 || $state.current.name === 'status') {
         return true;
       }
 

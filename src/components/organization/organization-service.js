@@ -12,7 +12,7 @@
       });
 
       function addUser(id, email) {
-        return Restangular.one('organizations', id).one('users', email).remove();
+        return Restangular.one('organizations', id).one('users', email).post();
       }
 
       function create(name) {

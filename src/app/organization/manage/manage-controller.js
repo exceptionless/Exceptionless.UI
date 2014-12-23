@@ -23,7 +23,7 @@
             notificationService.error('An error occurred while inviting the user.');
           }
 
-          organizationService.create(name).then(onSuccess, onFailure);
+          organizationService.addUser(name).then(onSuccess, onFailure);
         });
       }
 
