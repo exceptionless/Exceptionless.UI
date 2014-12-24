@@ -64,7 +64,7 @@
 
     RestangularProvider.setBaseUrl(BASE_URL);
     RestangularProvider.setFullResponse(true);
-    RestangularProvider.setDefaultHttpFields({ timeout: 5 * 1000 });
+    //RestangularProvider.setDefaultHttpFields({ timeout: 10 * 1000 });
 
     stripeProvider.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
 

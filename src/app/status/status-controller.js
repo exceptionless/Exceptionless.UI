@@ -12,7 +12,6 @@
         }
 
         function onSuccess(response) {
-          console.log(redirect);
           if (redirect) {
             if (!authService.isAuthenticated()) {
               return $state.go('auth.login');
@@ -27,7 +26,7 @@
         return statusService.get().then(onSuccess, updateMessage);
       }
 
-      var interval = $interval(updateStatus, 10 * 1000);
+      var interval = $interval(updateStatus, 20 * 1000);
       $scope.$on('$destroy', function () {
         $interval.cancel(interval);
       });
