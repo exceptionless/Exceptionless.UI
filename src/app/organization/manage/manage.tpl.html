@@ -11,14 +11,18 @@
               <form name="organizationForm" role="form" class="form-validation">
                 <div class="form-group">
                   <label for="name">Organization Name</label>
-                  <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
-                         ng-model="vm.organization.name"
-                         ng-model-options="{ debounce: 1000 }"
-                         ng-change="vm.save(organizationForm.$valid)"
-                         organization-name-available-validator
-                         required />
+                  <div ng-class="{'input-group': organizationForm.$pending }">
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
+                           ng-model="vm.organization.name"
+                           ng-model-options="{ debounce: 1000 }"
+                           ng-change="vm.save(organizationForm.$valid)"
+                           organization-name-available-validator
+                           required />
+                    <span class="input-group-addon" ng-if="organizationForm.$pending">
+                      <i class="fa fa-fw fa-spinner fa-spin"></i>
+                    </span>
+                  </div>
 
-                  <div ng-if="organizationForm.$pending">Checking Organization Name</div>
                   <div class="error" ng-messages="organizationForm.name.$error" ng-if="organizationForm.$submitted || organizationForm.name.$touched">
                     <small ng-message="required">Organization Name is required.</small>
                     <small ng-message="unique">A organizations with this name already exists.</small>

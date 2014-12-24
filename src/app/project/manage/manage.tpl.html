@@ -11,14 +11,19 @@
               <form name="projectForm" role="form" class="form-validation">
                 <div class="form-group">
                   <label for="name">Project Name</label>
-                  <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
-                         ng-model="vm.project.name"
-                         ng-model-options="{ debounce: 1000 }"
-                         ng-change="vm.save(projectForm.$valid)"
-                         project-name-available-validator
-                         required />
+                  <div ng-class="{'input-group': projectForm.$pending }">
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
+                           ng-model="vm.project.name"
+                           ng-model-options="{ debounce: 1000 }"
+                           ng-change="vm.save(projectForm.$valid)"
+                           project-name-available-validator
+                           required />
 
-                  <div ng-if="projectForm.$pending">Checking Project Name</div>
+                    <span class="input-group-addon" ng-if="projectForm.$pending">
+                      <i class="fa fa-fw fa-spinner fa-spin"></i>
+                    </span>
+                  </div>
+
                   <div class="error" ng-messages="projectForm.name.$error" ng-if="projectForm.$submitted || projectForm.name.$touched">
                     <small ng-message="required">Project Name is required.</small>
                     <small ng-message="unique">A project with this name already exists.</small>

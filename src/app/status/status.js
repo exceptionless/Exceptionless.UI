@@ -6,7 +6,8 @@
     'ui.router',
 
     'exceptionless.auth',
-    'exceptionless.state'
+    'exceptionless.state',
+    'exceptionless.status'
   ])
   .config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('status', {
@@ -17,7 +18,7 @@
     });
   }])
   .run(['$state', 'Restangular', 'stateService', function($state, Restangular, stateService) {
-    Restangular.setErrorInterceptor(function(response) {
+    Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
       if (response.status !== 0 || $state.current.name === 'status') {
         return true;
       }

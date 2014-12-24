@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('app.status')
-    .controller('Status', ['$interval', '$scope', '$state', '$stateParams', 'authService', 'stateService', 'Restangular', function ($interval, $scope, $state, $stateParams, authService, stateService, Restangular) {
-      var redirect = $stateParams.redirect === true;
+    .controller('Status', ['$interval', '$scope', '$state', '$stateParams', 'authService', 'stateService', 'statusService', 'Restangular', function ($interval, $scope, $state, $stateParams, authService, stateService, statusService, Restangular) {
+      var redirect = !!$stateParams.redirect;
       var vm = this;
 
       function updateStatus() {
@@ -12,6 +12,7 @@
         }
 
         function onSuccess(response) {
+          console.log(redirect);
           if (redirect) {
             if (!authService.isAuthenticated()) {
               return $state.go('auth.login');
@@ -23,7 +24,7 @@
           return updateMessage(response);
         }
 
-        return Restangular.one('status').get().then(onSuccess, updateMessage);
+        return statusService.get().then(onSuccess, updateMessage);
       }
 
       var interval = $interval(updateStatus, 10 * 1000);
