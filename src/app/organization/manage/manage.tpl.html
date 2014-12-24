@@ -28,21 +28,17 @@
                     <small ng-message="unique">A organizations with this name already exists.</small>
                   </div>
                 </div>
-                <div class="line line-dashed b-b line-lg pull-in"></div>
-                <div class="form-group">
-                  <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default">Go To Dashboard</a>
-                </div>
+                <div class="line line-dashed b-b line-lg"></div>
+                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default">Go To Dashboard</a>
               </form>
             </tab>
             <tab heading="Projects">
               <projects settings="vm.projects"></projects>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default">Go To Dashboard</a>
-                <div class="pull-right">
-                  <a ui-sref="app.project.add" type="button" role="button" class="btn btn-primary">Add New Project</a>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default">Go To Dashboard</a>
+              <div class="pull-right">
+                <a ui-sref="app.project.add" type="button" role="button" class="btn btn-primary">Add New Project</a>
               </div>
             </tab>
             <tab heading="Users">
@@ -78,12 +74,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+              <div class="pull-right">
+                <button ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
               </div>
             </tab>
             <tab heading="Billing" ng-if="vm.hasInvoices()">

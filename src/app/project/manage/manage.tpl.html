@@ -35,12 +35,10 @@
                   <input type="text" class="form-control" placeholder="Organization Name" ng-model="vm.project.organization_name" readonly />
                 </div>
 
-                <div class="line line-dashed b-b line-lg pull-in"></div>
-                <div class="form-group">
-                  <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
-                  <div class="pull-right">
-                    <button ng-click="vm.resetData()" class="btn btn-danger">Delete All Project Data</button>
-                  </div>
+                <div class="line line-dashed b-b line-lg"></div>
+                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+                <div class="pull-right">
+                  <button ng-click="vm.resetData()" class="btn btn-danger">Delete All Project Data</button>
                 </div>
               </form>
             </tab>
@@ -66,12 +64,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+              <div class="pull-right">
+                <button ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
               </div>
             </tab>
             <tab heading="Settings">
@@ -148,12 +144,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+              <div class="pull-right">
+                <button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
               </div>
             </tab>
             <tab heading="Integrations">
@@ -194,12 +188,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+              <div class="pull-right">
+                <button ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
               </div>
             </tab>
           </tabset>
