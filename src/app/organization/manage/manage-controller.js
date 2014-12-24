@@ -104,6 +104,8 @@
         } else {
           $state.go('payment', {id: id});
         }
+
+        event.preventDefault();
       }
 
       function save(isValid) {
