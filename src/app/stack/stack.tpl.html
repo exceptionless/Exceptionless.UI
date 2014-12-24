@@ -70,10 +70,12 @@
               {{vm.isFixed() ? 'Mark Not Fixed' : 'Mark Fixed' }}
             </button>
           </div>
-          <div class="btn-group btn-group-sm">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              <i class="visible-xs fa fa-fw fa-gear"></i><span class="hidden-xs">Options</span> <span
-              class="caret"></span>
+
+          <div class="btn-group">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+              <span class="hidden-xs">Options</span>
+              <span class="visible-xs-inline"><i class="fa fa-fw fa-gear"></i></span>
+              <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
               <li><a ng-click="vm.updateIsHidden()" title="Hide this stack from reports and mutes occurrence notifications"><i ng-if="vm.isHidden()" class="fa fa-fw fa-check"></i>Hide</a></li>
