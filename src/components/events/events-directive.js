@@ -45,10 +45,12 @@
 
           function open(id, event) {
             if (event.ctrlKey || event.which === 2) {
-              $window.open('/#/app/event/' + id, '_blank');
+              $window.open('/#/event/' + id, '_blank');
             } else {
-              $state.go('app.event', {id: id});
+              $state.go('app.event', { id: id });
             }
+
+            event.preventDefault();
           }
 
           function nextPage() {

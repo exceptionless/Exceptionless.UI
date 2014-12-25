@@ -82,6 +82,8 @@
         } else {
           $state.go('app.organization.manage', { id: id });
         }
+
+        event.preventDefault();
       }
 
       function nextPage() {

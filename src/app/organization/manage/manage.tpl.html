@@ -1,6 +1,6 @@
 <organization-notifications organization-id="vm.organization.id"></organization-notifications>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm">
+<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="OrganizationChanged" refresh-action="vm.get()" refresh-debounce="1000">
   <div class="col">
     <div class="wrapper-md">
       <div class="panel panel-default">
@@ -28,21 +28,17 @@
                     <small ng-message="unique">A organizations with this name already exists.</small>
                   </div>
                 </div>
-                <div class="line line-dashed b-b line-lg pull-in"></div>
-                <div class="form-group">
-                  <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                </div>
+                <div class="line line-dashed b-b line-lg"></div>
+                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
               </form>
             </tab>
             <tab heading="Projects">
               <projects settings="vm.projects"></projects>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                <div class="pull-right">
-                  <a ui-sref="app.project.add" type="button" role="button" class="btn btn-primary">Add New Project</a>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+              <div class="pull-right">
+                <a ui-sref="app.project.add" class="btn btn-primary" role="button">Add New Project</a>
               </div>
             </tab>
             <tab heading="Users">
@@ -62,7 +58,7 @@
                   </td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -78,12 +74,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+              <div class="pull-right">
+                <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
               </div>
             </tab>
             <tab heading="Billing" ng-if="vm.hasInvoices()">

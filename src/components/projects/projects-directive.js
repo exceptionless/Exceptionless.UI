@@ -52,6 +52,8 @@
             } else {
               $state.go('app.project.manage', { id: id });
             }
+
+            event.preventDefault();
           }
 
           function nextPage() {

@@ -35,12 +35,10 @@
                   <input type="text" class="form-control" placeholder="Organization Name" ng-model="vm.project.organization_name" readonly />
                 </div>
 
-                <div class="line line-dashed b-b line-lg pull-in"></div>
-                <div class="form-group">
-                  <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                  <div class="pull-right">
-                    <button type="button" role="button" ng-click="vm.resetData()" class="btn btn-danger">Delete All Project Data</button>
-                  </div>
+                <div class="line line-dashed b-b line-lg"></div>
+                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+                <div class="pull-right">
+                  <button type="button" role="button" ng-click="vm.resetData()" class="btn btn-danger">Delete All Project Data</button>
                 </div>
               </form>
             </tab>
@@ -56,12 +54,8 @@
                 <tr ng-repeat="token in vm.tokens track by token.id">
                   <td>{{::token.id}}</td>
                   <td>
-                    <button type="button" role="button" class="btn btn-sm btn-default" title="Copy to Clipboard" clip-copy="token.id" clip-click="vm.copied()" clip-hide-on-no-flash>
-                      <i class="fa fa-copy"></i>
-                    </button>
-                    <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-danger" title="Delete">
-                      <i class="fa fa-times"></i>
-                    </button>
+                    <button type="button" role="button" class="btn btn-sm btn-default" title="Copy to Clipboard" clip-copy="token.id" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></button>
+                    <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-times"></i></button>
                   </td>
                 </tr>
                 <tr ng-if="!vm.hasTokens()">
@@ -70,12 +64,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button type="button" role="button" ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+              <div class="pull-right">
+                <button type="button" role="button" ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
               </div>
             </tab>
             <tab heading="Settings">
@@ -133,11 +125,11 @@
                     </td>
                     <td>
                       <form name="rowform" editable-form ng-show="rowform.$visible" class="form-buttons form-inline">
-                        <button type="button" role="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
-                          Cancel
-                        </button>
                         <button type="submit" role="button" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
                           Save
+                        </button>
+                        <button type="button" role="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+                          Cancel
                         </button>
                       </form>
                       <div class="buttons" ng-show="!rowform.$visible">
@@ -152,12 +144,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button type="button" role="button" ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+              <div class="pull-right">
+                <button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
               </div>
             </tab>
             <tab heading="Integrations">
@@ -187,8 +177,7 @@
                     <span class="label label-success" ng-repeat="type in hook.event_types track by type">{{::type}}</span>
                   </td>
                   <td>
-                    <button type="button" role="button" class="btn btn-sm" title="Delete" ng-click="vm.removeWebHook(hook)"><i
-                      class="fa fa-times"></i></button>
+                    <button type="button" role="button" class="btn btn-sm" title="Delete" ng-click="vm.removeWebHook(hook)"><i class="fa fa-times"></i></button>
                   </td>
                 </tr>
                 <tr ng-if="!vm.hasWebHook()">
@@ -197,12 +186,10 @@
                 </tbody>
               </table>
 
-              <div class="line line-dashed b-b line-lg pull-in"></div>
-              <div class="form-group">
-                <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                <div class="pull-right">
-                  <button type="button" role="button" ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
-                </div>
+              <div class="line line-dashed b-b line-lg"></div>
+              <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+              <div class="pull-right">
+                <button type="button" role="button" ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
               </div>
             </tab>
           </tabset>
