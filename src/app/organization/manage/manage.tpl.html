@@ -30,7 +30,7 @@
                 </div>
                 <div class="line line-dashed b-b line-lg pull-in"></div>
                 <div class="form-group">
-                  <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default">Go To Dashboard</a>
+                  <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
                 </div>
               </form>
             </tab>
@@ -39,7 +39,7 @@
 
               <div class="line line-dashed b-b line-lg pull-in"></div>
               <div class="form-group">
-                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default">Go To Dashboard</a>
+                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
                 <div class="pull-right">
                   <a ui-sref="app.project.add" type="button" role="button" class="btn btn-primary">Add New Project</a>
                 </div>
@@ -62,7 +62,7 @@
                   </td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                      <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -80,9 +80,9 @@
 
               <div class="line line-dashed b-b line-lg pull-in"></div>
               <div class="form-group">
-                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+                <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
                 <div class="pull-right">
-                  <button ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
+                  <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
                 </div>
               </div>
             </tab>
@@ -103,7 +103,7 @@
                     <td class="row-clickable" ng-click="vm.open(invoice.id, $event)">{{::invoice.paid ? 'Paid' : 'Unpaid'}}</td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                        <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
                           <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu">

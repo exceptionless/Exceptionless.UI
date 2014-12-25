@@ -1,6 +1,6 @@
 <form name="addReferenceForm" role="form" class="form-validation" autocomplete="on">
   <div class="modal-header dialog-header-confirm">
-    <button type="button" class="close" ng-click="vm.cancel()">&times;</button>
+    <button type="button" role="button" class="close" ng-click="vm.cancel()">&times;</button>
     <h4 class="modal-title">Please enter a Reference Link</h4>
   </div>
 
@@ -16,7 +16,7 @@
   </div>
 
   <div class="modal-footer">
-    <input type="submit" class="btn btn-default" ng-click="vm.save(addReferenceForm.$valid)" value="Save Reference Link" />
-    <button type="button" role="button" class="btn btn-primary" ng-click="vm.cancel()">Cancel</button>
+    <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.save(addReferenceForm.$valid)" value="Save Reference Link" />
   </div>
 </form>

@@ -59,7 +59,7 @@
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
                 <div class="form-group">
-                  <a ui-sref="app.dashboard" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+                  <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
                 </div>
               </form>
             </tab>
@@ -134,19 +134,19 @@
 
                   <div class="form-group">
                     <div class="btn-group">
-                      <label class="btn btn-default"
+                      <label class="btn btn-default" role="button"
                              btn-radio="0"
                              ng-model="vm.emailNotificationSettings.mode"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()"
                              uncheckable>Never</label>
-                      <label class="btn btn-default"
+                      <label class="btn btn-default" role="button"
                              btn-radio="1"
                              ng-model="vm.emailNotificationSettings.mode"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()"
                              uncheckable>New Only</label>
-                      <label class="btn btn-default"
+                      <label class="btn btn-default" role="button"
                              btn-radio="2"
                              ng-model="vm.emailNotificationSettings.mode"
                              ng-change="vm.saveEmailNotificationSettings()"
@@ -183,7 +183,7 @@
 
                   <div class="line line-dashed b-b line-lg pull-in"></div>
                   <div class="form-group">
-                    <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+                    <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
                   </div>
                 </div>
               </form>
@@ -224,9 +224,9 @@
 
                 <div class="line line-dashed b-b line-lg pull-in"></div>
                 <div class="form-group">
-                  <a ui-sref="app.dashboard" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
+                  <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
                   <div class="pull-right">
-                    <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" class="btn btn-primary" value="{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}" />
+                    <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" class="btn btn-primary" role="button" value="{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}" />
                   </div>
                 </div>
               </form>
@@ -235,10 +235,10 @@
               <h4>Add an external login</h4>
 
               <div>
-                <button type="button" ng-click="vm.authenticate('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
-                <button type="button" ng-click="vm.authenticate('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
-                <button type="button" ng-click="vm.authenticate('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
-                <button type="button" ng-click="vm.authenticate('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
               </div>
 
               <h4>Existing external logins</h4>

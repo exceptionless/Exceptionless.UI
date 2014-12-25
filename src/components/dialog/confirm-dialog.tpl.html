@@ -1,5 +1,5 @@
 <div class="modal-header dialog-header-confirm">
-  <button type="button" class="close" ng-click="vm.cancel()">&times;</button>
+  <button type="button" role="button" class="close" ng-click="vm.cancel()">&times;</button>
   <h4 class="modal-title">
     <span class="glyphicon glyphicon-check"></span>
     {{::vm.header}}
@@ -9,8 +9,8 @@
 <div class="modal-body" ng-bind-html="vm.message"></div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" ng-class="{'btn-danger': vm.danger}" ng-click="vm.confirm()">
+  <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+  <button type="button" role="button" class="btn btn-primary" ng-class="{'btn-danger': vm.danger}" ng-click="vm.confirm()">
     {{vm.confirmButtonText}}
   </button>
-  <button type="button" class="btn btn-primary" ng-click="vm.cancel()">Cancel</button>
 </div>

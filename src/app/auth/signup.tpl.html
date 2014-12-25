@@ -15,10 +15,10 @@
                 <h4>Login with</h4>
 
                 <div class="form-group" style="margin-left:0px;">
-                  <button type="button" ng-click="vm.authenticate('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
-                  <button type="button" ng-click="vm.authenticate('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
-                  <button type="button" ng-click="vm.authenticate('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
-                  <button type="button" ng-click="vm.authenticate('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
+                  <button type="button" role="button" ng-click="vm.authenticate('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
+                  <button type="button" role="button" ng-click="vm.authenticate('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
+                  <button type="button" role="button" ng-click="vm.authenticate('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
+                  <button type="button" role="button" ng-click="vm.authenticate('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
                 </div>
 
                 <div class="form-group">
@@ -76,7 +76,7 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <input type="submit" ng-click="vm.signup(signupForm.$valid)" class="btn btn-primary btn-lg" value="Create My Account" />
+                  <input type="submit" role="button" ng-click="vm.signup(signupForm.$valid)" class="btn btn-primary btn-lg" value="Create My Account" />
                   <p>Already have an account? <a ui-sref="auth.login">Log In</a></p>
                 </div>
               </div>

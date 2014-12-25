@@ -1,6 +1,6 @@
 <form name="vm.changePlanForm" role="form" class="form-validation" autocomplete="on">
   <div class="modal-header dialog-header-notify">
-    <button type="button" class="close" ng-click="vm.cancel()">&times;</button>
+    <button type="button" role="button" class="close" ng-click="vm.cancel()">&times;</button>
     <h4 class="modal-title">Exceptionless Plan</h4>
     <div>
       <img src="/img/exceptionless-48.png" alt="logo" />
@@ -115,7 +115,7 @@
   </div>
 
   <div class="modal-footer">
-    <input type="submit" role="button" class="btn btn-primary" ng-disabled="!vm.isBillingEnabled()" ng-click="vm.save(vm.changePlanForm.$valid)" value="Change Plan" />
     <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+    <input type="submit" role="button" class="btn btn-primary" ng-disabled="!vm.isBillingEnabled()" ng-click="vm.save(vm.changePlanForm.$valid)" value="Change Plan" />
   </div>
 </form>

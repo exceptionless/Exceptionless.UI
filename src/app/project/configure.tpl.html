@@ -48,8 +48,10 @@
           <div class="alert alert-success">For more information and troubleshooting tips, view the <a target="_blank" href="http://docs.exceptionless.com/contents/home/">Exceptionless docs</a>.</div>
         </div>
         <div class="panel-footer">
-          <a ui-sref="app.account.manage" class="btn btn-default">Notification Settings</a>
-          <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-primary pull-right">Go To Dashboard</a>
+          <a ui-sref="app.account.manage" class="btn btn-default" role="button">Notification Settings</a>
+          <div class="pull-right">
+            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-primary" role="button">Go To Dashboard</a>
+          </div>
         </div>
       </div>
     </div>
