@@ -27,6 +27,10 @@
         });
       }
 
+      function get() {
+        return getOrganization().then(getUsers).then(getInvoices);
+      }
+
       function getOrganization() {
         function onSuccess(response) {
           vm.organization = response.data.plain();
@@ -136,6 +140,7 @@
       }
 
       vm.addUser = addUser;
+      vm.get = get;
       vm.hasAdminRole = hasAdminRole;
       vm.hasInvoices = hasInvoices;
       vm.hasPremiumFeatures = hasPremiumFeatures;
@@ -157,6 +162,6 @@
       vm.updateAdminRole = updateAdminRole;
       vm.users = [];
 
-      getOrganization().then(getUsers).then(getInvoices);
+      get();
     }]);
 }());
