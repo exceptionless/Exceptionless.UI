@@ -3,19 +3,21 @@
 
   angular.module('exceptionless.validators')
     .directive('projectNameAvailableValidator', ['$q', 'projectService', function($q, projectService) {
-      function projectNameAvailable(name) {
-        var deferred = $q.defer();
-
-        projectService.isNameAvailable(name).then(deferred.reject, deferred.resolve);
-
-        return deferred.promise;
-      }
-
       return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attrs, ngModel) {
-          ngModel.$asyncValidators.unique = projectNameAvailable;
+          ngModel.$asyncValidators.unique = function(name) {
+            var deferred = $q.defer();
+
+            if (ngModel.$pristine) {
+              deferred.resolve(true);
+            } else {
+              projectService.isNameAvailable(name).then(deferred.reject, deferred.resolve);
+            }
+
+            return deferred.promise;
+          };
         }
       };
     }]);
