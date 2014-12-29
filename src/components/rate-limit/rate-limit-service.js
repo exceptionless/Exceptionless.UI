@@ -19,8 +19,6 @@
       _rateLimitRemaining = !isNaN(limitRemaining) ? limitRemaining : -1;
 
       _rateLimitExceeded = _rateLimit > 0 ? _rateLimitRemaining <= 0 : false;
-      console.log('rate limit exceeded: ');
-      console.log(_rateLimitExceeded);
     }
 
     var service = {
