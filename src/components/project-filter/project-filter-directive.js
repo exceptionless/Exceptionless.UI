@@ -75,7 +75,7 @@
         }
 
         function getProjectsByOrganizationId(id) {
-          return vm.projects.filter(function (project) { return project.organization_id === id });
+          return vm.projects.filter(function (project) { return project.organization_id === id; });
         }
 
         function getProjectUrl(project) {
