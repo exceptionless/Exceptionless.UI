@@ -7,9 +7,7 @@
       var vm = this;
 
       function addConfiguration() {
-        dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm').result.then(function (data) {
-          return saveClientConfiguration(data);
-        });
+        return dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm').result.then(saveClientConfiguration);
       }
 
       function addToken() {
@@ -26,7 +24,7 @@
       }
 
       function addWebHook() {
-        dialogs.create('components/web-hook/add-web-hook-dialog.tpl.html', 'AddWebHookDialog as vm').result.then(function (data) {
+        return dialogs.create('components/web-hook/add-web-hook-dialog.tpl.html', 'AddWebHookDialog as vm').result.then(function (data) {
           data.organization_id = vm.project.organization_id;
           data.project_id = projectId;
           return createWebHook(data);

@@ -58,9 +58,10 @@
           function setCustomFilter() {
             function onSuccess(range) {
               setFilter(moment(range.start, 'MM/DD/YYYY').format('YYYY-MM-DDTHH:mm:ss') + '-' + moment(range.end, 'MM/DD/YYYY').format('YYYY-MM-DDTHH:mm:ss'));
+              return range;
             }
 
-            dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm').result.then(onSuccess);
+            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm').result.then(onSuccess);
           }
 
           function setFilter(filter) {

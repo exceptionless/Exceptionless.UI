@@ -7,9 +7,7 @@
       var vm = this;
 
       function add() {
-        dialogs.create('app/organization/list/add-organization-dialog.tpl.html', 'AddOrganizationDialog as vm').result.then(function (name) {
-          return createOrganization(name);
-        });
+        return dialogs.create('app/organization/list/add-organization-dialog.tpl.html', 'AddOrganizationDialog as vm').result.then(createOrganization);
       }
 
       function createOrganization(name) {

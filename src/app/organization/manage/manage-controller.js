@@ -8,23 +8,32 @@
       var vm = this;
 
       function addUser() {
-        dialogs.create('app/organization/manage/add-user-dialog.tpl.html', 'AddUserDialog as vm').result.then(function (name) {
-          function onSuccess(response) {
-            vm.users.push(response.data);
+        return dialogs.create('app/organization/manage/add-user-dialog.tpl.html', 'AddUserDialog as vm').result.then(createUser);
+      }
+
+      function createUser(emailAddress) {
+        function onSuccess(response) {
+          vm.users.push(response.data);
+
+          return response.data;
+        }
+
+        function onFailure(response) {
+          if (response.status === 426) {
+            return billingService.confirmUpgradePlan(response.data.message).then(function() {
+              return createUser(emailAddress);
+            });
           }
 
-          function onFailure(response) {
-            if (response.status === 426) {
-              return billingService.confirmUpgradePlan(response.data.message).then(function () {
-                return addUser(name);
-              });
-            }
-
-            notificationService.error('An error occurred while inviting the user.');
+          var message = 'An error occurred while inviting the user.';
+          if (response.data && response.data.message) {
+            message += ' Message: ' + response.data.message;
           }
 
-          organizationService.addUser(name).then(onSuccess, onFailure);
-        });
+          notificationService.error(message);
+        }
+
+        return organizationService.addUser(organizationId, emailAddress).then(onSuccess, onFailure);
       }
 
       function get() {
