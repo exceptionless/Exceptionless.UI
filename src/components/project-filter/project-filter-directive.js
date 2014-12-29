@@ -74,6 +74,10 @@
           return projectService.getAll().then(onSuccess, onFailure);
         }
 
+        function getProjectsByOrganizationId(id) {
+          return vm.projects.filter(function (project) { return project.organization_id === id });
+        }
+
         function getProjectUrl(project) {
           return urlService.buildFilterUrl({ route: getStateName(), projectId: project.id, type: $stateParams.type });
         }
@@ -108,6 +112,7 @@
         vm.getFilterName = getFilterName;
         vm.getOrganizationUrl = getOrganizationUrl;
         vm.getProjectUrl = getProjectUrl;
+        vm.getProjectsByOrganizationId = getProjectsByOrganizationId;
         vm.organizations = [];
         vm.projects = [];
 
