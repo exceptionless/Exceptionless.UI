@@ -4,7 +4,8 @@
   angular.module('app.payment', [
     'ui.router',
 
-    'exceptionless.organization'
+    'exceptionless.organization',
+    'exceptionless.rate-limit'
   ])
   .config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('payment', {

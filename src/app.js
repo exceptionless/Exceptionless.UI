@@ -34,6 +34,7 @@
     'exceptionless.organization',
     'exceptionless.organization-notifications',
     'exceptionless.project-filter',
+    'exceptionless.rate-limit',
     'exceptionless.refresh',
     'exceptionless.search-filter',
     'exceptionless.signalr',
@@ -373,7 +374,29 @@
       }]
     });
   }])
-  .run(['editableOptions', function(editableOptions) {
+  .run(['$state', 'editableOptions', 'rateLimitService', 'Restangular', 'stateService', function($state, editableOptions, rateLimitService, Restangular, stateService) {
     editableOptions.theme = 'bs3';
+
+    Restangular.setErrorInterceptor(function(response) {
+      rateLimitService.updateFromResponseHeader(response);
+
+      if(response.status === 401) {
+        stateService.save(['auth.']);
+        $state.go('auth.login');
+        return false;
+      }
+
+      if(response.status === 409) {
+        return false;
+      }
+
+      if ($state.current.name !== 'status' && response.status === 0 && response.status === 503) {
+        stateService.save(['auth.', 'status']);
+        $state.go('status', { redirect: true });
+        return false;
+      }
+
+      return true;
+    });
   }]);
 }());

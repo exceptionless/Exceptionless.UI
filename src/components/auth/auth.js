@@ -2,11 +2,11 @@
   'use strict';
 
   angular.module('exceptionless.auth', [
-    'restangular',
     'satellizer',
     'ui.router',
 
     'app.config',
+    'exceptionless.notification',
     'exceptionless.state'
   ])
   .config(['$authProvider', 'BASE_URL', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', function ($authProvider, BASE_URL, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID) {
@@ -34,17 +34,6 @@
     $authProvider.live({
       clientId: LIVE_APPID,
       url: BASE_URL + '/auth/live'
-    });
-  }])
-  .run(['$state', 'Restangular', 'stateService', function($state, Restangular, stateService) {
-    Restangular.setErrorInterceptor(function(response) {
-      if(response.status !== 401) {
-        return true;
-      }
-
-      stateService.save(['auth.']);
-      $state.go('auth.login');
-      return false;
     });
   }]);
 }());

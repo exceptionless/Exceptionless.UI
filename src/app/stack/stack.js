@@ -16,6 +16,7 @@
     'exceptionless.filter',
     'exceptionless.organization-notifications',
     'exceptionless.notification',
+    'exceptionless.rate-limit',
     'exceptionless.refresh',
     'exceptionless.stack',
     'exceptionless.stack-trace',

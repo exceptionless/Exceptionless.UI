@@ -9,6 +9,7 @@
     'exceptionless.auth',
     'exceptionless.notification',
     'exceptionless.project',
+    'exceptionless.rate-limit',
     'exceptionless.user',
     'exceptionless.validators'
   ])
