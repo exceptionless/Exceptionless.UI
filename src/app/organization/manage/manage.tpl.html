@@ -50,7 +50,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="user in vm.users track by user.id">
+                <tr ng-repeat="user in vm.users">
                   <td>
                     <span>{{::user.email_address}}</span>
                     <span ng-if="user.has_admin_role" class="label label-info">Admin</span>

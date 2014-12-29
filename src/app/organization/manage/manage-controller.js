@@ -13,7 +13,9 @@
 
       function createUser(emailAddress) {
         function onSuccess(response) {
-          vm.users.push(response.data);
+          if (!vm.users.filter(function (u) { return u.email_address === emailAddress; })[0]) {
+            vm.users.push(response.data);
+          }
 
           return response.data;
         }
@@ -99,7 +101,7 @@
             notificationService.error('An error occurred while trying to remove the user.');
           }
 
-          return organizationService.removeUser(organizationId, user.id).then(onSuccess, onFailure);
+          return organizationService.removeUser(organizationId, user.email_address).then(onSuccess, onFailure);
         });
       }
 
