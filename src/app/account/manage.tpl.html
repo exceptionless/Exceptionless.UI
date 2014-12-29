@@ -6,7 +6,7 @@
         <div class="panel-body">
           <tabset class="tab-container">
             <tab heading="General">
-              <form name="userForm" role="form" class="form-validation" autocomplete="on">
+              <form name="fullNameForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
                   <img gravatar-src="vm.user.email_address" gravatar-size="100" alt="{{vm.user.full_name}}">
                   <div>
@@ -22,31 +22,33 @@
                          placeholder="Your first and last name"
                          ng-model="vm.user.full_name"
                          ng-model-options="{ debounce: 1000 }"
-                         ng-change="vm.saveUser(userForm.$valid)"
+                         ng-change="vm.saveUser(fullNameForm.$valid)"
                          required />
 
-                  <div class="error" ng-messages="userForm.name.$error" ng-if="userForm.$submitted || userForm.name.$touched">
+                  <div class="error" ng-messages="fullNameForm.name.$error" ng-if="fullNameForm.$submitted || fullNameForm.name.$touched">
                     <small ng-message="required">Full Name is required.</small>
                   </div>
                 </div>
+              </form>
 
+              <form name="emailAddressForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
                   <label for="email">Email Address</label>
-                  <div ng-class="{'input-group': userForm.$pending }">
+                  <div ng-class="{'input-group': emailAddressForm.$pending }">
                     <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                            placeholder="Email Address"
                            ng-model="vm.user.email_address"
                            ng-model-options="{ debounce: 1000 }"
-                           ng-change="vm.saveEmailAddress(userForm.$valid)"
+                           ng-change="vm.saveEmailAddress(emailAddressForm.$valid)"
                            email-address-available-validator
                            required/>
 
-                    <span class="input-group-addon" ng-if="userForm.$pending">
+                    <span class="input-group-addon" ng-if="emailAddressForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>
                     </span>
                   </div>
 
-                  <div class="error" ng-messages="userForm.email.$error" ng-if="userForm.$submitted || userForm.email.$touched">
+                  <div class="error" ng-messages="emailAddressForm.email.$error" ng-if="emailAddressForm.$submitted || emailAddressForm.email.$touched">
                     <small ng-message="required">Email Address is required.</small>
                     <small ng-message="email">Email Address is required.</small>
                     <small ng-message="unique">A user already exists with this email address.</small>
