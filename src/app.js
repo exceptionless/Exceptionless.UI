@@ -379,6 +379,11 @@
 
     Restangular.setErrorInterceptor(function(response) {
       rateLimitService.updateFromResponseHeader(response);
+      if (response.status === 0 || response.status === 503) {
+        stateService.save(['auth.', 'status']);
+        $state.go('status', { redirect: true });
+        return false;
+      }
 
       if(response.status === 401) {
         stateService.save(['auth.']);
@@ -387,12 +392,6 @@
       }
 
       if(response.status === 409) {
-        return false;
-      }
-
-      if ($state.current.name !== 'status' && response.status === 0 && response.status === 503) {
-        stateService.save(['auth.', 'status']);
-        $state.go('status', { redirect: true });
         return false;
       }
 

@@ -102,12 +102,15 @@
               return;
             }
 
-            if (!vm.projects.filter(function(o) { return organization.id === o.organization_id; })[0]) {
+            // Only show when there are no projects in the current selected organizations.
+            if (currentProjects.length === 0) {
               vm.organizationsWithNoProjects.push(organization);
-              return;
             }
 
-            if (!$scope.ignoreConfigureProjects) {
+            // Only show it if you absolutely have no data or the current project has no data or if the current org has no data.
+            var canShowConfigurationAlert = currentProjects.filter(function(p) { return p.total_event_count === 0; }).length === currentProjects.length;
+
+            if (!$scope.ignoreConfigureProjects && canShowConfigurationAlert) {
               var hasProjectsRequiringConfiguration = false;
               angular.forEach(currentProjects, function (project) {
                 if (project.organization_id !== organization.id) {
