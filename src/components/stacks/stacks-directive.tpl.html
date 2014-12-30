@@ -19,7 +19,7 @@
       <td ng-click="vm.open(stack.id, $event)">
         <summary source="stack" show-type="vm.showType"></summary>
       </td>
-      <td ng-click="vm.open(stack.id, $event)">{{stack.total | number:0}}</td>
+      <td ng-click="vm.open(stack.id, $event)" class="number">{{stack.total | number:0}}</td>
       <td ng-click="vm.open(stack.id, $event)" class="hidden-xs"><abbr
         title="{{::stack.first_occurrence | date : 'medium'}}">
         <timeago date="stack.first_occurrence"></timeago>

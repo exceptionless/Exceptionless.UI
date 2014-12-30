@@ -13,8 +13,8 @@
     <tr class="row-clickable" ng-repeat="project in vm.projects track by project.id" ng-if="vm.hasProjects()">
       <td ng-click="vm.open(project.id, $event)">{{project.name}}</td>
       <td ng-click="vm.open(project.id, $event)">{{project.organization_name}}</td>
-      <td ng-click="vm.open(project.id, $event)" class="hidden-xs">{{project.stack_count | number:0}}</td>
-      <td ng-click="vm.open(project.id, $event)" class="hidden-xs">{{project.event_count | number:0}}</td>
+      <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.stack_count | number:0}}</td>
+      <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.event_count | number:0}}</td>
       <td>
         <div class="btn-group">
           <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
