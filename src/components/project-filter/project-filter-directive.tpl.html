@@ -12,7 +12,7 @@
             <a class="media list-group-item" ng-href="{{::vm.getOrganizationUrl(organization)}}" auto-active>{{::organization.name}}</a>
             <a class="media list-group-item project-name" ng-href="{{::vm.getProjectUrl(project)}}" auto-active ng-repeat="project in vm.getProjectsByOrganizationId(organization.id) track by project.id">{{project.name}}</a>
           </div>
-          <a class="panel-footer media list-group-item" ui-sref="app.project.add">Add New Project</a>
+          <a class="list-group-footer media list-group-item" ui-sref="app.project.add" auto-active>Add New Project</a>
         </div>
       </div>
     </div>
