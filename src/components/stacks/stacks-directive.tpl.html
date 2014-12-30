@@ -20,17 +20,21 @@
         <summary source="stack" show-type="vm.showType"></summary>
       </td>
       <td ng-click="vm.open(stack.id, $event)" class="number">{{stack.total | number:0}}</td>
-      <td ng-click="vm.open(stack.id, $event)" class="hidden-xs"><abbr
-        title="{{::stack.first_occurrence | date : 'medium'}}">
-        <timeago date="stack.first_occurrence"></timeago>
-      </abbr></td>
+      <td ng-click="vm.open(stack.id, $event)" class="hidden-xs">
+        <abbr title="{{::stack.first_occurrence | date : 'medium'}}">
+          <timeago date="stack.first_occurrence"></timeago>
+        </abbr>
+      </td>
       <td ng-click="vm.open(stack.id, $event)"><abbr title="{{::stack.last_occurrence | date : 'medium'}}">
         <timeago date="stack.last_occurrence"></timeago>
       </abbr></td>
     </tr>
     <tr ng-if="!vm.hasStacks()">
       <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
-      <td colspan="4">
+      <td colspan="4" class="hidden-xs">
+        <strong>No data found.</strong>
+      </td>
+      <td colspan="3" class="visible-xs">
         <strong>No data found.</strong>
       </td>
     </tr>
