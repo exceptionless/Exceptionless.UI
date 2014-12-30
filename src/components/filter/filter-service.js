@@ -14,8 +14,11 @@
 
       function buildFilter() {
         var filters = [];
-        // TODO: This needs to be fixed in the stack repository.
-        //filters.push('fixed:'.concat(_includeFixed === true));
+
+        if (!_includeFixed) {
+          filters.push('fixed:false');
+        }
+
         if (!_includeHidden) {
           filters.push('hidden:false');
         }

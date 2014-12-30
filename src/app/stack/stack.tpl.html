@@ -1,7 +1,7 @@
 <organization-notifications organization-id="vm.stack.organization_id"></organization-notifications>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="filterChanged StackChanged" refresh-action="vm.get()" refresh-throttle="5000">
-  <div class="wrapper-md">
+<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="StackChanged" refresh-action="vm.get()" refresh-throttle="2500">
+  <div class="wrapper-md" refresh-on="filterChanged" refresh-action="vm.get()">
     <div class="row">
       <div class="col-sm-12">
         <div class="row row-sm text-center">
@@ -117,7 +117,7 @@
             <tr ng-if="vm.hasReference()">
               <th>{{vm.hasReferences() ? 'Reference Links' : 'Reference Link'}}</th>
               <td>
-                <ul ng-if="vm.hasReferences()" class="fa fa-fw-ul">
+                <ul ng-if="vm.hasReferences()">
                   <li ng-repeat="reference in vm.stack.references track by reference">
                     <a ng-href="{{::reference}}" target="_blank">{{::reference}}</a>
                     <a class="delete-link" ng-click="vm.removeReferenceLink(reference)"><i class="fa fa-fw fa-times"></i></a>
@@ -126,8 +126,7 @@
 
                 <div ng-if="!vm.hasReferences()">
                   <a ng-href="{{::vm.stack.references[0]}}" target="_blank">{{::vm.stack.references[0]}}</a>
-                  <a class="delete-link" ng-click="vm.removeReferenceLink(vm.stack.references[0])"><i
-                    class="fa fa-fw fa-times"></i></a>
+                  <a class="delete-link" ng-click="vm.removeReferenceLink(vm.stack.references[0])"><i class="fa fa-fw fa-times"></i></a>
                 </div>
               </td>
             </tr>

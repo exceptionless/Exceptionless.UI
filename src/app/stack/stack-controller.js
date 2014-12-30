@@ -81,7 +81,7 @@
       }
 
       function isFixed() {
-        return vm.stack.date_fixed;
+        return !!vm.stack.date_fixed;
       }
 
       function isHidden() {
@@ -129,15 +129,11 @@
 
       function removeReferenceLink(reference) {
         return dialogService.confirmDanger('Are you sure you want to remove this reference link?', 'REMOVE REFERENCE LINK').then(function () {
-          function onSuccess() {
-            vm.stack.references.splice(vm.stack.references.indexOf(reference), 1);
-          }
-
           function onFailure() {
             notificationService.info('An error occurred while removing the external reference link.');
           }
 
-          return stackService.removeLink(stackId, reference).then(onSuccess, onFailure);
+          return stackService.removeLink(stackId, reference).catch(onFailure);
         });
       }
 
@@ -157,71 +153,53 @@
       }
 
       function updateIsCritical() {
-        function onSuccess() {
-          vm.stack.occurrences_are_critical = !isCritical();
-        }
-
         function onFailure() {
           notificationService.error('An error occurred while marking future occurrences as ' + isCritical() ? 'not critical.' : 'critical.');
         }
 
         if (isCritical()) {
-          return stackService.markNotCritical(stackId).then(onSuccess, onFailure);
+          return stackService.markNotCritical(stackId).catch(onFailure);
         }
 
-        return stackService.markCritical(stackId).then(onSuccess, onFailure);
+        return stackService.markCritical(stackId).catch(onFailure);
       }
 
       function updateIsFixed() {
-        function onSuccess() {
-          vm.stack.date_fixed = !isFixed() ? moment().toDate() : null;
-          if (isRegressed() && isFixed())
-            vm.stack.is_regressed = false;
-        }
-
         function onFailure() {
           var action = isFixed() ? ' not' : '';
           notificationService.error('An error occurred while marking this stack as' + action + ' fixed.');
         }
 
         if (isFixed()) {
-          return stackService.markNotFixed(stackId).then(onSuccess, onFailure);
+          return stackService.markNotFixed(stackId).catch(onFailure);
         }
 
-        return stackService.markFixed(stackId).then(onSuccess, onFailure);
+        return stackService.markFixed(stackId).catch(onFailure);
       }
 
       function updateIsHidden() {
-        function onSuccess() {
-          vm.stack.is_hidden = !isHidden();
-        }
-
         function onFailure() {
           notificationService.error('An error occurred while marking this stack as ' + isHidden() ? 'shown.' : 'hidden.');
         }
 
         if (isHidden()) {
-          return stackService.markNotHidden(stackId).then(onSuccess, onFailure);
+          return stackService.markNotHidden(stackId).catch(onFailure);
         }
 
-        return stackService.markHidden(stackId).then(onSuccess, onFailure);
+        return stackService.markHidden(stackId).catch(onFailure);
       }
 
       function updateNotifications() {
-        function onSuccess() {
-          vm.stack.disable_notifications = !notificationsDisabled();
-        }
-
         function onFailure() {
           var action = notificationsDisabled() ? 'enabling' : 'disabling';
           notificationService.error('An error occurred while ' + action + ' stack notifications.');
         }
 
         if (notificationsDisabled()) {
-          return stackService.enableNotifications(stackId).then(onSuccess, onFailure);
+          return stackService.enableNotifications(stackId).catch(onFailure);
         }
 
-        return stackService.disableNotifications(stackId).then(onSuccess, onFailure);
+        return stackService.disableNotifications(stackId).catch(onFailure);
       }
 
       vm.addReferenceLink = addReferenceLink;
