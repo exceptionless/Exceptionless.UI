@@ -19,20 +19,28 @@
         return Restangular.one('projects', id).one('promotedtabs', name).remove();
       }
 
-      function getAll(options) {
-        return _cachedRestangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
+      function getAll(options, useCache) {
+        if (useCache === undefined || useCache) {
+          return _cachedRestangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
+        }
+
+        return Restangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
       }
 
       function getById(id, useCache) {
-        if (useCache) {
-          _cachedRestangular.one('projects', id).get();
+        if (useCache === undefined || useCache) {
+          return _cachedRestangular.one('projects', id).get();
         }
 
         return Restangular.one('projects', id).get();
       }
 
-      function getByOrganizationId(id, options) {
-        return _cachedRestangular.one('organizations', id).all('projects').getList(options || {});
+      function getByOrganizationId(id, options, useCache) {
+        if (useCache === undefined || useCache) {
+          return _cachedRestangular.one('organizations', id).all('projects').getList(options || {});
+        }
+
+        return Restangular.one('organizations', id).all('projects').getList(options || {});
       }
 
       function getConfig(id) {

@@ -34,7 +34,7 @@
 
       }
 
-      function get(options) {
+      function get(options, useCache) {
         function onSuccess(response) {
           vm.organizations = response.data.plain();
 
@@ -45,14 +45,14 @@
           vm.pageSummary = paginationService.getCurrentPageSummary(response.data, vm.currentOptions.page, vm.currentOptions.limit);
 
           if (vm.organizations.length === 0 && vm.currentOptions.page && vm.currentOptions.page > 1) {
-            return get();
+            return get(null, useCache);
           }
 
           return vm.organizations;
         }
 
         vm.currentOptions = options || settings;
-        return organizationService.getAll(vm.currentOptions).then(onSuccess);
+        return organizationService.getAll(vm.currentOptions, useCache).then(onSuccess);
       }
 
       function leave(organization, user) {

@@ -21,7 +21,7 @@
         controller: ['$window', '$state', 'dialogService', 'linkService', 'notificationService', 'paginationService', 'projectService', function ($window, $state, dialogService, linkService, notificationService, paginationService, projectService) {
           var vm = this;
 
-          function get(options) {
+          function get(options, useCache) {
             function onSuccess(response) {
               vm.projects = response.data.plain();
 
@@ -32,14 +32,14 @@
               vm.pageSummary = paginationService.getCurrentPageSummary(response.data, vm.currentOptions.page, vm.currentOptions.limit);
 
               if (vm.projects.length === 0 && vm.currentOptions.page && vm.currentOptions.page > 1) {
-                return get();
+                return get(null, useCache);
               }
 
               return vm.projects;
             }
 
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions).then(onSuccess);
+            return vm.settings.get(vm.currentOptions, useCache).then(onSuccess);
           }
 
           function hasProjects() {
@@ -78,6 +78,7 @@
             });
           }
 
+          vm.currentOptions = {};
           vm.get = get;
           vm.hasProjects = hasProjects;
           vm.nextPage = nextPage;

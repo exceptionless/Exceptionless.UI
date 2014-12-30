@@ -5,9 +5,7 @@
     .controller('project.List', ['projectService', function (projectService) {
       var vm = this;
       vm.projects = {
-        get: function (options) {
-          return projectService.getAll(options);
-        },
+        get: projectService.getAll,
         options: {
           limit: 10,
           mode: 'summary'

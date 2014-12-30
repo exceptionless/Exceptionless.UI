@@ -1,5 +1,5 @@
-<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="OrganizationChanged" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="2500">
-  <div class="col">
+<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="OrganizationChanged ProjectChanged" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="2500">
+  <div class="col" refresh-on="eventOccurrence" refresh-action="vm.get(vm.currentOptions, false)" refresh-throttle="2500">
     <div class="wrapper-md">
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-group"></i> My Organizations</div>
@@ -17,11 +17,11 @@
             </thead>
             <tbody>
             <tr class="row-clickable" ng-repeat="organization in vm.organizations track by organization.id">
-              <td ng-click="vm.open(organization.id, $event)">{{::organization.name}}</td>
-              <td ng-click="vm.open(organization.id, $event)">{{::organization.plan_id}}</td>
-              <td ng-click="vm.open(organization.id, $event)" class="hidden-xs">{{::organization.project_count | number:0}}</td>
-              <td ng-click="vm.open(organization.id, $event)" class="hidden-xs">{{::organization.stack_count | number:0}}</td>
-              <td ng-click="vm.open(organization.id, $event)" class="hidden-xs">{{::organization.event_count | number:0}}</td>
+              <td ng-click="vm.open(organization.id, $event)">{{organization.name}}</td>
+              <td ng-click="vm.open(organization.id, $event)">{{organization.plan_name}}</td>
+              <td ng-click="vm.open(organization.id, $event)" class="hidden-xs">{{organization.project_count | number:0}}</td>
+              <td ng-click="vm.open(organization.id, $event)" class="hidden-xs">{{organization.stack_count | number:0}}</td>
+              <td ng-click="vm.open(organization.id, $event)" class="hidden-xs">{{organization.event_count | number:0}}</td>
               <td>
                 <div class="btn-group">
                   <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">

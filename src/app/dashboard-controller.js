@@ -99,9 +99,7 @@
       vm.get = get;
 
       vm.mostFrequent = {
-        get: function (options) {
-          return stackService.getFrequent(options);
-        },
+        get: stackService.getFrequent,
         options: {
           limit: 10,
           mode: 'summary'
@@ -110,9 +108,7 @@
 
       vm.mostRecent = {
         header: 'Most Recent',
-        get: function (options) {
-          return eventService.getAll(options);
-        },
+        get: eventService.getAll,
         options: {
           limit: 10,
           mode: 'summary'

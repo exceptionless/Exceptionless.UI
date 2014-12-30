@@ -6,6 +6,7 @@
       var _cache = $cacheFactory('http:organization');
       $rootScope.$on('auth:logout', _cache.removeAll);
       $rootScope.$on('OrganizationChanged', _cache.removeAll);
+      $rootScope.$on('ProjectChanged', _cache.removeAll);
 
       var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
         RestangularConfigurer.setDefaultHttpFields({ cache: _cache });
@@ -23,11 +24,19 @@
         return Restangular.one('organizations', id).customPOST(null, 'change-plan', options);
       }
 
-      function getAll(options) {
-        return _cachedRestangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
+      function getAll(options, useCache) {
+        if (useCache === undefined || useCache) {
+          return _cachedRestangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
+        }
+
+        return Restangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
       }
 
-      function getById(id) {
+      function getById(id, useCache) {
+        if (useCache === undefined || useCache) {
+          return _cachedRestangular.one('organizations', id).get();
+        }
+
         return Restangular.one('organizations', id).get();
       }
 

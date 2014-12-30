@@ -147,7 +147,7 @@
             if (!organizationId || vm.organizations.filter(function(o) { return o.id === organizationId; })[0])
               return;
 
-            return organizationService.getById(organizationId).then(onSuccess);
+            return organizationService.getById(organizationId, true).then(onSuccess);
           }
 
           function getAllOrganizations() {

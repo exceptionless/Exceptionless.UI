@@ -52,7 +52,7 @@
           notificationService.error('The organization "' + organizationId + '" could not be found.');
         }
 
-        return organizationService.getById(organizationId).then(onSuccess, onFailure);
+        return organizationService.getById(organizationId, false).then(onSuccess, onFailure);
       }
 
       function getInvoices() {
@@ -60,11 +60,7 @@
           vm.invoices = response.data.plain();
         }
 
-        function onFailure() {
-          notificationService.error('The invoices for this organization could not be loaded.');
-        }
-
-        return organizationService.getInvoices(organizationId, options).then(onSuccess, onFailure);
+        return organizationService.getInvoices(organizationId, options).then(onSuccess);
       }
 
       function getUsers() {
@@ -159,8 +155,8 @@
       vm.open = open;
       vm.organization = {};
       vm.projects = {
-        get: function (options) {
-          return projectService.getByOrganizationId(organizationId, options);
+        get: function (options, useCache) {
+          return projectService.getByOrganizationId(organizationId, options, useCache);
         },
         options: {
           limit: 10,
