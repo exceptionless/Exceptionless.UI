@@ -116,7 +116,7 @@
       function registerPartials() {
         Handlebars.registerPartial('objectDump',
           '{{#ifHasData this}}' +
-          '<table class="table table-striped table-bordered table-fixed table-key-value b-t b-light object-dump">\r\n' +
+          '<table class="table table-striped table-bordered table-fixed table-key-value b-t object-dump">\r\n' +
           '{{#properties this}}' +
           '  <tr>\r\n' +
           '    <th>{{toSpaceWords name}}</th>\r\n' +
