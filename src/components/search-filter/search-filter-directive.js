@@ -2,7 +2,10 @@
   'use strict';
 
   angular.module('exceptionless.search-filter', [
-    'exceptionless.refresh'
+    'ngMessages',
+
+    'exceptionless.refresh',
+    'exceptionless.validators'
   ])
   .directive('searchFilter', function () {
     return {

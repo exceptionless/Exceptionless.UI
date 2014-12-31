@@ -9,18 +9,32 @@
         <form name="searchFilterForm" role="form" class="form-validation">
           <div class="form-group">
             <label for="search">Filter</label>
-            <input id="search" type="search" class="form-control" placeholder="Criteria" ng-model="vm.filter" ng-model-options="{ debounce: 500 }" ng-change="vm.setFilter(vm.filter)">
+            <div ng-class="{'input-group': searchFilterForm.$pending }">
+              <input id="search" name="search" type="search" class="form-control" placeholder="Criteria"
+                     ng-model="vm.filter"
+                     ng-model-options="{ debounce: 500 }"
+                     ng-change="vm.setFilter(vm.filter)"
+                     search-filter-validator />
+
+              <span class="input-group-addon" ng-if="searchFilterForm.$pending">
+                <i class="fa fa-fw fa-spinner fa-spin"></i>
+              </span>
+            </div>
+
+            <div class="error" ng-messages="searchFilterForm.search.$error" ng-if="searchFilterForm.$submitted || searchFilterForm.search.$touched">
+              <small ng-message="valid">An invalid search term was found.</small>
+            </div>
           </div>
 
           <div class="checkbox">
             <label class="i-checks">
-              <input id="includeFixed" type="checkbox" ng-model="vm.includeFixed" ng-change="vm.setIncludeFixed(vm.includeFixed)"><i></i> Include Fixed
+              <input id="includeFixed" type="checkbox" ng-model="vm.includeFixed" ng-change="vm.setIncludeFixed(vm.includeFixed)" /><i></i> Include Fixed
             </label>
           </div>
 
           <div class="checkbox">
             <label class="i-checks">
-              <input id="includeHidden" type="checkbox" ng-model="vm.includeHidden" ng-change="vm.setIncludeHidden(vm.includeHidden)"><i></i> Include Hidden
+              <input id="includeHidden" type="checkbox" ng-model="vm.includeHidden" ng-change="vm.setIncludeHidden(vm.includeHidden)" /><i></i> Include Hidden
             </label>
           </div>
 

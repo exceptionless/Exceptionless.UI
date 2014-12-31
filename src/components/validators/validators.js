@@ -4,6 +4,7 @@
   angular.module('exceptionless.validators', [
     'exceptionless.auth',
     'exceptionless.organization',
-    'exceptionless.project'
+    'exceptionless.project',
+    'exceptionless.search'
   ]);
 }());
