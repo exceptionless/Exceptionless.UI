@@ -1,4 +1,4 @@
-<ul class="nav navbar-nav">
+<ul class="nav navbar-nav" refresh-on="filterChanged" refresh-action="vm.updateFilter()">
   <li class="dropdown" dropdown is-open="vm.isDropDownOpen">
     <a class="dropdown-toggle" dropdown-toggle>
       <i class="fa fa-fw fa-search fa-lg" ng-class="{'text-success': vm.hasFilter() }"></i>
