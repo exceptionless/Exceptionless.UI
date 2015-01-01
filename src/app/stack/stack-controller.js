@@ -39,9 +39,14 @@
           vm.stack = response.data.plain();
         }
 
-        function onFailure() {
+        function onFailure(response) {
           $state.go('app.dashboard');
-          notificationService.error('The stack "' + stackId + '" could not be found.');
+
+          if (response.status === 404) {
+            notificationService.error('The stack "' + stackId + '" could not be found.');
+          } else {
+            notificationService.error('An error occurred while loading the stack "' + stackId + '".');
+          }
         }
 
         return stackService.getById(stackId).then(onSuccess, onFailure);
@@ -56,12 +61,8 @@
           });
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while loading the stats for this stack.');
-        }
-
         var options = {};
-        return statService.getByStackId(stackId, options).then(onSuccess, onFailure);
+        return statService.getByStackId(stackId, options).then(onSuccess);
       }
 
       function hasTags() {
@@ -274,6 +275,7 @@
       };
 
       vm.get = get;
+      vm.getStats = getStats;
       vm.hasTags = hasTags;
       vm.hasReference = hasReference;
       vm.hasReferences = hasReferences;
