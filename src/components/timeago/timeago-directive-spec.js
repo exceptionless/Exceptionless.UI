@@ -23,5 +23,11 @@
       var element = compile('<timeago date="date" />')(scope);
       expect(element.text()).not.toBe('a few seconds ago');
     });
+
+    it('should set the elements text to never', function () {
+      scope.date = new moment('0001-01-01T00:00:00').toDate();
+      var element = compile('<timeago date="date" />')(scope);
+      expect(element.text()).toBe('never');
+    });
   });
 }());

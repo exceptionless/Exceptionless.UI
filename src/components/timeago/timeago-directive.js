@@ -10,11 +10,8 @@
         },
         link: function (scope, element) {
           function setTimeagoText() {
-            if (!scope.date) {
-              element.text('Loading..');
-            } else {
-              element.text(moment(scope.date).fromNow());
-            }
+            var date = moment(scope.date);
+            element.text((!!scope.date && date.isValid() && date.year() > 1) ? date.fromNow() : 'never');
           }
 
           setTimeagoText();

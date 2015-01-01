@@ -92,6 +92,11 @@
         return vm.stack.is_regressed === true;
       }
 
+      function isValidDate(date) {
+        var d = moment(date);
+        return !!date && d.isValid() && d.year() > 1;
+      }
+
       function notificationsDisabled() {
         return vm.stack.disable_notifications === true;
       }
@@ -276,6 +281,7 @@
       vm.isFixed = isFixed;
       vm.isHidden = isHidden;
       vm.isRegressed = isRegressed;
+      vm.isValidDate = isValidDate;
       vm.notificationsDisabled = notificationsDisabled;
       vm.promoteToExternal = promoteToExternal;
       vm.project = {};

@@ -81,13 +81,12 @@
           vm.currentOptions = {};
           vm.get = get;
           vm.hasProjects = hasProjects;
-          vm.includeOrganizationName = !!vm.settings.includeOrganizationName;
+          vm.includeOrganizationName = !vm.settings.hideOrganizationName;
           vm.nextPage = nextPage;
           vm.open = open;
           vm.previousPage = previousPage;
           vm.projects = [];
           vm.remove = remove;
-
           get();
         }],
         controllerAs: 'vm'
