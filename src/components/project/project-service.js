@@ -5,6 +5,7 @@
     .factory('projectService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
       var _cache = $cacheFactory('http:project');
       $rootScope.$on('auth:logout', _cache.removeAll);
+      $rootScope.$on('OrganizationChanged', _cache.removeAll);
       $rootScope.$on('ProjectChanged', _cache.removeAll);
 
       var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {

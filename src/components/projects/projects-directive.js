@@ -81,6 +81,7 @@
           vm.currentOptions = {};
           vm.get = get;
           vm.hasProjects = hasProjects;
+          vm.includeOrganizationName = !!vm.settings.includeOrganizationName;
           vm.nextPage = nextPage;
           vm.open = open;
           vm.previousPage = previousPage;
