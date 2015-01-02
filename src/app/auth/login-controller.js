@@ -56,6 +56,6 @@
 
       vm.authenticate = authenticate;
       vm.login = login;
-      vm.user = { remember: true };
+      vm.user = {};
     }]);
 }());
