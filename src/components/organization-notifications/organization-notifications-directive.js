@@ -152,17 +152,13 @@
 
           function getAllOrganizations() {
             function onSuccess(response) {
-              angular.forEach(response.data.plain(), function(value, key) {
-                vm.organizations.push(value);
-              });
-
+              vm.organizations = response.data.plain();
               return vm.organizations;
             }
 
             return  organizationService.getAll().then(onSuccess);
           }
 
-          vm.organizations = [];
           return getAllOrganizations().then(getSelectedOrganization);
         }
 

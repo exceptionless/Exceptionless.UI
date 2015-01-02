@@ -38,7 +38,8 @@
         }
 
         function onFailure(response) {
-          if (response.error.message) {
+          console.log(response);
+          if (response.error && response.error.message) {
             vm.paymentMessage = response.error.message;
           } else {
             vm.paymentMessage = 'An error occurred while changing plans.';
@@ -59,7 +60,7 @@
           return changePlan(hasAdminRole()).then(onSuccess, onFailure);
         }
 
-        if (isNewCard()) {
+        if (vm.currentPlan.price > 0 && isNewCard()) {
           try {
             return createStripeToken().then(onCreateTokenSuccess, onFailure);
           } catch (error) {
