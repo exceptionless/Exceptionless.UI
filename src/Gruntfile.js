@@ -33,11 +33,22 @@ module.exports = function (grunt) {
 
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('grunt-cache-bust');
   grunt.loadNpmTasks('grunt-ng-constant');
   grunt.loadNpmTasks('grunt-html-angular-validate');
 
   // Project configuration.
   grunt.initConfig({
+    cacheBust: {
+      assets: {
+        files: [{
+          src: ['dist/index.html']
+        }]
+      },
+      options: {
+        deleteOriginals: true
+      }
+    },
     connect: {
       main: {
         options: {
@@ -280,7 +291,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build', ['jshint', /* 'htmlangular', */ 'clean:before', 'less', 'dom_munger', 'ngconstant', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
+  grunt.registerTask('build', ['jshint', /* 'htmlangular', */ 'clean:before', 'less', 'dom_munger', 'ngconstant', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'cacheBust', 'clean:after']);
   grunt.registerTask('default', ['build']);
   grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'connect', 'watch']);
   grunt.registerTask('test', ['dom_munger:read', 'karma:all_tests']);
