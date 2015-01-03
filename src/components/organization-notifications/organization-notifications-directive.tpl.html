@@ -1,6 +1,6 @@
 <div>
-  <div ng-if="vm.hasNotifications" refresh-on="filterChanged" refresh-action="vm.getOrganizationNotifications()">
-    <div refresh-on="OrganizationChanged ProjectChanged planChanged planOverage" refresh-action="vm.get()"></div>
+  <div ng-if="vm.hasNotifications" refresh-on="filterChanged" refresh-action="vm.onFilterChanged()">
+    <div refresh-on="OrganizationChanged ProjectChanged planChanged planOverage" refresh-action="vm.get()" refresh-throttle="2500"></div>
 
     <div class="alert alert-success alert-banner m-b-none" ng-if="!vm.hasOrganizations()">
       <h4>Setup your first project</h4>
@@ -84,6 +84,17 @@
       </h4>
 
       <p><a ng-click="vm.showChangePlanDialog(vm.monthlyOverageOrganizations[0].id)">Upgrade now</a> to continue receiving errors.</p>
+    </div>
+
+    <div class="alert alert-danger alert-banner m-b-none" ng-if="vm.hasOrganizationsSearchingWithoutPremiumFeatures()">
+      <h4>
+        <span ng-repeat="organization in vm.organizationsSearchingWithoutPremiumFeatures">
+          <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
+        </span>
+        is attempting to use a premium feature.
+      </h4>
+
+      <p><a ng-click="vm.showChangePlanDialog(vm.organizationsSearchingWithoutPremiumFeatures[0].id)">Upgrade now</a> to enable search and other premium!</p>
     </div>
 
     <div class="alert alert-success alert-banner m-b-none" ng-if="vm.hasFreeOrganizations()">

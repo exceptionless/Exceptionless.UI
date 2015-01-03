@@ -10,7 +10,8 @@
     'exceptionless.notification',
     'exceptionless.organization',
     'exceptionless.project',
-    'exceptionless.refresh'
+    'exceptionless.refresh',
+    'exceptionless.search'
   ])
   .directive('organizationNotifications', [function() {
     return {
@@ -22,11 +23,11 @@
         ignoreConfigureProjects: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
-      controller: ['$scope', 'billingService', 'filterService', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, STRIPE_PUBLISHABLE_KEY) {
+      controller: ['$scope', 'billingService', 'filterService', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'searchService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, STRIPE_PUBLISHABLE_KEY) {
         var vm = this;
 
         function get() {
-          return getOrganizations().then(getProjects).then(getOrganizationNotifications);
+          return getOrganizations().then(getProjects).then(getFilterUsesPremiumFeatures).then(getOrganizationNotifications);
         }
 
         function getCurrentOrganizationId() {
@@ -65,11 +66,22 @@
           return projects;
         }
 
+        function getFilterUsesPremiumFeatures() {
+          function onSuccess(response) {
+            vm.filterUsesPremiumFeatures = response.data.uses_premium_features === true;
+            return vm.filterUsesPremiumFeatures;
+          }
+
+          vm.filterUsesPremiumFeatures = false;
+          return searchService.validate(filterService.getFilter()).then(onSuccess);
+        }
+
         function getOrganizationNotifications() {
           vm.freeOrganizations = [];
           vm.hourlyOverageOrganizations = [];
           vm.monthlyOverageOrganizations = [];
           vm.projectsRequiringConfiguration = [];
+          vm.organizationsSearchingWithoutPremiumFeatures = [];
           vm.organizationsWithNoProjects = [];
           vm.suspendedForBillingOrganizations = [];
           vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
@@ -90,6 +102,17 @@
               } else if (organization.billing_status !== 1 || organization.suspension_code === 'Abuse' || organization.suspension_code === 'Overage') {
                 vm.suspendedForAbuseOrOverageOrNotActiveOrganizations.push(organization);
               }
+
+              return;
+            }
+
+            // Only show it if you absolutely have no data or the current project has no data or if the current org has no data.
+            var canShowConfigurationAlert = currentProjects.filter(function(p) { return p.total_event_count === 0; }).length === currentProjects.length;
+
+            // Only show the premium features dialog when searching on a plan without premium features and your project has been configured.
+            var tryingToSearchWithoutPremiumFeatures = vm.filterUsesPremiumFeatures && !organization.has_premium_features;
+            if (tryingToSearchWithoutPremiumFeatures && !canShowConfigurationAlert) {
+              vm.organizationsSearchingWithoutPremiumFeatures.push(organization);
             }
 
             if (organization.is_over_monthly_limit === true) {
@@ -107,9 +130,6 @@
               vm.organizationsWithNoProjects.push(organization);
             }
 
-            // Only show it if you absolutely have no data or the current project has no data or if the current org has no data.
-            var canShowConfigurationAlert = currentProjects.filter(function(p) { return p.total_event_count === 0; }).length === currentProjects.length;
-
             if (!$scope.ignoreConfigureProjects && canShowConfigurationAlert) {
               var hasProjectsRequiringConfiguration = false;
               angular.forEach(currentProjects, function (project) {
@@ -126,6 +146,10 @@
               if (hasProjectsRequiringConfiguration) {
                 return;
               }
+            }
+
+            if (tryingToSearchWithoutPremiumFeatures) {
+              return;
             }
 
             if (!$scope.ignoreFree && organization.plan_id === 'EX_FREE') {
@@ -191,6 +215,10 @@
           return vm.organizations && vm.organizations.length > 0;
         }
 
+        function hasOrganizationsSearchingWithoutPremiumFeatures() {
+          return vm.organizationsSearchingWithoutPremiumFeatures && vm.organizationsSearchingWithoutPremiumFeatures.length > 0;
+        }
+
         function hasOrganizationsWithNoProjects() {
           return vm.organizationsWithNoProjects && vm.organizationsWithNoProjects.length > 0;
         }
@@ -209,6 +237,10 @@
 
         function isIntercomEnabled() {
           return INTERCOM_APPID;
+        }
+
+        function onFilterChanged() {
+          return getFilterUsesPremiumFeatures().then(getOrganizationNotifications);
         }
 
         function showChangePlanDialog(organizationId) {
@@ -250,12 +282,15 @@
         vm.hasNotifications = false;
         vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
         vm.hasOrganizations = hasOrganizations;
+        vm.hasOrganizationsSearchingWithoutPremiumFeatures = hasOrganizationsSearchingWithoutPremiumFeatures;
         vm.hasOrganizationsWithNoProjects = hasOrganizationsWithNoProjects;
         vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
         vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
         vm.hasSuspendedOrganizations = hasSuspendedOrganizations;
         vm.isIntercomEnabled = isIntercomEnabled;
+        vm.onFilterChanged = onFilterChanged;
         vm.organizations = [];
+        vm.organizationsSearchingWithoutPremiumFeatures = [];
         vm.organizationsWithNoProjects = [];
         vm.hourlyOverageOrganizations = [];
         vm.monthlyOverageOrganizations = [];

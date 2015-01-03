@@ -10,7 +10,7 @@
       });
 
       function validate(query) {
-        return _cachedRestangular.one('search', 'validate').get({ query: query });
+        return _cachedRestangular.one('search', 'validate').get({ query: query || '' });
       }
 
       var service = {

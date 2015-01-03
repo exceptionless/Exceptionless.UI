@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.ui-nav', [])
-    .directive('uiNav', ['$timeout', function ($timeout) {
+    .directive('uiNav', [function () {
       return {
         restrict: 'AC',
         link: function(scope, element) {

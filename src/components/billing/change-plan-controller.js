@@ -38,7 +38,6 @@
         }
 
         function onFailure(response) {
-          console.log(response);
           if (response.error && response.error.message) {
             vm.paymentMessage = response.error.message;
           } else {

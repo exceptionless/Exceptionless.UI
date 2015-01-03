@@ -15,7 +15,6 @@
     'satellizer',
     'ui.bootstrap',
     'ui.gravatar',
-    'ui.utils',
     'ui.router',
     'xeditable',
 
