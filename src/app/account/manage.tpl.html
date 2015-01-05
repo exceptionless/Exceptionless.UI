@@ -58,9 +58,6 @@
                     Email not verified. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.
                   </p>
                 </div>
-
-                <div class="line line-dashed b-b line-lg"></div>
-                <a ui-sref="app.dashboard" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
               </form>
             </tab>
             <tab heading="Notifications" active="vm.tabNotificationsActive">
@@ -180,9 +177,6 @@
                       </label>
                     </div>
                   </div>
-
-                  <div class="line line-dashed b-b line-lg"></div>
-                  <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
                 </div>
               </form>
             </tab>
@@ -221,10 +215,10 @@
                 </div>
 
                 <div class="line line-dashed b-b line-lg"></div>
-                <a ui-sref="app.dashboard" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
                 <div class="pull-right">
                   <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" role="button" class="btn btn-primary" value="{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}" />
                 </div>
+                <div class="clearfix"></div>
               </form>
             </tab>
             <tab heading="External Logins" active="vm.tabExternalActive">
@@ -243,7 +237,7 @@
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th class="action" ng-hide="!vm.hasOAuthAccounts() || !vm.canRemoveOAuthAccount()">Action</th>
+                      <th class="action">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -265,6 +259,14 @@
               </div>
             </tab>
           </tabset>
+        </div>
+        <div class="panel-footer">
+          <div ng-if="!vm.currentProject.id">
+            <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
+          </div>
+          <div ng-if="vm.currentProject.id">
+            <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+          </div>
         </div>
       </div>
     </div>
