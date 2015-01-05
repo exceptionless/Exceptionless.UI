@@ -11,7 +11,7 @@
           }, 150);
 
           // TODO: Fix this bug: http://branchandbound.net/blog/web/2013/08/some-angularjs-pitfalls/
-          var timeout = $timeout(truncate, 1);
+          var timeout = $timeout(truncate, 150);
 
           var window = angular.element($window);
           window.bind('resize', truncate);
