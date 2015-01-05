@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'organizationService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, notificationService, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
       var vm = this;
 
       function canChangePlan() {
@@ -38,10 +38,15 @@
         return organizationService.getAll().then(onSuccess);
       }
 
-      function getUser() {
+      function getUser(data) {
         function onSuccess(response) {
           vm.user = response.data.plain();
           return response;
+        }
+
+        if (data && data.type === 'User' && data.deleted && data.id === vm.user.id) {
+          notificationService.error('Your user account was deleted. Please create a new account.');
+          return authService.logout(true);
         }
 
         return userService.getCurrentUser().then(onSuccess);

@@ -25,6 +25,10 @@
           // client side methods
           listeners: {
             'entityChanged': function (entityChanged) {
+              entityChanged.added = entityChanged.change_type === 0;
+              entityChanged.updated = entityChanged.change_type === 1 || entityChanged.change_type === 4;
+              entityChanged.deleted = entityChanged.change_type === 2 || entityChanged.change_type === 3;
+
               $rootScope.$emit(entityChanged.type + 'Changed', entityChanged);
             },
             'eventOccurrence': function (eventOccurrence) {

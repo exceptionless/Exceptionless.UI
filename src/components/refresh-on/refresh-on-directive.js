@@ -14,7 +14,7 @@
               return;
             }
 
-            action(scope, data);
+            action(scope, { data: data });
           });
 
           scope.$on('$destroy', function() {

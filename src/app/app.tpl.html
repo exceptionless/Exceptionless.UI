@@ -3,7 +3,7 @@
 
   <div ng-include="'app/blocks/sidebar.tpl.html'" class="app-aside hidden-xs bg-dark"></div>
 
-  <div class="app-content" refresh-on="UserChanged" refresh-action="appVm.getUser()" refresh-debounce="1000">
+  <div class="app-content" refresh-on="UserChanged" refresh-action="appVm.getUser(data)" refresh-debounce="1000">
     <div refresh-on="OrganizationChanged" refresh-action="appVm.getOrganizations()" refresh-debounce="1000"></div>
     <button type="button" role="button" class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside"></button>
     <rate-limit></rate-limit>

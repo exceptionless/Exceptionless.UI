@@ -52,7 +52,12 @@
         return authService.changePassword(vm.password).then(onSuccess, onFailure);
       }
 
-      function get() {
+      function get(data) {
+        if (data && data.type === 'User' && data.deleted && data.id === vm.user.id) {
+          notificationService.error('Your user account was deleted. Please create a new account.');
+          return authService.logout(true);
+        }
+
         return getUser().then(getProjects).then(getEmailNotificationSettings);
       }
 

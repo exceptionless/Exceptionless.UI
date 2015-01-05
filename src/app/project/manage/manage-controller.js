@@ -54,7 +54,13 @@
         notificationService.success('Copied!');
       }
 
-      function get() {
+      function get(data) {
+        if (data && data.type === 'Project' && data.deleted && data.id === projectId) {
+          $state.go('app.project.list');
+          notificationService.error('The project "' + projectId + '" was deleted.');
+          return;
+        }
+
         return getProject().then(getTokens).then(getConfiguration).then(getWebHooks);
       }
 
@@ -65,7 +71,7 @@
         }
 
         function onFailure() {
-          $state.go('app.dashboard');
+          $state.go('app.project.list');
           notificationService.error('The project "' + projectId + '" could not be found.');
         }
 
@@ -137,31 +143,45 @@
         return vm.webHooks.length > 0;
       }
 
-      function removeToken(token) {
-        return dialogService.confirmDanger('Are you sure you want to remove the API key?', 'REMOVE API KEY').then(function () {
-          function onSuccess() {
-            vm.tokens.splice(vm.tokens.indexOf(token), 1);
-          }
-
-          function onFailure() {
-            notificationService.error('An error occurred while trying to remove the API Key.');
-          }
-
-          return tokenService.remove(token.id).then(onSuccess, onFailure);
-        });
-      }
-
       function removeConfig(config) {
-        return dialogService.confirmDanger('Are you sure you want to remove this configuration setting?', 'REMOVE CONFIGURATION SETTING').then(function () {
+        return dialogService.confirmDanger('Are you sure you want to delete this configuration setting?', 'DELETE CONFIGURATION SETTING').then(function () {
           function onSuccess() {
             vm.config.splice(vm.config.indexOf(config), 1);
           }
 
           function onFailure() {
-            notificationService.error('An error occurred while trying to remove the configuration setting.');
+            notificationService.error('An error occurred while trying to delete the configuration setting.');
           }
 
           return projectService.removeConfig(projectId, config.key).then(onSuccess, onFailure);
+        });
+      }
+
+      function removeProject() {
+        return dialogService.confirmDanger('Are you sure you want to delete the project?', 'DELETE PROJECT').then(function () {
+          function onSuccess() {
+            $state.go('app.project.list');
+          }
+
+          function onFailure() {
+            notificationService.error('An error occurred while trying to delete the project.');
+          }
+
+          return projectService.remove(projectId).then(onSuccess, onFailure);
+        });
+      }
+
+      function removeToken(token) {
+        return dialogService.confirmDanger('Are you sure you want to delete the API key?', 'DELETE API KEY').then(function () {
+          function onSuccess() {
+            vm.tokens.splice(vm.tokens.indexOf(token), 1);
+          }
+
+          function onFailure() {
+            notificationService.error('An error occurred while trying to delete the API Key.');
+          }
+
+          return tokenService.remove(token.id).then(onSuccess, onFailure);
         });
       }
 
@@ -258,6 +278,7 @@
       vm.hasWebHook = hasWebHook;
       vm.project = {};
       vm.removeConfig = removeConfig;
+      vm.removeProject = removeProject;
       vm.removeToken = removeToken;
       vm.removeWebHook = removeWebHook;
       vm.resetData = resetData;

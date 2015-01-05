@@ -4,10 +4,11 @@
   angular.module('exceptionless.auth', [
     'restangular',
     'satellizer',
+    'ui.router',
 
     'exceptionless.state'
   ])
-  .factory('authService', ['$auth', '$rootScope', 'stateService', 'Restangular', function ($auth, $rootScope, stateService, Restangular) {
+  .factory('authService', ['$auth', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $rootScope, $state, stateService, Restangular) {
     function authenticate(provider) {
       function onSuccess() {
         $rootScope.$emit('auth:login', {});
@@ -44,9 +45,14 @@
       return $auth.login(user).then(onSuccess);
     }
 
-    function logout() {
+    function logout(withRedirect) {
       function onSuccess() {
         $rootScope.$emit('auth:logout', {});
+
+        if (withRedirect) {
+          stateService.save(['auth.']);
+          return $state.go('auth.login');
+        }
       }
 
       stateService.clear();

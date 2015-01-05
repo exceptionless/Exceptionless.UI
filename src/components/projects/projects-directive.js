@@ -65,7 +65,7 @@
           }
 
           function remove(project) {
-            return dialogService.confirmDanger('Are you sure you want to remove the project?', 'REMOVE PROJECT').then(function () {
+            return dialogService.confirmDanger('Are you sure you want to delete the project?', 'DELETE PROJECT').then(function () {
               function onSuccess() {
                 vm.projects.splice(vm.projects.indexOf(project), 1);
               }

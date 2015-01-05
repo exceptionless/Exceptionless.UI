@@ -21,7 +21,13 @@
         });
       }
 
-      function get() {
+      function get(data) {
+        if (data && data.type === 'Stack' && data.deleted && data.id === stackId) {
+          $state.go('app.dashboard');
+          notificationService.error('The stack "' + stackId + '" was deleted.');
+          return;
+        }
+
         return getStack().then(getStats).then(getProject);
       }
 
@@ -134,9 +140,9 @@
       }
 
       function removeReferenceLink(reference) {
-        return dialogService.confirmDanger('Are you sure you want to remove this reference link?', 'REMOVE REFERENCE LINK').then(function () {
+        return dialogService.confirmDanger('Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK').then(function () {
           function onFailure() {
-            notificationService.info('An error occurred while removing the external reference link.');
+            notificationService.info('An error occurred while deleting the external reference link.');
           }
 
           return stackService.removeLink(stackId, reference).catch(onFailure);

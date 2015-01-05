@@ -38,7 +38,13 @@
         return organizationService.addUser(organizationId, emailAddress).then(onSuccess, onFailure);
       }
 
-      function get() {
+      function get(data) {
+        if (data && data.type === 'Organization' && data.deleted && data.id === organizationId) {
+          $state.go('app.dashboard');
+          notificationService.error('The organization "' + organizationId + '" was deleted.');
+          return;
+        }
+
         return getOrganization().then(getUsers).then(getInvoices);
       }
 
