@@ -63,7 +63,7 @@
                 <a ui-sref="app.dashboard" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
               </form>
             </tab>
-            <tab heading="Notifications">
+            <tab heading="Notifications" active="vm.tabNotificationsActive">
               <form role="form" class="form-validation">
                 <div class="alert in fade alert-info" ng-if="!vm.user.email_notifications_enabled">
                   Email notifications are currently disabled.
@@ -186,7 +186,7 @@
                 </div>
               </form>
             </tab>
-            <tab heading="Password">
+            <tab heading="Password" active="vm.tabPasswordActive">
               <form name="vm.passwordForm" role="form" class="form-validation">
                 <div class="form-group" ng-if="vm.hasLocalAccount()">
                   <label for="current">Current Password</label>
@@ -227,7 +227,7 @@
                 </div>
               </form>
             </tab>
-            <tab heading="External Logins">
+            <tab heading="External Logins" active="vm.tabExternalActive">
               <h4>Add an external login</h4>
 
               <div>

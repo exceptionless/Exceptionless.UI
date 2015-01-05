@@ -21,7 +21,7 @@
       });
 
       $stateProvider.state('app.account.manage', {
-        url: '/manage',
+        url: '/manage?projectId&tab',
         controller: 'account.Manage',
         controllerAs: 'vm',
         templateUrl: 'app/account/manage.tpl.html'

@@ -22,7 +22,7 @@
             </div>
 
             <div class="error" ng-messages="searchFilterForm.search.$error" ng-if="searchFilterForm.$submitted || searchFilterForm.search.$touched">
-              <small ng-message="valid">An invalid search term was found.</small>
+              <small ng-message="valid">An invalid search term was found. {{searchFilterForm.search.$error.valid}}</small>
             </div>
           </div>
 

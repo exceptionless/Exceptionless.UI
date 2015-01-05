@@ -2,8 +2,14 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', ['authService', 'billingService', 'featureService', 'notificationService', 'projectService', 'userService', function (authService, billingService, featureService, notificationService, projectService, userService) {
+    .controller('account.Manage', ['$stateParams', 'authService', 'billingService', 'featureService', 'notificationService', 'projectService', 'userService', function ($stateParams, authService, billingService, featureService, notificationService, projectService, userService) {
       var vm = this;
+
+      function activateTab(tabName) {
+        vm.tabNotificationsActive = tabName === 'notifications';
+        vm.tabPasswordActive = tabName === 'password';
+        vm.tabExternalActive = tabName === 'external';
+      }
 
       function authenticate(provider) {
         function onFailure(response) {
@@ -72,7 +78,8 @@
         function onSuccess(response) {
           vm.projects = response.data.plain();
 
-          vm.currentProject = vm.projects.filter(function(p) { return p.id === vm.currentProject.id; })[0];
+          var currentProjectId = vm.currentProject.id ? vm.currentProject.id : $stateParams.projectId;
+          vm.currentProject = vm.projects.filter(function(p) { return p.id === currentProjectId; })[0];
           if (!vm.currentProject) {
             vm.currentProject = vm.projects.length > 0 ? vm.projects[0] : {};
           }
@@ -252,6 +259,7 @@
       vm.unlink = unlink;
       vm.user = {};
 
+      activateTab($stateParams.tab);
       get();
     }]);
 }());
