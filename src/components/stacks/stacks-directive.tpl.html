@@ -1,5 +1,5 @@
 <div class="table-responsive" refresh-on="filterChanged" refresh-action="vm.get()">
-  <table class="table table-striped table-bordered table-fixed b-t table-hover table-clickable" refresh-on="eventOccurrence planChanged" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="2500">
+  <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable" refresh-on="eventOccurrence PersistentEventChanged planChanged" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="2500">
     <thead>
     <tr>
       <th class="selection hidden-xs">
@@ -56,7 +56,7 @@
           </ul>
         </div>
       </div>
-      <div class="col-sm-4 col-xs-8 text-center" ng-if="vm.pageSummary">
+      <div class="col-sm-4 text-center" ng-class="vm.previous || vm.next ? 'col-xs-8': 'col-xs-12'" ng-if="vm.pageSummary">
         <small class="text-muted inline m-t-xs">{{vm.pageSummary}}</small>
       </div>
       <div class="col-sm-4 col-xs-4 text-right" ng-if="vm.previous || vm.next">

@@ -3,7 +3,7 @@
 
   angular.module('exceptionless.state', [
     'angular-locker',
-    'ui.router',
+    'ui.router'
   ])
   .factory('stateService', ['$location', '$state', 'locker', function ($location, $state, locker) {
     var _store = locker.driver('session').namespace('state');

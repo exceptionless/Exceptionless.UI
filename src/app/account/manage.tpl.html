@@ -1,5 +1,5 @@
 <div class="hbox hbox-auto-xs hbox-auto-sm">
-  <div class="col" refresh-on="UserChanged ProjectChanged" refresh-action="vm.get()" refresh-debounce="1000">
+  <div class="col" refresh-on="UserChanged ProjectChanged" refresh-action="vm.get(data)" refresh-debounce="1000">
     <div class="wrapper-md">
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-th-list"></i> My Account</div>
@@ -58,12 +58,9 @@
                     Email not verified. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.
                   </p>
                 </div>
-
-                <div class="line line-dashed b-b line-lg"></div>
-                <a ui-sref="app.dashboard" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
               </form>
             </tab>
-            <tab heading="Notifications">
+            <tab heading="Notifications" active="vm.tabNotificationsActive">
               <form role="form" class="form-validation">
                 <div class="alert in fade alert-info" ng-if="!vm.user.email_notifications_enabled">
                   Email notifications are currently disabled.
@@ -180,13 +177,10 @@
                       </label>
                     </div>
                   </div>
-
-                  <div class="line line-dashed b-b line-lg"></div>
-                  <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
                 </div>
               </form>
             </tab>
-            <tab heading="Password">
+            <tab heading="Password" active="vm.tabPasswordActive">
               <form name="vm.passwordForm" role="form" class="form-validation">
                 <div class="form-group" ng-if="vm.hasLocalAccount()">
                   <label for="current">Current Password</label>
@@ -221,13 +215,13 @@
                 </div>
 
                 <div class="line line-dashed b-b line-lg"></div>
-                <a ui-sref="app.dashboard" type="button" role="button" class="btn btn-default">Go To Dashboard</a>
                 <div class="pull-right">
                   <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" role="button" class="btn btn-primary" value="{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}" />
                 </div>
+                <div class="clearfix"></div>
               </form>
             </tab>
-            <tab heading="External Logins">
+            <tab heading="External Logins" active="vm.tabExternalActive">
               <h4>Add an external login</h4>
 
               <div>
@@ -243,7 +237,7 @@
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th class="action" ng-hide="!vm.hasOAuthAccounts() || !vm.canRemoveOAuthAccount()">Action</th>
+                      <th class="action">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -265,6 +259,14 @@
               </div>
             </tab>
           </tabset>
+        </div>
+        <div class="panel-footer">
+          <div ng-if="!vm.currentProject.id">
+            <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
+          </div>
+          <div ng-if="vm.currentProject.id">
+            <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+          </div>
         </div>
       </div>
     </div>

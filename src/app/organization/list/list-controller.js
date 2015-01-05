@@ -93,13 +93,13 @@
       }
 
       function remove(organization) {
-        return dialogService.confirmDanger('Are you sure you want to remove the organization?', 'REMOVE ORGANIZATION').then(function () {
+        return dialogService.confirmDanger('Are you sure you want to delete the organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
           }
 
           function onFailure(response) {
-            var message = 'An error occurred while trying to remove the organization.';
+            var message = 'An error occurred while trying to delete the organization.';
             if (response.status === 400) {
               message += ' Message: ' + response.data.message;
             }

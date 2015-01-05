@@ -55,6 +55,16 @@ td.number {
     }
 }
 
+.table-selectable th:nth-child(2), .table-selectable td:nth-child(2) {
+  @media (max-width: @screen-xs-max) {
+    border-left: none;
+  }
+}
+
+.table-key-value td>ul {
+  padding-left: 15px;
+}
+
 .table-footer {
     padding: 10px 15px;
     background-color: #fff;

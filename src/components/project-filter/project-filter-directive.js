@@ -7,7 +7,8 @@
     'exceptionless.auto-active',
     'exceptionless.organization',
     'exceptionless.project',
-    'exceptionless.refresh'
+    'exceptionless.refresh',
+    'exceptionless.show-on-hover-parent'
   ])
   .directive('projectFilter', [function () {
     return {
