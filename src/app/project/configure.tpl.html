@@ -21,8 +21,8 @@
               <p>Update the <code>&lt;exceptionless apiKey="API_KEY_HERE" /&gt;</code> section located in the project's {{vm.currentProjectType.config}} with your Exceptionless API key:</p>
 
               <div class="input-group">
-                <input class="form-control" type="text" ng-model="vm.apiKey"/>
-                <a class="input-group-addon " title="Copy to Clipboard"><i class="fa fa-copy" clip-copy="vm.apiKey" clip-click="vm.copied()" clip-hide-on-no-flash></i></a>
+                <input class="form-control" type="text" ng-model="vm.apiKey" />
+                <a class="input-group-addon" title="Copy to Clipboard" clip-copy="vm.apiKey" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></a>
               </div>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless'">
