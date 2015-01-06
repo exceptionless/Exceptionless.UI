@@ -52,6 +52,10 @@
         return userService.getCurrentUser().then(onSuccess);
       }
 
+      function hasAdminRole() {
+        return userService.hasAdminRole(vm.user);
+      }
+
       function isAllMenuActive() {
         return $state.includes('app.dashboard', $stateParams) ||
           $state.includes('app.project-dashboard', $stateParams) ||
@@ -140,6 +144,7 @@
       vm.getNewUrl = getNewUrl;
       vm.getOrganizations = getOrganizations;
       vm.getUser = getUser;
+      vm.hasAdminRole = hasAdminRole;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
       vm.isIntercomEnabled = isIntercomEnabled;
