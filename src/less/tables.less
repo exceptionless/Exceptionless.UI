@@ -73,6 +73,20 @@ td.number {
     border-bottom-left-radius: 5px;
 }
 
+.tab-content .table {
+  @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    margin-bottom: 15px;
+  }
+
+  @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+    margin-bottom: 15px;
+  }
+
+  @media (min-width: @screen-lg-min) {
+    margin-bottom: 15px;
+  }
+}
+
 // Override default styles. This fixes dropdowns not being cut off and long content not running over other td's.
 .table-responsive {
   overflow-x: inherit;

@@ -115,13 +115,8 @@
         return organizationService.addUser(organizationId, user.email_address).catch(onFailure);
       }
 
-      function open(id, event) {
-        if (event.ctrlKey || event.which === 2) {
-          $window.open('/#/payment/' + id, '_blank');
-        } else {
-          $state.go('payment', {id: id});
-        }
-
+      function openInvoice(id, event) {
+        $window.open('/#/payment/' + id, '_blank');
         event.preventDefault();
       }
 
@@ -158,7 +153,7 @@
       vm.hasInvoices = hasInvoices;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.invoices = [];
-      vm.open = open;
+      vm.openInvoice = openInvoice;
       vm.organization = {};
       vm.projects = {
         get: function (options, useCache) {

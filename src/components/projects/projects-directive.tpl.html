@@ -1,41 +1,51 @@
 <div class="table-responsive" refresh-on="OrganizationChanged ProjectChanged" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="2500">
   <table class="table table-striped table-bordered table-fixed b-t" refresh-on="eventOccurrence  planChanged" refresh-action="vm.get(vm.currentOptions, false)" refresh-throttle="2500">
     <thead>
-    <tr>
-      <th>Name</th>
-      <th ng-show="vm.includeOrganizationName">Organization</th>
-      <th class="number hidden-xs">Stacks</th>
-      <th class="number hidden-xs">Events</th>
-      <th class="action" ng-hide="!vm.hasProjects()">Actions</th>
-    </tr>
+      <tr>
+        <th>Name</th>
+        <th ng-show="vm.includeOrganizationName">Organization</th>
+        <th class="number hidden-xs">Stacks</th>
+        <th class="number hidden-xs">Events</th>
+        <th class="action">Actions</th>
+      </tr>
     </thead>
     <tbody>
-    <tr class="row-clickable" ng-repeat="project in vm.projects track by project.id" ng-if="vm.hasProjects()">
-      <td ng-click="vm.open(project.id, $event)">{{project.name}}</td>
-      <td ng-show="vm.includeOrganizationName" ng-click="vm.open(project.id, $event)">{{project.organization_name}}</td>
-      <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.stack_count | number:0}}</td>
-      <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.event_count | number:0}}</td>
-      <td>
-        <div class="btn-group">
-          <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-right" role="menu">
-            <li><a ui-sref="app.project-dashboard({ projectId: project.id })"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a></li>
-            <li><a ui-sref="app.project.manage({ id: project.id })"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
-            <li><a ui-sref="app.project.configure({ id: project.id })"><i class="fa fa-fw fa-download"></i> Configure Client</a></li>
-            <li><a ng-click="vm.remove(project)"><i class="fa fa-fw fa-times"></i> Delete</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr ng-if="!vm.hasProjects()">
-      <td colspan="5">
-        <strong>No projects were found.</strong>
-      </td>
-    </tr>
+      <tr class="row-clickable" ng-repeat="project in vm.projects track by project.id" ng-if="vm.hasProjects()">
+        <td ng-click="vm.open(project.id, $event)">{{project.name}}</td>
+        <td ng-show="vm.includeOrganizationName" ng-click="vm.open(project.id, $event)">{{project.organization_name}}</td>
+        <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.stack_count | number:0}}</td>
+        <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.event_count | number:0}}</td>
+        <td>
+          <div class="btn-group">
+            <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li><a ui-sref="app.project-dashboard({ projectId: project.id })"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a></li>
+              <li><a ui-sref="app.project.manage({ id: project.id })"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
+              <li><a ui-sref="app.project.configure({ id: project.id })"><i class="fa fa-fw fa-download"></i> Configure Client</a></li>
+              <li><a ng-click="vm.remove(project)"><i class="fa fa-fw fa-times"></i> Delete</a></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      <tr ng-if="!vm.hasProjects()">
+        <td class="hidden-xs" colspan="5" ng-if="vm.includeOrganizationName">
+          <strong>No projects were found.</strong>
+        </td>
+        <td class="visible-xs" colspan="3" ng-if="vm.includeOrganizationName">
+          <strong>No projects were found.</strong>
+        </td>
+        <td class="hidden-xs" colspan="4" ng-if="!vm.includeOrganizationName">
+          <strong>No projects were found.</strong>
+        </td>
+        <td class="visible-xs" colspan="2" ng-if="!vm.includeOrganizationName">
+          <strong>No projects were found.</strong>
+        </td>
+      </tr>
     </tbody>
   </table>
+
   <div class="table-footer" ng-if="vm.previous || vm.next">
     <div class="row">
       <div class="col-sm-8 col-xs-8 text-center" ng-if="vm.pageSummary">
