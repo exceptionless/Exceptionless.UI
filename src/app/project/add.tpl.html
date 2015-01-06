@@ -54,9 +54,11 @@
           </form>
         </div>
         <div class="panel-footer">
-          <a ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
           <div class="pull-right">
             <input ng-click="vm.add()" type="submit" role="button" class="btn btn-primary" value="Add Project" />
+          </div>
+          <div class="clearfix">
+            <a ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 <div ng-if="vm.hasData()">
-  <h3 class="pull-left">{{::vm.title | toSpacedWords}}</h3>
   <div class="pull-right hidden-print" style="margin-top: 1.2em;">
     <button type="button" role="button" class="btn btn-dark btn-xs" title="Copy to Clipboard" clip-copy="vm.getDataAsJson()" clip-click="vm.copied()" clip-hide-on-no-flash>
       <i class="fa fa-copy"></i>
@@ -15,7 +14,7 @@
       </ul>
     </div>
   </div>
-  <div class="clearfix"></div>
+  <h3>{{::vm.title | toSpacedWords}}</h3>
   <div ng-if="!vm.showRaw">
     <object-dump content="vm.data"></object-dump>
   </div>
