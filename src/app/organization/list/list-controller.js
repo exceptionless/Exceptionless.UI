@@ -111,7 +111,6 @@
         });
       }
 
-
       vm.add = add;
       vm.get = get;
       vm.leave = leave;

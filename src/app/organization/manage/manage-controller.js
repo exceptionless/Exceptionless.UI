@@ -3,8 +3,10 @@
 
   angular.module('app.organization')
     .controller('organization.Manage', ['$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', function ($state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs) {
-      var organizationId = $stateParams.id;
-      var options = {limit: 5};
+      var _ignoreRefresh = false;
+      var _organizationId = $stateParams.id;
+      var _options = {limit: 5};
+
       var vm = this;
 
       function addUser() {
@@ -35,13 +37,17 @@
           notificationService.error(message);
         }
 
-        return organizationService.addUser(organizationId, emailAddress).then(onSuccess, onFailure);
+        return organizationService.addUser(_organizationId, emailAddress).then(onSuccess, onFailure);
       }
 
       function get(data) {
-        if (data && data.type === 'Organization' && data.deleted && data.id === organizationId) {
+        if (_ignoreRefresh) {
+          return;
+        }
+
+        if (data && data.type === 'Organization' && data.deleted && data.id === _organizationId) {
           $state.go('app.dashboard');
-          notificationService.error('The organization "' + organizationId + '" was deleted.');
+          notificationService.error('The organization "' + _organizationId + '" was deleted.');
           return;
         }
 
@@ -55,10 +61,10 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The organization "' + organizationId + '" could not be found.');
+          notificationService.error('The organization "' + _organizationId + '" could not be found.');
         }
 
-        return organizationService.getById(organizationId, false).then(onSuccess, onFailure);
+        return organizationService.getById(_organizationId, false).then(onSuccess, onFailure);
       }
 
       function getInvoices() {
@@ -66,7 +72,7 @@
           vm.invoices = response.data.plain();
         }
 
-        return organizationService.getInvoices(organizationId, options).then(onSuccess);
+        return organizationService.getInvoices(_organizationId, _options).then(onSuccess);
       }
 
       function getUsers() {
@@ -78,7 +84,7 @@
           notificationService.error('The users for this organization could not be loaded.');
         }
 
-        return userService.getByOrganizationId(organizationId, options).then(onSuccess, onFailure);
+        return userService.getByOrganizationId(_organizationId, _options).then(onSuccess, onFailure);
       }
 
       function hasAdminRole(user) {
@@ -93,6 +99,48 @@
         return featureService.hasPremium();
       }
 
+      function leaveOrganization(currentUser){
+        return dialogService.confirmDanger('Are you sure you want to leave this organization?', 'LEAVE ORGANIZATION').then(function () {
+          function onSuccess() {
+            $state.go('app.dashboard');
+          }
+
+          function onFailure(response) {
+            var message = 'An error occurred while trying to leave the organization.';
+            if (response.status === 400) {
+              message += ' Message: ' + response.data.message;
+            }
+
+            notificationService.error(message);
+            _ignoreRefresh = false;
+          }
+
+          _ignoreRefresh = true;
+          return organizationService.removeUser(_organizationId, currentUser.email_address).then(onSuccess, onFailure);
+        });
+      }
+
+      function removeOrganization() {
+        return dialogService.confirmDanger('Are you sure you want to delete the organization?', 'DELETE ORGANIZATION').then(function () {
+          function onSuccess() {
+            $state.go('app.dashboard');
+          }
+
+          function onFailure(response) {
+            var message = 'An error occurred while trying to delete the organization.';
+            if (response.status === 400) {
+              message += ' Message: ' + response.data.message;
+            }
+
+            notificationService.error(message);
+            _ignoreRefresh = false;
+          }
+
+          _ignoreRefresh = true;
+          return organizationService.remove(_organizationId).then(onSuccess, onFailure);
+        });
+      }
+
       function removeUser(user) {
         return dialogService.confirmDanger('Are you sure you want to remove this user from your organization?', 'REMOVE USER').then(function () {
           function onSuccess() {
@@ -103,7 +151,7 @@
             notificationService.error('An error occurred while trying to remove the user.');
           }
 
-          return organizationService.removeUser(organizationId, user.email_address).then(onSuccess, onFailure);
+          return organizationService.removeUser(_organizationId, user.email_address).then(onSuccess, onFailure);
         });
       }
 
@@ -112,7 +160,7 @@
           notificationService.error('An error occurred while trying to resend the notification.');
         }
 
-        return organizationService.addUser(organizationId, user.email_address).catch(onFailure);
+        return organizationService.addUser(_organizationId, user.email_address).catch(onFailure);
       }
 
       function openInvoice(id, event) {
@@ -129,7 +177,7 @@
           notificationService.error('An error occurred while saving the organization.');
         }
 
-        return organizationService.update(organizationId, vm.organization).catch(onFailure);
+        return organizationService.update(_organizationId, vm.organization).catch(onFailure);
       }
 
       function updateAdminRole(user) {
@@ -153,11 +201,12 @@
       vm.hasInvoices = hasInvoices;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.invoices = [];
+      vm.leaveOrganization = leaveOrganization;
       vm.openInvoice = openInvoice;
       vm.organization = {};
       vm.projects = {
         get: function (options, useCache) {
-          return projectService.getByOrganizationId(organizationId, options, useCache);
+          return projectService.getByOrganizationId(_organizationId, options, useCache);
         },
         hideOrganizationName: true,
         options: {
@@ -165,6 +214,7 @@
           mode: 'summary'
         }
       };
+      vm.removeOrganization = removeOrganization;
       vm.removeUser = removeUser;
       vm.resendNotification = resendNotification;
       vm.save = save;

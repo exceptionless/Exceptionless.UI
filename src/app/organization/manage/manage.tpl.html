@@ -111,9 +111,15 @@
           </tabset>
         </div>
         <div class="panel-footer">
-          <button type="button" role="button" class="btn btn-sm btn-danger" title="Delete Organization">
-            <i class="fa fa-fw fa-remove"></i></span>
-          </button>
+          <div class="btn-group">
+            <button type="button" role="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li><a ng-click="vm.leaveOrganization(appVm.user)" role="button">Leave Organization</a></li>
+              <li><a ng-click="vm.removeOrganization()" role="button">Delete Organization</a></li>
+            </ul>
+          </div>
           <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
         </div>
       </div>
