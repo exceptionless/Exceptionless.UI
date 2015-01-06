@@ -25,13 +25,13 @@
           </accordion-group>
         </accordion>
       </div>
-      <div class="panel-footer hidden-xs">
+      <footer class="panel-footer hidden-xs">
         <div class="pull-right">
           <a ui-sref="app.stack({ id: vm.event.stack_id })" class="btn btn-default" role="button">Go To Stack</a>
         </div>
         <a ui-sref="app.event({ id: vm.previous })" ng-class="{'disabled': !vm.previous}" class="btn btn-primary" role="button">Previous Occurrence</a>
         <a ui-sref="app.event({ id: vm.next })" ng-class="{'disabled': !vm.next}" class="btn btn-primary" role="button">Next Occurrence</a>
-      </div>
+      </footer>
     </div>
   </div>
 </div>
