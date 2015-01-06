@@ -3,7 +3,7 @@
 
   angular.module('app.account')
     .controller('account.Manage', ['$stateParams', '$timeout', 'authService', 'billingService', 'featureService', 'notificationService', 'projectService', 'userService', function ($stateParams, $timeout, authService, billingService, featureService, notificationService, projectService, userService) {
-      var _canSaveEamilAddress = true;
+      var _canSaveEmailAddress = true;
       var vm = this;
 
       function activateTab(tabName) {
@@ -157,7 +157,7 @@
 
       function saveEmailAddress() {
         function resetCanSaveEmailAddress() {
-          _canSaveEamilAddress = true;
+          _canSaveEmailAddress = true;
         }
 
         if (!vm.emailAddressForm || vm.emailAddressForm.$invalid) {
@@ -173,8 +173,8 @@
           return;
         }
 
-        if (_canSaveEamilAddress) {
-          _canSaveEamilAddress = false;
+        if (_canSaveEmailAddress) {
+          _canSaveEmailAddress = false;
         } else {
           return;
         }
