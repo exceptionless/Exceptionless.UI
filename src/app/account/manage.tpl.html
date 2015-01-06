@@ -21,9 +21,9 @@
                   <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                          placeholder="Your first and last name"
                          ng-model="vm.user.full_name"
-                         ng-model-options="{ debounce: 1000 }"
+                         ng-model-options="{ debounce: 500 }"
                          ng-change="vm.saveUser(fullNameForm.$valid)"
-                         required />
+                         ng-required />
 
                   <div class="error" ng-messages="fullNameForm.name.$error" ng-if="fullNameForm.$submitted || fullNameForm.name.$touched">
                     <small ng-message="required">Full Name is required.</small>
@@ -31,24 +31,24 @@
                 </div>
               </form>
 
-              <form name="emailAddressForm" role="form" class="form-validation" autocomplete="on">
+              <form name="vm.emailAddressForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
                   <label for="email">Email Address</label>
-                  <div ng-class="{'input-group': emailAddressForm.$pending }">
+                  <div ng-class="{'input-group': vm.emailAddressForm.$pending }">
                     <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                            placeholder="Email Address"
                            ng-model="vm.user.email_address"
-                           ng-model-options="{ debounce: 1000 }"
-                           ng-change="vm.saveEmailAddress(emailAddressForm.$valid)"
+                           ng-model-options="{ debounce: 500 }"
+                           ng-change="vm.saveEmailAddress()"
                            email-address-available-validator
                            required/>
 
-                    <span class="input-group-addon" ng-if="emailAddressForm.$pending">
+                    <span class="input-group-addon" ng-if="vm.emailAddressForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>
                     </span>
                   </div>
 
-                  <div class="error" ng-messages="emailAddressForm.email.$error" ng-if="emailAddressForm.$submitted || emailAddressForm.email.$touched">
+                  <div class="error" ng-messages="vm.emailAddressForm.email.$error" ng-if="vm.emailAddressForm.$submitted || vm.emailAddressForm.email.$touched">
                     <small ng-message="required">Email Address is required.</small>
                     <small ng-message="email">Email Address is required.</small>
                     <small ng-message="unique">A user already exists with this email address.</small>
@@ -69,7 +69,7 @@
                   <label class="i-checks">
                     <input type="checkbox"
                            ng-model="vm.user.email_notifications_enabled"
-                           ng-model-options="{ debounce: 1000 }"
+                           ng-model-options="{ debounce: 500 }"
                            ng-change="vm.saveEnableEmailNotification()">
                     <i></i>
                     Enable email notifications
@@ -87,7 +87,7 @@
                     <label class="i-checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.send_daily_summary"
-                             ng-model-options="{ debounce: 1000 }"
+                             ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasEmailNotifications()">
                       <i></i>
@@ -105,7 +105,7 @@
                     <label class="i-checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.report_critical_errors"
-                             ng-model-options="{ debounce: 1000 }"
+                             ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()">
                       <i></i>
@@ -117,7 +117,7 @@
                     <label class="i-checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.report_regressions"
-                             ng-model-options="{ debounce: 1000 }"
+                             ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()">
                       <i></i>
@@ -157,7 +157,7 @@
                       <label class="i-checks">
                         <input type="checkbox"
                                ng-model="vm.emailNotificationSettings.report_known_bot_events"
-                               ng-model-options="{ debounce: 1000 }"
+                               ng-model-options="{ debounce: 500 }"
                                ng-change="vm.saveEmailNotificationSettings()"
                                ng-disabled="!vm.hasPremiumEmailNotifications()">
                         <i></i>
@@ -169,7 +169,7 @@
                       <label class="i-checks">
                         <input type="checkbox"
                                ng-model="vm.emailNotificationSettings.report_404_events"
-                               ng-model-options="{ debounce: 1000 }"
+                               ng-model-options="{ debounce: 500 }"
                                ng-change="vm.saveEmailNotificationSettings()"
                                ng-disabled="!vm.hasPremiumEmailNotifications()">
                         <i></i>
@@ -204,7 +204,12 @@
 
                 <div class="form-group">
                   <label for="confirmPassword">Confirm password</label>
-                  <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" ng-model="vm.password.confirm_password" match="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
+                  <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
+                         ng-model="vm.password.confirm_password"
+                         match="vm.password.password"
+                         ng-minlength="6"
+                         ng-maxlength="100"
+                         ng-required />
 
                   <div class="error" ng-messages="vm.passwordForm.confirmPassword.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.confirmPassword.$touched">
                     <small ng-message="match">New Password and Confirmation Password fields do not match.</small>

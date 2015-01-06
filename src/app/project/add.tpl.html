@@ -4,7 +4,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-asterisk"></i> Project Information</div>
         <div class="panel-body">
-          <form name="addForm" role="form" class="form-validation">
+          <form name="vm.addForm" role="form" class="form-validation">
             <div class="form-group" ng-if="vm.hasOrganizations()">
               <label for="organization">Organization Name</label>
               <select id="organization" class="form-control"
@@ -14,19 +14,19 @@
             </div>
 
             <div class="form-group" ng-if="vm.canCreateOrganization()">
-              <div ng-class="{'input-group': addForm.$pending }">
+              <div ng-class="{'input-group': vm.addForm.$pending }">
                 <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
                        ng-model="vm.organization_name"
-                       ng-model-options="{ debounce: 1000 }"
+                       ng-model-options="{ debounce: 500 }"
                        organization-name-available-validator
                        ng-required="vm.canCreateOrganization()" />
 
-                <span class="input-group-addon" ng-if="addForm.$pending">
+                <span class="input-group-addon" ng-if="vm.addForm.$pending">
                   <i class="fa fa-fw fa-spinner fa-spin"></i>
                 </span>
               </div>
 
-              <div class="error" ng-messages="addForm.organization_name.$error" ng-if="addForm.$submitted || addForm.organization_name.$touched">
+              <div class="error" ng-messages="vm.addForm.organization_name.$error" ng-if="vm.addForm.$submitted || vm.addForm.organization_name.$touched">
                 <small ng-message="required">Organization Name is required.</small>
                 <small ng-message="unique">A organizations with this name already exists.</small>
               </div>
@@ -34,19 +34,19 @@
 
             <div class="form-group">
               <label for="project_name">Project Name</label>
-              <div ng-class="{'input-group': addForm.$pending }">
+              <div ng-class="{'input-group': vm.addForm.$pending }">
                 <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name"
                        ng-model="vm.project_name"
-                       ng-model-options="{ debounce: 1000 }"
+                       ng-model-options="{ debounce: 500 }"
                        project-name-available-validator
-                       required />
+                       ng-required />
 
-                  <span class="input-group-addon" ng-if="addForm.$pending">
+                  <span class="input-group-addon" ng-if="vm.addForm.$pending">
                     <i class="fa fa-fw fa-spinner fa-spin"></i>
                   </span>
               </div>
 
-              <div class="error" ng-messages="addForm.project_name.$error" ng-if="addForm.$submitted || addForm.project_name.$touched">
+              <div class="error" ng-messages="vm.addForm.project_name.$error" ng-if="vm.addForm.$submitted || vm.addForm.project_name.$touched">
                 <small ng-message="required">Project Name is required.</small>
                 <small ng-message="unique">A project with this name already exists.</small>
               </div>
@@ -56,7 +56,7 @@
         <div class="panel-footer">
           <a ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
           <div class="pull-right">
-            <input ng-disabled="addForm.$pending" ng-click="vm.add(addForm.$valid)" type="submit" role="button" class="btn btn-primary" value="Add Project" />
+            <input ng-click="vm.add()" type="submit" role="button" class="btn btn-primary" value="Add Project" />
           </div>
         </div>
       </div>

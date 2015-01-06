@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', ['$stateParams', 'authService', 'billingService', 'featureService', 'notificationService', 'projectService', 'userService', function ($stateParams, authService, billingService, featureService, notificationService, projectService, userService) {
+    .controller('account.Manage', ['$stateParams', '$timeout', 'authService', 'billingService', 'featureService', 'notificationService', 'projectService', 'userService', function ($stateParams, $timeout, authService, billingService, featureService, notificationService, projectService, userService) {
+      var _canSaveEamilAddress = true;
       var vm = this;
 
       function activateTab(tabName) {
@@ -154,8 +155,27 @@
         return userService.resendVerificationEmail(vm.user.id).catch(onFailure);
       }
 
-      function saveEmailAddress(isValid) {
-        if (!isValid) {
+      function saveEmailAddress() {
+        function resetCanSaveEmailAddress() {
+          _canSaveEamilAddress = true;
+        }
+
+        if (!vm.emailAddressForm || vm.emailAddressForm.$invalid) {
+          resetCanSaveEmailAddress();
+          return;
+        }
+
+        if (!vm.user.email_address || vm.emailAddressForm.$pending) {
+          var timeout = $timeout(function() {
+            $timeout.cancel(timeout);
+            saveEmailAddress();
+          }, 100);
+          return;
+        }
+
+        if (_canSaveEamilAddress) {
+          _canSaveEamilAddress = false;
+        } else {
           return;
         }
 
@@ -172,7 +192,7 @@
           notificationService.error(message);
         }
 
-        return userService.updateEmailAddress(vm.user.id, vm.user.email_address).then(onSuccess, onFailure);
+        return userService.updateEmailAddress(vm.user.id, vm.user.email_address).then(onSuccess, onFailure).then(resetCanSaveEmailAddress, resetCanSaveEmailAddress);
       }
 
       function saveEmailNotificationSettings() {
@@ -243,6 +263,7 @@
       vm.canRemoveOAuthAccount = canRemoveOAuthAccount;
       vm.changePassword = changePassword;
       vm.currentProject = {};
+      vm.emailAddressForm = {};
       vm.emailNotificationSettings = null;
       vm.getEmailNotificationSettings = getEmailNotificationSettings;
       vm.hasEmailNotifications = hasEmailNotifications;

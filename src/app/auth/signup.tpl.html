@@ -12,7 +12,7 @@
           <div class="panel panel-default">
             <div class="panel-heading text-center"><strong>Signup for a FREE account in seconds</strong></div>
             <div class="panel-body">
-              <form name="signupForm" role="form" class="form-horizontal form-validation" autocomplete="on">
+              <form name="vm.signupForm" role="form" class="form-horizontal form-validation" autocomplete="on">
                 <div class="form-horizontal col-sm-offset-2">
                   <h4>Login with</h4>
 
@@ -36,8 +36,8 @@
                 <div class="form-group">
                   <label for="name" class="col-sm-2 control-label">Name</label>
                   <div class="col-sm-10">
-                    <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false" ng-model="vm.user.name" required />
-                    <div class="error" ng-messages="signupForm.name.$error" ng-if="signupForm.$submitted || signupForm.name.$touched">
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false" ng-model="vm.user.name" ng-required />
+                    <div class="error" ng-messages="vm.signupForm.name.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.name.$touched">
                       <small ng-message="required">Full Name is required.</small>
                     </div>
                   </div>
@@ -45,20 +45,20 @@
                 <div class="form-group">
                   <label for="email" class="col-sm-2 control-label">Email</label>
                   <div class="col-sm-10">
-                    <div ng-class="{'input-group': signupForm.$pending }">
+                    <div ng-class="{'input-group': vm.signupForm.$pending }">
                       <input id="email" name="email" type="email" class="form-control" placeholder="Email address (no spam)"
                              x-autocompletetype="email" autocorrect="off" spellcheck="false"
                              ng-model="vm.user.email"
-                             ng-model-options="{ debounce: 1000 }"
+                             ng-model-options="{ debounce: 500 }"
                              email-address-available-validator
-                             required />
+                             ng-required />
 
-                        <span class="input-group-addon" ng-if="signupForm.$pending">
+                        <span class="input-group-addon" ng-if="vm.signupForm.$pending">
                           <i class="fa fa-fw fa-spinner fa-spin"></i>
                         </span>
                     </div>
 
-                    <div class="error" ng-messages="signupForm.email.$error" ng-if="signupForm.$submitted || signupForm.email.$touched">
+                    <div class="error" ng-messages="vm.signupForm.email.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.email.$touched">
                       <small ng-message="required">Email Address is required.</small>
                       <small ng-message="email">Email Address is required.</small>
                       <small ng-message="unique">A user already exists with this email address.</small>
@@ -68,8 +68,8 @@
                 <div class="form-group">
                   <label for="password" class="col-sm-2 control-label">Password</label>
                   <div class="col-sm-10">
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" required />
-                    <div class="error" ng-messages="signupForm.password.$error" ng-if="signupForm.$submitted || signupForm.password.$touched">
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required />
+                    <div class="error" ng-messages="vm.signupForm.password.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.password.$touched">
                       <small ng-message="required">Password is required.</small>
                       <small ng-message="minlength">Password must be at least 6 characters long.</small>
                       <small ng-message="maxlength">Password must be less than 101 characters long.</small>
@@ -78,7 +78,7 @@
                 </div>
                 <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
-                    <input type="submit" role="button" ng-disabled="signupForm.$pending" ng-click="vm.signup(signupForm.$valid)" class="btn btn-primary btn-lg" value="Create My Account" />
+                    <input type="submit" role="button" ng-click="vm.signup()" class="btn btn-primary btn-lg" value="Create My Account" />
                     <p>Already have an account? <a ui-sref="auth.login">Log In</a></p>
                   </div>
                 </div>

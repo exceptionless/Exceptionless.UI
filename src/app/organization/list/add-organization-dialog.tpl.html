@@ -1,4 +1,4 @@
-<form name="addOrganizationForm" role="form" class="form-validation">
+<form name="vm.addOrganizationForm" role="form" class="form-validation">
   <div class="modal-header dialog-header-confirm">
     <button type="button" role="button" class="close" ng-click="vm.cancel()">&times;</button>
     <h4 class="modal-title">New Organization</h4>
@@ -7,19 +7,19 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="name">Organization Name</label>
-      <div ng-class="{'input-group': addOrganizationForm.$pending }">
+      <div ng-class="{'input-group': vm.addOrganizationForm.$pending }">
         <input id="name" name="name" type="text" class="form-control input-lg" placeholder="Organization Name"
                ng-model="vm.data.name"
-               ng-model-options="{ debounce: 1000 }"
+               ng-model-options="{ debounce: 500 }"
                organization-name-available-validator
-               required />
+               ng-required />
 
-        <span class="input-group-addon" ng-if="addOrganizationForm.$pending">
+        <span class="input-group-addon" ng-if="vm.addOrganizationForm.$pending">
           <i class="fa fa-fw fa-spinner fa-spin"></i>
         </span>
       </div>
 
-      <div class="error" ng-messages="addOrganizationForm.name.$error" ng-if="addOrganizationForm.$submitted || addOrganizationForm.name.$touched">
+      <div class="error" ng-messages="vm.addOrganizationForm.name.$error" ng-if="vm.addOrganizationForm.$submitted || vm.addOrganizationForm.name.$touched">
         <small ng-message="required">Organization Name is required.</small>
         <small ng-message="unique">A organizations with this name already exists.</small>
       </div>
@@ -28,6 +28,6 @@
 
   <div class="modal-footer">
     <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-    <input type="submit" role="button" class="btn btn-primary" ng-disabled="addOrganizationForm.$pending" ng-click="vm.save(addOrganizationForm.$valid)" value="Save" />
+    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.save()" value="Save" />
   </div>
 </form>

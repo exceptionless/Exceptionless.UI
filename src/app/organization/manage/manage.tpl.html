@@ -14,10 +14,10 @@
                   <div ng-class="{'input-group': organizationForm.$pending }">
                     <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
                            ng-model="vm.organization.name"
-                           ng-model-options="{ debounce: 1000 }"
+                           ng-model-options="{ debounce: 500 }"
                            ng-change="vm.save(organizationForm.$valid)"
                            organization-name-available-validator
-                           required />
+                           ng-required />
                     <span class="input-group-addon" ng-if="organizationForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>
                     </span>

@@ -43,7 +43,7 @@
                 <div class="form-group">
                   <label for="password" class="col-sm-2 control-label">Password</label>
                   <div class="col-sm-10">
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" required />
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required />
                     <div class="error" ng-messages="loginForm.password.$error" ng-if="loginForm.$submitted || loginForm.password.$touched">
                       <small ng-message="required">Password is required.</small>
                       <small ng-message="minlength">Password must be at least 6 characters long.</small>

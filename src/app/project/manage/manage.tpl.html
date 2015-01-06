@@ -14,10 +14,10 @@
                   <div ng-class="{'input-group': projectForm.$pending }">
                     <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
                            ng-model="vm.project.name"
-                           ng-model-options="{ debounce: 1000 }"
+                           ng-model-options="{ debounce: 500 }"
                            ng-change="vm.save(projectForm.$valid)"
                            project-name-available-validator
-                           required />
+                           ng-required />
 
                     <span class="input-group-addon" ng-if="projectForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>
@@ -71,7 +71,7 @@
                 <label class="i-checks">
                   <input type="checkbox"
                          ng-model="vm.project.delete_bot_data_enabled"
-                         ng-model-options="{ debounce: 1000 }"
+                         ng-model-options="{ debounce: 500 }"
                          ng-change="vm.saveDeleteBotDataEnabled()">
                   <i></i>
                   Automatically delete bot data
@@ -89,7 +89,7 @@
               </p>
               <input type="text" class="form-control" placeholder="Example: *Password*, CreditCard*, SSN"
                      ng-model="vm.data_exclusions"
-                     ng-model-options="{ debounce: 1000 }"
+                     ng-model-options="{ debounce: 500 }"
                      ng-change="vm.saveDataExclusion()"/>
 
               <h4>Client Configuration</h4>

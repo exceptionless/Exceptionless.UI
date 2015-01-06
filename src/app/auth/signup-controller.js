@@ -2,7 +2,9 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', ['$state', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, authService, notificationService, projectService, stateService) {
+    .controller('auth.Signup', ['$state', '$timeout', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, $timeout, authService, notificationService, projectService, stateService) {
+      var _canSignup = true;
+
       if (authService.isAuthenticated()) {
         authService.logout();
       }
@@ -42,8 +44,27 @@
         return projectService.getAll().then(onSuccess, onFailure);
       }
 
-      function signup(isValid) {
-        if (!isValid) {
+      function signup() {
+        function resetCanSignup() {
+          _canSignup = true;
+        }
+
+        if (!vm.signupForm || vm.signupForm.$invalid) {
+          resetCanSignup();
+          return;
+        }
+
+        if (vm.signupForm.$pending) {
+          var timeout = $timeout(function() {
+            $timeout.cancel(timeout);
+            signup();
+          }, 100);
+          return;
+        }
+
+        if (_canSignup) {
+          _canSignup = false;
+        } else {
           return;
         }
 
@@ -51,11 +72,12 @@
           notificationService.error(getMessage(response));
         }
 
-        return authService.signup(vm.user).then(redirectOnSignup, onFailure);
+        return authService.signup(vm.user).then(redirectOnSignup, onFailure).then(resetCanSignup, resetCanSignup);
       }
 
       vm.authenticate = authenticate;
       vm.signup = signup;
+      vm.signupForm = {};
       vm.user = {};
     }]);
 }());
