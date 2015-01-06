@@ -4,7 +4,7 @@
   <div class="col">
     <div class="wrapper-md">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-th-list"></i> Manage {{vm.project.name || 'Project'}}</div>
+        <div class="panel-heading"><i class="fa fa-th-list"></i> Manage {{ vm.project.name ? 'Project "' + vm.project.name + '"' : 'Project'}}</div>
         <div class="panel-body m-b-n">
           <tabset class="tab-container">
             <tab heading="Project">
@@ -48,8 +48,8 @@
                 <tr ng-repeat="token in vm.tokens track by token.id">
                   <td>{{::token.id}}</td>
                   <td>
-                    <button type="button" role="button" class="btn btn-sm btn-default" title="Copy to Clipboard" clip-copy="token.id" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></button>
-                    <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-times"></i></button>
+                    <button type="button" role="button" class="btn btn-sm btn-primary" title="Copy to Clipboard" clip-copy="token.id" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></button>
+                    <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-default" title="Delete"><i class="fa fa-times"></i></button>
                   </td>
                 </tr>
                 <tr ng-if="!vm.hasTokens()">
@@ -58,10 +58,7 @@
                 </tbody>
               </table>
 
-              <div class="pull-right">
-                <button type="button" role="button" ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
-              </div>
-              <div class="clearfix"></div>
+              <button type="button" role="button" ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
             </tab>
             <tab heading="Settings">
               <p>If the system detects a high volume of events coming from the same client IP address, it will
@@ -137,10 +134,7 @@
                 </tbody>
               </table>
 
-               <div class="pull-right">
-                <button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
-              </div>
-              <div class="clearfix"></div>
+              <button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
             </tab>
             <tab heading="Integrations">
               <div class="alert in fade alert-success" ng-if="!vm.hasPremiumFeatures()">
@@ -178,20 +172,23 @@
                 </tbody>
               </table>
 
-              <div class="pull-right">
-                <button type="button" role="button" ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
-              </div>
-              <div class="clearfix"></div>
+              <button type="button" role="button" ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
             </tab>
           </tabset>
         </div>
         <div class="panel-footer">
           <div class="pull-right">
-            <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button">Notification Settings</a>
+            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
           </div>
 
+          <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="Manage Notification Settings">
+            <i class="fa fa-fw fa-bell"></i>
+          </a>
+          <a ui-sref="app.project.configure({ id: vm.project.id })" class="btn btn-primary" role="button" title="Download & Configure Client">
+            <i class="fa fa-fw fa-cloud-download"></i>
+          </a>
           <div class="btn-group">
-            <button type="button" role="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown">
+            <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
@@ -199,7 +196,6 @@
               <li><a ng-click="vm.removeProject()" role="button">Delete Project</a></li>
             </ul>
           </div>
-          <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
         </div>
       </div>
     </div>

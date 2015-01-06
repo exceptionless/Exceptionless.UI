@@ -4,7 +4,7 @@
   <div class="col">
     <div class="wrapper-md">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-th-list"></i> Manage {{vm.organization.name || 'Organization'}}</div>
+        <div class="panel-heading"><i class="fa fa-th-list"></i> Manage {{ vm.organization.name ? 'Organization "' + vm.organization.name + '"' : 'Organization'}}</div>
         <div class="panel-body m-b-n">
           <tabset class="tab-container">
             <tab heading="General">
@@ -33,10 +33,7 @@
             <tab heading="Projects">
               <projects settings="vm.projects"></projects>
 
-              <div class="pull-right">
-                <a ui-sref="app.project.add" class="btn btn-primary" role="button">Add New Project</a>
-              </div>
-              <div class="clearfix"></div>
+              <a ui-sref="app.project.add" class="btn btn-primary" role="button">Add New Project</a>
             </tab>
             <tab heading="Users">
               <table class="table table-striped table-bordered table-fixed b-t">
@@ -51,11 +48,11 @@
                   <td>
                     <span>{{::user.email_address}}</span>
                     <span ng-if="user.has_admin_role" class="label label-info">Admin</span>
-                    <span ng-if="user.is_invite" class="label label-success">Invited</span>
+                    <span ng-if="user.is_invite" class="label label-default">Invited</span>
                   </td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                      <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -71,10 +68,7 @@
                 </tbody>
               </table>
 
-              <div class="pull-right">
-                <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
-              </div>
-              <div class="clearfix"></div>
+              <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
             </tab>
             <tab heading="Billing" ng-if="vm.hasInvoices()">
               <table class="table table-striped table-bordered table-fixed b-t">
@@ -93,7 +87,7 @@
                     <td class="row-clickable" ng-click="vm.openInvoice(invoice.id)">{{::invoice.paid ? 'Paid' : 'Unpaid'}}</td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" role="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                        <button type="button" role="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
                           <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -111,8 +105,11 @@
           </tabset>
         </div>
         <div class="panel-footer">
+          <div class="pull-right">
+            <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+          </div>
           <div class="btn-group">
-            <button type="button" role="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown">
+            <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -120,7 +117,6 @@
               <li><a ng-click="vm.removeOrganization()" role="button">Delete Organization</a></li>
             </ul>
           </div>
-          <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
         </div>
       </div>
     </div>

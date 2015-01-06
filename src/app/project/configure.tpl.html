@@ -4,7 +4,7 @@
   <div class="col">
     <div class="wrapper-md">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-th-list"></i> Configure "{{vm.project.name}}"</div>
+        <div class="panel-heading"><i class="fa fa-cloud-download"></i> Download & Configure {{ vm.project.name ? 'Project "' + vm.project.name + '"' : 'Project'}} Client</div>
         <div class="panel-body m-b-n">
           <p>The Exceptionless client can be integrated into your project in just a few easy steps.</p>
           <ol>
@@ -48,10 +48,12 @@
           <div class="alert alert-success">For more information and troubleshooting tips, view the <a target="_blank" href="http://docs.exceptionless.com/contents/home/">Exceptionless docs</a>.</div>
         </div>
         <div class="panel-footer">
-          <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-default" role="button">Notification Settings</a>
           <div class="pull-right">
-            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-primary" role="button">Go To Dashboard</a>
+            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
           </div>
+          <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="Manage Notification Settings">
+            <i class="fa fa-fw fa-bell"></i>
+          </a>
         </div>
       </div>
     </div>

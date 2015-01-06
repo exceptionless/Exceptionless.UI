@@ -55,10 +55,10 @@
         </div>
         <div class="panel-footer">
           <div class="pull-right">
-            <input ng-click="vm.add()" type="submit" role="button" class="btn btn-primary" value="Add Project" />
+            <a ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
           </div>
           <div class="clearfix">
-            <a ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
+            <input ng-click="vm.add()" type="submit" role="button" class="btn btn-primary" value="Add Project" />
           </div>
         </div>
       </div>
