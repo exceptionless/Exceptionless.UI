@@ -265,14 +265,14 @@
             </tab>
           </tabset>
         </div>
-        <div class="panel-footer">
+        <footer class="panel-footer">
           <div ng-if="!vm.currentProject.id">
             <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
           </div>
           <div ng-if="vm.currentProject.id">
             <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   </div>
