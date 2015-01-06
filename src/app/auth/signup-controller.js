@@ -54,7 +54,7 @@
           return;
         }
 
-        if (vm.signupForm.$pending) {
+        if (!vm.user.email || vm.signupForm.$pending) {
           var timeout = $timeout(function() {
             $timeout.cancel(timeout);
             signup();
