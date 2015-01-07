@@ -3,7 +3,8 @@
 
   angular.module('app.project')
     .controller('project.Manage', ['$state', '$stateParams', 'billingService', 'projectService', 'tokenService', 'webHookService', 'notificationService', 'featureService', 'dialogs', 'dialogService', function ($state, $stateParams, billingService, projectService, tokenService, webHookService, notificationService, featureService, dialogs, dialogService) {
-      var projectId = $stateParams.id;
+      var _ignoreRefresh = false;
+      var _projectId = $stateParams.id;
       var vm = this;
 
       function addConfiguration() {
@@ -19,14 +20,14 @@
           notificationService.error('An error occurred while creating a new API key for your project.');
         }
 
-        var options = {organization_id: vm.project.organization_id, project_id: projectId};
+        var options = {organization_id: vm.project.organization_id, project_id: _projectId};
         return tokenService.create(options).then(onSuccess, onFailure);
       }
 
       function addWebHook() {
         return dialogs.create('components/web-hook/add-web-hook-dialog.tpl.html', 'AddWebHookDialog as vm').result.then(function (data) {
           data.organization_id = vm.project.organization_id;
-          data.project_id = projectId;
+          data.project_id = _projectId;
           return createWebHook(data);
         });
       }
@@ -55,9 +56,13 @@
       }
 
       function get(data) {
-        if (data && data.type === 'Project' && data.deleted && data.id === projectId) {
+        if (_ignoreRefresh) {
+          return;
+        }
+
+        if (data && data.type === 'Project' && data.deleted && data.id === _projectId) {
           $state.go('app.project.list');
-          notificationService.error('The project "' + projectId + '" was deleted.');
+          notificationService.error('The project "' + _projectId + '" was deleted.');
           return;
         }
 
@@ -72,10 +77,10 @@
 
         function onFailure() {
           $state.go('app.project.list');
-          notificationService.error('The project "' + projectId + '" could not be found.');
+          notificationService.error('The project "' + _projectId + '" could not be found.');
         }
 
-        return projectService.getById(projectId).then(onSuccess, onFailure);
+        return projectService.getById(_projectId).then(onSuccess, onFailure);
       }
 
       function getTokens() {
@@ -88,7 +93,7 @@
           notificationService.error('An error occurred loading the api keys.');
         }
 
-        return tokenService.getByProjectId(projectId).then(onSuccess, onFailure);
+        return tokenService.getByProjectId(_projectId).then(onSuccess, onFailure);
       }
 
       function getConfiguration() {
@@ -111,7 +116,7 @@
           notificationService.error('An error occurred loading the notification settings.');
         }
 
-        return projectService.getConfig(projectId).then(onSuccess, onFailure);
+        return projectService.getConfig(_projectId).then(onSuccess, onFailure);
       }
 
       function getWebHooks() {
@@ -124,7 +129,7 @@
           notificationService.error('An error occurred loading the notification settings.');
         }
 
-        return webHookService.getByProjectId(projectId).then(onSuccess, onFailure);
+        return webHookService.getByProjectId(_projectId).then(onSuccess, onFailure);
       }
 
       function hasConfiguration() {
@@ -153,7 +158,7 @@
             notificationService.error('An error occurred while trying to delete the configuration setting.');
           }
 
-          return projectService.removeConfig(projectId, config.key).then(onSuccess, onFailure);
+          return projectService.removeConfig(_projectId, config.key).then(onSuccess, onFailure);
         });
       }
 
@@ -165,9 +170,11 @@
 
           function onFailure() {
             notificationService.error('An error occurred while trying to delete the project.');
+            _ignoreRefresh = false;
           }
 
-          return projectService.remove(projectId).then(onSuccess, onFailure);
+          _ignoreRefresh = true;
+          return projectService.remove(_projectId).then(onSuccess, onFailure);
         });
       }
 
@@ -195,7 +202,7 @@
             notificationService.error('An error occurred while resetting project data.');
           }
 
-          return projectService.resetData(projectId).catch(onFailure);
+          return projectService.resetData(_projectId).catch(onFailure);
         });
       }
 
@@ -208,7 +215,7 @@
           notificationService.error('An error occurred while saving the project.');
         }
 
-        return projectService.update(projectId, vm.project).catch(onFailure);
+        return projectService.update(_projectId, vm.project).catch(onFailure);
       }
 
       function saveClientConfiguration(data) {
@@ -230,7 +237,7 @@
           notificationService.error('An error occurred while saving the configuration setting.');
         }
 
-        return projectService.setConfig(projectId, data.key, data.value).then(onSuccess, onFailure);
+        return projectService.setConfig(_projectId, data.key, data.value).then(onSuccess, onFailure);
       }
 
       function saveDataExclusion() {
@@ -239,9 +246,9 @@
         }
 
         if (vm.data_exclusions) {
-          return projectService.setConfig(projectId, '@@DataExclusions', vm.data_exclusions).catch(onFailure);
+          return projectService.setConfig(_projectId, '@@DataExclusions', vm.data_exclusions).catch(onFailure);
         } else {
-          return projectService.removeConfig(projectId, '@@DataExclusions').catch(onFailure);
+          return projectService.removeConfig(_projectId, '@@DataExclusions').catch(onFailure);
         }
       }
 
@@ -250,7 +257,7 @@
           notificationService.error('An error occurred while saving the project.');
         }
 
-        return projectService.update(projectId, {'delete_bot_data_enabled': vm.project.delete_bot_data_enabled}).catch(onFailure);
+        return projectService.update(_projectId, {'delete_bot_data_enabled': vm.project.delete_bot_data_enabled}).catch(onFailure);
       }
 
       function showChangePlanDialog() {

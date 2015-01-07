@@ -102,7 +102,7 @@
       function leaveOrganization(currentUser){
         return dialogService.confirmDanger('Are you sure you want to leave this organization?', 'LEAVE ORGANIZATION').then(function () {
           function onSuccess() {
-            $state.go('app.dashboard');
+            $state.go('app.organization.list');
           }
 
           function onFailure(response) {
@@ -123,7 +123,7 @@
       function removeOrganization() {
         return dialogService.confirmDanger('Are you sure you want to delete the organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
-            $state.go('app.dashboard');
+            $state.go('app.organization.list');
           }
 
           function onFailure(response) {

@@ -24,7 +24,7 @@
       }
 
       function hasRole(user, role) {
-        return !!role && !!user && !!user.roles[role];
+        return !!user && !!user.roles && user.roles.indexOf(role) !== -1;
       }
 
       function removeAdminRole(id) {
