@@ -135,8 +135,8 @@
             return $intercom.shutdown();
           }
 
-          function updateIntercom(hide) {
-            if (hide === true) {
+          function updateIntercom(hideInterface) {
+            if (hideInterface === true) {
               hide();
             }
 
