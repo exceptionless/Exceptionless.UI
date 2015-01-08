@@ -10,7 +10,7 @@
       link: function (scope, element, attrs) {
         function runActionOnEvent(name, action, refreshIf) {
           var unbind = $rootScope.$on(name, function (event, data) {
-            if (refreshIf && !scope.$eval(refreshIf)) {
+            if (refreshIf && !scope.$eval(refreshIf, { data: data })) {
               return;
             }
 

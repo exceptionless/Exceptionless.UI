@@ -3,7 +3,12 @@
 
   angular.module('app.project')
     .controller('project.Configure', ['$state', '$stateParams', 'notificationService', 'projectService', 'tokenService', function ($state, $stateParams, notificationService, projectService, tokenService) {
-      var projectId = $stateParams.id;
+      var _projectId = $stateParams.id;
+      var _canRedirect = $stateParams.redirect === true;
+
+      function canRedirect(data) {
+        return _canRedirect && !!data && data.project_id === _projectId;
+      }
 
       function copied() {
         notificationService.success('Copied!');
@@ -19,7 +24,7 @@
           notificationService.error('An error occurred while getting the API key for your project.');
         }
 
-        return tokenService.getProjectDefault(projectId).then(onSuccess, onFailure);
+        return tokenService.getProjectDefault(_projectId).then(onSuccess, onFailure);
       }
 
       function getProject() {
@@ -30,10 +35,10 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The project "' + projectId + '" could not be found.');
+          notificationService.error('The project "' + _projectId + '" could not be found.');
         }
 
-        return projectService.getById(projectId, true).then(onSuccess, onFailure);
+        return projectService.getById(_projectId, true).then(onSuccess, onFailure);
       }
 
       function getProjectTypes() {
@@ -48,19 +53,15 @@
         ];
       }
 
-      function hasProjectData() {
-        return vm.project.total_event_count > 0;
-      }
-
       function navigateToDashboard() {
-        $state.go('app.project-dashboard', {projectId: vm.projectId});
+        $state.go('app.project-dashboard', { projectId: _projectId } );
       }
 
       var vm = this;
-      vm.copied = copied;
       vm.apiKey = null;
+      vm.canRedirect = canRedirect;
+      vm.copied = copied;
       vm.currentProjectType = {};
-      vm.hasProjectData = hasProjectData;
       vm.navigateToDashboard = navigateToDashboard;
       vm.project = {};
       vm.projectTypes = getProjectTypes();

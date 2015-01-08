@@ -1,6 +1,6 @@
 <organization-notifications organization-id="vm.project.organization_id" ignore-free="true" ignore-configure-projects="true"></organization-notifications>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="eventOccurrence" refresh-if="!vm.hasProjectData()" refresh-action="vm.navigateToDashboard()">
+<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="eventOccurrence" refresh-if="vm.canRedirect(data)" refresh-action="vm.navigateToDashboard()">
   <div class="col">
     <div class="wrapper-md">
       <div class="panel panel-default">
