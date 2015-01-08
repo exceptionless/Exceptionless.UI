@@ -3,8 +3,8 @@
 
   angular.module('app.project')
     .controller('project.Add', ['$state', '$stateParams', '$timeout', 'billingService', 'organizationService', 'projectService', 'notificationService', function ($state, $stateParams, $timeout, billingService, organizationService, projectService, notificationService) {
-      var _newOrganizationId = '__newOrganization';
       var _canAdd = true;
+      var _newOrganizationId = '__newOrganization';
 
       var vm = this;
 
@@ -75,7 +75,7 @@
         }
 
         function onSuccess(response) {
-          $state.go('app.project.configure', { id: response.data.id });
+          $state.go('app.project.configure', { id: response.data.id, redirect: true });
         }
 
         function onFailure(response) {
@@ -101,7 +101,8 @@
           vm.organizations = response.data;
           vm.organizations.push({id: _newOrganizationId, name: '<New Organization>'});
 
-          vm.currentOrganization = vm.organizations.filter(function(o) { return o.id === (vm.currentOrganization.id); })[0];
+          var currentOrganizationId = vm.currentOrganization.id ? vm.currentOrganization.id : $stateParams.organizationId;
+          vm.currentOrganization = vm.organizations.filter(function(o) { return o.id === currentOrganizationId; })[0];
           if (!vm.currentOrganization) {
             vm.currentOrganization = vm.organizations.length > 0 ? vm.organizations[0] : {};
           }

@@ -8,7 +8,6 @@
             <div class="form-group" ng-if="vm.hasOrganizations()">
               <label for="organization">Organization Name</label>
               <select id="organization" class="form-control"
-                      ng-init="vm.currentOrganization = vm.organizations[0]"
                       ng-model="vm.currentOrganization"
                       ng-options="organization.name for organization in vm.organizations track by organization.id"></select>
             </div>

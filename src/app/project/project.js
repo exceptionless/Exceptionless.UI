@@ -28,14 +28,14 @@
     });
 
     $stateProvider.state('app.project.add', {
-      url: '/add',
+      url: '/add?organizationId',
       controller: 'project.Add',
       controllerAs: 'vm',
       templateUrl: 'app/project/add.tpl.html'
     });
 
     $stateProvider.state('app.project.configure', {
-      url: '/:id/configure',
+      url: '/:id/configure?redirect',
       controller: 'project.Configure',
       controllerAs: 'vm',
       templateUrl: 'app/project/configure.tpl.html'
