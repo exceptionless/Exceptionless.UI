@@ -11,15 +11,11 @@
 
     <div class="alert alert-success alert-banner m-b-none" ng-if="vm.hasOrganizationsWithNoProjects()">
       <h4>Setup your first project</h4>
-      <p ng-if="!vm.hasOrganizations()">
-        Please <a ui-sref="app.project.add">add a new project</a> and start becoming exceptionless in less than 60 seconds!
-      </p>
-
       <p>
         <strong ng-repeat="organization in vm.organizationsWithNoProjects">
-          <span ng-if="!$first">, </span><a ui-sref="app.project.add">{{organization.name}}</a>
+          <span ng-if="!$first">, </span><a ui-sref="app.project.add({ organizationId: organization.id })">{{organization.name}}</a>
         </strong>
-        currently has no projects. <a ui-sref="app.project.add">Add a new project</a> and start becoming exceptionless in less than 60 seconds!
+        currently has no projects. <a ui-sref="app.project.add({ organizationId: vm.organizationsWithNoProjects[0].id })">Add a new project</a> and start becoming exceptionless in less than 60 seconds!
       </p>
     </div>
 

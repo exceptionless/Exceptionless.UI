@@ -128,6 +128,7 @@
             // Only show when there are no projects in the current selected organizations.
             if (currentProjects.length === 0) {
               vm.organizationsWithNoProjects.push(organization);
+              return;
             }
 
             if (!$scope.ignoreConfigureProjects && canShowConfigurationAlert) {
