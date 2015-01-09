@@ -78,6 +78,9 @@
 
                 <div ng-if="vm.hasProjects()">
                   <hr/>
+
+                  <p>Choose how often you want to receive notifications for event occurrences in this project.</p>
+
                   <select class="form-control"
                           ng-model="vm.currentProject"
                           ng-change="vm.getEmailNotificationSettings()"
@@ -104,78 +107,49 @@
                   <div class="checkbox">
                     <label class="i-checks">
                       <input type="checkbox"
-                             ng-model="vm.emailNotificationSettings.report_critical_errors"
+                             ng-model="vm.emailNotificationSettings.report_new_errors"
                              ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()">
                       <i></i>
-                      Notify me on critical events
+                      Notify me on new errors
                     </label>
                   </div>
 
                   <div class="checkbox">
                     <label class="i-checks">
                       <input type="checkbox"
-                             ng-model="vm.emailNotificationSettings.report_regressions"
+                             ng-model="vm.emailNotificationSettings.report_critical_errors"
                              ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()">
                       <i></i>
-                      Notify me on event regressions
+                      Notify me on critical errors
                     </label>
                   </div>
 
-                  <hr/>
-
-                  <p>Choose how often you want to receive notifications for error occurrences in this project.</p>
-
-                  <div class="form-group">
-                    <div class="btn-group">
-                      <label class="btn btn-default" role="button"
-                             btn-radio="0"
-                             ng-model="vm.emailNotificationSettings.mode"
+                  <div class="checkbox">
+                    <label class="i-checks">
+                      <input type="checkbox"
+                             ng-model="vm.emailNotificationSettings.report_errors_regressions"
+                             ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
-                             ng-disabled="!vm.hasPremiumEmailNotifications()"
-                             uncheckable>Never</label>
-                      <label class="btn btn-default" role="button"
-                             btn-radio="1"
-                             ng-model="vm.emailNotificationSettings.mode"
-                             ng-change="vm.saveEmailNotificationSettings()"
-                             ng-disabled="!vm.hasPremiumEmailNotifications()"
-                             uncheckable>New Only</label>
-                      <label class="btn btn-default" role="button"
-                             btn-radio="2"
-                             ng-model="vm.emailNotificationSettings.mode"
-                             ng-change="vm.saveEmailNotificationSettings()"
-                             ng-disabled="!vm.hasPremiumEmailNotifications()"
-                             uncheckable>All Occurrences</label>
-                    </div>
+                             ng-disabled="!vm.hasPremiumEmailNotifications()">
+                      <i></i>
+                      Notify me on error regressions
+                    </label>
                   </div>
 
-                  <div ng-if="vm.currentProject.mode > 0">
-                    <div class="checkbox">
-                      <label class="i-checks">
-                        <input type="checkbox"
-                               ng-model="vm.emailNotificationSettings.report_known_bot_events"
-                               ng-model-options="{ debounce: 500 }"
-                               ng-change="vm.saveEmailNotificationSettings()"
-                               ng-disabled="!vm.hasPremiumEmailNotifications()">
-                        <i></i>
-                        Notify me on events from known bots
-                      </label>
-                    </div>
-
-                    <div class="checkbox">
-                      <label class="i-checks">
-                        <input type="checkbox"
-                               ng-model="vm.emailNotificationSettings.report_404_events"
-                               ng-model-options="{ debounce: 500 }"
-                               ng-change="vm.saveEmailNotificationSettings()"
-                               ng-disabled="!vm.hasPremiumEmailNotifications()">
-                        <i></i>
-                        Notify me on 404 events
-                      </label>
-                    </div>
+                  <div class="checkbox">
+                    <label class="i-checks">
+                      <input type="checkbox"
+                             ng-model="vm.emailNotificationSettings.report_new_not_founds"
+                             ng-model-options="{ debounce: 500 }"
+                             ng-change="vm.saveEmailNotificationSettings()"
+                             ng-disabled="!vm.hasPremiumEmailNotifications()">
+                      <i></i>
+                      Notify me on new 404 errors
+                    </label>
                   </div>
                 </div>
               </form>
