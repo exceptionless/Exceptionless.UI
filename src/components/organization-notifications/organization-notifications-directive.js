@@ -271,7 +271,7 @@
         }
 
         function showIntercom() {
-          $intercom('showNewMessage');
+          $intercom.showNewMessage();
         }
 
         vm.freeOrganizations = [];
