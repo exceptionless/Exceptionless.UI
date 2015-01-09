@@ -4,7 +4,7 @@
   angular.module('app.project')
     .controller('project.Configure', ['$state', '$stateParams', 'notificationService', 'projectService', 'tokenService', function ($state, $stateParams, notificationService, projectService, tokenService) {
       var _projectId = $stateParams.id;
-      var _canRedirect = $stateParams.redirect === true;
+      var _canRedirect = $stateParams.redirect === 'true';
 
       function canRedirect(data) {
         return _canRedirect && !!data && data.project_id === _projectId;
