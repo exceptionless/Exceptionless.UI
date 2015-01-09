@@ -122,7 +122,7 @@
       }
 
       function showIntercom() {
-        $intercom.show();
+        $intercom('showNewMessage');
       }
 
       hotkeys.bindTo($scope)
