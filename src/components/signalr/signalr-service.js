@@ -8,18 +8,20 @@
     'app.config'
   ])
   .factory('signalRService', ['$rootScope', '$timeout', '$log', 'authService', 'BASE_URL', 'Hub', function ($rootScope, $timeout, $log, authService, BASE_URL, Hub) {
-    var signalR;
+    var _hub;
+    var _signalRTimeout;
 
     function start() {
       startDelayed(0);
     }
 
     function startDelayed(delay) {
-      if (signalR)
+      if (_hub || _signalRTimeout) {
         stop();
+      }
 
-      signalR = $timeout(function (){
-        var hub = new Hub('messages', {
+      _signalRTimeout = $timeout(function (){
+        _hub = new Hub('messages', {
           rootPath: BASE_URL + '/push',
 
           // client side methods
@@ -59,11 +61,15 @@
     }
 
     function stop() {
-      if (!signalR)
+      if (!_hub && !_signalRTimeout) {
         return;
+      }
 
-      $timeout.cancel(signalR);
-      signalR = null;
+      _hub.disconnect();
+      _hub = null;
+
+      $timeout.cancel(_signalRTimeout);
+      _signalRTimeout = null;
     }
 
     var service = {
