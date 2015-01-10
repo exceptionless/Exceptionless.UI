@@ -42,7 +42,8 @@
 
     $authProvider.live({
       clientId: LIVE_APPID,
-      url: BASE_URL + '/auth/live'
+      url: BASE_URL + '/auth/live',
+      scope: ['wl.basic', 'wl.emails']
     });
 
     $stateProvider.state('auth', {
