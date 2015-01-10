@@ -35,7 +35,9 @@
 
     $authProvider.github({
       clientId: GITHUB_APPID,
-      url: BASE_URL + '/auth/github'
+      url: BASE_URL + '/auth/github',
+      optionalUrlParams: ['scope'],
+      scope: ['user:email']
     });
 
     $authProvider.live({
