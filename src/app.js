@@ -390,7 +390,11 @@
       }]
     });
   }])
-  .run(['$state', 'editableOptions', 'rateLimitService', 'Restangular', 'stateService', function($state, editableOptions, rateLimitService, Restangular, stateService) {
+  .run(['$state', 'editableOptions', '$location', 'rateLimitService', 'Restangular', 'stateService', 'USE_SSL', '$window', function($state, editableOptions, $location, rateLimitService, Restangular, stateService, USE_SSL, $window) {
+    if (USE_SSL && $location.protocol() !== 'https') {
+        $window.location.href = $location.absUrl().replace('http', 'https');
+    }
+
     editableOptions.theme = 'bs3';
 
     Restangular.setErrorInterceptor(function(response) {

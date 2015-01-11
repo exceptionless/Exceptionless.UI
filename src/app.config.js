@@ -9,5 +9,6 @@
     .constant('INTERCOM_APPID')
     .constant('LIVE_APPID')
     .constant('STRIPE_PUBLISHABLE_KEY')
+    .constant('USE_SSL', false)
     .constant('VERSION', '2.0.0');
 }());
