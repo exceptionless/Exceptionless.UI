@@ -24,9 +24,18 @@ body {
 
 a {
   color: @link-color;
-  text-decoration: none;
+  text-decoration: underline;
   cursor: pointer;
 }
+
+a.btn,
+.nav a,
+.table-clickable a,
+.dropdown-menu a
+{
+  text-decoration: none;
+}
+
 a:hover,
 a:focus {
   color: @link-hover-color;
