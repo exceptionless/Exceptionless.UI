@@ -2,14 +2,26 @@
   'use strict';
 
   angular.module('exceptionless.user', ['restangular'])
-    .factory('userService', ['Restangular', function (Restangular) {
+    .factory('userService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
+      var _cache = $cacheFactory('http:user');
+      $rootScope.$on('auth:logout', _cache.removeAll);
+      $rootScope.$on('UserChanged', _cache.removeAll);
+
+      var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
+        RestangularConfigurer.setDefaultHttpFields({ cache: _cache });
+      });
+
       function addAdminRole(id) {
         return Restangular.one('users', id).one('admin-role').post();
       }
 
-      function getCurrentUser() {
-        return Restangular.one('users', 'me').get();
-      }
+      function getCurrentUser(useCache) {
+          if (useCache === undefined || useCache) {
+            return _cachedRestangular.one('users', 'me').get();
+          }
+
+          return Restangular.one('users', 'me').get();
+        }
 
       function getById(id) {
         return Restangular.one('users', id).get();
