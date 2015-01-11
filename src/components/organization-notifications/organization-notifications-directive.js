@@ -44,26 +44,16 @@
         }
 
         function getCurrentProjects() {
-          var projects = [];
-          angular.forEach(vm.projects, function(project) {
-            if (filterService.getProjectId()) {
-              if (project.id === filterService.getProjectId()) {
-                projects.push(project);
-              }
+          var currentOrganizationId = $scope.organizationId || filterService.getOrganizationId();
+          if (currentOrganizationId) {
+            return vm.projects.filter(function (p) { return p.organization_id === currentOrganizationId; });
+          }
 
-              return;
-            }
+          if (filterService.getProjectId()) {
+            return vm.projects.filter(function (p) { return p.id === filterService.getProjectId(); });
+          }
 
-            if (filterService.getOrganizationId()) {
-              if (project.organization_id === filterService.getOrganizationId()) {
-                projects.push(project);
-              }
-            } else {
-              projects.push(project);
-            }
-          });
-
-          return projects;
+          return vm.projects;
         }
 
         function getFilterUsesPremiumFeatures() {

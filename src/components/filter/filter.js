@@ -2,6 +2,8 @@
   'use strict';
 
   angular.module('exceptionless.filter', [
-    'angular-locker'
+    'angular-locker',
+
+    'exceptionless.objectid'
   ]);
 }());

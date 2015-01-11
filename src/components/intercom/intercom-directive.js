@@ -1,5 +1,3 @@
-/* global ObjectId:false */
-
 (function () {
   'use strict';
 
@@ -10,7 +8,7 @@
         restrict: 'E',
         replace: true,
         templateUrl: 'components/intercom/intercom-directive.tpl.html',
-        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', '$intercom', 'organizationService', 'projectService', 'userService', function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, organizationService, projectService, userService) {
+        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', '$intercom', 'objectIDService', 'organizationService', 'projectService', 'userService', function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, objectIDService, organizationService, projectService, userService) {
           if (!authService.isAuthenticated()) {
             return;
           }
@@ -59,7 +57,7 @@
               user_hash: vm.user.hash,
               name: vm.user.full_name,
               email: vm.user.email_address,
-              remote_created_at: new ObjectId(vm.user.id).timestamp
+              remote_created_at: objectIDService.create(vm.user.id).timestamp
             };
 
             var currentOrganization = getCurrentOrganization();
@@ -67,7 +65,7 @@
               data.company = {
                 company_id: currentOrganization.id,
                 name: currentOrganization.name,
-                remote_created_at: new ObjectId(currentOrganization.id).timestamp,
+                remote_created_at: objectIDService.create(currentOrganization.id).timestamp,
                 plan: currentOrganization.plan_id,
                 monthly_spend: currentOrganization.billing_price,
                 total_errors: currentOrganization.total_event_count

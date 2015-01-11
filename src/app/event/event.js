@@ -22,7 +22,7 @@
   ])
     .config(['$stateProvider', function ($stateProvider) {
       $stateProvider.state('app.event', {
-        url: '/event/:id',
+        url: '/event/{id:[0-9a-fA-F]{24}}',
         controller: 'Event',
         controllerAs: 'vm',
         templateUrl: 'app/event/event.tpl.html'

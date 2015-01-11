@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.filter')
-    .factory('filterService', ['$rootScope', 'filterStoreService', function ($rootScope, filterStoreService) {
+    .factory('filterService', ['$rootScope', 'filterStoreService', 'objectIDService', function ($rootScope, filterStoreService, objectIDService) {
       var _includeFixed = filterStoreService.getIncludeFixed();
       var _includeHidden = filterStoreService.getIncludeHidden();
       var _time = filterStoreService.getTimeFilter();
@@ -61,7 +61,13 @@
       }
 
       function fireFilterChanged() {
-        $rootScope.$emit('filterChanged', getDefaultOptions());
+        var options = {
+          organization_id: _organizationId,
+          project_id: _projectId,
+          type: _eventType
+        };
+
+        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions()));
       }
 
       function getDefaultOptions() {
@@ -150,7 +156,7 @@
       }
 
       function setOrganizationId(id, suspendNotifications) {
-        if (angular.equals(id, _organizationId)) {
+        if (angular.equals(id, _organizationId) || (id && !objectIDService.isValid(id))) {
           return;
         }
 
@@ -163,7 +169,7 @@
       }
 
       function setProjectId(id, suspendNotifications) {
-        if (angular.equals(id, _projectId)) {
+        if (angular.equals(id, _projectId) || (id && !objectIDService.isValid(id))) {
           return;
         }
 
@@ -199,6 +205,18 @@
           fireFilterChanged();
         }
       }
+
+      $rootScope.$on('OrganizationChanged', function ($event, organizationChanged) {
+        if (organizationChanged.id === getOrganizationId() &&  organizationChanged.deleted) {
+          setOrganizationId();
+        }
+      });
+
+      $rootScope.$on('ProjectChanged', function ($event, projectChanged) {
+        if (projectChanged.id === getProjectId() &&  projectChanged.deleted) {
+          setProjectId();
+        }
+      });
 
       var service = {
         apply: apply,

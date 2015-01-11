@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, notificationService, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
       var vm = this;
 
       function canChangePlan() {
@@ -135,6 +135,29 @@
         });
 
       $scope.$on('$destroy', signalRService.stop);
+
+      $scope.$on('$stateChangeStart', function($event, toState, toParams) {
+        function smartRedirect() {
+          $event.preventDefault();
+          $state.go(toState.data.fallbackState, toParams);
+
+          if (toParams.projectId) {
+            notificationService.error('The project "' + toParams.projectId + '" could not be found.');
+          } else {
+            notificationService.error('The organization "' + toParams.organizationId + '" could not be found.');
+          }
+        }
+
+        if (!toState.data || !toState.data.fallbackState) {
+          return;
+        }
+
+        if (toParams.projectId) {
+          return projectService.getById(toParams.projectId, true).catch(smartRedirect);
+        } else if (toParams.organizationId) {
+          return organizationService.getById(toParams.organizationId, true).catch(smartRedirect);
+        }
+      });
 
       vm.canChangePlan = canChangePlan;
       vm.changePlan = changePlan;

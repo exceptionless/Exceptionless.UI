@@ -32,6 +32,7 @@
     'exceptionless.notification',
     'exceptionless.organization',
     'exceptionless.organization-notifications',
+    'exceptionless.project',
     'exceptionless.project-filter',
     'exceptionless.rate-limit',
     'exceptionless.refresh',
@@ -88,9 +89,10 @@
     });
 
     $stateProvider.state('app.project-dashboard', {
-      url: '/project/:projectId/dashboard',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.dashboard' },
       templateUrl: 'app/dashboard.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -98,9 +100,10 @@
     });
 
     $stateProvider.state('app.project-type-dashboard', {
-      url: '/project/:projectId/:type/dashboard',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-dashboard' },
       templateUrl: 'app/dashboard.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -112,9 +115,10 @@
     });
 
     $stateProvider.state('app.organization-dashboard', {
-      url: '/organization/:organizationId/dashboard',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.dashboard' },
       templateUrl: 'app/dashboard.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);
@@ -123,9 +127,10 @@
     });
 
     $stateProvider.state('app.organization-type-dashboard', {
-      url: '/organization/:organizationId/:type/dashboard',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-dashboard' },
       templateUrl: 'app/dashboard.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);
@@ -163,9 +168,10 @@
     });
 
     $stateProvider.state('app.project-frequent', {
-      url: '/project/:projectId/frequent',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.frequent' },
       templateUrl: 'app/frequent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -173,9 +179,10 @@
     });
 
     $stateProvider.state('app.project-type-frequent', {
-      url: '/project/:projectId/:type/frequent',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-frequent' },
       templateUrl: 'app/frequent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -187,9 +194,10 @@
     });
 
     $stateProvider.state('app.organization-frequent', {
-      url: '/organization/:organizationId/frequent',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.frequent' },
       templateUrl: 'app/frequent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);
@@ -197,9 +205,10 @@
     });
 
     $stateProvider.state('app.organization-type-frequent', {
-      url: '/organization/:organizationId/:type/frequent',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-frequent' },
       templateUrl: 'app/frequent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);
@@ -237,9 +246,10 @@
     });
 
     $stateProvider.state('app.project-new', {
-      url: '/project/:projectId/new',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/new',
       controller: 'app.New',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.new' },
       templateUrl: 'app/new.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -247,9 +257,10 @@
     });
 
     $stateProvider.state('app.project-type-new', {
-      url: '/project/:projectId/:type/new',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/new',
       controller: 'app.New',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-new' },
       templateUrl: 'app/new.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -261,9 +272,10 @@
     });
 
     $stateProvider.state('app.organization-new', {
-      url: '/organization/:organizationId/new',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/new',
       controller: 'app.New',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.new' },
       templateUrl: 'app/new.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);
@@ -271,9 +283,10 @@
     });
 
     $stateProvider.state('app.organization-type-new', {
-      url: '/organization/:organizationId/:type/new',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/new',
       controller: 'app.New',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-new' },
       templateUrl: 'app/new.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);
@@ -311,9 +324,10 @@
     });
 
     $stateProvider.state('app.project-recent', {
-      url: '/project/:projectId/recent',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.recent' },
       templateUrl: 'app/recent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -321,9 +335,10 @@
     });
 
     $stateProvider.state('app.project-type-recent', {
-      url: '/project/:projectId/:type/recent',
+      url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-recent' },
       templateUrl: 'app/recent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setProjectId($stateParams.projectId, true);
@@ -335,9 +350,10 @@
     });
 
     $stateProvider.state('app.organization-recent', {
-      url: '/organization/:organizationId/recent',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.recent' },
       templateUrl: 'app/recent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);
@@ -345,9 +361,10 @@
     });
 
     $stateProvider.state('app.organization-type-recent', {
-      url: '/organization/:organizationId/:type/recent',
+      url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
+      data: { fallbackState: 'app.type-recent' },
       templateUrl: 'app/recent.tpl.html',
       onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
         filterService.setOrganizationId($stateParams.organizationId, true);

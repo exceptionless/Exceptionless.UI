@@ -28,7 +28,7 @@
     });
 
     $stateProvider.state('app.project.add', {
-      url: '/add?organizationId',
+      url: '/add?{organizationId:[0-9a-fA-F]{24}}',
       controller: 'project.Add',
       controllerAs: 'vm',
       templateUrl: 'app/project/add.tpl.html'
@@ -49,7 +49,7 @@
     });
 
     $stateProvider.state('app.project.manage', {
-      url: '/:id/manage',
+      url: '/{id:[0-9a-fA-F]{24}}/manage',
       controller: 'project.Manage',
       controllerAs: 'vm',
       templateUrl: 'app/project/manage/manage.tpl.html'

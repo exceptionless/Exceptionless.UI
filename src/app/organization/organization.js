@@ -36,7 +36,7 @@
     });
 
     $stateProvider.state('app.organization.manage', {
-      url: '/:id/manage',
+      url: '/{id:[0-9a-fA-F]{24}}/manage',
       controller: 'organization.Manage',
       controllerAs: 'vm',
       templateUrl: 'app/organization/manage/manage.tpl.html'
