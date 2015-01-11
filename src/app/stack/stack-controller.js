@@ -3,7 +3,7 @@
 
   angular.module('app.stack')
     .controller('Stack', ['$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, projectService, stackService, statService) {
-      var stackId = $stateParams.id;
+      var _stackId = $stateParams.id;
       var vm = this;
 
       function addReferenceLink() {
@@ -17,14 +17,18 @@
           }
 
           if (vm.stack.references.indexOf(url) < 0)
-            return stackService.addLink(stackId, url).then(onSuccess, onFailure);
+            return stackService.addLink(_stackId, url).then(onSuccess, onFailure);
         });
       }
 
       function get(data) {
-        if (data && data.type === 'Stack' && data.deleted && data.id === stackId) {
+        if (data && data.type === 'Stack' && data.id !== _stackId) {
+          return;
+        }
+
+        if (data && data.type === 'Stack' && data.deleted) {
           $state.go('app.dashboard');
-          notificationService.error('The stack "' + stackId + '" was deleted.');
+          notificationService.error('The stack "' + _stackId + '" was deleted.');
           return;
         }
 
@@ -49,13 +53,13 @@
           $state.go('app.dashboard');
 
           if (response.status === 404) {
-            notificationService.error('The stack "' + stackId + '" could not be found.');
+            notificationService.error('The stack "' + _stackId + '" could not be found.');
           } else {
-            notificationService.error('An error occurred while loading the stack "' + stackId + '".');
+            notificationService.error('An error occurred while loading the stack "' + _stackId + '".');
           }
         }
 
-        return stackService.getById(stackId).then(onSuccess, onFailure);
+        return stackService.getById(_stackId).then(onSuccess, onFailure);
       }
 
       function getStats() {
@@ -68,7 +72,7 @@
         }
 
         var options = {};
-        return statService.getByStackId(stackId, options).then(onSuccess);
+        return statService.getByStackId(_stackId, options).then(onSuccess);
       }
 
       function hasTags() {
@@ -136,7 +140,7 @@
           notificationService.error('An error occurred while promoting this stack.');
         }
 
-        return stackService.promote(stackId).then(onSuccess, onFailure);
+        return stackService.promote(_stackId).then(onSuccess, onFailure);
       }
 
       function removeReferenceLink(reference) {
@@ -145,7 +149,7 @@
             notificationService.info('An error occurred while deleting the external reference link.');
           }
 
-          return stackService.removeLink(stackId, reference).catch(onFailure);
+          return stackService.removeLink(_stackId, reference).catch(onFailure);
         });
       }
 
@@ -160,7 +164,7 @@
             notificationService.error('An error occurred while deleting this stack.');
           }
 
-          return stackService.remove(stackId).then(onSuccess, onFailure);
+          return stackService.remove(_stackId).then(onSuccess, onFailure);
         });
       }
 
@@ -170,10 +174,10 @@
         }
 
         if (isCritical()) {
-          return stackService.markNotCritical(stackId).catch(onFailure);
+          return stackService.markNotCritical(_stackId).catch(onFailure);
         }
 
-        return stackService.markCritical(stackId).catch(onFailure);
+        return stackService.markCritical(_stackId).catch(onFailure);
       }
 
       function updateIsFixed() {
@@ -183,10 +187,10 @@
         }
 
         if (isFixed()) {
-          return stackService.markNotFixed(stackId).catch(onFailure);
+          return stackService.markNotFixed(_stackId).catch(onFailure);
         }
 
-        return stackService.markFixed(stackId).catch(onFailure);
+        return stackService.markFixed(_stackId).catch(onFailure);
       }
 
       function updateIsHidden() {
@@ -195,10 +199,10 @@
         }
 
         if (isHidden()) {
-          return stackService.markNotHidden(stackId).catch(onFailure);
+          return stackService.markNotHidden(_stackId).catch(onFailure);
         }
 
-        return stackService.markHidden(stackId).catch(onFailure);
+        return stackService.markHidden(_stackId).catch(onFailure);
       }
 
       function updateNotifications() {
@@ -208,10 +212,10 @@
         }
 
         if (notificationsDisabled()) {
-          return stackService.enableNotifications(stackId).catch(onFailure);
+          return stackService.enableNotifications(_stackId).catch(onFailure);
         }
 
-        return stackService.disableNotifications(stackId).catch(onFailure);
+        return stackService.disableNotifications(_stackId).catch(onFailure);
       }
 
       vm.addReferenceLink = addReferenceLink;
@@ -281,7 +285,6 @@
       };
 
       vm.get = get;
-      vm.getStats = getStats;
       vm.hasTags = hasTags;
       vm.hasReference = hasReference;
       vm.hasReferences = hasReferences;
@@ -297,7 +300,7 @@
       vm.removeReferenceLink = removeReferenceLink;
       vm.recentOccurrences = {
         get: function (options) {
-          return eventService.getByStackId(stackId, options);
+          return eventService.getByStackId(_stackId, options);
         },
         summary: {
           showType: false
