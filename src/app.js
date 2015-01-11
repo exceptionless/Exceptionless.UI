@@ -70,6 +70,7 @@
     stripeProvider.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
 
     $urlRouterProvider.when('', '/type/error/dashboard');
+    $urlRouterProvider.when('/', '/type/error/dashboard');
 
     $stateProvider.state('app', {
       abstract: true,
