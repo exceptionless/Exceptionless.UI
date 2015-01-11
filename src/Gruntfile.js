@@ -170,6 +170,7 @@ module.exports = function (grunt) {
             INTERCOM_APPID: process.env.INTERCOM_APPID,
             LIVE_APPID: process.env.LIVE_APPID || '0000000044132A07',
             STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+            USE_SSL: process.env.USE_SSL || false,
             VERSION: process.env.BUILD_NUMBER || '2.0.0'
           }
         },

@@ -49,7 +49,7 @@
           function onSuccess(response) {
             vm.organizations = response.data.plain();
 
-            if (filterService.getOrganizationId() && vm.organizations.filter(function(o) { return o.id === filterService.getByOrganizationId(); }).length === 0) {
+            if (filterService.getOrganizationId() && !vm.organizations.filter(function(o) { return o.id === filterService.getByOrganizationId(); })) {
               filterService.setOrganizationId();
             }
 
@@ -71,7 +71,7 @@
           function onSuccess(response) {
             vm.projects = response.data.plain();
 
-            if (filterService.getProjectId() && vm.projects.filter(function(p) { return p.id === filterService.getProjectId(); }).length === 0) {
+            if (filterService.getProjectId() && !vm.projects.filter(function(p) { return p.id === filterService.getProjectId(); })) {
               filterService.setProjectId();
             }
 
