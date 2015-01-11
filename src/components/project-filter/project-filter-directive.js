@@ -49,7 +49,7 @@
           function onSuccess(response) {
             vm.organizations = response.data.plain();
 
-            if (filterService.getOrganizationId() && !vm.organizations.filter(function(o) { return o.id === filterService.getByOrganizationId(); })) {
+            if (filterService.getOrganizationId() && !vm.organizations.filter(function(o) { return o.id === filterService.getOrganizationId(); })) {
               filterService.setOrganizationId();
             }
 
