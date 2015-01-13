@@ -78,7 +78,7 @@
 
       function changePlan(isAdmin, options) {
         if (isAdmin) {
-          return adminService.changePlan(vm.currentOrganization.id, { planId: vm.currentPlan.id });
+          return adminService.changePlan({ organizationId: vm.currentOrganization.id, planId: vm.currentPlan.id });
         } else {
           return organizationService.changePlan(vm.currentOrganization.id, angular.extend({}, { planId: vm.currentPlan.id }, options));
         }
