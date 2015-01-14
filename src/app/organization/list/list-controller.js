@@ -93,7 +93,7 @@
       }
 
       function remove(organization) {
-        return dialogService.confirmDanger('Are you sure you want to delete the organization?', 'DELETE ORGANIZATION').then(function () {
+        return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
           }

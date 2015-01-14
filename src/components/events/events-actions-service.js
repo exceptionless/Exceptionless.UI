@@ -6,7 +6,7 @@
       var deleteAction = {
         name: 'Delete',
         run: function (ids) {
-          return dialogService.confirmDanger('Are you sure you want to delete these events', 'DELETE EVENTS').then(function () {
+          return dialogService.confirmDanger('Are you sure you want to delete these events?', 'DELETE EVENTS').then(function () {
             function onSuccess() {
               notificationService.success('Successfully deleted the events.');
             }

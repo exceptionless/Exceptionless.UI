@@ -163,7 +163,7 @@
       }
 
       function removeProject() {
-        return dialogService.confirmDanger('Are you sure you want to delete the project?', 'DELETE PROJECT').then(function () {
+        return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
           function onSuccess() {
             $state.go('app.project.list');
           }
@@ -179,7 +179,7 @@
       }
 
       function removeToken(token) {
-        return dialogService.confirmDanger('Are you sure you want to delete the API key?', 'DELETE API KEY').then(function () {
+        return dialogService.confirmDanger('Are you sure you want to delete this API key?', 'DELETE API KEY').then(function () {
           function onSuccess() {
             vm.tokens.splice(vm.tokens.indexOf(token), 1);
           }
