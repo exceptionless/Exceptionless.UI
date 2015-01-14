@@ -13,7 +13,13 @@
             if (ngModel.$pristine) {
               deferred.resolve(true);
             } else {
-              authService.isEmailAddressAvailable(emailAddress).then(deferred.reject, deferred.resolve);
+              authService.isEmailAddressAvailable(emailAddress).then(function(response) {
+                if (response.status === 201) {
+                  deferred.reject('');
+                } else {
+                  deferred.resolve(true);
+                }
+              });
             }
 
             return deferred.promise;

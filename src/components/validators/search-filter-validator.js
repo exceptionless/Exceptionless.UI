@@ -13,7 +13,12 @@
             if (ngModel.$pristine) {
               deferred.resolve(true);
             } else {
-              searchService.validate(query).then(deferred.resolve, deferred.reject);
+              searchService.validate(query).then(function(response) {
+                if (!response.data.is_valid) {
+                  deferred.reject(response.data.message);
+                }
+                deferred.resolve(true);
+              });
             }
 
             return deferred.promise;

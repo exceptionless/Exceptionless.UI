@@ -13,7 +13,13 @@
             if (ngModel.$pristine) {
               deferred.resolve(true);
             } else {
-              organizationService.isNameAvailable(name).then(deferred.reject, deferred.resolve);
+              organizationService.isNameAvailable(name).then(function(response) {
+                if (response.status === 201) {
+                  deferred.reject('');
+                } else {
+                  deferred.resolve(true);
+                }
+              });
             }
 
             return deferred.promise;
