@@ -35,6 +35,21 @@
         }
       };
 
+      var markNotFixedAction = {
+        name: 'Mark Not Fixed',
+        run: function (ids) {
+          function onSuccess() {
+            notificationService.success('Successfully marked stacks as not fixed.');
+          }
+
+          function onFailure() {
+            notificationService.error('An error occurred while marking stacks as not fixed.');
+          }
+
+          return stackService.markNotFixed(ids.join(',')).then(onSuccess, onFailure);
+        }
+      };
+
       var markHiddenAction = {
         name: 'Mark Hidden',
         run: function (ids) {
@@ -50,8 +65,23 @@
         }
       };
 
+      var markNotHiddenAction = {
+        name: 'Mark Not Hidden',
+        run: function (ids) {
+          function onSuccess() {
+            notificationService.success('Successfully marked stacks as not hidden.');
+          }
+
+          function onFailure() {
+            notificationService.error('An error occurred while marking stacks as not hidden.');
+          }
+
+          return stackService.markNotHidden(ids.join(',')).then(onSuccess, onFailure);
+        }
+      };
+
       function getActions() {
-        return [markFixedAction, markHiddenAction, deleteAction];
+        return [markFixedAction, markNotFixedAction, markHiddenAction, markNotHiddenAction, deleteAction];
       }
 
       var service = {
