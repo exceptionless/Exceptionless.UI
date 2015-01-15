@@ -7,7 +7,7 @@
         var token = {
           'organization_id': options.organization_id,
           'project_id': options.project_id,
-          'scopes': ['Client']
+          'scopes': ['client']
         };
 
         return Restangular.all('tokens').post(token);
