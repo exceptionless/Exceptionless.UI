@@ -2,15 +2,29 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', function ($state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs) {
+    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', 'STRIPE_PUBLISHABLE_KEY', function ($state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs, STRIPE_PUBLISHABLE_KEY) {
       var _ignoreRefresh = false;
       var _organizationId = $stateParams.id;
       var _options = {limit: 5};
 
       var vm = this;
 
+      function activateTab(tabName) {
+        vm.tabBillingActive = tabName === 'billing';
+        vm.tabProjectsActive = tabName === 'projects';
+        vm.tabUsersActive = tabName === 'users';
+      }
+
       function addUser() {
         return dialogs.create('app/organization/manage/add-user-dialog.tpl.html', 'AddUserDialog as vm').result.then(createUser);
+      }
+
+      function canChangePlan() {
+        return STRIPE_PUBLISHABLE_KEY && vm.organization;
+      }
+
+      function changePlan() {
+        return billingService.changePlan(vm.organization.id);
       }
 
       function createUser(emailAddress) {
@@ -196,6 +210,8 @@
       }
 
       vm.addUser = addUser;
+      vm.canChangePlan = canChangePlan;
+      vm.changePlan = changePlan;
       vm.get = get;
       vm.hasAdminRole = hasAdminRole;
       vm.hasInvoices = hasInvoices;
@@ -218,9 +234,13 @@
       vm.removeUser = removeUser;
       vm.resendNotification = resendNotification;
       vm.save = save;
+      vm.tabBillingActive = false;
+      vm.tabProjectsActive = false;
+      vm.tabUsersActive = false;
       vm.updateAdminRole = updateAdminRole;
       vm.users = [];
 
+      activateTab($stateParams.tab);
       get();
     }]);
 }());

@@ -9,6 +9,7 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'app.config',
     'exceptionless.billing',
     'exceptionless.dialog',
     'exceptionless.organization',
@@ -36,7 +37,7 @@
     });
 
     $stateProvider.state('app.organization.manage', {
-      url: '/{id:[0-9a-fA-F]{24}}/manage',
+      url: '/{id:[0-9a-fA-F]{24}}/manage?tab',
       controller: 'organization.Manage',
       controllerAs: 'vm',
       templateUrl: 'app/organization/manage/manage.tpl.html'

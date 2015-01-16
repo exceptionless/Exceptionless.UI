@@ -7,9 +7,9 @@
       var vm = this;
 
       function activateTab(tabName) {
+        vm.tabExternalActive = tabName === 'external';
         vm.tabNotificationsActive = tabName === 'notifications';
         vm.tabPasswordActive = tabName === 'password';
-        vm.tabExternalActive = tabName === 'external';
       }
 
       function authenticate(provider) {
@@ -282,6 +282,9 @@
       vm.saveEnableEmailNotification = saveEnableEmailNotification;
       vm.saveUser = saveUser;
       vm.showChangePlanDialog = showChangePlanDialog;
+      vm.tabExternalActive = false;
+      vm.tabNotificationsActive = false;
+      vm.tabPasswordActive = false;
       vm.unlink = unlink;
       vm.user = {};
 
