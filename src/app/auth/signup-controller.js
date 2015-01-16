@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', ['$state', '$timeout', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, $timeout, authService, notificationService, projectService, stateService) {
+    .controller('auth.Signup', ['$state', '$stateParams', '$timeout', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, $timeout, authService, notificationService, projectService, stateService) {
       var _canSignup = true;
 
       if (authService.isAuthenticated()) {
@@ -78,6 +78,6 @@
       vm.authenticate = authenticate;
       vm.signup = signup;
       vm.signupForm = {};
-      vm.user = {};
+      vm.user = { invite_token: $stateParams.token };
     }]);
 }());

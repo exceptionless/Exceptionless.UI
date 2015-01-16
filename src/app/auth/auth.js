@@ -79,7 +79,7 @@
     });
 
     $stateProvider.state('auth.signup', {
-      url: '/signup',
+      url: '/signup?token',
       controller: 'auth.Signup',
       controllerAs: 'vm',
       templateUrl: 'app/auth/signup.tpl.html'
