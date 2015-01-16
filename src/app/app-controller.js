@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'organizationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+      var _store = locker.driver('local').namespace('app');
       var vm = this;
 
       function canChangePlan() {
@@ -125,6 +126,11 @@
         $intercom.showNewMessage();
       }
 
+      function toggleSideNavCollapsed() {
+        vm.isSideNavCollapsed = !vm.isSideNavCollapsed;
+        _store.put('sideNavCollapsed', vm.isSideNavCollapsed);
+      }
+
       hotkeys.bindTo($scope)
         .add({
           combo: 'f1',
@@ -148,12 +154,11 @@
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
       vm.isIntercomEnabled = isIntercomEnabled;
+      vm.isSideNavCollapsed = _store.get('sideNavCollapsed') === true;
       vm.isTypeMenuActive = isTypeMenuActive;
       vm.organizations = [];
-      vm.settings = {
-        asideFolded: false
-      };
       vm.showIntercom = showIntercom;
+      vm.toggleSideNavCollapsed = toggleSideNavCollapsed;
       vm.user = {};
       vm.version = VERSION;
 

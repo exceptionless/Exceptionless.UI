@@ -13,8 +13,8 @@
 
 <div class="collapse navbar-collapse box-shadow bg-black primary-underline">
   <div class="nav navbar-nav m-l-sm hidden-xs">
-    <a class="btn no-shadow navbar-btn" role="button" ng-click="appVm.settings.asideFolded = !appVm.settings.asideFolded">
-      <i class="fa {{appVm.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
+    <a class="btn no-shadow navbar-btn" role="button" ng-click="appVm.toggleSideNavCollapsed()">
+      <i class="fa {{appVm.isSideNavCollapsed ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
     </a>
   </div>
 
