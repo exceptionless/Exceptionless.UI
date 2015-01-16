@@ -26,5 +26,11 @@
         controllerAs: 'vm',
         templateUrl: 'app/account/manage.tpl.html'
       });
+
+      $stateProvider.state('app.account.verify', {
+        url: '/verify?token',
+        template: null,
+        controller: 'account.Verify'
+      });
     }]);
 }());
