@@ -72,7 +72,7 @@
     });
 
     $stateProvider.state('auth.reset-password', {
-      url: '/reset-password/:token',
+      url: '/reset-password/:token?cancel',
       controller: 'auth.ResetPassword',
       controllerAs: 'vm',
       templateUrl: 'app/auth/reset-password.tpl.html'

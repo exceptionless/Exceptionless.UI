@@ -17,6 +17,10 @@
       return $auth.authenticate(provider).then(onSuccess);
     }
 
+    function cancelResetPassword(resetToken) {
+      return Restangular.one('auth', 'cancel-reset-password').one(resetToken).post();
+    }
+
     function changePassword(changePasswordModel) {
       return Restangular.one('auth', 'change-password').customPOST(changePasswordModel);
     }
@@ -71,12 +75,9 @@
       return $auth.unlink(providerName + '/' + providerUserId);
     }
 
-    function verifyEmailAddress(token) {
-      return Restangular.one('auth', 'verify-email-address').one(token).get();
-    }
-
     var service = {
       authenticate: authenticate,
+      cancelResetPassword: cancelResetPassword,
       changePassword: changePassword,
       forgotPassword: forgotPassword,
       getToken: getToken,
@@ -86,8 +87,7 @@
       logout: logout,
       resetPassword: resetPassword,
       signup: signup,
-      unlink: unlink,
-      verifyEmailAddress: verifyEmailAddress
+      unlink: unlink
     };
 
     return service;

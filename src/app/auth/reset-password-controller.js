@@ -3,6 +3,8 @@
 
   angular.module('app.auth')
     .controller('auth.ResetPassword', ['$state', '$stateParams', 'authService', 'notificationService', function ($state, $stateParams, authService, notificationService) {
+      var _cancelResetToken = $stateParams.cancel === 'true';
+      var _resetToken = $stateParams.token;
       var vm = this;
 
       function changePassword(isValid) {
@@ -27,7 +29,19 @@
         return authService.resetPassword(vm.data).then(onSuccess, onFailure);
       }
 
+      function cancelResetPassword() {
+        function redirectToLoginPage() {
+          return $state.go('auth.login');
+        }
+
+        return authService.cancelResetPassword(_resetToken).then(redirectToLoginPage, redirectToLoginPage);
+      }
+
       vm.changePassword = changePassword;
-      vm.data = { password_reset_token: $stateParams.token };
+      vm.data = { password_reset_token: _resetToken };
+
+      if (_cancelResetToken) {
+        cancelResetPassword();
+      }
     }]);
 }());
