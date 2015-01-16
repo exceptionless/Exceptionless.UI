@@ -21,6 +21,17 @@
         });
       }
 
+      function executeAction() {
+        var action = $stateParams.action;
+        if (action === 'mark-fixed' && !isFixed()) {
+          return updateIsFixed(true);
+        }
+
+        if (action === 'stop-notifications' && !notificationsDisabled()) {
+          return updateNotifications(true);
+        }
+      }
+
       function get(data) {
         if (data && data.type === 'Stack' && data.id !== _stackId) {
           return;
@@ -180,17 +191,26 @@
         return stackService.markCritical(_stackId).catch(onFailure);
       }
 
-      function updateIsFixed() {
+      function updateIsFixed(showSuccessNotification) {
+        function onSuccess() {
+          if (!showSuccessNotification) {
+            return;
+          }
+
+          var action = isFixed() ? ' not' : '';
+          notificationService.info('Successfully marked this stack as' + action + ' fixed.');
+        }
+
         function onFailure() {
           var action = isFixed() ? ' not' : '';
           notificationService.error('An error occurred while marking this stack as' + action + ' fixed.');
         }
 
         if (isFixed()) {
-          return stackService.markNotFixed(_stackId).catch(onFailure);
+          return stackService.markNotFixed(_stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.markFixed(_stackId).catch(onFailure);
+        return stackService.markFixed(_stackId).then(onSuccess, onFailure);
       }
 
       function updateIsHidden() {
@@ -205,17 +225,26 @@
         return stackService.markHidden(_stackId).catch(onFailure);
       }
 
-      function updateNotifications() {
+      function updateNotifications(showSuccessNotification) {
+        function onSuccess() {
+          if (!showSuccessNotification) {
+            return;
+          }
+
+          var action = notificationsDisabled() ? 'enabled' : 'disabled';
+          notificationService.info('Successfully ' + action + ' stack notifications.');
+        }
+
         function onFailure() {
           var action = notificationsDisabled() ? 'enabling' : 'disabling';
           notificationService.error('An error occurred while ' + action + ' stack notifications.');
         }
 
         if (notificationsDisabled()) {
-          return stackService.enableNotifications(_stackId).catch(onFailure);
+          return stackService.enableNotifications(_stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.disableNotifications(_stackId).catch(onFailure);
+        return stackService.disableNotifications(_stackId).then(onSuccess, onFailure);
       }
 
       vm.addReferenceLink = addReferenceLink;
@@ -317,6 +346,6 @@
       vm.updateIsHidden = updateIsHidden;
       vm.updateNotifications = updateNotifications;
 
-      get();
+      get().then(executeAction);
     }]);
 }());

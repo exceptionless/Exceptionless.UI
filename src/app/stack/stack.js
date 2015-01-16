@@ -29,5 +29,12 @@
       controllerAs: 'vm',
       templateUrl: 'app/stack/stack.tpl.html'
     });
+
+    $stateProvider.state('app.stack-action', {
+      url: '/stack/{id:[0-9a-fA-F]{24}}/:action',
+      controller: 'Stack',
+      controllerAs: 'vm',
+      templateUrl: 'app/stack/stack.tpl.html'
+    });
   }]);
 }());
