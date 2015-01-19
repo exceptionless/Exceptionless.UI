@@ -61,15 +61,15 @@
     }
 
     function stop() {
-      if (!_hub && !_signalRTimeout) {
-        return;
+      if (_hub) {
+        _hub.disconnect();
+        _hub = null;
       }
 
-      _hub.disconnect();
-      _hub = null;
-
-      $timeout.cancel(_signalRTimeout);
-      _signalRTimeout = null;
+      if (_signalRTimeout) {
+        $timeout.cancel(_signalRTimeout);
+        _signalRTimeout = null;
+      }
     }
 
     var service = {
