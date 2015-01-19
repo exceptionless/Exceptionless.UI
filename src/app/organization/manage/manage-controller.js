@@ -5,8 +5,6 @@
     .controller('organization.Manage', ['$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', 'STRIPE_PUBLISHABLE_KEY', function ($state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs, STRIPE_PUBLISHABLE_KEY) {
       var _ignoreRefresh = false;
       var _organizationId = $stateParams.id;
-      var _options = {limit: 5};
-
       var vm = this;
 
       function activateTab(tabName) {
@@ -28,14 +26,6 @@
       }
 
       function createUser(emailAddress) {
-        function onSuccess(response) {
-          if (!vm.users.filter(function (u) { return u.email_address === emailAddress; })[0]) {
-            vm.users.push(response.data);
-          }
-
-          return response.data;
-        }
-
         function onFailure(response) {
           if (response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message).then(function() {
@@ -51,7 +41,7 @@
           notificationService.error(message);
         }
 
-        return organizationService.addUser(_organizationId, emailAddress).then(onSuccess, onFailure);
+        return organizationService.addUser(_organizationId, emailAddress).catch(onFailure);
       }
 
       function get(data) {
@@ -65,7 +55,7 @@
           return;
         }
 
-        return getOrganization().then(getUsers).then(getInvoices);
+        return getOrganization().then(getInvoices);
       }
 
       function getOrganization() {
@@ -86,27 +76,11 @@
           vm.invoices = response.data.plain();
         }
 
-        return organizationService.getInvoices(_organizationId, _options).then(onSuccess);
-      }
-
-      function getUsers() {
-        function onSuccess(response) {
-          vm.users = response.data.plain();
-        }
-
-        function onFailure() {
-          notificationService.error('The users for this organization could not be loaded.');
-        }
-
-        return userService.getByOrganizationId(_organizationId, _options).then(onSuccess, onFailure);
+        return organizationService.getInvoices(_organizationId).then(onSuccess);
       }
 
       function hasAdminRole(user) {
         return userService.hasAdminRole(user);
-      }
-
-      function hasInvoices() {
-        return vm.invoices.length > 0;
       }
 
       function hasPremiumFeatures() {
@@ -155,33 +129,6 @@
         });
       }
 
-      function removeUser(user) {
-        return dialogService.confirmDanger('Are you sure you want to remove this user from your organization?', 'REMOVE USER').then(function () {
-          function onSuccess() {
-            vm.users.splice(vm.users.indexOf(user), 1);
-          }
-
-          function onFailure() {
-            notificationService.error('An error occurred while trying to remove the user.');
-          }
-
-          return organizationService.removeUser(_organizationId, user.email_address).then(onSuccess, onFailure);
-        });
-      }
-
-      function resendNotification(user) {
-        function onFailure() {
-          notificationService.error('An error occurred while trying to resend the notification.');
-        }
-
-        return organizationService.addUser(_organizationId, user.email_address).catch(onFailure);
-      }
-
-      function openInvoice(id, event) {
-        $window.open('/#/payment/' + id, '_blank');
-        event.preventDefault();
-      }
-
       function save(isValid) {
         if (!isValid) {
           return;
@@ -194,31 +141,22 @@
         return organizationService.update(_organizationId, vm.organization).catch(onFailure);
       }
 
-      function updateAdminRole(user) {
-        var message = 'Are you sure you want to ' + (!userService.hasAdminRole(user) ? 'add' : 'remove') + ' the admin role for this user?';
-        return dialogService.confirmDanger(message, (!userService.hasAdminRole(user) ? 'ADD' : 'REMOVE')).then(function () {
-          function onFailure() {
-            notificationService.error('An error occurred while ' + (!userService.hasAdminRole(user) ? 'add' : 'remove') + ' the admin role.');
-          }
-
-          if (!userService.hasAdminRole(user)) {
-            return userService.addAdminRole(user.id).then(getUsers, onFailure);
-          }
-
-          return userService.removeAdminRole(user.id).then(getUsers, onFailure);
-        });
-      }
-
       vm.addUser = addUser;
       vm.canChangePlan = canChangePlan;
       vm.changePlan = changePlan;
       vm.get = get;
       vm.hasAdminRole = hasAdminRole;
-      vm.hasInvoices = hasInvoices;
       vm.hasPremiumFeatures = hasPremiumFeatures;
-      vm.invoices = [];
+      vm.invoices = {
+        get: function (options, useCache) {
+          return  organizationService.getInvoices(_organizationId, options, useCache);
+        },
+        options: {
+          limit: 12
+        },
+        organizationId: _organizationId
+      };
       vm.leaveOrganization = leaveOrganization;
-      vm.openInvoice = openInvoice;
       vm.organization = {};
       vm.projects = {
         get: function (options, useCache) {
@@ -231,14 +169,19 @@
         }
       };
       vm.removeOrganization = removeOrganization;
-      vm.removeUser = removeUser;
-      vm.resendNotification = resendNotification;
       vm.save = save;
       vm.tabBillingActive = false;
       vm.tabProjectsActive = false;
       vm.tabUsersActive = false;
-      vm.updateAdminRole = updateAdminRole;
-      vm.users = [];
+      vm.users = {
+        get: function (options, useCache) {
+          return userService.getByOrganizationId(_organizationId, options, useCache);
+        },
+        options: {
+          limit: 10
+        },
+        organizationId: _organizationId
+      };
 
       activateTab($stateParams.tab);
       get();

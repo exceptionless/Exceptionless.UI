@@ -19,6 +19,7 @@
     'exceptionless.refresh',
     'exceptionless.token',
     'exceptionless.user',
+    'exceptionless.users',
     'exceptionless.validators',
     'exceptionless.web-hook'
   ])
