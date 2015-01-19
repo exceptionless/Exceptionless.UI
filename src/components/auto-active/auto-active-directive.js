@@ -16,14 +16,16 @@
 
             angular.forEach(element.find('li'), function (li) {
               var anchor = li.querySelector('a');
-              if (anchor.href.match('#' + path + '(?=\\?|$)')) {
-                angular.element(li).addClass('active');
-              } else {
-                angular.element(li).removeClass('active');
+              if (anchor && anchor.href) {
+                if (anchor.href.match('#' + path + '(?=\\?|$)')) {
+                  angular.element(li).addClass('active');
+                } else {
+                  angular.element(li).removeClass('active');
+                }
               }
             });
 
-            if (attr.href) {
+            if (attr && attr.href) {
               if (attr.href.match('#' + path + '(?=\\?|$)')) {
                 element.addClass('active');
               } else {
