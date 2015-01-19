@@ -70,7 +70,7 @@
 
               <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
             </tab>
-            <tab heading="Billing" active="vm.tabBillingActive && vm.hasInvoices()" ng-if="vm.hasInvoices()">
+            <tab heading="Billing" active="vm.tabBillingActive" ng-if="vm.hasInvoices()">
               <p>You are currently on the <strong>{{vm.organization.plan_name}}</strong> plan. <a ng-if="vm.canChangePlan()" ng-click="vm.changePlan()">Change your plan or billing information.</a></p>
               <table class="table table-striped table-bordered table-fixed b-t">
                 <thead>
