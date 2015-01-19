@@ -47,7 +47,9 @@
           return;
         }
 
-        _raw = _includeFixed = _includeHidden = null;
+        setFilter(null, false);
+        setIncludeFixed(null, false);
+        setIncludeHidden(null, false);
         fireFilterChanged();
       }
 
