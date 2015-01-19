@@ -18,7 +18,7 @@
           notificationService.error(getMessage(response));
         }
 
-        return authService.authenticate(provider, { invite_token: vm.token }).then(redirectOnSignup, onFailure);
+        return authService.authenticate(provider, { InviteToken: vm.token }).then(redirectOnSignup, onFailure);
       }
 
       function login(isValid) {
