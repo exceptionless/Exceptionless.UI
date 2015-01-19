@@ -1,6 +1,6 @@
 <ul class="nav">
   <li ng-class="{active: appVm.isTypeMenuActive('error')}">
-    <a href class="auto" title="Exceptions">
+    <a href="#" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -9,6 +9,7 @@
       <span>Exceptions</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
+      <li class="nav-sub-header">Exceptions</li>
       <li>
         <a ng-href="{{appVm.getDashboardUrl('error')}}">
           <i class="fa fa-dashboard fa-fw"></i>
@@ -36,7 +37,7 @@
     </ul>
   </li>
   <li ng-class="{active: appVm.isTypeMenuActive('log')}">
-    <a href class="auto" title="Log Messages">
+    <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -45,6 +46,7 @@
       <span>Log Messages</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
+      <li class="nav-sub-header">Log Messages</li>
       <li>
         <a ng-href="{{appVm.getDashboardUrl('log')}}">
           <i class="fa fa-dashboard fa-fw"></i>
@@ -72,7 +74,7 @@
     </ul>
   </li>
   <li ng-class="{active: appVm.isTypeMenuActive('404')}">
-    <a href class="auto" title="Broken Links">
+    <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -81,6 +83,7 @@
       <span>Broken Links</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
+      <li class="nav-sub-header">Broken Links</li>
       <li>
         <a ng-href="{{appVm.getDashboardUrl('404')}}">
           <i class="fa fa-dashboard fa-fw"></i>
@@ -108,7 +111,7 @@
     </ul>
   </li>
   <li ng-class="{active: appVm.isTypeMenuActive('usage')}">
-    <a href class="auto" title="Feature Usages">
+    <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -117,6 +120,7 @@
       <span>Feature Usages</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
+      <li class="nav-sub-header">Feature Usages</li>
       <li>
         <a ng-href="{{appVm.getDashboardUrl('usage')}}">
           <i class="fa fa-dashboard fa-fw"></i>
@@ -138,7 +142,7 @@
     </ul>
   </li>
   <li ng-class="{active: appVm.isAllMenuActive()}">
-    <a href class="auto" title="All Events">
+    <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -147,6 +151,7 @@
       <span>All Events</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
+      <li class="nav-sub-header">All Events</li>
       <li>
         <a ng-href="{{appVm.getDashboardUrl()}}">
           <i class="fa fa-dashboard fa-fw"></i>
@@ -174,7 +179,7 @@
     </ul>
   </li>
   <li ng-class="{active: appVm.isAdminMenuActive()}">
-    <a href class="auto" title="Admin">
+    <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -183,6 +188,7 @@
       <span>Admin</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
+      <li class="nav-sub-header">Admin</li>
       <li>
         <a ui-sref="app.project.list">
           <i class="fa fa-briefcase fa-fw"></i>
