@@ -55,7 +55,7 @@
           return;
         }
 
-        return getOrganization().then(getInvoices);
+        return getOrganization();
       }
 
       function getOrganization() {
@@ -69,14 +69,6 @@
         }
 
         return organizationService.getById(_organizationId, false).then(onSuccess, onFailure);
-      }
-
-      function getInvoices() {
-        function onSuccess(response) {
-          vm.invoices = response.data.plain();
-        }
-
-        return organizationService.getInvoices(_organizationId).then(onSuccess);
       }
 
       function hasAdminRole(user) {
