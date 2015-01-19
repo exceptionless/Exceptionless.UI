@@ -59,7 +59,7 @@
     });
 
     $stateProvider.state('auth.login', {
-      url: '/login',
+      url: '/login?token',
       controller: 'auth.Login',
       controllerAs: 'vm',
       templateUrl: 'app/auth/login.tpl.html'

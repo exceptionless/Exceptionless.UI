@@ -4,11 +4,6 @@
   angular.module('app.auth')
     .controller('auth.Signup', ['$state', '$stateParams', '$timeout', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, $timeout, authService, notificationService, projectService, stateService) {
       var _canSignup = true;
-
-      if (authService.isAuthenticated()) {
-        authService.logout();
-      }
-
       var vm = this;
 
       function getMessage(response) {
@@ -24,7 +19,7 @@
           notificationService.error(getMessage(response));
         }
 
-        return authService.authenticate(provider).then(redirectOnSignup, onFailure);
+        return authService.authenticate(provider, { invite_token: vm.token }).then(redirectOnSignup, onFailure);
       }
 
       function redirectOnSignup() {
@@ -75,9 +70,14 @@
         return authService.signup(vm.user).then(redirectOnSignup, onFailure).then(resetCanSignup, resetCanSignup);
       }
 
+      if (authService.isAuthenticated()) {
+        authService.logout();
+      }
+
       vm.authenticate = authenticate;
       vm.signup = signup;
       vm.signupForm = {};
-      vm.user = { invite_token: $stateParams.token };
+      vm.token = $stateParams.token;
+      vm.user = { invite_token: vm.token };
     }]);
 }());

@@ -2,11 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', ['$state', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, authService, notificationService, projectService, stateService) {
-      if (authService.isAuthenticated()) {
-        authService.logout();
-      }
-
+    .controller('auth.Login', ['$state', '$stateParams', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, authService, notificationService, projectService, stateService) {
       var vm = this;
 
       function getMessage(response) {
@@ -22,7 +18,7 @@
           notificationService.error(getMessage(response));
         }
 
-        return authService.authenticate(provider).then(redirectOnSignup, onFailure);
+        return authService.authenticate(provider, { invite_token: vm.token }).then(redirectOnSignup, onFailure);
       }
 
       function login(isValid) {
@@ -54,8 +50,13 @@
         return projectService.getAll().then(onSuccess, onFailure);
       }
 
+      if (authService.isAuthenticated()) {
+        authService.logout();
+      }
+
       vm.authenticate = authenticate;
       vm.login = login;
-      vm.user = {};
+      vm.token = $stateParams.token;
+      vm.user = { invite_token: vm.token };
     }]);
 }());

@@ -9,12 +9,12 @@
     'exceptionless.state'
   ])
   .factory('authService', ['$auth', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $rootScope, $state, stateService, Restangular) {
-    function authenticate(provider) {
+    function authenticate(provider, userData) {
       function onSuccess() {
         $rootScope.$emit('auth:login', {});
       }
 
-      return $auth.authenticate(provider).then(onSuccess);
+      return $auth.authenticate(provider, userData || {}).then(onSuccess);
     }
 
     function cancelResetPassword(resetToken) {
