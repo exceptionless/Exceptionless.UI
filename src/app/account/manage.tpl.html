@@ -131,7 +131,7 @@
                   <div class="checkbox">
                     <label class="i-checks">
                       <input type="checkbox"
-                             ng-model="vm.emailNotificationSettings.report_error_regressions"
+                             ng-model="vm.emailNotificationSettings.report_event_regressions"
                              ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()">
@@ -143,12 +143,24 @@
                   <div class="checkbox">
                     <label class="i-checks">
                       <input type="checkbox"
-                             ng-model="vm.emailNotificationSettings.report_new_not_founds"
+                             ng-model="vm.emailNotificationSettings.report_new_events"
                              ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
                              ng-disabled="!vm.hasPremiumEmailNotifications()">
                       <i></i>
-                      Notify me on new 404 errors
+                      Notify me on new events
+                    </label>
+                  </div>
+
+                  <div class="checkbox">
+                    <label class="i-checks">
+                      <input type="checkbox"
+                             ng-model="vm.emailNotificationSettings.report_critical_events"
+                             ng-model-options="{ debounce: 500 }"
+                             ng-change="vm.saveEmailNotificationSettings()"
+                             ng-disabled="!vm.hasPremiumEmailNotifications()">
+                      <i></i>
+                      Notify me on critical events
                     </label>
                   </div>
                 </div>
