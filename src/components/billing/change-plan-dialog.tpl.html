@@ -65,7 +65,7 @@
                      payments-format="card"
                      payments-type-model="vm.card.type"
                      ng-disabled="!vm.isBillingEnabled()"
-                     ng-required />
+                     ng-required="true" />
                 <span class="input-group-addon"><img ng-src="/img/cards/{{ vm.card.type ? vm.card.type : 'placeholder' }}.png" alt="Card Type" /></span>
               </div>
           </div>
@@ -78,7 +78,7 @@
                    ng-disabled="!vm.isBillingEnabled()"
                    payments-validate="expiry"
                    payments-format="expiry"
-                   ng-required />
+                   ng-required="true" />
           </div>
         </div>
 
@@ -89,7 +89,7 @@
                    x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                    ng-model="vm.card.name"
                    ng-disabled="!vm.isBillingEnabled()"
-                   ng-required />
+                   ng-required="true" />
           </div>
 
           <div class="form-group col-xs-4">
@@ -101,7 +101,7 @@
                    payments-validate="cvc"
                    payments-format="cvc"
                    payments-type-model="vm.card.type"
-                   ng-required />
+                   ng-required="true" />
           </div>
         </div>
       </div>

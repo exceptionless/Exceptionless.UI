@@ -38,7 +38,7 @@
                        ng-model="vm.project_name"
                        ng-model-options="{ debounce: 500 }"
                        project-name-available-validator
-                       ng-required />
+                       ng-required="true" />
 
                   <span class="input-group-addon" ng-if="vm.addForm.$pending">
                     <i class="fa fa-fw fa-spinner fa-spin"></i>

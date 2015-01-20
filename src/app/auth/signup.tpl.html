@@ -36,7 +36,7 @@
                 <div class="form-group">
                   <label for="name" class="col-sm-2 control-label">Name</label>
                   <div class="col-sm-10">
-                    <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false" ng-model="vm.user.name" ng-required />
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false" ng-model="vm.user.name" ng-required="true" />
                     <div class="error" ng-messages="vm.signupForm.name.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.name.$touched">
                       <small ng-message="required">Full Name is required.</small>
                     </div>
@@ -51,7 +51,7 @@
                              ng-model="vm.user.email"
                              ng-model-options="{ debounce: 500 }"
                              email-address-available-validator
-                             ng-required />
+                             ng-required="true" />
 
                         <span class="input-group-addon" ng-if="vm.signupForm.$pending">
                           <i class="fa fa-fw fa-spinner fa-spin"></i>
@@ -68,7 +68,7 @@
                 <div class="form-group">
                   <label for="password" class="col-sm-2 control-label">Password</label>
                   <div class="col-sm-10">
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required />
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required="true" />
                     <div class="error" ng-messages="vm.signupForm.password.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.password.$touched">
                       <small ng-message="required">Password is required.</small>
                       <small ng-message="minlength">Password must be at least 6 characters long.</small>

@@ -12,6 +12,21 @@
       function getEventTypes() {
         return [
           {
+            key: 'NewError',
+            name: 'New Error',
+            description: 'Occurs when a new error that has never been seen before is reported to your project.'
+          },
+          {
+            key: 'CriticalError',
+            name: 'Critical Error',
+            description: 'Occurs when an error that has been marked as critical is reported to your project.'
+          },
+          {
+            key: 'StackRegression',
+            name: 'Regression',
+            description: 'Occurs when an event that has been marked as fixed has reoccurred in your project.'
+          },
+          {
             key: 'NewEvent',
             name: 'New Event',
             description: 'Occurs when a new event that has never been seen before is reported to your project.'
@@ -21,21 +36,10 @@
             name: 'Critical Event',
             description: 'Occurs when an event that has been marked as critical is reported to your project.'
           },
-          {key: 'StackPromoted', name: 'Promoted', description: 'Used to promote event stacks to external systems.'},
           {
-            key: 'NewError',
-            name: 'New Error',
-            description: 'Occurs when a new error that has never been seen before is reported to your project.'
-          },
-          {
-            key: 'CriticalError',
-            name: 'Critical Event',
-            description: 'Occurs when an error that has been marked as critical is reported to your project.'
-          },
-          {
-            key: 'ErrorRegression',
-            name: 'Regression',
-            description: 'Occurs when an error that has been marked as fixed is reported to your project.'
+            key: 'StackPromoted',
+            name: 'Promoted',
+            description: 'Used to promote event stacks to external systems.'
           }
         ];
       }
@@ -52,8 +56,9 @@
         $modalInstance.close(vm.data);
       }
 
+      vm.addWebHookForm = {};
       vm.cancel = cancel;
-      vm.data = {};
+      vm.data = { };
       vm.eventTypes = getEventTypes();
       vm.hasEventTypeSelection = hasEventTypeSelection;
       vm.save = save;

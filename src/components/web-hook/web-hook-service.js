@@ -23,13 +23,17 @@
         return Restangular.one('projects', id).all('webhooks').getList(options || {});
       }
 
+      function remove(id) {
+        return Restangular.one('webhooks', id).remove();
+      }
 
       var service = {
         create: create,
         getAll: getAll,
         getById: getById,
         getByOrganizationId: getByOrganizationId,
-        getByProjectId: getByProjectId
+        getByProjectId: getByProjectId,
+        remove: remove
       };
       return service;
     }

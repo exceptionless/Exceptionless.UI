@@ -1,7 +1,7 @@
 <organization-notifications organization-id="vm.project.organization_id"></organization-notifications>
 
 <div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="ProjectChanged" refresh-action="vm.get(data)" refresh-throttle="2500">
-  <div class="col">
+  <div class="col" refresh-on="WebHookChanged" refresh-action="vm.getWebHooks()" refresh-throttle="2500">
     <div class="wrapper-md">
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-th-list"></i> Manage {{ vm.project.name ? 'Project "' + vm.project.name + '"' : 'Project'}}</div>
@@ -17,7 +17,7 @@
                            ng-model-options="{ debounce: 500 }"
                            ng-change="vm.save(projectForm.$valid)"
                            project-name-available-validator
-                           ng-required />
+                           ng-required="true" />
 
                     <span class="input-group-addon" ng-if="projectForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>

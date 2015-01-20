@@ -12,32 +12,22 @@
       }
 
       function addToken() {
-        function onSuccess(response) {
-          vm.tokens.push(response.data.plain());
-        }
-
         function onFailure() {
           notificationService.error('An error occurred while creating a new API key for your project.');
         }
 
         var options = {organization_id: vm.project.organization_id, project_id: _projectId};
-        return tokenService.create(options).then(onSuccess, onFailure);
+        return tokenService.create(options).catch(onFailure);
       }
 
       function addWebHook() {
         return dialogs.create('components/web-hook/add-web-hook-dialog.tpl.html', 'AddWebHookDialog as vm').result.then(function (data) {
-          data.organization_id = vm.project.organization_id;
           data.project_id = _projectId;
           return createWebHook(data);
         });
       }
 
       function createWebHook(data) {
-        function onSuccess(response) {
-          vm.webHooks.push(response.data);
-          return response.data.plain();
-        }
-
         function onFailure(response) {
           if (response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message).then(function () {
@@ -48,7 +38,7 @@
           notificationService.error('An error occurred while saving the configuration setting.');
         }
 
-        return webHookService.create(data).then(onSuccess, onFailure);
+        return webHookService.create(data).catch(onFailure);
       }
 
       function copied() {
@@ -150,15 +140,11 @@
 
       function removeConfig(config) {
         return dialogService.confirmDanger('Are you sure you want to delete this configuration setting?', 'DELETE CONFIGURATION SETTING').then(function () {
-          function onSuccess() {
-            vm.config.splice(vm.config.indexOf(config), 1);
-          }
-
           function onFailure() {
             notificationService.error('An error occurred while trying to delete the configuration setting.');
           }
 
-          return projectService.removeConfig(_projectId, config.key).then(onSuccess, onFailure);
+          return projectService.removeConfig(_projectId, config.key).catch(onFailure);
         });
       }
 
@@ -180,20 +166,22 @@
 
       function removeToken(token) {
         return dialogService.confirmDanger('Are you sure you want to delete this API key?', 'DELETE API KEY').then(function () {
-          function onSuccess() {
-            vm.tokens.splice(vm.tokens.indexOf(token), 1);
-          }
-
           function onFailure() {
             notificationService.error('An error occurred while trying to delete the API Key.');
           }
 
-          return tokenService.remove(token.id).then(onSuccess, onFailure);
+          return tokenService.remove(token.id).catch(onFailure);
         });
       }
 
       function removeWebHook(hook) {
+        return dialogService.confirmDanger('Are you sure you want to delete this web hook?', 'DELETE WEB HOOK').then(function () {
+          function onFailure() {
+            notificationService.error('An error occurred while trying to delete the web hook.');
+          }
 
+          return webHookService.remove(hook.id).catch(onFailure);
+        });
       }
 
       function resetData() {
@@ -219,25 +207,11 @@
       }
 
       function saveClientConfiguration(data) {
-        function onSuccess() {
-          var found = false;
-          vm.config.forEach(function (conf) {
-            if (conf.key === data.key) {
-              found = true;
-              conf.value = data.value;
-            }
-          });
-
-          if (!found) {
-            vm.config.push(data);
-          }
-        }
-
         function onFailure() {
           notificationService.error('An error occurred while saving the configuration setting.');
         }
 
-        return projectService.setConfig(_projectId, data.key, data.value).then(onSuccess, onFailure);
+        return projectService.setConfig(_projectId, data.key, data.value).catch(onFailure);
       }
 
       function saveDataExclusion() {
@@ -279,6 +253,7 @@
       vm.copied = copied;
       vm.data_exclusions = null;
       vm.get = get;
+      vm.getWebHooks = getWebHooks;
       vm.hasConfiguration = hasConfiguration;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.hasTokens = hasTokens;

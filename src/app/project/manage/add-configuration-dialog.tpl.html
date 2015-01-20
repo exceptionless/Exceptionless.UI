@@ -7,14 +7,14 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="key">Key</label>
-      <input id="key" name="key" type="text" class="form-control" placeholder="Configuration Key" ng-model="vm.data.key" ng-required />
+      <input id="key" name="key" type="text" class="form-control" placeholder="Configuration Key" ng-model="vm.data.key" ng-required="true" />
       <div class="error" ng-messages="addConfigurationForm.key.$error" ng-if="addConfigurationForm.$submitted || addConfigurationForm.key.$touched">
         <small ng-message="required">Please enter a valid key.</small>
       </div>
     </div>
     <div class="form-group">
       <label for="value">Value</label>
-      <input id="value" name="value" type="text" class="form-control" placeholder="Configuration Value" ng-model="vm.data.value" ng-required />
+      <input id="value" name="value" type="text" class="form-control" placeholder="Configuration Value" ng-model="vm.data.value" ng-required="true" />
       <div class="error" ng-messages="addConfigurationForm.value.$error" ng-if="addConfigurationForm.$submitted || addConfigurationForm.value.$touched">
         <small ng-message="required">Please enter a valid value.</small>
       </div>
