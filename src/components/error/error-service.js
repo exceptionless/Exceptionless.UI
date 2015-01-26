@@ -15,7 +15,7 @@
       }
 
       function getTargetInfo(exception) {
-        return exception && exception.data ? exception.data.ti : null;
+        return exception && exception.data ? exception.data['@target'] : null;
       }
 
       function getTargetInfoExceptionType(exception) {

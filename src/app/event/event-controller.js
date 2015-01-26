@@ -42,9 +42,9 @@
         var tabs = [{title: 'Overview', template_key: 'overview'}];
 
         if (isError()) {
-          if (vm.event.data.error) {
+          if (vm.event.data['@error']) {
             tabs.push({title: 'Exception', template_key: 'error'});
-          } else if (vm.event.data.simple_error) {
+          } else if (vm.event.data['@simple_error']) {
             tabs.push({title: 'Exception', template_key: 'simple-error'});
           }
         }
@@ -59,6 +59,14 @@
 
         var extendedDataItems = [];
         angular.forEach(vm.event.data, function(data, key) {
+          if (key === '@trace') {
+            key = 'Trace Log';
+          }
+
+          if (key.startsWith('@')) {
+            return;
+          }
+
           if (isPromoted(key)) {
             tabs.push({ title: key, template_key: 'promoted', data: data});
           } else if (_knownDataKeys.indexOf(key) < 0) {
@@ -101,27 +109,27 @@
       }
 
       function getBrowser() {
-        return userAgentService.getBrowser(vm.event.data.request.user_agent);
+        return userAgentService.getBrowser(vm.event.data['@request'].user_agent);
       }
 
       function getBrowserOS() {
-        return userAgentService.getBrowserOS(vm.event.data.request.user_agent);
+        return userAgentService.getBrowserOS(vm.event.data['@request'].user_agent);
       }
 
       function getDevice() {
-        return userAgentService.getDevice(vm.event.data.request.user_agent);
+        return userAgentService.getDevice(vm.event.data['@request'].user_agent);
       }
 
       function getErrorType() {
-        if (vm.event.data.error) {
-          var type = errorService.getTargetInfoExceptionType(vm.event.data.error);
+        if (vm.event.data['@error']) {
+          var type = errorService.getTargetInfoExceptionType(vm.event.data['@error']);
           if (type) {
             return type;
           }
         }
 
-        if (vm.event.data.simple_error) {
-          return vm.event.data.simple_error.type;
+        if (vm.event.data['@simple_error']) {
+          return vm.event.data['@simple_error'].type;
         }
 
         return 'Unknown';
@@ -155,8 +163,8 @@
       }
 
       function getMessage() {
-        if (vm.event.data.error) {
-          var message = errorService.getTargetInfoMessage(vm.event.data.error);
+        if (vm.event.data['@error']) {
+          var message = errorService.getTargetInfoMessage(vm.event.data['@error']);
           if (message) {
             return message;
           }
@@ -183,16 +191,16 @@
       }
 
       function getRequestUrl() {
-        var request = vm.event.data.request;
+        var request = vm.event.data['@request'];
         return urlService.buildUrl(request.is_secure, request.host, request.port, request.path, request.query_string);
       }
 
       function getVersion() {
-        return vm.event.data.version;
+        return vm.event.data['@version'];
       }
 
       function hasCookies() {
-        return Object.keys(vm.event.data.request.cookies).length > 0;
+        return Object.keys(vm.event.data['@request'].cookies).length > 0;
       }
 
       function hasDevice() {
@@ -200,35 +208,35 @@
       }
 
       function hasEnvironmentInfo() {
-        return vm.event.data && vm.event.data.environment;
+        return vm.event.data && vm.event.data['@environment'];
       }
 
       function hasIdentity() {
-        return vm.event.data && vm.event.data.user && vm.event.data.user.identity;
+        return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].identity;
       }
 
       function hasIPAddress() {
-        return hasRequestInfo() && vm.event.data.request.client_ip_address && vm.event.data.request.client_ip_address.length > 0;
+        return hasRequestInfo() && vm.event.data['@request'].client_ip_address && vm.event.data['@request'].client_ip_address.length > 0;
       }
 
       function hasReferrer() {
-        return vm.event.data && vm.event.data.request && vm.event.data.request.referrer;
+        return vm.event.data && vm.event.data['@request'] && vm.event.data['@request'].referrer;
       }
 
       function hasRequestInfo() {
-        return vm.event.data && vm.event.data.request;
+        return vm.event.data && vm.event.data['@request'];
       }
 
       function hasUserAgent() {
-        return vm.event.data && vm.event.data.request && vm.event.data.request.user_agent;
+        return vm.event.data && vm.event.data['@request'] && vm.event.data['@request'].user_agent;
       }
 
       function hasUserEmail() {
-        return vm.event.data && vm.event.data.user_description && vm.event.data.user_description.email_address;
+        return vm.event.data && vm.event.data['@user_description'] && vm.event.data['@user_description'].email_address;
       }
 
       function hasUserDescription() {
-        return vm.event.data && vm.event.data.user_description && vm.event.data.user_description.description;
+        return vm.event.data && vm.event.data['@user_description'] && vm.event.data['@user_description'].description;
       }
 
       function hasTags() {
@@ -236,7 +244,7 @@
       }
 
       function hasVersion() {
-        return vm.event.data && vm.event.data.version;
+        return vm.event.data && vm.event.data['@version'];
       }
 
       function isError() {

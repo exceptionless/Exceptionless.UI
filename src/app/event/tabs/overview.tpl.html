@@ -47,7 +47,7 @@
     <th>Referrer</th>
     <td>
       <span ng-if="vm.hasReferrer()">
-          <a ng-href="{{::vm.event.data.request.referrer}}" target="_blank" truncate>{{::vm.event.data.request.referrer}}</a>
+          <a ng-href="{{::vm.event.data['@request'].referrer}}" target="_blank" truncate>{{::vm.event.data['@request'].referrer}}</a>
       </span>
       <em ng-if="!vm.hasReferrer()">None</em>
     </td>
@@ -68,22 +68,22 @@
   <table class="table table-striped table-bordered table-fixed table-key-value b-t">
     <tr ng-if="vm.hasUserEmail()">
       <th>User Email</th>
-      <td><a ng-href="mailto:{{::vm.event.data.user_description.email_address}}" truncate>{{::vm.event.data.user_description.email_address}}</a>
+      <td><a ng-href="mailto:{{::vm.event.data['@user_description'].email_address}}" truncate>{{::vm.event.data['@user_description'].email_address}}</a>
       </td>
     </tr>
     <tr ng-if="vm.hasIdentity()">
       <th>User Name</th>
-      <td><span truncate>{{::vm.event.data.user.identity}}</span></td>
+      <td><span truncate>{{::vm.event.data['@user'].identity}}</span></td>
     </tr>
     <tr ng-if="vm.hasUserDescription()">
       <th>User Description</th>
-      <td><span truncate lines="2">{{::vm.event.data.user_description.description}}</span></td>
+      <td><span truncate lines="2">{{::vm.event.data['@user_description'].description}}</span></td>
     </tr>
   </table>
 </div>
 
 <div class="hidden-print" ng-if="vm.isError()">
   <h4>Stack Trace</h4>
-  <stack-trace class="stack-trace-mini" exception="vm.event.data.error" ng-if="vm.event.data.error"></stack-trace>
-  <simple-stack-trace class="stack-trace-mini" exception="vm.event.data.simple_error" ng-if="vm.event.data.simple_error"></simple-stack-trace>
+  <stack-trace class="stack-trace-mini" exception="vm.event.data['@error']" ng-if="vm.event.data['@error']"></stack-trace>
+  <simple-stack-trace class="stack-trace-mini" exception="vm.event.data['@simple_error']" ng-if="vm.event.data['@simple_error']"></simple-stack-trace>
 </div>

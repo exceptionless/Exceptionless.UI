@@ -6,7 +6,7 @@
   </tr>
   <tr>
     <th>HTTP Method</th>
-    <td>{{::vm.event.data.request.http_method}}</td>
+    <td>{{::vm.event.data['@request'].http_method}}</td>
   </tr>
   <tr>
     <th>URL</th>
@@ -16,18 +16,18 @@
     <th>Referrer</th>
     <td>
       <span ng-if="vm.hasReferrer()">
-          <a ng-href="{{::vm.event.data.request.referrer}}" target="_blank" truncate>{{::vm.event.data.request.referrer}}</a>
+          <a ng-href="{{::vm.event.data['@request'].referrer}}" target="_blank" truncate>{{::vm.event.data['@request'].referrer}}</a>
       </span>
       <em ng-if="!vm.hasReferrer()">None</em>
     </td>
   </tr>
   <tr ng-if="vm.hasIPAddress()">
     <th>Client IP</th>
-    <td>{{::vm.event.data.request.client_ip_address}}</td>
+    <td>{{::vm.event.data['@request'].client_ip_address}}</td>
   </tr>
   <tr>
     <th>User Agent</th>
-    <td><span truncate lines="2">{{::vm.event.data.request.user_agent}}</span></td>
+    <td><span truncate lines="2">{{::vm.event.data['@request'].user_agent}}</span></td>
   </tr>
   <tr ng-if="vm.hasUserAgent()">
     <th>Browser</th>
@@ -43,7 +43,7 @@
   </tr>
 </table>
 
-<extended-data-item can-promote="false" title="'Post Data'" data="vm.event.data.request.post_data"></extended-data-item>
+<extended-data-item can-promote="false" title="'Post Data'" data="vm.event.data['@request'].post_data"></extended-data-item>
 
 <div ng-if="vm.hasCookies()">
   <h4>Cookie Values</h4>
@@ -55,7 +55,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="(key, value) in vm.event.data.request.cookies track by key">
+    <tr ng-repeat="(key, value) in vm.event.data['@request'].cookies track by key">
       <td>{{::key}}</td>
       <td><span truncate lines="3">{{::value}}</span></td>
     </tr>
