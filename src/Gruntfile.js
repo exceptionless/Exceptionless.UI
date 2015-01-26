@@ -190,7 +190,7 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['*.png', '*.ico', 'img/**/{*.png,*.jpg,*.ico}'], dest: 'dist/'}
+          {src: ['web.config', '*.png', '*.ico', 'img/**/{*.png,*.jpg,*.ico}'], dest: 'dist/'}
         ]
       }
     },
