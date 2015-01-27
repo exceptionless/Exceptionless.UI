@@ -61,7 +61,7 @@
   ])
   .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
     $locationProvider.html5Mode({
-      enabled: USE_HTML5_MODE,
+      enabled: (typeof USE_HTML5_MODE === 'boolean' && USE_HTML5_MODE) || USE_HTML5_MODE === 'true',
       requireBase: false
     });
 
@@ -468,7 +468,7 @@
     });
   }])
   .run(['$state', 'editableOptions', '$location', 'rateLimitService', 'Restangular', 'stateService', 'USE_SSL', '$window', function($state, editableOptions, $location, rateLimitService, Restangular, stateService, USE_SSL, $window) {
-    if (USE_SSL && $location.protocol() !== 'https') {
+    if (((typeof USE_SSL === 'boolean' && USE_SSL) || USE_SSL === 'true') && $location.protocol() !== 'https') {
         $window.location.href = $location.absUrl().replace('http', 'https');
     }
 
