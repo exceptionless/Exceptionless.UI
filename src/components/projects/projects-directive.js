@@ -48,7 +48,7 @@
 
           function open(id, event) {
             if (event.ctrlKey || event.which === 2) {
-              $window.open('/#/project/' + id + '/manage', '_blank');
+              $window.open($state.href('app.project.manage', { id: id }, { absolute: true }), '_blank');
             } else {
               $state.go('app.project.manage', { id: id });
             }

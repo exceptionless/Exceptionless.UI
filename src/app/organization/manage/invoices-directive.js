@@ -44,7 +44,7 @@
           }
 
           function open(id, event) {
-            $window.open('/#/payment/' + id, '_blank');
+            $window.open($state.href('payment', { id: id }, { absolute: true }), '_blank');
             event.preventDefault();
           }
 

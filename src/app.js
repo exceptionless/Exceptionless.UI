@@ -59,7 +59,12 @@
     'app.stack',
     'app.status'
   ])
-  .config(['$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', function ($stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, stripeProvider, STRIPE_PUBLISHABLE_KEY) {
+  .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
+    $locationProvider.html5Mode({
+      enabled: USE_HTML5_MODE,
+      requireBase: false
+    });
+
     $uiViewScrollProvider.useAnchorScroll();
 
     dialogsProvider.setSize('md');
