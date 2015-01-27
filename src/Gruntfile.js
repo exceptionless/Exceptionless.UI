@@ -164,14 +164,14 @@ module.exports = function (grunt) {
           dest: 'dist/app.config.js',
           constants: {
             BASE_URL: process.env.API_URL || 'http://localhost:50000/api/v2',
-            FACEBOOK_APPID: process.env.FACEBOOK_APPID || '395178683904310',
-            GITHUB_APPID: process.env.GITHUB_APPID || 'fdb0fdc666419c4cd3e9',
-            GOOGLE_APPID: process.env.GOOGLE_APPID || '86088244242-6ihnf99upp3a2g5sp13joerdo1i5f29l.apps.googleusercontent.com',
-            INTERCOM_APPID: process.env.INTERCOM_APPID,
+            FACEBOOK_APPID: process.env.FACEBOOK_APPID || '',
+            GITHUB_APPID: process.env.GITHUB_APPID || '',
+            GOOGLE_APPID: process.env.GOOGLE_APPID || '',
+            INTERCOM_APPID: process.env.INTERCOM_APPID || '',
             LIVE_APPID: process.env.LIVE_APPID || '0000000044132A07',
-            STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
-            USE_HTML5_MODE: process.env.HTML5_MODE || false,
-            USE_SSL: process.env.USE_SSL || false,
+            STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
+            USE_HTML5_MODE: process.env.HTML5_MODE === true,
+            USE_SSL: process.env.USE_SSL === true,
             VERSION: process.env.BUILD_NUMBER || '2.0.0'
           }
         },
