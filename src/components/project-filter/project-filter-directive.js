@@ -16,7 +16,7 @@
       replace: true,
       scope: true,
       templateUrl: 'components/project-filter/project-filter-directive.tpl.html',
-      controller: ['$scope', '$state', '$stateParams', 'filterService', 'notificationService', 'organizationService', 'projectService', 'urlService', function ($scope, $state, $stateParams, filterService, notificationService, organizationService, projectService, urlService) {
+      controller: ['$scope', '$state', '$stateParams', '$window', 'debounce', 'filterService', 'notificationService', 'organizationService', 'projectService', 'urlService', function ($scope, $state, $stateParams, $window, debounce, filterService, notificationService, organizationService, projectService, urlService) {
         function get() {
           return getOrganizations().then(getProjects);
         }
@@ -109,12 +109,22 @@
           return 'dashboard';
         }
 
+        var updateFilterDropDownMaxHeight = debounce(function() {
+          vm.filterDropDownMaxHeight = angular.element($window).height() - 52;
+        }, 150);
+
+        var window = angular.element($window);
+        window.bind('resize', updateFilterDropDownMaxHeight);
+
         // NOTE: We need to watch on getFilterName because the filterChangedEvents might not be called depending on suspendNotifications option.
         var unbind = $scope.$watch(function() { return vm.getFilterName(); }, function (filterName) {
           vm.filterName = filterName;
         });
 
-        $scope.$on('$destroy', unbind);
+        $scope.$on('$destroy', function(e) {
+          unbind();
+          window.unbind('resize', updateFilterDropDownMaxHeight);
+        });
 
         var vm = this;
         vm.filterName = 'Loading';
@@ -127,6 +137,7 @@
         vm.organizations = [];
         vm.projects = [];
 
+        updateFilterDropDownMaxHeight();
         get();
       }],
       controllerAs: 'vm'

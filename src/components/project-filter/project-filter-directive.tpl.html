@@ -4,7 +4,7 @@
       <span>{{vm.filterName}}</span> <b class="caret"></b>
     </a>
 
-    <div class="dropdown-menu w-xl project-filter-dropdown-menu">
+    <div class="dropdown-menu w-xl project-filter-dropdown-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}">
       <div class="panel bg-dark">
         <div class="list-group">
           <div ng-repeat="organization in vm.organizations track by organization.id">
