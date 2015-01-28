@@ -5,6 +5,8 @@
     'ui.bootstrap',
 
     'dialogs.main',
-    'dialogs.default-translations'
+    'dialogs.default-translations',
+
+    'exceptionless.autofocus'
   ]);
 }());

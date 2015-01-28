@@ -12,7 +12,8 @@
                ng-model="vm.data.name"
                ng-model-options="{ debounce: 500 }"
                organization-name-available-validator
-               ng-required="true" />
+               ng-required="true"
+               autofocus />
 
         <span class="input-group-addon" ng-if="vm.addOrganizationForm.$pending">
           <i class="fa fa-fw fa-spinner fa-spin"></i>

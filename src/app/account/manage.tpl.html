@@ -23,7 +23,8 @@
                          ng-model="vm.user.full_name"
                          ng-model-options="{ debounce: 500 }"
                          ng-change="vm.saveUser(fullNameForm.$valid)"
-                         ng-required="true" />
+                         ng-required="true"
+                         autofocus />
 
                   <div class="error" ng-messages="fullNameForm.name.$error" ng-if="fullNameForm.$submitted || fullNameForm.name.$touched">
                     <small ng-message="required">Full Name is required.</small>

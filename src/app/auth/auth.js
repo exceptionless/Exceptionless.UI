@@ -9,6 +9,7 @@
 
     'app.config',
     'exceptionless.auth',
+    'exceptionless.autofocus',
     'exceptionless.notification',
     'exceptionless.project',
     'exceptionless.rate-limit',

@@ -36,7 +36,12 @@
                 <div class="form-group">
                   <label for="name" class="col-sm-2 control-label">Name</label>
                   <div class="col-sm-10">
-                    <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false" ng-model="vm.user.name" ng-required="true" />
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name"
+                           x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
+                           ng-model="vm.user.name"
+                           ng-required="true"
+                           autofocus />
+
                     <div class="error" ng-messages="vm.signupForm.name.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.name.$touched">
                       <small ng-message="required">Full Name is required.</small>
                     </div>

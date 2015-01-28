@@ -28,7 +28,8 @@
               ng-init="vm.currentPlan = vm.plans[0]"
               ng-model="vm.currentPlan"
               ng-disabled="!vm.isBillingEnabled()"
-              ng-options="plan.description for plan in vm.plans track by plan.id"></select>
+              ng-options="plan.description for plan in vm.plans track by plan.id"
+              autofocus></select>
     </div>
 
     <div ng-if="vm.isPaidPlan() && !vm.hasAdminRole()">

@@ -17,7 +17,8 @@
                            ng-model-options="{ debounce: 500 }"
                            ng-change="vm.save(projectForm.$valid)"
                            project-name-available-validator
-                           ng-required="true" />
+                           ng-required="true"
+                           autofocus />
 
                     <span class="input-group-addon" ng-if="projectForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>

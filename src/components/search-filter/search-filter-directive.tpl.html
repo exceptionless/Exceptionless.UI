@@ -14,7 +14,8 @@
                      ng-model="vm.filter"
                      ng-model-options="{ debounce: 500 }"
                      ng-change="vm.setFilter(vm.filter)"
-                     search-filter-validator />
+                     search-filter-validator
+                     autofocus />
 
               <span class="input-group-addon" ng-if="searchFilterForm.$pending">
                 <i class="fa fa-fw fa-spinner fa-spin"></i>

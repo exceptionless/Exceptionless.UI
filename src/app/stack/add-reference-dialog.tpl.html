@@ -9,7 +9,8 @@
       <label for="url">Reference Link</label>
       <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Please enter a valid URL"
              ng-model="vm.data.url"
-             ng-required="true" />
+             ng-required="true"
+             autofocus />
 
       <div class="error" ng-messages="addReferenceForm.url.$error" ng-if="addReferenceForm.$submitted || addReferenceForm.url.$touched">
         <small ng-message="required">Reference Link is required.</small>

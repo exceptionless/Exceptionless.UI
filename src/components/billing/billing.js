@@ -11,6 +11,7 @@
 
     'app.config',
     'exceptionless.admin',
+    'exceptionless.autofocus',
     'exceptionless.dialog',
     'exceptionless.notification',
     'exceptionless.organization',

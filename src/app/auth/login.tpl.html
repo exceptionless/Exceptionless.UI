@@ -33,7 +33,7 @@
                 <div class="form-group">
                   <label for="email" class="col-sm-2 control-label">Email</label>
                   <div class="col-sm-10">
-                    <input id="email" name="email" type="email" class="form-control" placeholder="Email address" x-autocompletetype="email" autocorrect="off" spellcheck="false" ng-model="vm.user.email" required />
+                    <input id="email" name="email" type="email" class="form-control" placeholder="Email address" x-autocompletetype="email" autocorrect="off" spellcheck="false" ng-model="vm.user.email" ng-required="true" autofocus />
                     <div class="error" ng-messages="loginForm.email.$error" ng-if="loginForm.$submitted || loginForm.email.$touched">
                       <small ng-message="required">Email Address is required.</small>
                       <small ng-message="email">Email Address is required.</small>

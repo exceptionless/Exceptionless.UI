@@ -4,6 +4,7 @@
   angular.module('exceptionless.search-filter', [
     'ngMessages',
 
+    'exceptionless.autofocus',
     'exceptionless.refresh',
     'exceptionless.validators'
   ])

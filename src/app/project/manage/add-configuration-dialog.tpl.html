@@ -7,7 +7,7 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="key">Key</label>
-      <input id="key" name="key" type="text" class="form-control" placeholder="Configuration Key" ng-model="vm.data.key" ng-required="true" />
+      <input id="key" name="key" type="text" class="form-control" placeholder="Configuration Key" ng-model="vm.data.key" ng-required="true" autofocus />
       <div class="error" ng-messages="addConfigurationForm.key.$error" ng-if="addConfigurationForm.$submitted || addConfigurationForm.key.$touched">
         <small ng-message="required">Please enter a valid key.</small>
       </div>

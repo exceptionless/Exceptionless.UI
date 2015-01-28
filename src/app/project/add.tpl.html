@@ -18,7 +18,8 @@
                        ng-model="vm.organization_name"
                        ng-model-options="{ debounce: 500 }"
                        organization-name-available-validator
-                       ng-required="vm.canCreateOrganization()" />
+                       ng-required="vm.canCreateOrganization()"
+                       autofocus />
 
                 <span class="input-group-addon" ng-if="vm.addForm.$pending">
                   <i class="fa fa-fw fa-spinner fa-spin"></i>
@@ -38,7 +39,8 @@
                        ng-model="vm.project_name"
                        ng-model-options="{ debounce: 500 }"
                        project-name-available-validator
-                       ng-required="true" />
+                       ng-required="true"
+                       autofocus />
 
                   <span class="input-group-addon" ng-if="vm.addForm.$pending">
                     <i class="fa fa-fw fa-spinner fa-spin"></i>
