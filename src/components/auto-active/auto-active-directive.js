@@ -17,7 +17,7 @@
             angular.forEach(element.find('li'), function (li) {
               var anchor = li.querySelector('a');
               if (anchor && anchor.href) {
-                if (anchor.href.match('#' + path + '(?=\\?|$)')) {
+                if (anchor.href.match(path + '(?=\\?|$)') || anchor.href.match('#' + path + '(?=\\?|$)')) {
                   angular.element(li).addClass('active');
                 } else {
                   angular.element(li).removeClass('active');
@@ -26,7 +26,7 @@
             });
 
             if (attr && attr.href) {
-              if (attr.href.match('#' + path + '(?=\\?|$)')) {
+              if (attr.href.match(path + '(?=\\?|$)') || attr.href.match('#' + path + '(?=\\?|$)')) {
                 element.addClass('active');
               } else {
                 element.removeClass('active');
