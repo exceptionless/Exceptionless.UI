@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', ['$filter', 'eventService', 'filterService', 'notificationService', 'stackService', 'statService', function ($filter, eventService, filterService, notificationService, stackService, statService) {
+    .controller('app.Dashboard', ['$filter', '$stateParams', 'eventService', 'filterService', 'notificationService', 'stackService', 'statService', function ($filter, $stateParams, eventService, filterService, notificationService, stackService, statService) {
       var vm = this;
 
       function get() {
@@ -115,6 +115,7 @@
         }
       };
       vm.stats = {};
+      vm.type = $stateParams.type;
 
       get();
     }
