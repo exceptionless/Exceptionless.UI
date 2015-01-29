@@ -9,15 +9,19 @@
         scope: false,
         link: function (scope, element, attr) {
           function setActive() {
-            var path = $location.path();
-            if (!path) {
+            function isMatch(href) {
+              var pattern = href + '(?=\\?|$)';
+              return $location.absUrl().match(pattern);
+            }
+
+            if (!$location.path()) {
               return;
             }
 
             angular.forEach(element.find('li'), function (li) {
               var anchor = li.querySelector('a');
               if (anchor && anchor.href) {
-                if (anchor.href.match(path + '(?=\\?|$)') || anchor.href.match('#' + path + '(?=\\?|$)')) {
+                if (isMatch(anchor.href)) {
                   angular.element(li).addClass('active');
                 } else {
                   angular.element(li).removeClass('active');
@@ -26,7 +30,7 @@
             });
 
             if (attr && attr.href) {
-              if (attr.href.match(path + '(?=\\?|$)') || attr.href.match('#' + path + '(?=\\?|$)')) {
+              if (isMatch(attr.href)) {
                 element.addClass('active');
               } else {
                 element.removeClass('active');
@@ -35,7 +39,7 @@
           }
 
           function setActiveWithTimeout() {
-            var timeout = $timeout(setActive, 10);
+            var timeout = $timeout(setActive, 100);
             scope.$on('$destroy', function() {
               $timeout.cancel(timeout);
             });
