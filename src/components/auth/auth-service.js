@@ -72,7 +72,7 @@
     }
 
     function unlink(providerName, providerUserId) {
-      return $auth.unlink(providerName + '/' + providerUserId);
+      return Restangular.one('auth', 'unlink').one(providerName).customPOST(providerUserId);
     }
 
     var service = {

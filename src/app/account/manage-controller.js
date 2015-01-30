@@ -256,7 +256,7 @@
           notificationService.error(message);
         }
 
-        return authService.unlink(account.provider, encodeURIComponent(account.provider_user_id)).then(onSuccess, onFailure);
+        return authService.unlink(account.provider, account.provider_user_id).then(onSuccess, onFailure);
       }
 
       vm.authenticate = authenticate;
