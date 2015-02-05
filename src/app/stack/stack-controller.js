@@ -43,6 +43,14 @@
           return;
         }
 
+        if (data && data.type === 'PersistentEvent') {
+          if (!data.deleted || data.project_id !== vm.stack.project_id) {
+            return;
+          }
+
+          return getStats();
+        }
+
         return getStack().then(getStats).then(getProject);
       }
 
