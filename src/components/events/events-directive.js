@@ -14,6 +14,18 @@
         controller: ['$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($window, $state, $stateParams, eventsActionsService, linkService, filterService, notificationService, paginationService) {
           var vm = this;
 
+          function canRefresh(data) {
+            if (!data || data.type !== 'PersistentEvent' || !data.deleted) {
+              return false;
+            }
+
+            if (!!data.id) {
+                return vm.events.filter(function (e) { return e.id === data.id; }).length > 0;
+            }
+
+            return true;
+          }
+
           function get(options) {
             function onSuccess(response) {
               vm.events = response.data.plain();
@@ -62,10 +74,14 @@
           }
 
           function save(action) {
+            function onSuccess() {
+              vm.selectedIds = [];
+            }
+
             if (!hasSelection()) {
               notificationService.info(null, 'Please select one or more events');
             } else {
-              action.run(vm.selectedIds);
+              action.run(vm.selectedIds).then(onSuccess);
             }
           }
 
@@ -82,6 +98,7 @@
           }
 
           vm.actions = eventsActionsService.getActions();
+          vm.canRefresh = canRefresh;
           vm.get = get;
           vm.hasEvents = hasEvents;
           vm.hasSelection = hasSelection;
