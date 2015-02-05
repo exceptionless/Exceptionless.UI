@@ -63,10 +63,14 @@
           }
 
           function save(action) {
+            function onSuccess() {
+              vm.selectedIds = [];
+            }
+
             if (!hasSelection()) {
               notificationService.info(null, 'Please select one or more stacks');
             } else {
-              action.run(vm.selectedIds);
+              action.run(vm.selectedIds).then(onSuccess);
             }
           }
 
