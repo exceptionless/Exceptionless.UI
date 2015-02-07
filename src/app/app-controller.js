@@ -7,7 +7,7 @@
       var vm = this;
 
       function canChangePlan() {
-        return STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
+        return !!STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
       }
 
       function changePlan(organizationId) {
