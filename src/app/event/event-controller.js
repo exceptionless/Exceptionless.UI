@@ -219,6 +219,10 @@
         return hasRequestInfo() && vm.event.data['@request'].client_ip_address && vm.event.data['@request'].client_ip_address.length > 0;
       }
 
+      function hasLevel() {
+        return vm.event.data && vm.event.data['@level'];
+      }
+
       function hasReferrer() {
         return vm.event.data && vm.event.data['@request'] && vm.event.data['@request'].referrer;
       }
@@ -249,6 +253,23 @@
 
       function isError() {
         return vm.event.type === 'error';
+      }
+
+      function isLevelSuccess() {
+        var level = hasLevel() ? vm.event.data['@level'].toLowerCase() : null;
+        return level === 'trace' || level === 'debug';
+      }
+
+      function isLevelInfo() {
+        return hasLevel() && vm.event.data['@level'].toLowerCase() === 'info';
+      }
+
+      function isLevelWarning() {
+        return hasLevel() && vm.event.data['@level'].toLowerCase() === 'warn';
+      }
+
+      function isLevelError() {
+        return hasLevel() && vm.event.data['@level'].toLowerCase() === 'error';
       }
 
       function isPromoted(tabName) {
@@ -292,6 +313,7 @@
       vm.hasCookies = hasCookies;
       vm.hasDevice = hasDevice;
       vm.hasIdentity = hasIdentity;
+      vm.hasLevel = hasLevel;
       vm.hasReferrer = hasReferrer;
       vm.hasRequestInfo = hasRequestInfo;
       vm.hasTags = hasTags;
@@ -300,6 +322,10 @@
       vm.hasUserEmail = hasUserEmail;
       vm.hasVersion = hasVersion;
       vm.isError = isError;
+      vm.isLevelSuccess = isLevelSuccess;
+      vm.isLevelInfo = isLevelInfo;
+      vm.isLevelWarning = isLevelWarning;
+      vm.isLevelError = isLevelError;
       vm.isPromoted = isPromoted;
       vm.project = {};
       vm.promoteTab = promoteTab;
