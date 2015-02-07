@@ -51,7 +51,7 @@
         scope: {
           exception: "="
         },
-        template: '<pre class="stack-trace" ng-bind-html="vm.stackTrace"></pre>',
+        template: '<pre class="stack-trace" bind-html-unsafe="vm.stackTrace"></pre>',
         controller: [function () {
           var vm = this;
           vm.stackTrace = buildStackTrace(simpleErrorService.getExceptions(vm.exception));
