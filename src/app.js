@@ -73,7 +73,9 @@
     RestangularProvider.setFullResponse(true);
     //RestangularProvider.setDefaultHttpFields({ timeout: 10 * 1000 });
 
-    stripeProvider.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
+    if (!!STRIPE_PUBLISHABLE_KEY) {
+      stripeProvider.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
+    }
 
     $urlRouterProvider.when('', '/type/error/dashboard');
     $urlRouterProvider.when('/', '/type/error/dashboard');
