@@ -74,8 +74,9 @@
                 plan: currentOrganization.plan_id,
                 monthly_spend: currentOrganization.billing_price,
                 total_errors: currentOrganization.total_event_count,
-                app_build: build
               };
+
+              data.app_build = build;
 
               if (currentOrganization.subscribe_date) {
                 data.company.subscribe_at = moment(currentOrganization.subscribe_date).unix();
