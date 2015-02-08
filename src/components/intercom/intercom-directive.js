@@ -8,7 +8,7 @@
         restrict: 'E',
         replace: true,
         templateUrl: 'components/intercom/intercom-directive.tpl.html',
-        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', '$intercom', 'objectIDService', 'organizationService', 'projectService', 'userService', function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, objectIDService, organizationService, projectService, userService) {
+        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', '$intercom', 'objectIDService', 'organizationService', 'projectService', 'userService', 'VERSION', function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, objectIDService, organizationService, projectService, userService, VERSION) {
           if (!authService.isAuthenticated()) {
             return;
           }
@@ -68,7 +68,8 @@
                 remote_created_at: objectIDService.create(currentOrganization.id).timestamp,
                 plan: currentOrganization.plan_id,
                 monthly_spend: currentOrganization.billing_price,
-                total_errors: currentOrganization.total_event_count
+                total_errors: currentOrganization.total_event_count,
+                app_version: VERSION
               };
 
               if (currentOrganization.subscribe_date) {
