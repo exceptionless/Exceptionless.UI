@@ -62,7 +62,7 @@
 
             var versionParts = VERSION.split('.');
             var build = 0;
-            if (versionParts.length == 3)
+            if (versionParts.length === 3)
               build = parseInt(versionParts[2]);
 
             var currentOrganization = getCurrentOrganization();
