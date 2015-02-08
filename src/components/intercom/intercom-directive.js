@@ -60,6 +60,11 @@
               remote_created_at: objectIDService.create(vm.user.id).timestamp
             };
 
+            var versionParts = VERSION.split('.');
+            var build = 0;
+            if (versionParts.length == 3)
+              build = parseInt(versionParts[2]);
+
             var currentOrganization = getCurrentOrganization();
             if (currentOrganization) {
               data.company = {
@@ -69,7 +74,7 @@
                 plan: currentOrganization.plan_id,
                 monthly_spend: currentOrganization.billing_price,
                 total_errors: currentOrganization.total_event_count,
-                app_version: VERSION
+                app_build: build
               };
 
               if (currentOrganization.subscribe_date) {
