@@ -49,7 +49,7 @@
           { key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config' },
           { key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config' },
           { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config' },
-          { key: 'Exceptionless', name: 'Console', config: 'app.config' }
+          { key: 'Exceptionless.Console', name: 'Console', config: 'app.config' }
         ];
       }
 

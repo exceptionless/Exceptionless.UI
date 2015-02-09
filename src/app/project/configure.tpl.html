@@ -25,14 +25,11 @@
                 <a class="input-group-addon" title="Copy to Clipboard" clip-copy="vm.apiKey" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></a>
               </div>
             </li>
-            <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless'">
-              <p>Import the <code>Exceptionless</code> namespace and add a call to <code>ExceptionlessClient.Default.Startup()</code> during the startup of your app.</p>
-            </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Nancy'">
               <p>Import the <code>Exceptionless</code> namespace and add a call to <code>Exceptionless.ExceptionlessClient.Default.RegisterNancy(pipelines)</code>
                  with an instance of Nancy.Bootstrapper.IPipelines inside of your NancyBootstrapper's ApplicationStartup method.</p>
             </li>
-            <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Windows' || vm.currentProjectType.key === 'Exceptionless.Wpf'">
+            <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Windows' || vm.currentProjectType.key === 'Exceptionless.Wpf' || vm.currentProjectType.key === 'Exceptionless.Console'">
               <p>Import the <code>Exceptionless</code> namespace and add a call to <code>ExceptionlessClient.Default.Register()</code> during the startup of your app.</p>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.WebApi'">
