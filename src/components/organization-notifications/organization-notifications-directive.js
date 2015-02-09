@@ -97,7 +97,7 @@
             }
 
             // Only show it if you absolutely have no data or the current project has no data or if the current org has no data.
-            var canShowConfigurationAlert = currentProjects.filter(function(p) { return p.total_event_count === 0; }).length === currentProjects.length;
+            var canShowConfigurationAlert = currentProjects.filter(function(p) { return p.event_count === 0; }).length === currentProjects.length;
 
             // Only show the premium features dialog when searching on a plan without premium features and your project has been configured.
             var tryingToSearchWithoutPremiumFeatures = vm.filterUsesPremiumFeatures && !organization.has_premium_features;
@@ -128,7 +128,7 @@
                   return;
                 }
 
-                if (project.total_event_count === 0) {
+                if (project.event_count === 0) {
                   vm.projectsRequiringConfiguration.push(project);
                   hasProjectsRequiringConfiguration = true;
                 }
