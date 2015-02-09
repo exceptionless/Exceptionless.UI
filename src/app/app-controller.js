@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'organizationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'organizationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'SYSTEM_NOTIFICATION_MESSAGE', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, SYSTEM_NOTIFICATION_MESSAGE, urlService, userService, VERSION) {
       var _store = locker.driver('local').namespace('app');
       var vm = this;
 
@@ -53,8 +53,16 @@
         return userService.getCurrentUser().then(onSuccess);
       }
 
+      function getSystemNotificationMessage() {
+        return SYSTEM_NOTIFICATION_MESSAGE;
+      }
+
       function hasAdminRole() {
         return userService.hasAdminRole(vm.user);
+      }
+
+      function hasSystemNotificationMessage() {
+        return !!SYSTEM_NOTIFICATION_MESSAGE;
       }
 
       function isAllMenuActive() {
@@ -150,7 +158,9 @@
       vm.getNewUrl = getNewUrl;
       vm.getOrganizations = getOrganizations;
       vm.getUser = getUser;
+      vm.getSystemNotificationMessage = getSystemNotificationMessage;
       vm.hasAdminRole = hasAdminRole;
+      vm.hasSystemNotificationMessage = hasSystemNotificationMessage;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
       vm.isIntercomEnabled = isIntercomEnabled;
