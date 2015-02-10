@@ -91,6 +91,7 @@
 
         if (graph._selectionCallback && !isNaN(position.coordMinX) && !isNaN(position.coordMaxX) &&
           this.startPointX !== event.layerX && // Ensure that there was an actual selection.
+          position.coordMinX !== position.coordMaxX && // Ensure that there was an actual selection.
           event.button === 0) { // Only accept left mouse button up..
           graph._selectionCallback(position);
         }
