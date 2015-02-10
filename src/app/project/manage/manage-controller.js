@@ -253,6 +253,7 @@
       vm.copied = copied;
       vm.data_exclusions = null;
       vm.get = get;
+      vm.getTokens = getTokens;
       vm.getWebHooks = getWebHooks;
       vm.hasConfiguration = hasConfiguration;
       vm.hasPremiumFeatures = hasPremiumFeatures;
