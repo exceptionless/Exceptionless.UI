@@ -21,7 +21,7 @@
         }
 
         routeParts.push(options.route);
-        return $state.href('app.' + routeParts.join('-'), routeParams);
+        return $state.href('app.' + routeParts.join('-'), routeParams, { absolute: true });
       }
 
       function buildUrl(isSecure, host, port, path, queryString) {
