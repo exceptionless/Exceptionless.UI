@@ -26,10 +26,37 @@
         return device.model;
       }
 
+      function hasBrowser(userAgent) {
+        if (!userAgent) {
+          return false;
+        }
+        var browser = getUserAgent(userAgent).browser;
+        return !!browser.name || !!browser.version || !!browser.major;
+      }
+
+      function hasBrowserOS(userAgent) {
+        if (!userAgent) {
+          return false;
+        }
+        var os = getUserAgent(userAgent).os;
+        return !!os.name || !!os.version;
+      }
+
+      function hasDevice(userAgent) {
+        if (!userAgent) {
+          return false;
+        }
+        var os = getUserAgent(userAgent).os;
+        return !!os.model || !!os.vendor || !!os.type;
+      }
+
       var service = {
         getBrowser: getBrowser,
         getBrowserOS: getBrowserOS,
-        getDevice: getDevice
+        getDevice: getDevice,
+        hasBrowser: hasBrowser,
+        hasBrowserOS: hasBrowserOS,
+        hasDevice: hasDevice
       };
 
       return service;

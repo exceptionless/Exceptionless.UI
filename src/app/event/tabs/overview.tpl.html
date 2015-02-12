@@ -57,11 +57,11 @@
     </td>
   </tr>
 
-  <tr class="hidden-print" ng-if="vm.hasUserAgent()">
+  <tr class="hidden-print" ng-if="vm.hasBrowser()">
     <th>Browser</th>
     <td><span truncate>{{::vm.getBrowser()}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.hasUserAgent()">
+  <tr class="hidden-print" ng-if="vm.hasBrowserOS()">
     <th>Browser OS</th>
     <td>{{::vm.getBrowserOS()}}</td>
   </tr>

@@ -199,12 +199,20 @@
         return vm.event.data['@version'];
       }
 
+      function hasBrowser() {
+        return hasUserAgent() && userAgentService.hasBrowser(vm.event.data['@request'].user_agent);
+      }
+
+      function hasBrowserOS() {
+        return hasUserAgent() && userAgentService.hasBrowserOS(vm.event.data['@request'].user_agent);
+      }
+
       function hasCookies() {
         return Object.keys(vm.event.data['@request'].cookies).length > 0;
       }
 
       function hasDevice() {
-        return hasUserAgent() && getDevice();
+        return hasUserAgent() && userAgentService.hasDevice(vm.event.data['@request'].user_agent);
       }
 
       function hasEnvironmentInfo() {
@@ -310,6 +318,8 @@
       vm.getMessage = getMessage;
       vm.getRequestUrl = getRequestUrl;
       vm.getVersion = getVersion;
+      vm.hasBrowser = hasBrowser;
+      vm.hasBrowserOS = hasBrowserOS;
       vm.hasCookies = hasCookies;
       vm.hasDevice = hasDevice;
       vm.hasIdentity = hasIdentity;
@@ -317,7 +327,6 @@
       vm.hasReferrer = hasReferrer;
       vm.hasRequestInfo = hasRequestInfo;
       vm.hasTags = hasTags;
-      vm.hasUserAgent = hasUserAgent;
       vm.hasUserDescription = hasUserDescription;
       vm.hasUserEmail = hasUserEmail;
       vm.hasVersion = hasVersion;

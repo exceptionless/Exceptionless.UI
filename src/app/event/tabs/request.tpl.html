@@ -29,11 +29,11 @@
     <th>User Agent</th>
     <td><span truncate lines="2">{{::vm.event.data['@request'].user_agent}}</span></td>
   </tr>
-  <tr ng-if="vm.hasUserAgent()">
+  <tr ng-if="vm.hasBrowser()">
     <th>Browser</th>
     <td><span truncate>{{::vm.getBrowser()}}</span></td>
   </tr>
-  <tr ng-if="vm.hasUserAgent()">
+  <tr ng-if="vm.hasBrowserOS()">
     <th>Browser OS</th>
     <td>{{::vm.getBrowserOS()}}</td>
   </tr>
