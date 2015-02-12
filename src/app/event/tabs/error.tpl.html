@@ -19,6 +19,10 @@
     <th>Code</th>
     <td><span truncate>{{::vm.event.data['@error'].code}}</span></td>
   </tr>
+  <tr ng-if="vm.event.data['@submission_method']">
+    <th>Submission Method</th>
+    <td><span truncate>{{::vm.event.data['@submission_method']}}</span></td>
+  </tr>
 </table>
 
 <h3>Stack Trace</h3>
