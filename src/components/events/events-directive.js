@@ -15,12 +15,22 @@
           var vm = this;
 
           function canRefresh(data) {
-            if (!data || data.type !== 'PersistentEvent' || !data.deleted) {
-              return false;
+            if (!!data && data.type === 'PersistentEvent') {
+              // We are already listening to the stack changed event... This prevents a double refresh.
+              if (!data.deleted) {
+                return false;
+              }
+
+              // Refresh if the event id is set (non bulk) and the deleted event matches one of the events.
+              if (!!data.id) {
+                return vm.events.filter(function (e) { return e.id === data.id; }).length > 0;
+              }
+
+              return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
             }
 
-            if (!!data.id) {
-                return vm.events.filter(function (e) { return e.id === data.id; }).length > 0;
+            if (!!data && data.type === 'Stack') {
+              return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
             }
 
             return true;

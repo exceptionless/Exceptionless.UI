@@ -119,6 +119,19 @@
         return new Date().getTimezoneOffset() * -1;
       }
 
+      function includedInProjectOrOrganizationFilter(data) {
+        if (!data.organizationId && !data.projectId) {
+          return false;
+        }
+
+        // The all filter is set.
+        if (!_organizationId && !_projectId) {
+          return true;
+        }
+
+        return _organizationId === data.organizationId || _projectId === data.projectId;
+      }
+
       function setEventType(eventType, suspendNotifications) {
         if (angular.equals(eventType, _eventType)) {
           return;
@@ -231,6 +244,7 @@
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
         getTime: getTime,
+        includedInProjectOrOrganizationFilter: includedInProjectOrOrganizationFilter,
         setEventType: setEventType,
         setFilter: setFilter,
         setIncludeFixed: setIncludeFixed,

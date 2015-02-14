@@ -5,6 +5,14 @@
     .controller('app.Dashboard', ['$filter', '$stateParams', 'eventService', 'filterService', 'notificationService', 'stackService', 'statService', function ($filter, $stateParams, eventService, filterService, notificationService, stackService, statService) {
       var vm = this;
 
+      function canRefresh(data) {
+        if (!data || data.type !== 'PersistentEvent') {
+          return true;
+        }
+
+        return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+      }
+
       function get() {
         function onSuccess(response) {
           vm.stats = response.data.plain();
@@ -26,6 +34,7 @@
         return statService.get(options).then(onSuccess, onFailure);
       }
 
+      vm.canRefresh = canRefresh;
       vm.chart = {
         options: {
           renderer: 'stack',

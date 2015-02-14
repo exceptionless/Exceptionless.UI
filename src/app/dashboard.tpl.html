@@ -1,6 +1,6 @@
 <organization-notifications></organization-notifications>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="PersistentEventChanged planChanged" refresh-action="vm.get()" refresh-throttle="2500">
+<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="PersistentEventChanged planChanged" refresh-action="vm.get()" refresh-if="vm.canRefresh(data)" refresh-throttle="2500">
   <div class="col" refresh-on="filterChanged" refresh-action="vm.get()">
     <div class="wrapper-md">
       <div class="row">

@@ -14,6 +14,14 @@
         controller: ['$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', 'stacksActionsService', function ($window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
           var vm = this;
 
+          function canRefresh(data) {
+            if (!!data && data.type === 'Stack') {
+              return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+            }
+
+            return true;
+          }
+
           function get(options) {
             function onSuccess(response) {
               vm.selectedIds = [];
@@ -87,6 +95,7 @@
           }
 
           vm.actions = stacksActionsService.getActions();
+          vm.canRefresh = canRefresh;
           vm.get = get;
           vm.hasStacks = hasStacks;
           vm.hasSelection = hasSelection;
