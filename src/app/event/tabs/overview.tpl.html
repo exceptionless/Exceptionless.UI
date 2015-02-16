@@ -10,6 +10,10 @@
     <th>Project</th>
     <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
   </tr>
+  <tr ng-if="vm.event.session_id">
+    <th>Session</th>
+    <td>{{vm.event.session_id}}</td>
+  </tr>
   <tr class="hidden-print" ng-if="vm.hasLevel()">
     <th>Level</th>
     <td><span class="label label-default" ng-class="{ 'label-success': vm.isLevelSuccess(), 'label-info': vm.isLevelInfo(), 'label-warning': vm.isLevelWarning(), 'label-danger': vm.isLevelError() }">{{::vm.event.data['@level']}}</span></td>
