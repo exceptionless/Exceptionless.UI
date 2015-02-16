@@ -16,6 +16,9 @@
       function get() {
         function onSuccess(response) {
           vm.stats = response.data.plain();
+          if (!vm.stats.timeline) {
+            vm.stats.timeline = [];
+          }
 
           vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.total, data: item};
