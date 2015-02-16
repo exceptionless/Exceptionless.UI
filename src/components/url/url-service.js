@@ -39,7 +39,7 @@
           url += path;
         }
 
-        if (Object.keys(queryString).length > 0) {
+        if (!!queryString && Object.keys(queryString).length > 0) {
           var isFirst = true;
           for (var key in queryString) {
             if (isFirst) {

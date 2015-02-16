@@ -208,7 +208,7 @@
       }
 
       function hasCookies() {
-        return Object.keys(vm.event.data['@request'].cookies).length > 0;
+        return !!vm.event.data['@request'].cookies && Object.keys(vm.event.data['@request'].cookies).length > 0;
       }
 
       function hasDevice() {
