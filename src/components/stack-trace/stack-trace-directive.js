@@ -19,7 +19,7 @@
 
       result += parts.join('.').replace('+', '.');
 
-      if (parameter.generic_arguments.length > 0) {
+      if (!!parameter.generic_arguments && parameter.generic_arguments.length > 0) {
         result += '[' + parameter.generic_arguments.join(',') + ']';
       }
 
@@ -48,15 +48,15 @@
       }
 
       var result = 'at ' + [frame.declaring_namespace, frame.declaring_type, frame.name].join('.').replace('+', '.');
-      if (frame.generic_arguments.length > 0) {
+      if (!!frame.generic_arguments && frame.generic_arguments.length > 0) {
         result += '[' + frame.generic_arguments.join(',') + ']';
       }
 
-      if (frame.parameters.length > 0) {
+      if (!!frame.parameters && frame.parameters.length > 0) {
         result += buildParameters(frame.parameters);
       }
 
-      if (frame.data.ILOffset > 0 || frame.data.NativeOffset > 0) {
+      if (!!frame.data && (frame.data.ILOffset > 0 || frame.data.NativeOffset > 0)) {
         result += ' at offset ' + frame.data.ILOffset || frame.data.NativeOffset;
       }
 
