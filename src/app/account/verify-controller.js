@@ -22,6 +22,6 @@
         return userService.verifyEmailAddress(_token).then(onSuccess, onFailure);
       }
 
-      $state.go('app.account.manage').then(verify);
+      verify().then($state.go('app.account.manage'));
     }]);
 }());
