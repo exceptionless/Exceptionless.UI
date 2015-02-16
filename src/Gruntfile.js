@@ -245,14 +245,10 @@ module.exports = function (grunt) {
     },
     uglify: {
       options: {
-        ASCIIOnly: true,
-        beautify: {
-          quote_style: 3
-        },
         sourceMap: true,
         sourceMapIncludeSources: false,
         mangle: {
-          except: ['$super', 'define']
+          except: ['$super']
         }
       },
       main: {
