@@ -77,23 +77,29 @@
     function buildStackFrames(exceptions) {
       var frames = '';
       for (var index = 0; index < exceptions.length; index++) {
-        frames += '<div class="stack-frame">';
+        if (!!exceptions[index].stack_trace) {
+          frames += '<div class="stack-frame">';
 
-        for (var frameIndex = 0; frameIndex < exceptions[index].stack_trace.length; frameIndex++) {
-          frames += buildStackFrame(exceptions[index].stack_trace[frameIndex]);
+          for (var frameIndex = 0; frameIndex < exceptions[index].stack_trace.length; frameIndex++) {
+            frames += buildStackFrame(exceptions[index].stack_trace[frameIndex]);
+          }
+
+          if (index < (exceptions.length - 1)) {
+            frames += '<div>--- End of inner exception stack trace ---</div>';
+          }
+
+          frames += '</div>';
         }
-
-        if (index < (exceptions.length - 1)) {
-          frames += '<div>--- End of inner exception stack trace ---</div>';
-        }
-
-        frames += '</div>';
       }
 
       return frames;
     }
 
     function buildStackTrace(exceptions) {
+      if (!exceptions) {
+        return null;
+      }
+
       return buildStackTraceHeader(exceptions) + buildStackFrames(exceptions.reverse());
     }
 
