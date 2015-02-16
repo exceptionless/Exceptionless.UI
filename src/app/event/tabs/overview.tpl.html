@@ -57,13 +57,17 @@
     </td>
   </tr>
 
-  <tr class="hidden-print" ng-if="vm.hasBrowser()">
-    <th>Browser</th>
-    <td><span truncate>{{::vm.getBrowser()}}</span></td>
+  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@device']">
+    <th>Device</th>
+    <td>{{::vm.event.data['@request'].data['@device']}}</td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.hasBrowserOS()">
+  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@browser']">
+    <th>Browser</th>
+    <td>{{::vm.event.data['@request'].data['@browser']}} <abbr ng-if="vm.event.data['@request'].data['@browser_major_version']" title="{{::vm.event.data['@request'].data['@browser_version']}}">{{::vm.event.data['@request'].data['@browser_major_version']}}</abbr></td>
+  </tr>
+  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@os']">
     <th>Browser OS</th>
-    <td>{{::vm.getBrowserOS()}}</td>
+    <td>{{::vm.event.data['@request'].data['@os']}} <abbr ng-if="vm.event.data['@request'].data['@os_major_version']" title="{{::vm.event.data['@request'].data['@os_version']}}">{{::vm.event.data['@request'].data['@os_major_version']}}</abbr></td>
   </tr>
 </table>
 

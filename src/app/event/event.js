@@ -17,8 +17,7 @@
     'exceptionless.simple-stack-trace',
     'exceptionless.stack-trace',
     'exceptionless.timeago',
-    'exceptionless.url',
-    'exceptionless.user-agent'
+    'exceptionless.url'
   ])
     .config(['$stateProvider', function ($stateProvider) {
       $stateProvider.state('app.event', {

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', 'userAgentService', function ($scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService, userAgentService) {
+    .controller('Event', ['$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService) {
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'version'];
       var vm = this;
@@ -108,18 +108,6 @@
         return projectService.demoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
 
-      function getBrowser() {
-        return userAgentService.getBrowser(vm.event.data['@request'].user_agent);
-      }
-
-      function getBrowserOS() {
-        return userAgentService.getBrowserOS(vm.event.data['@request'].user_agent);
-      }
-
-      function getDevice() {
-        return userAgentService.getDevice(vm.event.data['@request'].user_agent);
-      }
-
       function getErrorType() {
         if (vm.event.data['@error']) {
           var type = errorService.getTargetInfoExceptionType(vm.event.data['@error']);
@@ -199,20 +187,8 @@
         return vm.event.data['@version'];
       }
 
-      function hasBrowser() {
-        return hasUserAgent() && userAgentService.hasBrowser(vm.event.data['@request'].user_agent);
-      }
-
-      function hasBrowserOS() {
-        return hasUserAgent() && userAgentService.hasBrowserOS(vm.event.data['@request'].user_agent);
-      }
-
       function hasCookies() {
         return !!vm.event.data['@request'].cookies && Object.keys(vm.event.data['@request'].cookies).length > 0;
-      }
-
-      function hasDevice() {
-        return hasUserAgent() && userAgentService.hasDevice(vm.event.data['@request'].user_agent);
       }
 
       function hasEnvironmentInfo() {
@@ -311,17 +287,11 @@
 
       vm.demoteTab = demoteTab;
       vm.event = {};
-      vm.getBrowser = getBrowser;
-      vm.getBrowserOS = getBrowserOS;
-      vm.getDevice = getDevice;
       vm.getErrorType = getErrorType;
       vm.getMessage = getMessage;
       vm.getRequestUrl = getRequestUrl;
       vm.getVersion = getVersion;
-      vm.hasBrowser = hasBrowser;
-      vm.hasBrowserOS = hasBrowserOS;
       vm.hasCookies = hasCookies;
-      vm.hasDevice = hasDevice;
       vm.hasIdentity = hasIdentity;
       vm.hasLevel = hasLevel;
       vm.hasReferrer = hasReferrer;
