@@ -245,12 +245,10 @@ module.exports = function (grunt) {
     },
     uglify: {
       options: {
-        ASCIIOnly: true, // needed for lodash
-        quote_style: 3, // needed for lodash
         sourceMap: true,
         sourceMapIncludeSources: false,
         mangle: {
-          except: ['$super', 'define']
+          except: ['$super']
         }
       },
       main: {
