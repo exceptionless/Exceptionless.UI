@@ -248,7 +248,7 @@ module.exports = function (grunt) {
         sourceMap: true,
         sourceMapIncludeSources: false,
         mangle: {
-          except: ['$super', '_']
+          except: ['$super', 'define']
         }
       },
       main: {
