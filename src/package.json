@@ -18,7 +18,7 @@
     "grunt-contrib-watch": "~0.6",
     "grunt-dom-munger": "~3.4",
     "grunt-html-angular-validate": "^0.4.0",
-    "grunt-karma": "~0.10",
+    "grunt-karma": "~0.9",
     "grunt-ng-annotate": "^0.9.2",
     "grunt-ng-constant": "^1.0.0",
     "grunt-traceur": "^0.5.1",
