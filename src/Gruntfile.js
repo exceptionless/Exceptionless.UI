@@ -245,6 +245,7 @@ module.exports = function (grunt) {
     },
     uglify: {
       options: {
+        ASCIIOnly: true, // needed for lodash
         sourceMap: true,
         sourceMapIncludeSources: false,
         mangle: {
