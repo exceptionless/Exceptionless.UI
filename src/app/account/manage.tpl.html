@@ -63,8 +63,8 @@
             </tab>
             <tab heading="Notifications" active="vm.tabNotificationsActive">
               <form role="form" class="form-validation">
-                <div class="alert in fade alert-danger" ng-if="!vm.user.email_notifications_enabled">
-                  Email notifications are currently disabled.
+                <div class="alert in fade alert-danger" ng-if="!vm.user.is_email_address_verified || !vm.user.email_notifications_enabled">
+                  Email notifications are currently disabled. <span ng-if="!vm.user.is_email_address_verified">To enable email notifications you must first verify your email address. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</span>
                 </div>
                 <div class="checkbox">
                   <label class="i-checks">
@@ -85,6 +85,7 @@
                   <select class="form-control"
                           ng-model="vm.currentProject"
                           ng-change="vm.getEmailNotificationSettings()"
+                          ng-disabled="!vm.hasEmailNotifications()"
                           ng-options="project.name group by project.organization_name for project in vm.projects"></select>
 
                   <div class="checkbox">
