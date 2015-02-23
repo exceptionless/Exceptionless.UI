@@ -108,6 +108,11 @@
         return projectService.demoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
 
+      function getCurrentTab() {
+        var tab = vm.tabs.filter(function(t) { return t.active; })[0];
+        return tab ? tab.title : null;
+      }
+
       function getErrorType() {
         if (vm.event.data['@error']) {
           var type = errorService.getTargetInfoExceptionType(vm.event.data['@error']);
@@ -151,7 +156,7 @@
       }
 
       function getMessage() {
-        if (vm.event.data['@error']) {
+        if (vm.event && vm.event.data && vm.event.data['@error']) {
           var message = errorService.getTargetInfoMessage(vm.event.data['@error']);
           if (message) {
             return message;
@@ -287,6 +292,7 @@
 
       vm.demoteTab = demoteTab;
       vm.event = {};
+      vm.getCurrentTab = getCurrentTab;
       vm.getErrorType = getErrorType;
       vm.getMessage = getMessage;
       vm.getRequestUrl = getRequestUrl;
@@ -310,6 +316,6 @@
       vm.promoteTab = promoteTab;
       vm.tabs = [];
 
-      getEvent().then(getProject).then(buildTabs);
+      getEvent().then(getProject).then(function() { buildTabs($stateParams.tab); });
     }]);
 }());
