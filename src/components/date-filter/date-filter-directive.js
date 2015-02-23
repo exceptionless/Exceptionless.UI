@@ -29,16 +29,17 @@
               return moment().subtract(30, 'days').startOf('day').twix(moment()).format();
             }
 
-            if (time) {
-              var range = dateRangeParserService.parse(time);
-              if (range && range.start && range.end) {
-                return moment(range.start).twix(moment(range.end)).format();
-              } else {
-                setFilter();
-              }
+            if (time === 'all') {
+              return 'All Time';
             }
 
-            return 'All Time';
+            var range = dateRangeParserService.parse(time);
+            if (range && range.start && range.end) {
+              return moment(range.start).twix(moment(range.end)).format();
+            }
+
+            setFilter('last week');
+            return moment().subtract(7, 'days').startOf('day').twix(moment()).format();
           }
 
           function isActive(filterName) {
@@ -48,11 +49,11 @@
               return range && range.start && range.end;
             }
 
-            return filterName === time || (!time && filterName === 'All Time');
+            return filterName === time;
           }
 
           function hasFilter() {
-            return filterService.getTime();
+            return filterService.getTime() !== 'all';
           }
 
           function setCustomFilter() {

@@ -3,9 +3,10 @@
 
   angular.module('exceptionless.filter')
     .factory('filterService', ['$rootScope', 'filterStoreService', 'objectIDService', function ($rootScope, filterStoreService, objectIDService) {
+      var DEFAULT_TIME_FILTER = 'last week';
       var _includeFixed = filterStoreService.getIncludeFixed();
       var _includeHidden = filterStoreService.getIncludeHidden();
-      var _time = filterStoreService.getTimeFilter();
+      var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
 
       function apply(source) {
@@ -80,7 +81,7 @@
           angular.extend(options, { filter: filter });
         }
 
-        if (_time) {
+        if (_time && _time !== 'all') {
           angular.extend(options, { time: _time });
         }
 
@@ -112,7 +113,7 @@
       }
 
       function getTime() {
-        return _time;
+        return _time || DEFAULT_TIME_FILTER;
       }
 
       function getTimeZoneOffset() {
@@ -201,7 +202,7 @@
           return;
         }
 
-        _time = time ? time : null;
+        _time = time || DEFAULT_TIME_FILTER;
         filterStoreService.setTimeFilter(_time);
 
         if (!suspendNotifications) {
