@@ -67,6 +67,7 @@
         }
 
         function getOrganizationNotifications() {
+          vm.exceededRequestLimitOrganizations = [];
           vm.freeOrganizations = [];
           vm.hourlyOverageOrganizations = [];
           vm.monthlyOverageOrganizations = [];
@@ -112,6 +113,11 @@
 
             if (organization.is_over_hourly_limit === true) {
               vm.hourlyOverageOrganizations.push(organization);
+              return;
+            }
+
+            if (organization.is_over_request_limit === true) {
+              vm.exceededRequestLimitOrganizations.push(organization);
               return;
             }
 
@@ -184,6 +190,10 @@
           }
 
           return projectService.getAll().then(onSuccess);
+        }
+
+        function hasExceededRequestLimitOrganizations() {
+          return vm.exceededRequestLimitOrganizations && vm.exceededRequestLimitOrganizations.length > 0;
         }
 
         function hasFreeOrganizations() {
@@ -264,9 +274,11 @@
           $intercom.showNewMessage();
         }
 
+        vm.exceededRequestLimitOrganizations = [];
         vm.freeOrganizations = [];
         vm.get = get;
         vm.getOrganizationNotifications = getOrganizationNotifications;
+        vm.hasExceededRequestLimitOrganizations = hasExceededRequestLimitOrganizations;
         vm.hasFreeOrganizations = hasFreeOrganizations;
         vm.hasHourlyOverageOrganizations = hasHourlyOverageOrganizations;
         vm.hasMonthlyOverageOrganizations = hasMonthlyOverageOrganizations;
