@@ -21,10 +21,6 @@
           element.removeClass('loading-bar-disabled');
           _hideOnCompleted = true;
         });
-
-        $rootScope.$on('$stateChangeSuccess', function() {
-          _hideOnCompleted = true;
-        });
       }
     };
   }]);
