@@ -30,6 +30,7 @@
     'exceptionless.events',
     'exceptionless.filter',
     'exceptionless.intercom',
+    'exceptionless.loading-bar',
     'exceptionless.notification',
     'exceptionless.organization',
     'exceptionless.organization-notifications',
