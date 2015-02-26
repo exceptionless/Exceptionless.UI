@@ -103,6 +103,7 @@
       function getUser() {
         function onSuccess(response) {
           vm.user = response.data.plain();
+          vm.user.o_auth_accounts = vm.user.o_auth_accounts || [];
           return vm.user;
         }
 

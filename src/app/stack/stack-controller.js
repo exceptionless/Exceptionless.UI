@@ -66,6 +66,7 @@
       function getStack() {
         function onSuccess(response) {
           vm.stack = response.data.plain();
+          vm.stack.references = vm.stack.references || [];
         }
 
         function onFailure(response) {
