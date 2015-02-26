@@ -470,32 +470,49 @@
       templateUrl: 'app/not-found.tpl.html'
     });
   }])
-  .run(['$state', 'editableOptions', '$location', 'rateLimitService', 'Restangular', 'stateService', 'USE_SSL', '$window', function($state, editableOptions, $location, rateLimitService, Restangular, stateService, USE_SSL, $window) {
+  .run(['$http', '$state', 'editableOptions', '$location', 'rateLimitService', 'Restangular', 'stateService', 'USE_SSL', '$window', function($http, $state, editableOptions, $location, rateLimitService, Restangular, stateService, USE_SSL, $window) {
     if (((typeof USE_SSL === 'boolean' && USE_SSL) || USE_SSL === 'true') && $location.protocol() !== 'https') {
         $window.location.href = $location.absUrl().replace('http', 'https');
     }
 
     editableOptions.theme = 'bs3';
 
-    Restangular.setErrorInterceptor(function(response) {
+    Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
+      function handleError(response) {
+        if (response.status === 0 || response.status === 503) {
+          stateService.save(['auth.', 'status']);
+          $state.go('status', {redirect: true});
+          return true;
+        }
+
+        if(response.status === 401) {
+          stateService.save(['auth.']);
+          $state.go('auth.login');
+          return true;
+        }
+
+        if(response.status === 409) {
+          return true;
+        }
+
+        return false;
+      }
+
       rateLimitService.updateFromResponseHeader(response);
-      if (response.status === 0 || response.status === 503) {
-        stateService.save(['auth.', 'status']);
-        $state.go('status', { redirect: true });
+
+      // Lets retry as long as we are not on the status page.
+      if ($state.current.name !== 'status' && (response.status === 0 || response.status === 503)) {
+        // No request interceptors will be called on the retry.
+        $http(response.config).then(responseHandler, function (response) {
+          if (!handleError(response)) {
+            deferred.reject(response);
+          }
+        });
+
         return false;
       }
 
-      if(response.status === 401) {
-        stateService.save(['auth.']);
-        $state.go('auth.login');
-        return false;
-      }
-
-      if(response.status === 409) {
-        return false;
-      }
-
-      return true;
+      return !handleError(response);
     });
   }]);
 }());
