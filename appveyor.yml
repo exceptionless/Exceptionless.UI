@@ -18,6 +18,9 @@ install:
   - npm install
   - bower install
 
+build:
+  publish_nuget: true 
+
 build_script:
   - grunt build
 
