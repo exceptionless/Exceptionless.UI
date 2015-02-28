@@ -1,5 +1,5 @@
 environment:
-  nodejs_version: "0.12"
+  nodejs_version: "0.10"
   API_URL: https://#{api.hostheader}/api/v2
   FACEBOOK_APPID: #{facebook.appid}
   GITHUB_APPID: #{github.appid}
@@ -14,6 +14,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - cd src
   - npm install -g grunt-cli
+  - npm install -g bower
   - npm install
   - bower install
 
