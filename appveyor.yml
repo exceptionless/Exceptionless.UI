@@ -38,9 +38,3 @@ notifications:
     auth_token:
       secure: WxN+iiJf8AT50n50y8/AkTMl+Cvma6lwSdffFaBU6/o=
     room: Notifications
-
-cache:
-  - C:\Users\appveyor\AppData\Roaming\npm\node_modules -> package.json
-  - C:\Users\appveyor\AppData\Roaming\npm-cache -> package.json
-  - src\node_modules -> package.json
-  - src\bower_components -> bower.json
