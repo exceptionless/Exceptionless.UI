@@ -11,6 +11,9 @@ environment:
   LIVE_APPID: #{live.appid}
   STRIPE_PUBLISHABLE_KEY: #{stripe.publishablekey}
   SYSTEM_NOTIFICATION_MESSAGE: #{systemnotificationmessage}
+  OCTOPUS_API_URL: https://deploy.codesmithtools.com/api
+  OCTOPUS_API_KEY:
+    secure: 9Uk1fnTNb36QtrWfRCe9vrqVsBaEXGcM1K1mRoLUB0A=
 
 install:
   - ps: Install-Product node $env:nodejs_version
@@ -29,6 +32,8 @@ test_script:
 after_test:
   - cd ..
   - ps: nuget pack -Version $env:APPVEYOR_BUILD_VERSION
+  - nuget install OctopusTools
+  - ps: &(ls .\OctopusTools*\Octo.exe) create-release --project="Exceptionless UI" --version "$env:APPVEYOR_BUILD_VERSION" --server "$env:OCTOPUS_API_URL" --apiKey "$env:OCTOPUS_API_KEY"
 
 artifacts:
   - path: .\*.nupkg
