@@ -81,7 +81,7 @@
           angular.extend(options, { filter: filter });
         }
 
-        if (_time && _time !== 'all') {
+        if (!!_time && _time !== 'all') {
           angular.extend(options, { time: _time });
         }
 
