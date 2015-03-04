@@ -26,9 +26,9 @@
     <th>Source</th>
     <td><span truncate lines="2">{{::vm.event.source}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.getMessage()">
+  <tr class="hidden-print" ng-if="vm.event.message || vm.getMessage()">
     <th>Message</th>
-    <td><span truncate lines="2">{{::vm.getMessage()}}</span></td>
+    <td><span truncate lines="4">{{::vm.event.message || vm.getMessage()}}</span></td>
   </tr>
   <tr class="hidden-print" ng-if="vm.hasVersion()">
     <th>Version</th>
