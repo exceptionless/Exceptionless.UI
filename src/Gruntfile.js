@@ -173,7 +173,7 @@ module.exports = function (grunt) {
             SYSTEM_NOTIFICATION_MESSAGE: process.env.SYSTEM_NOTIFICATION_MESSAGE || '',
             USE_HTML5_MODE: process.env.HTML5_MODE || false,
             USE_SSL: process.env.USE_SSL || false,
-            VERSION: process.env.BUILD_NUMBER || '2.0.0'
+            VERSION: process.env.APPVEYOR_BUILD_VERSION || '2.0.0'
           }
         },
         build: {}
