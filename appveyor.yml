@@ -3,14 +3,14 @@ version: 2.0.{build}
 environment:
   nodejs_version: "0.10"
   API_URL: https://#{api.hostheader}/api/v2
-  FACEBOOK_APPID: #{facebook.appid}
-  GITHUB_APPID: #{github.appid}
-  GOOGLE_APPID: #{google.appid}
-  HTML5_MODE: #{html5mode}
-  INTERCOM_APPID: #{intercom.appid}
-  LIVE_APPID: #{live.appid}
-  STRIPE_PUBLISHABLE_KEY: #{stripe.publishablekey}
-  SYSTEM_NOTIFICATION_MESSAGE: #{systemnotificationmessage}
+  FACEBOOK_APPID: "#{facebook.appid}"
+  GITHUB_APPID: "#{github.appid}"
+  GOOGLE_APPID: "#{google.appid}"
+  HTML5_MODE: "#{html5mode}"
+  INTERCOM_APPID: "#{intercom.appid}"
+  LIVE_APPID: "#{live.appid}"
+  STRIPE_PUBLISHABLE_KEY: "#{stripe.publishablekey}"
+  SYSTEM_NOTIFICATION_MESSAGE: "#{systemnotificationmessage}"
   OCTOPUS_API_URL: https://deploy.codesmithtools.com/api
   OCTOPUS_API_KEY:
     secure: 9Uk1fnTNb36QtrWfRCe9vrqVsBaEXGcM1K1mRoLUB0A=
