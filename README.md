@@ -3,20 +3,27 @@
 
 Exceptionless User Interface
 
-## Development
+## Getting Started
 
-Once you cloned the repo, you'll need to install [grunt](http://gruntjs.com/) and the development dependencies using [npm](https://www.npmjs.com/).
+_** NOTE: If you simply want to use Exceptionless, just go to [http://exceptionless.io](http://exceptionless.io) and signup for a free account and you will be up and running in seconds._
+
+1. You will need to clone this repo.
+2. Install [grunt](http://gruntjs.com/) and the development dependencies using [npm](https://www.npmjs.com/).
 
     npm install -g grunt-cli
     npm install
 
-Next, you'll need to download the JavaScript dependencies by running the following [bower](http://bower.io/) command.
+3. Download the JavaScript dependencies by running the following [bower](http://bower.io/) command.
 
     bower install
 
-Finally, start a web server and view it on [`http://localhost:9001`](http://localhost:9001) by running the following grunt command.
+4. Start a web server and view it on [`http://localhost:9001`](http://localhost:9001) by running the following grunt command.
 
     grunt serve
+
+## Using Exceptionless
+
+Refer to the Exceptionless documentation here: [Exceptionless Docs](http://docs.exceptionless.io)
 
 ## Hosting Options
 
