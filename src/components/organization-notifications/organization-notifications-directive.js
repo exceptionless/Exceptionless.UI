@@ -23,8 +23,26 @@
         ignoreConfigureProjects: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
-      controller: ['$scope', 'billingService', 'filterService', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'searchService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, STRIPE_PUBLISHABLE_KEY) {
+      controller: ['$rootScope', '$scope', 'billingService', 'filterService', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'searchService', 'STRIPE_PUBLISHABLE_KEY', function($rootScope, $scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, STRIPE_PUBLISHABLE_KEY) {
         var vm = this;
+
+        function canRefresh(data) {
+          if (hasProjectsRequiringConfiguration()) {
+            $rootScope.$emit('cache:clear-project');
+          }
+
+          if (hasExceededRequestLimitOrganizations() ||
+            hasHourlyOverageOrganizations() ||
+            hasMonthlyOverageOrganizations() ||
+            hasOrganizationsWithNoProjects() ||
+            hasSuspendedForBillingOrganizations() ||
+            hasSuspendedForAbuseOrOverageOrNotActiveOrganizations() ||
+            hasSuspendedOrganizations()) {
+            $rootScope.$emit('cache:clear-organization');
+          }
+
+          return true;
+        }
 
         function get() {
           return getOrganizations().then(getProjects).then(getFilterUsesPremiumFeatures).then(getOrganizationNotifications);
@@ -274,6 +292,7 @@
           $intercom.showNewMessage();
         }
 
+        vm.canRefresh = canRefresh;
         vm.exceededRequestLimitOrganizations = [];
         vm.freeOrganizations = [];
         vm.get = get;

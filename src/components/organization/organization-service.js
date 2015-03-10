@@ -4,6 +4,8 @@
   angular.module('exceptionless.organization', ['restangular'])
     .factory('organizationService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
       var _cache = $cacheFactory('http:organization');
+      $rootScope.$on('cache:clear', _cache.removeAll);
+      $rootScope.$on('cache:clear-organization', _cache.removeAll);
       $rootScope.$on('auth:logout', _cache.removeAll);
       $rootScope.$on('OrganizationChanged', _cache.removeAll);
       $rootScope.$on('ProjectChanged', _cache.removeAll);
