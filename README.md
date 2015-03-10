@@ -10,11 +10,11 @@ Once you cloned the repo, you'll need to install [grunt](http://gruntjs.com/) an
     npm install -g grunt-cli
     npm install
 
-Next, you'll need to download the JavaScript dependencies by running the following command.
+Next, you'll need to download the JavaScript dependencies by running the following [bower](http://bower.io/) command.
 
     bower install
 
-Finally, you can start a web server and view it on [`http://localhost:9001`](http://localhost:9001)
+Finally, start a web server and view it on [`http://localhost:9001`](http://localhost:9001) by running the following grunt command.
 
     grunt serve
 
