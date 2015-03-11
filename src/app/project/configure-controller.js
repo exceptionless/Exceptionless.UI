@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Configure', ['$state', '$stateParams', 'notificationService', 'projectService', 'tokenService', function ($state, $stateParams, notificationService, projectService, tokenService) {
+    .controller('project.Configure', ['$rootScope', '$state', '$stateParams', 'notificationService', 'projectService', 'tokenService', function ($rootScope, $state, $stateParams, notificationService, projectService, tokenService) {
       var _projectId = $stateParams.id;
       var _canRedirect = $stateParams.redirect === 'true';
 
@@ -54,6 +54,7 @@
       }
 
       function navigateToDashboard() {
+        $rootScope.$emit('cache:clear-project');
         $state.go('app.project-dashboard', { projectId: _projectId } );
       }
 
