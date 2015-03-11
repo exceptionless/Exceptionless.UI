@@ -169,6 +169,7 @@
       function getProject() {
         function onSuccess(response) {
           vm.project = response.data.plain();
+          vm.project.promoted_tabs = vm.project.promoted_tabs || [];
           return vm.project;
         }
 
