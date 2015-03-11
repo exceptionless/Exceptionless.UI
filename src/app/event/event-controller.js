@@ -21,7 +21,7 @@
             combo: 'ctrl+left',
             description: 'Previous Occurrence',
             callback: function () {
-              $state.go('app.event', { id: vm.previous });
+              $state.go('app.event', { id: vm.previous, tab: vm.getCurrentTab() });
             }
           });
         }
@@ -31,7 +31,7 @@
             combo: 'ctrl+right',
             description: 'Next Occurrence',
             callback: function () {
-              $state.go('app.event', { id: vm.next });
+              $state.go('app.event', { id: vm.next, tab: vm.getCurrentTab() });
             }
           });
         }
