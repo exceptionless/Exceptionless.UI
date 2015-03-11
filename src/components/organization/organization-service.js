@@ -10,6 +10,12 @@
       $rootScope.$on('OrganizationChanged', _cache.removeAll);
       $rootScope.$on('ProjectChanged', _cache.removeAll);
 
+      $rootScope.$on('StackChanged', function($event, data) {
+        if (data.added) {
+          _cache.removeAll();
+        }
+      });
+
       var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
         RestangularConfigurer.setDefaultHttpFields({ cache: _cache });
       });

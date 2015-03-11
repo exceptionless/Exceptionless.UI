@@ -54,7 +54,6 @@
       }
 
       function navigateToDashboard() {
-        $rootScope.$emit('cache:clear-project');
         $state.go('app.project-dashboard', { projectId: _projectId } );
       }
 
