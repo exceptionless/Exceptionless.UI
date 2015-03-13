@@ -7,7 +7,7 @@
       var vm = this;
 
       function getMessage(response) {
-        var message = 'An error occurred while signing up.';
+        var message = 'An error occurred while signing up.  Please contact support for more information.';
         if (response.data && response.data.message)
           message += ' Message: ' + response.data.message;
 

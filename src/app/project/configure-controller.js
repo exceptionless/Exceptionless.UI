@@ -43,13 +43,14 @@
 
       function getProjectTypes() {
         return [
+          { key: 'Exceptionless', name: 'Non WPF and WinForms applications', config: 'app.config' },
+          { key: 'Exceptionless.Portable', name: 'Portable Class Library' },
           { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config' },
           { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config' },
           { key: 'Exceptionless.Web', name: 'ASP.NET Web Forms', config: 'web.config' },
           { key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config' },
           { key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config' },
-          { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config' },
-          { key: 'Exceptionless.Console', name: 'Console', config: 'app.config' }
+          { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config' }
         ];
       }
 

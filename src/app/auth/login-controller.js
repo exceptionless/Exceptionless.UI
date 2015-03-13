@@ -6,7 +6,7 @@
       var vm = this;
 
       function getMessage(response) {
-        var message = 'An error occurred while logging in.';
+        var message = 'An error occurred while logging in. Please contact support for more information.';
         if (response.data && response.data.message)
           message += ' Message: ' + response.data.message;
 
