@@ -43,7 +43,7 @@
 
       function getProjectTypes() {
         return [
-          { key: 'Exceptionless', name: 'Non WPF and WinForms applications', config: 'app.config' },
+          { key: 'Exceptionless', name: 'Console and Service applications', config: 'app.config' },
           { key: 'Exceptionless.Portable', name: 'Portable Class Library' },
           { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config' },
           { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config' },
