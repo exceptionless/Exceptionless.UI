@@ -38,10 +38,6 @@ after_test:
 artifacts:
   - path: '*.nupkg'
 
-deploy:
-  - provider: Environment
-    name: MyGet
-
 notifications:
   - provider: HipChat
     auth_token:
