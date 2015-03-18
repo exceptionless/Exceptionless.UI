@@ -29,7 +29,6 @@ Refer to the Exceptionless documentation here: [Exceptionless Docs](http://docs.
 
 1. We provide very reasonably priced hosting at [Exceptionless](http://exceptionless.io). By using our hosted service, you are supporting the project and helping it get better! We also provide set up and support services.
 2. If you would rather host Exceptionless yourself, you will need to follow these steps:
-  1. From the command prompt run `grunt build` to build the project. *You can also download a prebuilt package from our [myget feed](https://www.myget.org/feed/exceptionless/package/nuget/Exceptionless.UI)*
-  2. Copy the `dist` folder to any hosting solution or cdn.
-  3. Update the `app.config.js` file with your settings.
-
+  1. [Download and and extract the latest release](https://github.com/exceptionless/Exceptionless.UI/releases).
+  2. Update the `app.config.*.js` file with your settings.
+  3. Host on any web server!
