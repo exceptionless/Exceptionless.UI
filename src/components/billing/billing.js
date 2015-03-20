@@ -15,6 +15,7 @@
     'exceptionless.dialog',
     'exceptionless.notification',
     'exceptionless.organization',
+    'exceptionless.promise-button',
     'exceptionless.user',
     'exceptionless.refresh'
   ]);

@@ -8,7 +8,7 @@
     .constant('GOOGLE_APPID')
     .constant('INTERCOM_APPID')
     .constant('LIVE_APPID')
-    .constant('STRIPE_PUBLISHABLE_KEY')
+    .constant('STRIPE_PUBLISHABLE_KEY', 'pk_test_nStD8zuwsiyVjPhfxxxMEFeE')
     .constant('SYSTEM_NOTIFICATION_MESSAGE')
     .constant('USE_HTML5_MODE', false)
     .constant('USE_SSL', false)
