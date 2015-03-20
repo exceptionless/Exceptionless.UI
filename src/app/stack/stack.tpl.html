@@ -78,7 +78,7 @@
 
         <div class="pull-right btn-toolbar hidden-print">
           <div class="btn-group btn-group-sm">
-            <button type="button" role="button" class="btn btn-default" ng-click="vm.updateIsFixed()" title="{{vm.isFixed() ? 'Mark this stack as not fixed' : 'Mark this stack as fixed'}}">
+            <button type="button" role="button" class="btn btn-default" title="{{vm.isFixed() ? 'Mark this stack as not fixed' : 'Mark this stack as fixed'}}" promise-button="vm.updateIsFixed()" promise-button-busy-text="{{vm.isFixed() ? 'Marking Not Fixed' : 'Marking Fixed' }}" promise-button-busy-spinner-class="fa-size-sm">
               {{vm.isFixed() ? 'Mark Not Fixed' : 'Mark Fixed' }}
             </button>
           </div>

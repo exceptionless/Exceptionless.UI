@@ -207,7 +207,7 @@
                   </div>
                 </div>
 
-                <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" role="button" class="btn btn-primary" value="{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}" />
+                <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="{{vm.hasLocalAccount() ? 'Changing Password' : 'Setting Password'}}">{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}</button>
               </form>
             </tab>
             <tab heading="External Logins" active="vm.tabExternalActive">

@@ -11,6 +11,7 @@
     'exceptionless.billing',
     'exceptionless.dialog',
     'exceptionless.project',
+    'exceptionless.promise-button',
     'exceptionless.user',
     'exceptionless.validators'
   ])

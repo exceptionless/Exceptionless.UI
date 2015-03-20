@@ -7,7 +7,8 @@
         restrict: 'A',
         scope: {
           promiseButton: '&',
-          promiseBusyText: '@'
+          promiseButtonBusyText: '@',
+          promiseButtonBusySpinnerClass: '@'
         },
         templateUrl: 'components/promise-button/promise-button-directive.tpl.html',
         transclude: true,
