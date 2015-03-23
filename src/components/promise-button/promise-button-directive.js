@@ -24,9 +24,9 @@
             }
 
             var promise = scope.promiseButton();
-            if (promise && promise.then) {
+            if (promise && promise.finally) {
               scope.running = true;
-              promise.then(stop, stop);
+              promise.finally(stop);
             }
           };
 
