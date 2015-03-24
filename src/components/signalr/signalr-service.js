@@ -26,6 +26,12 @@
 
           // client side methods
           listeners: {
+            'releaseNotification': function (releaseNotification) {
+              $rootScope.$emit('notification:release', releaseNotification);
+            },
+            'systemNotification': function (systemNotification) {
+              $rootScope.$emit('notification:system', systemNotification);
+            },
             'entityChanged': function (entityChanged) {
               entityChanged.added = entityChanged.change_type === 0;
               entityChanged.updated = entityChanged.change_type === 1;
