@@ -7,12 +7,12 @@
     <div class="dropdown-menu w-xl project-filter-dropdown-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}">
       <div class="panel bg-dark">
         <div class="list-group">
-          <div ng-repeat="organization in vm.organizations track by organization.id">
+          <div ng-repeat="organization in vm.organizations | orderBy: 'name' track by organization.id">
             <a class="media list-group-item" ng-if="$first" ng-href="{{vm.getAllProjectsUrl()}}" auto-active>All Projects</a>
             <a class="media list-group-item" ng-href="{{vm.getOrganizationUrl(organization)}}" auto-active>{{organization.name}}
               <span class="icon-right" ui-sref="app.organization.manage({ id: organization.id })" show-on-hover-parent><i class="fa fa-gear fa-fw"></i></span>
             </a>
-            <a class="media list-group-item project-name" ng-href="{{vm.getProjectUrl(project)}}" auto-active ng-repeat="project in vm.getProjectsByOrganizationId(organization.id) track by project.id">{{project.name}}
+            <a class="media list-group-item project-name" ng-href="{{vm.getProjectUrl(project)}}" auto-active ng-repeat="project in vm.getProjectsByOrganizationId(organization.id) | orderBy: 'name' track by project.id">{{project.name}}
               <span class="icon-right" ui-sref="app.project.manage({ id: project.id })" show-on-hover-parent><i class="fa fa-gear fa-fw"></i></span>
             </a>
           </div>
