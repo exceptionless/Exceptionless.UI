@@ -2,11 +2,16 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Verify', ['$state', '$stateParams', 'notificationService', 'userService', function ($state, $stateParams, notificationService, userService) {
+    .controller('account.Verify', ['$rootScope', '$state', '$stateParams', 'notificationService', 'userService', function ($rootScope, $state, $stateParams, notificationService, userService) {
       var _token = $stateParams.token;
+
+      function redirect() {
+        return $state.go('app.account.manage');
+      }
 
       function verify() {
         function onSuccess() {
+          $rootScope.$emit('UserChanged');
           notificationService.info('Successfully verified your account.');
         }
 
@@ -22,6 +27,6 @@
         return userService.verifyEmailAddress(_token).then(onSuccess, onFailure);
       }
 
-      verify().then($state.go('app.account.manage'));
+      verify().finally(redirect);
     }]);
 }());
