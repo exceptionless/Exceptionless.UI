@@ -38,6 +38,7 @@
     'exceptionless.project-filter',
     'exceptionless.rate-limit',
     'exceptionless.refresh',
+    'exceptionless.release-notification',
     'exceptionless.search-filter',
     'exceptionless.signalr',
     'exceptionless.stack',
