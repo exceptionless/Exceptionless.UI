@@ -152,7 +152,7 @@
           onFailure();
         }
 
-        return eventService.getById(_eventId).then(onSuccess, onFailure);
+        return eventService.getById(_eventId, { stack: 'current' }).then(onSuccess, onFailure);
       }
 
       function getMessage() {
