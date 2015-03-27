@@ -3,7 +3,7 @@
 
 Exceptionless User Interface
 
-## Getting Started
+## Getting Started (Development)
 
 _NOTE: If you simply want to use Exceptionless, just go to [http://exceptionless.io](http://exceptionless.io) and signup for a free account and you will be up and running in seconds._
 
