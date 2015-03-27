@@ -61,7 +61,7 @@
     'app.stack',
     'app.status'
   ])
-  .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'RestangularProvider', 'BASE_URL', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, RestangularProvider, BASE_URL, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
+  .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'gravatarServiceProvider', 'RestangularProvider', 'BASE_URL', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
     $locationProvider.html5Mode({
       enabled: (typeof USE_HTML5_MODE === 'boolean' && USE_HTML5_MODE) || USE_HTML5_MODE === 'true',
       requireBase: false
@@ -70,6 +70,10 @@
     $uiViewScrollProvider.useAnchorScroll();
 
     dialogsProvider.setSize('md');
+
+    gravatarServiceProvider.defaults = {
+      'default': 'mm'
+    };
 
     RestangularProvider.setBaseUrl(BASE_URL);
     RestangularProvider.setFullResponse(true);
