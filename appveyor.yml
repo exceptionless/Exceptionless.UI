@@ -29,7 +29,7 @@ build_script:
 test_script:
   - grunt test
   
-after_test:
+after_deploy:
   - cd ..
   - ps: nuget pack -Version $env:APPVEYOR_BUILD_VERSION
   - nuget install OctopusTools
