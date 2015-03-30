@@ -11,8 +11,9 @@
       return Restangular.all('events').getList(filterService.apply(options));
     }
 
-    function getById(id, options) {
-      return Restangular.one('events', id).get(filterService.apply(options));
+    function getById(id, options, optionsCallback) {
+      optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
+      return Restangular.one('events', id).get(optionsCallback(filterService.apply(options)));
     }
 
     function getByStackId(id, options) {

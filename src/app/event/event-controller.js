@@ -131,6 +131,16 @@
       function getEvent() {
         removeHotKeys();
 
+        function optionsCallback(options) {
+          if (options.filter) {
+            options.filter += ' stack:current';
+          } else {
+            options.filter = 'stack:current';
+          }
+
+          return options;
+        }
+
         function onSuccess(response) {
           vm.event = response.data.plain();
 
@@ -152,7 +162,7 @@
           onFailure();
         }
 
-        return eventService.getById(_eventId, { stack: 'current' }).then(onSuccess, onFailure);
+        return eventService.getById(_eventId, {}, optionsCallback).then(onSuccess, onFailure);
       }
 
       function getMessage() {
