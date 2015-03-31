@@ -32,6 +32,7 @@ test_script:
 after_deploy:
   - cd ..
   - ps: nuget pack -Version $env:APPVEYOR_BUILD_VERSION
+  - appveyor PushArtifact '*.nupkg'
   - nuget install OctopusTools
   - ps: '&(ls .\OctopusTools*\Octo.exe) create-release --project="Exceptionless UI" --version "$env:APPVEYOR_BUILD_VERSION" --server "$env:OCTOPUS_API_URL" --apiKey "$env:OCTOPUS_API_KEY" --deployto Dev'
 
@@ -43,3 +44,8 @@ notifications:
     auth_token:
       secure: PigIGGo7UUDwdb0KGM/s7OfpAng/OMJx7q33jKfzudFBiXi1EBEd0DRmkbCc7CiX
     channel: notifications
+
+cache:
+  - '%APPDATA%\npm\node_modules -> package.json'    # global npm modules
+  - '%APPDATA%\npm-cache -> package.json'           # npm cache
+  - 'node_modules -> package.json'                  # local npm modules
