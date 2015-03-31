@@ -32,13 +32,14 @@ test_script:
 after_test:
   - cd ..
   - ps: nuget pack -Version $env:APPVEYOR_BUILD_VERSION
-  - ps: appveyor PushArtifact "Exceptionless.UI.$env:APPVEYOR_BUILD_VERSION.nupkg"
-  - nuget install OctopusTools
-  - ps: '&(ls .\OctopusTools*\Octo.exe) create-release --project="Exceptionless UI" --version "$env:APPVEYOR_BUILD_VERSION" --server "$env:OCTOPUS_API_URL" --apiKey "$env:OCTOPUS_API_KEY" --deployto Dev'
 
 artifacts:
   - path: '*.nupkg'
 
+after_deploy:
+  - nuget install OctopusTools
+  - ps: '&(ls .\OctopusTools*\Octo.exe) create-release --project="Exceptionless UI" --version "$env:APPVEYOR_BUILD_VERSION" --server "$env:OCTOPUS_API_URL" --apiKey "$env:OCTOPUS_API_KEY" --deployto Dev'
+  
 notifications:
   - provider: Slack
     auth_token:
