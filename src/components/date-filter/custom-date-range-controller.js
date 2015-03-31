@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.date-filter')
-    .controller('CustomDateRangeDialog', ['$modalInstance', function ($modalInstance) {
+    .controller('CustomDateRangeDialog', ['$modalInstance', 'data', function ($modalInstance, data) {
       var vm = this;
 
       function cancel() {
@@ -14,18 +14,20 @@
           return;
         }
 
+        if ((vm.range.start.toDate() === vm.range.end.toDate()) || (vm.maxDate.toDate() === vm.range.end.toDate())) {
+          vm.range.end = vm.range.end.endOf('day');
+        }
+
         $modalInstance.close(vm.range);
       }
 
       vm.cancel = cancel;
-      vm.options =  {
-        autoclose: true,
-        startDate: '01/01/2012',
-        endDate: new Date(),
-        todayBtn: 'linked',
-        todayHighlight: true
+      vm.maxDate = moment();
+      vm.minDate = moment(new Date(2012, 1, 1));
+      vm.range = {
+        start: data.start,
+        end: data.end
       };
-      vm.range = {};
       vm.save = save;
     }]);
 }());

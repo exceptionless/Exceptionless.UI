@@ -8,7 +8,7 @@
       var vm = this;
 
       function addConfiguration() {
-        return dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm').result.then(saveClientConfiguration);
+        return dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm', vm.config).result.then(saveClientConfiguration);
       }
 
       function addToken() {

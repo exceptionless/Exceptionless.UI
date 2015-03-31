@@ -5,7 +5,12 @@
   </div>
 
   <div class="modal-body">
-    <date-picker start="vm.range.start" end="vm.range.end" ng-options="vm.options"></date-picker>
+    <date-range-picker range="vm.range"
+                       min-date="vm.minDate"
+                       max-date="vm.maxDate"
+                       time-picker="true"
+                       time-picker12-hour="true">
+    </date-range-picker>
   </div>
 
   <div class="modal-footer">
