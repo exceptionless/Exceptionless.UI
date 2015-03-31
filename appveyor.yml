@@ -45,8 +45,3 @@ notifications:
     auth_token:
       secure: PigIGGo7UUDwdb0KGM/s7OfpAng/OMJx7q33jKfzudFBiXi1EBEd0DRmkbCc7CiX
     channel: notifications
-
-cache:
-  - '%APPDATA%\Roaming\npm\node_modules -> package.json'    # global npm modules
-  - '%APPDATA%\Roaming\npm-cache -> package.json'           # npm cache
-  - 'src\node_modules -> package.json'                      # local npm modules
