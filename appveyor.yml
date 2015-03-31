@@ -29,10 +29,10 @@ build_script:
 test_script:
   - grunt test
   
-after_deploy:
+after_test:
   - cd ..
   - ps: nuget pack -Version $env:APPVEYOR_BUILD_VERSION
-  - appveyor PushArtifact '*.nupkg'
+  - appveyor PushArtifact "Exceptionless.UI.$env:APPVEYOR_BUILD_VERSION.nupkg"
   - nuget install OctopusTools
   - ps: '&(ls .\OctopusTools*\Octo.exe) create-release --project="Exceptionless UI" --version "$env:APPVEYOR_BUILD_VERSION" --server "$env:OCTOPUS_API_URL" --apiKey "$env:OCTOPUS_API_KEY" --deployto Dev'
 
@@ -46,6 +46,6 @@ notifications:
     channel: notifications
 
 cache:
-  - '%APPDATA%\npm\node_modules -> package.json'    # global npm modules
-  - '%APPDATA%\npm-cache -> package.json'           # npm cache
-  - 'node_modules -> package.json'                  # local npm modules
+  - '%APPDATA%\Roaming\npm\node_modules -> package.json'    # global npm modules
+  - '%APPDATA%\Roaming\npm-cache -> package.json'           # npm cache
+  - 'src\node_modules -> package.json'                      # local npm modules
