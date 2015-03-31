@@ -14,6 +14,7 @@
         range: '=',
         showDropdowns: '=',
         timePicker: '=',
+        timePickerSeconds: '=',
         timePicker12Hour: '='
       },
       templateUrl: 'components/date-range-picker/date-range-picker-directive.tpl.html',
@@ -28,6 +29,7 @@
           startDate: vm.range.start,
           timePicker: !!vm.timePicker,
           timePicker12Hour: !!vm.timePicker12Hour,
+          timePickerSeconds: !!vm.timePickerSeconds,
           timePickerIncrement: vm.timePickerIncrement || 1
         };
 

@@ -14,7 +14,15 @@
           return;
         }
 
-        if ((vm.range.start.toDate() === vm.range.end.toDate()) || (vm.maxDate.toDate() === vm.range.end.toDate())) {
+        if (!angular.isObject(vm.range.start)) {
+          vm.range.start = moment(vm.range.start);
+        }
+
+        if (!angular.isObject(vm.range.end)) {
+          vm.range.end = moment(vm.range.end);
+        }
+
+        if ((vm.range.start.diff(vm.range.end, 'seconds') === 0) || (vm.maxDate.diff(vm.range.end, 'seconds') === 0)) {
           vm.range.end = vm.range.end.endOf('day');
         }
 
