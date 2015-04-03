@@ -71,7 +71,7 @@
       }
 
       if (authService.isAuthenticated()) {
-        authService.logout();
+        authService.logout(true, $stateParams);
       }
 
       vm.authenticate = authenticate;

@@ -49,13 +49,13 @@
       return $auth.login(user).then(onSuccess);
     }
 
-    function logout(withRedirect) {
+    function logout(withRedirect, params) {
       function onSuccess() {
         $rootScope.$emit('auth:logout', {});
 
         if (withRedirect) {
           stateService.save(['auth.']);
-          return $state.go('auth.login');
+          return $state.go('auth.login', params);
         }
       }
 
