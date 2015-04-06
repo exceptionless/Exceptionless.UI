@@ -484,11 +484,11 @@
 
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
       function handleError(response) {
-        //if (response.status === 0 || response.status === 503) {
-        //  stateService.save(['auth.', 'status']);
-        //  $state.go('status', {redirect: true});
-        //  return true;
-        //}
+        if ($state.current.name !== 'status' && (response.status === 0 || response.status === 503)) {
+          stateService.save(['auth.', 'status']);
+          $state.go('status', { redirect: true });
+          return true;
+        }
 
         if(response.status === 401) {
           stateService.save(['auth.']);
