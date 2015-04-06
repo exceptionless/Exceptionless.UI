@@ -293,7 +293,7 @@
       vm.hasPremiumEmailNotifications = hasPremiumEmailNotifications;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.hasProjects = hasProjects;
-      vm.isExternalLoginEnabled;
+      vm.isExternalLoginEnabled = isExternalLoginEnabled;
       vm.password = {};
       vm.passwordForm = {};
       vm.projects = [];
