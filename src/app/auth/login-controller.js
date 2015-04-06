@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', ['$state', '$stateParams', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, authService, notificationService, projectService, stateService) {
+    .controller('auth.Login', ['$state', '$stateParams', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
       var vm = this;
 
       function getMessage(response) {
@@ -19,6 +19,25 @@
         }
 
         return authService.authenticate(provider, { InviteToken: vm.token }).then(redirectOnSignup, onFailure);
+      }
+
+      function isExternalLoginEnabled(provider) {
+        if (!provider) {
+          return !!FACEBOOK_APPID || !!GITHUB_APPID || !!GOOGLE_APPID || !!LIVE_APPID;
+        }
+
+        switch (provider) {
+          case 'facebook':
+            return !!FACEBOOK_APPID;
+          case 'github':
+            return !!GITHUB_APPID;
+          case 'google':
+            return !!GOOGLE_APPID;
+          case 'live':
+            return !!LIVE_APPID;
+          default:
+            return false;
+        }
       }
 
       function login(isValid) {
@@ -55,6 +74,7 @@
       }
 
       vm.authenticate = authenticate;
+      vm.isExternalLoginEnabled = isExternalLoginEnabled;
       vm.login = login;
       vm.token = $stateParams.token;
       vm.user = { invite_token: vm.token };

@@ -14,16 +14,16 @@
             <div class="panel-body">
               <form name="loginForm" role="form" class="form-horizontal form-validation" autocomplete="on">
                 <div class="form-horizontal col-sm-offset-2">
-                  <h4>Login with</h4>
+                  <h4>Login <span ng-if="vm.isExternalLoginEnabled()">with</span></h4>
 
-                  <div class="form-group" style="margin-left:0px;">
-                    <button type="button" role="button" ng-click="vm.authenticate('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
-                    <button type="button" role="button" ng-click="vm.authenticate('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
-                    <button type="button" role="button" ng-click="vm.authenticate('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
-                    <button type="button" role="button" ng-click="vm.authenticate('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
+                  <div class="form-group" style="margin-left:0px;" ng-if="vm.isExternalLoginEnabled()">
+                    <button type="button" role="button" ng-click="vm.authenticate('live')" ng-if="vm.isExternalLoginEnabled('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
+                    <button type="button" role="button" ng-click="vm.authenticate('google')" ng-if="vm.isExternalLoginEnabled('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
+                    <button type="button" role="button" ng-click="vm.authenticate('facebook')" ng-if="vm.isExternalLoginEnabled('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
+                    <button type="button" role="button" ng-click="vm.authenticate('github')" ng-if="vm.isExternalLoginEnabled('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group" ng-if="vm.isExternalLoginEnabled()">
                     <div class="col-sm-10 horizontal-divider">
                       <p>OR</p>
                       <span></span>

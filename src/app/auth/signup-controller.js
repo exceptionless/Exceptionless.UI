@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', ['$state', '$stateParams', '$timeout', 'authService', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, $timeout, authService, notificationService, projectService, stateService) {
+    .controller('auth.Signup', ['$state', '$stateParams', '$timeout', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, $timeout, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
       var _canSignup = true;
       var vm = this;
 
@@ -20,6 +20,25 @@
         }
 
         return authService.authenticate(provider, { InviteToken: vm.token }).then(redirectOnSignup, onFailure);
+      }
+
+      function isExternalLoginEnabled(provider) {
+        if (!provider) {
+          return !!FACEBOOK_APPID || !!GITHUB_APPID || !!GOOGLE_APPID || !!LIVE_APPID;
+        }
+
+        switch (provider) {
+          case 'facebook':
+            return !!FACEBOOK_APPID;
+          case 'github':
+            return !!GITHUB_APPID;
+          case 'google':
+            return !!GOOGLE_APPID;
+          case 'live':
+            return !!LIVE_APPID;
+          default:
+            return false;
+        }
       }
 
       function redirectOnSignup() {
@@ -75,6 +94,7 @@
       }
 
       vm.authenticate = authenticate;
+      vm.isExternalLoginEnabled = isExternalLoginEnabled;
       vm.signup = signup;
       vm.signupForm = {};
       vm.token = $stateParams.token;

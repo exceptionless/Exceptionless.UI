@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', ['$stateParams', '$timeout', 'authService', 'billingService', 'featureService', 'notificationService', 'projectService', 'userService', function ($stateParams, $timeout, authService, billingService, featureService, notificationService, projectService, userService) {
+    .controller('account.Manage', ['$stateParams', '$timeout', 'authService', 'billingService', 'FACEBOOK_APPID', 'featureService', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'userService', function ($stateParams, $timeout, authService, billingService, FACEBOOK_APPID, featureService, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
       var _canSaveEmailAddress = true;
       var vm = this;
 
@@ -143,6 +143,25 @@
         return hasEmailNotifications() && hasPremiumFeatures();
       }
 
+      function isExternalLoginEnabled(provider) {
+        if (!provider) {
+          return !!FACEBOOK_APPID || !!GITHUB_APPID || !!GOOGLE_APPID || !!LIVE_APPID;
+        }
+
+        switch (provider) {
+          case 'facebook':
+            return !!FACEBOOK_APPID;
+          case 'github':
+            return !!GITHUB_APPID;
+          case 'google':
+            return !!GOOGLE_APPID;
+          case 'live':
+            return !!LIVE_APPID;
+          default:
+            return false;
+        }
+      }
+
       function resendVerificationEmail() {
         function onFailure(response) {
           var message = 'An error occurred while sending your verification email.';
@@ -274,6 +293,7 @@
       vm.hasPremiumEmailNotifications = hasPremiumEmailNotifications;
       vm.hasPremiumFeatures = hasPremiumFeatures;
       vm.hasProjects = hasProjects;
+      vm.isExternalLoginEnabled;
       vm.password = {};
       vm.passwordForm = {};
       vm.projects = [];
