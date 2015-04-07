@@ -2,6 +2,8 @@
   'use strict';
 
   angular.module('exceptionless.simple-stack-trace', [
+    'ngSanitize',
+
     'exceptionless.simple-error'
   ])
     .directive('simpleStackTrace', ['$sanitize', 'simpleErrorService', function ($sanitize, simpleErrorService) {
