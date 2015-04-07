@@ -4,11 +4,11 @@
   angular.module('exceptionless.simple-stack-trace', [
     'exceptionless.simple-error'
   ])
-    .directive('simpleStackTrace', ['simpleErrorService', function (simpleErrorService) {
+    .directive('simpleStackTrace', ['$sanitize', 'simpleErrorService', function ($sanitize, simpleErrorService) {
       function buildStackFrames(exceptions) {
         var frames = '';
         for (var index = 0; index < exceptions.length; index++) {
-          frames += '<div class="stack-frame">' + exceptions[index].stack_trace.replace(' ', '');
+          frames += '<div class="stack-frame">' + $sanitize(exceptions[index].stack_trace.replace(' ', ''));
 
           if (index < (exceptions.length - 1)) {
             frames += '<div>--- End of inner exception stack trace ---</div>';
@@ -33,9 +33,9 @@
             header += ' ---> ';
           }
 
-          header += '<span class="ex-type">' + exceptions[index].type + '</span>';
+          header += '<span class="ex-type">' + $sanitize(exceptions[index].type) + '</span>';
           if (exceptions[index].message) {
-            header += '<span class="ex-message">: ' + exceptions[index].message + '</span>';
+            header += '<span class="ex-message">: ' + $sanitize(exceptions[index].message) + '</span>';
           }
 
           header += '</span>';

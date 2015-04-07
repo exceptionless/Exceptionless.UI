@@ -4,7 +4,7 @@
   angular.module('exceptionless.stack-trace', [
     'exceptionless.error'
   ])
-  .directive('stackTrace', ['errorService', function (errorService) {
+  .directive('stackTrace', ['$sanitize', 'errorService', function ($sanitize, errorService) {
     function buildParameter(parameter) {
       var result = '';
 
@@ -71,7 +71,7 @@
         }
       }
 
-      return result + '\r\n';
+      return $sanitize(result + '\r\n');
     }
 
     function buildStackFrames(exceptions) {
@@ -112,9 +112,9 @@
           header += ' ---> ';
         }
 
-        header += '<span class="ex-type">' + exceptions[index].type + '</span>';
+        header += '<span class="ex-type">' + $sanitize(exceptions[index].type) + '</span>';
         if (exceptions[index].message) {
-          header += '<span class="ex-message">: ' + exceptions[index].message + '</span>';
+          header += '<span class="ex-message">: ' + $sanitize(exceptions[index].message) + '</span>';
         }
 
         header += '</span>';
