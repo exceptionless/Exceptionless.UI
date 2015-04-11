@@ -214,6 +214,10 @@
       function hasIdentity() {
         return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].identity;
       }
+	  
+      function hasUserName() {
+        return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].name;
+      }
 
       function hasIPAddress() {
         return hasRequestInfo() && vm.event.data['@request'].client_ip_address && vm.event.data['@request'].client_ip_address.length > 0;
@@ -310,6 +314,7 @@
       vm.getVersion = getVersion;
       vm.hasCookies = hasCookies;
       vm.hasIdentity = hasIdentity;
+      vm.hasUserName = hasUserName;
       vm.hasLevel = hasLevel;
       vm.hasReferrer = hasReferrer;
       vm.hasRequestInfo = hasRequestInfo;
