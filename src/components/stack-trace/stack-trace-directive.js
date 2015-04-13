@@ -73,7 +73,7 @@
         }
       }
 
-      return $sanitize(result + '\r\n');
+      return sanitize(result + '\r\n');
     }
 
     function buildStackFrames(exceptions) {
@@ -114,15 +114,25 @@
           header += ' ---> ';
         }
 
-        header += '<span class="ex-type">' + $sanitize(exceptions[index].type) + '</span>';
+        header += '<span class="ex-type">' + sanitize(exceptions[index].type) + '</span>';
         if (exceptions[index].message) {
-          header += '<span class="ex-message">: ' + $sanitize(exceptions[index].message) + '</span>';
+          header += '<span class="ex-message">: ' + sanitize(exceptions[index].message) + '</span>';
         }
 
         header += '</span>';
       }
 
       return header;
+    }
+
+    function sanitize(input) {
+      try {
+        return $sanitize(input);
+      } catch (e) {
+        // TODO: Log this to Exceptionless.
+      }
+
+      return input;
     }
 
     return {
