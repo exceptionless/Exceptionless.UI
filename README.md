@@ -3,6 +3,18 @@
 
 Exceptionless User Interface
 
+## Using Exceptionless
+
+Refer to the Exceptionless documentation here: [Exceptionless Docs](http://docs.exceptionless.io)
+
+## Hosting Options
+
+1. We provide very reasonably priced hosting at [Exceptionless](http://exceptionless.io). By using our hosted service, you are supporting the project and helping it get better! We also provide set up and support services.
+2. If you would rather host Exceptionless yourself, you will need to follow these steps:
+  1. [Download and and extract the latest release](https://github.com/exceptionless/Exceptionless.UI/releases).
+  2. Update the `app.config.*.js` file with your settings.
+  3. Host on any web server!
+
 ## Getting Started (Development)
 
 _NOTE: If you simply want to use Exceptionless, just go to [http://exceptionless.io](http://exceptionless.io) and signup for a free account and you will be up and running in seconds._
@@ -21,14 +33,3 @@ bower install
 ```javascript
 grunt serve
 ```
-## Using Exceptionless
-
-Refer to the Exceptionless documentation here: [Exceptionless Docs](http://docs.exceptionless.io)
-
-## Hosting Options
-
-1. We provide very reasonably priced hosting at [Exceptionless](http://exceptionless.io). By using our hosted service, you are supporting the project and helping it get better! We also provide set up and support services.
-2. If you would rather host Exceptionless yourself, you will need to follow these steps:
-  1. [Download and and extract the latest release](https://github.com/exceptionless/Exceptionless.UI/releases).
-  2. Update the `app.config.*.js` file with your settings.
-  3. Host on any web server!
