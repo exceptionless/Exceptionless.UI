@@ -8,6 +8,7 @@
     'ui.router',
 
     'app.config',
+    'exceptionless',
     'exceptionless.auth',
     'exceptionless.autofocus',
     'exceptionless.notification',

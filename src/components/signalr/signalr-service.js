@@ -4,10 +4,12 @@
   angular.module('exceptionless.signalr', [
     'SignalR',
 
-    'exceptionless.auth',
-    'app.config'
+    'app.config',
+    'exceptionless',
+    'exceptionless.auth'
   ])
-  .factory('signalRService', ['$rootScope', '$timeout', '$log', 'authService', 'BASE_URL', 'Hub', function ($rootScope, $timeout, $log, authService, BASE_URL, Hub) {
+  .factory('signalRService', ['$ExceptionlessClient', '$rootScope', '$timeout', '$log', 'authService', 'BASE_URL', 'Hub', function ($ExceptionlessClient, $rootScope, $timeout, $log, authService, BASE_URL, Hub) {
+    var source = 'exceptionless.signalr.signalRService';
     var _hub;
     var _signalRTimeout;
 
@@ -20,7 +22,8 @@
         stop();
       }
 
-      _signalRTimeout = $timeout(function (){
+      _signalRTimeout = $timeout(function () {
+        $log.log('Starting SignalR');
         _hub = new Hub('messages', {
           rootPath: BASE_URL + '/push',
 
@@ -60,7 +63,9 @@
 
           // handle connection error
           errorHandler: function (error) {
-            $log.error(error);
+            $ExceptionlessClient.createUnhandledException(error, source)
+              .addTags('SignalR')
+              .submit();
           }
         });
       }, delay || 1000);
@@ -68,6 +73,7 @@
 
     function stop() {
       if (_hub) {
+        $log.log('Stopping SignalR');
         _hub.disconnect();
         _hub = null;
       }

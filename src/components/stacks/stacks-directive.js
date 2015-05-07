@@ -11,7 +11,8 @@
           settings: '='
         },
         templateUrl: 'components/stacks/stacks-directive.tpl.html',
-        controller: ['$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', 'stacksActionsService', function ($window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', 'stacksActionsService', function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
+          var source = 'exceptionless.stacks';
           var vm = this;
 
           function canRefresh(data) {
@@ -53,6 +54,7 @@
           }
 
           function open(id, event) {
+            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
             if (event.ctrlKey || event.which === 2) {
               $window.open($state.href('app.stack', { id: id }, { absolute: true }), '_blank');
             } else {
@@ -63,10 +65,12 @@
           }
 
           function nextPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
@@ -107,6 +111,7 @@
           vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
           vm.updateSelection = updateSelection;
 
+          $ExceptionlessClient.submitFeatureUsage(source);
           get();
         }],
         controllerAs: 'vm'

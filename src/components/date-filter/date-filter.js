@@ -7,6 +7,7 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'exceptionless',
     'exceptionless.date-range-parser',
     'exceptionless.date-range-picker',
     'exceptionless.refresh'

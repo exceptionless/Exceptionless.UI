@@ -2,10 +2,12 @@
   'use strict';
 
   angular.module('exceptionless.web-hook')
-    .controller('AddWebHookDialog', ['$modalInstance', function ($modalInstance) {
+    .controller('AddWebHookDialog', ['$ExceptionlessClient', '$modalInstance', function ($ExceptionlessClient, $modalInstance) {
+      var source = 'exceptionless.web-hook.AddWebHookDialog';
       var vm = this;
 
       function cancel() {
+        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
         $modalInstance.dismiss('cancel');
       }
 
@@ -53,6 +55,7 @@
           return;
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('WebHook', vm.data).submit();
         $modalInstance.close(vm.data);
       }
 
@@ -62,5 +65,7 @@
       vm.eventTypes = getEventTypes();
       vm.hasEventTypeSelection = hasEventTypeSelection;
       vm.save = save;
+
+      $ExceptionlessClient.submitFeatureUsage(source);
     }]);
 }());

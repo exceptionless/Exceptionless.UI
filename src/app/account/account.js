@@ -6,6 +6,7 @@
     'ngMessages',
     'ui.router',
 
+    'exceptionless',
     'exceptionless.auth',
     'exceptionless.autofocus',
     'exceptionless.billing',

@@ -2,10 +2,12 @@
   'use strict';
 
   angular.module('exceptionless.date-filter')
-    .controller('CustomDateRangeDialog', ['$modalInstance', 'data', function ($modalInstance, data) {
+    .controller('CustomDateRangeDialog', ['$ExceptionlessClient', '$modalInstance', 'data', function ($ExceptionlessClient, $modalInstance, data) {
+      var source = 'exceptionless.date-filter.CustomDateRangeDialog';
       var vm = this;
 
       function cancel() {
+        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
         $modalInstance.dismiss('cancel');
       }
 
@@ -26,6 +28,7 @@
           vm.range.end = vm.range.end.endOf('day');
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('Range', vm.range).submit();
         $modalInstance.close(vm.range);
       }
 
@@ -37,5 +40,7 @@
         end: data.end
       };
       vm.save = save;
+
+      $ExceptionlessClient.submitFeatureUsage(source);
     }]);
 }());

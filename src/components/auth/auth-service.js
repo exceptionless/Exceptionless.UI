@@ -6,9 +6,10 @@
     'satellizer',
     'ui.router',
 
+    'exceptionless',
     'exceptionless.state'
   ])
-  .factory('authService', ['$auth', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $rootScope, $state, stateService, Restangular) {
+  .factory('authService', ['$auth', '$ExceptionlessClient', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $ExceptionlessClient, $rootScope, $state, stateService, Restangular) {
     function authenticate(provider, userData) {
       function onSuccess() {
         $rootScope.$emit('auth:login', {});
@@ -43,6 +44,7 @@
 
     function login(user) {
       function onSuccess() {
+        $ExceptionlessClient.config.setUserIdentity({ identity: user.email_address, name: user.full_name, data: { user: user }});
         $rootScope.$emit('auth:login', {});
       }
 
@@ -51,6 +53,7 @@
 
     function logout(withRedirect, params) {
       function onSuccess() {
+        $ExceptionlessClient.config.setUserIdentity();
         $rootScope.$emit('auth:logout', {});
 
         if (withRedirect) {

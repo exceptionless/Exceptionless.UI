@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService) {
+    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService) {
+      var source = 'app.event.Event';
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'version'];
       var vm = this;
@@ -12,6 +13,11 @@
           combo: 'ctrl+up',
           description: 'Go To Stack',
           callback: function () {
+            $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.GoToStack')
+              .addTags('hotkeys')
+              .setProperty('id', _eventId)
+              .submit();
+
             $state.go('app.stack', { id: vm.event.stack_id });
           }
         });
@@ -21,6 +27,11 @@
             combo: 'ctrl+left',
             description: 'Previous Occurrence',
             callback: function () {
+              $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.PreviousOccurrence')
+                .addTags('hotkeys')
+                .setProperty('id', _eventId)
+                .submit();
+
               $state.go('app.event', { id: vm.previous, tab: vm.getCurrentTab() });
             }
           });
@@ -31,6 +42,11 @@
             combo: 'ctrl+right',
             description: 'Next Occurrence',
             callback: function () {
+              $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.NextOccurrence')
+                .addTags('hotkeys')
+                .setProperty('id', _eventId)
+                .submit();
+
               $state.go('app.event', { id: vm.next, tab: vm.getCurrentTab() });
             }
           });
@@ -92,11 +108,22 @@
 
       function demoteTab(tabName) {
         function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.success')
+            .setProperty('id', _eventId)
+            .setProperty('TabName', tabName)
+            .submit();
+
           vm.project.promoted_tabs.splice(indexOf, 1);
           buildTabs('Extended Data');
         }
 
-        function onFailure() {
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.error')
+            .setProperty('id', _eventId)
+            .setProperty('response', response)
+            .setProperty('TabName', tabName)
+            .submit();
+
           notificationService.error('An error occurred promoting tab.');
         }
 
@@ -104,6 +131,11 @@
         if (indexOf < 0) {
           return;
         }
+
+        $ExceptionlessClient.createFeatureUsage(source + '.demoteTab')
+          .setProperty('id', _eventId)
+          .setProperty('TabName', tabName)
+          .submit();
 
         return projectService.demoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
@@ -214,7 +246,7 @@
       function hasIdentity() {
         return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].identity;
       }
-	  
+
       function hasUserName() {
         return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].name;
       }
@@ -285,14 +317,30 @@
       }
 
       function promoteTab(tabName) {
-        function onSuccess(response) {
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.success')
+            .setProperty('id', _eventId)
+            .setProperty('TabName', tabName)
+            .submit();
+
           vm.project.promoted_tabs.push(tabName);
           buildTabs(tabName);
         }
 
-        function onFailure() {
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.error')
+            .setProperty('id', _eventId)
+            .setProperty('response', response)
+            .setProperty('TabName', tabName)
+            .submit();
+
           notificationService.error('An error occurred promoting tab.');
         }
+
+        $ExceptionlessClient.createFeatureUsage(source + '.promoteTab')
+          .setProperty('id', _eventId)
+          .setProperty('TabName', tabName)
+          .submit();
 
         return projectService.promoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }

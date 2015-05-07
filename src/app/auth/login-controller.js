@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', ['$state', '$stateParams', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
+    .controller('auth.Login', ['$ExceptionlessClient', '$state', '$stateParams', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($ExceptionlessClient, $state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
+      var source = 'app.auth.Login';
       var vm = this;
 
       function getMessage(response) {
@@ -14,11 +15,17 @@
       }
 
       function authenticate(provider) {
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.authenticate.success').setProperty('InviteToken', vm.token).submit();
+        }
+
         function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.authenticate.error').setProperty('InviteToken', vm.token).setProperty('response', response).submit();
           notificationService.error(getMessage(response));
         }
 
-        return authService.authenticate(provider, { InviteToken: vm.token }).then(redirectOnSignup, onFailure);
+        $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).submit();
+        return authService.authenticate(provider, { InviteToken: vm.token }).then(onSuccess, onFailure).then(redirectOnSignup);
       }
 
       function isExternalLoginEnabled(provider) {
@@ -45,11 +52,17 @@
           return;
         }
 
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.login.success').setUserIdentity(vm.loginForm.email).submit();
+        }
+
         function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.login.error').setUserIdentity(vm.loginForm.email).setProperty('response', response).submit();
           notificationService.error(getMessage(response));
         }
 
-        return authService.login(vm.user).then(redirectOnSignup, onFailure);
+        $ExceptionlessClient.createFeatureUsage(source + '.login').setUserIdentity(vm.loginForm.email).submit();
+        return authService.login(vm.user).then(onSuccess, onFailure).then(redirectOnSignup);
       }
 
       function redirectOnSignup() {

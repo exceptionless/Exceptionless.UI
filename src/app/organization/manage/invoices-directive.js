@@ -11,7 +11,8 @@
           settings: "="
         },
         templateUrl: 'app/organization/manage/invoices-directive.tpl.html',
-        controller: ['$window', '$state', 'dialogService', 'linkService', 'notificationService', 'paginationService', 'userService', function ($window, $state, dialogService, linkService, notificationService, paginationService, userService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', 'dialogService', 'linkService', 'notificationService', 'paginationService', 'userService', function ($ExceptionlessClient, $window, $state, dialogService, linkService, notificationService, paginationService, userService) {
+          var source = 'exceptionless.organization.invoices';
           var vm = this;
 
           function get(options, useCache) {
@@ -44,15 +45,18 @@
           }
 
           function open(id, event) {
+            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).submit();
             $window.open($state.href('payment', { id: id }, { absolute: true }), '_blank');
             event.preventDefault();
           }
 
           function nextPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
@@ -65,6 +69,7 @@
           vm.previousPage = previousPage;
           vm.invoices = [];
 
+          $ExceptionlessClient.submitFeatureUsage(source);
           get();
         }],
         controllerAs: 'vm'

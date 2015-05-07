@@ -3,6 +3,7 @@ version: 2.0.{build}
 environment:
   nodejs_version: "0.10"
   API_URL: https://#{api.hostheader}/api/v2
+  EXCEPTIONLESS_API_KEY: "#{exceptionless.api.key}"
   FACEBOOK_APPID: "#{facebook.appid}"
   GITHUB_APPID: "#{github.appid}"
   GOOGLE_APPID: "#{google.appid}"

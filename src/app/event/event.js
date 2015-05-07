@@ -7,6 +7,7 @@
     'ngClipboard',
     'ui.router',
 
+    'exceptionless',
     'exceptionless.error',
     'exceptionless.event',
     'exceptionless.organization-notifications',

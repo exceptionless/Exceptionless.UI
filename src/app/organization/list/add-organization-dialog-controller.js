@@ -2,11 +2,13 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('AddOrganizationDialog', ['$modalInstance', '$timeout', function ($modalInstance, $timeout) {
+    .controller('AddOrganizationDialog', ['$ExceptionlessClient', '$modalInstance', '$timeout', function ($ExceptionlessClient, $modalInstance, $timeout) {
+      var source = 'app.organization.AddOrganizationDialog';
       var _canSave = true;
       var vm = this;
 
       function cancel() {
+        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
         $modalInstance.dismiss('cancel');
       }
 
@@ -30,6 +32,7 @@
           return;
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('name', vm.data.name).submit();
         $modalInstance.close(vm.data.name);
       }
 
@@ -37,5 +40,6 @@
       vm.cancel = cancel;
       vm.data = {};
       vm.save = save;
+      $ExceptionlessClient.submitFeatureUsage(source);
     }]);
 }());

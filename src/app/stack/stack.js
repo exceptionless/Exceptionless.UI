@@ -9,6 +9,7 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'exceptionless',
     'exceptionless.autofocus',
     'exceptionless.dialog',
     'exceptionless.event',

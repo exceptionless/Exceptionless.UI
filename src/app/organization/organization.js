@@ -10,6 +10,7 @@
     'dialogs.default-translations',
 
     'app.config',
+    'exceptionless',
     'exceptionless.autofocus',
     'exceptionless.billing',
     'exceptionless.dialog',

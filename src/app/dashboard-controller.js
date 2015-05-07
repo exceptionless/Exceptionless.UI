@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', ['$filter', '$stateParams', 'eventService', 'filterService', 'notificationService', 'stackService', 'statService', function ($filter, $stateParams, eventService, filterService, notificationService, stackService, statService) {
+    .controller('app.Dashboard', ['$ExceptionlessClient', '$filter', '$stateParams', 'eventService', 'filterService', 'notificationService', 'stackService', 'statService', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, stackService, statService) {
+      var source = 'app.Dashboard';
       var vm = this;
 
       function canRefresh(data) {
@@ -98,6 +99,11 @@
               var end = moment.unix(position.coordMaxX).utc();
 
               filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+              $ExceptionlessClient.createFeatureUsage(source + '.chart.range.onSelection')
+                .setProperty('start', start)
+                .setProperty('end', end)
+                .submit();
+
               return false;
             }
           },

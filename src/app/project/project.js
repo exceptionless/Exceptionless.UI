@@ -10,6 +10,7 @@
     'dialogs.default-translations',
     'xeditable',
 
+    'exceptionless',
     'exceptionless.autofocus',
     'exceptionless.billing',
     'exceptionless.dialog',

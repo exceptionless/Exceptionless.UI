@@ -2,10 +2,16 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', 'data', function ($modalInstance, adminService, Common, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, organizationId) {
+    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', '$ExceptionlessClient', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', 'data', function ($modalInstance, adminService, Common, $ExceptionlessClient, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, organizationId) {
+      var source = 'exceptionless.billing.ChangePlanDialog';
       var vm = this;
-
       function cancel() {
+        $ExceptionlessClient.createFeatureUsage(source + '.cancel')
+          .setProperty('CurrentPlan', vm.currentPlan)
+          .setProperty('CouponId', vm.coupon)
+          .setProperty('IsNewCard', isNewCard())
+          .submit();
+
         $modalInstance.dismiss('cancel');
       }
 
@@ -30,8 +36,24 @@
         function onSuccess(response) {
           if(!response.data.success) {
             vm.paymentMessage = 'An error occurred while changing plans. Message: ' + response.data.message;
+            $ExceptionlessClient.createException(new Error(response.data.message))
+              .markAsCritical()
+              .setSource(source + '.save.error')
+              .setProperty('CurrentPlan', vm.currentPlan)
+              .setProperty('CouponId', vm.coupon)
+              .setProperty('IsNewCard', isNewCard())
+              .submit();
+
             return;
           }
+
+          $ExceptionlessClient.createFeatureUsage(source + '.save')
+            .markAsCritical()
+            .setMessage(response.data.message)
+            .setProperty('CurrentPlan', vm.currentPlan)
+            .setProperty('CouponId', vm.coupon)
+            .setProperty('IsNewCard', isNewCard())
+            .submit();
 
           $modalInstance.close(vm.currentPlan);
           notificationService.success('Thanks! Your billing plan has been successfully changed.');
@@ -43,6 +65,14 @@
           } else {
             vm.paymentMessage = 'An error occurred while changing plans.';
           }
+
+          $ExceptionlessClient.createException(new Error(vm.paymentMessage))
+            .markAsCritical()
+            .setSource(source + '.save.error')
+            .setProperty('CurrentPlan', vm.currentPlan)
+            .setProperty('CouponId', vm.coupon)
+            .setProperty('IsNewCard', isNewCard())
+            .submit();
         }
 
         if (!isValid) {
@@ -64,6 +94,13 @@
             return createStripeToken().then(onCreateTokenSuccess, onFailure);
           } catch (error) {
             vm.paymentMessage = 'An error occurred while changing plans.';
+            $ExceptionlessClient.createException(error)
+              .markAsCritical()
+              .setSource(source + '.save.error')
+              .setProperty('CurrentPlan', vm.currentPlan)
+              .setProperty('CouponId', vm.coupon)
+              .setProperty('IsNewCard', isNewCard())
+              .submit();
             return null;
           }
         }
@@ -174,6 +211,7 @@
       function isNewCard() {
         return vm.card && vm.card.mode === 'new';
       }
+
       function isPaidPlan() {
         return vm.currentPlan && vm.currentPlan.price !== 0;
       }
@@ -196,6 +234,7 @@
       vm.save = save;
       vm.stripe = {};
 
+      $ExceptionlessClient.submitFeatureUsage(source);
       getOrganizations().then(getPlans).then(getUser);
     }]);
 }());

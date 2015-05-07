@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.List', ['$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'linkService', 'notificationService', 'organizationService', 'paginationService', function ($rootScope, $scope, $window, $state, billingService, dialogs, dialogService, linkService, notificationService, organizationService, paginationService) {
+    .controller('organization.List', ['$ExceptionlessClient', '$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'linkService', 'notificationService', 'organizationService', 'paginationService', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, linkService, notificationService, organizationService, paginationService) {
+      var source = 'exceptionless.organization.List';
       var settings = {limit: 10, mode: 'summary'};
       var vm = this;
 
@@ -75,6 +76,7 @@
       }
 
       function open(id, event) {
+        $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
         if (event.ctrlKey || event.which === 2) {
           $window.open($state.href('app.organization.manage', { id: id }, { absolute: true }), '_blank');
         } else {
@@ -85,16 +87,20 @@
       }
 
       function nextPage() {
+        $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
         return get(vm.next);
       }
 
       function previousPage() {
+        $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
         return get(vm.previous);
       }
 
       function remove(organization) {
+        $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('organization', organization).submit();
         return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
+            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('organization', organization).submit();
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
           }
 
@@ -104,6 +110,7 @@
               message += ' Message: ' + response.data.message;
             }
 
+            $ExceptionlessClient.createFeatureUsage(source + '.remove.error').setProperty('organization', organization).submit();
             notificationService.error(message);
           }
 
@@ -120,7 +127,7 @@
       vm.previousPage = previousPage;
       vm.remove = remove;
 
+      $ExceptionlessClient.submitFeatureUsage(source);
       get();
-    }
-    ]);
+    }]);
 }());
