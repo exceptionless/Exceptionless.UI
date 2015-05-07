@@ -60,5 +60,8 @@
     "bootstrap": "~3.3.4",
     "lodash": "~3.8.0",
     "moment": "~2.10.2"
+  },
+  "devDependencies": {
+    "exceptionless": "*"
   }
 }

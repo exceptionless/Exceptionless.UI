@@ -9,6 +9,7 @@ module.exports = function (grunt) {
                 dest: 'dist/app.config.js',
                 constants: {
                     BASE_URL: process.env.API_URL || 'http://localhost:50000/api/v2',
+                    EXCEPTIONLESS_API_KEY: process.env.EXCEPTIONLESS_API_KEY || 'Bx7JgglstPG544R34Tw9T7RlCed3OIwtYXVeyhT2',
                     FACEBOOK_APPID: process.env.FACEBOOK_APPID || '',
                     GITHUB_APPID: process.env.GITHUB_APPID || '',
                     GOOGLE_APPID: process.env.GOOGLE_APPID || '',
