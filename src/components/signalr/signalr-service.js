@@ -8,7 +8,7 @@
     'exceptionless',
     'exceptionless.auth'
   ])
-  .factory('signalRService', ['$ExceptionlessClient', '$rootScope', '$timeout', '$log', 'authService', 'BASE_URL', 'Hub', function ($ExceptionlessClient, $rootScope, $timeout, $log, authService, BASE_URL, Hub) {
+  .factory('signalRService', ['$ExceptionlessClient', '$rootScope', '$timeout', 'authService', 'BASE_URL', 'Hub', function ($ExceptionlessClient, $rootScope, $timeout, authService, BASE_URL, Hub) {
     var source = 'exceptionless.signalr.signalRService';
     var _hub;
     var _signalRTimeout;
@@ -23,7 +23,7 @@
       }
 
       _signalRTimeout = $timeout(function () {
-        $log.log('Starting SignalR');
+        $ExceptionlessClient.submitLog(source + '.startDelayed');
         _hub = new Hub('messages', {
           rootPath: BASE_URL + '/push',
 
@@ -73,7 +73,7 @@
 
     function stop() {
       if (_hub) {
-        $log.log('Stopping SignalR');
+        $ExceptionlessClient.submitLog(source + '.stop');
         _hub.disconnect();
         _hub = null;
       }

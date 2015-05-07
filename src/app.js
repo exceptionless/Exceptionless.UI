@@ -64,7 +64,7 @@
   ])
   .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'gravatarServiceProvider', 'RestangularProvider', 'BASE_URL', 'EXCEPTIONLESS_API_KEY', '$ExceptionlessClient', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, $ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
     $ExceptionlessClient.config.apiKey = EXCEPTIONLESS_API_KEY;
-    $ExceptionlessClient.config.serverUrl = BASE_URL.substring(0, BASE_URL.indexOf('/api'));
+    $ExceptionlessClient.config.serverUrl = BASE_URL.substring(0, BASE_URL.indexOf('/api/'));
 
     $locationProvider.html5Mode({
       enabled: (typeof USE_HTML5_MODE === 'boolean' && USE_HTML5_MODE) || USE_HTML5_MODE === 'true',
