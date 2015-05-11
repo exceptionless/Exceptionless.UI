@@ -57,7 +57,7 @@
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.login.error').setUserIdentity(vm.loginForm.email).setProperty('response', response).submit();
+          $ExceptionlessClient.createFeatureUsage(source + '.login.error').setUserIdentity(vm.loginForm.email).submit();
           notificationService.error(getMessage(response));
         }
 
