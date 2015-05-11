@@ -44,8 +44,8 @@
 
     function login(user) {
       function onSuccess() {
-        $ExceptionlessClient.config.setUserIdentity({ identity: user.email_address, name: user.full_name, data: { user: user }});
-        $rootScope.$emit('auth:login', {});
+         $ExceptionlessClient.config.setUserIdentity({ identity: user.email, data: { InviteToken: user.invite_token }});
+         $rootScope.$emit('auth:login', {});
       }
 
       return $auth.login(user).then(onSuccess);

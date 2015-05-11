@@ -12,7 +12,7 @@
         <div class="wrapper-md">
           <div class="panel panel-default">
             <div class="panel-body">
-              <form name="loginForm" role="form" class="form-horizontal form-validation" autocomplete="on">
+              <form name="vm.loginForm" role="form" class="form-horizontal form-validation" autocomplete="on">
                 <div class="form-horizontal col-sm-offset-2">
                   <h4>Login <span ng-if="vm.isExternalLoginEnabled()">with</span></h4>
 
@@ -35,7 +35,7 @@
                   <label for="email" class="col-sm-2 control-label">Email</label>
                   <div class="col-sm-10">
                     <input id="email" name="email" type="email" class="form-control" placeholder="Email address" x-autocompletetype="email" autocorrect="off" spellcheck="false" ng-model="vm.user.email" ng-required="true" autofocus />
-                    <div class="error" ng-messages="loginForm.email.$error" ng-if="loginForm.$submitted || loginForm.email.$touched">
+                    <div class="error" ng-messages="vm.loginForm.email.$error" ng-if="vm.loginForm.$submitted || vm.loginForm.email.$touched">
                       <small ng-message="required">Email Address is required.</small>
                       <small ng-message="email">Email Address is required.</small>
                     </div>
@@ -45,7 +45,7 @@
                   <label for="password" class="col-sm-2 control-label">Password</label>
                   <div class="col-sm-10">
                     <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required="true" />
-                    <div class="error" ng-messages="loginForm.password.$error" ng-if="loginForm.$submitted || loginForm.password.$touched">
+                    <div class="error" ng-messages="vm.loginForm.password.$error" ng-if="vm.loginForm.$submitted || vm.loginForm.password.$touched">
                       <small ng-message="required">Password is required.</small>
                       <small ng-message="minlength">Password must be at least 6 characters long.</small>
                       <small ng-message="maxlength">Password must be less than 101 characters long.</small>
@@ -55,7 +55,7 @@
 
                 <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
-                    <input type="submit" role="button" ng-click="vm.login(loginForm.$valid)" class="btn btn-primary" value="Log in" />
+                    <input type="submit" role="button" ng-click="vm.login(vm.loginForm.$valid)" class="btn btn-primary" value="Log in" />
                     <a class="btn btn-default" role="button" ui-sref="auth.signup({ token: vm.token })">Signup</a>
                     <p><a ui-sref="auth.forgot-password">Forgot password?</a></p>
                   </div>

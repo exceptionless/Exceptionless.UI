@@ -89,6 +89,7 @@
       vm.authenticate = authenticate;
       vm.isExternalLoginEnabled = isExternalLoginEnabled;
       vm.login = login;
+      vm.loginForm = {};
       vm.token = $stateParams.token;
       vm.user = { invite_token: vm.token };
     }]);
