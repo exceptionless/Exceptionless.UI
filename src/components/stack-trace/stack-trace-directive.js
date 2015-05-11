@@ -4,9 +4,10 @@
   angular.module('exceptionless.stack-trace', [
     'ngSanitize',
 
+    'exceptionless',
     'exceptionless.error'
   ])
-  .directive('stackTrace', ['$sanitize', 'errorService', function ($sanitize, errorService) {
+  .directive('stackTrace', ['$ExceptionlessClient', '$sanitize', 'errorService', function ($ExceptionlessClient, $sanitize, errorService) {
     function buildParameter(parameter) {
       var result = '';
 
@@ -49,7 +50,21 @@
         return '<null>';
       }
 
-      var result = 'at ' + [frame.declaring_namespace, frame.declaring_type, frame.name].join('.').replace('+', '.');
+      var typeNameParts = [];
+      if (!!frame.declaring_namespace) {
+        typeNameParts.push(frame.declaring_namespace);
+      }
+
+      if (!!frame.declaring_type) {
+        typeNameParts.push(frame.declaring_type);
+      }
+
+      if (!!frame.name) {
+        typeNameParts.push(frame.name);
+      }
+
+      var result = 'at ' + typeNameParts.join('.').replace('+', '.');
+
       if (!!frame.generic_arguments && frame.generic_arguments.length > 0) {
         result += '[' + frame.generic_arguments.join(',') + ']';
       }
@@ -114,12 +129,18 @@
           header += ' ---> ';
         }
 
-        header += '<span class="ex-type">' + sanitize(exceptions[index].type) + '</span>';
-        if (exceptions[index].message) {
-          header += '<span class="ex-message">: ' + sanitize(exceptions[index].message) + '</span>';
+        var hasType = !!exceptions[index].type;
+        if (hasType) {
+          header += '<span class="ex-type">' + sanitize(exceptions[index].type) + '</span>: ';
         }
 
-        header += '</span>';
+        if (exceptions[index].message) {
+          header += '<span class="ex-message">' + sanitize(exceptions[index].message) + '</span>';
+        }
+
+        if (hasType) {
+          header += '</span>';
+        }
       }
 
       return header;
@@ -127,9 +148,9 @@
 
     function sanitize(input) {
       try {
-        return $sanitize(input);
+        return $sanitize(input.replace('<', '&lt;'));
       } catch (e) {
-        // TODO: Log this to Exceptionless.
+        $ExceptionlessClient.createException(e).addTags('sanitize').submit();
       }
 
       return input;

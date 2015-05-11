@@ -4,9 +4,10 @@
   angular.module('exceptionless.simple-stack-trace', [
     'ngSanitize',
 
+    'exceptionless',
     'exceptionless.simple-error'
   ])
-    .directive('simpleStackTrace', ['$sanitize', 'simpleErrorService', function ($sanitize, simpleErrorService) {
+    .directive('simpleStackTrace', ['$ExceptionlessClient', '$sanitize', 'simpleErrorService', function ($ExceptionlessClient, $sanitize, simpleErrorService) {
       function buildStackFrames(exceptions) {
         var frames = '';
         for (var index = 0; index < exceptions.length; index++) {
@@ -35,12 +36,18 @@
             header += ' ---> ';
           }
 
-          header += '<span class="ex-type">' + sanitize(exceptions[index].type) + '</span>';
-          if (exceptions[index].message) {
-            header += '<span class="ex-message">: ' + sanitize(exceptions[index].message) + '</span>';
+          var hasType = !!exceptions[index].type;
+          if (hasType) {
+            header += '<span class="ex-type">' + sanitize(exceptions[index].type) + '</span>: ';
           }
 
-          header += '</span>';
+          if (exceptions[index].message) {
+            header += '<span class="ex-message">' + sanitize(exceptions[index].message) + '</span>';
+          }
+
+          if (hasType) {
+            header += '</span>';
+          }
         }
 
         return header;
@@ -48,9 +55,9 @@
 
       function sanitize(input) {
         try {
-          return $sanitize(input);
+          return $sanitize(input.replace('<', '&lt;'));
         } catch (e) {
-          // TODO: Log this to Exceptionless.
+          $ExceptionlessClient.createException(e).addTags('sanitize').submit();
         }
 
         return input;
