@@ -19,6 +19,8 @@ Refer to the Exceptionless documentation here: [Exceptionless Docs](http://docs.
 
 _NOTE: If you simply want to use Exceptionless, just go to [http://exceptionless.io](http://exceptionless.io) and signup for a free account and you will be up and running in seconds._
 
+**This section is for development purposes only! If you are trying to self host Exceptionless, than please refer to the `Hosting Options` section above.**
+
 1. You will need to clone this repo.
 2. Install [grunt](http://gruntjs.com/) and the development dependencies using [npm](https://www.npmjs.com/).
 ```javascript
