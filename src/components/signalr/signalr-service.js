@@ -23,7 +23,6 @@
       }
 
       _signalRTimeout = $timeout(function () {
-        $ExceptionlessClient.submitFeatureUsage(source + '.startDelayed');
         _hub = new Hub('messages', {
           rootPath: BASE_URL + '/push',
 
@@ -73,7 +72,6 @@
 
     function stop() {
       if (_hub) {
-        $ExceptionlessClient.submitFeatureUsage(source + '.stop');
         _hub.disconnect();
         _hub = null;
       }

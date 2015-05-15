@@ -4,6 +4,8 @@
   angular.module('exceptionless.billing')
     .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', '$ExceptionlessClient', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', 'data', function ($modalInstance, adminService, Common, $ExceptionlessClient, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, organizationId) {
       var source = 'exceptionless.billing.ChangePlanDialog';
+      var contactSupport = 'Please contact support for more information.';
+
       var vm = this;
       function cancel() {
         $ExceptionlessClient.createFeatureUsage(source + '.cancel')
@@ -75,7 +77,7 @@
             .submit();
         }
 
-        if (!isValid) {
+        if (!isValid || !vm.currentPlan) {
           return;
         }
 
@@ -155,8 +157,14 @@
           vm.card.mode = hasExistingCard() ? 'existing' : 'new';
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while loading your organizations.');
+        function onFailure(response) {
+          notificationService.error('An error occurred while loading your organizations. ' + contactSupport);
+          $ExceptionlessClient.createFeatureUsage(source + '.getOrganizations.error')
+            .markAsCritical()
+            .setMessage(response && response.data && response.data.message)
+            .submit();
+
+          cancel();
         }
 
         vm.organizations = [];
@@ -175,8 +183,14 @@
           return vm.plans;
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while loading available billing plans.');
+        function onFailure(response) {
+          notificationService.error('An error occurred while loading available billing plans. ' + contactSupport);
+          $ExceptionlessClient.createFeatureUsage(source + '.getPlans.error')
+            .markAsCritical()
+            .setMessage(response && response.data && response.data.message)
+            .submit();
+
+          cancel();
         }
 
         return organizationService.getPlans(vm.currentOrganization.id).then(onSuccess, onFailure);
@@ -193,7 +207,17 @@
           return vm.user;
         }
 
-        return userService.getCurrentUser().then(onSuccess);
+        function onFailure(response) {
+          notificationService.error('An error occurred while loading your user account. ' + contactSupport);
+          $ExceptionlessClient.createFeatureUsage(source + '.getUser.error')
+            .markAsCritical()
+            .setMessage(response && response.data && response.data.message)
+            .submit();
+
+          cancel();
+        }
+
+        return userService.getCurrentUser().then(onSuccess, onFailure);
       }
 
       function hasAdminRole() {
