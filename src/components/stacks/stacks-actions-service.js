@@ -2,8 +2,18 @@
   'use strict';
 
   angular.module('exceptionless.stacks')
-    .factory('stacksActionsService', ['$ExceptionlessClient', 'dialogService', 'stackService', 'notificationService', function ($ExceptionlessClient, dialogService, stackService, notificationService) {
+    .factory('stacksActionsService', ['$ExceptionlessClient', 'dialogService', 'stackService', 'notificationService', '$q', function ($ExceptionlessClient, dialogService, stackService, notificationService, $q) {
       var source = 'exceptionless.stacks.stacksActionsService';
+
+      function executeAction(ids, action, onSuccess, onFailure) {
+        var deferred = $q.defer();
+        var promise = _.chunk(ids, 10).reduce(function (previous, item) {
+          return previous.then(action(item.join(',')));
+        }, deferred.promise).then(onSuccess, onFailure);
+
+        deferred.resolve();
+        return promise;
+      }
 
       var deleteAction = {
         name: 'Delete',
@@ -19,7 +29,7 @@
               notificationService.error('An error occurred while deleting the stacks.');
             }
 
-            return stackService.remove(ids.join(',')).then(onSuccess, onFailure);
+            return executeAction(ids, stackService.remove, onSuccess, onFailure);
           });
         }
       };
@@ -37,7 +47,7 @@
           }
 
           $ExceptionlessClient.createFeatureUsage(source + '.mark-fixed').setProperty('count', ids.length).submit();
-          return stackService.markFixed(ids.join(',')).then(onSuccess, onFailure);
+          return executeAction(ids, stackService.markFixed, onSuccess, onFailure);
         }
       };
 
@@ -54,7 +64,7 @@
           }
 
           $ExceptionlessClient.createFeatureUsage(source + '.mark-not-fixed').setProperty('count', ids.length).submit();
-          return stackService.markNotFixed(ids.join(',')).then(onSuccess, onFailure);
+          return executeAction(ids, stackService.markNotFixed, onSuccess, onFailure);
         }
       };
 
@@ -71,7 +81,7 @@
           }
 
           $ExceptionlessClient.createFeatureUsage(source + '.mark-hidden').setProperty('count', ids.length).submit();
-          return stackService.markHidden(ids.join(',')).then(onSuccess, onFailure);
+          return executeAction(ids, stackService.markHidden, onSuccess, onFailure);
         }
       };
 
@@ -88,7 +98,7 @@
           }
 
           $ExceptionlessClient.createFeatureUsage(source + '.mark-not-hidden').setProperty('count', ids.length).submit();
-          return stackService.markNotHidden(ids.join(',')).then(onSuccess, onFailure);
+          return executeAction(ids, stackService.markNotHidden, onSuccess, onFailure);
         }
       };
 
