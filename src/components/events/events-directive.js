@@ -23,7 +23,7 @@
               }
 
               // Refresh if the event id is set (non bulk) and the deleted event matches one of the events.
-              if (!!data.id) {
+              if (!!data.id && !!vm.events) {
                 return vm.events.filter(function (e) { return e.id === data.id; }).length > 0;
               }
 

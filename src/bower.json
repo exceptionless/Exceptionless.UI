@@ -35,7 +35,7 @@
     "d3": "~3.5.5",
     "es5-shim": "~4.1.0",
     "es6-shim": "0.31.2",
-    "exceptionless": "0.2.0",
+    "exceptionless": "0.2.1",
     "font-awesome": "~4.3.0",
     "handlebars": "~3.0.0",
     "jquery": "~2.1.3",
