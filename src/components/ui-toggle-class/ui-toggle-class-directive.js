@@ -10,7 +10,7 @@
             if (e && e.preventDefault) {
               e.preventDefault();
             }
-            
+
             var classes = attr.uiToggleClass.split(','),
               targets = (attr.target && attr.target.split(',')) || new Array(el),
               key = 0;

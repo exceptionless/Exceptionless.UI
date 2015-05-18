@@ -388,7 +388,8 @@
         options: {
           limit: 10,
           mode: 'summary'
-        }
+        },
+        source: source + '.Recent'
       };
       vm.stack = {};
       vm.stats = {};

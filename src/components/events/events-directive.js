@@ -12,8 +12,8 @@
         },
         templateUrl: 'components/events/events-directive.tpl.html',
         controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, linkService, filterService, notificationService, paginationService) {
-          var source = 'exceptionless.events';
           var vm = this;
+          var source = vm.settings.source + '.events';
 
           function canRefresh(data) {
             if (!!data && data.type === 'PersistentEvent') {
@@ -123,8 +123,6 @@
           vm.selectedIds = [];
           vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
           vm.updateSelection = updateSelection;
-
-          $ExceptionlessClient.submitFeatureUsage(source);
           get();
         }],
         controllerAs: 'vm'

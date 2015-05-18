@@ -12,8 +12,8 @@
         },
         templateUrl: 'components/stacks/stacks-directive.tpl.html',
         controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', 'stacksActionsService', function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
-          var source = 'exceptionless.stacks';
           var vm = this;
+          var source = vm.settings.source + '.stacks';
 
           function canRefresh(data) {
             if (!!data && data.type === 'Stack') {
@@ -111,7 +111,6 @@
           vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
           vm.updateSelection = updateSelection;
 
-          $ExceptionlessClient.submitFeatureUsage(source);
           get();
         }],
         controllerAs: 'vm'

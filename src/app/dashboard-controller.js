@@ -121,7 +121,8 @@
         options: {
           limit: 10,
           mode: 'summary'
-        }
+        },
+        source: source + '.Frequent'
       };
 
       vm.mostRecent = {
@@ -130,7 +131,8 @@
         options: {
           limit: 10,
           mode: 'summary'
-        }
+        },
+        source: source + '.Recent'
       };
       vm.stats = {};
       vm.type = $stateParams.type;
