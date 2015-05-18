@@ -20,7 +20,7 @@
             var _this = $(this);
             _this.parent().siblings( ".active" ).toggleClass('active');
 
-            if(_this.next().is('ul') && _this.parent().toggleClass('active')) {
+            if(_this.next().is('ul') && _this.parent().toggleClass('active') && e && e.preventDefault) {
               e.preventDefault();
             }
 
