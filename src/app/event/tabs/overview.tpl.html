@@ -18,9 +18,13 @@
     <th>Level</th>
     <td><span class="label label-default" ng-class="{ 'label-success': vm.isLevelSuccess(), 'label-info': vm.isLevelInfo(), 'label-warning': vm.isLevelWarning(), 'label-danger': vm.isLevelError() }">{{::vm.event.data['@level']}}</span></td>
   </tr>
-  <tr class="hidden-print">
+  <tr class="hidden-print" ng-if="!vm.isError()">
     <th>Event Type</th>
     <td><span truncate>{{::vm.event.type}}</span></td>
+  </tr>
+  <tr class="hidden-print" ng-if="vm.isError()">
+    <th>Error Type</th>
+    <td><span truncate>{{::vm.getErrorType()}}</span></td>
   </tr>
   <tr class="hidden-print" ng-if="vm.event.source">
     <th>Source</th>
@@ -38,10 +42,6 @@
     <th>Tags</th>
     <td><span class="label label-info" ng-repeat="tag in vm.event.tags track by tag">{{tag}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.isError()">
-    <th>Error Type</th>
-    <td><span truncate>{{::vm.getErrorType()}}</span></td>
-  </tr>
   <tr class="hidden-print" ng-if="vm.event.code">
     <th>Code</th>
     <td><span truncate>{{::vm.event.code}}</span></td>
@@ -50,28 +50,6 @@
   <tr class="hidden-print" ng-if="vm.hasRequestInfo()">
     <th>URL</th>
     <td><a ng-href="{{::vm.getRequestUrl()}}" target="_blank" truncate>{{::vm.getRequestUrl()}}</a></td>
-  </tr>
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo()">
-    <th>Referrer</th>
-    <td>
-      <span ng-if="vm.hasReferrer()">
-          <a ng-href="{{::vm.event.data['@request'].referrer}}" target="_blank" truncate>{{::vm.event.data['@request'].referrer}}</a>
-      </span>
-      <em ng-if="!vm.hasReferrer()">None</em>
-    </td>
-  </tr>
-
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@device']">
-    <th>Device</th>
-    <td>{{::vm.event.data['@request'].data['@device']}}</td>
-  </tr>
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@browser']">
-    <th>Browser</th>
-    <td>{{::vm.event.data['@request'].data['@browser']}} <abbr ng-if="vm.event.data['@request'].data['@browser_major_version']" title="{{::vm.event.data['@request'].data['@browser_version']}}">{{::vm.event.data['@request'].data['@browser_major_version']}}</abbr></td>
-  </tr>
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@os']">
-    <th>Browser OS</th>
-    <td>{{::vm.event.data['@request'].data['@os']}} <abbr ng-if="vm.event.data['@request'].data['@os_major_version']" title="{{::vm.event.data['@request'].data['@os_version']}}">{{::vm.event.data['@request'].data['@os_major_version']}}</abbr></td>
   </tr>
 </table>
 
