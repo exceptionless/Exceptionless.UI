@@ -11,13 +11,16 @@
       function buildStackFrames(exceptions) {
         var frames = '';
         for (var index = 0; index < exceptions.length; index++) {
-          frames += '<div class="stack-frame">' + sanitize(exceptions[index].stack_trace.replace(' ', ''));
+          var stackTrace = exceptions[index].stack_trace;
+          if (!!stackTrace) {
+            frames += '<div class="stack-frame">' + sanitize(stackTrace.replace(' ', ''));
 
-          if (index < (exceptions.length - 1)) {
-            frames += '<div>--- End of inner exception stack trace ---</div>';
+            if (index < (exceptions.length - 1)) {
+              frames += '<div>--- End of inner exception stack trace ---</div>';
+            }
+
+            frames += '</div>';
           }
-
-          frames += '</div>';
         }
 
         return frames;

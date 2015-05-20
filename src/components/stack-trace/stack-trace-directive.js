@@ -94,11 +94,12 @@
     function buildStackFrames(exceptions) {
       var frames = '';
       for (var index = 0; index < exceptions.length; index++) {
-        if (!!exceptions[index].stack_trace) {
+        var stackTrace = exceptions[index].stack_trace;
+        if (!!stackTrace) {
           frames += '<div class="stack-frame">';
 
-          for (var frameIndex = 0; frameIndex < exceptions[index].stack_trace.length; frameIndex++) {
-            frames += buildStackFrame(exceptions[index].stack_trace[frameIndex]);
+          for (var frameIndex = 0; frameIndex < stackTrace.length; frameIndex++) {
+            frames += buildStackFrame(stackTrace[frameIndex]);
           }
 
           if (index < (exceptions.length - 1)) {
