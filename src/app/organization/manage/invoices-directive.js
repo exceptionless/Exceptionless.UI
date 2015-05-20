@@ -44,10 +44,9 @@
             return vm.invoices && vm.invoices.length > 0;
           }
 
-          function open(id, event) {
+          function open(id) {
             $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).submit();
             $window.open($state.href('payment', { id: id }, { absolute: true }), '_blank');
-            event.preventDefault();
           }
 
           function nextPage() {
