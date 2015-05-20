@@ -46,8 +46,8 @@
     }
 
     function buildStackFrame(frame) {
-      if (!frame || !frame.name) {
-        return '<null>';
+      if (!frame) {
+        return '<null>\r\n';
       }
 
       var typeNameParts = [];
@@ -59,9 +59,7 @@
         typeNameParts.push(frame.declaring_type);
       }
 
-      if (!!frame.name) {
-        typeNameParts.push(frame.name);
-      }
+      typeNameParts.push(frame.name || '<anonymous>');
 
       var result = 'at ' + typeNameParts.join('.').replace('+', '.');
 
@@ -95,11 +93,12 @@
       var frames = '';
       for (var index = 0; index < exceptions.length; index++) {
         var stackTrace = exceptions[index].stack_trace;
+        console.log(stackTrace);
         if (!!stackTrace) {
           frames += '<div class="stack-frame">';
 
           for (var frameIndex = 0; frameIndex < stackTrace.length; frameIndex++) {
-            frames += buildStackFrame(stackTrace[frameIndex]);
+            frames += sanitize(buildStackFrame(stackTrace[frameIndex]));
           }
 
           if (index < (exceptions.length - 1)) {
