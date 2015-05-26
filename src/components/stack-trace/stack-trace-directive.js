@@ -35,7 +35,7 @@
 
     function buildParameters(parameters) {
       var result = '(';
-      for (var index = 0; index < parameters.length; index++) {
+      for (var index = 0; index < (parameters || []).length; index++) {
         if (index > 0) {
           result += ', ';
         }
@@ -67,10 +67,7 @@
         result += '[' + frame.generic_arguments.join(',') + ']';
       }
 
-      if (!!frame.parameters && frame.parameters.length > 0) {
-        result += buildParameters(frame.parameters);
-      }
-
+      result += buildParameters(frame.parameters);
       if (!!frame.data && (frame.data.ILOffset > 0 || frame.data.NativeOffset > 0)) {
         result += ' at offset ' + frame.data.ILOffset || frame.data.NativeOffset;
       }
@@ -93,7 +90,6 @@
       var frames = '';
       for (var index = 0; index < exceptions.length; index++) {
         var stackTrace = exceptions[index].stack_trace;
-        console.log(stackTrace);
         if (!!stackTrace) {
           frames += '<div class="stack-frame">';
 
