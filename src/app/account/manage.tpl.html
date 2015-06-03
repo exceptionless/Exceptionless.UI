@@ -86,7 +86,7 @@
                           ng-model="vm.currentProject"
                           ng-change="vm.getEmailNotificationSettings()"
                           ng-disabled="!vm.hasEmailNotifications()"
-                          ng-options="project.name group by project.organization_name for project in vm.projects"></select>
+                          ng-options="project.name group by project.organization_name for project in vm.projects | orderBy: 'name' track by project.id"></select>
 
                   <div class="checkbox">
                     <label class="i-checks">
