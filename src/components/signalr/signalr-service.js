@@ -14,7 +14,7 @@
     var _signalRTimeout;
 
     function start() {
-      startDelayed(0);
+      startDelayed(1);
     }
 
     function startDelayed(delay) {
@@ -65,6 +65,12 @@
             $ExceptionlessClient.createUnhandledException(error, source)
               .addTags('SignalR')
               .submit();
+          },
+          stateChanged: function(state) {
+            if (state.newState === $.signalR.connectionState.disconnected && authService.isAuthenticated()) {
+              stop();
+              start();
+            }
           }
         });
       }, delay || 1000);
