@@ -150,6 +150,7 @@
       };
       vm.leaveOrganization = leaveOrganization;
       vm.organization = {};
+      vm.organizationForm = {};
       vm.projects = {
         get: function (options, useCache) {
           return projectService.getByOrganizationId(_organizationId, options, useCache);

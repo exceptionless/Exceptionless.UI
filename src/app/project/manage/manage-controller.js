@@ -260,6 +260,7 @@
       vm.hasTokens = hasTokens;
       vm.hasWebHook = hasWebHook;
       vm.project = {};
+      vm.projectForm = {};
       vm.removeConfig = removeConfig;
       vm.removeProject = removeProject;
       vm.removeToken = removeToken;

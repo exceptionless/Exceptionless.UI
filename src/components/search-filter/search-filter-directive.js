@@ -50,6 +50,7 @@
         vm.isDropDownOpen = false;
         vm.includeFixed =  filterService.getIncludeFixed();
         vm.includeHidden = filterService.getIncludeHidden();
+        vm.searchFilterForm = {};
         vm.setFilter = setFilter;
         vm.setIncludeFixed = setIncludeFixed;
         vm.setIncludeHidden = setIncludeHidden;
