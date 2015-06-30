@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .factory('billingService', ['$ExceptionlessClient', 'dialogs', 'dialogService', function ($ExceptionlessClient, dialogs, dialogService) {
+    .factory('billingService', ['$ExceptionlessClient', 'dialogs', 'dialogService', '$q', function ($ExceptionlessClient, dialogs, dialogService, $q) {
       var source = 'exceptionless.billing.billingService';
 
       function changePlan(organizationId) {
@@ -19,6 +19,8 @@
             .setMessage(message)
             .setProperty('OrganizationId', organizationId)
             .submit();
+
+          return $q.reject('cancelled');
         }
 
         $ExceptionlessClient.createFeatureUsage(source + '.confirmUpgradePlan')
