@@ -1,6 +1,7 @@
 version: 2.0.{build}
 
 install:
+  - cd src
   - npm install
   - node_modules\.bin\bower install
 

@@ -1,3 +1,4 @@
+/* global process */
 /* jslint node: true */
 var fs = require('fs');
 
