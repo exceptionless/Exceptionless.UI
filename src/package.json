@@ -1,11 +1,14 @@
 {
   "name": "exceptionless",
   "version": "2.0.0",
+  "private": true,
   "devDependencies": {
+    "bower": "^1.4.1",
     "grunt": "~0.4",
     "grunt-angular-templates": "~0.5",
     "grunt-browser-output": "1.0.3",
     "grunt-cache-bust": "^0.4.13",
+    "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "~0.6",
     "grunt-contrib-concat": "~0.5",
     "grunt-contrib-connect": "~0.10",
