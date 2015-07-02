@@ -3,6 +3,11 @@
 
 var pkg = require('./package.json');
 
+var buildNum = process.env.APPVEYOR_BUILD_NUMBER || "[unknown]";
+var buildRepoUrl = process.env.BUILD_REPO_URL;
+var buildBranch = "master";
+var tag = "build-" + buildNum;
+
 //Using exclusion patterns slows down Grunt significantly
 //instead of creating a set of patterns like '**/*.js' and '!**/node_modules/**'
 //this method is used to create a set of inclusive patterns for all subdirectories
@@ -48,6 +53,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', ['jshint', /* 'htmlangular', */ 'clean:before', 'less', 'dom_munger', 'ngconstant', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'cacheBust', 'clean:after']);
   grunt.registerTask('default', ['build']);
+  grunt.registerTask('deploy');
   grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'connect', 'watch']);
   grunt.registerTask('test', ['dom_munger:read', 'karma:all_tests']);
 

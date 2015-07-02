@@ -1,5 +1,9 @@
 version: 2.0.{build}
 
+environment:
+  BUILD_REPO_URL:
+    secure: ihokuuq+RpzgNHswW7F15k7X+XrVJ24CHNRpxPGcbdw5aCLQNVOXUd9h6mfe3D0rT9u7D+KPQLaaO5t5f7uAroOj0BgaB4STOYrJPD6rSEdw2fAAdBM6AQuYbN0Wui74pzzoXv/GolwnJiI81avJag==
+
 install:
   - cd src
   - npm install

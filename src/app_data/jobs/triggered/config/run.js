@@ -34,9 +34,11 @@ var content = [
 	'}());'
 ].join('\n');
 
-fs.writeFile('../../../../dist/app.config.js', content, function (err) {
+fs.writeFile('../../../../app.config.js', content, function (err) {
   if (err)
     throw err;
   
   console.log('Config generated.');
 });
+
+// todo: save config file with cache buster in name and update the index.html
