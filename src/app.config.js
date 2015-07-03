@@ -12,6 +12,5 @@
     .constant('STRIPE_PUBLISHABLE_KEY')
     .constant('SYSTEM_NOTIFICATION_MESSAGE')
     .constant('USE_HTML5_MODE', false)
-    .constant('USE_SSL', false)
-    .constant('VERSION', '2.0.0');
+    .constant('USE_SSL', false);
 }());

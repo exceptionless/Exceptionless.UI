@@ -29,15 +29,14 @@ var content = [
 	'    .constant("STRIPE_PUBLISHABLE_KEY", "' + stripePubKey + '")',
 	'    .constant("SYSTEM_NOTIFICATION_MESSAGE", "' + notificationMessage + '")',
 	'    .constant("USE_HTML5_MODE", ' + useHtml5mode + ')',
-	'    .constant("USE_SSL", ' + useSsl + ')',
-	'    .constant("VERSION", "2.0.0");',
+	'    .constant("USE_SSL", ' + useSsl + ');',
 	'}());'
 ].join('\n');
 
 fs.writeFile('../../../../app.config.js', content, function (err) {
   if (err)
     throw err;
-  
+
   console.log('Config generated.');
 });
 
