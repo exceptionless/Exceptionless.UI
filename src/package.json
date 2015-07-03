@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "devDependencies": {
+    "MD5": "^1.2.2",
     "bower": "^1.4.1",
     "grunt": "~0.4",
     "grunt-angular-templates": "~0.5",

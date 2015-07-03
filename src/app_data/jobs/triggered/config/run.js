@@ -1,6 +1,8 @@
 /* global process */
 /* jslint node: true */
 var fs = require('fs');
+var replace = require("replace");
+var md5 = require('MD5');
 
 var baseUrl = process.env.EX_BASE_URL ? process.env.EX_BASE_URL : 'http://localhost:51000/api/v2';
 var exceptionlessApiKey = process.env.EX_API_KEY ? process.env.EX_API_KEY : 'Bx7JgglstPG544R34Tw9T7RlCed3OIwtYXVeyhT2';
@@ -33,11 +35,22 @@ var content = [
 	'}());'
 ].join('\n');
 
-fs.writeFile('../../../../app.config.js', content, function (err) {
+var hash = md5(content);
+
+// todo: use cache buster in name
+var configFile = 'app.config.' + hash + '.js';
+
+fs.writeFile('../../../../' + configFile, content, function (err) {
   if (err)
     throw err;
 
   console.log('Config generated.');
 });
 
-// todo: save config file with cache buster in name and update the index.html
+replace({
+  regex: "app\.config\.*\.js",
+  replacement: configFile,
+  paths: ['../../../../index.html'],
+  recursive: false,
+  silent: false,
+});
