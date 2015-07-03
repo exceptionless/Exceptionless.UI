@@ -5,7 +5,7 @@ module.exports = {
     branch: 'master',
     message: 'Build ' + process.env.APPVEYOR_BUILD_NUMBER || '[unknown]',
     repo: process.env.BUILD_REPO_URL,
-    silent: true
+    silent: false
   },
   src: '**/*'
 };
