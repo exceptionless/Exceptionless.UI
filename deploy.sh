@@ -67,6 +67,7 @@ fi
 echo Updating configuration settings.
 
 cd "$DEPLOYMENT_SOURCE/app_data/jobs/triggered/config"
+npm install
 node ./run.js
 
 echo Deploying site content.
