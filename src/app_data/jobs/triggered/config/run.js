@@ -4,24 +4,24 @@ var fs = require('fs');
 var replace = require("replace");
 var md5 = require('MD5');
 
-var baseUrl = process.env.EX_BASE_URL ? process.env.EX_BASE_URL : 'http://localhost:51000/api/v2';
-var exceptionlessApiKey = process.env.EX_API_KEY ? process.env.EX_API_KEY : 'Bx7JgglstPG544R34Tw9T7RlCed3OIwtYXVeyhT2';
-var facebookAppId = process.env.EX_FACEBOOK_APP_ID ? process.env.EX_FACEBOOK_APP_ID : '';
-var gitHubAppId = process.env.EX_GITHUB_APP_ID ? process.env.EX_GITHUB_APP_ID : '';
-var googleAppId = process.env.EX_GOOGLE_APP_ID ? process.env.EX_GOOGLE_APP_ID : '';
-var intercomId = process.env.EX_INTERCOM_ID ? process.env.EX_INTERCOM_ID : '';
-var liveAppId = process.env.EX_LIVE_APP_ID ? process.env.EX_LIVE_APP_ID : '';
-var stripePubKey = process.env.EX_STRIPE_PUB_KEY ? process.env.EX_STRIPE_PUB_KEY : '';
-var notificationMessage = process.env.EX_MESSAGE ? process.env.EX_MESSAGE : '';
-var useHtml5mode = process.env.EX_HTML5MODE ? process.env.EX_HTML5MODE === 'true' : false;
-var useSsl = process.env.EX_USESSL ? process.env.EX_USESSL === 'true' : false;
+var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:51000/api/v2';
+var exceptionlessApiKey = process.env.Exceptionless_ApiKey ? process.env.Exceptionless_ApiKey : 'Bx7JgglstPG544R34Tw9T7RlCed3OIwtYXVeyhT2';
+var facebookAppId = process.env.Exceptionless_FacebookAppId ? process.env.Exceptionless_FacebookAppId : '';
+var gitHubAppId = process.env.Exceptionless_GitHubAppId ? process.env.Exceptionless_GitHubAppId : '';
+var googleAppId = process.env.Exceptionless_GoogleAppId ? process.env.Exceptionless_GoogleAppId : '';
+var intercomId = process.env.Exceptionless_IntercomAppId ? process.env.Exceptionless_IntercomAppId : '';
+var liveAppId = process.env.Exceptionless_MicrosoftAppId ? process.env.Exceptionless_MicrosoftAppId : '';
+var stripePubKey = process.env.Exceptionless_StripePubKey ? process.env.Exceptionless_StripePubKey : '';
+var notificationMessage = process.env.Exceptionless_Message ? process.env.Exceptionless_Message : '';
+var useHTML5Mode = process.env.Exceptionless_HTML5Mode ? process.env.Exceptionless_HTML5Mode === 'true' : false;
+var useSSL = process.env.Exceptionless_EnableSSL ? process.env.Exceptionless_EnableSSL === 'true' : false;
 
 var content = [
 	'(function () {',
 	'  \'use strict\';',
 	'',
 	'  angular.module("app.config", [])',
-	'    .constant("BASE_URL", "' + baseUrl + '")',
+	'    .constant("BASE_URL", "' + baseURL + '")',
 	'    .constant("EXCEPTIONLESS_API_KEY", "' + exceptionlessApiKey + '")',
 	'    .constant("FACEBOOK_APPID", "' + facebookAppId + '")',
 	'    .constant("GITHUB_APPID", "' + gitHubAppId + '")',
@@ -30,8 +30,8 @@ var content = [
 	'    .constant("LIVE_APPID", "' + liveAppId + '")',
 	'    .constant("STRIPE_PUBLISHABLE_KEY", "' + stripePubKey + '")',
 	'    .constant("SYSTEM_NOTIFICATION_MESSAGE", "' + notificationMessage + '")',
-	'    .constant("USE_HTML5_MODE", ' + useHtml5mode + ')',
-	'    .constant("USE_SSL", ' + useSsl + ');',
+	'    .constant("USE_HTML5_MODE", ' + useHTML5Mode + ')',
+	'    .constant("USE_SSL", ' + useSSL + ');',
 	'}());'
 ].join('\n');
 
