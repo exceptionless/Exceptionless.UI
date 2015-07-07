@@ -11,7 +11,7 @@ var gitHubAppId = process.env.Exceptionless_GitHubAppId ? process.env.Exceptionl
 var googleAppId = process.env.Exceptionless_GoogleAppId ? process.env.Exceptionless_GoogleAppId : '';
 var intercomId = process.env.Exceptionless_IntercomAppId ? process.env.Exceptionless_IntercomAppId : '';
 var liveAppId = process.env.Exceptionless_MicrosoftAppId ? process.env.Exceptionless_MicrosoftAppId : '';
-var stripePubKey = process.env.Exceptionless_StripePubKey ? process.env.Exceptionless_StripePubKey : '';
+var stripePubKey = process.env.Exceptionless_StripePublishableApiKey ? process.env.Exceptionless_StripePublishableApiKey : '';
 var notificationMessage = process.env.Exceptionless_Message ? process.env.Exceptionless_Message : '';
 var useHTML5Mode = process.env.Exceptionless_HTML5Mode ? process.env.Exceptionless_HTML5Mode === 'true' : false;
 var useSSL = process.env.Exceptionless_EnableSSL ? process.env.Exceptionless_EnableSSL === 'true' : false;
