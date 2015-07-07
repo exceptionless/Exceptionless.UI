@@ -24,7 +24,7 @@
 
       _signalRTimeout = $timeout(function () {
         _hub = new Hub('messages', {
-          rootPath: BASE_URL + '/push',
+          rootPath: BASE_URL + '/api/v2/push',
 
           // client side methods
           listeners: {

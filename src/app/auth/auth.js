@@ -18,7 +18,7 @@
     'exceptionless.validators'
   ])
   .config(['$authProvider', '$stateProvider', 'BASE_URL', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', function ($authProvider, $stateProvider, BASE_URL, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID) {
-    $authProvider.baseUrl = BASE_URL;
+    $authProvider.baseUrl = BASE_URL + '/api/v2';
     $authProvider.loginRedirect = false;
     $authProvider.logoutRedirect = '/login';
     $authProvider.signupRedirect = false;

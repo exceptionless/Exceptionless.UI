@@ -4,7 +4,7 @@ var fs = require('fs');
 var replace = require("replace");
 var md5 = require('MD5');
 
-var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:51000/api/v2';
+var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:50000';
 var exceptionlessApiKey = process.env.Exceptionless_ApiKey ? process.env.Exceptionless_ApiKey : 'Bx7JgglstPG544R34Tw9T7RlCed3OIwtYXVeyhT2';
 var facebookAppId = process.env.Exceptionless_FacebookAppId ? process.env.Exceptionless_FacebookAppId : '';
 var gitHubAppId = process.env.Exceptionless_GitHubAppId ? process.env.Exceptionless_GitHubAppId : '';
