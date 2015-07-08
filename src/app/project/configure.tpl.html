@@ -56,7 +56,7 @@
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Portable'">
               <p>Wire up to any unhandled exception events specific to your project type to start reporting them!
-              Please see the <a target="_blank" href="http://docs.exceptionless.com/contents/home/">Exceptionless docs</a> for more information.</p>
+              Please see the <a target="_blank" href="https://github.com/exceptionless/Exceptionless.Net/wiki/Configuration#exceptionless-portable-class-library-pcl-configuration">Exceptionless docs</a> for more information.</p>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Nancy'">
               <p>Import the <code>Exceptionless</code> namespace and add a call to <code>Exceptionless.ExceptionlessClient.Default.RegisterNancy(pipelines)</code>
@@ -75,7 +75,7 @@
             Exceptionless.</span> You can also send handled exceptions to Exceptionless using <code>ex.ToExceptionless().Submit()</code>.
           </p>
 
-          <div class="alert alert-success">For more information and troubleshooting tips, view the <a target="_blank" href="http://docs.exceptionless.com/contents/home/">Exceptionless docs</a>.</div>
+          <div class="alert alert-success">For more information and troubleshooting tips, view the <a target="_blank" href="https://github.com/exceptionless/Exceptionless.Net/wiki/Troubleshooting">Exceptionless docs</a>.</div>
         </div>
         <footer class="panel-footer">
           <div class="pull-right">

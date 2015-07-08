@@ -148,7 +148,7 @@
           description: 'Documentation',
           callback: function openDocumention() {
             $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.Documentation').addTags('hotkeys').submit();
-            $window.open('http://docs.exceptionless.com', '_blank');
+            $window.open('https://github.com/exceptionless/Exceptionless/wiki', '_blank');
           }
         });
 
