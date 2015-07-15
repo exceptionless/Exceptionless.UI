@@ -500,13 +500,13 @@
           return true;
         }
 
-        if(response.status === 401) {
+        if (response.status === 401) {
           stateService.save(['auth.']);
           $state.go('auth.login');
           return true;
         }
 
-        if(response.status === 409) {
+        if (response.status === 409) {
           return true;
         }
 

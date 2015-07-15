@@ -59,13 +59,6 @@
           queryParams: {
             'access_token': authService.getToken()
           },
-
-          // handle connection error
-          errorHandler: function (error) {
-            $ExceptionlessClient.createUnhandledException(error, source)
-              .addTags('SignalR')
-              .submit();
-          },
           stateChanged: function(state) {
             if (state.newState === $.signalR.connectionState.disconnected && authService.isAuthenticated()) {
               stop();
