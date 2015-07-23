@@ -18,15 +18,18 @@ Please read the [contributing document](https://github.com/exceptionless/Excepti
 
 1. You will need to clone this repo.
 2. Install [grunt](http://gruntjs.com/) and the development dependencies using [npm](https://www.npmjs.com/).
-```javascript
-npm install -g grunt-cli
-npm install
-```
+
+   ```javascript
+   npm install -g grunt-cli
+   npm install
+   ```
 3. Download the JavaScript dependencies by running the following [bower](http://bower.io/) command.
-```javascript
-bower install
-```
+
+   ```javascript
+   bower install
+   ```
 4. Start a web server and view it on [`http://localhost:9001`](http://localhost:9001) by running the following grunt command.
-```javascript
-grunt serve
-```
+
+   ```javascript
+   grunt serve
+   ```
