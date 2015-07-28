@@ -65,22 +65,25 @@
         return projectService.getAll().then(onSuccess, onFailure);
       }
 
-      function signup() {
+      function signup(isRetrying) {
         function resetCanSignup() {
           _canSignup = true;
         }
 
+        function retry(timeout) {
+          var timeout = $timeout(function() {
+            $timeout.cancel(timeout);
+            signup(true);
+          }, timeout || 100);
+        }
+
         if (!vm.signupForm || vm.signupForm.$invalid) {
           resetCanSignup();
-          return;
+          return !isRetrying && retry(1000);
         }
 
         if (!vm.user.email || vm.signupForm.$pending) {
-          var timeout = $timeout(function() {
-            $timeout.cancel(timeout);
-            signup();
-          }, 100);
-          return;
+          return retry();
         }
 
         if (_canSignup) {

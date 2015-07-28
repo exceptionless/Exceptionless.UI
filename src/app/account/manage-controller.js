@@ -175,22 +175,25 @@
         return userService.resendVerificationEmail(vm.user.id).catch(onFailure);
       }
 
-      function saveEmailAddress() {
+      function saveEmailAddress(isRetrying) {
         function resetCanSaveEmailAddress() {
           _canSaveEmailAddress = true;
         }
 
+        function retry(timeout) {
+          var timeout = $timeout(function() {
+            $timeout.cancel(timeout);
+            saveEmailAddress(true);
+          }, timeout || 100);
+        }
+
         if (!vm.emailAddressForm || vm.emailAddressForm.$invalid) {
           resetCanSaveEmailAddress();
-          return;
+          return !isRetrying && retry(1000);
         }
 
         if (!vm.user.email_address || vm.emailAddressForm.$pending) {
-          var timeout = $timeout(function() {
-            $timeout.cancel(timeout);
-            saveEmailAddress();
-          }, 100);
-          return;
+          return retry();
         }
 
         if (_canSaveEmailAddress) {
