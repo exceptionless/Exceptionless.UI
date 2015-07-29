@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.validators')
-    .directive('organizationNameAvailableValidator', ['$q', 'organizationService', function($q, organizationService) {
+    .directive('organizationNameAvailableValidator', ['$timeout', '$q', 'organizationService', function($timeout, $q, organizationService) {
       return {
         restrict: 'A',
         require: 'ngModel',
@@ -11,7 +11,9 @@
             var deferred = $q.defer();
 
             if (ngModel.$pristine) {
-              deferred.resolve(true);
+              $timeout(function() {
+                deferred.resolve(true);
+              }, 0);
             } else {
               organizationService.isNameAvailable(name).then(function(response) {
                 if (response.status === 201) {
@@ -19,6 +21,8 @@
                 } else {
                   deferred.resolve(true);
                 }
+              }, function() {
+                deferred.reject('An error occurred while validating the organization name.');
               });
             }
 

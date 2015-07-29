@@ -12,18 +12,21 @@
         $modalInstance.dismiss('cancel');
       }
 
-      function save() {
+      function save(isRetrying) {
+        function retry(delay) {
+          var timeout = $timeout(function() {
+            $timeout.cancel(timeout);
+            save(true);
+          }, delay || 100);
+        }
+
         if (!vm.addOrganizationForm || vm.addOrganizationForm.$invalid) {
           _canSave = true;
-          return;
+          return !isRetrying && retry(1000);
         }
 
         if (!vm.data.name || vm.addOrganizationForm.$pending) {
-          var timeout = $timeout(function() {
-            $timeout.cancel(timeout);
-            save();
-          }, 100);
-          return;
+          return retry();
         }
 
         if (_canSave) {
