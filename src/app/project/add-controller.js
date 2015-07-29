@@ -13,11 +13,11 @@
           _canAdd = true;
         }
 
-        function retry(timeout) {
+        function retry(delay) {
           var timeout = $timeout(function() {
             $timeout.cancel(timeout);
             add(true);
-          }, timeout || 100);
+          }, delay || 100);
         }
 
         if (!vm.addForm || vm.addForm.$invalid) {

@@ -180,11 +180,11 @@
           _canSaveEmailAddress = true;
         }
 
-        function retry(timeout) {
+        function retry(delay) {
           var timeout = $timeout(function() {
             $timeout.cancel(timeout);
             saveEmailAddress(true);
-          }, timeout || 100);
+          }, delay || 100);
         }
 
         if (!vm.emailAddressForm || vm.emailAddressForm.$invalid) {

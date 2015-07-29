@@ -13,11 +13,11 @@
       }
 
       function save(isRetrying) {
-        function retry(timeout) {
+        function retry(delay) {
           var timeout = $timeout(function() {
             $timeout.cancel(timeout);
             save(true);
-          }, timeout || 100);
+          }, delay || 100);
         }
 
         if (!vm.addOrganizationForm || vm.addOrganizationForm.$invalid) {

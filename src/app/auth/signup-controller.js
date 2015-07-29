@@ -70,11 +70,11 @@
           _canSignup = true;
         }
 
-        function retry(timeout) {
+        function retry(delay) {
           var timeout = $timeout(function() {
             $timeout.cancel(timeout);
             signup(true);
-          }, timeout || 100);
+          }, delay || 100);
         }
 
         if (!vm.signupForm || vm.signupForm.$invalid) {
