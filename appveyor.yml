@@ -16,7 +16,7 @@ test_script:
   - node_modules\.bin\grunt test
 
 artifacts: 
-  - path: *.zip
+  - path: .\*.zip
     name: ReleaseArtifacts
 
 before_deploy:
