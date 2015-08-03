@@ -24,19 +24,23 @@
     $authProvider.signupRedirect = false;
 
     $authProvider.facebook({
-      clientId: FACEBOOK_APPID
+      clientId: FACEBOOK_APPID,
+      redirectUri: BASE_URL
     });
 
     $authProvider.google({
-      clientId: GOOGLE_APPID
+      clientId: GOOGLE_APPID,
+      redirectUri: BASE_URL
     });
 
     $authProvider.github({
-      clientId: GITHUB_APPID
+      clientId: GITHUB_APPID,
+      redirectUri: BASE_URL
     });
 
     $authProvider.live({
       clientId: LIVE_APPID,
+      redirectUri: BASE_URL,
       scope: ['wl.emails']
     });
 
