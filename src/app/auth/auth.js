@@ -23,20 +23,25 @@
     $authProvider.logoutRedirect = '/login';
     $authProvider.signupRedirect = false;
 
+    var redirectUri = (window.location.origin || window.location.protocol + '//' + window.location.host) + '/login';
     $authProvider.facebook({
-      clientId: FACEBOOK_APPID
+      clientId: FACEBOOK_APPID,
+      redirectUri: redirectUri
     });
 
     $authProvider.google({
-      clientId: GOOGLE_APPID
+      clientId: GOOGLE_APPID,
+      redirectUri: redirectUri
     });
 
     $authProvider.github({
-      clientId: GITHUB_APPID
+      clientId: GITHUB_APPID,
+      redirectUri: redirectUri
     });
 
     $authProvider.live({
       clientId: LIVE_APPID,
+      redirectUri: redirectUri,
       scope: ['wl.emails']
     });
 
