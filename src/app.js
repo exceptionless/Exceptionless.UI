@@ -88,14 +88,14 @@
       stripeProvider.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
     }
 
-    $urlRouterProvider.when('', '/type/error/dashboard');
-    $urlRouterProvider.when('/', '/type/error/dashboard');
-
     $stateProvider.state('app', {
       abstract: true,
       templateUrl: 'app/app.tpl.html',
       controller: 'App',
-      controllerAs: 'appVm'
+      controllerAs: 'appVm',
+      data: {
+        requireAuthentication: true
+      }
     });
 
     $stateProvider.state('app.dashboard', {
@@ -475,6 +475,34 @@
       }]
     });
 
+    $stateProvider.state("loading", {
+      url: "",
+      templateUrl: 'app/app.tpl.html',
+      onEnter: ['authService', '$state', '$timeout', function (authService, $state, $timeout) {
+        return $timeout(function () {
+          if (authService.isAuthenticated()) {
+            $state.transitionTo('app.type-dashboard', {type: 'error'});
+          } else {
+            $state.transitionTo('auth.login');
+          }
+        });
+      }]
+    });
+
+    $stateProvider.state("loading-slash", {
+      url: "/",
+      templateUrl: 'app/app.tpl.html',
+      onEnter: ['authService', '$state', '$timeout', function (authService, $state, $timeout) {
+        return $timeout(function () {
+          if (authService.isAuthenticated()) {
+            $state.transitionTo('app.type-dashboard', {type: 'error'});
+          } else {
+            $state.transitionTo('auth.login');
+          }
+        });
+      }]
+    });
+
     $stateProvider.state("otherwise", {
       url: "*path",
       templateUrl: 'app/not-found.tpl.html',
@@ -485,13 +513,12 @@
       }]
     });
   }])
-  .run(['$http', '$state', 'editableOptions', '$location', 'rateLimitService', 'Restangular', 'stateService', 'USE_SSL', '$window', function($http, $state, editableOptions, $location, rateLimitService, Restangular, stateService, USE_SSL, $window) {
+  .run(['$http', '$rootScope', '$state', 'authService', 'editableOptions', '$location', 'rateLimitService', 'Restangular', 'stateService', 'USE_SSL', '$window', function($http, $rootScope, $state, authService, editableOptions, $location, rateLimitService, Restangular, stateService, USE_SSL, $window) {
     if (((typeof USE_SSL === 'boolean' && USE_SSL) || USE_SSL === 'true') && $location.protocol() !== 'https') {
         $window.location.href = $location.absUrl().replace('http', 'https');
     }
 
     editableOptions.theme = 'bs3';
-
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
       function handleError(response) {
         if ($state.current.name !== 'status' && (response.status === 0 || response.status === 503)) {
@@ -528,6 +555,17 @@
       }
 
       return !handleError(response);
+    });
+
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+      if (!toState || !toState.data || !toState.data.requireAuthentication)
+        return;
+
+      if (!authService.isAuthenticated()) {
+        event.preventDefault();
+        stateService.save(['auth.']);
+        $state.transitionTo("auth.login");
+      }
     });
   }]);
 }());

@@ -119,11 +119,6 @@
         return signalRService.startDelayed(1000);
       }
 
-      if (!authService.isAuthenticated()) {
-        stateService.save(['auth.']);
-        return $state.go('auth.login');
-      }
-
       if (!!navigator.userAgent.match(/MSIE/i)) {
         angular.element($window.document.body).addClass('ie');
       }
