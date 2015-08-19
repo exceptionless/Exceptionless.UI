@@ -71,7 +71,12 @@
     }
 
     function signup(user) {
-      return $auth.signup(user);
+      function onSuccess(response) {
+        $auth.setToken(response);
+        return response;
+      }
+
+      return $auth.signup(user).then(onSuccess);
     }
 
     function unlink(providerName, providerUserId) {
