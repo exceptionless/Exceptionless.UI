@@ -475,36 +475,34 @@
       }]
     });
 
-    $stateProvider.state("loading", {
-      url: "",
-      templateUrl: 'app/app.tpl.html',
-      onEnter: ['authService', '$state', '$timeout', function (authService, $state, $timeout) {
-        return $timeout(function () {
-          if (authService.isAuthenticated()) {
-            $state.transitionTo('app.type-dashboard', {type: 'error'});
-          } else {
-            $state.transitionTo('auth.login');
-          }
-        });
-      }]
+    var onEnter = ['authService', '$location', '$state', '$timeout', function (authService, $location, $state, $timeout) {
+      if ($location.search().code){
+        return;
+      }
+
+      return $timeout(function () {
+        if (authService.isAuthenticated()) {
+          $state.transitionTo('app.type-dashboard', {type: 'error'});
+        } else {
+          $state.transitionTo('auth.login');
+        }
+      });
+    }];
+
+    $stateProvider.state('loading', {
+      url: '',
+      template: null,
+      onEnter: onEnter
     });
 
-    $stateProvider.state("loading-slash", {
-      url: "/",
-      templateUrl: 'app/app.tpl.html',
-      onEnter: ['authService', '$state', '$timeout', function (authService, $state, $timeout) {
-        return $timeout(function () {
-          if (authService.isAuthenticated()) {
-            $state.transitionTo('app.type-dashboard', {type: 'error'});
-          } else {
-            $state.transitionTo('auth.login');
-          }
-        });
-      }]
+    $stateProvider.state('loading-slash', {
+      url: '/',
+      template: null,
+      onEnter: onEnter
     });
 
-    $stateProvider.state("otherwise", {
-      url: "*path",
+    $stateProvider.state('otherwise', {
+      url: '*path',
       templateUrl: 'app/not-found.tpl.html',
       onEnter: ['$stateParams', function ($stateParams) {
         $ExceptionlessClient.createNotFound($stateParams.path)
@@ -557,14 +555,14 @@
       return !handleError(response);
     });
 
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    $rootScope.$on('$stateChangeStart', function (event, toState) {
       if (!toState || !toState.data || !toState.data.requireAuthentication)
         return;
 
       if (!authService.isAuthenticated()) {
         event.preventDefault();
         stateService.save(['auth.']);
-        $state.transitionTo("auth.login");
+        $state.transitionTo('auth.login');
       }
     });
   }]);
