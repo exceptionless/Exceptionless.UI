@@ -83,11 +83,11 @@
           if (options.data)
             data = Handlebars.createFrame(options.data);
           if (context) {
-            for (var field in context) {
-              var info = reflect(context[field]);
-              info.name = field;
+            Object.keys(context || {}).sort().forEach(function(key) {
+              var info = reflect(context[key]);
+              info.name = key;
               ret = ret + fn(info, { data: data });
-            }
+            });
           }
           return ret;
         });
