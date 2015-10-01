@@ -37,7 +37,7 @@
           return response;
         }
 
-        return organizationService.getAll().then(onSuccess);
+        return organizationService.getAll({ mode: 'summary' }).then(onSuccess);
       }
 
       function getUser(data) {

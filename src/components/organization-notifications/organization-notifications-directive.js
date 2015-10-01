@@ -177,7 +177,7 @@
               return vm.organizations;
             }
 
-            return  organizationService.getAll().then(onSuccess);
+            return  organizationService.getAll({ mode: 'summary' }).then(onSuccess);
           }
 
           return getAllOrganizations().then(getSelectedOrganization);
@@ -189,7 +189,7 @@
             return vm.projects;
           }
 
-          return projectService.getAll().then(onSuccess);
+          return projectService.getAll({ mode: 'summary' }).then(onSuccess);
         }
 
         function hasExceededRequestLimitOrganizations() {

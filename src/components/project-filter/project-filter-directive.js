@@ -60,7 +60,7 @@
             notificationService.error('An error occurred while loading your organizations.');
           }
 
-          return organizationService.getAll().then(onSuccess, onFailure);
+          return organizationService.getAll({ mode: 'summary' }).then(onSuccess, onFailure);
         }
 
         function getOrganizationUrl(organization) {
@@ -82,7 +82,7 @@
             notificationService.error('An error occurred while loading your projects.');
           }
 
-          return projectService.getAll().then(onSuccess, onFailure);
+          return projectService.getAll({ mode: 'summary' }).then(onSuccess, onFailure);
         }
 
         function getProjectsByOrganizationId(id) {
