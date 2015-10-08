@@ -111,7 +111,7 @@
           }
         }
 
-        organizationService.getAll({ mode: 'summary' }).then(onSuccess);
+        organizationService.getAll().then(onSuccess);
       }
 
       function hasOrganizations() {

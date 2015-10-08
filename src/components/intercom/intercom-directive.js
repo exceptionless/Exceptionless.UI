@@ -94,7 +94,7 @@
               return vm.organizations;
             }
 
-            return organizationService.getAll({ mode: 'summary' }).then(onSuccess);
+            return organizationService.getAll().then(onSuccess);
           }
 
           function getProjects(canUpdate) {
@@ -108,7 +108,7 @@
               return vm.projects;
             }
 
-            return projectService.getAll({ mode: 'summary' }).then(onSuccess);
+            return projectService.getAll().then(onSuccess);
           }
 
           function getUser(canUpdate) {
