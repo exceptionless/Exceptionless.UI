@@ -79,7 +79,7 @@
           return stateService.restore('app.project.add');
         }
 
-        return projectService.getAll({ mode: 'summary' }).then(onSuccess, onFailure);
+        return projectService.getAll().then(onSuccess, onFailure);
       }
 
       if (authService.isAuthenticated()) {
