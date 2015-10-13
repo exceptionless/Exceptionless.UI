@@ -23,7 +23,6 @@
     "angular-mocks": "1.4.6",
     "angular-payments": "*",
     "angular-resource": "1.4.6",
-    "angular-signalr-hub": "1.5.0",
     "angular-stripe": "4.2.8",
     "angular-ui-router": "0.2.15",
     "angular-xeditable": "0.1.9",
