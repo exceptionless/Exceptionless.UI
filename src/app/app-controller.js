@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'organizationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'SYSTEM_NOTIFICATION_MESSAGE', 'urlService', 'userService', 'VERSION', function ($scope, $state, $stateParams, $window, authService, billingService, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, SYSTEM_NOTIFICATION_MESSAGE, urlService, userService, VERSION) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', '$ExceptionlessClient', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'organizationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'SYSTEM_NOTIFICATION_MESSAGE', 'urlService', 'userService', function ($scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, SYSTEM_NOTIFICATION_MESSAGE, urlService, userService) {
+      var source = 'app.App';
       var _store = locker.driver('local').namespace('app');
       var vm = this;
 
@@ -42,6 +43,7 @@
       function getUser(data) {
         function onSuccess(response) {
           vm.user = response.data.plain();
+          $ExceptionlessClient.config.setUserIdentity({ identity: vm.user.email_address, name: vm.user.full_name, data: { user: vm.user }});
           return response;
         }
 
@@ -117,11 +119,6 @@
         return signalRService.startDelayed(1000);
       }
 
-      if (!authService.isAuthenticated()) {
-        stateService.save(['auth.']);
-        return $state.go('auth.login');
-      }
-
       if (!!navigator.userAgent.match(/MSIE/i)) {
         angular.element($window.document.body).addClass('ie');
       }
@@ -131,6 +128,7 @@
       }
 
       function showIntercom() {
+        $ExceptionlessClient.submitFeatureUsage(source + '.showIntercom');
         $intercom.showNewMessage();
       }
 
@@ -144,7 +142,8 @@
           combo: 'f1',
           description: 'Documentation',
           callback: function openDocumention() {
-            $window.open('http://docs.exceptionless.com', '_blank');
+            $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.Documentation').addTags('hotkeys').submit();
+            $window.open('https://github.com/exceptionless/Exceptionless/wiki', '_blank');
           }
         });
 
@@ -170,7 +169,6 @@
       vm.showIntercom = showIntercom;
       vm.toggleSideNavCollapsed = toggleSideNavCollapsed;
       vm.user = {};
-      vm.version = VERSION;
 
       getUser().then(getOrganizations).then(startSignalR);
     }]);

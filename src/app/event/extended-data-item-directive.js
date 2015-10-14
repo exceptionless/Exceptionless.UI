@@ -46,7 +46,7 @@
         }
 
         function hasData() {
-          return vm.data && !angular.equals({}, vm.data);
+          return typeof vm.data !== 'undefined' && !angular.equals({}, vm.data);
         }
 
         function promoteTab() {

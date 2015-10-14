@@ -11,8 +11,9 @@
           settings: '='
         },
         templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($window, $state, $stateParams, eventsActionsService, linkService, filterService, notificationService, paginationService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, linkService, filterService, notificationService, paginationService) {
           var vm = this;
+          var source = vm.settings.source + '.events';
 
           function canRefresh(data) {
             if (!!data && data.type === 'PersistentEvent') {
@@ -22,7 +23,7 @@
               }
 
               // Refresh if the event id is set (non bulk) and the deleted event matches one of the events.
-              if (!!data.id) {
+              if (!!data.id && !!vm.events) {
                 return vm.events.filter(function (e) { return e.id === data.id; }).length > 0;
               }
 
@@ -66,6 +67,7 @@
           }
 
           function open(id, event) {
+            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
             if (event.ctrlKey || event.which === 2) {
               $window.open($state.href('app.event', { id: id }, { absolute: true }), '_blank');
             } else {
@@ -76,10 +78,12 @@
           }
 
           function nextPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
@@ -119,7 +123,6 @@
           vm.selectedIds = [];
           vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
           vm.updateSelection = updateSelection;
-
           get();
         }],
         controllerAs: 'vm'

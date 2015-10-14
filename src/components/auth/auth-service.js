@@ -6,9 +6,10 @@
     'satellizer',
     'ui.router',
 
+    'exceptionless',
     'exceptionless.state'
   ])
-  .factory('authService', ['$auth', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $rootScope, $state, stateService, Restangular) {
+  .factory('authService', ['$auth', '$ExceptionlessClient', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $ExceptionlessClient, $rootScope, $state, stateService, Restangular) {
     function authenticate(provider, userData) {
       function onSuccess() {
         $rootScope.$emit('auth:login', {});
@@ -43,19 +44,21 @@
 
     function login(user) {
       function onSuccess() {
-        $rootScope.$emit('auth:login', {});
+         $ExceptionlessClient.config.setUserIdentity({ identity: user.email, data: { InviteToken: user.invite_token }});
+         $rootScope.$emit('auth:login', {});
       }
 
       return $auth.login(user).then(onSuccess);
     }
 
-    function logout(withRedirect) {
+    function logout(withRedirect, params) {
       function onSuccess() {
+        $ExceptionlessClient.config.setUserIdentity();
         $rootScope.$emit('auth:logout', {});
 
         if (withRedirect) {
           stateService.save(['auth.']);
-          return $state.go('auth.login');
+          return $state.go('auth.login', params);
         }
       }
 
@@ -68,7 +71,12 @@
     }
 
     function signup(user) {
-      return $auth.signup(user);
+      function onSuccess(response) {
+        $auth.setToken(response);
+        return response;
+      }
+
+      return $auth.signup(user).then(onSuccess);
     }
 
     function unlink(providerName, providerUserId) {

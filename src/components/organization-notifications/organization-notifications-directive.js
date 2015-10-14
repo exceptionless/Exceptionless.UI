@@ -189,7 +189,7 @@
             return vm.projects;
           }
 
-          return projectService.getAll().then(onSuccess);
+          return projectService.getAll({ mode: 'statistics' }).then(onSuccess);
         }
 
         function hasExceededRequestLimitOrganizations() {

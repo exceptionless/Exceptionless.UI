@@ -21,7 +21,7 @@
       });
 
       function create(organizationId, name) {
-        return Restangular.all('projects').post({'organization_id': organizationId, 'name': name});
+        return Restangular.all('projects').post({'organization_id': organizationId, 'name': name, delete_bot_data_enabled: true  });
       }
 
       function demoteTab(id, name) {

@@ -8,22 +8,25 @@
 
       var vm = this;
 
-      function add() {
+      function add(isRetrying) {
         function resetCanAdd() {
           _canAdd = true;
         }
 
+        function retry(delay) {
+          var timeout = $timeout(function() {
+            $timeout.cancel(timeout);
+            add(true);
+          }, delay || 100);
+        }
+
         if (!vm.addForm || vm.addForm.$invalid) {
           resetCanAdd();
-          return;
+          return !isRetrying && retry(1000);
         }
 
         if ((canCreateOrganization() && !vm.organization_name) || !vm.project_name || vm.addForm.$pending) {
-          var timeout = $timeout(function() {
-            $timeout.cancel(timeout);
-            add();
-          }, 100);
-          return;
+          return retry();
         }
 
         if (_canAdd) {

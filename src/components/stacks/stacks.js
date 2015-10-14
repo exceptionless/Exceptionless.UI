@@ -8,6 +8,7 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'exceptionless',
     'exceptionless.filter',
     'exceptionless.link',
     'exceptionless.notification',

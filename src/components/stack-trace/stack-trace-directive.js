@@ -2,9 +2,12 @@
   'use strict';
 
   angular.module('exceptionless.stack-trace', [
+    'ngSanitize',
+
+    'exceptionless',
     'exceptionless.error'
   ])
-  .directive('stackTrace', ['errorService', function (errorService) {
+  .directive('stackTrace', ['$ExceptionlessClient', '$sanitize', 'errorService', function ($ExceptionlessClient, $sanitize, errorService) {
     function buildParameter(parameter) {
       var result = '';
 
@@ -32,7 +35,7 @@
 
     function buildParameters(parameters) {
       var result = '(';
-      for (var index = 0; index < parameters.length; index++) {
+      for (var index = 0; index < (parameters || []).length; index++) {
         if (index > 0) {
           result += ', ';
         }
@@ -43,19 +46,28 @@
     }
 
     function buildStackFrame(frame) {
-      if (!frame || !frame.name) {
-        return '<null>';
+      if (!frame) {
+        return '<null>\r\n';
       }
 
-      var result = 'at ' + [frame.declaring_namespace, frame.declaring_type, frame.name].join('.').replace('+', '.');
+      var typeNameParts = [];
+      if (!!frame.declaring_namespace) {
+        typeNameParts.push(frame.declaring_namespace);
+      }
+
+      if (!!frame.declaring_type) {
+        typeNameParts.push(frame.declaring_type);
+      }
+
+      typeNameParts.push(frame.name || '<anonymous>');
+
+      var result = 'at ' + typeNameParts.join('.').replace('+', '.');
+
       if (!!frame.generic_arguments && frame.generic_arguments.length > 0) {
         result += '[' + frame.generic_arguments.join(',') + ']';
       }
 
-      if (!!frame.parameters && frame.parameters.length > 0) {
-        result += buildParameters(frame.parameters);
-      }
-
+      result += buildParameters(frame.parameters);
       if (!!frame.data && (frame.data.ILOffset > 0 || frame.data.NativeOffset > 0)) {
         result += ' at offset ' + frame.data.ILOffset || frame.data.NativeOffset;
       }
@@ -71,17 +83,18 @@
         }
       }
 
-      return result + '\r\n';
+      return sanitize(result + '\r\n');
     }
 
     function buildStackFrames(exceptions) {
       var frames = '';
       for (var index = 0; index < exceptions.length; index++) {
-        if (!!exceptions[index].stack_trace) {
+        var stackTrace = exceptions[index].stack_trace;
+        if (!!stackTrace) {
           frames += '<div class="stack-frame">';
 
-          for (var frameIndex = 0; frameIndex < exceptions[index].stack_trace.length; frameIndex++) {
-            frames += buildStackFrame(exceptions[index].stack_trace[frameIndex]);
+          for (var frameIndex = 0; frameIndex < stackTrace.length; frameIndex++) {
+            frames += sanitize(buildStackFrame(stackTrace[frameIndex]));
           }
 
           if (index < (exceptions.length - 1)) {
@@ -112,15 +125,31 @@
           header += ' ---> ';
         }
 
-        header += '<span class="ex-type">' + exceptions[index].type + '</span>';
-        if (exceptions[index].message) {
-          header += '<span class="ex-message">: ' + exceptions[index].message + '</span>';
+        var hasType = !!exceptions[index].type;
+        if (hasType) {
+          header += '<span class="ex-type">' + sanitize(exceptions[index].type) + '</span>: ';
         }
 
-        header += '</span>';
+        if (exceptions[index].message) {
+          header += '<span class="ex-message">' + sanitize(exceptions[index].message) + '</span>';
+        }
+
+        if (hasType) {
+          header += '</span>';
+        }
       }
 
       return header;
+    }
+
+    function sanitize(input) {
+      try {
+        return $sanitize(input.replace('<', '&lt;'));
+      } catch (e) {
+        $ExceptionlessClient.createException(e).addTags('sanitize').submit();
+      }
+
+      return input;
     }
 
     return {

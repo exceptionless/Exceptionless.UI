@@ -24,7 +24,7 @@
       <p>
         Please configure your clients for
         <strong ng-repeat="project in vm.projectsRequiringConfiguration">
-          <span ng-if="!$first">, </span><a ui-sref="app.project.configure({ id: project.id })" title="Configure {{project.name}} ({{project.organization_name}})">{{project.name}}</a>
+          <span ng-if="!$first">, </span><a ui-sref="app.project.configure({ id: project.id, redirect: true })" title="Configure {{project.name}} ({{project.organization_name}})">{{project.name}}</a>
         </strong>
         projects and start becoming exceptionless in less than 60 seconds!
       </p>

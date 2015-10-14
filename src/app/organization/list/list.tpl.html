@@ -16,7 +16,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="row-clickable" ng-repeat="organization in vm.organizations track by organization.id">
+            <tr class="row-clickable" ng-repeat="organization in vm.organizations | orderBy: 'name' track by organization.id">
               <td ng-click="vm.open(organization.id, $event)">{{organization.name}}</td>
               <td ng-click="vm.open(organization.id, $event)">{{organization.plan_name}}</td>
               <td ng-click="vm.open(organization.id, $event)" class="number hidden-xs">{{organization.project_count | number:0}}</td>

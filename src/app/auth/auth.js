@@ -8,6 +8,7 @@
     'ui.router',
 
     'app.config',
+    'exceptionless',
     'exceptionless.auth',
     'exceptionless.autofocus',
     'exceptionless.notification',
@@ -17,31 +18,21 @@
     'exceptionless.validators'
   ])
   .config(['$authProvider', '$stateProvider', 'BASE_URL', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', function ($authProvider, $stateProvider, BASE_URL, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID) {
-    $authProvider.loginUrl = BASE_URL + '/auth/login';
-    $authProvider.loginRedirect = false;
-    $authProvider.logoutRedirect = '/login';
-    $authProvider.signupUrl = BASE_URL + '/auth/signup';
-    $authProvider.signupRedirect = false;
-    $authProvider.unlinkUrl = BASE_URL + '/auth/unlink/';
-
+    $authProvider.baseUrl = BASE_URL + '/api/v2';
     $authProvider.facebook({
-      clientId: FACEBOOK_APPID,
-      url: BASE_URL + '/auth/facebook'
+      clientId: FACEBOOK_APPID
     });
 
     $authProvider.google({
-      clientId: GOOGLE_APPID,
-      url: BASE_URL + '/auth/google'
+      clientId: GOOGLE_APPID
     });
 
     $authProvider.github({
-      clientId: GITHUB_APPID,
-      url: BASE_URL + '/auth/github'
+      clientId: GITHUB_APPID
     });
 
     $authProvider.live({
       clientId: LIVE_APPID,
-      url: BASE_URL + '/auth/live',
       scope: ['wl.emails']
     });
 

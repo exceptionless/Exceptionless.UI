@@ -2,17 +2,21 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', ['$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, projectService, stackService, statService) {
+    .controller('Stack', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, projectService, stackService, statService) {
+      var source = 'app.stack.Stack';
       var _stackId = $stateParams.id;
       var vm = this;
 
       function addReferenceLink() {
+        $ExceptionlessClient.submitFeatureUsage(source + '.addReferenceLink');
         return dialogs.create('app/stack/add-reference-dialog.tpl.html', 'AddReferenceDialog as vm').result.then(function (url) {
           function onSuccess() {
+            $ExceptionlessClient.createFeatureUsage(source + '.addReferenceLink.success').setProperty('url', url).submit();
             vm.stack.references.push(url);
           }
 
           function onFailure() {
+            $ExceptionlessClient.createFeatureUsage(source + '.addReferenceLink.error').setProperty('url', url).submit();
             notificationService.error('An error occurred while adding the reference link.');
           }
 
@@ -136,6 +140,7 @@
       }
 
       function promoteToExternal() {
+        $ExceptionlessClient.createFeatureUsage(source + '.promoteToExternal').setProperty('id', _stackId).submit();
         if (!featureService.hasPremium()) {
           var message = 'Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.';
           return billingService.confirmUpgradePlan(message, vm.stack.organization_id).then(function () {
@@ -144,10 +149,12 @@
         }
 
         function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.promoteToExternal.success').setProperty('id', _stackId).submit();
           notificationService.success('Successfully promoted stack!');
         }
 
         function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.promoteToExternal.error').setProperty('id', _stackId).setProperty('response', response).submit();
           if (response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message, vm.stack.organization_id).then(function () {
               return promoteToExternal();
@@ -167,23 +174,32 @@
       }
 
       function removeReferenceLink(reference) {
+        $ExceptionlessClient.createFeatureUsage(source + '.removeReferenceLink').setProperty('id', _stackId).submit();
         return dialogService.confirmDanger('Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK').then(function () {
-          function onFailure() {
+          function onSuccess() {
+            $ExceptionlessClient.createFeatureUsage(source + '.removeReferenceLink.success').setProperty('id', _stackId).submit();
+          }
+
+          function onFailure(response) {
+            $ExceptionlessClient.createFeatureUsage(source + '.removeReferenceLink.error').setProperty('id', _stackId).setProperty('response', response).submit();
             notificationService.info('An error occurred while deleting the external reference link.');
           }
 
-          return stackService.removeLink(_stackId, reference).catch(onFailure);
+          return stackService.removeLink(_stackId, reference).then(onSuccess, onFailure);
         });
       }
 
       function remove() {
+        $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('id', _stackId).submit();
         var message = 'Are you sure you want to delete this stack?';
         return dialogService.confirmDanger(message, 'DELETE STACK').then(function () {
           function onSuccess() {
+            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('id', _stackId).submit();
             $state.go('app.project-dashboard', { projectId: vm.stack.project_id });
           }
 
-          function onFailure() {
+          function onFailure(response) {
+            $ExceptionlessClient.createFeatureUsage(source + '.remove.error').setProperty('id', _stackId).setProperty('response', response).submit();
             notificationService.error('An error occurred while deleting this stack.');
           }
 
@@ -192,19 +208,26 @@
       }
 
       function updateIsCritical() {
-        function onFailure() {
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateIsCritical.success').setProperty('id', _stackId).submit();
+        }
+
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateIsCritical.error').setProperty('id', _stackId).setProperty('response', response).submit();
           notificationService.error('An error occurred while marking future occurrences as ' + isCritical() ? 'not critical.' : 'critical.');
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.updateIsCritical').setProperty('id', _stackId).submit();
         if (isCritical()) {
-          return stackService.markNotCritical(_stackId).catch(onFailure);
+          return stackService.markNotCritical(_stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.markCritical(_stackId).catch(onFailure);
+        return stackService.markCritical(_stackId).catch(onSuccess, onFailure);
       }
 
       function updateIsFixed(showSuccessNotification) {
         function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateIsFixed.success').setProperty('id', _stackId).submit();
           if (!showSuccessNotification) {
             return;
           }
@@ -213,11 +236,13 @@
           notificationService.info('Successfully marked this stack as' + action + ' fixed.');
         }
 
-        function onFailure() {
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateIsFixed.error').setProperty('id', _stackId).setProperty('response', response).submit();
           var action = isFixed() ? ' not' : '';
           notificationService.error('An error occurred while marking this stack as' + action + ' fixed.');
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.updateIsFixed').setProperty('id', _stackId).submit();
         if (isFixed()) {
           return stackService.markNotFixed(_stackId).then(onSuccess, onFailure);
         }
@@ -226,19 +251,26 @@
       }
 
       function updateIsHidden() {
-        function onFailure() {
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateIsHidden.success').setProperty('id', _stackId).submit();
+        }
+
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateIsHidden.error').setProperty('id', _stackId).setProperty('response', response).submit();
           notificationService.error('An error occurred while marking this stack as ' + isHidden() ? 'shown.' : 'hidden.');
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.updateIsHidden').setProperty('id', _stackId).submit();
         if (isHidden()) {
-          return stackService.markNotHidden(_stackId).catch(onFailure);
+          return stackService.markNotHidden(_stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.markHidden(_stackId).catch(onFailure);
+        return stackService.markHidden(_stackId).then(onSuccess, onFailure);
       }
 
       function updateNotifications(showSuccessNotification) {
         function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateNotifications.success').setProperty('id', _stackId).submit();
           if (!showSuccessNotification) {
             return;
           }
@@ -247,11 +279,13 @@
           notificationService.info('Successfully ' + action + ' stack notifications.');
         }
 
-        function onFailure() {
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(source + '.updateNotifications.error').setProperty('id', _stackId).setProperty('response', response).submit();
           var action = notificationsDisabled() ? 'enabling' : 'disabling';
           notificationService.error('An error occurred while ' + action + ' stack notifications.');
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.updateNotifications').setProperty('id', _stackId).submit();
         if (notificationsDisabled()) {
           return stackService.enableNotifications(_stackId).then(onSuccess, onFailure);
         }
@@ -313,6 +347,11 @@
               var end = moment.unix(position.coordMaxX).utc();
 
               filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+              $ExceptionlessClient.createFeatureUsage(source + '.chart.range.onSelection')
+                .setProperty('id', _stackId)
+                .setProperty('start', start)
+                .setProperty('end', end)
+                .submit();
 
               return false;
             }
@@ -349,7 +388,8 @@
         options: {
           limit: 10,
           mode: 'summary'
-        }
+        },
+        source: source + '.Recent'
       };
       vm.stack = {};
       vm.stats = {};

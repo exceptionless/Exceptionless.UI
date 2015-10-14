@@ -6,10 +6,10 @@
 
     <div class="dropdown-menu w-xl" role="menu">
       <div class="panel search-panel bg-dark">
-        <form name="searchFilterForm" role="form" class="form-validation">
+        <form name="vm.searchFilterForm" role="form" class="form-validation">
           <div class="form-group">
-            <label for="search">Filter <a href="http://docs.exceptionless.com/contents/search/" target="_blank" title="Search Documentation"><i class="fa fa-fw fa-question-circle"></i></a></label>
-            <div ng-class="{'input-group': searchFilterForm.$pending }">
+            <label for="search">Filter <a href="https://github.com/exceptionless/Exceptionless/wiki/Filtering-Searching" target="_blank" title="Search Documentation"><i class="fa fa-fw fa-question-circle"></i></a></label>
+            <div ng-class="{'input-group': vm.searchFilterForm.$pending }">
               <input id="search" name="search" type="search" class="form-control" placeholder="Criteria"
                      ng-model="vm.filter"
                      ng-model-options="{ debounce: 500 }"
@@ -17,12 +17,12 @@
                      search-filter-validator
                      autofocus />
 
-              <span class="input-group-addon" ng-if="searchFilterForm.$pending">
+              <span class="input-group-addon" ng-if="vm.searchFilterForm.$pending">
                 <i class="fa fa-fw fa-spinner fa-spin"></i>
               </span>
             </div>
 
-            <div class="error" ng-messages="searchFilterForm.search.$error" ng-if="searchFilterForm.$submitted || searchFilterForm.search.$touched">
+            <div class="error" ng-messages="vm.searchFilterForm.search.$error" ng-if="vm.searchFilterForm.$submitted || vm.searchFilterForm.search.$touched">
               <small ng-message="valid">An invalid search term was found.</small>
             </div>
           </div>

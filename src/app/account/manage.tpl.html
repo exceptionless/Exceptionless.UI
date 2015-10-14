@@ -86,7 +86,7 @@
                           ng-model="vm.currentProject"
                           ng-change="vm.getEmailNotificationSettings()"
                           ng-disabled="!vm.hasEmailNotifications()"
-                          ng-options="project.name group by project.organization_name for project in vm.projects"></select>
+                          ng-options="project.name group by project.organization_name for project in vm.projects | orderBy: 'name' track by project.id"></select>
 
                   <div class="checkbox">
                     <label class="i-checks">
@@ -207,17 +207,17 @@
                   </div>
                 </div>
 
-                <input ng-click="vm.changePassword(vm.passwordForm.$valid)" type="submit" role="button" class="btn btn-primary" value="{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}" />
+                <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="{{vm.hasLocalAccount() ? 'Changing Password' : 'Setting Password'}}">{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}</button>
               </form>
             </tab>
-            <tab heading="External Logins" active="vm.tabExternalActive">
+            <tab heading="External Logins" active="vm.tabExternalActive" ng-if="vm.isExternalLoginEnabled()">
               <h4>Add an external login</h4>
 
               <div>
-                <button type="button" role="button" ng-click="vm.authenticate('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
-                <button type="button" role="button" ng-click="vm.authenticate('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
-                <button type="button" role="button" ng-click="vm.authenticate('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
-                <button type="button" role="button" ng-click="vm.authenticate('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('live')" ng-if="vm.isExternalLoginEnabled('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('google')" ng-if="vm.isExternalLoginEnabled('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('facebook')" ng-if="vm.isExternalLoginEnabled('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
+                <button type="button" role="button" ng-click="vm.authenticate('github')" ng-if="vm.isExternalLoginEnabled('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
               </div>
 
               <h4>Existing external logins</h4>
@@ -260,7 +260,7 @@
               <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
             </div>
           </div>
-          <div class="clearfix" />
+          <div class="clearfix"></div>
         </footer>
       </div>
     </div>

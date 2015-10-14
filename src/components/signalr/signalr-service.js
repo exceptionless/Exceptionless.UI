@@ -4,15 +4,17 @@
   angular.module('exceptionless.signalr', [
     'SignalR',
 
-    'exceptionless.auth',
-    'app.config'
+    'app.config',
+    'exceptionless',
+    'exceptionless.auth'
   ])
-  .factory('signalRService', ['$rootScope', '$timeout', '$log', 'authService', 'BASE_URL', 'Hub', function ($rootScope, $timeout, $log, authService, BASE_URL, Hub) {
+  .factory('signalRService', ['$ExceptionlessClient', '$rootScope', '$timeout', 'authService', 'BASE_URL', 'Hub', function ($ExceptionlessClient, $rootScope, $timeout, authService, BASE_URL, Hub) {
+    var source = 'exceptionless.signalr.signalRService';
     var _hub;
     var _signalRTimeout;
 
     function start() {
-      startDelayed(0);
+      startDelayed(1);
     }
 
     function startDelayed(delay) {
@@ -20,12 +22,18 @@
         stop();
       }
 
-      _signalRTimeout = $timeout(function (){
+      _signalRTimeout = $timeout(function () {
         _hub = new Hub('messages', {
-          rootPath: BASE_URL + '/push',
+          rootPath: BASE_URL + '/api/v2/push',
 
           // client side methods
           listeners: {
+            'releaseNotification': function (releaseNotification) {
+              $rootScope.$emit('notification:release', releaseNotification);
+            },
+            'systemNotification': function (systemNotification) {
+              $rootScope.$emit('notification:system', systemNotification);
+            },
             'entityChanged': function (entityChanged) {
               entityChanged.added = entityChanged.change_type === 0;
               entityChanged.updated = entityChanged.change_type === 1;
@@ -51,10 +59,11 @@
           queryParams: {
             'access_token': authService.getToken()
           },
-
-          // handle connection error
-          errorHandler: function (error) {
-            $log.error(error);
+          stateChanged: function(state) {
+            if (state.newState === $.signalR.connectionState.disconnected && authService.isAuthenticated()) {
+              stop();
+              start();
+            }
           }
         });
       }, delay || 1000);

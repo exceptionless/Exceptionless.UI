@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.validators')
-    .directive('projectNameAvailableValidator', ['$q', 'projectService', function($q, projectService) {
+    .directive('projectNameAvailableValidator', ['$timeout', '$q', 'projectService', function($timeout, $q, projectService) {
       return {
         restrict: 'A',
         require: 'ngModel',
@@ -11,7 +11,9 @@
             var deferred = $q.defer();
 
             if (ngModel.$pristine) {
-              deferred.resolve(true);
+              $timeout(function() {
+                deferred.resolve(true);
+              }, 0);
             } else {
               projectService.isNameAvailable(name).then(function(response) {
                 if (response.status === 201) {
@@ -19,6 +21,8 @@
                 } else {
                   deferred.resolve(true);
                 }
+              }, function() {
+                deferred.reject('An error occurred while validating the project name.');
               });
             }
 

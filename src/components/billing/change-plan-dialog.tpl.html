@@ -116,6 +116,6 @@
 
   <div class="modal-footer">
     <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-    <input type="submit" role="button" class="btn btn-primary" ng-disabled="!vm.isBillingEnabled()" ng-click="vm.save(vm.changePlanForm.$valid)" value="Change Plan" />
+    <button type="submit" role="button" class="btn btn-primary" promise-button="vm.save(vm.changePlanForm.$valid)" promise-button-busy-text="Changing Plan">Change Plan</button>
   </div>
 </form>

@@ -8,23 +8,23 @@
         <div class="panel-body m-b-n">
           <tabset class="tab-container">
             <tab heading="General">
-              <form name="organizationForm" role="form" class="form-validation">
+              <form name="vm.organizationForm" role="form" class="form-validation">
                 <div class="form-group m-b-none">
                   <label for="name">Organization Name</label>
-                  <div ng-class="{'input-group': organizationForm.$pending }">
+                  <div ng-class="{'input-group': vm.organizationForm.$pending }">
                     <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
                            ng-model="vm.organization.name"
                            ng-model-options="{ debounce: 500 }"
-                           ng-change="vm.save(organizationForm.$valid)"
+                           ng-change="vm.save(vm.organizationForm.$valid)"
                            organization-name-available-validator
                            ng-required="true"
                            autofocus />
-                    <span class="input-group-addon" ng-if="organizationForm.$pending">
+                    <span class="input-group-addon" ng-if="vm.organizationForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>
                     </span>
                   </div>
 
-                  <div class="error" ng-messages="organizationForm.name.$error" ng-if="organizationForm.$submitted || organizationForm.name.$touched">
+                  <div class="error" ng-messages="vm.organizationForm.name.$error" ng-if="vm.organizationForm.$submitted || vm.organizationForm.name.$touched">
                     <small ng-message="required">Organization Name is required.</small>
                     <small ng-message="unique">A organizations with this name already exists.</small>
                   </div>

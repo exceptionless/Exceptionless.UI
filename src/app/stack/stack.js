@@ -9,6 +9,7 @@
     'dialogs.main',
     'dialogs.default-translations',
 
+    'exceptionless',
     'exceptionless.autofocus',
     'exceptionless.dialog',
     'exceptionless.event',
@@ -16,6 +17,7 @@
     'exceptionless.feature',
     'exceptionless.filter',
     'exceptionless.organization-notifications',
+    'exceptionless.promise-button',
     'exceptionless.notification',
     'exceptionless.rate-limit',
     'exceptionless.refresh',

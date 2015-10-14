@@ -12,7 +12,7 @@
           templateKey: '=templateKey'
         },
         link: function (scope, element) {
-          if (!scope.content) {
+          if (typeof scope.content === 'undefined') {
             return;
           }
 

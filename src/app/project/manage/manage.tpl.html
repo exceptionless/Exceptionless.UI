@@ -8,24 +8,24 @@
         <div class="panel-body m-b-n">
           <tabset class="tab-container">
             <tab heading="General">
-              <form name="projectForm" role="form" class="form-validation">
+              <form name="vm.projectForm" role="form" class="form-validation">
                 <div class="form-group">
                   <label for="name">Project Name</label>
-                  <div ng-class="{'input-group': projectForm.$pending }">
+                  <div ng-class="{'input-group': vm.projectForm.$pending }">
                     <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
                            ng-model="vm.project.name"
                            ng-model-options="{ debounce: 500 }"
-                           ng-change="vm.save(projectForm.$valid)"
+                           ng-change="vm.save(vm.projectForm.$valid)"
                            project-name-available-validator
                            ng-required="true"
                            autofocus />
 
-                    <span class="input-group-addon" ng-if="projectForm.$pending">
+                    <span class="input-group-addon" ng-if="vm.projectForm.$pending">
                       <i class="fa fa-fw fa-spinner fa-spin"></i>
                     </span>
                   </div>
 
-                  <div class="error" ng-messages="projectForm.name.$error" ng-if="projectForm.$submitted || projectForm.name.$touched">
+                  <div class="error" ng-messages="vm.projectForm.name.$error" ng-if="vm.projectForm.$submitted || vm.projectForm.name.$touched">
                     <small ng-message="required">Project Name is required.</small>
                     <small ng-message="unique">A project with this name already exists.</small>
                   </div>
@@ -81,7 +81,7 @@
               <p>
                 A comma delimited list of field names that should be removed from any error report data
                 (e.g., extended data properties, form fields, cookies and query parameters). You can also
-                specify a <a href="http://docs.exceptionless.com/contents/security/" target="_blank"
+                specify a <a href="https://github.com/exceptionless/Exceptionless/wiki/Security" target="_blank"
                              title="Data Exclusions documentation">field name with wildcards (<strong>*</strong>)</a>
                 to specify starts with, ends with, or contains just to be extra safe.
               </p>

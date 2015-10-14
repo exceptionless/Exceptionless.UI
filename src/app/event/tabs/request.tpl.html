@@ -4,7 +4,7 @@
     <th>Occurred On</th>
     <td>{{::vm.event.date | date: 'medium'}} (<timeago date="vm.event.date"></timeago>)</td>
   </tr>
-  <tr>
+  <tr ng-if="vm.event.data['@request'].http_method">
     <th>HTTP Method</th>
     <td>{{::vm.event.data['@request'].http_method}}</td>
   </tr>

@@ -150,14 +150,14 @@
       };
       vm.leaveOrganization = leaveOrganization;
       vm.organization = {};
+      vm.organizationForm = {};
       vm.projects = {
         get: function (options, useCache) {
           return projectService.getByOrganizationId(_organizationId, options, useCache);
         },
         hideOrganizationName: true,
         options: {
-          limit: 10,
-          mode: 'summary'
+          limit: 10
         }
       };
       vm.removeOrganization = removeOrganization;

@@ -2,26 +2,31 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('AddOrganizationDialog', ['$modalInstance', '$timeout', function ($modalInstance, $timeout) {
+    .controller('AddOrganizationDialog', ['$ExceptionlessClient', '$modalInstance', '$timeout', function ($ExceptionlessClient, $modalInstance, $timeout) {
+      var source = 'app.organization.AddOrganizationDialog';
       var _canSave = true;
       var vm = this;
 
       function cancel() {
+        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
         $modalInstance.dismiss('cancel');
       }
 
-      function save() {
+      function save(isRetrying) {
+        function retry(delay) {
+          var timeout = $timeout(function() {
+            $timeout.cancel(timeout);
+            save(true);
+          }, delay || 100);
+        }
+
         if (!vm.addOrganizationForm || vm.addOrganizationForm.$invalid) {
           _canSave = true;
-          return;
+          return !isRetrying && retry(1000);
         }
 
         if (!vm.data.name || vm.addOrganizationForm.$pending) {
-          var timeout = $timeout(function() {
-            $timeout.cancel(timeout);
-            save();
-          }, 100);
-          return;
+          return retry();
         }
 
         if (_canSave) {
@@ -30,6 +35,7 @@
           return;
         }
 
+        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('name', vm.data.name).submit();
         $modalInstance.close(vm.data.name);
       }
 
@@ -37,5 +43,6 @@
       vm.cancel = cancel;
       vm.data = {};
       vm.save = save;
+      $ExceptionlessClient.submitFeatureUsage(source);
     }]);
 }());

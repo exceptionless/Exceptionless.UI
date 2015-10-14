@@ -7,7 +7,10 @@
         restrict: 'AC',
         link: function (scope, el, attr) {
           el.on('click', function (e) {
-            e.preventDefault();
+            if (e && e.preventDefault) {
+              e.preventDefault();
+            }
+
             var classes = attr.uiToggleClass.split(','),
               targets = (attr.target && attr.target.split(',')) || new Array(el),
               key = 0;

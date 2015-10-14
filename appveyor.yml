@@ -1,45 +1,39 @@
-version: 2.0.{build}
+version: 2.1.{build}
 
 environment:
-  nodejs_version: "0.10"
-  API_URL: https://#{api.hostheader}/api/v2
-  FACEBOOK_APPID: "#{facebook.appid}"
-  GITHUB_APPID: "#{github.appid}"
-  GOOGLE_APPID: "#{google.appid}"
-  HTML5_MODE: "#{html5mode}"
-  INTERCOM_APPID: "#{intercom.appid}"
-  LIVE_APPID: "#{live.appid}"
-  STRIPE_PUBLISHABLE_KEY: "#{stripe.publishablekey}"
-  SYSTEM_NOTIFICATION_MESSAGE: "#{systemnotificationmessage}"
-  OCTOPUS_API_URL: https://deploy.codesmithtools.com/api
-  OCTOPUS_API_KEY:
-    secure: 9Uk1fnTNb36QtrWfRCe9vrqVsBaEXGcM1K1mRoLUB0A=
+  BUILD_REPO_URL:
+    secure: vuYBT6D5arel88+Py/H3nnMPd4hInIXvr2cwhJaZSSSvJnmg+9sX1P5+bTWaJskYpGztHVMg0Iq7hgUCMKjh23w8WBrutLiUsixRE0LBjroIVJaRsYG1okSko0fNKVOCyOLKGt19Qrk45/TrTFlGMQ==
 
 install:
-  - ps: Install-Product node $env:nodejs_version
   - cd src
-  - npm install -g grunt-cli
-  - npm install -g bower
   - npm install
-  - bower install
+  - node_modules\.bin\bower install
 
 build_script:
-  - grunt build
+  - node_modules\.bin\grunt build
 
 test_script:
-  - grunt test
-  
-after_test:
-  - cd ..
-  - ps: nuget pack -Version $env:APPVEYOR_BUILD_VERSION
-  - nuget install OctopusTools
-  - ps: '&(ls .\OctopusTools*\Octo.exe) create-release --project="Exceptionless UI" --version "$env:APPVEYOR_BUILD_VERSION" --server "$env:OCTOPUS_API_URL" --apiKey "$env:OCTOPUS_API_KEY" --deployto Dev'
+  - node_modules\.bin\grunt test
 
-artifacts:
-  - path: '*.nupkg'
+artifacts: 
+  - path: .\*.zip
+    name: ReleaseArtifacts
+
+before_deploy:
+  - node_modules\.bin\grunt deploy
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: 0s81q7bweVLTFSOKxnIhan7el6bIFiN8HJ1kYJzOkeFXX7wgGSq9bs/rV53X9qpf
+  artifact: ReleaseArtifacts
+  draft: true
+  on:
+    branch: master
+    appveyor_repo_tag: true
 
 notifications:
-  - provider: HipChat
+  - provider: Slack
     auth_token:
-      secure: WxN+iiJf8AT50n50y8/AkTMl+Cvma6lwSdffFaBU6/o=
-    room: Notifications
+      secure: PigIGGo7UUDwdb0KGM/s7OfpAng/OMJx7q33jKfzudFBiXi1EBEd0DRmkbCc7CiX
+    channel: notifications

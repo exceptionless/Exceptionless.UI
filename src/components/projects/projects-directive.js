@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.projects', [
+    'exceptionless',
     'exceptionless.dialog',
     'exceptionless.link',
     'exceptionless.notification',
@@ -18,7 +19,8 @@
           settings: "="
         },
         templateUrl: 'components/projects/projects-directive.tpl.html',
-        controller: ['$window', '$state', 'dialogService', 'linkService', 'notificationService', 'paginationService', 'projectService', function ($window, $state, dialogService, linkService, notificationService, paginationService, projectService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', 'dialogService', 'linkService', 'notificationService', 'paginationService', 'projectService', function ($ExceptionlessClient, $window, $state, dialogService, linkService, notificationService, paginationService, projectService) {
+          var source = 'exceptionless.projects';
           var vm = this;
 
           function get(options, useCache) {
@@ -47,6 +49,7 @@
           }
 
           function open(id, event) {
+            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
             if (event.ctrlKey || event.which === 2) {
               $window.open($state.href('app.project.manage', { id: id }, { absolute: true }), '_blank');
             } else {
@@ -57,20 +60,25 @@
           }
 
           function nextPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
+            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
           function remove(project) {
+            $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('project', project).submit();
             return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
               function onSuccess() {
+                $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('project', project).submit();
                 vm.projects.splice(vm.projects.indexOf(project), 1);
               }
 
               function onFailure() {
+                $ExceptionlessClient.createFeatureUsage(source + '.remove.error').setProperty('project', project).submit();
                 notificationService.error('An error occurred while trying to remove the project.');
               }
 
@@ -87,6 +95,8 @@
           vm.previousPage = previousPage;
           vm.projects = [];
           vm.remove = remove;
+
+          $ExceptionlessClient.submitFeatureUsage(source);
           get();
         }],
         controllerAs: 'vm'
