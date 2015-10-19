@@ -8,7 +8,7 @@
         get: projectService.getAll,
         options: {
           limit: 10,
-          mode: 'statistics'
+          mode: 'stats'
         }
       };
     }
