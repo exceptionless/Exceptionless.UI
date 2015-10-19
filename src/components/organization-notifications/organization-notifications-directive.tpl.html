@@ -1,6 +1,6 @@
 <div>
   <div ng-if="vm.hasNotifications" refresh-on="filterChanged" refresh-action="vm.onFilterChanged()">
-    <div refresh-on="OrganizationChanged ProjectChanged PersistentEventChanged PlanChanged PlanOverage" refresh-action="vm.get()" refresh-throttle="2500"></div>
+    <div refresh-on="OrganizationChanged ProjectChanged PersistentEventChanged PlanChanged PlanOverage" refresh-action="vm.get()" refresh-throttle="10000"></div>
 
     <div class="alert alert-success alert-banner m-b-none" ng-if="!vm.hasOrganizations()">
       <h4>Setup your first project</h4>
