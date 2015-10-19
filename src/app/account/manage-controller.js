@@ -97,7 +97,7 @@
           notificationService.error('An error occurred while loading the projects.');
         }
 
-        return projectService.getAll({ mode: 'stats' }).then(onSuccess, onFailure);
+        return projectService.getAll().then(onSuccess, onFailure);
       }
 
       function getUser() {

@@ -98,7 +98,7 @@
             }
 
             // Only show it if you absolutely have no data or the current project has no data or if the current org has no data.
-            var canShowConfigurationAlert = currentProjects.filter(function(p) { return p.event_count === 0; }).length === currentProjects.length;
+            var canShowConfigurationAlert = currentProjects.filter(function(p) { return p.is_configured === false; }).length === currentProjects.length;
 
             // Only show the premium features dialog when searching on a plan without premium features and your project has been configured.
             var tryingToSearchWithoutPremiumFeatures = vm.filterUsesPremiumFeatures && !organization.has_premium_features;
@@ -134,7 +134,7 @@
                   return;
                 }
 
-                if (project.event_count === 0) {
+                if (project.is_configured === false) {
                   vm.projectsRequiringConfiguration.push(project);
                   hasProjectsRequiringConfiguration = true;
                 }
@@ -177,7 +177,7 @@
               return vm.organizations;
             }
 
-            return  organizationService.getAll({ mode: 'stats' }).then(onSuccess);
+            return  organizationService.getAll().then(onSuccess);
           }
 
           return getAllOrganizations().then(getSelectedOrganization);
@@ -189,7 +189,7 @@
             return vm.projects;
           }
 
-          return projectService.getAll({ mode: 'stats' }).then(onSuccess);
+          return projectService.getAll().then(onSuccess);
         }
 
         function hasExceededRequestLimitOrganizations() {

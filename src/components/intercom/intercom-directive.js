@@ -64,6 +64,7 @@
             if (versionParts.length === 3)
               data.app_build = parseInt(versionParts[2]);
 
+            // TODO: include the total event count for the organization.
             var currentOrganization = getCurrentOrganization();
             if (currentOrganization) {
               data.company = {
@@ -71,8 +72,7 @@
                 name: currentOrganization.name,
                 remote_created_at: objectIDService.create(currentOrganization.id).timestamp,
                 plan: currentOrganization.plan_id,
-                monthly_spend: currentOrganization.billing_price,
-                total_errors: currentOrganization.total_event_count
+                monthly_spend: currentOrganization.billing_price
               };
 
               if (currentOrganization.subscribe_date) {
@@ -94,7 +94,7 @@
               return vm.organizations;
             }
 
-            return organizationService.getAll({ mode: 'stats' }).then(onSuccess);
+            return organizationService.getAll().then(onSuccess);
           }
 
           function getProjects(canUpdate) {
@@ -108,7 +108,7 @@
               return vm.projects;
             }
 
-            return projectService.getAll({ mode: 'stats' }).then(onSuccess);
+            return projectService.getAll().then(onSuccess);
           }
 
           function getUser(canUpdate) {

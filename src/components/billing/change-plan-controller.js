@@ -145,7 +145,7 @@
             return vm.organizations;
           }
 
-          return  organizationService.getAll({ mode: 'stats' }).then(onSuccess);
+          return  organizationService.getAll().then(onSuccess);
         }
 
         function onSuccess() {
