@@ -62,7 +62,7 @@
           return stateService.restore('app.project.add');
         }
 
-        return projectService.getAll({ mode: 'summary' }).then(onSuccess, onFailure);
+        return projectService.getAll({ mode: 'stats' }).then(onSuccess, onFailure);
       }
 
       function signup(isRetrying) {

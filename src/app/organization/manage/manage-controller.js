@@ -158,7 +158,7 @@
         hideOrganizationName: true,
         options: {
           limit: 10,
-          mode: 'summary'
+          mode: 'stats'
         }
       };
       vm.removeOrganization = removeOrganization;
