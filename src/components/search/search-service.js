@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.search', ['restangular'])
-    .factory('searchService', ['$cacheFactory', 'Restangular', function ($cacheFactory, Restangular) {
+    .factory('searchService', ['$cacheFactory', '$timeout', '$q', 'Restangular', function ($cacheFactory, $timeout, $q, Restangular) {
       var _cache = $cacheFactory('http:search');
 
       var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
@@ -10,7 +10,21 @@
       });
 
       function validate(query) {
-        return _cachedRestangular.one('search', 'validate').get({ query: query || '' });
+        if (!query) {
+          var deferred = $q.defer();
+          $timeout(function() {
+            deferred.resolve({
+              data: {
+                is_valid: true,
+                uses_premium_features: false
+              }
+            });
+          }, 0);
+
+          return deferred.promise;
+        }
+
+        return _cachedRestangular.one('search', 'validate').get({ query: query });
       }
 
       var service = {
