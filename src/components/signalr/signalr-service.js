@@ -22,20 +22,23 @@
       }
 
       _connection = $.connection(BASE_URL + '/api/v2/push', { access_token: authService.getToken() });
-      _connection.received(function (json) {
-        var typedMessage = JSON.parse(json);
-        if (typedMessage.message.change_type) {
-          typedMessage.message.added = typedMessage.message.change_type === 0;
-          typedMessage.message.updated = typedMessage.message.change_type === 1;
-          typedMessage.message.deleted = typedMessage.message.change_type === 2;
+      _connection.received(function (data) {
+        if (!data || typeof data === 'string') {
+          return;
         }
 
-        $rootScope.$emit(typedMessage.type, typedMessage.message);
+        if (data.message && data.message.change_type) {
+          data.message.added = data.message.change_type === 0;
+          data.message.updated = data.message.change_type === 1;
+          data.message.deleted = data.message.change_type === 2;
+        }
+
+        $rootScope.$emit(data.type, data.message);
 
         // This event is fired when a user is added or removed from an organization.
-        if (typedMessage.type === 'UserMembershipChanged' && typedMessage.message.organization_id) {
-          $rootScope.$emit('OrganizationChanged', typedMessage.message);
-          $rootScope.$emit('ProjectChanged', typedMessage.message);
+        if (data.type === 'UserMembershipChanged' && data.message && data.message.organization_id) {
+          $rootScope.$emit('OrganizationChanged', data.message);
+          $rootScope.$emit('ProjectChanged', data.message);
         }
       });
 
