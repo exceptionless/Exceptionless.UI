@@ -45,6 +45,10 @@
       _connection.stateChanged(function (change) {
         if (change.newState === $.signalR.connectionState.disconnected && authService.isAuthenticated()) {
           _reconnectInterval = $interval(function() {
+            if (!_connection) {
+              return $interval.cancel(_reconnectInterval);
+            }
+
             _connection.start().then(function() {
               $interval.cancel(_reconnectInterval);
             });
