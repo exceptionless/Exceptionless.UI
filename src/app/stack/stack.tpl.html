@@ -1,8 +1,8 @@
 <organization-notifications organization-id="vm.stack.organization_id"></organization-notifications>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="PersistentEventChanged PlanChanged StackChanged" refresh-action="vm.get(data)" refresh-throttle="10000">
+<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="StackChanged" refresh-action="vm.get(data)" refresh-throttle="1000">
   <div class="wrapper-md" refresh-on="filterChanged" refresh-action="vm.get()">
-    <div class="row">
+    <div class="row" refresh-on="PersistentEventChanged PlanChanged" refresh-action="vm.get(data)" refresh-throttle="10000">
       <div class="col-sm-12">
         <div class="row row-sm text-center">
           <div class="col-xs-4">
