@@ -2,13 +2,13 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', '$ExceptionlessClient', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'projectService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'SYSTEM_NOTIFICATION_MESSAGE', 'urlService', 'userService', function ($scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, projectService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, SYSTEM_NOTIFICATION_MESSAGE, urlService, userService) {
+    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', '$ExceptionlessClient', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'organizationService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'SYSTEM_NOTIFICATION_MESSAGE', 'urlService', 'userService', function ($scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, SYSTEM_NOTIFICATION_MESSAGE, urlService, userService) {
       var source = 'app.App';
       var _store = locker.driver('local').namespace('app');
       var vm = this;
 
       function canChangePlan() {
-        return !!STRIPE_PUBLISHABLE_KEY && vm.projects && vm.projects.length > 0;
+        return !!STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
       }
 
       function changePlan(organizationId) {
@@ -31,13 +31,13 @@
         return urlService.buildFilterUrl({ route: 'new', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
       }
 
-      function getProjects() {
+      function getOrganizations() {
         function onSuccess(response) {
-          vm.projects = response.data.plain();
+          vm.organizations = response.data.plain();
           return response;
         }
 
-        return projectService.getAll().then(onSuccess);
+        return organizationService.getAll().then(onSuccess);
       }
 
       function getUser(data) {
@@ -155,7 +155,7 @@
       vm.getRecentUrl = getRecentUrl;
       vm.getFrequentUrl = getFrequentUrl;
       vm.getNewUrl = getNewUrl;
-      vm.getProjects = getProjects;
+      vm.getOrganizations = getOrganizations;
       vm.getUser = getUser;
       vm.getSystemNotificationMessage = getSystemNotificationMessage;
       vm.hasAdminRole = hasAdminRole;
@@ -165,11 +165,11 @@
       vm.isIntercomEnabled = isIntercomEnabled;
       vm.isSideNavCollapsed = _store.get('sideNavCollapsed') === true;
       vm.isTypeMenuActive = isTypeMenuActive;
-      vm.projects = [];
+      vm.organizations = [];
       vm.showIntercom = showIntercom;
       vm.toggleSideNavCollapsed = toggleSideNavCollapsed;
       vm.user = {};
 
-      getUser().then(getProjects).then(startSignalR);
+      getUser().then(getOrganizations).then(startSignalR);
     }]);
 }());
