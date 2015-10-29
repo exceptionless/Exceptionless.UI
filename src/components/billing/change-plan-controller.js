@@ -2,9 +2,10 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', '$ExceptionlessClient', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', 'data', function ($modalInstance, adminService, Common, $ExceptionlessClient, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, organizationId) {
+    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', '$ExceptionlessClient', '$intercom', 'INTERCOM_APPID', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', '$window', 'data', function ($modalInstance, adminService, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, organizationId) {
       var source = 'exceptionless.billing.ChangePlanDialog';
       var contactSupport = 'Please contact support for more information.';
+      var freePlanId = 'EX_FREE';
 
       var vm = this;
       function cancel() {
@@ -82,12 +83,12 @@
         }
 
         vm.paymentMessage = null;
-        if (vm.currentOrganization.plan_id === 'EX_FREE' && vm.currentPlan.id === 'EX_FREE') {
+        if (vm.currentOrganization.plan_id === freePlanId && vm.currentPlan.id === freePlanId) {
           cancel();
           return;
         }
 
-        if (hasAdminRole() || vm.currentPlan.id === 'EX_FREE') {
+        if (hasAdminRole() || vm.currentPlan.id === freePlanId) {
           return changePlan(hasAdminRole()).then(onSuccess, onFailure);
         }
 
@@ -232,12 +233,25 @@
         return !!STRIPE_PUBLISHABLE_KEY;
       }
 
+      function isCancellingPlan() {
+        return vm.currentPlan && vm.currentPlan.id === freePlanId && vm.currentOrganization.plan_id !== freePlanId;
+      }
+
       function isNewCard() {
         return vm.card && vm.card.mode === 'new';
       }
 
       function isPaidPlan() {
         return vm.currentPlan && vm.currentPlan.price !== 0;
+      }
+
+      function showIntercom() {
+        $ExceptionlessClient.submitFeatureUsage(source + '.showIntercom');
+        if (INTERCOM_APPID) {
+          $intercom.showNewMessage();
+        } else {
+          $window.open('http://exceptionless.com/contact/', '_blank');
+        }
       }
 
       vm.cancel = cancel;
@@ -250,12 +264,14 @@
       vm.hasAdminRole = hasAdminRole;
       vm.hasExistingCard = hasExistingCard;
       vm.isBillingEnabled = isBillingEnabled;
+      vm.isCancellingPlan = isCancellingPlan;
       vm.isNewCard = isNewCard;
       vm.isPaidPlan = isPaidPlan;
       vm.organizations = [];
       vm.paymentMessage = !isBillingEnabled() ? 'Billing is currently disabled.' : null;
       vm.plans = [];
       vm.save = save;
+      vm.showIntercom = showIntercom;
       vm.stripe = {};
 
       $ExceptionlessClient.submitFeatureUsage(source);
