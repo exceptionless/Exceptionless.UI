@@ -43,15 +43,29 @@
 
       function getProjectTypes() {
         return [
-          { key: 'Exceptionless', name: 'Console and Service applications', config: 'app.config' },
-          { key: 'Exceptionless.Portable', name: 'Portable Class Library' },
-          { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config' },
-          { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config' },
-          { key: 'Exceptionless.Web', name: 'ASP.NET Web Forms', config: 'web.config' },
-          { key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config' },
-          { key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config' },
-          { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config' }
+          { key: 'Exceptionless', name: 'Console and Service applications', config: 'app.config', platform: '.NET' },
+          { key: 'Exceptionless.Portable', name: 'Portable Class Library', platform: '.NET' },
+          { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config', platform: '.NET' },
+          { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config', platform: '.NET' },
+          { key: 'Exceptionless.Web', name: 'ASP.NET Web Forms', config: 'web.config', platform: '.NET' },
+          { key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config', platform: '.NET' },
+          { key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config', platform: '.NET' },
+          { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config', platform: '.NET' },
+          { key: 'Exceptionless.JavaScript', name: 'Browser applications', platform: 'JavaScript' },
+          { key: 'Exceptionless.Node', name: 'Node.js', platform: 'JavaScript' }
         ];
+      }
+
+      function isDotNet() {
+       return vm.currentProjectType.platform === '.NET';
+      }
+
+      function isJavaScript() {
+        return vm.currentProjectType.platform === 'JavaScript';
+      }
+
+      function isNode() {
+        return vm.currentProjectType.key === 'Exceptionless.Node';
       }
 
       function navigateToDashboard() {
@@ -63,6 +77,9 @@
       vm.canRedirect = canRedirect;
       vm.copied = copied;
       vm.currentProjectType = {};
+      vm.isDotNet = isDotNet;
+      vm.isJavaScript = isJavaScript;
+      vm.isNode = isNode;
       vm.navigateToDashboard = navigateToDashboard;
       vm.project = {};
       vm.projectTypes = getProjectTypes();
