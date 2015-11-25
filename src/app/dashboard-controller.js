@@ -95,9 +95,8 @@
           },
           range: {
             onSelection: function (position) {
-              var start = moment.unix(position.coordMinX).utc();
-              var end = moment.unix(position.coordMaxX).utc();
-
+              var start = moment.unix(position.coordMinX).utc().local();
+              var end = moment.unix(position.coordMaxX).utc().local();
               filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
               $ExceptionlessClient.createFeatureUsage(source + '.chart.range.onSelection')
                 .setProperty('start', start)
