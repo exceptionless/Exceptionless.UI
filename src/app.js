@@ -63,10 +63,14 @@
     'app.status'
   ])
   .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'gravatarServiceProvider', 'RestangularProvider', 'BASE_URL', 'EXCEPTIONLESS_API_KEY', '$ExceptionlessClient', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, $ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
-    $ExceptionlessClient.config.apiKey = EXCEPTIONLESS_API_KEY;
-    $ExceptionlessClient.config.serverUrl = BASE_URL;
-    $ExceptionlessClient.config.setVersion('@@version');
-    $ExceptionlessClient.config.defaultTags.push('UI');
+    if (EXCEPTIONLESS_API_KEY) {
+      var config = $ExceptionlessClient.config;
+      config.apiKey = EXCEPTIONLESS_API_KEY;
+      config.serverUrl = BASE_URL;
+      config.setVersion('@@version');
+      config.defaultTags.push('UI');
+      config.useReferenceIds();
+    }
 
     $locationProvider.html5Mode({
       enabled: (typeof USE_HTML5_MODE === 'boolean' && USE_HTML5_MODE) || USE_HTML5_MODE === 'true',

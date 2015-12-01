@@ -10,6 +10,7 @@
     'exceptionless',
     'exceptionless.error',
     'exceptionless.event',
+    'exceptionless.events',
     'exceptionless.organization-notifications',
     'exceptionless.link',
     'exceptionless.notification',
@@ -26,6 +27,13 @@
         controller: 'Event',
         controllerAs: 'vm',
         templateUrl: 'app/event/event.tpl.html'
+      });
+
+      $stateProvider.state('app.event-reference', {
+        url: '/event/by-ref/{referenceId:.{8,100}}',
+        controller: 'Reference',
+        controllerAs: 'vm',
+        templateUrl: 'app/event/reference.tpl.html'
       });
     }]);
 }());

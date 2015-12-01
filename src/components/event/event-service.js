@@ -16,6 +16,10 @@
       return Restangular.one('events', id).get(optionsCallback(filterService.apply(options)));
     }
 
+    function getByReferenceId(id, options) {
+      return Restangular.one('events', 'by-ref').all(id).getList(filterService.apply(options));
+    }
+
     function getByStackId(id, options) {
       return Restangular.one('stacks', id).all('events').getList(filterService.apply(options));
     }
@@ -35,6 +39,7 @@
     var service = {
       getAll: getAll,
       getById: getById,
+      getByReferenceId: getByReferenceId,
       getByStackId: getByStackId,
       markCritical: markCritical,
       markNotCritical: markNotCritical,

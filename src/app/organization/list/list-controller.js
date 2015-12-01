@@ -4,7 +4,7 @@
   angular.module('app.organization')
     .controller('organization.List', ['$ExceptionlessClient', '$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'linkService', 'notificationService', 'organizationService', 'paginationService', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, linkService, notificationService, organizationService, paginationService) {
       var source = 'exceptionless.organization.List';
-      var settings = {limit: 10, mode: 'stats'};
+      var settings = { mode: 'stats' };
       var vm = this;
 
       function add() {

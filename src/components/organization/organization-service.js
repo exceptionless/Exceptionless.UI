@@ -34,10 +34,10 @@
 
       function getAll(options, useCache) {
         if (useCache === undefined || useCache) {
-          return _cachedRestangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
+          return _cachedRestangular.all('organizations').getList(options || {});
         }
 
-        return Restangular.all('organizations').getList(angular.extend({}, { limit: 100 }, options));
+        return Restangular.all('organizations').getList(options || {});
       }
 
       function getById(id, useCache) {

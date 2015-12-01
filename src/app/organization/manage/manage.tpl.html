@@ -6,8 +6,8 @@
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-th-list"></i> Manage {{ vm.organization.name ? 'Organization "' + vm.organization.name + '"' : 'Organization'}}</div>
         <div class="panel-body m-b-n">
-          <tabset class="tab-container">
-            <tab heading="General">
+          <uib-tabset class="tab-container">
+            <uib-tab heading="General">
               <form name="vm.organizationForm" role="form" class="form-validation">
                 <div class="form-group m-b-none">
                   <label for="name">Organization Name</label>
@@ -30,22 +30,22 @@
                   </div>
                 </div>
               </form>
-            </tab>
-            <tab heading="Projects" active="vm.tabProjectsActive">
+            </uib-tab>
+            <uib-tab heading="Projects" active="vm.tabProjectsActive">
               <projects settings="vm.projects"></projects>
 
               <a ui-sref="app.project.add" class="btn btn-primary" role="button">Add New Project</a>
-            </tab>
-            <tab heading="Users" active="vm.tabUsersActive">
+            </uib-tab>
+            <uib-tab heading="Users" active="vm.tabUsersActive">
               <users settings="vm.users"></users>
 
               <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">Invite User</button>
-            </tab>
-            <tab heading="Billing" active="vm.tabBillingActive">
+            </uib-tab>
+            <uib-tab heading="Billing" active="vm.tabBillingActive">
               <p>You are currently on the <strong>{{vm.organization.plan_name}}</strong> plan. <a ng-if="vm.canChangePlan()" ng-click="vm.changePlan()">Change your plan or billing information.</a></p>
               <invoices settings="vm.invoices"></invoices>
-            </tab>
-          </tabset>
+            </uib-tab>
+          </uib-tabset>
         </div>
         <footer class="panel-footer">
           <div class="pull-right">
