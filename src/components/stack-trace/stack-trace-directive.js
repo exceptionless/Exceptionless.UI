@@ -7,7 +7,7 @@
     'exceptionless',
     'exceptionless.error'
   ])
-  .directive('stackTrace', ['$ExceptionlessClient', '$sanitize', 'errorService', function ($ExceptionlessClient, $sanitize, errorService) {
+  .directive('stackTrace', ['$ExceptionlessClient', '$sanitize', '$sce', 'errorService', function ($ExceptionlessClient, $sanitize, $sce, errorService) {
     function buildParameter(parameter) {
       var result = '';
 
@@ -159,10 +159,11 @@
       scope: {
         exception: "="
       },
-      template: '<pre class="stack-trace" bind-html-unsafe="vm.stackTrace"></pre>',
+      template: '<pre class="stack-trace" ng-bind-html="vm.stackTrace"></pre>',
       controller: [function () {
         var vm = this;
-        vm.stackTrace = buildStackTrace(errorService.getExceptions(vm.exception));
+        vm.stackTrace = $sce.trustAsHtml(buildStackTrace(errorService.getExceptions(vm.exception)));
+        console.log(vm.stackTrace);
       }],
       controllerAs: 'vm'
     };

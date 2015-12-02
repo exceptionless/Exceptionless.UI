@@ -7,7 +7,7 @@
     'exceptionless',
     'exceptionless.simple-error'
   ])
-    .directive('simpleStackTrace', ['$ExceptionlessClient', '$sanitize', 'simpleErrorService', function ($ExceptionlessClient, $sanitize, simpleErrorService) {
+    .directive('simpleStackTrace', ['$ExceptionlessClient', '$sanitize', '$sce', 'simpleErrorService', function ($ExceptionlessClient, $sanitize, $sce, simpleErrorService) {
       function buildStackFrames(exceptions) {
         var frames = '';
         for (var index = 0; index < exceptions.length; index++) {
@@ -73,10 +73,10 @@
         scope: {
           exception: "="
         },
-        template: '<pre class="stack-trace" bind-html-unsafe="vm.stackTrace"></pre>',
+        template: '<pre class="stack-trace" ng-bind-html="vm.stackTrace"></pre>',
         controller: [function () {
           var vm = this;
-          vm.stackTrace = buildStackTrace(simpleErrorService.getExceptions(vm.exception));
+          vm.stackTrace = $sce.trustAsHtml(buildStackTrace(simpleErrorService.getExceptions(vm.exception)));
         }],
         controllerAs: 'vm'
       };
