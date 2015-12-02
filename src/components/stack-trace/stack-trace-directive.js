@@ -163,7 +163,6 @@
       controller: [function () {
         var vm = this;
         vm.stackTrace = $sce.trustAsHtml(buildStackTrace(errorService.getExceptions(vm.exception)));
-        console.log(vm.stackTrace);
       }],
       controllerAs: 'vm'
     };
