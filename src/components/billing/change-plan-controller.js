@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$modalInstance', 'adminService', 'Common', '$ExceptionlessClient', '$intercom', 'INTERCOM_APPID', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', '$window', 'data', function ($modalInstance, adminService, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, organizationId) {
+    .controller('ChangePlanDialog', ['$uibModalInstance', 'adminService', 'Common', '$ExceptionlessClient', '$intercom', 'INTERCOM_APPID', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', '$window', 'data', function ($uibModalInstance, adminService, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, organizationId) {
       var source = 'exceptionless.billing.ChangePlanDialog';
       var contactSupport = 'Please contact support for more information.';
       var freePlanId = 'EX_FREE';
@@ -15,7 +15,7 @@
           .setProperty('IsNewCard', isNewCard())
           .submit();
 
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
       }
 
       function createStripeToken() {
@@ -58,7 +58,7 @@
             .setProperty('IsNewCard', isNewCard())
             .submit();
 
-          $modalInstance.close(vm.currentPlan);
+          $uibModalInstance.close(vm.currentPlan);
           notificationService.success('Thanks! Your billing plan has been successfully changed.');
         }
 

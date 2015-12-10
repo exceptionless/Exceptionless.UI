@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('AddOrganizationDialog', ['$ExceptionlessClient', '$modalInstance', '$timeout', function ($ExceptionlessClient, $modalInstance, $timeout) {
+    .controller('AddOrganizationDialog', ['$ExceptionlessClient', '$uibModalInstance', '$timeout', function ($ExceptionlessClient, $uibModalInstance, $timeout) {
       var source = 'app.organization.AddOrganizationDialog';
       var _canSave = true;
       var vm = this;
 
       function cancel() {
         $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
       }
 
       function save(isRetrying) {
@@ -36,7 +36,7 @@
         }
 
         $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('name', vm.data.name).submit();
-        $modalInstance.close(vm.data.name);
+        $uibModalInstance.close(vm.data.name);
       }
 
       vm.addOrganizationForm = {};

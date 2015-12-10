@@ -2,13 +2,13 @@
   'use strict';
 
   angular.module('exceptionless.web-hook')
-    .controller('AddWebHookDialog', ['$ExceptionlessClient', '$modalInstance', function ($ExceptionlessClient, $modalInstance) {
+    .controller('AddWebHookDialog', ['$ExceptionlessClient', '$uibModalInstance', function ($ExceptionlessClient, $uibModalInstance) {
       var source = 'exceptionless.web-hook.AddWebHookDialog';
       var vm = this;
 
       function cancel() {
         $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
       }
 
       function getEventTypes() {
@@ -56,7 +56,7 @@
         }
 
         $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('WebHook', vm.data).submit();
-        $modalInstance.close(vm.data);
+        $uibModalInstance.close(vm.data);
       }
 
       vm.addWebHookForm = {};
