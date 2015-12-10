@@ -2,13 +2,13 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('AddUserDialog', ['$ExceptionlessClient', '$modalInstance', function ($ExceptionlessClient, $modalInstance) {
+    .controller('AddUserDialog', ['$ExceptionlessClient', '$uibModalInstance', function ($ExceptionlessClient, $uibModalInstance) {
       var source = 'app.organization.AddUserDialog';
       var vm = this;
 
       function cancel() {
         $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
       }
 
       function save(isValid) {
@@ -17,7 +17,7 @@
         }
 
         $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('email', vm.data.email).submit();
-        $modalInstance.close(vm.data.email);
+        $uibModalInstance.close(vm.data.email);
       }
 
       vm.cancel = cancel;

@@ -2,13 +2,13 @@
   'use strict';
 
   angular.module('exceptionless.dialog')
-    .controller('confirmDialog', ['$modalInstance', '$translate', 'data', function ($modalInstance, $translate, data) {
+    .controller('confirmDialog', ['$uibModalInstance', '$translate', 'data', function ($uibModalInstance, $translate, data) {
       function cancel() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
       }
 
       function confirm() {
-        $modalInstance.close('confirm');
+        $uibModalInstance.close('confirm');
       }
 
       var vm = this;
