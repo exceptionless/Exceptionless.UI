@@ -10,7 +10,10 @@
     <tbody>
       <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.hasEvents()">
         <td ng-click="vm.open(event.session_id, $event)">
-          <summary source="event" show-type="vm.showType"></summary>
+          <div>
+            <span ng-if="!event.data.session_end" class="glyphicon glyphicon-one-fine-dot glyphicon-green"></span>
+            <summary source="event" show-type="vm.showType"></summary>
+          </div>
         </td>
         <td ng-click="vm.open(event.session_id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
           <timeago date="event.date"></timeago>
