@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  angular.module('exceptionless.events')
-    .directive('events', function (linkService) {
+  angular.module('app.session')
+    .directive('sessions', function (linkService) {
       return {
         bindToController: true,
         restrict: 'E',
@@ -10,10 +10,10 @@
         scope: {
           settings: '='
         },
-        templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, linkService, filterService, notificationService, paginationService) {
+        templateUrl: 'app/session/sessions-directive.tpl.html',
+        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService) {
           var vm = this;
-          var source = vm.settings.source + '.events';
+          var source = vm.settings.source + '.sessions';
 
           function canRefresh(data) {
             if (!!data && data.type === 'PersistentEvent') {
@@ -66,12 +66,12 @@
             return vm.selectedIds.length > 0;
           }
 
-          function open(id, event) {
-            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
+          function open(session_id, event) {
+            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', session_id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
             if (event.ctrlKey || event.which === 2) {
-              $window.open($state.href('app.event', { id: id }, { absolute: true }), '_blank');
+              $window.open($state.href('app.session.manage', { id: session_id }, { absolute: true }), '_blank');
             } else {
-              $state.go('app.event', { id: id });
+              $state.go('app.session.manage', { id: session_id });
             }
 
             event.preventDefault();
@@ -111,7 +111,6 @@
               });
           }
 
-          vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
           vm.canRefresh = canRefresh;
           vm.get = get;
           vm.hasEvents = hasEvents;

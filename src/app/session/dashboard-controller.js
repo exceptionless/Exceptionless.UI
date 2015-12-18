@@ -1,18 +1,10 @@
 (function () {
   'use strict';
 
-  angular.module('app')
-    .controller('app.Dashboard', ['$ExceptionlessClient', '$filter', '$stateParams', 'eventService', 'filterService', 'notificationService', 'stackService', 'statService', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, stackService, statService) {
-      var source = 'app.Dashboard';
+  angular.module('app.session')
+    .controller('session.Dashboard', ['$ExceptionlessClient', 'eventService', '$filter', 'filterService', 'notificationService', 'statService', 'userService', function ($ExceptionlessClient, eventService, $filter, filterService, notificationService, statService, userService) {
+      var source = 'app.session.Dashboard';
       var vm = this;
-
-      function canRefresh(data) {
-        if (!data || data.type !== 'PersistentEvent') {
-          return true;
-        }
-
-        return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
-      }
 
       function get() {
         function onSuccess(response) {
@@ -38,25 +30,20 @@
         return statService.get(options).then(onSuccess, onFailure);
       }
 
-      vm.canRefresh = canRefresh;
       vm.chart = {
         options: {
           renderer: 'stack',
           stroke: true,
-          padding: {
-            top: 0.085
-          },
-          series: [
-            {
-              name: 'Unique',
-              color: 'rgba(60, 116, 0, .9)',
-              stroke: 'rgba(0, 0, 0, 0.15)'
-            }, {
-              name: 'Total',
-              color: 'rgba(124, 194, 49, .9)',
-              stroke: 'rgba(0, 0, 0, 0.15)'
-            }
-          ]
+          padding: {top: 0.085},
+          series: [{
+            name: 'Users',
+            color: 'rgba(60, 116, 0, .9)',
+            stroke: 'rgba(0, 0, 0, 0.15)'
+          }, {
+            name: 'Sessions',
+            color: 'rgba(124, 194, 49, .9)',
+            stroke: 'rgba(0, 0, 0, 0.15)'
+          }]
         },
         features: {
           hover: {
@@ -68,7 +55,7 @@
                 return a.order - b.order;
               }).forEach(function (d) {
                 var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                content += swatch + $filter('number')(d.name === 'Total' ? d.value.data.total : d.value.data.unique) + ' ' + d.series.name + ' <br />';
+                content += swatch + $filter('number')(d.value.data.total) + ' ' + d.series.name + ' <br />';
               }, this);
 
               var xLabel = document.createElement('div');
@@ -97,6 +84,7 @@
             onSelection: function (position) {
               var start = moment.unix(position.coordMinX).utc().local();
               var end = moment.unix(position.coordMaxX).utc().local();
+
               filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
               $ExceptionlessClient.createFeatureUsage(source + '.chart.range.onSelection')
                 .setProperty('start', start)
@@ -113,20 +101,23 @@
           }
         }
       };
-      vm.get = get;
 
-      vm.mostFrequent = {
-        get: stackService.getFrequent,
+      vm.get = get;
+      vm.recentSessions = {
+        get: function (options) {
+          return eventService.getAll(options);
+        },
         options: {
           limit: 10,
           mode: 'summary'
         },
-        source: source + '.Frequent'
+        source: source + '.Recent',
+        hideActions: true
       };
-
-      vm.mostRecent = {
-        header: 'Most Recent',
-        get: eventService.getAll,
+      vm.recentUsers = {
+        get: function (options) {
+          return userService.getAll();
+        },
         options: {
           limit: 10,
           mode: 'summary'
@@ -134,9 +125,7 @@
         source: source + '.Recent'
       };
       vm.stats = {};
-      vm.type = $stateParams.type;
 
       get();
-    }
-    ]);
+    }]);
 }());

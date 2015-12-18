@@ -59,6 +59,7 @@
     'app.organization',
     'app.payment',
     'app.project',
+    'app.session',
     'app.stack',
     'app.status'
   ])

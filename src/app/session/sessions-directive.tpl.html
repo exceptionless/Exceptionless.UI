@@ -2,28 +2,25 @@
   <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable" refresh-on="StackChanged PlanChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <thead refresh-on="PersistentEventChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <tr>
-      <th class="selection hidden-xs" ng-if="vm.actions.length > 0">
-        <label class="i-checks m-b-none">
-          <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.hasSelection()" ng-disabled="!vm.hasEvents()"><i></i>
-        </label>
-      </th>
       <th>Summary</th>
       <th class="date">Date</th>
+      <th class="date">Duration</th>
     </tr>
     </thead>
     <tbody>
       <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.hasEvents()">
-        <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="event.id"><i></i></label></td>
-        <td ng-click="vm.open(event.id, $event)">
+        <td ng-click="vm.open(event.session_id, $event)">
           <summary source="event" show-type="vm.showType"></summary>
         </td>
-        <td ng-click="vm.open(event.id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
+        <td ng-click="vm.open(event.session_id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
           <timeago date="event.date"></timeago>
+        </abbr></td>
+        <td ng-click="vm.open(event.session_id, $event)"><abbr title="{{event.data.value || 0}} seconds">
+          <duration value="event.data.value"></duration>
         </abbr></td>
       </tr>
       <tr ng-if="!vm.hasEvents()">
-        <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
-        <td colspan="2">
+        <td colspan="3">
           <strong>No data found.</strong>
         </td>
       </tr>
@@ -32,17 +29,7 @@
 
   <div class="table-footer">
     <div class="row">
-      <div class="col-xs-4 hidden-xs">
-        <div class="dropdown" ng-if="vm.actions.length > 0">
-          <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Bulk Action
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
-            <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name}}</a></li>
-          </ul>
-        </div>
-      </div>
+      <div class="col-xs-4 hidden-xs"/>
       <div class="col-sm-4 text-center" ng-class="vm.previous || vm.next ? 'col-xs-8': 'col-xs-12'" ng-if="vm.pageSummary">
         <small class="text-muted inline m-t-xs">{{vm.pageSummary}}</small>
       </div>

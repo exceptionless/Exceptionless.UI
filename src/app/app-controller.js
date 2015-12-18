@@ -19,6 +19,10 @@
         return urlService.buildFilterUrl({ route: 'dashboard', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
       }
 
+      function getSessionDashboardUrl() {
+        return urlService.buildFilterUrl({ route: 'dashboard', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() });
+      }
+
       function getRecentUrl(type) {
         return urlService.buildFilterUrl({ route: 'recent', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
       }
@@ -89,6 +93,12 @@
           $state.includes('app.admin.dashboard', $stateParams);
       }
 
+      function isSessionMenuActive() {
+        return $state.includes('app.session-dashboard', $stateParams) ||
+          $state.includes('app.session-project-dashboard', $stateParams) ||
+          $state.includes('app.session-organization-dashboard', $stateParams);
+      }
+
       function isIntercomEnabled() {
         return authService.isAuthenticated() && INTERCOM_APPID;
       }
@@ -152,6 +162,7 @@
       vm.canChangePlan = canChangePlan;
       vm.changePlan = changePlan;
       vm.getDashboardUrl = getDashboardUrl;
+      vm.getSessionDashboardUrl = getSessionDashboardUrl;
       vm.getRecentUrl = getRecentUrl;
       vm.getFrequentUrl = getFrequentUrl;
       vm.getNewUrl = getNewUrl;
@@ -162,6 +173,7 @@
       vm.hasSystemNotificationMessage = hasSystemNotificationMessage;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
+      vm.isSessionMenuActive = isSessionMenuActive;
       vm.isIntercomEnabled = isIntercomEnabled;
       vm.isSideNavCollapsed = _store.get('sideNavCollapsed') === true;
       vm.isTypeMenuActive = isTypeMenuActive;

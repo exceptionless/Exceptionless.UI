@@ -22,6 +22,10 @@
         }
 
         function getAllProjectsUrl() {
+          if ($state.current.name.contains('session-')) {
+            return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session' });
+          }
+
           return urlService.buildFilterUrl({ route: getStateName(), type: $stateParams.type });
         }
 
@@ -64,6 +68,10 @@
         }
 
         function getOrganizationUrl(organization) {
+          if ($state.current.name.contains('session-')) {
+            return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', organizationId: organization.id });
+          }
+
           return urlService.buildFilterUrl({ route: getStateName(), organizationId: organization.id, type: $stateParams.type });
         }
 
@@ -90,6 +98,10 @@
         }
 
         function getProjectUrl(project) {
+          if ($state.current.name.contains('session-')) {
+            return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', projectId: project.id });
+          }
+
           return urlService.buildFilterUrl({ route: getStateName(), projectId: project.id, type: $stateParams.type });
         }
 

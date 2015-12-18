@@ -1,0 +1,31 @@
+(function () {
+  'use strict';
+
+  angular.module('exceptionless.duration', [])
+    .directive('duration', ['$interval', function ($interval) {
+      return {
+        restrict: 'AE',
+        scope: {
+          value: '=',
+          period: '='
+        },
+        link: function (scope, element) {
+          function setDurationText() {
+            var duration = moment.duration(scope.value || 0, scope.period || 'seconds');
+            element.text(duration.humanize());
+          }
+
+          setDurationText();
+          scope.$watch('value', function(value) {
+            setDurationText();
+          });
+
+          // TODO: implement smarter delay logic. We shouldn't be updating stuff it the interval period is a hour, day, month, year..
+          var interval = $interval(setDurationText, 60 * 1000);
+          scope.$on('$destroy', function () {
+            $interval.cancel(interval);
+          });
+        }
+      };
+    }]);
+}());
