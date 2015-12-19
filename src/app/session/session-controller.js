@@ -95,12 +95,12 @@
       };
 
       vm.get = get;
-      vm.sessionOccurrences = {
+      vm.sessionEvents = {
         get: function (options) {
           return eventService.getBySessionId(_sessionId, options);
         },
         summary: {
-          showType: false
+          showType: true
         },
         options: {
           limit: 10,

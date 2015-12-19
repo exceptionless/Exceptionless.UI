@@ -121,7 +121,7 @@
           vm.previousPage = previousPage;
           vm.save = save;
           vm.selectedIds = [];
-          vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
+          vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
           vm.updateSelection = updateSelection;
           get();
         }],
