@@ -72,17 +72,10 @@
       });
 
       $stateProvider.state('app.session.manage', {
-        url: '/{id:[0-9a-fA-F\-]{8-100}}',
+        url: '/{id:[0-9a-fA-F\-]{8,100}}',
         controller: 'session.Manage',
         controllerAs: 'vm',
-        templateUrl: 'app/session/manage.tpl.html'
-      });
-
-      $stateProvider.state('app.session.list', {
-        url: '/list',
-        controller: 'session.List',
-        controllerAs: 'vm',
-        templateUrl: 'app/session/list.tpl.html'
+        templateUrl: 'app/session/session.tpl.html'
       });
     }]);
 }());

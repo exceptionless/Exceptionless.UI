@@ -1,0 +1,66 @@
+<organization-notifications organization-id="vm.stack.organization_id"></organization-notifications>
+
+<div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="PersistentEventChanged PlanChanged" refresh-action="vm.get(data)" refresh-throttle="1000">
+  <div class="wrapper-md" refresh-on="filterChanged" refresh-action="vm.get()">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row row-sm text-center">
+          <div class="col-xs-4">
+            <div class="dashboard-block">
+              <div class="rotate">
+                <i class="fa fa-calendar fa-4x"></i>
+              </div>
+              <div class="details">
+                <span class="title">Total</span>
+                <span class="sub">{{vm.stats.total || 0 | number : 0}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="dashboard-block">
+              <div class="rotate">
+                <i class="fa fa-arrow-circle-left fa-4x"></i>
+              </div>
+              <div class="details">
+                <span class="title">First</span>
+                <span class="sub visible-md visible-lg"><timeago date="vm.stats.first_occurrence"></timeago></span>
+                <span class="sub visible-sm">
+                  <span ng-if="vm.isValidDate(vm.stats.first_occurrence)">{{vm.stats.first_occurrence | date:'shortDate' }}</span>
+                  <span ng-if="!vm.isValidDate(vm.stats.first_occurrence)">never</span>
+                </span>
+                <span class="sub visible-xs">
+                  <span ng-if="vm.isValidDate(vm.stats.first_occurrence)">{{vm.stats.first_occurrence | date:'M/d' }}</span>
+                  <span ng-if="!vm.isValidDate(vm.stats.first_occurrence)">NA</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="dashboard-block">
+              <div class="rotate">
+                <i class="fa fa-arrow-circle-right  fa-4x"></i>
+              </div>
+              <div class="details">
+                <span class="title">Last</span>
+                <span class="sub visible-md visible-lg"><timeago date="vm.stats.last_occurrence"></timeago></span>
+                <span class="sub visible-sm">
+                  <span ng-if="vm.isValidDate(vm.stats.last_occurrence)">{{vm.stats.last_occurrence | date:'shortDate' }}</span>
+                  <span ng-if="!vm.isValidDate(vm.stats.last_occurrence)">never</span>
+                </span>
+                <span class="sub visible-xs">
+                  <span ng-if="vm.isValidDate(vm.stats.last_occurrence)">{{vm.stats.last_occurrence | date:'M/d' }}</span>
+                  <span ng-if="!vm.isValidDate(vm.stats.last_occurrence)">NA</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><i class="fa fa-fw fa-calendar"></i> Session Occurrences</div>
+      <events settings="vm.sessionOccurrences"></events>
+    </div>
+  </div>
+</div>

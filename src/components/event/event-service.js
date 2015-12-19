@@ -20,6 +20,10 @@
       return Restangular.one('events', 'by-ref').all(id).getList(filterService.apply(options));
     }
 
+    function getBySessionId(id, options) {
+      return Restangular.one('events', 'by-session').all(id).getList(filterService.apply(options));
+    }
+
     function getByStackId(id, options) {
       return Restangular.one('stacks', id).all('events').getList(filterService.apply(options));
     }
@@ -40,6 +44,7 @@
       getAll: getAll,
       getById: getById,
       getByReferenceId: getByReferenceId,
+      getBySessionId: getBySessionId,
       getByStackId: getByStackId,
       markCritical: markCritical,
       markNotCritical: markNotCritical,
