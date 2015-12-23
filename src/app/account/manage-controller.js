@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', ['$stateParams', '$timeout', 'authService', 'billingService', 'FACEBOOK_APPID', 'featureService', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'userService', function ($stateParams, $timeout, authService, billingService, FACEBOOK_APPID, featureService, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
+    .controller('account.Manage', ['$stateParams', '$timeout', 'authService', 'billingService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'userService', function ($stateParams, $timeout, authService, billingService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
       var _canSaveEmailAddress = true;
       var vm = this;
 
@@ -132,7 +132,7 @@
       }
 
       function hasPremiumFeatures() {
-        return featureService.hasPremium();
+        return vm.currentProject && vm.currentProject.has_premium_features;
       }
 
       function hasProjects() {
