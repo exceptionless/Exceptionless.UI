@@ -14,7 +14,6 @@
     'exceptionless.dialog',
     'exceptionless.event',
     'exceptionless.events',
-    'exceptionless.feature',
     'exceptionless.filter',
     'exceptionless.organization-notifications',
     'exceptionless.promise-button',

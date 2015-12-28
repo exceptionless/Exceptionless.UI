@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, projectService, stackService, statService) {
+    .controller('Stack', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackService, statService) {
       var source = 'app.stack.Stack';
       var _stackId = $stateParams.id;
       var vm = this;
@@ -141,7 +141,7 @@
 
       function promoteToExternal() {
         $ExceptionlessClient.createFeatureUsage(source + '.promoteToExternal').setProperty('id', _stackId).submit();
-        if (!featureService.hasPremium()) {
+        if (vm.project && !vm.project.has_premium_features) {
           var message = 'Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.';
           return billingService.confirmUpgradePlan(message, vm.stack.organization_id).then(function () {
             return promoteToExternal();

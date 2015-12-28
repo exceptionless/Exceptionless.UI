@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'featureService', 'dialogs', 'STRIPE_PUBLISHABLE_KEY', function ($state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, featureService, dialogs, STRIPE_PUBLISHABLE_KEY) {
+    .controller('organization.Manage', ['$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'dialogs', 'STRIPE_PUBLISHABLE_KEY', function ($state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, dialogs, STRIPE_PUBLISHABLE_KEY) {
       var _ignoreRefresh = false;
       var _organizationId = $stateParams.id;
       var vm = this;
@@ -76,7 +76,7 @@
       }
 
       function hasPremiumFeatures() {
-        return featureService.hasPremium();
+        return vm.organization && vm.organization.has_premium_features;
       }
 
       function leaveOrganization(currentUser){

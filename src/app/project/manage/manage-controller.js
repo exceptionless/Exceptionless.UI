@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Manage', ['$state', '$stateParams', 'billingService', 'projectService', 'tokenService', 'webHookService', 'notificationService', 'featureService', 'dialogs', 'dialogService', function ($state, $stateParams, billingService, projectService, tokenService, webHookService, notificationService, featureService, dialogs, dialogService) {
+    .controller('project.Manage', ['$state', '$stateParams', 'billingService', 'projectService', 'tokenService', 'webHookService', 'notificationService', 'dialogs', 'dialogService', function ($state, $stateParams, billingService, projectService, tokenService, webHookService, notificationService, dialogs, dialogService) {
       var _ignoreRefresh = false;
       var _projectId = $stateParams.id;
       var vm = this;
@@ -127,7 +127,7 @@
       }
 
       function hasPremiumFeatures() {
-        return featureService.hasPremium();
+        return vm.project && vm.project.has_premium_features;
       }
 
       function hasTokens() {
