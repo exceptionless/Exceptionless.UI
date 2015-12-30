@@ -14,11 +14,7 @@
           }
 
           vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.unique, data: item};
-          });
-
-          vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
+            return {x: moment.utc(item.date).unix(), y: item.sessions, data: item};
           });
         }
 
@@ -27,7 +23,7 @@
         }
 
         var options = {};
-        return statService.get(options).then(onSuccess, onFailure);
+        return statService.getSessions(options).then(onSuccess, onFailure);
       }
 
       vm.chart = {
@@ -36,10 +32,6 @@
           stroke: true,
           padding: {top: 0.085},
           series: [{
-            name: 'Users',
-            color: 'rgba(60, 116, 0, .9)',
-            stroke: 'rgba(0, 0, 0, 0.15)'
-          }, {
             name: 'Sessions',
             color: 'rgba(124, 194, 49, .9)',
             stroke: 'rgba(0, 0, 0, 0.15)'
@@ -55,7 +47,7 @@
                 return a.order - b.order;
               }).forEach(function (d) {
                 var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                content += swatch + $filter('number')(d.value.data.total) + ' ' + d.series.name + ' <br />';
+                content += swatch + $filter('number')(d.value.data.sessions) + ' ' + d.series.name + ' <br />';
               }, this);
 
               var xLabel = document.createElement('div');
@@ -105,7 +97,7 @@
       vm.get = get;
       vm.recentSessions = {
         get: function (options) {
-          return eventService.getAll(options);
+          return eventService.getAllSessions(options);
         },
         options: {
           limit: 10,
@@ -114,18 +106,7 @@
         source: source + '.Recent',
         hideActions: true
       };
-      vm.recentUsers = {
-        get: function (options) {
-          return userService.getAll();
-        },
-        options: {
-          limit: 10,
-          mode: 'summary'
-        },
-        source: source + '.Recent'
-      };
       vm.stats = {};
-
       get();
     }]);
 }());

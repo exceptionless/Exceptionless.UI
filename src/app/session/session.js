@@ -27,16 +27,18 @@
         template: '<ui-view autoscroll="true" />'
       });
 
+      $stateProvider.state('app.session.dashboard', {
+        url: '/dashboard',
+        controller: 'session.Dashboard',
+        controllerAs: 'vm',
+        templateUrl: 'app/session/dashboard.tpl.html'
+      });
+
       $stateProvider.state('app.session-dashboard', {
         url: '/session/dashboard',
         controller: 'session.Dashboard',
         controllerAs: 'vm',
-        templateUrl: 'app/session/dashboard.tpl.html',
-        onEnter: ['filterService', function (filterService) {
-          filterService.setOrganizationId(null, true);
-          filterService.setProjectId(null, true);
-          filterService.setEventType('start', true);
-        }]
+        templateUrl: 'app/session/dashboard.tpl.html'
       });
 
       $stateProvider.state('app.session-project-dashboard', {
@@ -46,7 +48,6 @@
         templateUrl: 'app/session/dashboard.tpl.html',
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setProjectId($stateParams.projectId, true);
-          filterService.setEventType('start', true);
         }],
         resolve: {
           project: ['$stateParams', 'projectService', function($stateParams, projectService) {
@@ -62,7 +63,6 @@
         templateUrl: 'app/session/dashboard.tpl.html',
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setOrganizationId($stateParams.organizationId, true);
-          filterService.setEventType('start', true);
         }],
         resolve: {
           project: ['$stateParams', 'organizationService', function($stateParams, organizationService) {
@@ -72,7 +72,7 @@
       });
 
       $stateProvider.state('app.session.manage', {
-        url: '/{id:[0-9a-fA-F\-]{8,100}}',
+        url: '/{id:[0-9a-zA-Z\-]{8,100}}',
         controller: 'session.Manage',
         controllerAs: 'vm',
         templateUrl: 'app/session/session.tpl.html'

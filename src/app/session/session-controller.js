@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Manage', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'featureService', 'filterService', 'notificationService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, featureService, filterService, notificationService, statService) {
+    .controller('session.Manage', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, statService) {
       var source = 'app.session.Session';
       var _sessionId = $stateParams.id;
       var vm = this;

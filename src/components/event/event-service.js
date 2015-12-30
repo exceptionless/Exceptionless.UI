@@ -11,6 +11,10 @@
       return Restangular.all('events').getList(filterService.apply(options));
     }
 
+    function getAllSessions(options) {
+      return Restangular.one('events').all('sessions').getList(filterService.apply(options));
+    }
+
     function getById(id, options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
       return Restangular.one('events', id).get(optionsCallback(filterService.apply(options)));
@@ -21,7 +25,7 @@
     }
 
     function getBySessionId(id, options) {
-      return Restangular.one('events', 'by-session').all(id).getList(filterService.apply(options));
+      return Restangular.one('events', 'sessions').all(id).getList(filterService.apply(options));
     }
 
     function getByStackId(id, options) {
@@ -42,6 +46,7 @@
 
     var service = {
       getAll: getAll,
+      getAllSessions: getAllSessions,
       getById: getById,
       getByReferenceId: getByReferenceId,
       getBySessionId: getBySessionId,

@@ -13,7 +13,7 @@
                 </div>
                 <div class="details">
                   <span class="title">Sessions</span>
-                  <span class="sub">{{vm.stats.total || 0 | number : 0}}</span>
+                  <span class="sub">{{vm.stats.sessions || 0 | number : 0}}</span>
                 </div>
               </div>
             </div>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="details">
                   <span class="title">Users</span>
-                  <span class="sub">{{vm.stats.unique || 0 | number : 0}}</span>
+                  <span class="sub">{{vm.stats.users || 0 | number : 0}}</span>
                 </div>
               </div>
             </div>
@@ -34,8 +34,8 @@
                   <i class="fa fa-arrow-circle-right  fa-4x"></i>
                 </div>
                 <div class="details">
-                  <span class="title">Exceptions</span>
-                  <span class="sub">{{vm.stats.exceptions || 0 | number : 0}}</span>
+                  <span class="title">Average Duration</span>
+                  <span class="sub"><duration value="vm.stats.avg_duration"></duration></span>
                 </div>
               </div>
             </div>
