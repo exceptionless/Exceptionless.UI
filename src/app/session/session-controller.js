@@ -8,20 +8,8 @@
       var vm = this;
 
       function get(data) {
-        if (data && data.type === 'session' && data.session_id !== _sessionId) {
+        if (!!data && data.type === 'PersistentEvent' && data.project_id !== vm.event.project_id) {
           return;
-        }
-
-        if (data && data.type === 'session' && data.deleted) {
-          $state.go('app.session.dashboard');
-          notificationService.error('The session "' + _sessionId + '" was deleted.');
-          return;
-        }
-
-        if (data && data.type === 'PersistentEvent') {
-          if (!data.deleted || data.project_id !== vm.event.project_id) {
-            return;
-          }
         }
 
         return getSessionEvent().then(getStats).then(getProject);
