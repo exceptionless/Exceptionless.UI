@@ -83,7 +83,7 @@
         }
       }
 
-      return sanitize(result + '\r\n');
+      return escapeHTML(result + '\r\n');
     }
 
     function buildStackFrames(exceptions) {
@@ -94,7 +94,7 @@
           frames += '<div class="stack-frame">';
 
           for (var frameIndex = 0; frameIndex < stackTrace.length; frameIndex++) {
-            frames += sanitize(buildStackFrame(stackTrace[frameIndex]));
+            frames += escapeHTML(buildStackFrame(stackTrace[frameIndex]));
           }
 
           if (index < (exceptions.length - 1)) {
@@ -127,11 +127,11 @@
 
         var hasType = !!exceptions[index].type;
         if (hasType) {
-          header += '<span class="ex-type">' + sanitize(exceptions[index].type) + '</span>: ';
+          header += '<span class="ex-type">' + escapeHTML(exceptions[index].type) + '</span>: ';
         }
 
         if (exceptions[index].message) {
-          header += '<span class="ex-message">' + sanitize(exceptions[index].message) + '</span>';
+          header += '<span class="ex-message">' + escapeHTML(exceptions[index].message) + '</span>';
         }
 
         if (hasType) {
@@ -142,14 +142,17 @@
       return header;
     }
 
-    function sanitize(input) {
-      try {
-        return $sanitize(input.replace('<', '&lt;'));
-      } catch (e) {
-        $ExceptionlessClient.createException(e).addTags('sanitize').submit();
+    function escapeHTML(input) {
+      if (!input || !input.replace) {
+        return input;
       }
 
-      return input;
+      return input
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
     return {
