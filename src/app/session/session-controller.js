@@ -2,27 +2,93 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Manage', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, statService) {
+    .controller('session.Manage', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'projectService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, statService) {
       var source = 'app.session.Session';
       var _sessionId = $stateParams.id;
       var vm = this;
 
       function get(data) {
-        if (data && data.type === 'session' && data.id !== _sessionId) {
+        if (data && data.type === 'session' && data.session_id !== _sessionId) {
           return;
         }
 
         if (data && data.type === 'session' && data.deleted) {
-          $state.go('app.dashboard');
+          $state.go('app.session.dashboard');
           notificationService.error('The session "' + _sessionId + '" was deleted.');
           return;
         }
 
         if (data && data.type === 'PersistentEvent') {
-          if (!data.deleted || data.project_id !== vm.session.project_id) {
+          if (!data.deleted || data.project_id !== vm.event.project_id) {
             return;
           }
         }
+
+        return getSessionEvent().then(getStats).then(getProject);
+      }
+
+      function getProject() {
+        function onSuccess(response) {
+          vm.project = response.data.plain();
+          return vm.project;
+        }
+
+        return projectService.getById(vm.event.project_id, true).then(onSuccess);
+      }
+
+      function getSessionEvent() {
+        function onSuccess(response) {
+          vm.event = response.data.plain()[0];
+          if (!vm.event) {
+            $state.go('app.session.dashboard');
+            notificationService.error('No session events "' + _sessionId + '" could not be found.');
+          }
+        }
+
+        function onFailure(response) {
+          $state.go('app.session.dashboard');
+
+          if (response.status === 404) {
+            notificationService.error('No session events "' + _sessionId + '" could not be found.');
+          } else {
+            notificationService.error('An error occurred while loading a session event "' + _sessionId + '".');
+          }
+        }
+
+        return eventService.getBySessionId(_sessionId, { sort: 'date', limit: 1 }).then(onSuccess, onFailure);
+      }
+
+      function getStats() {
+        function onSuccess(response) {
+          vm.stats = response.data.plain();
+          if (!vm.stats.timeline) {
+            vm.stats.timeline = [];
+          }
+
+          vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
+          });
+        }
+
+        var options = {};
+        return statService.getBySessionId(_sessionId, options).then(onSuccess);
+      }
+
+      function hasIdentity() {
+        return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].identity;
+      }
+
+      function hasUserEmail() {
+        return vm.event.data && vm.event.data['@user_description'] && vm.event.data['@user_description'].email_address;
+      }
+
+      function hasUserName() {
+        return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].name;
+      }
+
+      function isValidDate(date) {
+        var d = moment(date);
+        return !!date && d.isValid() && d.year() > 1;
       }
 
       vm.chart = {
@@ -94,7 +160,13 @@
         }
       };
 
+      vm.event = {};
       vm.get = get;
+      vm.hasIdentity = hasIdentity;
+      vm.hasUserEmail = hasUserEmail;
+      vm.hasUserName = hasUserName;
+      vm.isValidDate = isValidDate;
+      vm.project = {};
       vm.sessionEvents = {
         get: function (options) {
           return eventService.getBySessionId(_sessionId, options);
@@ -109,7 +181,6 @@
         hideActions: true,
         source: source + '.Recent'
       };
-      vm.session = {};
       vm.stats = {};
 
       get();
