@@ -42,7 +42,7 @@
     "less.js": "2.5.3",
     "li": "1.0.1",
     "lodash": "3.10.1",
-    "moment": "2.10.6",
+    "moment": "2.11.0",
     "ng-clip": "0.2.6",
     "ng-debounce": "0.1.7",
     "ng-filters": "1.2.0",
@@ -61,6 +61,6 @@
     "angular-bootstrap": "0.14.3",
     "bootstrap": "3.3.6",
     "lodash": "3.10.0",
-    "moment": "2.10.6"
+    "moment": "2.11.0"
   }
 }

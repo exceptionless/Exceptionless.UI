@@ -106,6 +106,7 @@
           limit: 10,
           mode: 'summary'
         },
+        hideActions: true,
         source: source + '.Recent'
       };
       vm.session = {};

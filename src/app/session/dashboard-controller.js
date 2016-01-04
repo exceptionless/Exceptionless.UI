@@ -99,6 +99,9 @@
         get: function (options) {
           return eventService.getAllSessions(options);
         },
+        summary: {
+          showType: false
+        },
         options: {
           limit: 10,
           mode: 'summary'

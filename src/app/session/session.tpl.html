@@ -11,7 +11,7 @@
                 <i class="fa fa-calendar fa-4x"></i>
               </div>
               <div class="details">
-                <span class="title">Total</span>
+                <span class="title">Events</span>
                 <span class="sub">{{vm.stats.total || 0 | number : 0}}</span>
               </div>
             </div>
@@ -22,7 +22,7 @@
                 <i class="fa fa-arrow-circle-left fa-4x"></i>
               </div>
               <div class="details">
-                <span class="title">First</span>
+                <span class="title">Start</span>
                 <span class="sub visible-md visible-lg"><timeago date="vm.stats.first_occurrence"></timeago></span>
                 <span class="sub visible-sm">
                   <span ng-if="vm.isValidDate(vm.stats.first_occurrence)">{{vm.stats.first_occurrence | date:'shortDate' }}</span>
@@ -41,7 +41,7 @@
                 <i class="fa fa-arrow-circle-right  fa-4x"></i>
               </div>
               <div class="details">
-                <span class="title">Last</span>
+                <span class="title">End</span>
                 <span class="sub visible-md visible-lg"><timeago date="vm.stats.last_occurrence"></timeago></span>
                 <span class="sub visible-sm">
                   <span ng-if="vm.isValidDate(vm.stats.last_occurrence)">{{vm.stats.last_occurrence | date:'shortDate' }}</span>
@@ -56,6 +56,11 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><i class="fa fa-fw fa-calendar"></i> Session Overview</div>
+       Identity: TODO
     </div>
 
     <div class="panel panel-default">
