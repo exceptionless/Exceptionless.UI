@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Dashboard', ['$ExceptionlessClient', 'eventService', '$filter', 'filterService', 'notificationService', 'statService', 'userService', function ($ExceptionlessClient, eventService, $filter, filterService, notificationService, statService, userService) {
+    .controller('session.Dashboard', ['$ExceptionlessClient', 'eventService', '$filter', 'filterService', 'notificationService', 'organizationService', 'statService', function ($ExceptionlessClient, eventService, $filter, filterService, notificationService, organizationService, statService) {
       var source = 'app.session.Dashboard';
       var vm = this;
 
@@ -23,7 +23,10 @@
         }
 
         var options = {};
-        return statService.getSessions(options).then(onSuccess, onFailure);
+
+        return organizationService.getPremiumFilter().then(function(filter) {
+          return statService.getSessions(options, function (o) { o.filter += ' ' + filter; });
+        }).then(onSuccess, onFailure);
       }
 
       vm.chart = {
@@ -97,7 +100,9 @@
       vm.get = get;
       vm.recentSessions = {
         get: function (options) {
-          return eventService.getAllSessions(options);
+          return organizationService.getPremiumFilter().then(function(filter) {
+            return eventService.getAll(options, function (o) { o.filter += ' ' + filter; });
+          });
         },
         summary: {
           showType: false

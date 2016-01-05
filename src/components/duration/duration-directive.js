@@ -11,8 +11,12 @@
         },
         link: function (scope, element) {
           function setDurationText() {
-            var duration = moment.duration(scope.value || 0, scope.period || 'seconds');
-            element.text(duration.humanize());
+            if (typeof(scope.value) === 'number') {
+              var duration = moment.duration(scope.value, scope.period || 'seconds');
+              element.text(duration.humanize());
+            } else {
+              element.text('Never');
+            }
           }
 
           setDurationText();

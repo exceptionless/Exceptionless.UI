@@ -78,6 +78,7 @@
 
         var filter = buildFilter();
         if (filter) {
+
           angular.extend(options, { filter: filter });
         }
 

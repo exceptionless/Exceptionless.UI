@@ -20,7 +20,8 @@
       scope: {
         organizationId: '=',
         ignoreFree: '=',
-        ignoreConfigureProjects: '='
+        ignoreConfigureProjects: '=',
+        requiresPremium: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
       controller: ['$scope', 'billingService', 'filterService', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'searchService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, STRIPE_PUBLISHABLE_KEY) {
@@ -72,7 +73,7 @@
           vm.hourlyOverageOrganizations = [];
           vm.monthlyOverageOrganizations = [];
           vm.projectsRequiringConfiguration = [];
-          vm.organizationsSearchingWithoutPremiumFeatures = [];
+          vm.organizationsWithoutPremiumFeatures = [];
           vm.organizationsWithNoProjects = [];
           vm.suspendedForBillingOrganizations = [];
           vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
@@ -102,8 +103,9 @@
 
             // Only show the premium features dialog when searching on a plan without premium features and your project has been configured.
             var tryingToSearchWithoutPremiumFeatures = vm.filterUsesPremiumFeatures && !organization.has_premium_features;
-            if (tryingToSearchWithoutPremiumFeatures && !canShowConfigurationAlert) {
-              vm.organizationsSearchingWithoutPremiumFeatures.push(organization);
+            var upgradeRequiredForPremiumFeatures = $scope.requiresPremium && !organization.has_premium_features;
+            if ((tryingToSearchWithoutPremiumFeatures || upgradeRequiredForPremiumFeatures) && !canShowConfigurationAlert) {
+              vm.organizationsWithoutPremiumFeatures.push(organization);
             }
 
             if (organization.is_over_monthly_limit === true) {
@@ -145,7 +147,7 @@
               }
             }
 
-            if (tryingToSearchWithoutPremiumFeatures) {
+            if (tryingToSearchWithoutPremiumFeatures || upgradeRequiredForPremiumFeatures) {
               return;
             }
 
@@ -216,8 +218,8 @@
           return vm.organizations && vm.organizations.length > 0;
         }
 
-        function hasOrganizationsSearchingWithoutPremiumFeatures() {
-          return vm.organizationsSearchingWithoutPremiumFeatures && vm.organizationsSearchingWithoutPremiumFeatures.length > 0;
+        function hasOrganizationsWithoutPremiumFeatures() {
+          return vm.organizationsWithoutPremiumFeatures && vm.organizationsWithoutPremiumFeatures.length > 0;
         }
 
         function hasOrganizationsWithNoProjects() {
@@ -285,7 +287,7 @@
         vm.hasNotifications = false;
         vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
         vm.hasOrganizations = hasOrganizations;
-        vm.hasOrganizationsSearchingWithoutPremiumFeatures = hasOrganizationsSearchingWithoutPremiumFeatures;
+        vm.hasOrganizationsWithoutPremiumFeatures = hasOrganizationsWithoutPremiumFeatures;
         vm.hasOrganizationsWithNoProjects = hasOrganizationsWithNoProjects;
         vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
         vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
@@ -293,7 +295,7 @@
         vm.isIntercomEnabled = isIntercomEnabled;
         vm.onFilterChanged = onFilterChanged;
         vm.organizations = [];
-        vm.organizationsSearchingWithoutPremiumFeatures = [];
+        vm.organizationsWithoutPremiumFeatures = [];
         vm.organizationsWithNoProjects = [];
         vm.hourlyOverageOrganizations = [];
         vm.monthlyOverageOrganizations = [];

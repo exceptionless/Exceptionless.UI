@@ -66,12 +66,12 @@
             return vm.selectedIds.length > 0;
           }
 
-          function open(session_id, event) {
-            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', session_id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
+          function open(id, event) {
+            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
             if (event.ctrlKey || event.which === 2) {
-              $window.open($state.href('app.session.manage', { id: session_id }, { absolute: true }), '_blank');
+              $window.open($state.href('app.event', { id: id }, { absolute: true }), '_blank');
             } else {
-              $state.go('app.session.manage', { id: session_id });
+              $state.go('app.event', { id: id });
             }
 
             event.preventDefault();

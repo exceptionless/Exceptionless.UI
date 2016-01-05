@@ -22,7 +22,7 @@
         }
 
         function getAllProjectsUrl() {
-          if ($state.current.name.contains('session-')) {
+          if (isOnSessionDashboard()) {
             return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session' });
           }
 
@@ -68,7 +68,7 @@
         }
 
         function getOrganizationUrl(organization) {
-          if ($state.current.name.contains('session-')) {
+          if (isOnSessionDashboard()) {
             return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', organizationId: organization.id });
           }
 
@@ -98,7 +98,7 @@
         }
 
         function getProjectUrl(project) {
-          if ($state.current.name.contains('session-')) {
+          if (isOnSessionDashboard()) {
             return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', projectId: project.id });
           }
 
@@ -119,6 +119,10 @@
           }
 
           return 'dashboard';
+        }
+
+        function isOnSessionDashboard() {
+          return $state.current.name.contains('session-') || $state.current.name === 'app.session.dashboard';
         }
 
         var updateFilterDropDownMaxHeight = debounce(function() {

@@ -12,7 +12,7 @@
   </tr>
   <tr ng-if="vm.event.session_id">
     <th>Session</th>
-    <td><a ui-sref="app.session.manage({ id: vm.event.session_id })">{{vm.event.session_id}}</a></td>
+    <td><a ui-sref="app.session.list({ id: vm.event.session_id })">{{vm.event.session_id}}</a></td>
   </tr>
   <tr ng-if="vm.event.reference_id">
     <th>Reference</th>
@@ -41,6 +41,10 @@
   <tr class="hidden-print" ng-if="vm.hasVersion()">
     <th>Version</th>
     <td>{{::vm.getVersion()}}</td>
+  </tr>
+  <tr class="hidden-print" ng-if="vm.event.geo">
+    <th>Geo</th>
+    <td><span truncate>{{::vm.event.geo}}</span></td>
   </tr>
   <tr ng-if="vm.hasTags()">
     <th>Tags</th>

@@ -57,6 +57,10 @@
       function buildTabs(tabNameToActivate) {
         var tabs = [{title: 'Overview', template_key: 'overview'}];
 
+        if (vm.event.session_id && vm.event.type === 'session') {
+          tabs.push({title: 'Session Events', template_key: 'session'});
+        }
+
         if (isError()) {
           if (vm.event.data['@error']) {
             tabs.push({title: 'Exception', template_key: 'error'});
@@ -378,6 +382,31 @@
       vm.isPromoted = isPromoted;
       vm.project = {};
       vm.promoteTab = promoteTab;
+      vm.sessionEvents = {
+        get: function (options) {
+          function optionsCallback(options) {
+            if (options.filter) {
+              options.filter += ' -type:session';
+            } else {
+              options.filter = '-type:session';
+            }
+
+            if (!vm.project.has_premium_features) {
+              options.limit = 1;
+            }
+
+            return options;
+          }
+
+          return eventService.getBySessionId(vm.event.session_id, options, optionsCallback);
+        },
+        options: {
+          limit: 10,
+          mode: 'summary'
+        },
+        source: source + '.Recent',
+        hideActions: true
+      };
       vm.tabs = [];
 
       getEvent().then(getProject).then(function() { buildTabs($stateParams.tab); });

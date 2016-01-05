@@ -1,4 +1,4 @@
-<organization-notifications></organization-notifications>
+<organization-notifications requires-premium="true"></organization-notifications>
 
 <div class="hbox hbox-auto-xs hbox-auto-sm" refresh-on="PersistentEventChanged PlanChanged" refresh-action="vm.get()" refresh-if="vm.canRefresh(data)" refresh-throttle="10000">
   <div class="col" refresh-on="filterChanged" refresh-action="vm.get()">
@@ -51,7 +51,7 @@
       </div>
 
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-signal"></i>Recent Sessions</div>
+        <div class="panel-heading"><i class="fa fa-area-chart"></i>Recent Sessions</div>
         <sessions settings="vm.recentSessions"></sessions>
       </div>
     </div>

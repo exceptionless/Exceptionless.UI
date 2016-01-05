@@ -9,16 +9,16 @@
     </thead>
     <tbody>
       <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.hasEvents()">
-        <td ng-click="vm.open(event.data.session_id, $event)">
+        <td ng-click="vm.open(event.id, $event)">
           <div>
-            <span ng-if="!event.data.session_end" class="glyphicon glyphicon-one-fine-dot glyphicon-green"></span>
+            <span ng-if="!event.data.session_end" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
             <summary source="event" show-type="vm.showType"></summary>
           </div>
         </td>
-        <td ng-click="vm.open(event.data.session_id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
+        <td ng-click="vm.open(event.id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
           <timeago date="event.date"></timeago>
         </abbr></td>
-        <td ng-click="vm.open(event.data.session_id, $event)"><abbr title="{{event.data.value || 0}} seconds">
+        <td ng-click="vm.open(event.id, $event)"><abbr title="{{event.data.value || 0}} seconds">
           <duration value="event.data.value"></duration>
         </abbr></td>
       </tr>

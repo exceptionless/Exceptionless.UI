@@ -14,6 +14,7 @@
       'exceptionless.notification',
       'exceptionless.pagination',
       'exceptionless.refresh',
+      'exceptionless.organization',
       'exceptionless.organization-notifications',
       'exceptionless.project',
       'exceptionless.stat',
@@ -22,6 +23,14 @@
       'exceptionless.users'
     ])
     .config(['$stateProvider', function ($stateProvider) {
+      var onEnterSetTypeFilter = ['filterService', function (filterService) {
+        filterService.setEventType('session', true);
+      }];
+
+      var onExitRemoveTypeFilter = ['filterService', function (filterService) {
+        filterService.setEventType(null, true);
+      }];
+
       $stateProvider.state('app.session', {
         abstract: true,
         url: '/session',
@@ -32,14 +41,18 @@
         url: '/dashboard',
         controller: 'session.Dashboard',
         controllerAs: 'vm',
-        templateUrl: 'app/session/dashboard.tpl.html'
+        templateUrl: 'app/session/dashboard.tpl.html',
+        onEnter: onEnterSetTypeFilter,
+        onExit: onExitRemoveTypeFilter
       });
 
       $stateProvider.state('app.session-dashboard', {
         url: '/session/dashboard',
         controller: 'session.Dashboard',
         controllerAs: 'vm',
-        templateUrl: 'app/session/dashboard.tpl.html'
+        templateUrl: 'app/session/dashboard.tpl.html',
+        onEnter: onEnterSetTypeFilter,
+        onExit: onExitRemoveTypeFilter
       });
 
       $stateProvider.state('app.session-project-dashboard', {
@@ -49,7 +62,9 @@
         templateUrl: 'app/session/dashboard.tpl.html',
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setProjectId($stateParams.projectId, true);
+          filterService.setEventType('session', true);
         }],
+        onExit: onExitRemoveTypeFilter,
         resolve: {
           project: ['$stateParams', 'projectService', function($stateParams, projectService) {
             return projectService.getById($stateParams.projectId, true);
@@ -64,7 +79,9 @@
         templateUrl: 'app/session/dashboard.tpl.html',
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setOrganizationId($stateParams.organizationId, true);
+          filterService.setEventType('session', true);
         }],
+        onExit: onExitRemoveTypeFilter,
         resolve: {
           project: ['$stateParams', 'organizationService', function($stateParams, organizationService) {
             return organizationService.getById($stateParams.organizationId, true);
@@ -72,11 +89,13 @@
         }
       });
 
-      $stateProvider.state('app.session.manage', {
+      $stateProvider.state('app.session.list', {
         url: '/{id:[0-9a-zA-Z\-]{8,100}}',
-        controller: 'session.Manage',
+        controller: 'session.List',
         controllerAs: 'vm',
-        templateUrl: 'app/session/session.tpl.html'
+        templateUrl: 'app/session/list.tpl.html',
+        onEnter: onEnterSetTypeFilter,
+        onExit: onExitRemoveTypeFilter
       });
     }]);
 }());
