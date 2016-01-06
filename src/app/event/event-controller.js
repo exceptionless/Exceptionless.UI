@@ -391,10 +391,6 @@
               options.filter = '-type:session';
             }
 
-            if (!vm.project.has_premium_features) {
-              options.limit = 1;
-            }
-
             return options;
           }
 

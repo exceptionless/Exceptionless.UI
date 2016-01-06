@@ -12,6 +12,11 @@
       }
 
       function changePlan(organizationId) {
+        if (!STRIPE_PUBLISHABLE_KEY) {
+          notificationService.error('Billing is currently disabled.');
+          return;
+        }
+
         return billingService.changePlan(organizationId);
       }
 
