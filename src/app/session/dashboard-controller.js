@@ -23,10 +23,7 @@
         }
 
         var options = {};
-
-        return organizationService.getPremiumFilter().then(function(filter) {
-          return statService.getSessions(options, function (o) { o.filter += ' ' + filter; });
-        }).then(onSuccess, onFailure);
+        return statService.getSessions(options).then(onSuccess, onFailure);
       }
 
       vm.chart = {
@@ -100,9 +97,7 @@
       vm.get = get;
       vm.recentSessions = {
         get: function (options) {
-          return organizationService.getPremiumFilter().then(function(filter) {
-            return eventService.getAll(options, function (o) { o.filter += ' ' + filter; });
-          });
+          return eventService.getAllSessions(options);
         },
         summary: {
           showType: false

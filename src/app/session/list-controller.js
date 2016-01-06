@@ -7,7 +7,12 @@
 
       vm.references = {
         get: function(options) {
-          return eventService.getBySessionId($stateParams.id, options).then(function(response) {
+          function applyFilter(options) {
+            options.filter += ' session_id' + $stateParams.id;
+            return options;
+          }
+
+          return eventService.getAll({}, applyFilter).then(function(response) {
             var events = response.data.plain();
             if (events && events.length === 1) {
               $state.go('app.event', { id: events[0].id });

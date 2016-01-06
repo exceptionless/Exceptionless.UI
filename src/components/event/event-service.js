@@ -12,6 +12,10 @@
       return Restangular.all('events').getList(optionsCallback(filterService.apply(options)));
     }
 
+    function getAllSessions(options) {
+      return Restangular.one('events').all('sessions').getList(filterService.apply(options));
+    }
+
     function getById(id, options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
       return Restangular.one('events', id).get(optionsCallback(filterService.apply(options)));
@@ -44,6 +48,7 @@
 
     var service = {
       getAll: getAll,
+      getAllSessions: getAllSessions,
       getById: getById,
       getByReferenceId: getByReferenceId,
       getBySessionId: getBySessionId,

@@ -40,28 +40,6 @@
         return Restangular.all('organizations').getList(options || {});
       }
 
-      function getAllFreemium() {
-        function onSuccess(response) {
-          return response.data.plain().filter(function(o) {
-            return o && !o.has_premium_features;
-          });
-        }
-
-        function onFailure() {
-          return [];
-        }
-
-        return getAll().then(onSuccess, onFailure);
-      }
-
-      function getPremiumFilter() {
-        return getAllFreemium().then(function (organizations) {
-          return '-organization:' + organizations.map(function(o) {
-            return o.id;
-          }).join(' -organization:');
-        });
-      }
-
       function getById(id, useCache) {
         if (useCache === undefined || useCache) {
           return _cachedRestangular.one('organizations', id).get();
@@ -103,8 +81,6 @@
         create: create,
         changePlan: changePlan,
         getAll: getAll,
-        getAllFreemium: getAllFreemium,
-        getPremiumFilter: getPremiumFilter,
         getById: getById,
         getInvoice: getInvoice,
         getInvoices: getInvoices,
