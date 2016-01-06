@@ -24,6 +24,8 @@
     ])
     .config(['$stateProvider', function ($stateProvider) {
       var onEnterSetTypeFilter = ['filterService', function (filterService) {
+        filterService.setOrganizationId(null, true);
+        filterService.setProjectId(null, true);
         filterService.setEventType('session', true);
       }];
 
