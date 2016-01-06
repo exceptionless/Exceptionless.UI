@@ -17,12 +17,14 @@
         <td ng-click="vm.open(event.id, $event)">
           <summary source="event" show-type="vm.showType"></summary>
         </td>
-        <td ng-click="vm.open(event.id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
-          <timeago date="event.date"></timeago>
-        </abbr></td>
+        <td ng-click="vm.open(event.id, $event)">
+          <abbr title="{{::event.date | date : 'medium'}}">
+            <timeago date="event.date"></timeago>
+          </abbr>
+        </td>
       </tr>
       <tr ng-if="!vm.hasEvents()">
-        <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
+        <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
         <td colspan="2">
           <strong>No data found.</strong>
         </td>
@@ -32,15 +34,17 @@
 
   <div class="table-footer">
     <div class="row">
-      <div class="col-xs-4 hidden-xs">
-        <div class="dropdown" ng-if="vm.actions.length > 0">
-          <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Bulk Action
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
-            <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name}}</a></li>
-          </ul>
+      <div class="col-sm-4 hidden-xs">
+        <div ng-if="vm.actions.length > 0">
+          <div class="dropdown">
+            <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Bulk Action
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
+              <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name}}</a></li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="col-sm-4 text-center" ng-class="vm.previous || vm.next ? 'col-xs-8': 'col-xs-12'" ng-if="vm.pageSummary">

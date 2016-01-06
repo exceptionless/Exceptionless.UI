@@ -5,7 +5,7 @@
     .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService) {
       var source = 'app.event.Event';
       var _eventId = $stateParams.id;
-      var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'version'];
+      var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'version'];
       var vm = this;
 
       function addHotKeys() {
@@ -57,7 +57,7 @@
       function buildTabs(tabNameToActivate) {
         var tabs = [{title: 'Overview', template_key: 'overview'}];
 
-        if (vm.event.session_id && vm.event.type === 'session') {
+        if (vm.event.session_id && isSessionStart()) {
           tabs.push({title: 'Session Events', template_key: 'session'});
         }
 
@@ -70,7 +70,7 @@
         }
 
         if (hasRequestInfo()) {
-          tabs.push({title: 'Request', template_key: 'request'});
+          tabs.push({title: isSessionStart() ? 'Browser' : 'Request', template_key: 'request'});
         }
 
         if (hasEnvironmentInfo()) {
@@ -320,6 +320,10 @@
         return vm.project.promoted_tabs.filter(function (tab) { return tab === tabName; }).length > 0;
       }
 
+      function isSessionStart() {
+        return vm.event.type === 'session';
+      }
+
       function promoteTab(tabName) {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.success')
@@ -380,6 +384,7 @@
       vm.isLevelWarning = isLevelWarning;
       vm.isLevelError = isLevelError;
       vm.isPromoted = isPromoted;
+      vm.isSessionStart = isSessionStart;
       vm.project = {};
       vm.promoteTab = promoteTab;
       vm.sessionEvents = {

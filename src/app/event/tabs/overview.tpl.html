@@ -6,13 +6,24 @@
       )
     </td>
   </tr>
+  <tr ng-if="vm.isSessionStart() && vm.event.data.sessionend">
+    <th>End</th>
+    <td>{{::vm.event.data.sessionend | date: 'medium'}} (
+      <abbr title="{{vm.event.value || 0}} seconds">
+        <duration value="vm.event.value"></duration>
+      </abbr>
+      )
+    </td>
+  </tr>
   <tr>
     <th>Project</th>
     <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
   </tr>
   <tr ng-if="vm.event.session_id">
-    <th>Session</th>
-    <td><a ui-sref="app.session.list({ id: vm.event.session_id })">{{vm.event.session_id}}</a></td>
+    <th>Session<span ng-if="vm.isSessionStart()"> Id</span></th>
+    <td>
+      <span ng-if="vm.isSessionStart()">{{vm.event.session_id}}</span>
+      <a ng-if="!vm.isSessionStart()" ui-sref="app.session.list({ id: vm.event.session_id })">{{vm.event.session_id}}</a></td>
   </tr>
   <tr ng-if="vm.event.reference_id">
     <th>Reference</th>
@@ -55,7 +66,7 @@
     <td><span truncate>{{::vm.event.code}}</span></td>
   </tr>
 
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo()">
+  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && !vm.isSessionStart()">
     <th>URL</th>
     <td><a ng-href="{{::vm.getRequestUrl()}}" target="_blank" truncate>{{::vm.getRequestUrl()}}</a></td>
   </tr>
