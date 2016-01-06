@@ -5,10 +5,10 @@
     .controller('session.List', ['eventService', '$state', '$stateParams', function (eventService, $state, $stateParams) {
       var vm = this;
 
-      vm.references = {
+      vm.sessions = {
         get: function(options) {
           function applyFilter(options) {
-            options.filter += ' session_id' + $stateParams.id;
+            options.filter += ' session_id:' + $stateParams.id;
             return options;
           }
 

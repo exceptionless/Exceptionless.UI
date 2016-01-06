@@ -96,7 +96,9 @@
         controller: 'session.List',
         controllerAs: 'vm',
         templateUrl: 'app/session/list.tpl.html',
-        onEnter: onEnterSetTypeFilter,
+        onEnter: ['filterService', function (filterService) {
+          filterService.setEventType('session', true);
+        }],
         onExit: onExitRemoveTypeFilter
       });
     }]);
