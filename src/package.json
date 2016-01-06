@@ -27,6 +27,7 @@
     "grunt-ng-annotate": "^1.0.1",
     "grunt-replace": "^0.11.0",
     "grunt-traceur": "^0.5.4",
+    "jasmine-core": "^2.4.1",
     "jshint-stylish": "^2.0.0",
     "karma": "~0.13.11",
     "karma-chrome-launcher": "~0.2.1",
@@ -35,7 +36,9 @@
     "karma-mocha-reporter": "~1.1.1",
     "karma-phantomjs-launcher": "~0.2.0",
     "load-grunt-config": "^0.19.1",
+    "phantomjs": "^1.9.19",
     "rimraf": "^2.4.0",
-    "streamqueue": "^1.1.0"
+    "streamqueue": "^1.1.0",
+    "traceur": "0.0.96"
   }
 }
