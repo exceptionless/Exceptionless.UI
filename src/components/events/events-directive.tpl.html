@@ -35,16 +35,14 @@
   <div class="table-footer">
     <div class="row">
       <div class="col-sm-4 hidden-xs">
-        <div ng-if="vm.actions.length > 0">
-          <div class="dropdown">
-            <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              Bulk Action
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
-              <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name}}</a></li>
-            </ul>
-          </div>
+        <div class="dropdown" ng-if="vm.actions.length > 0">
+          <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Bulk Action
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
+            <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name}}</a></li>
+          </ul>
         </div>
       </div>
       <div class="col-sm-4 text-center" ng-class="vm.previous || vm.next ? 'col-xs-8': 'col-xs-12'" ng-if="vm.pageSummary">

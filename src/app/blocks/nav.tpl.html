@@ -178,21 +178,21 @@
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isSessionMenuActive()}">
+  <li ng-class="{active: appVm.isReportsMenuActive()}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
-      <i class="fa fa-heartbeat fa-fw"></i>
-      <span>Sessions</span>
+      <i class="fa fa-book fa-fw"></i>
+      <span>Reports</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
-      <li class="nav-sub-header">Sessions</li>
+      <li class="nav-sub-header">Reports</li>
       <li>
         <a ng-href="{{appVm.getSessionDashboardUrl()}}">
-          <i class="fa fa-dashboard fa-fw"></i>
-          <span>Dashboard</span>
+          <i class="fa fa-heartbeat fa-fw"></i>
+          <span>Sessions</span>
         </a>
       </li>
     </ul>

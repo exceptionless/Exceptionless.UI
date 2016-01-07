@@ -98,7 +98,7 @@
           $state.includes('app.admin.dashboard', $stateParams);
       }
 
-      function isSessionMenuActive() {
+      function isReportsMenuActive() {
         return $state.includes('app.session-dashboard', $stateParams) ||
           $state.includes('app.session-project-dashboard', $stateParams) ||
           $state.includes('app.session-organization-dashboard', $stateParams);
@@ -178,7 +178,7 @@
       vm.hasSystemNotificationMessage = hasSystemNotificationMessage;
       vm.isAllMenuActive = isAllMenuActive;
       vm.isAdminMenuActive = isAdminMenuActive;
-      vm.isSessionMenuActive = isSessionMenuActive;
+      vm.isReportsMenuActive = isReportsMenuActive;
       vm.isIntercomEnabled = isIntercomEnabled;
       vm.isSideNavCollapsed = _store.get('sideNavCollapsed') === true;
       vm.isTypeMenuActive = isTypeMenuActive;
