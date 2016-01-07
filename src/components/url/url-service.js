@@ -30,6 +30,10 @@
       }
 
       function buildUrl(isSecure, host, port, path, queryString) {
+        if (!host) {
+          return null;
+        }
+
         var url = (isSecure ? 'https://' : 'http://') + host;
 
         if (port !== 80 && port !== 443) {

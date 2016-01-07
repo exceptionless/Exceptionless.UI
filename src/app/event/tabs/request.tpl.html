@@ -8,7 +8,7 @@
     <th>HTTP Method</th>
     <td>{{::vm.event.data['@request'].http_method}}</td>
   </tr>
-  <tr>
+  <tr ng-if="vm.getRequestUrl()">
     <th>URL</th>
     <td><a ng-href="{{::vm.getRequestUrl()}}" target="_blank" truncate>{{::vm.getRequestUrl()}}</a></td>
   </tr>
@@ -25,7 +25,7 @@
     <th>Client IP</th>
     <td>{{::vm.event.data['@request'].client_ip_address}}</td>
   </tr>
-  <tr>
+  <tr ng-if="vm.event.data['@request'].user_agent">
     <th>User Agent</th>
     <td><span truncate lines="2">{{::vm.event.data['@request'].user_agent}}</span></td>
   </tr>

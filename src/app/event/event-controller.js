@@ -232,7 +232,7 @@
 
       function getRequestUrl() {
         var request = vm.event.data['@request'];
-        return urlService.buildUrl(request.is_secure, request.host, request.port, request.path, request.query_string);
+        return request ? urlService.buildUrl(request.is_secure, request.host, request.port, request.path, request.query_string) : null;
       }
 
       function getVersion() {
@@ -390,12 +390,8 @@
       vm.sessionEvents = {
         get: function (options) {
           function optionsCallback(options) {
-            if (options.filter) {
-              options.filter += ' -type:session';
-            } else {
-              options.filter = '-type:session';
-            }
-
+            options.filter = '-type:session';
+            options.time = null;
             return options;
           }
 
