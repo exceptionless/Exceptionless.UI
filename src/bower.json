@@ -34,7 +34,7 @@
     "checklist-model": "0.9.0",
     "d3": "3.5.12",
     "es5-shim": "4.4.1",
-    "es6-shim": "0.34.0",
+    "es6-shim": "0.34.1",
     "exceptionless": "1.2.0",
     "font-awesome": "4.5.0",
     "handlebars": "4.0.5",

@@ -9,7 +9,7 @@ module.exports = function (grunt) {
                 'bower_components/angular-mocks/angular-mocks.js',
                 grunt.option('folderGlobs')('*-spec.js'),
 
-                'components/event-summary/**/*.html'
+                'components/summary/**/*.html'
             ],
             ngHtml2JsPreprocessor: {
                 moduleName: "app"
