@@ -23,10 +23,11 @@
           </abbr>
         </td>
       </tr>
-      <tr ng-if="!vm.hasEvents()">
+      <tr ng-if="!vm.hasEvents() || vm.loading">
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
         <td colspan="2">
-          <strong>No data found.</strong>
+          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="!vm.loading">No events were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
       </tr>
     </tbody>

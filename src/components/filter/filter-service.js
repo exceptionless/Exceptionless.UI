@@ -121,6 +121,10 @@
         return new Date().getTimezoneOffset() * -1;
       }
 
+      function hasFilter() {
+        return _includeFixed || _includeHidden || _organizationId || _projectId || _raw || (_time && _time !== 'all');
+      }
+
       function includedInProjectOrOrganizationFilter(data) {
         if (!data.organizationId && !data.projectId) {
           return false;
@@ -246,6 +250,7 @@
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
         getTime: getTime,
+        hasFilter: hasFilter,
         includedInProjectOrOrganizationFilter: includedInProjectOrOrganizationFilter,
         setEventType: setEventType,
         setFilter: setFilter,

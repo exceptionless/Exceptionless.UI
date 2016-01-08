@@ -41,8 +41,11 @@
               return vm.stacks;
             }
 
+            vm.loading = vm.stacks.length === 0;
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions).then(onSuccess);
+            return vm.settings.get(vm.currentOptions).then(onSuccess).finally(function() {
+              vm.loading = false;
+            });
           }
 
           function hasStacks() {
@@ -101,14 +104,17 @@
           vm.actions = stacksActionsService.getActions();
           vm.canRefresh = canRefresh;
           vm.get = get;
+          vm.hasFilter = filterService.hasFilter;
           vm.hasStacks = hasStacks;
           vm.hasSelection = hasSelection;
+          vm.loading = true;
           vm.nextPage = nextPage;
           vm.open = open;
           vm.previousPage = previousPage;
           vm.save = save;
           vm.selectedIds = [];
           vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
+          vm.stacks = [];
           vm.updateSelection = updateSelection;
 
           get();

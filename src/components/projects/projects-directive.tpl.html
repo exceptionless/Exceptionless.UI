@@ -30,17 +30,21 @@
         </td>
       </tr>
       <tr ng-if="!vm.hasProjects()">
-        <td class="hidden-xs" colspan="5" ng-if="vm.includeOrganizationName">
-          <strong>No projects were found.</strong>
+        <td class="hidden-xs" colspan="5" ng-if="vm.includeOrganizationName || vm.loading">
+          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
-        <td class="visible-xs" colspan="3" ng-if="vm.includeOrganizationName">
-          <strong>No projects were found.</strong>
+        <td class="visible-xs" colspan="3" ng-if="vm.includeOrganizationName || vm.loading">
+          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
-        <td class="hidden-xs" colspan="4" ng-if="!vm.includeOrganizationName">
-          <strong>No projects were found.</strong>
+        <td class="hidden-xs" colspan="4" ng-if="!vm.includeOrganizationName || vm.loading">
+          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
-        <td class="visible-xs" colspan="2" ng-if="!vm.includeOrganizationName">
-          <strong>No projects were found.</strong>
+        <td class="visible-xs" colspan="2" ng-if="!vm.includeOrganizationName || vm.loading">
+          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
       </tr>
     </tbody>

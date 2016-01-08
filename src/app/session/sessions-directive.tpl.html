@@ -22,9 +22,10 @@
           <duration value="event.data.value"></duration>
         </abbr></td>
       </tr>
-      <tr ng-if="!vm.hasEvents()">
+      <tr ng-if="!vm.hasEvents() || vm.loading">
         <td colspan="3">
-          <strong>No data found.</strong>
+          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="!vm.loading">No sessions were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
       </tr>
     </tbody>

@@ -11,7 +11,7 @@
           settings: '='
         },
         templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, linkService, filterService, notificationService, paginationService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService) {
           var vm = this;
           var source = vm.settings.source + '.events';
 
@@ -54,8 +54,11 @@
               return vm.events;
             }
 
+            vm.loading = vm.events.length === 0;
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions).then(onSuccess);
+            return vm.settings.get(vm.currentOptions).then(onSuccess).finally(function() {
+              vm.loading = false;
+            });
           }
 
           function hasEvents() {
@@ -113,9 +116,12 @@
 
           vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
           vm.canRefresh = canRefresh;
+          vm.events = [];
           vm.get = get;
           vm.hasEvents = hasEvents;
+          vm.hasFilter = filterService.hasFilter;
           vm.hasSelection = hasSelection;
+          vm.loading = true;
           vm.open = open;
           vm.nextPage = nextPage;
           vm.previousPage = previousPage;

@@ -31,13 +31,15 @@
         <timeago date="stack.last_occurrence"></timeago>
       </abbr></td>
     </tr>
-    <tr ng-if="!vm.hasStacks()">
+    <tr ng-if="!vm.hasStacks() || vm.loading">
       <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
       <td colspan="4" class="hidden-xs">
-        <strong>No data found.</strong>
+        <strong ng-if="vm.loading">Loading...</strong>
+        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
       </td>
       <td colspan="3" class="visible-xs">
-        <strong>No data found.</strong>
+        <strong ng-if="vm.loading">Loading...</strong>
+        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
       </td>
     </tr>
     </tbody>
