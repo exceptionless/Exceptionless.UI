@@ -73,8 +73,9 @@
             $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('project', project).submit();
             return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
               function onSuccess() {
-                $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('project', project).submit();
                 vm.projects.splice(vm.projects.indexOf(project), 1);
+                notificationService.info('Successfully queued the project for deletion.');
+                $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('project', project).submit();
               }
 
               function onFailure() {

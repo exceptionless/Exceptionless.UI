@@ -151,6 +151,7 @@
       function removeProject() {
         return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
           function onSuccess() {
+            notificationService.info('Successfully queued the project for deletion.');
             $state.go('app.project.list');
           }
 

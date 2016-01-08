@@ -21,7 +21,7 @@
           $ExceptionlessClient.createFeatureUsage(source + '.delete').setProperty('count', ids.length).submit();
           return dialogService.confirmDanger('Are you sure you want to delete these stacks?', 'DELETE STACKS').then(function () {
             function onSuccess() {
-              notificationService.success('Successfully deleted the stacks.');
+              notificationService.info('Successfully queued the stacks for deletion.');
             }
 
             function onFailure() {
@@ -38,7 +38,7 @@
         name: 'Mark Fixed',
         run: function (ids) {
           function onSuccess() {
-            notificationService.success('Successfully marked stacks as fixed.');
+            notificationService.info('Successfully queued the stacks to be marked as fixed.');
           }
 
           function onFailure() {
@@ -55,7 +55,7 @@
         name: 'Mark Not Fixed',
         run: function (ids) {
           function onSuccess() {
-            notificationService.success('Successfully marked stacks as not fixed.');
+            notificationService.info('Successfully queued the stacks to be marked as not fixed.');
           }
 
           function onFailure() {
@@ -72,7 +72,7 @@
         name: 'Mark Hidden',
         run: function (ids) {
           function onSuccess() {
-            notificationService.success('Successfully marked stacks as hidden.');
+            notificationService.info('Successfully queued the stacks to be marked as hidden.');
           }
 
           function onFailure() {
@@ -89,7 +89,7 @@
         name: 'Mark Not Hidden',
         run: function (ids) {
           function onSuccess() {
-            notificationService.success('Successfully marked stacks as not hidden.');
+            notificationService.info('Successfully queued the stacks to be marked as not hidden.');
           }
 
           function onFailure() {

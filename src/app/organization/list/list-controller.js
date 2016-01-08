@@ -100,8 +100,9 @@
         $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('organization', organization).submit();
         return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
-            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('organization', organization).submit();
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
+            notificationService.info('Successfully queued the organization for deletion.');
+            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('organization', organization).submit();
           }
 
           function onFailure(response) {
