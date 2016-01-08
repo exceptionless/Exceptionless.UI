@@ -122,7 +122,7 @@
       }
 
       function hasFilter() {
-        return _includeFixed || _includeHidden || _organizationId || _projectId || _raw || (_time && _time !== 'all');
+        return _includeFixed || _includeHidden || _raw || (_time && _time !== 'all');
       }
 
       function includedInProjectOrOrganizationFilter(data) {
