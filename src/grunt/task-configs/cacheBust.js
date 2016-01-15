@@ -5,6 +5,7 @@ module.exports = {
         }]
     },
     options: {
-        deleteOriginals: true
+        deleteOriginals: true,
+        ignorePatterns: ['touch-icon-ipad']
     }
 };
