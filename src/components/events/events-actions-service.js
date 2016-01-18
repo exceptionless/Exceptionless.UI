@@ -11,7 +11,7 @@
           $ExceptionlessClient.createFeatureUsage(source + '.delete').setProperty('count', ids.length).submit();
           return dialogService.confirmDanger('Are you sure you want to delete these events?', 'DELETE EVENTS').then(function () {
             function onSuccess() {
-              notificationService.success('Successfully deleted the events.');
+              notificationService.info('Successfully queued the events for deletion.');
             }
 
             function onFailure() {

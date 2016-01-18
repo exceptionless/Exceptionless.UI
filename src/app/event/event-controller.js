@@ -5,7 +5,7 @@
     .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService) {
       var source = 'app.event.Event';
       var _eventId = $stateParams.id;
-      var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'version'];
+      var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
       var vm = this;
 
       function addHotKeys() {
@@ -54,8 +54,29 @@
 
       }
 
+      function buildReferences() {
+        function toSpacedWords(value) {
+          value = value.replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+          value = value.replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2');
+          return value.length > 1 ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+        }
+
+        vm.references = [];
+
+        var referencePrefix = '@ref:';
+        angular.forEach(vm.event.data, function(data, key) {
+          if (key.startsWith(referencePrefix)) {
+            vm.references.push({ id: data, name: toSpacedWords(key.slice(5)) });
+          }
+        });
+      }
+
       function buildTabs(tabNameToActivate) {
         var tabs = [{title: 'Overview', template_key: 'overview'}];
+
+        if (vm.event.session_id && isSessionStart()) {
+          tabs.push({title: 'Session Events', template_key: 'session'});
+        }
 
         if (isError()) {
           if (vm.event.data['@error']) {
@@ -66,7 +87,7 @@
         }
 
         if (hasRequestInfo()) {
-          tabs.push({title: 'Request', template_key: 'request'});
+          tabs.push({title: isSessionStart() ? 'Browser' : 'Request', template_key: 'request'});
         }
 
         if (hasEnvironmentInfo()) {
@@ -181,6 +202,7 @@
           vm.next = links['next'] ? links['next'].split('/').pop() : null;
 
           addHotKeys();
+          buildReferences();
 
           return vm.event;
         }
@@ -228,7 +250,7 @@
 
       function getRequestUrl() {
         var request = vm.event.data['@request'];
-        return urlService.buildUrl(request.is_secure, request.host, request.port, request.path, request.query_string);
+        return request ? urlService.buildUrl(request.is_secure, request.host, request.port, request.path, request.query_string) : null;
       }
 
       function getVersion() {
@@ -316,6 +338,10 @@
         return vm.project.promoted_tabs.filter(function (tab) { return tab === tabName; }).length > 0;
       }
 
+      function isSessionStart() {
+        return vm.event.type === 'session';
+      }
+
       function promoteTab(tabName) {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.success')
@@ -376,8 +402,26 @@
       vm.isLevelWarning = isLevelWarning;
       vm.isLevelError = isLevelError;
       vm.isPromoted = isPromoted;
+      vm.isSessionStart = isSessionStart;
       vm.project = {};
       vm.promoteTab = promoteTab;
+      vm.references = [];
+      vm.sessionEvents = {
+        get: function (options) {
+          function optionsCallback(options) {
+            options.filter = options.time = null;
+            return options;
+          }
+
+          return eventService.getBySessionId(vm.event.session_id, options, optionsCallback);
+        },
+        options: {
+          limit: 10,
+          mode: 'summary'
+        },
+        source: source + '.Recent',
+        hideActions: true
+      };
       vm.tabs = [];
 
       getEvent().then(getProject).then(function() { buildTabs($stateParams.tab); });

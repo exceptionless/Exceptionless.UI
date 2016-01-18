@@ -2,7 +2,7 @@
   <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable" refresh-on="StackChanged PlanChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <thead refresh-on="PersistentEventChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <tr>
-      <th class="selection hidden-xs">
+      <th class="selection hidden-xs" ng-if="vm.actions.length > 0">
         <label class="i-checks m-b-none">
           <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.hasSelection()" ng-disabled="!vm.hasEvents()"><i></i>
         </label>
@@ -13,18 +13,21 @@
     </thead>
     <tbody>
       <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.hasEvents()">
-        <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="event.id"><i></i></label></td>
+        <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="event.id"><i></i></label></td>
         <td ng-click="vm.open(event.id, $event)">
           <summary source="event" show-type="vm.showType"></summary>
         </td>
-        <td ng-click="vm.open(event.id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
-          <timeago date="event.date"></timeago>
-        </abbr></td>
+        <td ng-click="vm.open(event.id, $event)">
+          <abbr title="{{::event.date | date : 'medium'}}">
+            <timeago date="event.date"></timeago>
+          </abbr>
+        </td>
       </tr>
-      <tr ng-if="!vm.hasEvents()">
-        <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
+      <tr ng-if="!vm.hasEvents() || vm.loading">
+        <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
         <td colspan="2">
-          <strong>No data found.</strong>
+          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="!vm.loading">No events were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
       </tr>
     </tbody>
@@ -32,8 +35,8 @@
 
   <div class="table-footer">
     <div class="row">
-      <div class="col-xs-4 hidden-xs">
-        <div class="dropdown">
+      <div class="col-sm-4 hidden-xs">
+        <div class="dropdown" ng-if="vm.actions.length > 0">
           <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             Bulk Action
             <span class="caret"></span>

@@ -4,6 +4,7 @@
   angular.module('exceptionless.projects', [
     'exceptionless',
     'exceptionless.dialog',
+    'exceptionless.filter',
     'exceptionless.link',
     'exceptionless.notification',
     'exceptionless.pagination',
@@ -19,7 +20,7 @@
           settings: "="
         },
         templateUrl: 'components/projects/projects-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', 'dialogService', 'linkService', 'notificationService', 'paginationService', 'projectService', function ($ExceptionlessClient, $window, $state, dialogService, linkService, notificationService, paginationService, projectService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', 'dialogService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'projectService', function ($ExceptionlessClient, $window, $state, dialogService, filterService, linkService, notificationService, paginationService, projectService) {
           var source = 'exceptionless.projects';
           var vm = this;
 
@@ -40,8 +41,11 @@
               return vm.projects;
             }
 
+            vm.loading = vm.projects.length === 0;
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions, useCache).then(onSuccess);
+            return vm.settings.get(vm.currentOptions, useCache).then(onSuccess).finally(function() {
+              vm.loading = false;
+            });
           }
 
           function hasProjects() {
@@ -73,8 +77,9 @@
             $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('project', project).submit();
             return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
               function onSuccess() {
-                $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('project', project).submit();
                 vm.projects.splice(vm.projects.indexOf(project), 1);
+                notificationService.info('Successfully queued the project for deletion.');
+                $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('project', project).submit();
               }
 
               function onFailure() {
@@ -88,8 +93,10 @@
 
           vm.currentOptions = {};
           vm.get = get;
+          vm.hasFilter = filterService.hasFilter;
           vm.hasProjects = hasProjects;
           vm.includeOrganizationName = !vm.settings.hideOrganizationName;
+          vm.loading = true;
           vm.nextPage = nextPage;
           vm.open = open;
           vm.previousPage = previousPage;

@@ -103,6 +103,7 @@
       function removeOrganization() {
         return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
+            notificationService.info('Successfully queued the organization for deletion.');
             $state.go('app.organization.list');
           }
 

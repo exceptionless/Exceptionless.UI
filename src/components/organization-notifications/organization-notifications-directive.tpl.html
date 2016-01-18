@@ -95,15 +95,15 @@
       <p><a ng-click="vm.showChangePlanDialog(vm.monthlyOverageOrganizations[0].id)">Upgrade now</a> to continue receiving events.</p>
     </div>
 
-    <div class="alert alert-danger alert-banner m-b-none" ng-if="vm.hasOrganizationsSearchingWithoutPremiumFeatures()">
+    <div class="alert alert-danger alert-banner m-b-none" ng-if="vm.hasOrganizationsWithoutPremiumFeatures()">
       <h4>
-        <span ng-repeat="organization in vm.organizationsSearchingWithoutPremiumFeatures">
+        <span ng-repeat="organization in vm.organizationsWithoutPremiumFeatures">
           <span ng-if="!$first">, </span><a ng-click="vm.showChangePlanDialog(organization.id)">{{organization.name}}</a>
         </span>
         is attempting to use a premium feature.
       </h4>
 
-      <p><a ng-click="vm.showChangePlanDialog(vm.organizationsSearchingWithoutPremiumFeatures[0].id)">Upgrade now</a> to enable search and other premium!</p>
+      <p><a ng-click="vm.showChangePlanDialog(vm.organizationsWithoutPremiumFeatures[0].id)">Upgrade now</a> to enable search and other premium features!</p>
     </div>
 
     <div class="alert alert-success alert-banner m-b-none" ng-if="vm.hasFreeOrganizations()">

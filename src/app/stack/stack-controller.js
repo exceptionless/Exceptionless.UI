@@ -194,6 +194,7 @@
         var message = 'Are you sure you want to delete this stack?';
         return dialogService.confirmDanger(message, 'DELETE STACK').then(function () {
           function onSuccess() {
+            notificationService.info('Successfully queued the stack for deletion.');
             $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('id', _stackId).submit();
             $state.go('app.project-dashboard', { projectId: vm.stack.project_id });
           }
@@ -233,7 +234,7 @@
           }
 
           var action = isFixed() ? ' not' : '';
-          notificationService.info('Successfully marked this stack as' + action + ' fixed.');
+          notificationService.info('Successfully queued the stack to be marked as' + action + ' fixed.');
         }
 
         function onFailure(response) {
@@ -253,6 +254,7 @@
       function updateIsHidden() {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(source + '.updateIsHidden.success').setProperty('id', _stackId).submit();
+          notificationService.info('Successfully queued the stack to be marked as' + isHidden() ? 'shown.' : 'hidden.');
         }
 
         function onFailure(response) {

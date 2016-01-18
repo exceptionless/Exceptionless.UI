@@ -6,17 +6,26 @@
       )
     </td>
   </tr>
+  <tr ng-if="vm.isSessionStart() && vm.event.data.sessionend">
+    <th>End</th>
+    <td>{{::vm.event.data.sessionend | date: 'medium'}} (
+      <abbr title="{{vm.event.value || 0}} seconds">
+        <duration value="vm.event.value"></duration>
+      </abbr>
+      )
+    </td>
+  </tr>
   <tr>
     <th>Project</th>
     <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
   </tr>
-  <tr ng-if="vm.event.session_id">
-    <th>Session</th>
-    <td>{{vm.event.session_id}}</td>
-  </tr>
   <tr ng-if="vm.event.reference_id">
     <th>Reference</th>
     <td>{{vm.event.reference_id}}</td>
+  </tr>
+  <tr ng-repeat="reference in vm.references | orderBy: 'name'">
+    <th>{{reference.name}}</th>
+    <td><a ui-sref="app.event-reference({ referenceId: reference.id })">{{reference.id}}</a></td>
   </tr>
   <tr class="hidden-print" ng-if="vm.hasLevel()">
     <th>Level</th>
@@ -42,6 +51,10 @@
     <th>Version</th>
     <td>{{::vm.getVersion()}}</td>
   </tr>
+  <tr class="hidden-print" ng-if="vm.event.geo">
+    <th>Geo</th>
+    <td><span truncate>{{::vm.event.geo}}</span></td>
+  </tr>
   <tr ng-if="vm.hasTags()">
     <th>Tags</th>
     <td><span class="label label-info" ng-repeat="tag in vm.event.tags track by tag">{{tag}}</span></td>
@@ -51,7 +64,7 @@
     <td><span truncate>{{::vm.event.code}}</span></td>
   </tr>
 
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo()">
+  <tr class="hidden-print" ng-if="vm.getRequestUrl()">
     <th>URL</th>
     <td><a ng-href="{{::vm.getRequestUrl()}}" target="_blank" truncate>{{::vm.getRequestUrl()}}</a></td>
   </tr>

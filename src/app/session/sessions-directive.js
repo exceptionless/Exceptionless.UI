@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  angular.module('exceptionless.events')
-    .directive('events', function (linkService) {
+  angular.module('app.session')
+    .directive('sessions', function (linkService) {
       return {
         bindToController: true,
         restrict: 'E',
@@ -10,10 +10,10 @@
         scope: {
           settings: '='
         },
-        templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService) {
+        templateUrl: 'app/session/sessions-directive.tpl.html',
+        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService) {
           var vm = this;
-          var source = vm.settings.source + '.events';
+          var source = vm.settings.source + '.sessions';
 
           function canRefresh(data) {
             if (!!data && data.type === 'PersistentEvent') {
@@ -114,7 +114,6 @@
               });
           }
 
-          vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
           vm.canRefresh = canRefresh;
           vm.events = [];
           vm.get = get;

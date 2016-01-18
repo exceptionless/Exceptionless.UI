@@ -14,6 +14,7 @@
     'exceptionless.autofocus',
     'exceptionless.billing',
     'exceptionless.dialog',
+    'exceptionless.filter',
     'exceptionless.organization',
     'exceptionless.pagination',
     'exceptionless.project',

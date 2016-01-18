@@ -9,7 +9,7 @@ module.exports = function (grunt) {
                 'bower_components/angular-mocks/angular-mocks.js',
                 grunt.option('folderGlobs')('*-spec.js'),
 
-                'components/event-summary/**/*.html'
+                'components/summary/**/*.html'
             ],
             ngHtml2JsPreprocessor: {
                 moduleName: "app"
@@ -17,13 +17,13 @@ module.exports = function (grunt) {
             preprocessors: {
                 'components/summary/**/*.html': 'ng-html2js'
             },
-            logLevel: 'ERROR',
+            logLevel: 'DEBUG',
             reporters: ['mocha'],
             autoWatch: false, //watching is handled by grunt-contrib-watch
             singleRun: true
         },
         all_tests: {
-            browsers: ['PhantomJS']//,'Chrome','Firefox']
+            browsers: ['PhantomJS']
         },
         during_watch: {
             browsers: ['PhantomJS']

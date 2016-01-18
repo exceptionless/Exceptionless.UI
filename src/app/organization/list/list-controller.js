@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.List', ['$ExceptionlessClient', '$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'linkService', 'notificationService', 'organizationService', 'paginationService', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, linkService, notificationService, organizationService, paginationService) {
+    .controller('organization.List', ['$ExceptionlessClient', '$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'filterService', 'linkService', 'notificationService', 'organizationService', 'paginationService', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, filterService, linkService, notificationService, organizationService, paginationService) {
       var source = 'exceptionless.organization.List';
       var settings = { mode: 'stats' };
       var vm = this;
@@ -52,8 +52,11 @@
           return vm.organizations;
         }
 
+        vm.loading = vm.organizations.length === 0;
         vm.currentOptions = options || settings;
-        return organizationService.getAll(vm.currentOptions, useCache).then(onSuccess);
+        return organizationService.getAll(vm.currentOptions, useCache).then(onSuccess).finally(function() {
+          vm.loading = false;
+        });
       }
 
       function leave(organization, user) {
@@ -100,8 +103,9 @@
         $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('organization', organization).submit();
         return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
-            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('organization', organization).submit();
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
+            notificationService.info('Successfully queued the organization for deletion.');
+            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('organization', organization).submit();
           }
 
           function onFailure(response) {
@@ -120,7 +124,9 @@
 
       vm.add = add;
       vm.get = get;
+      vm.hasFilter = filterService.hasFilter;
       vm.leave = leave;
+      vm.loading = true;
       vm.nextPage = nextPage;
       vm.open = open;
       vm.organizations = [];

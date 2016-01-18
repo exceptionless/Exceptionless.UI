@@ -78,6 +78,7 @@
 
         var filter = buildFilter();
         if (filter) {
+
           angular.extend(options, { filter: filter });
         }
 
@@ -118,6 +119,10 @@
 
       function getTimeZoneOffset() {
         return new Date().getTimezoneOffset() * -1;
+      }
+
+      function hasFilter() {
+        return _includeFixed || _includeHidden || _raw || (_time && _time !== 'all');
       }
 
       function includedInProjectOrOrganizationFilter(data) {
@@ -245,6 +250,7 @@
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
         getTime: getTime,
+        hasFilter: hasFilter,
         includedInProjectOrOrganizationFilter: includedInProjectOrOrganizationFilter,
         setEventType: setEventType,
         setFilter: setFilter,

@@ -93,11 +93,10 @@
         });
 
         Handlebars.registerHelper('toSpaceWords', function (value) {
-          if (value) {
-            if (!value.match(/\d+|__/g)) {
-              value = value.replace(/([a-z])([A-Z])/g, '$1 $2');
-              value = value.length > 1 ? value.charAt(0).toUpperCase() + value.slice(1) : value;
-            }
+          if (value && value.length) {
+            value = value.replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+            value = value.replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2');
+            value = value.length > 1 ? value.charAt(0).toUpperCase() + value.slice(1) : value;
             return new Handlebars.SafeString(Handlebars.Utils.escapeExpression(value));
           }
           else {

@@ -7,6 +7,10 @@
         var routeParts = [];
         var routeParams = {};
 
+        if (options.routePrefix) {
+          routeParts.push(options.routePrefix);
+        }
+
         if (options.organizationId) {
           routeParts.push('organization');
           routeParams.organizationId = options.organizationId;
@@ -21,10 +25,15 @@
         }
 
         routeParts.push(options.route);
+
         return $state.href('app.' + routeParts.join('-'), routeParams, { absolute: true });
       }
 
       function buildUrl(isSecure, host, port, path, queryString) {
+        if (!host) {
+          return null;
+        }
+
         var url = (isSecure ? 'https://' : 'http://') + host;
 
         if (port !== 80 && port !== 443) {
