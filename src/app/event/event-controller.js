@@ -409,8 +409,7 @@
       vm.sessionEvents = {
         get: function (options) {
           function optionsCallback(options) {
-            options.filter = '-type:session';
-            options.time = null;
+            options.filter = options.time = null;
             return options;
           }
 
