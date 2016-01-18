@@ -90,16 +90,5 @@
           }]
         }
       });
-
-      $stateProvider.state('app.session.list', {
-        url: '/{id:[0-9a-zA-Z\-]{8,100}}',
-        controller: 'session.List',
-        controllerAs: 'vm',
-        templateUrl: 'app/session/list.tpl.html',
-        onEnter: ['filterService', function (filterService) {
-          filterService.setEventType('session', true);
-        }],
-        onExit: onExitRemoveTypeFilter
-      });
     }]);
 }());

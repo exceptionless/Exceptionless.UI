@@ -5,7 +5,7 @@
   "devDependencies": {
     "bower": "1.7.2",
     "grunt": "0.4",
-    "grunt-angular-templates": "0.5",
+    "grunt-angular-templates": "1.0",
     "grunt-browser-output": "1.0.3",
     "grunt-cache-bust": "0.6.1",
     "grunt-cli": "0.1.13",
@@ -16,7 +16,7 @@
     "grunt-contrib-copy": "0.8",
     "grunt-contrib-cssmin": "0.14.0",
     "grunt-contrib-htmlmin": "0.6",
-    "grunt-contrib-jshint": "0.11",
+    "grunt-contrib-jshint": "0.12",
     "grunt-contrib-less": "1.1",
     "grunt-contrib-uglify": "0.11",
     "grunt-contrib-watch": "0.6",

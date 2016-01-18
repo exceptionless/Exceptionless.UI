@@ -19,15 +19,13 @@
     <th>Project</th>
     <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
   </tr>
-  <tr ng-if="vm.event.session_id">
-    <th>Session<span ng-if="vm.isSessionStart()"> Id</span></th>
-    <td>
-      <span ng-if="vm.isSessionStart()">{{vm.event.session_id}}</span>
-      <a ng-if="!vm.isSessionStart()" ui-sref="app.session.list({ id: vm.event.session_id })">{{vm.event.session_id}}</a></td>
-  </tr>
   <tr ng-if="vm.event.reference_id">
     <th>Reference</th>
     <td>{{vm.event.reference_id}}</td>
+  </tr>
+  <tr ng-repeat="reference in vm.references | orderBy: 'name'">
+    <th>{{reference.name}}</th>
+    <td><a ui-sref="app.app.event-reference({ referenceId: reference.id })">{{reference.id}}</a></td>
   </tr>
   <tr class="hidden-print" ng-if="vm.hasLevel()">
     <th>Level</th>
