@@ -25,7 +25,7 @@
   </tr>
   <tr ng-repeat="reference in vm.references | orderBy: 'name'">
     <th>{{reference.name}}</th>
-    <td><a ui-sref="app.app.event-reference({ referenceId: reference.id })">{{reference.id}}</a></td>
+    <td><a ui-sref="app.event-reference({ referenceId: reference.id })">{{reference.id}}</a></td>
   </tr>
   <tr class="hidden-print" ng-if="vm.hasLevel()">
     <th>Level</th>
