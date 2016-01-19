@@ -248,6 +248,20 @@
         return projectService.getById(vm.event.project_id, true).then(onSuccess, onFailure);
       }
 
+      function getLocation() {
+        var location = vm.event.data ? vm.event.data['@location'] : null;
+        if (!location) {
+          return;
+        }
+
+        return [location.locality, location.level2, location.level1, location.country]
+          .filter(function(value) { return value && value.length; })
+          .reduce(function(a, b, index) {
+            a += (index > 0 ? ', ' : '') + b;
+            return a;
+          }, '');
+      }
+
       function getRequestUrl() {
         var request = vm.event.data['@request'];
         return request ? urlService.buildUrl(request.is_secure, request.host, request.port, request.path, request.query_string) : null;
@@ -384,6 +398,7 @@
       vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
       vm.getCurrentTab = getCurrentTab;
       vm.getErrorType = getErrorType;
+      vm.getLocation = getLocation;
       vm.getMessage = getMessage;
       vm.getRequestUrl = getRequestUrl;
       vm.getVersion = getVersion;

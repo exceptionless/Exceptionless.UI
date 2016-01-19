@@ -51,6 +51,10 @@
     <th>Version</th>
     <td>{{::vm.getVersion()}}</td>
   </tr>
+  <tr ng-if="vm.getLocation()">
+    <th>Geo</th>
+    <td><span truncate>{{::vm.getLocation()}}</span></td>
+  </tr>
   <tr ng-if="vm.hasTags()">
     <th>Tags</th>
     <td><span class="label label-info" ng-repeat="tag in vm.event.tags track by tag">{{tag}}</span></td>
