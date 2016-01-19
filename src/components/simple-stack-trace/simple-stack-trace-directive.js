@@ -61,12 +61,12 @@
           return input;
         }
 
-        return input
+        return $sce.trustAsHtml(input
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
+          .replace(/'/g, "&#039;"));
       }
 
       return {
@@ -76,7 +76,7 @@
         scope: {
           exception: "="
         },
-        template: '<pre class="stack-trace" ng-bind-html="vm.stackTrace"></pre>',
+        template: '<pre class="stack-trace"><code ng-bind-html="vm.stackTrace"></code></pre>',
         controller: [function () {
           var vm = this;
           vm.stackTrace = $sce.trustAsHtml(buildStackTrace(simpleErrorService.getExceptions(vm.exception)));
