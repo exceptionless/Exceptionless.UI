@@ -254,7 +254,7 @@
           return;
         }
 
-        return [location.locality, location.level2, location.level1, location.country]
+        return [location.locality, location.level1, location.country]
           .filter(function(value) { return value && value.length; })
           .reduce(function(a, b, index) {
             a += (index > 0 ? ', ' : '') + b;
