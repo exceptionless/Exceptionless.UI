@@ -381,6 +381,7 @@
 
       vm.demoteTab = demoteTab;
       vm.event = {};
+      vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
       vm.getCurrentTab = getCurrentTab;
       vm.getErrorType = getErrorType;
       vm.getMessage = getMessage;
