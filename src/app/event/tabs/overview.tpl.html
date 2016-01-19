@@ -51,10 +51,6 @@
     <th>Version</th>
     <td>{{::vm.getVersion()}}</td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.event.geo">
-    <th>Geo</th>
-    <td><span truncate>{{::vm.event.geo}}</span></td>
-  </tr>
   <tr ng-if="vm.hasTags()">
     <th>Tags</th>
     <td><span class="label label-info" ng-repeat="tag in vm.event.tags track by tag">{{tag}}</span></td>
