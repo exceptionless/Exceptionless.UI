@@ -74,7 +74,7 @@
       function buildTabs(tabNameToActivate) {
         var tabs = [{title: 'Overview', template_key: 'overview'}];
 
-        if (vm.event.session_id && isSessionStart()) {
+        if (vm.event.reference_id && isSessionStart()) {
           tabs.push({title: 'Session Events', template_key: 'session'});
         }
 
@@ -413,7 +413,7 @@
             return options;
           }
 
-          return eventService.getBySessionId(vm.event.session_id, options, optionsCallback);
+          return eventService.getBySessionId(vm.event.reference_id, options, optionsCallback);
         },
         options: {
           limit: 10,
