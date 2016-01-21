@@ -15,13 +15,13 @@
   <tr>
     <th>Referrer</th>
     <td>
-      <span ng-if="vm.hasReferrer()">
+      <span ng-if="vm.event.data['@request'].referrer">
           <a ng-href="{{::vm.event.data['@request'].referrer}}" target="_blank" truncate>{{::vm.event.data['@request'].referrer}}</a>
       </span>
-      <em ng-if="!vm.hasReferrer()">None</em>
+      <em ng-if="!vm.event.data['@request'].referrer">None</em>
     </td>
   </tr>
-  <tr ng-if="vm.hasIPAddress()">
+  <tr ng-if="vm.event.data['@request'].client_ip_address">
     <th>Client IP</th>
     <td>{{::vm.event.data['@request'].client_ip_address}}</td>
   </tr>
@@ -29,15 +29,15 @@
     <th>User Agent</th>
     <td><span truncate lines="2">{{::vm.event.data['@request'].user_agent}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@device']">
+  <tr class="hidden-print" ng-if="vm.event.data['@request'].data['@device']">
     <th>Device</th>
     <td>{{::vm.event.data['@request'].data['@device']}}</td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@browser']">
+  <tr class="hidden-print" ng-if="vm.event.data['@request'].data['@browser']">
     <th>Browser</th>
     <td>{{::vm.event.data['@request'].data['@browser']}} <abbr ng-if="vm.event.data['@request'].data['@browser_major_version']" title="{{::vm.event.data['@request'].data['@browser_version']}}">{{::vm.event.data['@request'].data['@browser_major_version']}}</abbr></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.hasRequestInfo() && vm.event.data['@request'].data['@os']">
+  <tr class="hidden-print" ng-if="vm.event.data['@request'].data['@os']">
     <th>Browser OS</th>
     <td>{{::vm.event.data['@request'].data['@os']}} <abbr ng-if="vm.event.data['@request'].data['@os_major_version']" title="{{::vm.event.data['@request'].data['@os_version']}}">{{::vm.event.data['@request'].data['@os_major_version']}}</abbr></td>
   </tr>

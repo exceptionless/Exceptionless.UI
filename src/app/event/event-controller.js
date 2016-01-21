@@ -234,6 +234,7 @@
         function onSuccess(response) {
           vm.project = response.data.plain();
           vm.project.promoted_tabs = vm.project.promoted_tabs || [];
+
           return vm.project;
         }
 
@@ -287,24 +288,12 @@
         return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].name;
       }
 
-      function hasIPAddress() {
-        return hasRequestInfo() && vm.event.data['@request'].client_ip_address && vm.event.data['@request'].client_ip_address.length > 0;
-      }
-
       function hasLevel() {
         return vm.event.data && vm.event.data['@level'];
       }
 
-      function hasReferrer() {
-        return vm.event.data && vm.event.data['@request'] && vm.event.data['@request'].referrer;
-      }
-
       function hasRequestInfo() {
         return vm.event.data && vm.event.data['@request'];
-      }
-
-      function hasUserAgent() {
-        return vm.event.data && vm.event.data['@request'] && vm.event.data['@request'].user_agent;
       }
 
       function hasUserEmail() {
@@ -406,7 +395,6 @@
       vm.hasIdentity = hasIdentity;
       vm.hasUserName = hasUserName;
       vm.hasLevel = hasLevel;
-      vm.hasReferrer = hasReferrer;
       vm.hasRequestInfo = hasRequestInfo;
       vm.hasTags = hasTags;
       vm.hasUserDescription = hasUserDescription;
