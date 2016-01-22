@@ -61,7 +61,7 @@
       }
 
       function isNameAvailable(name) {
-        return Restangular.one('organizations', 'check-name').one(name).get();
+        return Restangular.one('organizations', 'check-name').get({ name: encodeURIComponent(name) });
       }
 
       function remove(id) {

@@ -61,7 +61,7 @@
       }
 
       function isNameAvailable(name) {
-        return Restangular.one('projects', 'check-name').one(name).get();
+        return Restangular.one('projects', 'check-name').get({ name: encodeURIComponent(name) });
       }
 
       function promoteTab(id, name) {
