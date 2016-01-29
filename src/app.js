@@ -68,9 +68,10 @@
       var config = $ExceptionlessClient.config;
       config.apiKey = EXCEPTIONLESS_API_KEY;
       config.serverUrl = BASE_URL;
-      config.setVersion('@@version');
       config.defaultTags.push('UI');
+      config.setVersion('@@version');
       config.useReferenceIds();
+      config.useSessions();
     }
 
     $locationProvider.html5Mode({
