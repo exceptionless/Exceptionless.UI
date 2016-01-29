@@ -12,7 +12,7 @@
        ng-change="vm.saveDataExclusion()"/>
 
 <h4>Error Stacking</h4>
-<h5>UserNamespaces</h5>
+<h5>User Namespaces</h5>
 <p>
   A comma delimited list of the namespace names that your applications code belongs to.
   If this value is set, only methods inside of these namespaces will be considered as stacking targets.
@@ -22,7 +22,7 @@
        ng-model-options="{ debounce: 500 }"
        ng-change="vm.saveUserNamespaces()"/>
 
-<h5>CommonMethods</h5>
+<h5>Common Methods</h5>
 <p>
   A comma delimited list of common method names that should not be used as stacking targets.
   This is useful when your code contains methods shared utility methods that throw a lot of errors.
