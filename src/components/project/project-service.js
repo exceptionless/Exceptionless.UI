@@ -76,6 +76,10 @@
         return Restangular.one('projects', id).one('config', key).remove();
       }
 
+      function removeData(id, key) {
+        return Restangular.one('projects', id).one('data', key).remove();
+      }
+
       function removeNotificationSettings(id, userId) {
         return Restangular.one('users', userId).one('projects', id).one('notifications').remove();
       }
@@ -90,6 +94,10 @@
 
       function setConfig(id, key, value) {
         return Restangular.one('projects', id).one('config', key).customPOST(value);
+      }
+
+      function setData(id, key, value) {
+        return Restangular.one('projects', id).one('data', key).customPOST(value);
       }
 
       function setNotificationSettings(id, userId, settings) {
@@ -108,9 +116,11 @@
         promoteTab: promoteTab,
         remove: remove,
         removeConfig: removeConfig,
+        removeData: removeData,
         removeNotificationSettings: removeNotificationSettings,
         resetData: resetData,
         setConfig: setConfig,
+        setData: setData,
         setNotificationSettings: setNotificationSettings,
         update: update
       };

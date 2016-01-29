@@ -61,7 +61,15 @@
 
       function getProject() {
         function onSuccess(response) {
+          vm.common_methods = null;
+          vm.user_namespaces = null;
+
           vm.project = response.data.plain();
+          if (vm.project && vm.project.data) {
+            vm.common_methods = vm.project.data['CommonMethods'];
+            vm.user_namespaces = vm.project.data['UserNamespaces'];
+          }
+
           return vm.project;
         }
 
@@ -90,10 +98,13 @@
         function onSuccess(response) {
           vm.config = [];
           vm.data_exclusions = null;
+          vm.user_agents = null;
 
           angular.forEach(response.data.settings, function (value, key) {
             if (key === '@@DataExclusions') {
               vm.data_exclusions = value;
+            } else if (key === '@@UserAgentBotPatterns') {
+              vm.user_agents = value;
             } else {
               vm.config.push({key: key, value: value});
             }
@@ -215,6 +226,18 @@
         return projectService.setConfig(_projectId, data.key, data.value).catch(onFailure);
       }
 
+      function saveCommonMethods() {
+        function onFailure() {
+          notificationService.error('An error occurred while saving the common methods.');
+        }
+
+        if (vm.common_methods) {
+          return projectService.setData(_projectId, 'CommonMethods', vm.common_methods).catch(onFailure);
+        } else {
+          return projectService.removeData(_projectId, 'CommonMethods').catch(onFailure);
+        }
+      }
+
       function saveDataExclusion() {
         function onFailure() {
           notificationService.error('An error occurred while saving the the data exclusion.');
@@ -235,6 +258,30 @@
         return projectService.update(_projectId, {'delete_bot_data_enabled': vm.project.delete_bot_data_enabled}).catch(onFailure);
       }
 
+      function saveUserAgents() {
+        function onFailure() {
+          notificationService.error('An error occurred while saving the user agents.');
+        }
+
+        if (vm.user_agents) {
+          return projectService.setConfig(_projectId, '@@UserAgentBotPatterns', vm.user_agents).catch(onFailure);
+        } else {
+          return projectService.removeConfig(_projectId, '@@UserAgentBotPatterns').catch(onFailure);
+        }
+      }
+
+      function saveUserNamespaces() {
+        function onFailure() {
+          notificationService.error('An error occurred while saving the user namespaces.');
+        }
+
+        if (vm.user_namespaces) {
+          return projectService.setData(_projectId, 'UserNamespaces', vm.user_namespaces).catch(onFailure);
+        } else {
+          return projectService.removeData(_projectId, 'UserNamespaces').catch(onFailure);
+        }
+      }
+
       function showChangePlanDialog() {
         return billingService.changePlan(vm.project.organization_id);
       }
@@ -252,6 +299,7 @@
       vm.addWebHook = addWebHook;
       vm.config = [];
       vm.copied = copied;
+      vm.common_methods = null;
       vm.data_exclusions = null;
       vm.get = get;
       vm.getTokens = getTokens;
@@ -269,10 +317,15 @@
       vm.resetData = resetData;
       vm.save = save;
       vm.saveClientConfiguration = saveClientConfiguration;
+      vm.saveCommonMethods = saveCommonMethods;
       vm.saveDataExclusion = saveDataExclusion;
       vm.saveDeleteBotDataEnabled = saveDeleteBotDataEnabled;
+      vm.saveUserAgents = saveUserAgents;
+      vm.saveUserNamespaces = saveUserNamespaces;
       vm.showChangePlanDialog = showChangePlanDialog;
       vm.tokens = [];
+      vm.user_agents = null;
+      vm.user_namespaces = null;
       vm.validateClientConfiguration = validateClientConfiguration;
       vm.webHooks = [];
       get();
