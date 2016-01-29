@@ -1,0 +1,28 @@
+<form name="vm.projectForm" role="form" class="form-validation">
+  <div class="form-group">
+    <label for="name">Project Name</label>
+    <div ng-class="{'input-group': vm.projectForm.$pending }">
+      <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
+             ng-model="vm.project.name"
+             ng-model-options="{ debounce: 500 }"
+             ng-change="vm.save(vm.projectForm.$valid)"
+             project-name-available-validator
+             ng-required="true"
+             autofocus />
+
+        <span class="input-group-addon" ng-if="vm.projectForm.$pending">
+          <i class="fa fa-fw fa-spinner fa-spin"></i>
+        </span>
+    </div>
+
+    <div class="error" ng-messages="vm.projectForm.name.$error" ng-if="vm.projectForm.$submitted || vm.projectForm.name.$touched">
+      <small ng-message="required">Project Name is required.</small>
+      <small ng-message="unique">A project with this name already exists.</small>
+    </div>
+  </div>
+
+  <div class="form-group m-b-none">
+    <label>Organization Name</label>
+    <input type="text" class="form-control" placeholder="Organization Name" ng-model="vm.project.organization_name" readonly />
+  </div>
+</form>
