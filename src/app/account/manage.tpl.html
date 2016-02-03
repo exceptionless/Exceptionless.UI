@@ -39,7 +39,7 @@
                     <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                            placeholder="Email Address"
                            ng-model="vm.user.email_address"
-                           ng-model-options="{ debounce: 500 }"
+                           ng-model-options="{ debounce: 1000 }"
                            ng-change="vm.saveEmailAddress()"
                            email-address-available-validator
                            required/>

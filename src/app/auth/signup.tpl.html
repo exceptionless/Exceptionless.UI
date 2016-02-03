@@ -55,7 +55,7 @@
                       <input id="email" name="email" type="email" class="form-control" placeholder="Email address (no spam)"
                              x-autocompletetype="email" autocorrect="off" spellcheck="false"
                              ng-model="vm.user.email"
-                             ng-model-options="{ debounce: 500 }"
+                             ng-model-options="{ debounce: 1000 }"
                              email-address-available-validator
                              ng-required="true" />
 
