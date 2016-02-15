@@ -413,7 +413,7 @@
       vm.sessionEvents = {
         get: function (options) {
           function optionsCallback(options) {
-            options.filter = '-type:heartbeat';
+            options.filter = '-type:heartbeat -type:sessionend';
             options.time = null;
             return options;
           }
