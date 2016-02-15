@@ -6,13 +6,15 @@
       )
     </td>
   </tr>
-  <tr ng-if="vm.isSessionStart() && vm.event.data.sessionend">
-    <th>End</th>
-    <td>{{::vm.event.data.sessionend | date: 'medium'}} (
-      <abbr title="{{vm.event.value || 0}} seconds">
-        <duration value="vm.event.value"></duration>
-      </abbr>
-      )
+  <tr ng-if="vm.isSessionStart()">
+    <th>Duration</th>
+    <td>
+      <div ng-if="!vm.event.data.sessionend">
+        <div id="online" ng-if="!event.data.session_end" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></div> Now
+      </div>
+      <div ng-if="vm.event.data.sessionend">
+        {{::vm.event.data.sessionend | date: 'medium'}} (<abbr title="{{vm.event.value || 0}} seconds"><duration value="vm.event.value"></duration></abbr>)
+      </div>
     </td>
   </tr>
   <tr>
