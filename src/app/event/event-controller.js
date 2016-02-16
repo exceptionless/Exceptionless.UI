@@ -166,6 +166,10 @@
         return tab ? tab.title : null;
       }
 
+      function getDuration() {
+        return vm.event.value || moment().diff(vm.event.date, 'seconds');
+      }
+
       function getErrorType() {
         if (vm.event.data['@error']) {
           var type = errorService.getTargetInfoExceptionType(vm.event.data['@error']);
@@ -386,6 +390,7 @@
       vm.event = {};
       vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
       vm.getCurrentTab = getCurrentTab;
+      vm.getDuration = getDuration;
       vm.getErrorType = getErrorType;
       vm.getLocation = getLocation;
       vm.getMessage = getMessage;
@@ -413,7 +418,7 @@
       vm.sessionEvents = {
         get: function (options) {
           function optionsCallback(options) {
-            options.filter = '-type:heartbeat';
+            options.filter = '-type:heartbeat -type:sessionend';
             options.time = null;
             return options;
           }
