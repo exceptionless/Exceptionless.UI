@@ -8,8 +8,8 @@
     "bower_components"
   ],
   "dependencies": {
-    "angular": "1.4.9",
-    "angular-animate": "1.4.9",
+    "angular": "1.5.0",
+    "angular-animate": "1.5.0",
     "angular-bootstrap": "1.1.2",
     "angular-dialog-service": "5.2.11",
     "angular-filter": "0.5.8",
@@ -19,14 +19,14 @@
     "angular-intercom": "2.1.1",
     "angular-loading-bar": "0.8.0",
     "angular-locker": "2.0.4",
-    "angular-messages": "1.4.9",
-    "angular-mocks": "1.4.9",
+    "angular-messages": "1.5.0",
+    "angular-mocks": "1.5.0",
     "angular-payments": "*",
-    "angular-resource": "1.4.9",
-    "angular-stripe": "4.2.8",
-    "angular-ui-router": "0.2.17",
+    "angular-resource": "1.5.0",
+    "angular-stripe": "4.2.11",
+    "angular-ui-router": "0.2.18",
     "angular-xeditable": "0.1.9",
-    "angularjs-toaster": "1.0.0",
+    "angularjs-toaster": "1.1.0",
     "animate.css": "3.5.1",
     "base64": "0.3.0",
     "bootstrap": "3.3.6",
@@ -42,7 +42,7 @@
     "less.js": "2.6.0",
     "li": "1.0.1",
     "lodash": "3.10.1",
-    "moment": "2.11.1",
+    "moment": "2.11.2",
     "ng-clip": "0.2.6",
     "ng-debounce": "0.1.7",
     "ng-filters": "1.2.0",
@@ -56,11 +56,11 @@
     "twix": "0.9.0"
   },
   "resolutions": {
-    "angular": "1.4.9",
-    "angular-animate": "1.4.9",
+    "angular": "1.5.0",
+    "angular-animate": "1.5.0",
     "angular-bootstrap": "1.1.2",
     "bootstrap": "3.3.6",
     "lodash": "3.10.1",
-    "moment": "2.11.1"
+    "moment": "2.11.2"
   }
 }
