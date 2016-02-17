@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'errorService', 'eventService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, errorService, eventService, hotkeys, linkService, notificationService, projectService, urlService) {
+    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
       var source = 'app.event.Event';
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
@@ -125,6 +125,23 @@
         }
 
         vm.tabs = tabs;
+      }
+
+      function canRefresh(data) {
+        if (!!data && data.type === 'PersistentEvent') {
+          // Refresh if the event id is set (non bulk) and the deleted event matches one of the events.
+          if (data.id === vm.event.id) {
+            return true;
+          }
+
+          return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+        }
+
+        if (!!data && data.type === 'Stack') {
+          return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+        }
+
+        return false;
       }
 
       function demoteTab(tabName) {
@@ -386,12 +403,14 @@
 
       $scope.$on('$destroy', removeHotKeys);
 
+      vm.canRefresh = canRefresh;
       vm.demoteTab = demoteTab;
       vm.event = {};
       vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
       vm.getCurrentTab = getCurrentTab;
       vm.getDuration = getDuration;
       vm.getErrorType = getErrorType;
+      vm.getEvent = getEvent;
       vm.getLocation = getLocation;
       vm.getMessage = getMessage;
       vm.getRequestUrl = getRequestUrl;
