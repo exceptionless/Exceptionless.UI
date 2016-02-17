@@ -1,3 +1,4 @@
+/* global Rickshaw:false */
 (function () {
   'use strict';
 
@@ -312,7 +313,7 @@
           hover: {
             render: function (args) {
               var date = moment.unix(args.domainX);
-              var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma')
+              var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
               var content = '<div class="date">' + formattedDate + '</div>';
               args.detail.sort(function (a, b) {
                 return a.order - b.order;
