@@ -61,6 +61,14 @@
             });
           }
 
+          function getDuration(ev) {
+            if (ev.data.session_end) {
+              return ev.value || 0;
+            }
+
+            return moment().diff(ev.date, 'seconds');
+          }
+
           function hasEvents() {
             return vm.events && vm.events.length > 0;
           }
@@ -117,6 +125,7 @@
           vm.canRefresh = canRefresh;
           vm.events = [];
           vm.get = get;
+          vm.getDuration = getDuration;
           vm.hasEvents = hasEvents;
           vm.hasFilter = filterService.hasFilter;
           vm.hasSelection = hasSelection;
