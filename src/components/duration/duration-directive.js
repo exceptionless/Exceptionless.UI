@@ -15,7 +15,7 @@
               var duration = moment.duration(scope.value, scope.period || 'seconds');
               element.text(duration.humanize());
             } else {
-              element.text('Never');
+              element.text('never');
             }
           }
 

@@ -217,6 +217,7 @@
 
         function onSuccess(response) {
           vm.event = response.data.plain();
+          vm.sessionEvents.relativeTo = vm.event.date;
 
           var links = linkService.getLinks(response.headers('link'));
           vm.previous = links['previous'] ? links['previous'].split('/').pop() : null;

@@ -125,6 +125,7 @@
           vm.open = open;
           vm.nextPage = nextPage;
           vm.previousPage = previousPage;
+          vm.relativeTo = function() { return vm.settings.relativeTo; };
           vm.save = save;
           vm.selectedIds = [];
           vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
