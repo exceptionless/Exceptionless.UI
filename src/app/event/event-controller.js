@@ -450,7 +450,9 @@
           mode: 'summary'
         },
         source: source + '.Recent',
-        hideActions: true
+        timeHeaderText: 'Session Time',
+        hideActions: true,
+        hideSessionStartTime: true
       };
       vm.tabs = [];
 

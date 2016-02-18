@@ -8,7 +8,7 @@
         </label>
       </th>
       <th>Summary</th>
-      <th ng-class="vm.relativeTo() ? 'relative-date' : 'date'">Date</th>
+      <th ng-class="vm.relativeTo() ? 'relative-date' : 'date'">{{::vm.timeHeaderText}}</th>
     </tr>
     </thead>
     <tbody>
@@ -18,10 +18,13 @@
           <summary source="event" show-type="vm.showType"></summary>
         </td>
         <td ng-click="vm.open(event.id, $event)">
-          <abbr title="{{::event.date | date : 'medium'}}">
-            <span ng-if="vm.relativeTo()">after <relative-time to="vm.relativeTo()" date="event.date"></relative-time></span>
-            <timeago date="event.date" ng-if="!vm.relativeTo()"></timeago>
-          </abbr>
+          <span ng-if="vm.hideSessionStartTime && event.data.type === 'session'">--</span>
+          <span ng-if="!vm.hideSessionStartTime || event.data.type !== 'session'">
+            <abbr title="{{::event.date | date : 'medium'}}">
+                <span ng-if="vm.relativeTo()">after <relative-time to="vm.relativeTo()" date="event.date"></relative-time></span>
+                <span ng-if="!vm.relativeTo()"><timeago date="event.date"></timeago></span>
+            </abbr>
+          </span>
         </td>
       </tr>
       <tr ng-if="!vm.hasEvents() || vm.loading">
