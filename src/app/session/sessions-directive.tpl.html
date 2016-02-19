@@ -18,8 +18,8 @@
         <td ng-click="vm.open(event.id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
           <timeago date="event.date"></timeago>
         </abbr></td>
-        <td ng-click="vm.open(event.id, $event)"><abbr title="{{event.data.value || 0}} seconds">
-          <duration value="event.data.value"></duration>
+        <td ng-click="vm.open(event.id, $event)"><abbr title="{{vm.getDuration(event)}} seconds">
+          <duration value="vm.getDuration(event)"></duration>
         </abbr></td>
       </tr>
       <tr ng-if="!vm.hasEvents() || vm.loading">

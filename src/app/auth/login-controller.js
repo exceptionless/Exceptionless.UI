@@ -16,7 +16,7 @@
 
       function authenticate(provider) {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.authenticate.success').setProperty('InviteToken', vm.token).submit();
+          $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).submit();
         }
 
         function onFailure(response) {
@@ -24,7 +24,6 @@
           notificationService.error(getMessage(response));
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).submit();
         return authService.authenticate(provider, { InviteToken: vm.token }).then(onSuccess, onFailure).then(redirectOnSignup);
       }
 
@@ -53,15 +52,14 @@
         }
 
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.login.success').setUserIdentity(vm.loginForm.email).submit();
+          $ExceptionlessClient.submitFeatureUsage(source + '.login');
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.login.error').setUserIdentity(vm.loginForm.email).submit();
+          $ExceptionlessClient.createFeatureUsage(source + '.login.error').setUserIdentity(vm.user.email).submit();
           notificationService.error(getMessage(response));
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.login').setUserIdentity(vm.loginForm.email).submit();
         return authService.login(vm.user).then(onSuccess, onFailure).then(redirectOnSignup);
       }
 

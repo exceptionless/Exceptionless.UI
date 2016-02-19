@@ -14,6 +14,7 @@
     'exceptionless.notification',
     'exceptionless.pagination',
     'exceptionless.refresh',
+    'exceptionless.relative-time',
     'exceptionless.summary',
     'exceptionless.timeago'
   ]);

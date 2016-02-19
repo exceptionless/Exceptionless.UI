@@ -1,3 +1,4 @@
+/* global Rickshaw:false */
 (function () {
   'use strict';
 
@@ -40,8 +41,8 @@
         features: {
           hover: {
             render: function (args) {
-              var date = moment.unix(args.domainX).utc();
-              var formattedDate = date.hours() === 0 ? $filter('date')(date.toDate(), 'mediumDate') : $filter('date')(date.toDate(), 'medium');
+              var date = moment.unix(args.domainX);
+              var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
               var content = '<div class="date">' + formattedDate + '</div>';
               args.detail.sort(function (a, b) {
                 return a.order - b.order;
@@ -85,6 +86,10 @@
 
               return false;
             }
+          },
+          xAxis: {
+            timeFixture: new Rickshaw.Fixtures.Time.Local(),
+            overrideTimeFixtureCustomFormatters: true
           },
           yAxis: {
             ticks: 5,

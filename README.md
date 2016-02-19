@@ -23,6 +23,7 @@ Please read the [contributing document](https://github.com/exceptionless/Excepti
 
    ```javascript
    npm install -g grunt-cli
+   npm install -g bower
    npm install
    ```
 3. Download the JavaScript dependencies by running the following [bower](http://bower.io/) command.

@@ -13,6 +13,7 @@
     function authenticate(provider, userData) {
       function onSuccess() {
         $rootScope.$emit('auth:login', {});
+        // TODO: Figure out a way to submit a session start event here.
       }
 
       return $auth.authenticate(provider, userData || {}).then(onSuccess);
@@ -43,16 +44,14 @@
     }
 
     function login(user) {
-      function onSuccess() {
-         $ExceptionlessClient.config.setUserIdentity({ identity: user.email, data: { InviteToken: user.invite_token }});
-         $rootScope.$emit('auth:login', {});
-      }
-
-      return $auth.login(user).then(onSuccess);
+      return $auth.login(user).then(function () {
+        onLoginSuccess(user);
+      });
     }
 
     function logout(withRedirect, params) {
       function onSuccess() {
+        $ExceptionlessClient.submitSessionEnd();
         $ExceptionlessClient.config.setUserIdentity();
         $rootScope.$emit('auth:logout', {});
 
@@ -66,6 +65,12 @@
       return $auth.logout().then(onSuccess);
     }
 
+    function onLoginSuccess(user) {
+      $ExceptionlessClient.config.setUserIdentity({ identity: user.email, data: { InviteToken: user.invite_token }});
+      $ExceptionlessClient.submitSessionStart();
+      $rootScope.$emit('auth:login', {});
+    }
+
     function resetPassword(resetPasswordModel) {
       return Restangular.one('auth', 'reset-password').customPOST(resetPasswordModel);
     }
@@ -73,6 +78,7 @@
     function signup(user) {
       function onSuccess(response) {
         $auth.setToken(response);
+        onLoginSuccess(user);
         return response;
       }
 

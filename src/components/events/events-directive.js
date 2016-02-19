@@ -121,10 +121,13 @@
           vm.hasEvents = hasEvents;
           vm.hasFilter = filterService.hasFilter;
           vm.hasSelection = hasSelection;
+          vm.hideSessionStartTime = vm.settings.hideSessionStartTime || false;
           vm.loading = true;
           vm.open = open;
           vm.nextPage = nextPage;
           vm.previousPage = previousPage;
+          vm.timeHeaderText = vm.settings.timeHeaderText || 'Date';
+          vm.relativeTo = function() { return vm.settings.relativeTo; };
           vm.save = save;
           vm.selectedIds = [];
           vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();

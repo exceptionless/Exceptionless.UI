@@ -1,5 +1,5 @@
 <table class="table table-striped table-bordered table-fixed table-key-value b-t">
-  <tr>
+  <tr refresh-on="PersistentEventChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.getEvent()" refresh-throttle="10000">
     <th>Occurred On</th>
     <td>{{::vm.event.date | date: 'medium'}} (
       <timeago date="vm.event.date"></timeago>
@@ -28,11 +28,11 @@
     <th>{{reference.name}}</th>
     <td><a ui-sref="app.event-reference({ referenceId: reference.id })">{{reference.id}}</a></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.hasLevel()">
+  <tr ng-if="vm.hasLevel()">
     <th>Level</th>
     <td><span class="label label-default" ng-class="{ 'label-success': vm.isLevelSuccess(), 'label-info': vm.isLevelInfo(), 'label-warning': vm.isLevelWarning(), 'label-danger': vm.isLevelError() }">{{::vm.event.data['@level']}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="!vm.isError()">
+  <tr ng-if="!vm.isError()">
     <th>Event Type</th>
     <td><span truncate>{{::vm.event.type}}</span></td>
   </tr>
@@ -40,15 +40,19 @@
     <th>Error Type</th>
     <td><span truncate>{{::vm.getErrorType()}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.event.source">
+  <tr ng-if="vm.event.source">
     <th>Source</th>
     <td><span truncate lines="2">{{::vm.event.source}}</span></td>
+  </tr>
+  <tr ng-if="!vm.isSessionStart() && vm.event.value">
+    <th>Value</th>
+    <td>{{::vm.event.value}}</td>
   </tr>
   <tr class="hidden-print" ng-if="vm.event.message || vm.getMessage()">
     <th>Message</th>
     <td><span truncate lines="4">{{::vm.event.message || vm.getMessage()}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.hasVersion()">
+  <tr ng-if="vm.hasVersion()">
     <th>Version</th>
     <td>{{::vm.getVersion()}}</td>
   </tr>
@@ -60,11 +64,6 @@
     <th>Tags</th>
     <td><span class="label label-info" ng-repeat="tag in vm.event.tags track by tag">{{tag}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.event.code">
-    <th>Code</th>
-    <td><span truncate>{{::vm.event.code}}</span></td>
-  </tr>
-
   <tr class="hidden-print" ng-if="vm.getRequestUrl()">
     <th>URL</th>
     <td><a ng-href="{{::vm.getRequestUrl()}}" target="_blank" truncate>{{::vm.getRequestUrl()}}</a></td>
