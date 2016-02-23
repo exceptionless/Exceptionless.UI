@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="row row-sm text-center">
-            <div class="col-xs-4">
+            <div class="col-md-3 col-sm-6 col-xs-6">
               <div class="dashboard-block">
                 <div class="rotate">
                   <i class="fa fa-area-chart fa-4x"></i>
@@ -17,7 +17,18 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-md-3 col-sm-6 col-xs-6">
+              <div class="dashboard-block">
+                <div class="rotate">
+                  <i class="fa fa-line-chart fa-4x"></i>
+                </div>
+                <div class="details">
+                  <span class="title">Per Hour</span>
+                  <span class="sub">{{vm.stats.avg_per_hour || 0 | number : 1}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-6">
               <div class="dashboard-block">
                 <div class="rotate">
                   <i class="fa fa-users fa-4x"></i>
@@ -28,7 +39,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-md-3 col-sm-6 col-xs-6">
               <div class="dashboard-block">
                 <div class="rotate">
                   <i class="fa fa-clock-o fa-4x"></i>
