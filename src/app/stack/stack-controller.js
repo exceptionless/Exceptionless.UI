@@ -300,14 +300,15 @@
 
       vm.chart = {
         options: {
+          padding: { top: 0.085 },
           renderer: 'stack',
-          stroke: true,
-          padding: {top: 0.085},
           series: [{
             name: 'Occurrences',
             color: 'rgba(124, 194, 49, .9)',
             stroke: 'rgba(0, 0, 0, 0.15)'
-          }]
+          }],
+          stroke: true,
+          unstack: true
         },
         features: {
           hover: {
