@@ -15,6 +15,10 @@
           }
 
           vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.users, data: item};
+          });
+
+          vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.sessions, data: item};
           });
         }
@@ -33,10 +37,15 @@
           stroke: true,
           padding: {top: 0.085},
           series: [{
-            name: 'Sessions',
-            color: 'rgba(124, 194, 49, .9)',
-            stroke: 'rgba(0, 0, 0, 0.15)'
-          }]
+              name: 'Users',
+              color: 'rgba(60, 116, 0, .9)',
+              stroke: 'rgba(0, 0, 0, 0.15)'
+            }, {
+              name: 'Sessions',
+              color: 'rgba(124, 194, 49, .9)',
+              stroke: 'rgba(0, 0, 0, 0.15)'
+            }
+          ]
         },
         features: {
           hover: {
