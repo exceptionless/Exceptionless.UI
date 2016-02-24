@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('app.organization', [
+    'angular-rickshaw',
     'ngMessages',
     'ui.bootstrap',
     'ui.router',
@@ -20,6 +21,7 @@
     'exceptionless.project',
     'exceptionless.projects',
     'exceptionless.refresh',
+    'exceptionless.timeago',
     'exceptionless.token',
     'exceptionless.user',
     'exceptionless.users',
