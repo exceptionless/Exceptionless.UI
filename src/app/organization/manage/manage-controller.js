@@ -1,8 +1,10 @@
+/* global Rickshaw:false */
 (function () {
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.Manage', ['$filter', '$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'dialogs', 'STRIPE_PUBLISHABLE_KEY', function ($filter, $state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, dialogs, STRIPE_PUBLISHABLE_KEY) {
+    .controller('organization.Manage', ['$ExceptionlessClient', 'filterService', '$filter', '$state', '$stateParams', '$window', 'billingService', 'dialogService', 'organizationService', 'projectService', 'userService', 'notificationService', 'dialogs', 'STRIPE_PUBLISHABLE_KEY', function ($ExceptionlessClient, filterService, $filter, $state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, dialogs, STRIPE_PUBLISHABLE_KEY) {
+      var source = 'organization.Manage';
       var _ignoreRefresh = false;
       var _organizationId = $stateParams.id;
       var vm = this;
