@@ -17,7 +17,7 @@ module.exports = function (grunt) {
             preprocessors: {
                 'components/summary/**/*.html': 'ng-html2js'
             },
-            logLevel: 'DEBUG',
+            logLevel: 'TRACE',
             reporters: ['mocha'],
             autoWatch: false, //watching is handled by grunt-contrib-watch
             singleRun: true
