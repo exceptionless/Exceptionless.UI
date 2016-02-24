@@ -31,15 +31,17 @@
                 </div>
               </form>
 
-              <h4 style="margin-top: 20px;">Monthly Usage</h4>
-              <p>
-                You are currently on the <a ng-if="vm.canChangePlan()" ng-click="vm.changePlan()"><strong>{{vm.organization.plan_name}}</strong> plan</a> with
-                <span ng-if="vm.getRemainingEventLimit() > 0">~</span><b ng-class="{'text-warning': vm.getRemainingEventLimit() === 0}">{{vm.getRemainingEventLimit()}}</b> events remaining until this billing period's limit is reset on <b>{{vm.next_billing_date | date: 'longDate'}}</b> (<timeago date="vm.next_billing_date"></timeago>).
-                <a ng-if="vm.canChangePlan()" ng-click="vm.changePlan()">Click here to change your plan or billing information.</a>
-              </p>
-              <rickshaw options="vm.chart.options" features="vm.chart.features"></rickshaw>
-              <br class="clearfix" />
-              <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
+              <div ng-show="vm.hasMonthlyUsage">
+                <h4 style="margin-top: 20px;">Monthly Usage</h4>
+                <p>
+                  You are currently on the <a ng-if="vm.canChangePlan()" ng-click="vm.changePlan()"><strong>{{vm.organization.plan_name}}</strong> plan</a> with
+                  <span ng-if="vm.getRemainingEventLimit() > 0">~</span><b ng-class="{'text-warning': vm.getRemainingEventLimit() === 0}">{{vm.getRemainingEventLimit()}}</b> events remaining until this billing period's limit is reset on <b>{{vm.next_billing_date | date: 'longDate'}}</b> (<timeago date="vm.next_billing_date"></timeago>).
+                  <a ng-if="vm.canChangePlan()" ng-click="vm.changePlan()">Click here to change your plan or billing information.</a>
+                </p>
+                <rickshaw options="vm.chart.options" features="vm.chart.features"></rickshaw>
+                <br class="clearfix" />
+                <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
+              </div>
              </uib-tab>
             <uib-tab heading="Projects" active="vm.tabProjectsActive">
               <projects settings="vm.projects"></projects>

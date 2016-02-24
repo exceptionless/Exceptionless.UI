@@ -63,6 +63,8 @@
       function getOrganization() {
         function onSuccess(response) {
           vm.organization = response.data.plain();
+          vm.organization.usage = vm.organization.usage || [];
+          vm.hasMonthlyUsage = vm.organization.max_events_per_month > 0;
 
           vm.chart.options.series[0].data = vm.organization.usage.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
@@ -258,6 +260,7 @@
       vm.getRemainingEventLimit = getRemainingEventLimit;
       vm.hasAdminRole = hasAdminRole;
       vm.hasPremiumFeatures = hasPremiumFeatures;
+      vm.hasMonthlyUsage = true;
       vm.invoices = {
         get: function (options, useCache) {
           return  organizationService.getInvoices(_organizationId, options, useCache);
