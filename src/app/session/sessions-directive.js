@@ -62,8 +62,8 @@
           }
 
           function getDuration(ev) {
-            if (ev.data.session_end) {
-              return ev.data.value || 0;
+            if (ev.data.SessionEnd) {
+              return ev.data.Value || 0;
             }
 
             return moment().diff(ev.date, 'seconds');
