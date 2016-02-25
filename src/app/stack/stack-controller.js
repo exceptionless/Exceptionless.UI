@@ -300,14 +300,15 @@
 
       vm.chart = {
         options: {
+          padding: { top: 0.085 },
           renderer: 'stack',
-          stroke: true,
-          padding: {top: 0.085},
           series: [{
             name: 'Occurrences',
             color: 'rgba(124, 194, 49, .9)',
             stroke: 'rgba(0, 0, 0, 0.15)'
-          }]
+          }],
+          stroke: true,
+          unstack: true
         },
         features: {
           hover: {
@@ -319,7 +320,7 @@
                 return a.order - b.order;
               }).forEach(function (d) {
                 var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                content += swatch + $filter('number')(d.value.data.total) + ' ' + d.series.name + ' <br />';
+                content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + ' <br />';
               }, this);
 
               var xLabel = document.createElement('div');

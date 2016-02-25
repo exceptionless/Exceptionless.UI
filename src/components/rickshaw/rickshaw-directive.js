@@ -83,7 +83,7 @@
               var timeFixture = scope.features.xAxis.timeFixture;
               if (timeFixture) {
                 if (scope.features.xAxis.overrideTimeFixtureCustomFormatters) {
-                  timeFixture.units[2].formatter = function(date) { return moment(date).format('MMM YYYY'); }; // month
+                  timeFixture.units[2].formatter = function(date) { return moment(date).format('MMM'); }; // month
                   timeFixture.units[3].formatter = function(date) { return moment(date).format('MMM D'); }; // week
                   timeFixture.units[4].formatter = function(date) { return moment(date).format('MMM D'); }; // day
                   timeFixture.units[5].formatter = function(date) { return moment(date).format('ha'); }; // 6 hours

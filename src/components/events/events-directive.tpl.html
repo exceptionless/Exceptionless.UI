@@ -18,8 +18,8 @@
           <summary source="event" show-type="vm.showType"></summary>
         </td>
         <td ng-click="vm.open(event.id, $event)">
-          <span ng-if="vm.hideSessionStartTime && event.data.type === 'session'">--</span>
-          <span ng-if="!vm.hideSessionStartTime || event.data.type !== 'session'">
+          <span ng-if="vm.hideSessionStartTime && event.data.Type === 'session'">--</span>
+          <span ng-if="!vm.hideSessionStartTime || event.data.Type !== 'session'">
             <abbr title="{{::event.date | date : 'medium'}}">
                 <span ng-if="vm.relativeTo()">after <relative-time to="vm.relativeTo()" date="event.date"></relative-time></span>
                 <span ng-if="!vm.relativeTo()"><timeago date="event.date"></timeago></span>
