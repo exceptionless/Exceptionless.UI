@@ -88,6 +88,11 @@
       }
 
       function getStats() {
+        function optionsCallback(options) {
+          options.filter += ' stack:' + _stackId;
+          return options;
+        }
+
         function onSuccess(response) {
           vm.stats = response.data.plain();
           if (!vm.stats.timeline) {
@@ -99,8 +104,8 @@
           });
         }
 
-        var options = {};
-        return statService.getByStackId(_stackId, options).then(onSuccess);
+        var options = { fields: 'distinct:stack_id' };
+        return statService.getTimeline(options, optionsCallback).then(onSuccess);
       }
 
       function hasTags() {
