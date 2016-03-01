@@ -88,8 +88,14 @@
       }
 
       function getStats() {
+        function buildFields(options) {
+          return options.filter(function(option) { return option.selected; })
+            .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
+            .join(',');
+        }
+
         function optionsCallback(options) {
-          options.filter += ' stack:' + _stackId;
+          options.filter = (options.filter || '') + ' stack:' + _stackId;
           return options;
         }
 
@@ -99,12 +105,26 @@
             vm.stats.timeline = [];
           }
 
-          vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.numbers[0], data: item};
-          });
+          var colors = ['rgba(60, 116, 0, .9)', 'rgba(124, 194, 49, .7)', '#e2e2e2'];
+          vm.chart.options.series = [{ name: 'Occurrences', selected: true }].concat(vm.chartOptions)
+            .filter(function(option) { return option.selected; })
+            .reduce(function (series, option, index) {
+              if (option.selected) {
+                series.push({
+                  name: option.name,
+                  color: colors[index],
+                  stroke: 'rgba(0, 0, 0, 0.15)',
+                  data: vm.stats.timeline.map(function (item) {
+                    return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index - 1]), data: item };
+                  })
+                });
+              }
+
+              return series;
+            });
         }
 
-        var options = { fields: vm.selectedChartOption.value };
+        var options = { fields: buildFields(vm.chartOptions) };
         return statService.getTimeline(options, optionsCallback).then(onSuccess);
       }
 
@@ -307,11 +327,7 @@
         options: {
           padding: { top: 0.085 },
           renderer: 'stack',
-          series: [{
-            name: 'Occurrences',
-            color: 'rgba(124, 194, 49, .9)',
-            stroke: 'rgba(0, 0, 0, 0.15)'
-          }],
+          series: [{ data: []}],
           stroke: true,
           unstack: true
         },
@@ -325,7 +341,7 @@
                 return a.order - b.order;
               }).forEach(function (d) {
                 var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + ' <br />';
+                content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + '<br />';
               }, this);
 
               var xLabel = document.createElement('div');
@@ -376,11 +392,12 @@
           }
         }
       };
+
       vm.chartOptions = [
-        { key: 'Average', value: 'avg:value' },
-        { key: 'Count', value: 'distinct:value' },
-        { key: 'Sum', value: 'sum:value' }
+        { name: 'Show Average Value', field: 'avg:value', title: 'The average of all event values', selected: false },
+        { name: 'Show Value Sum', filed: 'sum:value', title: 'The sum of all event values', selected: false }
       ];
+
       vm.get = get;
       vm.getStats = getStats;
       vm.hasTags = hasTags;
@@ -409,7 +426,6 @@
         },
         source: source + '.Recent'
       };
-      vm.selectedChartOption = vm.chartOptions[1];
       vm.stack = {};
       vm.stats = {};
       vm.updateIsCritical = updateIsCritical;

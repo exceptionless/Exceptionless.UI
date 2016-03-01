@@ -159,11 +159,11 @@
           <div class="btn-group btn-group-xs pull-right" role="group">
             <button type="button" role="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               <span><i class="fa fa-fw fa-filter"></i></span>
-              <span class="hidden-xs">{{vm.selectedChartOption.key}}</span>
+              <span class="hidden-xs">Chart Options</span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
-              <li ng-repeat="kvp in vm.chartOptions track by kvp.key"><a ng-click="vm.selectedChartOption = kvp; vm.getStats()"><i ng-if="vm.selectedChartOption === kvp;" class="fa fa-fw fa-check"></i>{{::kvp.key}}</a></li>
+              <li ng-repeat="o in vm.chartOptions track by o.field"><a ng-click="o.selected = !o.selected; vm.getStats();" title="{{::o.title}}"><i ng-if="o.selected" class="fa fa-fw fa-check"></i>{{::kvp.name}}</a></li>
             </ul>
           </div>
           <div class="clearfix"></div>
