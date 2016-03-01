@@ -100,7 +100,7 @@
           }
 
           vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
+            return {x: moment.utc(item.date).unix(), y: item.numbers[0], data: item};
           });
         }
 
@@ -377,9 +377,9 @@
         }
       };
       vm.chartOptions = [
-        { key: 'Average', value: 'avg:stack_id' },
-        { key: 'Count', value: 'distinct:stack_id' },
-        { key: 'Sum', value: 'sum:stack_id' }
+        { key: 'Average', value: 'avg:value' },
+        { key: 'Count', value: 'distinct:value' },
+        { key: 'Sum', value: 'sum:value' }
       ];
       vm.get = get;
       vm.getStats = getStats;
