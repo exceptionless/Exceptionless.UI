@@ -104,7 +104,7 @@
           });
         }
 
-        var options = { fields: 'distinct:stack_id' };
+        var options = { fields: vm.selectedChartOption.value };
         return statService.getTimeline(options, optionsCallback).then(onSuccess);
       }
 
@@ -376,8 +376,13 @@
           }
         }
       };
-
+      vm.chartOptions = [
+        { key: 'Average', value: 'avg:stack_id' },
+        { key: 'Count', value: 'distinct:stack_id' },
+        { key: 'Sum', value: 'sum:stack_id' }
+      ];
       vm.get = get;
+      vm.getStats = getStats;
       vm.hasTags = hasTags;
       vm.hasReference = hasReference;
       vm.hasReferences = hasReferences;
@@ -404,6 +409,7 @@
         },
         source: source + '.Recent'
       };
+      vm.selectedChartOption = vm.chartOptions[1];
       vm.stack = {};
       vm.stats = {};
       vm.updateIsCritical = updateIsCritical;
