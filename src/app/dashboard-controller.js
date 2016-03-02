@@ -35,8 +35,7 @@
           notificationService.error('An error occurred while loading the stats.');
         }
 
-        var options = { fields: 'distinct:stack_id,term:is_first_occurrence:-F' };
-        return statService.getTimeline(options).then(onSuccess, onFailure);
+        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess, onFailure);
       }
 
       vm.canRefresh = canRefresh;

@@ -32,8 +32,7 @@
           notificationService.error('An error occurred while loading the stats.');
         }
 
-        var options = { fields: 'avg:value,distinct:user.raw' };
-        return statService.getTimeline(options).then(onSuccess, onFailure);
+        return statService.getTimeline('avg:value,distinct:user.raw').then(onSuccess, onFailure);
       }
 
       vm.chart = {

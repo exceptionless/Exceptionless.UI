@@ -163,7 +163,9 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
-              <li ng-repeat="o in vm.chartOptions track by o.field"><a ng-click="o.selected = !o.selected; vm.getStats();" title="{{::o.title}}"><i ng-if="o.selected" class="fa fa-fw fa-check"></i>{{::kvp.name}}</a></li>
+              <li ng-repeat="o in vm.chartOptions | filter: { render: true } track by o.field">
+                <a ng-click="o.selected = !o.selected; vm.getStats();" title="{{::o.title}}"><i ng-if="o.selected" class="fa fa-fw fa-check"></i>Show {{::o.name}}</a>
+              </li>
             </ul>
           </div>
           <div class="clearfix"></div>

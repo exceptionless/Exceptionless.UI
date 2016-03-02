@@ -22,7 +22,7 @@
           }
 
           var create = debounce(function () {
-            if (!scope.options || !scope.options.series || !scope.options.series[0].data) {
+            if (!scope.options || !scope.options.series || !scope.options.series[0] || !scope.options.series[0].data) {
               return;
             }
 
@@ -193,7 +193,15 @@
           }, 150);
 
           var seriesWatcher = scope.$watch(function () {
-            return scope.options.series[0].data;
+            return (scope.options.series ? scope.options.series.length : 0);
+          }, function (newValue, oldValue) {
+            if (!angular.equals(newValue, oldValue)) {
+              create();
+            }
+          });
+
+          var seriesDataWatcher = scope.$watch(function () {
+            return (scope.options.series && scope.options.series[0] && scope.options.series[0].data ? scope.options.series[0].data : scope.options.series);
           }, function (newValue, oldValue) {
             if (!angular.equals(newValue, oldValue)) {
               create();
@@ -205,7 +213,10 @@
           window.bind('resize', create);
 
           scope.$on('$destroy', function (e) {
-            seriesWatcher(); // Remove watcher
+            // Remove watchers
+            seriesWatcher();
+            seriesDataWatcher();
+
             window.unbind('resize', create);
           });
         }

@@ -95,7 +95,7 @@
         }
 
         function optionsCallback(options) {
-          options.filter = (options.filter || '') + ' stack:' + _stackId;
+          options.filter = ['stack:' + _stackId, options.filter].filter(function(f) { return f && f.length > 0; }).join(' ');
           return options;
         }
 
@@ -105,27 +105,34 @@
             vm.stats.timeline = [];
           }
 
-          var colors = ['rgba(60, 116, 0, .9)', 'rgba(124, 194, 49, .7)', '#e2e2e2'];
-          vm.chart.options.series = [{ name: 'Occurrences', selected: true }].concat(vm.chartOptions)
+          var colors = ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'];
+          vm.chart.options.series = vm.chartOptions
             .filter(function(option) { return option.selected; })
             .reduce(function (series, option, index) {
-              if (option.selected) {
-                series.push({
-                  name: option.name,
-                  color: colors[index],
-                  stroke: 'rgba(0, 0, 0, 0.15)',
-                  data: vm.stats.timeline.map(function (item) {
-                    return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index - 1]), data: item };
-                  })
-                });
-              }
+              series.push({
+                name: option.name,
+                stroke: 'rgba(0, 0, 0, 0.15)',
+                data: vm.stats.timeline.map(function (item) {
+                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index - 1]), data: item };
+                })
+              });
 
               return series;
+            }, [])
+            .sort(function(a, b) {
+              function calculateSum(previous, current) {
+                return previous + current.y;
+              }
+
+              return b.data.reduce(calculateSum, 0) - a.data.reduce(calculateSum, 0);
+            })
+            .map(function(seri, index) {
+              seri.color = colors[index];
+              return seri;
             });
         }
 
-        var options = { fields: buildFields(vm.chartOptions) };
-        return statService.getTimeline(options, optionsCallback).then(onSuccess);
+        return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess);
       }
 
       function hasTags() {
@@ -327,7 +334,6 @@
         options: {
           padding: { top: 0.085 },
           renderer: 'stack',
-          series: [{ data: []}],
           stroke: true,
           unstack: true
         },
@@ -394,8 +400,9 @@
       };
 
       vm.chartOptions = [
-        { name: 'Show Average Value', field: 'avg:value', title: 'The average of all event values', selected: false },
-        { name: 'Show Value Sum', filed: 'sum:value', title: 'The sum of all event values', selected: false }
+        { name: 'Occurrences', selected: true, render: false },
+        { name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true },
+        { name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true }
       ];
 
       vm.get = get;
