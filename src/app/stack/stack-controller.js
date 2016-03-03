@@ -147,6 +147,14 @@
         return vm.stack.references && vm.stack.references.length > 1;
       }
 
+      function hasSelectedChartOption() {
+        return vm.chartOptions.filter(function (o) { return o.render && o.selected; }).length > 0;
+      }
+
+      function hasSelectedOption() {
+        return vm.isHidden() || vm.isCritical() || vm.notificationsDisabled();
+      }
+
       function isCritical() {
         return vm.stack.occurrences_are_critical === true;
       }
@@ -410,6 +418,8 @@
       vm.hasTags = hasTags;
       vm.hasReference = hasReference;
       vm.hasReferences = hasReferences;
+      vm.hasSelectedChartOption = hasSelectedChartOption;
+      vm.hasSelectedOption = hasSelectedOption;
       vm.isCritical = isCritical;
       vm.isFixed = isFixed;
       vm.isHidden = isHidden;
