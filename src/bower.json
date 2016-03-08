@@ -10,7 +10,7 @@
   "dependencies": {
     "angular": "1.5.0",
     "angular-animate": "1.5.0",
-    "angular-bootstrap": "1.2.2",
+    "angular-bootstrap": "1.2.4",
     "angular-dialog-service": "5.3.0",
     "angular-filter": "0.5.8",
     "angular-gravatar": "0.4.1",
@@ -39,10 +39,10 @@
     "font-awesome": "4.5.0",
     "handlebars": "4.0.5",
     "jquery": "2.2.1",
-    "less.js": "2.6.0",
+    "less.js": "2.6.1",
     "li": "1.0.1",
     "lodash": "4.6.1",
-    "moment": "2.11.2",
+    "moment": "2.12.0",
     "ng-clip": "0.2.6",
     "ng-debounce": "0.1.7",
     "ng-filters": "1.2.0",
@@ -58,9 +58,9 @@
   "resolutions": {
     "angular": "1.5.0",
     "angular-animate": "1.5.0",
-    "angular-bootstrap": "1.1.2",
+    "angular-bootstrap": "1.2.4",
     "bootstrap": "3.3.6",
-    "lodash": "3.10.1",
-    "moment": "2.11.2"
+    "lodash": "4.6.1",
+    "moment": "2.12.0"
   }
 }
