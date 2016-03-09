@@ -1,8 +1,8 @@
 /* jslint node: true */
-module.exports = function (grunt) {
+module.exports = function () {
   var branch = process.env.APPVEYOR_REPO_BRANCH || 'master';
   if (process.env.APPVEYOR_PULL_REQUEST_NUMBER) {
-    branch = 'pr-' + process.env.APPVEYOR_PULL_REQUEST_NUMBER;
+    branch = 'pull/' + process.env.APPVEYOR_PULL_REQUEST_NUMBER;
   }
 
   return {
