@@ -23,7 +23,7 @@
           }
 
           vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.unique, data: item};
+            return {x: moment.utc(item.date).unix(), y: item.numbers[0], data: item};
           });
 
           vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
@@ -35,8 +35,7 @@
           notificationService.error('An error occurred while loading the stats.');
         }
 
-        var options = {};
-        return statService.get(options).then(onSuccess, onFailure);
+        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess, onFailure);
       }
 
       vm.canRefresh = canRefresh;

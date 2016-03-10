@@ -8,6 +8,11 @@
       var vm = this;
 
       function get() {
+        function optionsCallback(options) {
+          options.filter += ' type:session';
+          return options;
+        }
+
         function onSuccess(response) {
           vm.stats = response.data.plain();
           if (!vm.stats.timeline) {
@@ -15,11 +20,11 @@
           }
 
           vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.users, data: item};
+            return {x: moment.utc(item.date).unix(), y: item.numbers[1], data: item};
           });
 
           vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.sessions, data: item};
+            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
           });
         }
 
@@ -27,8 +32,7 @@
           notificationService.error('An error occurred while loading the stats.');
         }
 
-        var options = {};
-        return statService.getSessions(options).then(onSuccess, onFailure);
+        return statService.getTimeline('avg:value,distinct:user.raw').then(onSuccess, onFailure);
       }
 
       vm.chart = {

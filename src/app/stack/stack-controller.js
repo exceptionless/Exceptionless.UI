@@ -88,19 +88,51 @@
       }
 
       function getStats() {
+        function buildFields(options) {
+          return options.filter(function(option) { return option.selected; })
+            .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
+            .join(',');
+        }
+
+        function optionsCallback(options) {
+          options.filter = ['stack:' + _stackId, options.filter].filter(function(f) { return f && f.length > 0; }).join(' ');
+          return options;
+        }
+
         function onSuccess(response) {
           vm.stats = response.data.plain();
           if (!vm.stats.timeline) {
             vm.stats.timeline = [];
           }
 
-          vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
-          });
+          var colors = ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'];
+          vm.chart.options.series = vm.chartOptions
+            .filter(function(option) { return option.selected; })
+            .reduce(function (series, option, index) {
+              series.push({
+                name: option.name,
+                stroke: 'rgba(0, 0, 0, 0.15)',
+                data: vm.stats.timeline.map(function (item) {
+                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index - 1]), data: item };
+                })
+              });
+
+              return series;
+            }, [])
+            .sort(function(a, b) {
+              function calculateSum(previous, current) {
+                return previous + current.y;
+              }
+
+              return b.data.reduce(calculateSum, 0) - a.data.reduce(calculateSum, 0);
+            })
+            .map(function(seri, index) {
+              seri.color = colors[index];
+              return seri;
+            });
         }
 
-        var options = {};
-        return statService.getByStackId(_stackId, options).then(onSuccess);
+        return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess);
       }
 
       function hasTags() {
@@ -113,6 +145,14 @@
 
       function hasReferences() {
         return vm.stack.references && vm.stack.references.length > 1;
+      }
+
+      function hasSelectedChartOption() {
+        return vm.chartOptions.filter(function (o) { return o.render && o.selected; }).length > 0;
+      }
+
+      function hasSelectedOption() {
+        return vm.isHidden() || vm.isCritical() || vm.notificationsDisabled();
       }
 
       function isCritical() {
@@ -302,11 +342,6 @@
         options: {
           padding: { top: 0.085 },
           renderer: 'stack',
-          series: [{
-            name: 'Occurrences',
-            color: 'rgba(124, 194, 49, .9)',
-            stroke: 'rgba(0, 0, 0, 0.15)'
-          }],
           stroke: true,
           unstack: true
         },
@@ -320,7 +355,7 @@
                 return a.order - b.order;
               }).forEach(function (d) {
                 var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + ' <br />';
+                content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + '<br />';
               }, this);
 
               var xLabel = document.createElement('div');
@@ -372,10 +407,19 @@
         }
       };
 
+      vm.chartOptions = [
+        { name: 'Occurrences', selected: true, render: false },
+        { name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true },
+        { name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true }
+      ];
+
       vm.get = get;
+      vm.getStats = getStats;
       vm.hasTags = hasTags;
       vm.hasReference = hasReference;
       vm.hasReferences = hasReferences;
+      vm.hasSelectedChartOption = hasSelectedChartOption;
+      vm.hasSelectedOption = hasSelectedOption;
       vm.isCritical = isCritical;
       vm.isFixed = isFixed;
       vm.isHidden = isHidden;

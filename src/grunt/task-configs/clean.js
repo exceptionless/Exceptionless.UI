@@ -3,6 +3,6 @@ module.exports = {
         src: ['dist', 'temp']
     },
     after: {
-        src: ['temp']
+        src: ['temp', 'dist/app.config.js', 'dist/app.min.css', 'dist/favicon.ico']
     }
 };

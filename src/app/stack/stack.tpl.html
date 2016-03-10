@@ -90,14 +90,14 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
-              <li><a ng-click="vm.updateIsHidden()" title="Hide this stack from reports and mutes occurrence notifications"><i ng-if="vm.isHidden()" class="fa fa-fw fa-check"></i>Hide</a></li>
-              <li><a ng-click="vm.updateIsCritical()" title="All future occurrences will be marked as critical"><i ng-if="vm.isCritical()" class="fa fa-fw fa-check"></i>Future Occurrences Are Critical</a></li>
-              <li><a ng-click="vm.updateNotifications()" title="Stop sending occurrence notifications for this stack"><i ng-if="vm.notificationsDisabled()" class="fa fa-fw fa-check"></i>Disable Notifications</a></li>
+              <li><a ng-click="vm.updateIsHidden()" title="Hide this stack from reports and mutes occurrence notifications"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw" ng-class="{'fa-check': vm.isHidden()}"></i>Hide</a></li>
+              <li><a ng-click="vm.updateIsCritical()" title="All future occurrences will be marked as critical"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw" ng-class="{'fa-check': vm.isCritical()}"></i>Future Occurrences Are Critical</a></li>
+              <li><a ng-click="vm.updateNotifications()" title="Stop sending occurrence notifications for this stack"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw" ng-class="{'fa-check': vm.notificationsDisabled()}"></i>Disable Notifications</a></li>
               <li class="divider"></li>
-              <li><a ng-click="vm.promoteToExternal()" title="Used to promote stacks to external systems.">Promote To External</a></li>
-              <li><a ng-click="vm.addReferenceLink()" title="Add a reference link to an external resource.">Add Reference Link</a></li>
+              <li><a ng-click="vm.promoteToExternal()" title="Used to promote stacks to external systems."><i ng-if="vm.hasSelectedOption()" class="fa fa-fw"></i>Promote To External</a></li>
+              <li><a ng-click="vm.addReferenceLink()" title="Add a reference link to an external resource."><i ng-if="vm.hasSelectedOption()" class="fa fa-fw"></i>Add Reference Link</a></li>
               <li class="divider"></li>
-              <li><a ng-click="vm.remove()" title="Delete this stack">Delete</a></li>
+              <li><a ng-click="vm.remove()" title="Delete this stack"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw"></i>Delete</a></li>
             </ul>
           </div>
         </div>
@@ -155,7 +155,22 @@
           </tbody>
         </table>
 
-        <rickshaw options="vm.chart.options" features="vm.chart.features"></rickshaw>
+        <div>
+          <div class="btn-group btn-group-xs pull-right" role="group">
+            <button type="button" role="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <span class="visible-xs"><i class="fa fa-fw fa-gear"></i></span>
+              <span class="hidden-xs">Chart Options</span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li ng-repeat="o in vm.chartOptions | filter: { render: true } track by o.field">
+                <a ng-click="o.selected = !o.selected; vm.getStats();" title="{{::o.title}}"><i class="fa fa-fw" ng-class="{'fa-check': o.selected}" ng-if="vm.hasSelectedChartOption()"></i>Show {{::o.name}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="clearfix"></div>
+          <rickshaw options="vm.chart.options" features="vm.chart.features"></rickshaw>
+        </div>
       </div>
     </div>
 
