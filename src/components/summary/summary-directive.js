@@ -10,7 +10,7 @@
           showType: '='
         },
         template: '<ng-include src="templateUrl" />',
-        link: function (scope, element, attrs) {
+        link: function (scope) {
           var level =  scope.source && scope.source.data.Level ? scope.source.data.Level.toLowerCase() : null;
           scope.isLevelSuccess = level === 'trace' || level === 'debug';
           scope.isLevelInfo = level === 'info';

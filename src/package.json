@@ -24,7 +24,7 @@
     "grunt-gh-pages": "1.0.0",
     "grunt-html-angular-validate": "0.5.7",
     "grunt-karma": "0.12",
-    "grunt-ng-annotate": "1.0.1",
+    "grunt-ng-annotate": "2.0.1",
     "grunt-replace": "0.11.0",
     "grunt-traceur": "0.5.4",
     "jasmine-core": "2.4.1",
