@@ -1,10 +1,8 @@
-/*global Rickshaw:false */
-
+/*global Rickshaw:false, d3:false */
 (function () {
   'use strict';
 
   Rickshaw.namespace('Rickshaw.Graph.RangeSelector');
-
   Rickshaw.Graph.RangeSelector = Rickshaw.Class.create({
     initialize: function (args) {
       var element = this.element = args.element;
@@ -110,6 +108,16 @@
       if (graph.window.xMax === null) {
         position.coordMaxX = graph.dataDomain()[1];
       }
+    }
+  });
+
+  Rickshaw.namespace('Rickshaw.Graph.Renderer.DottedLine');
+  Rickshaw.Graph.Renderer.DottedLine = Rickshaw.Class.create(Rickshaw.Graph.Renderer.Line, {
+    name: 'dotted_line',
+    _styleSeries: function(series) {
+      var result = Rickshaw.Graph.Renderer.Line.prototype._styleSeries.call(this, series);
+      d3.select(series.path).style("stroke-dasharray", '3, 2');
+      return result;
     }
   });
 }());

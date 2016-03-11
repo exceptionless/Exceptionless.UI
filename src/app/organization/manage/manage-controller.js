@@ -191,7 +191,7 @@
           }, {
             name: 'Limit',
             color: '#a94442',
-            renderer: 'line'
+            renderer: 'dotted_line'
           }]
         },
         features: {
