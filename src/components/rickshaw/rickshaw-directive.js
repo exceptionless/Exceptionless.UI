@@ -219,7 +219,8 @@
 
             window.unbind('resize', create);
           });
-        }
+        },
+        template: '<div class="rickshaw-container"></div>'
       };
     }]);
 }());
