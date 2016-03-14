@@ -25,6 +25,7 @@
   ])
     .config(['$stateProvider', function ($stateProvider) {
       $stateProvider.state('app.event', {
+        title: 'Event',
         url: '/event/{id:[0-9a-fA-F]{24}}?tab',
         controller: 'Event',
         controllerAs: 'vm',
@@ -32,6 +33,7 @@
       });
 
       $stateProvider.state('app.event-reference', {
+        title: 'Event Reference',
         url: '/event/by-ref/{referenceId:.{8,100}}',
         controller: 'Reference',
         controllerAs: 'vm',

@@ -26,6 +26,7 @@
   ])
   .config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('app.stack', {
+      title: 'Stack',
       url: '/stack/{id:[0-9a-fA-F]{24}}',
       controller: 'Stack',
       controllerAs: 'vm',
@@ -33,6 +34,7 @@
     });
 
     $stateProvider.state('app.stack-action', {
+      title: 'Stack',
       url: '/stack/{id:[0-9a-fA-F]{24}}/:action',
       controller: 'Stack',
       controllerAs: 'vm',

@@ -36,6 +36,7 @@
     });
 
     $stateProvider.state('app.organization.list', {
+      title: 'My Organizations',
       url: '/list',
       controller: 'organization.List',
       controllerAs: 'vm',
@@ -43,6 +44,7 @@
     });
 
     $stateProvider.state('app.organization.manage', {
+      title: 'Manage Organization',
       url: '/{id:[0-9a-fA-F]{24}}/manage?tab',
       controller: 'organization.Manage',
       controllerAs: 'vm',

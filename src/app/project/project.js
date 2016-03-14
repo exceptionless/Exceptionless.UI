@@ -30,6 +30,7 @@
     });
 
     $stateProvider.state('app.project.add', {
+      title: 'Add Project',
       url: '/add?{organizationId:[0-9a-fA-F]{24}}',
       controller: 'project.Add',
       controllerAs: 'vm',
@@ -37,6 +38,7 @@
     });
 
     $stateProvider.state('app.project.configure', {
+      title: 'Configure Project',
       url: '/:id/configure?redirect',
       controller: 'project.Configure',
       controllerAs: 'vm',
@@ -44,6 +46,7 @@
     });
 
     $stateProvider.state('app.project.list', {
+      title: 'My Projects',
       url: '/list',
       controller: 'project.List',
       controllerAs: 'vm',
@@ -51,6 +54,7 @@
     });
 
     $stateProvider.state('app.project.manage', {
+      title: 'Manage Project',
       url: '/{id:[0-9a-fA-F]{24}}/manage',
       controller: 'project.Manage',
       controllerAs: 'vm',

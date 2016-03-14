@@ -42,6 +42,7 @@
     });
 
     $stateProvider.state('auth.forgot-password', {
+      title: 'Forgot Password',
       url: '/forgot-password',
       controller: 'auth.ForgotPassword',
       controllerAs: 'vm',
@@ -49,6 +50,7 @@
     });
 
     $stateProvider.state('auth.login', {
+      title: 'Login',
       url: '/login?token',
       controller: 'auth.Login',
       controllerAs: 'vm',
@@ -56,12 +58,14 @@
     });
 
     $stateProvider.state('auth.logout', {
+      title: 'Logout',
       url: '/logout',
       template: null,
       controller: 'auth.Logout'
     });
 
     $stateProvider.state('auth.reset-password', {
+      title: 'Reset Password',
       url: '/reset-password/:token?cancel',
       controller: 'auth.ResetPassword',
       controllerAs: 'vm',
@@ -69,6 +73,7 @@
     });
 
     $stateProvider.state('auth.signup', {
+      title: 'Signup',
       url: '/signup?token',
       controller: 'auth.Signup',
       controllerAs: 'vm',

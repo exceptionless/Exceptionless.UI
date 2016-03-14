@@ -10,6 +10,7 @@
   ])
   .config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('status', {
+      title: 'Status',
       url: '/status?redirect',
       controller: 'Status',
       controllerAs: 'vm',

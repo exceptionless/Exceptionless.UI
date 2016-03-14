@@ -12,6 +12,7 @@
     });
 
     $stateProvider.state('app.admin.dashboard', {
+      title: 'Admin Dashboard',
       url: '/dashboard',
       controller: 'admin.Dashboard',
       controllerAs: 'vm',

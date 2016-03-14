@@ -24,6 +24,7 @@
       });
 
       $stateProvider.state('app.account.manage', {
+        title: 'My Account',
         url: '/manage?projectId&tab',
         controller: 'account.Manage',
         controllerAs: 'vm',
@@ -31,6 +32,7 @@
       });
 
       $stateProvider.state('app.account.verify', {
+        title: 'Verify Account',
         url: '/verify?token',
         template: null,
         controller: 'account.Verify'

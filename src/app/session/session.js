@@ -33,6 +33,7 @@
         filterService.setEventType(null, true);
       }];
 
+      var title = 'Session Dashboard';
       $stateProvider.state('app.session', {
         abstract: true,
         url: '/session',
@@ -40,6 +41,7 @@
       });
 
       $stateProvider.state('app.session.dashboard', {
+        title: title,
         url: '/dashboard',
         controller: 'session.Dashboard',
         controllerAs: 'vm',
@@ -49,6 +51,7 @@
       });
 
       $stateProvider.state('app.session-dashboard', {
+        title: title,
         url: '/session/dashboard',
         controller: 'session.Dashboard',
         controllerAs: 'vm',
@@ -58,6 +61,7 @@
       });
 
       $stateProvider.state('app.session-project-dashboard', {
+        title: title,
         url: '/project/{projectId:[0-9a-fA-F]{24}}/session/dashboard',
         controller: 'session.Dashboard',
         controllerAs: 'vm',
@@ -75,6 +79,7 @@
       });
 
       $stateProvider.state('app.session-organization-dashboard', {
+        title: title,
         url: '/organization/{organizationId:[0-9a-fA-F]{24}}/session/dashboard',
         controller: 'session.Dashboard',
         controllerAs: 'vm',

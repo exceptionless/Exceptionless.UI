@@ -9,6 +9,7 @@
   ])
   .config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('payment', {
+      title: 'View Invoice',
       url: '/payment/:id',
       controller: 'Payment',
       controllerAs: 'vm',

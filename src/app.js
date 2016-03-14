@@ -105,7 +105,9 @@
       }
     });
 
+    var title = 'Dashboard';
     $stateProvider.state('app.dashboard', {
+      title: title,
       url: '/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
@@ -117,6 +119,7 @@
     });
 
     $stateProvider.state('app.project-dashboard', {
+      title: title,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
@@ -132,6 +135,7 @@
     });
 
     $stateProvider.state('app.project-type-dashboard', {
+      title: title,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
@@ -155,6 +159,7 @@
     });
 
     $stateProvider.state('app.organization-dashboard', {
+      title: title,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
@@ -171,6 +176,7 @@
     });
 
     $stateProvider.state('app.organization-type-dashboard', {
+      title: title,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
@@ -194,6 +200,7 @@
     });
 
     $stateProvider.state('app.type-dashboard', {
+      title: title,
       url: '/type/:type/dashboard',
       controller: 'app.Dashboard',
       controllerAs: 'vm',
@@ -208,7 +215,9 @@
       }]
     });
 
+    var frequentTitle = 'Most Frequent';
     $stateProvider.state('app.frequent', {
+      title: frequentTitle,
       url: '/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
@@ -220,6 +229,7 @@
     });
 
     $stateProvider.state('app.project-frequent', {
+      title: frequentTitle,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
@@ -235,6 +245,7 @@
     });
 
     $stateProvider.state('app.project-type-frequent', {
+      title: frequentTitle,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
@@ -254,6 +265,7 @@
     });
 
     $stateProvider.state('app.organization-frequent', {
+      title: frequentTitle,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
@@ -269,6 +281,7 @@
     });
 
     $stateProvider.state('app.organization-type-frequent', {
+      title: frequentTitle,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
@@ -288,6 +301,7 @@
     });
 
     $stateProvider.state('app.type-frequent', {
+      title: frequentTitle,
       url: '/type/:type/frequent',
       controller: 'app.Frequent',
       controllerAs: 'vm',
@@ -302,7 +316,9 @@
       }]
     });
 
+    var newTitle = 'New';
     $stateProvider.state('app.new', {
+      title: newTitle,
       url: '/new',
       controller: 'app.New',
       controllerAs: 'vm',
@@ -314,6 +330,7 @@
     });
 
     $stateProvider.state('app.project-new', {
+      title: newTitle,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/new',
       controller: 'app.New',
       controllerAs: 'vm',
@@ -329,6 +346,7 @@
     });
 
     $stateProvider.state('app.project-type-new', {
+      title: newTitle,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/new',
       controller: 'app.New',
       controllerAs: 'vm',
@@ -348,6 +366,7 @@
     });
 
     $stateProvider.state('app.organization-new', {
+      title: newTitle,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/new',
       controller: 'app.New',
       controllerAs: 'vm',
@@ -363,6 +382,7 @@
     });
 
     $stateProvider.state('app.organization-type-new', {
+      title: newTitle,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/new',
       controller: 'app.New',
       controllerAs: 'vm',
@@ -382,6 +402,7 @@
     });
 
     $stateProvider.state('app.type-new', {
+      title: newTitle,
       url: '/type/:type/new',
       controller: 'app.New',
       controllerAs: 'vm',
@@ -396,7 +417,9 @@
       }]
     });
 
+    var recentTitle = 'Most Recent';
     $stateProvider.state('app.recent', {
+      title: recentTitle,
       url: '/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
@@ -408,6 +431,7 @@
     });
 
     $stateProvider.state('app.project-recent', {
+      title: recentTitle,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
@@ -423,6 +447,7 @@
     });
 
     $stateProvider.state('app.project-type-recent', {
+      title: recentTitle,
       url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
@@ -442,6 +467,7 @@
     });
 
     $stateProvider.state('app.organization-recent', {
+      title: recentTitle,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
@@ -457,6 +483,7 @@
     });
 
     $stateProvider.state('app.organization-type-recent', {
+      title: recentTitle,
       url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
@@ -476,6 +503,7 @@
     });
 
     $stateProvider.state('app.type-recent', {
+      title: recentTitle,
       url: '/type/:type/recent',
       controller: 'app.Recent',
       controllerAs: 'vm',
@@ -574,6 +602,16 @@
       return !handleError(response);
     });
 
+    $rootScope.page = {
+      setTitle: function(title) {
+        if (title) {
+          this.title = title + ' - Exceptionless';
+        } else {
+          this.title = 'Exceptionless';
+        }
+      }
+    };
+
     $rootScope.$on('$stateChangeStart', function (event, toState) {
       if (!toState || !toState.data || !toState.data.requireAuthentication)
         return;
@@ -583,6 +621,8 @@
         stateService.save(['auth.']);
         $state.transitionTo('auth.login');
       }
+
+      $rootScope.page.setTitle(toState.title);
     });
   }]);
 }());
