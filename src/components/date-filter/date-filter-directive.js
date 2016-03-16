@@ -11,22 +11,22 @@
         controller: ['$interval', '$scope', 'dialogs', 'filterService', function ($interval, $scope, dialogs, filterService) {
           var vm = this;
 
-          function getFilterName() {
+          function getFilteredDisplayName() {
             var time = filterService.getTime();
             if (time === 'last hour') {
-              return moment().subtract(1, 'hours').twix(moment()).format();
+              return 'Last Hour';
             }
 
             if (time === 'last 24 hours') {
-              return moment().subtract(24, 'hours').twix(moment()).format();
+              return 'Last 24 Hours';
             }
 
             if (time === 'last week') {
-              return moment().subtract(7, 'days').startOf('day').twix(moment()).format();
+              return 'Last Week';
             }
 
             if (time === 'last 30 days') {
-              return moment().subtract(30, 'days').startOf('day').twix(moment()).format();
+              return 'Last 30 Days';
             }
 
             if (time === 'all') {
@@ -39,17 +39,17 @@
             }
 
             setFilter('last week');
-            return moment().subtract(7, 'days').startOf('day').twix(moment()).format();
+            return 'Last Week';
           }
 
-          function isActive(filterName) {
+          function isActive(filteredDisplayName) {
             var time = filterService.getTime();
-            if (time && filterName === 'Custom') {
+            if (time && filteredDisplayName === 'Custom') {
               var range = dateRangeParserService.parse(time);
               return range && range.start && range.end;
             }
 
-            return filterName === time;
+            return filteredDisplayName === time;
           }
 
           function hasFilter() {
@@ -89,22 +89,22 @@
             filterService.setTime(filter);
           }
 
-          function updateFilterName() {
-            vm.filterName = getFilterName();
+          function updateFilterDisplayName() {
+            vm.filteredDisplayName = getFilteredDisplayName();
           }
 
-          var interval = $interval(updateFilterName, 60 * 1000);
+          var interval = $interval(updateFilterDisplayName, 60 * 1000);
           $scope.$on('$destroy', function () {
             $interval.cancel(interval);
           });
 
           vm.hasFilter = hasFilter;
           vm.isActive = isActive;
-          vm.filterName = getFilterName();
+          vm.filteredDisplayName = getFilteredDisplayName();
           vm.isDropDownOpen = false;
           vm.setCustomFilter = setCustomFilter;
           vm.setFilter = setFilter;
-          vm.updateFilterName = updateFilterName;
+          vm.updateFilterDisplayName = updateFilterDisplayName;
         }],
         controllerAs: 'vm'
       };

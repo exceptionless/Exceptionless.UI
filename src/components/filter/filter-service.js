@@ -4,8 +4,6 @@
   angular.module('exceptionless.filter')
     .factory('filterService', ['$rootScope', 'filterStoreService', 'objectIDService', function ($rootScope, filterStoreService, objectIDService) {
       var DEFAULT_TIME_FILTER = 'last week';
-      var _includeFixed = filterStoreService.getIncludeFixed();
-      var _includeHidden = filterStoreService.getIncludeHidden();
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
 
@@ -15,14 +13,6 @@
 
       function buildFilter() {
         var filters = [];
-
-        if (!_includeFixed) {
-          filters.push('fixed:false');
-        }
-
-        if (!_includeHidden) {
-          filters.push('hidden:false');
-        }
 
         if (_organizationId) {
           filters.push('organization:' + _organizationId);
@@ -43,14 +33,12 @@
         return filters.join(' ');
       }
 
-      function clearFilterAndIncludeFixedAndIncludeHidden() {
-        if (!_raw && !_includeFixed && !_includeHidden) {
+      function clearFilter() {
+        if (!_raw) {
           return;
         }
 
         setFilter(null, false);
-        setIncludeFixed(null, false);
-        setIncludeHidden(null, false);
         fireFilterChanged();
       }
 
@@ -240,12 +228,10 @@
 
       var service = {
         apply: apply,
-        clearFilterAndIncludeFixedAndIncludeHidden: clearFilterAndIncludeFixedAndIncludeHidden,
+        clearFilter: clearFilter,
         clearOrganizationAndProjectFilter: clearOrganizationAndProjectFilter,
         getEventType: getEventType,
         getFilter: getFilter,
-        getIncludeFixed: getIncludeFixed,
-        getIncludeHidden: getIncludeHidden,
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
         getTime: getTime,
@@ -253,8 +239,6 @@
         includedInProjectOrOrganizationFilter: includedInProjectOrOrganizationFilter,
         setEventType: setEventType,
         setFilter: setFilter,
-        setIncludeFixed: setIncludeFixed,
-        setIncludeHidden: setIncludeHidden,
         setOrganizationId: setOrganizationId,
         setProjectId: setProjectId,
         setTime: setTime

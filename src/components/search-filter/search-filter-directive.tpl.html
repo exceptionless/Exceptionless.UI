@@ -1,47 +1,23 @@
-<ul class="nav navbar-nav" refresh-on="filterChanged" refresh-action="vm.updateFilter()">
-  <li class="dropdown" uib-dropdown is-open="vm.isDropDownOpen">
-    <a class="dropdown-toggle" uib-dropdown-toggle>
-      <i class="fa fa-fw fa-search fa-lg" ng-class="{'text-success': vm.hasFilter() }"></i>
-    </a>
+<ul class="nav navbar-nav navbar-nav-search" refresh-on="filterChanged" refresh-action="vm.updateFilter()">
+  <div class="navbar-form " role="search">
+    <div class="input-group w-full">
+      <div class="input-group-btn">
+        <project-filter></project-filter>
+        <date-filter></date-filter>
+      </div>
 
-    <div class="dropdown-menu w-xl" role="menu">
-      <div class="panel search-panel bg-dark">
-        <form name="vm.searchFilterForm" role="form" class="form-validation">
-          <div class="form-group">
-            <label for="search">Filter <a href="https://github.com/exceptionless/Exceptionless/wiki/Filtering-Searching" target="_blank" title="Search Documentation"><i class="fa fa-fw fa-question-circle"></i></a></label>
-            <div ng-class="{'input-group': vm.searchFilterForm.$pending }">
-              <input id="search" name="search" type="search" class="form-control" placeholder="Criteria"
-                     ng-model="vm.filter"
-                     ng-model-options="{ debounce: 500 }"
-                     ng-change="vm.setFilter(vm.filter)"
-                     search-filter-validator
-                     autofocus />
+      <input id="search" name="search" type="search" class="form-control" placeholder="Search"
+             ng-model="vm.filter"
+             ng-model-options="{ debounce: 500 }"
+             ng-change="vm.setSearchFilter(vm.filter)"
+             search-filter-validator
+             autofocus />
 
-              <span class="input-group-addon" ng-if="vm.searchFilterForm.$pending">
-                <i class="fa fa-fw fa-spinner fa-spin"></i>
-              </span>
-            </div>
-
-            <div class="error" ng-messages="vm.searchFilterForm.search.$error" ng-if="vm.searchFilterForm.$submitted || vm.searchFilterForm.search.$touched">
-              <small ng-message="valid">An invalid search term was found.</small>
-            </div>
-          </div>
-
-          <div class="checkbox">
-            <label class="i-checks">
-              <input id="includeFixed" type="checkbox" ng-model="vm.includeFixed" ng-change="vm.setIncludeFixed(vm.includeFixed)" /><i></i> Include Fixed
-            </label>
-          </div>
-
-          <div class="checkbox">
-            <label class="i-checks">
-              <input id="includeHidden" type="checkbox" ng-model="vm.includeHidden" ng-change="vm.setIncludeHidden(vm.includeHidden)" /><i></i> Include Hidden
-            </label>
-          </div>
-
-          <input type="button" role="button" class="btn btn-primary w-sm" ng-click="vm.clearFilter()" value="Clear" />
-        </form>
+      <div class="input-group-btn">
+        <a class="btn btn-dark" href="https://github.com/exceptionless/Exceptionless/wiki/Filtering-Searching" target="_blank" title="Search Documentation" aria-label="Search Documentation">
+          <i class="fa fa-fw fa-question-circle"></i>
+        </a>
       </div>
     </div>
-  </li>
+  </div>
 </ul>

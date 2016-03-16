@@ -57,7 +57,7 @@
               filterService.setOrganizationId();
             }
 
-            vm.filterName = getFilterName();
+            vm.filteredDisplayName = getFilterName();
           }
 
           function onFailure() {
@@ -83,7 +83,7 @@
               filterService.setProjectId();
             }
 
-            vm.filterName = getFilterName();
+            vm.filteredDisplayName = getFilterName();
           }
 
           function onFailure() {
@@ -134,16 +134,16 @@
 
         // NOTE: We need to watch on getFilterName because the filterChangedEvents might not be called depending on suspendNotifications option.
         var unbind = $scope.$watch(function() { return vm.getFilterName(); }, function (filterName) {
-          vm.filterName = filterName;
+          vm.filteredDisplayName = filterName;
         });
 
-        $scope.$on('$destroy', function(e) {
+        $scope.$on('$destroy', function() {
           unbind();
           window.unbind('resize', updateFilterDropDownMaxHeight);
         });
 
         var vm = this;
-        vm.filterName = 'Loading';
+        vm.filteredDisplayName = 'Loading';
         vm.get = get;
         vm.getAllProjectsUrl = getAllProjectsUrl;
         vm.getFilterName = getFilterName;
