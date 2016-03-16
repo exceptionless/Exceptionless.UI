@@ -80,14 +80,6 @@
         return _raw;
       }
 
-      function getIncludeFixed() {
-        return _includeFixed === true;
-      }
-
-      function getIncludeHidden() {
-        return _includeHidden === true;
-      }
-
       function getProjectId() {
         return _projectId;
       }
@@ -109,7 +101,7 @@
       }
 
       function hasFilter() {
-        return _includeFixed || _includeHidden || _raw || (_time && _time !== 'all');
+        return _raw || (_time && _time !== 'all');
       }
 
       function includedInProjectOrOrganizationFilter(data) {
@@ -131,32 +123,6 @@
         }
 
         _eventType = eventType;
-
-        if (!suspendNotifications) {
-          fireFilterChanged();
-        }
-      }
-
-      function setIncludeFixed(includeFixed, suspendNotifications) {
-        if (angular.equals(includeFixed, _includeFixed)) {
-          return;
-        }
-
-        _includeFixed = includeFixed === true;
-        filterStoreService.setIncludeFixed(_includeFixed);
-
-        if (!suspendNotifications) {
-          fireFilterChanged();
-        }
-      }
-
-      function setIncludeHidden(includeHidden, suspendNotifications) {
-        if (angular.equals(includeHidden, _includeHidden)) {
-          return;
-        }
-
-        _includeHidden = includeHidden === true;
-        filterStoreService.setIncludeHidden(_includeHidden);
 
         if (!suspendNotifications) {
           fireFilterChanged();
