@@ -18,7 +18,8 @@
           function updateFilter() {
             vm.filter = filterService.getFilter();
           }
-
+          
+          vm.searchFilterForm = {};
           vm.setSearchFilter = setSearchFilter;
           vm.updateFilter = updateFilter;
 

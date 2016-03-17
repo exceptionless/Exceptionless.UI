@@ -31,11 +31,7 @@
           });
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while loading the stats.');
-        }
-
-        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess, onFailure);
+        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess);
       }
 
       vm.canRefresh = canRefresh;

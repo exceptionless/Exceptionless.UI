@@ -1,3 +1,5 @@
+@import "../../less/variables.less";
+
 .navbar-nav-search {
   margin: 0px;
   width: 79%;
@@ -37,4 +39,14 @@ div.input-group-btn div.inline:not(:first-child) .btn {
 
 input#search.form-control {
   background-color: #C5C5C5;
+}
+
+.error-tooltip .tooltip-inner  {
+  color: @alert-danger-text;
+  background-color: @alert-danger-bg;
+}
+
+.error-tooltip .tooltip-arrow {
+  border-bottom-color: @alert-danger-bg;
+  margin:0.1px;
 }

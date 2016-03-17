@@ -42,14 +42,14 @@
             return 'Last Week';
           }
 
-          function isActive(filteredDisplayName) {
+          function isActive(timeRangeName) {
             var time = filterService.getTime();
-            if (time && filteredDisplayName === 'Custom') {
+            if (time && timeRangeName === 'Custom') {
               var range = dateRangeParserService.parse(time);
               return range && range.start && range.end;
             }
 
-            return filteredDisplayName === time;
+            return timeRangeName === time;
           }
 
           function hasFilter() {
