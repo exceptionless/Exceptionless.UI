@@ -99,7 +99,7 @@
         var bonusEvents = moment.utc().isBefore(moment.utc(vm.organization.bonus_expiration)) ? vm.organization.bonus_events_per_month : 0;
         var usage = vm.organization.usage && vm.organization.usage[vm.organization.usage.length - 1];
         if (usage && moment.utc(usage.date).isSame(moment.utc().startOf('month'))) {
-          var remaining = usage.limit - usage.total;
+          var remaining = usage.limit - (usage.total - usage.blocked - usage.too_big);
           return remaining > 0 ? remaining : 0;
         }
 
