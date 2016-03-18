@@ -197,7 +197,7 @@
         features: {
           hover: {
             render: function (args) {
-              var date = moment.unix(args.domainX);
+              var date = moment.utc(args.domainX, 'X');
               var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
               var content = '<div class="date">' + formattedDate + '</div>';
               args.detail.sort(function (a, b) {
