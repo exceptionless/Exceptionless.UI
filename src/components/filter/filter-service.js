@@ -27,10 +27,23 @@
         }
 
         if (_raw) {
-          filters.push(_raw);
+          filters.push('(' + _raw + ')');
         }
 
-        return filters.join(' ');
+        var filter = filters.join(' ');
+        var hasFixed = filter.search(/\bfixed:/i) !== -1;
+        var hasHidden = filter.search(/\bhidden:/i) !== -1;
+        if (!hasFixed || !hasHidden) {
+          if (!hasFixed) {
+            filter += ' fixed:false';
+          }
+
+          if (!hasHidden) {
+            filter += ' hidden:false';
+          }
+        }
+
+        return filter.trim();
       }
 
       function clearFilter() {
