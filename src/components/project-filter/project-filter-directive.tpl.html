@@ -1,23 +1,21 @@
-<div class="inline" refresh-on="OrganizationChanged ProjectChanged" refresh-action="vm.get()" refresh-throttle="5000">
+<div class="btn-group" refresh-on="OrganizationChanged ProjectChanged" refresh-action="vm.get()" refresh-throttle="5000">
   <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" refresh-on="filterChanged" refresh-action="vm.getFilterName()">
     {{vm.filteredDisplayName}} <span class="caret"></span>
   </button>
-  <div role="menu" class="dropdown-menu w-xl project-filter-dropdown-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}">
-    <div class="panel bg-dark">
-      <div class="list-group">
-       <a class="media list-group-item" ng-href="{{vm.getAllProjectsUrl()}}" auto-active>All Projects</a>
-
-       <div ng-repeat="organization in vm.organizations | orderBy: 'name' track by organization.id">
-         <a class="media list-group-item" ng-href="{{vm.getOrganizationUrl(organization)}}" auto-active>{{organization.name}}
-           <span class="icon-right" ui-sref="app.organization.manage({ id: organization.id })" show-on-hover-parent><i class="fa fa-gear fa-fw"></i></span>
-         </a>
-         <a class="media list-group-item project-name" ng-href="{{vm.getProjectUrl(project)}}" auto-active ng-repeat="project in vm.getProjectsByOrganizationId(organization.id) | orderBy: 'name' track by project.id">{{project.name}}
-           <span class="icon-right" ui-sref="app.project.manage({ id: project.id })" show-on-hover-parent><i class="fa fa-gear fa-fw"></i></span>
-         </a>
-       </div>
-
-        <a class="list-group-footer media list-group-item" ui-sref="app.project.add" auto-active>Add New Project</a>
-      </div>
-    </div>
-  </div>
+  <ul class="dropdown-menu scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}">
+    <li><a ng-href="{{vm.getAllProjectsUrl()}}" auto-active>All Projects</a></li>
+    <li role="separator" class="divider"></li>
+    <li ng-repeat-start="organization in vm.organizations | orderBy: 'name' track by organization.id">
+      <a ng-href="{{vm.getOrganizationUrl(organization)}}" auto-active>
+        {{organization.name}} <span class="icon-right" ui-sref="app.organization.manage({ id: organization.id })" show-on-hover-parent><i class="fa fa-gear fa-fw"></i></span>
+      </a>
+    </li>
+    <li ng-repeat="project in vm.getProjectsByOrganizationId(organization.id) | orderBy: 'name' track by project.id">
+      <a ng-href="{{vm.getProjectUrl(project)}}"  auto-active>
+        {{project.name}} <span class="icon-right" ui-sref="app.project.manage({ id: project.id })" show-on-hover-parent><i class="fa fa-gear fa-fw"></i></span>
+      </a>
+    </li>
+    <li ng-repeat-end role="separator" class="divider"></li>
+    <li><a ui-sref="app.project.add" auto-active>Add New Project</a></li>
+  </ul>
 </div>
