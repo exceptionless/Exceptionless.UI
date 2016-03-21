@@ -1,7 +1,7 @@
-<div class="btn-group" refresh-on="filterChanged" refresh-action="vm.updateFilterDisplayName()">
-  <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" refresh-on="filterChanged" refresh-action="vm.updateFilterDisplayName()">
+<li class="dropdown" refresh-on="filterChanged" refresh-action="vm.updateFilterDisplayName()">
+  <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" refresh-on="filterChanged" refresh-action="vm.updateFilterDisplayName()">
     {{vm.filteredDisplayName}} <span class="caret"></span>
-  </button>
+  </a>
   <ul class="dropdown-menu">
     <li><a ng-class="{ active: vm.isActive('last hour')}" ng-click="vm.setFilter('last hour')">Last Hour</a></li>
     <li><a ng-class="{ active: vm.isActive('last 24 hours')}" ng-click="vm.setFilter('last 24 hours')">Last 24 Hours</a></li>
@@ -11,4 +11,4 @@
     <li role="separator" class="divider hidden-xs"></li>
     <li class="hidden-xs"><a ng-class="{ active: vm.isActive('Custom')}" ng-click="vm.setCustomFilter()">Custom</a></li>
   </ul>
-</div>
+</li>

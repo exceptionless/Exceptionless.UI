@@ -1,46 +1,23 @@
 @import "../../less/variables.less";
 
-.navbar-nav-search {
-  margin: 0px;
-  width: 79%;
-  .btn-dark {
-    background-color: #2C2C2C;
-  }
-  .dropdown-menu {
-    min-width: 300px;
-  }
-}
+.navbar-form-search {
+  border: 0;
 
-.navbar-nav-search .input-group-btn {
-  width: 1% !important;
-}
-
-.navbar-nav-search {
-  @media (max-width: @screen-xs-max) {
-    width: 100%;
+  #search + div.input-group-btn {
+    width: 1%;
   }
 
   @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-    width: 79%;
+    width: 40%;
   }
 
   @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
-    width: 85%;
+    width: 55%;
   }
 
   @media (min-width: @screen-lg-min) {
-    width: 88%;
+    width: 63%;
   }
-}
-
-.search-panel {
-  border-radius: 0px;
-  padding: 10px;
-}
-
-div.input-group-btn div.inline:not(:first-child) .btn {
-  border-radius:0;
-  margin-left: -3px
 }
 
 input#search.form-control {
@@ -59,6 +36,10 @@ input#search.form-control:focus {
   color:#0C0C0C;
 }
 
+.btn-search-help {
+  padding-top: 7px;
+}
+
 .error-tooltip .tooltip-inner  {
   color: @alert-danger-text;
   background-color: @alert-danger-bg;
@@ -67,4 +48,14 @@ input#search.form-control:focus {
 .error-tooltip .tooltip-arrow {
   border-bottom-color: @alert-danger-bg;
   margin:0.1px;
+}
+
+.navbar-nav > li > a.profile-image {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.profile-image img {
+  padding: 0;
+  border: 0;
 }

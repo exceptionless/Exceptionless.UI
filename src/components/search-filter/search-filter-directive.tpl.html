@@ -1,29 +1,26 @@
-<ul class="nav navbar-nav navbar-nav-search" refresh-on="filterChanged" refresh-action="vm.updateFilter()">
-  <div class="navbar-form " role="search">
-    <form name="vm.searchFilterForm" role="form" class="form-validation">
-      <div class="input-group w-full">
-        <div class="input-group-btn">
-          <project-filter></project-filter>
-          <date-filter></date-filter>
-        </div>
+<div>
+  <ul class="nav navbar-nav" refresh-on="filterChanged" refresh-action="vm.updateFilter()">
+    <project-filter></project-filter>
+    <date-filter></date-filter>
+  </ul>
+  <form class="navbar-form navbar-form-search navbar-left" name="vm.searchFilterForm" role="search">
+    <div class="input-group w-full">
+      <input id="search" name="search" type="search" class="form-control" placeholder="Filter"
+             ng-model="vm.filter"
+             ng-model-options="{ debounce: 500 }"
+             ng-change="vm.setSearchFilter(vm.filter)"
+             search-filter-validator
+             autofocus
+             uib-tooltip="{{(vm.searchFilterForm.search.$invalid) ? 'An invalid search term was found.' : ''}}"
+             tooltip-class="error-tooltip"
+             tooltip-is-open="vm.searchFilterForm.search.$invalid"
+             tooltip-placement="bottom" />
 
-        <input id="search" name="search" type="search" class="form-control" placeholder="Filter"
-               ng-model="vm.filter"
-               ng-model-options="{ debounce: 500 }"
-               ng-change="vm.setSearchFilter(vm.filter)"
-               search-filter-validator
-               autofocus
-               uib-tooltip="{{(vm.searchFilterForm.search.$invalid) ? 'An invalid search term was found.' : ''}}"
-               tooltip-class="error-tooltip"
-               tooltip-is-open="vm.searchFilterForm.search.$invalid"
-               tooltip-placement="bottom" />
-
-        <div class="input-group-btn">
-          <a class="btn btn-dark" href="https://github.com/exceptionless/Exceptionless/wiki/Filtering-Searching" target="_blank" title="Search Documentation" aria-label="Search Documentation">
-            <i class="fa fa-fw fa-question-circle"></i>
-          </a>
-        </div>
+      <div class="input-group-btn">
+        <a class="btn btn-search-help btn-dark" href="https://github.com/exceptionless/Exceptionless/wiki/Filtering-Searching" target="_blank" title="Search Documentation" aria-label="Search Documentation">
+          <i class="fa fa-fw fa-question-circle"></i>
+        </a>
       </div>
-    </form>
-  </div>
-</ul>
+    </div>
+  </form>
+</div>
