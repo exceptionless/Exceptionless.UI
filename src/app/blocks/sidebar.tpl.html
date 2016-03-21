@@ -1,61 +1,6 @@
 <div class="aside-wrap">
   <div class="navi-wrap">
     <div class="clearfix hidden-xs text-center hide" id="aside-user">
-      <div class="dropdown wrapper">
-        <a ui-sref="app.page.profile">
-          <span class="thumb-lg w-auto-folded avatar m-t-sm">
-            <img gravatar-src="appVm.user.email_address" gravatar-size="40" class="img-full" alt="{{appVm.user.full_name}}">
-          </span>
-        </a>
-        <a href="javascript:void(0);" class="dropdown-toggle hidden-folded">
-          <span class="clear">
-              <span class="block m-t-sm">
-                  <strong class="font-bold text-lt">{{appVm.user.full_name}}</strong>
-                  <b class="caret"></b>
-              </span>
-              <span class="text-muted text-xs block">{{appVm.user.full_name}}</span>
-          </span>
-        </a>
-        <ul class="dropdown-menu w hidden-folded">
-          <li>
-            <a ui-sref="app.account.manage">
-              <i class="fa fa-user fa-fw"></i>
-              My Account
-            </a>
-          </li>
-          <li ng-if="appVm.canChangePlan()">
-            <a ng-click="appVm.changePlan()">
-              <i class="fa fa-credit-card fa-fw"></i>
-              Change Plan
-            </a>
-          </li>
-          <li>
-            <a ui-sref="app.account.manage({ tab: 'password' })">
-              <i class="fa fa-lock fa-fw"></i>
-              Change Password
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank">
-              <i class="fa fa-book fa-fw"></i>
-              Documentation
-            </a>
-          </li>
-          <li ng-if="appVm.isIntercomEnabled()">
-            <a ng-click="appVm.showIntercom()">
-              <i class="fa fa-comment fa-fw"></i>
-              Support
-            </a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a ui-sref="auth.logout">
-              <i class="fa fa-power-off fa-fw"></i>
-              Logout
-            </a>
-          </li>
-        </ul>
-      </div>
       <div class="line dk hidden-folded"></div>
     </div>
 

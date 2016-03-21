@@ -20,26 +20,27 @@
 
   <search-filter></search-filter>
 
-  <ul class="nav navbar-nav navbar-right">
-    <li class="dropdown avatar-dd" uib-dropdown>
-      <a class="dropdown-toggle clear" uib-dropdown-toggle>
-        <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-            <img gravatar-src="appVm.user.email_address" gravatar-size="40" alt="{{appVm.user.full_name}}">
-        </span>
-      </a>
+  <div class="btn-group pull-right hidden-xs">
+    <button type="button" class="btn btn-avatar dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <img class="img-thumbnail" gravatar-src="appVm.user.email_address" gravatar-size="35" alt="{{appVm.user.full_name}}" />
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a ui-sref="app.account.manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
+      <li><a ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
+      <li><a ui-sref="app.account.manage({ tab: 'password' })"><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
+      <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> Documentation</a></li>
+      <li ng-if="appVm.isIntercomEnabled()"><a ng-click="appVm.showIntercom()"><i class="fa fa-comment fa-fw"></i> Support</a></li>
+      <li><a ui-sref="auth.logout"><i class="fa fa-power-off fa-fw"></i> Logout</a></li>
+    </ul>
+  </div>
 
-      <div class="dropdown-menu w-sm" role="menu">
-        <div class="panel bg-dark">
-          <div class="list-group">
-            <a class="media list-group-item" ui-sref="app.account.manage"><i class="fa fa-user fa-fw"></i> My Account</a>
-            <a class="media list-group-item" ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a>
-            <a class="media list-group-item" ui-sref="app.account.manage({ tab: 'password' })"><i class="fa fa-lock fa-fw"></i> Change Password</a>
-            <a class="media list-group-item" href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> Documentation</a>
-            <a class="media list-group-item" ng-click="appVm.showIntercom()" ng-if="appVm.isIntercomEnabled()"><i class="fa fa-comment fa-fw"></i> Support</a>
-            <a class="media list-group-item" ui-sref="auth.logout"><i class="fa fa-power-off fa-fw"></i> Logout</a>
-          </div>
-        </div>
-      </div>
-    </li>
+  <ul class="nav visible-xs hidden-sm">
+    <li><a ui-sref="app.account.manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
+    <li><a ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
+    <li><a ui-sref="app.account.manage({ tab: 'password' })"><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
+    <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> Documentation</a></li>
+    <li ng-if="appVm.isIntercomEnabled()"><a ng-click="appVm.showIntercom()"><i class="fa fa-comment fa-fw"></i> Support</a></li>
+    <li><a ui-sref="auth.logout"><i class="fa fa-power-off fa-fw"></i> Logout</a></li>
   </ul>
 </div>
