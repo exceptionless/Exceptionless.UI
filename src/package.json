@@ -35,7 +35,7 @@
     "karma-ng-html2js-preprocessor": "^0.2.1",
     "karma-phantomjs-launcher": "1.0.0",
     "load-grunt-config": "0.19.1",
-    "phantomjs-prebuilt": "2.1.5",
+    "phantomjs-prebuilt": "2.1.6",
     "rimraf": "2.5.2",
     "streamqueue": "1.1.1",
     "traceur": "0.0.104"

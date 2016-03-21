@@ -46,7 +46,7 @@
           // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
           val = val === undefined ? null : decodeURIComponent(val);
 
-          if (!previous[key]) {
+          if (!previous.hasOwnProperty(key)) {
             previous[key] = val;
           } else if (Array.isArray(previous[key])) {
             previous[key].push(val);
