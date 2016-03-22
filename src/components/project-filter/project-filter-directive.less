@@ -31,9 +31,33 @@
   color: #6BA32E;
 }
 
-.navbar-default .bg-black  .navbar-nav>.open>a,
-.navbar-default .bg-black  .navbar-nav>.open>a:focus,
-.navbar-default .bg-black  .navbar-nav>.open>a:hover {
+.navbar-default .bg-black .navbar-nav>.open>a,
+.navbar-default .bg-black .navbar-nav>.open>a:focus,
+.navbar-default .bg-black .navbar-nav>.open>a:hover {
   background-color: #201E1E;
   color: #fff;
 }
+
+@media (max-width: 767px) {
+  .bg-black .dropdown-menu > li > a:hover,
+  .bg-black .dropdown-menu > li > a:focus,
+  .bg-black .dropdown-menu > .active > a,
+  .bg-black .dropdown-menu > .active > a:hover,
+  .bg-black .dropdown-menu > .active > a:focus {
+    background-color: #201E1E !important;
+    color: #fff !important;
+  }
+  
+  .bg-black .dropdown-menu .divider {
+    background-color: #3E3E3E;
+  }
+  
+  .bg-black .dropdown-menu .child-menu > a {
+    padding-left: 40px !important;
+  }
+  
+  .bg-black .dropdown-menu .heading-menu > a {
+    color: #6BA32E !important;
+  }
+}
+
