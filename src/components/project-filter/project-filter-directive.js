@@ -58,9 +58,11 @@
             }
 
             vm.filteredDisplayName = getFilterName();
+            vm.isLoadingOrganizations = false;
           }
 
           function onFailure() {
+            vm.isLoadingOrganizations = false;
             notificationService.error('An error occurred while loading your organizations.');
           }
 
@@ -84,9 +86,11 @@
             }
 
             vm.filteredDisplayName = getFilterName();
+            vm.isLoadingProjects = false;
           }
 
           function onFailure() {
+            vm.isLoadingProjects = false;
             notificationService.error('An error occurred while loading your projects.');
           }
 
@@ -150,6 +154,8 @@
         vm.getOrganizationUrl = getOrganizationUrl;
         vm.getProjectUrl = getProjectUrl;
         vm.getProjectsByOrganizationId = getProjectsByOrganizationId;
+        vm.isLoadingOrganizations = true;
+        vm.isLoadingProjects = true;
         vm.organizations = [];
         vm.projects = [];
 

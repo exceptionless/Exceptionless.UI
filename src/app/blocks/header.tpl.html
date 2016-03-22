@@ -21,7 +21,7 @@
 
     <search-filter></search-filter>
 
-    <ul class="nav navbar-nav navbar-right hidden-xs">
+    <ul class="nav navbar-nav navbar-right hidden-xs" auto-active>
       <li class="dropdown">
         <a class="dropdown-toggle profile-image" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
           <img class="img-thumbnail" gravatar-src="appVm.user.email_address" gravatar-size="35" alt="{{appVm.user.full_name}}" />
@@ -38,7 +38,7 @@
       </li>
     </ul>
 
-    <ul class="nav navbar-nav visible-xs hidden-sm">
+    <ul class="nav navbar-nav visible-xs hidden-sm" auto-active>
       <li><a ui-sref="app.account.manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
       <li><a ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
       <li><a ui-sref="app.account.manage({ tab: 'password' })"><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
