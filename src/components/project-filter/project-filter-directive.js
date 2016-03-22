@@ -130,7 +130,7 @@
         }
 
         var updateFilterDropDownMaxHeight = debounce(function() {
-          vm.filterDropDownMaxHeight = angular.element($window).height() - 52;
+          vm.filterDropDownMaxHeight = angular.element($window).height() - 100;
         }, 150);
 
         var window = angular.element($window);
