@@ -8,7 +8,7 @@
     "grunt-angular-templates": "1.0",
     "grunt-browser-output": "1.0.3",
     "grunt-cache-bust": "1.1.1",
-    "grunt-cli": "0.1.13",
+    "grunt-cli": "1.0.0",
     "grunt-contrib-clean": "1.0",
     "grunt-contrib-compress": "1.1.1",
     "grunt-contrib-concat": "1.0",
