@@ -6,7 +6,6 @@
              ng-model-options="{ debounce: 500 }"
              ng-change="vm.setSearchFilter(vm.filter)"
              search-filter-validator
-             autofocus
              uib-tooltip="{{(vm.searchFilterForm.search.$invalid) ? 'An invalid search term was found.' : ''}}"
              tooltip-class="error-tooltip"
              tooltip-is-open="vm.searchFilterForm.search.$invalid"
