@@ -57,10 +57,12 @@
               filterService.setOrganizationId();
             }
 
-            vm.filterName = getFilterName();
+            vm.filteredDisplayName = getFilterName();
+            vm.isLoadingOrganizations = false;
           }
 
           function onFailure() {
+            vm.isLoadingOrganizations = false;
             notificationService.error('An error occurred while loading your organizations.');
           }
 
@@ -83,10 +85,12 @@
               filterService.setProjectId();
             }
 
-            vm.filterName = getFilterName();
+            vm.filteredDisplayName = getFilterName();
+            vm.isLoadingProjects = false;
           }
 
           function onFailure() {
+            vm.isLoadingProjects = false;
             notificationService.error('An error occurred while loading your projects.');
           }
 
@@ -126,7 +130,7 @@
         }
 
         var updateFilterDropDownMaxHeight = debounce(function() {
-          vm.filterDropDownMaxHeight = angular.element($window).height() - 52;
+          vm.filterDropDownMaxHeight = angular.element($window).height() - 100;
         }, 150);
 
         var window = angular.element($window);
@@ -134,22 +138,24 @@
 
         // NOTE: We need to watch on getFilterName because the filterChangedEvents might not be called depending on suspendNotifications option.
         var unbind = $scope.$watch(function() { return vm.getFilterName(); }, function (filterName) {
-          vm.filterName = filterName;
+          vm.filteredDisplayName = filterName;
         });
 
-        $scope.$on('$destroy', function(e) {
+        $scope.$on('$destroy', function() {
           unbind();
           window.unbind('resize', updateFilterDropDownMaxHeight);
         });
 
         var vm = this;
-        vm.filterName = 'Loading';
+        vm.filteredDisplayName = 'Loading';
         vm.get = get;
         vm.getAllProjectsUrl = getAllProjectsUrl;
         vm.getFilterName = getFilterName;
         vm.getOrganizationUrl = getOrganizationUrl;
         vm.getProjectUrl = getProjectUrl;
         vm.getProjectsByOrganizationId = getProjectsByOrganizationId;
+        vm.isLoadingOrganizations = true;
+        vm.isLoadingProjects = true;
         vm.organizations = [];
         vm.projects = [];
 

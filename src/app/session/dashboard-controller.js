@@ -28,11 +28,7 @@
           });
         }
 
-        function onFailure() {
-          notificationService.error('An error occurred while loading the stats.');
-        }
-
-        return statService.getTimeline('avg:value,distinct:user.raw').then(onSuccess, onFailure);
+        return statService.getTimeline('avg:value,distinct:user.raw').then(onSuccess);
       }
 
       vm.chart = {

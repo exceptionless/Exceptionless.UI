@@ -338,62 +338,8 @@ body{
 	}
 }
 
-// sm
-@media (min-width: 768px) and (max-width: 991px) {
-	.hbox-auto-sm{
-		display: block;
-		> .col{
-			width: auto;
-			display: block;
-			&.show{
-				display: block !important;
-			}
-		}
-
-	}
-}
-// xs
-@media (max-width: 767px) {
-	.app-aside{
-		float: none;
-	}
-	.hbox-auto-xs{
-		display: block;
-		> .col{
-			width: auto;
-			display: block;
-		}
-	}
-	.navbar-nav{
-		margin-top: 0;
-		margin-bottom: 0;
-		> li > a{
-			box-shadow:0 -1px 0 rgba(0,0,0,0.1);
-			.up{
-				top: 0;
-			}
-			.avatar{
-				width: 30px;
-				margin-top: -5px;
-			}
-		}
-		.open .dropdown-menu{
-			background-color: #fff;
-		}
-	}
-	.navbar-form{
-		box-shadow:0 -1px 0 rgba(0,0,0,0.1);
-		margin-top: 0 !important;
-		margin-bottom: 0 !important;
-		.form-group{
-			margin-bottom: 0;
-		}
-	}
-}
-
-@media (max-width: 767px) {
-  .navbar .navbar-header {
-    box-shadow: 0 5px 5px rgba(0, 0, 0, .25);
-    border-bottom: 2px solid @brand-primary;
+@media screen and (max-width: 767px) {
+  input, select, textarea {
+    font-size: 16px !important;
   }
 }

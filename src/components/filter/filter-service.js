@@ -4,8 +4,6 @@
   angular.module('exceptionless.filter')
     .factory('filterService', ['$rootScope', 'filterStoreService', 'objectIDService', function ($rootScope, filterStoreService, objectIDService) {
       var DEFAULT_TIME_FILTER = 'last week';
-      var _includeFixed = filterStoreService.getIncludeFixed();
-      var _includeHidden = filterStoreService.getIncludeHidden();
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
 
@@ -15,14 +13,6 @@
 
       function buildFilter() {
         var filters = [];
-
-        if (!_includeFixed) {
-          filters.push('fixed:false');
-        }
-
-        if (!_includeHidden) {
-          filters.push('hidden:false');
-        }
 
         if (_organizationId) {
           filters.push('organization:' + _organizationId);
@@ -37,20 +27,31 @@
         }
 
         if (_raw) {
-          filters.push(_raw);
+          filters.push('(' + _raw + ')');
         }
 
-        return filters.join(' ');
+        var filter = filters.join(' ');
+        var hasFixed = filter.search(/\bfixed:/i) !== -1;
+        var hasHidden = filter.search(/\bhidden:/i) !== -1;
+        if (!hasFixed || !hasHidden) {
+          if (!hasFixed) {
+            filter += ' fixed:false';
+          }
+
+          if (!hasHidden) {
+            filter += ' hidden:false';
+          }
+        }
+
+        return filter.trim();
       }
 
-      function clearFilterAndIncludeFixedAndIncludeHidden() {
-        if (!_raw && !_includeFixed && !_includeHidden) {
+      function clearFilter() {
+        if (!_raw) {
           return;
         }
 
         setFilter(null, false);
-        setIncludeFixed(null, false);
-        setIncludeHidden(null, false);
         fireFilterChanged();
       }
 
@@ -92,14 +93,6 @@
         return _raw;
       }
 
-      function getIncludeFixed() {
-        return _includeFixed === true;
-      }
-
-      function getIncludeHidden() {
-        return _includeHidden === true;
-      }
-
       function getProjectId() {
         return _projectId;
       }
@@ -121,7 +114,7 @@
       }
 
       function hasFilter() {
-        return _includeFixed || _includeHidden || _raw || (_time && _time !== 'all');
+        return _raw || (_time && _time !== 'all');
       }
 
       function includedInProjectOrOrganizationFilter(data) {
@@ -143,32 +136,6 @@
         }
 
         _eventType = eventType;
-
-        if (!suspendNotifications) {
-          fireFilterChanged();
-        }
-      }
-
-      function setIncludeFixed(includeFixed, suspendNotifications) {
-        if (angular.equals(includeFixed, _includeFixed)) {
-          return;
-        }
-
-        _includeFixed = includeFixed === true;
-        filterStoreService.setIncludeFixed(_includeFixed);
-
-        if (!suspendNotifications) {
-          fireFilterChanged();
-        }
-      }
-
-      function setIncludeHidden(includeHidden, suspendNotifications) {
-        if (angular.equals(includeHidden, _includeHidden)) {
-          return;
-        }
-
-        _includeHidden = includeHidden === true;
-        filterStoreService.setIncludeHidden(_includeHidden);
 
         if (!suspendNotifications) {
           fireFilterChanged();
@@ -240,12 +207,10 @@
 
       var service = {
         apply: apply,
-        clearFilterAndIncludeFixedAndIncludeHidden: clearFilterAndIncludeFixedAndIncludeHidden,
+        clearFilter: clearFilter,
         clearOrganizationAndProjectFilter: clearOrganizationAndProjectFilter,
         getEventType: getEventType,
         getFilter: getFilter,
-        getIncludeFixed: getIncludeFixed,
-        getIncludeHidden: getIncludeHidden,
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
         getTime: getTime,
@@ -253,8 +218,6 @@
         includedInProjectOrOrganizationFilter: includedInProjectOrOrganizationFilter,
         setEventType: setEventType,
         setFilter: setFilter,
-        setIncludeFixed: setIncludeFixed,
-        setIncludeHidden: setIncludeHidden,
         setOrganizationId: setOrganizationId,
         setProjectId: setProjectId,
         setTime: setTime
