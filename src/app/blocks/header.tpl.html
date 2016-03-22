@@ -12,14 +12,12 @@
     </a>
   </div>
 
-  <div class="clearfix collapse navbar-collapse no-shadow">
-    <div class="nav navbar-nav hidden-xs">
+  <div class="collapse navbar-collapse no-shadow">
+    <div class="nav navbar-nav navbar-left hidden-xs">
       <a class="btn no-shadow navbar-btn" role="button" ng-click="appVm.toggleSideNavCollapsed()">
         <i class="fa {{appVm.isSideNavCollapsed ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
       </a>
     </div>
-
-    <search-filter></search-filter>
 
     <ul class="nav navbar-nav navbar-right hidden-xs" auto-active>
       <li class="dropdown">
@@ -37,6 +35,8 @@
         </ul>
       </li>
     </ul>
+
+    <search-filter></search-filter>
 
     <ul class="nav navbar-nav visible-xs hidden-sm" auto-active>
       <li><a ui-sref="app.account.manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
