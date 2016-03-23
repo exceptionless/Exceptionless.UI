@@ -63,7 +63,7 @@
       function getOrganization() {
         function onSuccess(response) {
           vm.organization = response.data.plain();
-          vm.organization.usage = vm.organization.usage || [];
+          vm.organization.usage = vm.organization.usage || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: vm.organization.max_events_per_month, too_big: 0 }];
           vm.hasMonthlyUsage = vm.organization.max_events_per_month > 0;
 
           vm.chart.options.series[0].data = vm.organization.usage.map(function (item) {
