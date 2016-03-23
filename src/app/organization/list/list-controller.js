@@ -79,8 +79,9 @@
       }
 
       function open(id, event) {
-        $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', event.ctrlKey || event.which === 2).submit();
-        if (event.ctrlKey || event.which === 2) {
+        var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
+        if (openInNewTab) {
           $window.open($state.href('app.organization.manage', { id: id }, { absolute: true }), '_blank');
         } else {
           $state.go('app.organization.manage', { id: id });
