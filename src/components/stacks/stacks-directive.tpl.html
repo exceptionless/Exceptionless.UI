@@ -37,11 +37,11 @@
     </tr>
     <tr ng-if="!vm.hasStacks() || vm.loading">
       <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
-      <td colspan="4" class="hidden-xs">
+      <td colspan="5" class="hidden-xs">
         <strong ng-if="vm.loading">Loading...</strong>
         <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
       </td>
-      <td colspan="3" class="visible-xs">
+      <td colspan="4" class="visible-xs">
         <strong ng-if="vm.loading">Loading...</strong>
         <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
       </td>
