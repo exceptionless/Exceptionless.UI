@@ -23,7 +23,7 @@
         <summary source="stack" show-type="vm.showType"></summary>
       </td>
       <td ng-click="vm.open(stack.id, $event)" class="number">
-        <abbr title="{{stack.users | number:0}} out of  {{stack.total_users | number:0}} users affected">{{(stack.users > 0 ? stack.users / stack.total_users * 100.0 : 0) | number:0}}%</abbr>
+        <abbr title="{{stack.users | number:0}} of {{stack.total_users | number:0}} users affected">{{(stack.users > 0 ? stack.users / stack.total_users * 100.0 : 0) | number:0}}%</abbr>
       </td>
       <td ng-click="vm.open(stack.id, $event)" class="number">{{stack.total | number:0}}</td>
       <td ng-click="vm.open(stack.id, $event)" class="hidden-xs">
