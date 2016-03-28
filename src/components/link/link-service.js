@@ -24,16 +24,18 @@
 
       function parseQueryString(input) {
         // Source import from https://github.com/sindresorhus/query-string due to lack of browser support (node / requirejs).
+        var result = Object.create(null);
         if (typeof input !== 'string') {
-          return {};
+          return result;
         }
 
         input = input.trim().replace(/^(\?|#|&)/, '');
+
         if (!input) {
-          return {};
+          return result;
         }
 
-        return input.split('&').reduce(function (previous, param) {
+        input.split('&').forEach(function (param) {
           var parts = param.replace(/\+/g, ' ').split('=');
           // Firefox (pre 40) decodes `%3D` to `=`
           // https://github.com/sindresorhus/query-string/pull/37
@@ -46,16 +48,16 @@
           // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
           val = val === undefined ? null : decodeURIComponent(val);
 
-          if (!previous.hasOwnProperty(key)) {
-            previous[key] = val;
-          } else if (Array.isArray(previous[key])) {
-            previous[key].push(val);
+          if (result[key] === undefined) {
+            result[key] = val;
+          } else if (Array.isArray(result[key])) {
+            result[key].push(val);
           } else {
-            previous[key] = [previous[key], val];
+            result[key] = [result[key], val];
           }
+        });
 
-          return previous;
-        }, {});
+        return result;
       }
 
       var service = {
