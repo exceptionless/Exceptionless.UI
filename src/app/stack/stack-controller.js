@@ -89,7 +89,7 @@
 
       function getStats() {
         function buildFields(options) {
-          return options.filter(function(option) { return option.selected; })
+          return 'distinct:user.raw' + options.filter(function(option) { return option.selected; })
             .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
             .join(',');
         }
@@ -113,7 +113,7 @@
                 name: option.name,
                 stroke: 'rgba(0, 0, 0, 0.15)',
                 data: vm.stats.timeline.map(function (item) {
-                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index - 1]), data: item };
+                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index]), data: item };
                 })
               });
 

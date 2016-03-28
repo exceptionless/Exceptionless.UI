@@ -5,7 +5,7 @@
     <div class="row" refresh-on="PersistentEventChanged PlanChanged" refresh-action="vm.get(data)" refresh-throttle="10000">
       <div class="col-sm-12">
         <div class="row row-sm text-center">
-          <div class="col-xs-4">
+          <div class="col-md-3 col-sm-6 col-xs-6">
             <div class="dashboard-block">
               <div class="rotate">
                 <i class="fa fa-calendar fa-4x"></i>
@@ -16,7 +16,18 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-4">
+          <div class="col-md-3 col-sm-6 col-xs-6">
+            <div class="dashboard-block">
+              <div class="rotate">
+                <i class="fa fa-users fa-4x"></i>
+              </div>
+              <div class="details">
+                <span class="title">Users Affected</span>
+                <span class="sub">{{vm.stats.numbers[0] || 0 | number : 0}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-6">
             <div class="dashboard-block">
               <div class="rotate">
                 <i class="fa fa-arrow-circle-left fa-4x"></i>
@@ -35,10 +46,10 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-4">
+          <div class="col-md-3 col-sm-6 col-xs-6">
             <div class="dashboard-block">
               <div class="rotate">
-                <i class="fa fa-arrow-circle-right  fa-4x"></i>
+                <i class="fa fa-arrow-circle-right fa-4x"></i>
               </div>
               <div class="details">
                 <span class="title">Last</span>
