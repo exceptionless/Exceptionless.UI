@@ -11,7 +11,7 @@
       <th class="percentage">Users</th>
       <th class="number">Count</th>
       <th class="date hidden-xs">First</th>
-      <th class="date">Last</th>
+      <th class="date hidden-xs">Last</th>
     </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
           <timeago date="stack.first_occurrence"></timeago>
         </abbr>
       </td>
-      <td ng-click="vm.open(stack.id, $event)"><abbr title="{{::stack.last_occurrence | date : 'medium'}}">
+      <td ng-click="vm.open(stack.id, $event)" class="hidden-xs"><abbr title="{{::stack.last_occurrence | date : 'medium'}}">
         <timeago date="stack.last_occurrence"></timeago>
       </abbr></td>
     </tr>
@@ -41,7 +41,7 @@
         <strong ng-if="vm.loading">Loading...</strong>
         <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
       </td>
-      <td colspan="4" class="visible-xs">
+      <td colspan="3" class="visible-xs">
         <strong ng-if="vm.loading">Loading...</strong>
         <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
       </td>
