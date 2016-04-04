@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.stacks', [
+    'angular-filters',
     'checklist-model',
     'ui.bootstrap',
 
