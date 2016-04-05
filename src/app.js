@@ -64,6 +64,12 @@
     'app.status'
   ])
   .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', 'dialogsProvider', 'gravatarServiceProvider', 'RestangularProvider', 'BASE_URL', 'EXCEPTIONLESS_API_KEY', '$ExceptionlessClient', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, $ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
+    function setRouteFilter(filterService, organizationId, projectId, type) {
+      filterService.setOrganizationId(organizationId, true);
+      filterService.setProjectId(projectId, true);
+      filterService.setEventType(type, true);
+    }
+
     if (EXCEPTIONLESS_API_KEY) {
       var config = $ExceptionlessClient.config;
       config.apiKey = EXCEPTIONLESS_API_KEY;
@@ -113,13 +119,11 @@
       { key: 'users', title: 'Most Users', controller: 'app.Users' }
     ];
 
-    routes.forEach(function(route) {
-      var controllerAs = 'vm';
-      var templateUrl = 'app/' + route.key + '.tpl.html';
-      var resetEventTypeOnExit = ['filterService', function (filterService) {
-        filterService.setEventType(null, true);
-      }];
 
+    var controllerAs = 'vm';
+    var resetEventTypeOnExit = ['filterService', function (filterService) { filterService.setEventType(null, true); }];
+    routes.forEach(function(route) {
+      var templateUrl = 'app/' + route.key + '.tpl.html';
       $stateProvider.state('app.' + route.key, {
         title: route.title,
         url: '/' + route.key,
@@ -127,8 +131,7 @@
         controllerAs: controllerAs,
         templateUrl: templateUrl,
         onEnter: ['filterService', function (filterService) {
-          filterService.setOrganizationId(null, true);
-          filterService.setProjectId(null, true);
+          setRouteFilter(filterService, null, null, null);
         }]
       });
 
@@ -139,7 +142,7 @@
         controllerAs: controllerAs,
         templateUrl: templateUrl,
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
-          filterService.setProjectId($stateParams.projectId, true);
+          setRouteFilter(filterService, null, $stateParams.projectId, null);
         }]
       });
 
@@ -154,8 +157,7 @@
             return $state.go('app.session-project-dashboard', $stateParams);
           }
 
-          filterService.setProjectId($stateParams.projectId, true);
-          filterService.setEventType($stateParams.type, true);
+          setRouteFilter(filterService, null, $stateParams.projectId, $stateParams.type);
         }],
         onExit: resetEventTypeOnExit
       });
@@ -167,8 +169,7 @@
         controllerAs: controllerAs,
         templateUrl: templateUrl,
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
-          filterService.setOrganizationId($stateParams.organizationId, true);
-          filterService.setEventType(null, true);
+          setRouteFilter(filterService, $stateParams.organizationId, null, null);
         }]
       });
 
@@ -183,8 +184,7 @@
             return $state.go('app.session-organization-dashboard', $stateParams);
           }
 
-          filterService.setOrganizationId($stateParams.organizationId, true);
-          filterService.setEventType($stateParams.type, true);
+          setRouteFilter(filterService, $stateParams.organizationId, null, $stateParams.type);
         }],
         onExit: resetEventTypeOnExit
       });
@@ -195,10 +195,12 @@
         controller: route.controller,
         controllerAs: controllerAs,
         templateUrl: 'app/' + route.key + '.tpl.html',
-        onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
-          filterService.setOrganizationId(null, true);
-          filterService.setProjectId(null, true);
-          filterService.setEventType($stateParams.type, true);
+        onEnter: ['$state', '$stateParams', 'filterService', function ($state, $stateParams, filterService) {
+          if ($stateParams.type === 'session') {
+            return $state.go('app.session-dashboard', $stateParams);
+          }
+
+          setRouteFilter(filterService, null, null, $stateParams.type);
         }],
         onExit: resetEventTypeOnExit
       });
