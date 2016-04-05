@@ -20,8 +20,12 @@
         return billingService.changePlan(organizationId);
       }
 
+      function getFilterUrl(route, type) {
+        return urlService.buildFilterUrl({ route: route, projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+      }
+
       function getDashboardUrl(type) {
-        return urlService.buildFilterUrl({ route: 'dashboard', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+        return getFilterUrl('dashboard', type);
       }
 
       function getSessionDashboardUrl() {
@@ -29,15 +33,19 @@
       }
 
       function getRecentUrl(type) {
-        return urlService.buildFilterUrl({ route: 'recent', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+        return getFilterUrl('recent', type);
       }
 
       function getFrequentUrl(type) {
-        return urlService.buildFilterUrl({ route: 'frequent', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+        return getFilterUrl('frequent', type);
+      }
+
+      function getUsersUrl(type) {
+        return getFilterUrl('users', type);
       }
 
       function getNewUrl(type) {
-        return urlService.buildFilterUrl({ route: 'new', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+        return getFilterUrl('new', type);
       }
 
       function getOrganizations() {
@@ -170,6 +178,7 @@
       vm.getSessionDashboardUrl = getSessionDashboardUrl;
       vm.getRecentUrl = getRecentUrl;
       vm.getFrequentUrl = getFrequentUrl;
+      vm.getUsersUrl = getUsersUrl;
       vm.getNewUrl = getNewUrl;
       vm.getOrganizations = getOrganizations;
       vm.getUser = getUser;
