@@ -114,12 +114,18 @@
     ];
 
     routes.forEach(function(route) {
+      var controllerAs = 'vm';
+      var templateUrl = 'app/' + route.key + '.tpl.html';
+      var resetEventTypeOnExit = ['filterService', function (filterService) {
+        filterService.setEventType(null, true);
+      }];
+
       $stateProvider.state('app.' + route.key, {
         title: route.title,
         url: '/' + route.key,
         controller: route.controller,
-        controllerAs: 'vm',
-        templateUrl: 'app/' + route.key + '.tpl.html',
+        controllerAs: controllerAs,
+        templateUrl: templateUrl,
         onEnter: ['filterService', function (filterService) {
           filterService.setOrganizationId(null, true);
           filterService.setProjectId(null, true);
@@ -130,24 +136,19 @@
         title: route.title,
         url: '/project/{projectId:[0-9a-fA-F]{24}}/' + route.key,
         controller: route.controller,
-        controllerAs: 'vm',
-        templateUrl: 'app/' + route.key +'.tpl.html',
+        controllerAs: controllerAs,
+        templateUrl: templateUrl,
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setProjectId($stateParams.projectId, true);
-        }],
-        resolve: {
-          project: ['$stateParams', 'projectService', function($stateParams, projectService) {
-            return projectService.getById($stateParams.projectId, true);
-          }]
-        }
+        }]
       });
 
       $stateProvider.state('app.project-type-'+ route.key, {
         title: route.title,
         url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/'+ route.key,
         controller: route.controller,
-        controllerAs: 'vm',
-        templateUrl: 'app/' + route.key + '.tpl.html',
+        controllerAs: controllerAs,
+        templateUrl: templateUrl,
         onEnter: ['$state', '$stateParams', 'filterService', function ($state, $stateParams, filterService) {
           if ($stateParams.type === 'session') {
             return $state.go('app.session-project-dashboard', $stateParams);
@@ -156,39 +157,27 @@
           filterService.setProjectId($stateParams.projectId, true);
           filterService.setEventType($stateParams.type, true);
         }],
-        onExit: ['filterService', function (filterService) {
-          filterService.setEventType(null, true);
-        }],
-        resolve: {
-          project: ['$stateParams', 'projectService', function($stateParams, projectService) {
-            return projectService.getById($stateParams.projectId, true);
-          }]
-        }
+        onExit: resetEventTypeOnExit
       });
 
       $stateProvider.state('app.organization-' + route.key, {
         title: route.title,
         url: '/organization/{organizationId:[0-9a-fA-F]{24}}/' + route.key,
         controller: route.controller,
-        controllerAs: 'vm',
-        templateUrl: 'app/'+ route.key + '.tpl.html',
+        controllerAs: controllerAs,
+        templateUrl: templateUrl,
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setOrganizationId($stateParams.organizationId, true);
           filterService.setEventType(null, true);
-        }],
-        resolve: {
-          project: ['$stateParams', 'organizationService', function($stateParams, organizationService) {
-            return organizationService.getById($stateParams.organizationId, true);
-          }]
-        }
+        }]
       });
 
       $stateProvider.state('app.organization-type-' + route.key, {
         title: route.title,
         url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/' + route.key,
         controller: route.controller,
-        controllerAs: 'vm',
-        templateUrl: 'app/' + route.key + '.tpl.html',
+        controllerAs: controllerAs,
+        templateUrl: templateUrl,
         onEnter: ['$state', '$stateParams', 'filterService', function ($state, $stateParams, filterService) {
           if ($stateParams.type === 'session') {
             return $state.go('app.session-organization-dashboard', $stateParams);
@@ -197,30 +186,21 @@
           filterService.setOrganizationId($stateParams.organizationId, true);
           filterService.setEventType($stateParams.type, true);
         }],
-        onExit: ['filterService', function (filterService) {
-          filterService.setEventType(null, true);
-        }],
-        resolve: {
-          project: ['$stateParams', 'organizationService', function($stateParams, organizationService) {
-            return organizationService.getById($stateParams.organizationId, true);
-          }]
-        }
+        onExit: resetEventTypeOnExit
       });
 
       $stateProvider.state('app.type-' + route.key, {
         title: route.title,
         url: '/type/:type/' + route.key,
         controller: route.controller,
-        controllerAs: 'vm',
+        controllerAs: controllerAs,
         templateUrl: 'app/' + route.key + '.tpl.html',
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setOrganizationId(null, true);
           filterService.setProjectId(null, true);
           filterService.setEventType($stateParams.type, true);
         }],
-        onExit: ['filterService', function (filterService) {
-          filterService.setEventType(null, true);
-        }]
+        onExit: resetEventTypeOnExit
       });
     });
 

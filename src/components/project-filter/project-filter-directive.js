@@ -123,7 +123,7 @@
           }
 
           if ($state.current.name.endsWith('users')) {
-            return 'user';
+            return 'users';
           }
 
           return 'dashboard';
