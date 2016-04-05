@@ -122,6 +122,10 @@
             return 'recent';
           }
 
+          if ($state.current.name.endsWith('users')) {
+            return 'user';
+          }
+
           return 'dashboard';
         }
 
