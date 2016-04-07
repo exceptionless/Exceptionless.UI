@@ -31,6 +31,10 @@
       return Restangular.one('stacks').all('frequent').getList(filterService.apply(options));
     }
 
+    function getUsers(options) {
+      return Restangular.one('stacks').all('users').getList(filterService.apply(options));
+    }
+
     function getNew(options) {
       return Restangular.one('stacks').all('new').getList(filterService.apply(options));
     }
@@ -78,6 +82,7 @@
       getAll: getAll,
       getById: getById,
       getFrequent: getFrequent,
+      getUsers: getUsers,
       getNew: getNew,
       markCritical: markCritical,
       markNotCritical: markNotCritical,
