@@ -118,8 +118,6 @@
       { key: 'recent', title: 'Most Recent', controller: 'app.Recent' },
       { key: 'users', title: 'Most Users', controller: 'app.Users' }
     ];
-
-
     var resetEventTypeOnExit = ['filterService', function (filterService) { filterService.setEventType(null, true); }];
     routes.forEach(function(route) {
       var routeDefaults = {

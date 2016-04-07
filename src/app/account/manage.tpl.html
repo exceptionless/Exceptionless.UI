@@ -4,7 +4,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-user"></i> My Account</div>
         <div class="panel-body m-b-n">
-          <uib-tabset class="tab-container">
+          <uib-tabset class="tab-container" active="vm.activeTabIndex">
             <uib-tab heading="General">
               <form name="fullNameForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
@@ -61,7 +61,7 @@
                 </div>
               </form>
             </uib-tab>
-            <uib-tab heading="Notifications" active="vm.tabNotificationsActive">
+            <uib-tab heading="Notifications">
               <form role="form" class="form-validation">
                 <div class="alert in fade alert-danger" ng-if="!vm.user.is_email_address_verified || !vm.user.email_notifications_enabled">
                   Email notifications are currently disabled. <span ng-if="!vm.user.is_email_address_verified">To enable email notifications you must first verify your email address. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</span>
@@ -167,7 +167,7 @@
                 </div>
               </form>
             </uib-tab>
-            <uib-tab heading="Password" active="vm.tabPasswordActive">
+            <uib-tab heading="Password">
               <form name="vm.passwordForm" role="form" class="form-validation">
                 <div class="form-group" ng-if="vm.hasLocalAccount()">
                   <label for="current">Current Password</label>
@@ -209,7 +209,7 @@
                 <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="{{vm.hasLocalAccount() ? 'Changing Password' : 'Setting Password'}}">{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}</button>
               </form>
             </uib-tab>
-            <uib-tab heading="External Logins" active="vm.tabExternalActive" ng-if="vm.isExternalLoginEnabled()">
+            <uib-tab heading="External Logins" ng-if="vm.isExternalLoginEnabled()">
               <h4>Add an external login</h4>
 
               <div>

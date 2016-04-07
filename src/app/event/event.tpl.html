@@ -13,14 +13,14 @@
         </div>
       </div>
       <div class="panel-body">
-        <uib-tabset class="tab-container hidden-xs">
-          <uib-tab ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" active="tab.active">
+        <uib-tabset class="tab-container hidden-xs" active="vm.activeTabIndex">
+          <uib-tab ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}">
             <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
           </uib-tab>
         </uib-tabset>
 
         <uib-accordion class="visible-xs">
-          <uib-accordion-group ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" is-open="tab.active">
+          <uib-accordion-group ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" is-open="tab.index === vm.activeTabIndex">
             <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
           </uib-accordion-group>
         </uib-accordion>

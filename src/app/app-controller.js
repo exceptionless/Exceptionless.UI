@@ -84,19 +84,16 @@
         return !!SYSTEM_NOTIFICATION_MESSAGE;
       }
 
+      var dashboards = ['dashboard', 'frequent', 'new', 'recent', 'users'];
       function isAllMenuActive() {
-        return $state.includes('app.dashboard', $stateParams) ||
-          $state.includes('app.project-dashboard', $stateParams) ||
-          $state.includes('app.organization-dashboard', $stateParams) ||
-          $state.includes('app.frequent', $stateParams) ||
-          $state.includes('app.project-frequent', $stateParams) ||
-          $state.includes('app.organization-frequent', $stateParams) ||
-          $state.includes('app.new', $stateParams) ||
-          $state.includes('app.project-new', $stateParams) ||
-          $state.includes('app.organization-new', $stateParams) ||
-          $state.includes('app.recent', $stateParams) ||
-          $state.includes('app.project-recent', $stateParams) ||
-          $state.includes('app.organization-recent', $stateParams);
+        for (var dashboard in dashboards) {
+          if ($state.includes('app.' + dashboard, $stateParams) ||
+            $state.includes('app.project-' + dashboard, $stateParams) ||
+            $state.includes('app.organization-' + dashboard, $stateParams)) {
+            return true;
+          }
+        }
+        return false;
       }
 
       function isAdminMenuActive() {
@@ -124,18 +121,14 @@
       function isTypeMenuActive(type) {
         var params = angular.extend({}, $stateParams, { type: type });
 
-        return $state.includes('app.type-dashboard', params) ||
-          $state.includes('app.project-type-dashboard', params) ||
-          $state.includes('app.organization-type-dashboard', params) ||
-          $state.includes('app.type-frequent', params) ||
-          $state.includes('app.project-type-frequent', params) ||
-          $state.includes('app.organization-type-frequent', params) ||
-          $state.includes('app.type-new', params) ||
-          $state.includes('app.project-type-new', params) ||
-          $state.includes('app.organization-type-new', params) ||
-          $state.includes('app.type-recent', params) ||
-          $state.includes('app.project-type-recent', params) ||
-          $state.includes('app.organization-type-recent', params);
+        for (var dashboard in dashboards) {
+          if ($state.includes('app.type-' + dashboard, params) ||
+            $state.includes('app.project-type-' + dashboard, params) ||
+            $state.includes('app.organization-type-' + dashboard, params)) {
+            return true;
+          }
+        }
+        return false;
       }
 
       function startSignalR() {

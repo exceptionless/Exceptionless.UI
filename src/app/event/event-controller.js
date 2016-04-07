@@ -72,26 +72,27 @@
       }
 
       function buildTabs(tabNameToActivate) {
-        var tabs = [{title: 'Overview', template_key: 'overview'}];
+        var tabIndex = 0;
+        var tabs = [{index: tabIndex, title: 'Overview', template_key: 'overview'}];
 
         if (vm.event.reference_id && isSessionStart()) {
-          tabs.push({title: 'Session Events', template_key: 'session'});
+          tabs.push({index: ++tabIndex, title: 'Session Events', template_key: 'session'});
         }
 
         if (isError()) {
           if (vm.event.data['@error']) {
-            tabs.push({title: 'Exception', template_key: 'error'});
+            tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'error'});
           } else if (vm.event.data['@simple_error']) {
-            tabs.push({title: 'Exception', template_key: 'simple-error'});
+            tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'simple-error'});
           }
         }
 
         if (hasRequestInfo()) {
-          tabs.push({title: isSessionStart() ? 'Browser' : 'Request', template_key: 'request'});
+          tabs.push({index: ++tabIndex, title: isSessionStart() ? 'Browser' : 'Request', template_key: 'request'});
         }
 
         if (hasEnvironmentInfo()) {
-          tabs.push({title: 'Environment', template_key: 'environment'});
+          tabs.push({index: ++tabIndex, title: 'Environment', template_key: 'environment'});
         }
 
         var extendedDataItems = [];
@@ -105,26 +106,29 @@
           }
 
           if (isPromoted(key)) {
-            tabs.push({ title: key, template_key: 'promoted', data: data});
+            tabs.push({index: ++tabIndex, title: key, template_key: 'promoted', data: data});
           } else if (_knownDataKeys.indexOf(key) < 0) {
             extendedDataItems.push({title: key, data: data});
           }
         }, tabs);
 
         if (extendedDataItems.length > 0) {
-          tabs.push({title: 'Extended Data', template_key: 'extended-data', data: extendedDataItems});
+          tabs.push({index: ++tabIndex, title: 'Extended Data', template_key: 'extended-data', data: extendedDataItems});
         }
 
+        vm.tabs = tabs;
         for(var index = 0; index < tabs.length; index++) {
           if (tabs[index].title !== tabNameToActivate) {
             continue;
           }
 
-          tabs[index].active = true;
+          vm.activeTabIndex = tabs[index].index;
           break;
         }
 
-        vm.tabs = tabs;
+        if (vm.activeTabIndex >= vm.tabs.length) {
+          vm.activeTabIndex = 0;
+        }
       }
 
       function canRefresh(data) {
@@ -179,8 +183,8 @@
       }
 
       function getCurrentTab() {
-        var tab = vm.tabs.filter(function(t) { return t.active; })[0];
-        return tab ? tab.title : null;
+        var tab = vm.tabs.filter(function(t) { return t.index == vm.activeTabIndex; })[0];
+        return tab && tab.index > 0 ? tab.title : null;
       }
 
       function getDuration() {
@@ -404,6 +408,7 @@
 
       $scope.$on('$destroy', removeHotKeys);
 
+      vm.activeTabIndex = 0;
       vm.canRefresh = canRefresh;
       vm.demoteTab = demoteTab;
       vm.event = {};

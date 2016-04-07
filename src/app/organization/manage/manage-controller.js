@@ -10,9 +10,20 @@
       var vm = this;
 
       function activateTab(tabName) {
-        vm.tabBillingActive = tabName === 'billing';
-        vm.tabProjectsActive = tabName === 'projects';
-        vm.tabUsersActive = tabName === 'users';
+        switch (tabName) {
+          case 'projects':
+            vm.activeTabIndex = 1;
+            break;
+          case 'users':
+            vm.activeTabIndex = 2;
+            break;
+          case 'billing':
+            vm.activeTabIndex = 3;
+            break;
+          default:
+            vm.activeTabIndex = 0;
+            break;
+        }
       }
 
       function addUser() {
@@ -169,6 +180,7 @@
         return organizationService.update(_organizationId, vm.organization).catch(onFailure);
       }
 
+      vm.activeTabIndex = 0;
       vm.addUser = addUser;
       vm.canChangePlan = canChangePlan;
       vm.changePlan = changePlan;
@@ -287,9 +299,6 @@
       };
       vm.removeOrganization = removeOrganization;
       vm.save = save;
-      vm.tabBillingActive = false;
-      vm.tabProjectsActive = false;
-      vm.tabUsersActive = false;
       vm.users = {
         get: function (options, useCache) {
           return userService.getByOrganizationId(_organizationId, options, useCache);

@@ -7,9 +7,20 @@
       var vm = this;
 
       function activateTab(tabName) {
-        vm.tabExternalActive = tabName === 'external';
-        vm.tabNotificationsActive = tabName === 'notifications';
-        vm.tabPasswordActive = tabName === 'password';
+        switch (tabName) {
+          case 'notifications':
+            vm.activeTabIndex = 1;
+            break;
+          case 'password':
+            vm.activeTabIndex = 2;
+            break;
+          case 'external':
+            vm.activeTabIndex = 3;
+            break;
+          default:
+            vm.activeTabIndex = 0;
+            break;
+        }
       }
 
       function authenticate(provider) {
@@ -282,6 +293,7 @@
         return authService.unlink(account.provider, account.provider_user_id).then(onSuccess, onFailure);
       }
 
+      vm.activeTabIndex = 0;
       vm.authenticate = authenticate;
       vm.canRemoveOAuthAccount = canRemoveOAuthAccount;
       vm.changePassword = changePassword;
@@ -306,9 +318,6 @@
       vm.saveEnableEmailNotification = saveEnableEmailNotification;
       vm.saveUser = saveUser;
       vm.showChangePlanDialog = showChangePlanDialog;
-      vm.tabExternalActive = false;
-      vm.tabNotificationsActive = false;
-      vm.tabPasswordActive = false;
       vm.unlink = unlink;
       vm.user = {};
 
