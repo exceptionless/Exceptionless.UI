@@ -48,7 +48,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', ['jshint', /* 'htmlangular', */ 'clean:before', 'less', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'replace', 'cacheBust', 'clean:after']);
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('publish', ['gh-pages', 'compress']);
+  grunt.registerTask('zip', ['compress']);
+  grunt.registerTask('publish', ['gh-pages']);
   grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'connect', 'watch']);
   grunt.registerTask('test', ['dom_munger:read', 'karma:all_tests']);
 
