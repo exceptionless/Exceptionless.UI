@@ -183,7 +183,7 @@
       }
 
       function getCurrentTab() {
-        var tab = vm.tabs.filter(function(t) { return t.index == vm.activeTabIndex; })[0];
+        var tab = vm.tabs.filter(function(t) { return t.index === vm.activeTabIndex; })[0];
         return tab && tab.index > 0 ? tab.title : null;
       }
 
