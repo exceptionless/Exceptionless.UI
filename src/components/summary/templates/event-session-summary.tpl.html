@@ -1,1 +1,10 @@
-<span ng-if="showType"><strong>Session<span ng-if="source.data.Type === 'sessionend'"> End</span><span ng-if="source.data.Type === 'heartbeat'"> Heartbeat</span></strong>:&nbsp;</span><a ui-sref="app.event({ id: source.id })" truncate lines="2">{{::(source.data.Name || source.data.Identity || source.data.SessionId)}}<span ng-if="source.data.Name && source.data.Identity" class="text-muted"> ({{::source.data.Identity}})</span></a>
+<span ng-if="showType">
+  <strong>Session
+    <span ng-if="source.data.Type === 'sessionend'"> End</span>
+    <span ng-if="source.data.Type === 'heartbeat'"> Heartbeat</span>
+  </strong>:&nbsp;
+</span>
+<a ui-sref="app.event({ id: source.id })" truncate lines="2">
+  {{::(source.data.Name || source.data.Identity || source.data.SessionId)}}
+  <span ng-if="source.data.Name && source.data.Identity" class="text-muted"> ({{::source.data.Identity}})</span>
+</a>
