@@ -19,7 +19,7 @@
           <summary source="event" show-type="vm.showType"></summary>
         </td>
         <td class="hidden-xs" ng-click="vm.open(event.id, $event)">
-          <abbr ng-if="event.data.Name && event.data.Identity" title="{{::event.data.Identity}}" truncate>{{::event.data.Name}}</abbr>
+          <abbr ng-if="event.data.Name && event.data.Identity" title="{{::event.data.Name}} ({{::event.data.Identity}})" truncate overwrite-tooltip="false">{{::event.data.Name}}</abbr>
           <span ng-if="!event.data.Name || !event.data.Identity" truncate>{{::(event.data.Name || event.data.Identity)}}</span>
         </td>
         <td ng-click="vm.open(event.id, $event)">

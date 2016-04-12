@@ -7,7 +7,7 @@
         restrict: 'A',
         link: function (scope, element, attrs) {
           var truncate = debounce(function () {
-            angular.element(element).trunk8({lines: attrs.lines || 1});
+            angular.element(element).trunk8({ lines: attrs.lines || 1, tooltip: (attrs.overwriteTooltip !== undefined ? attrs.overwriteTooltip === true : true) });
           }, 150);
 
           // TODO: Fix this bug: http://branchandbound.net/blog/web/2013/08/some-angularjs-pitfalls/
