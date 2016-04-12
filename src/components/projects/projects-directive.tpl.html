@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th ng-show="vm.includeOrganizationName">Organization</th>
+        <th ng-if="vm.includeOrganizationName">Organization</th>
         <th class="number hidden-xs">Stacks</th>
         <th class="number hidden-xs">Events</th>
         <th class="action">Actions</th>
@@ -12,7 +12,7 @@
     <tbody>
       <tr class="row-clickable" ng-repeat="project in vm.projects | orderBy: 'name' track by project.id" ng-if="vm.hasProjects()">
         <td ng-click="vm.open(project.id, $event)">{{project.name}}</td>
-        <td ng-show="vm.includeOrganizationName" ng-click="vm.open(project.id, $event)">{{project.organization_name}}</td>
+        <td ng-if="vm.includeOrganizationName" ng-click="vm.open(project.id, $event)">{{project.organization_name}}</td>
         <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.stack_count | number:0}}</td>
         <td ng-click="vm.open(project.id, $event)" class="number hidden-xs">{{project.event_count | number:0}}</td>
         <td>
@@ -29,20 +29,22 @@
           </div>
         </td>
       </tr>
-      <tr ng-if="!vm.hasProjects()">
-        <td class="hidden-xs" colspan="5" ng-if="vm.includeOrganizationName || vm.loading">
+      <tr ng-if="!vm.hasProjects() && vm.includeOrganizationName">
+        <td class="hidden-xs" colspan="5">
           <strong ng-if="vm.loading">Loading...</strong>
           <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
-        <td class="visible-xs" colspan="3" ng-if="vm.includeOrganizationName || vm.loading">
+        <td class="visible-xs" colspan="3">
           <strong ng-if="vm.loading">Loading...</strong>
           <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
-        <td class="hidden-xs" colspan="4" ng-if="!vm.includeOrganizationName || vm.loading">
+      </tr>
+      <tr ng-if="!vm.hasProjects() && !vm.includeOrganizationName">
+        <td class="hidden-xs" colspan="4">
           <strong ng-if="vm.loading">Loading...</strong>
           <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>
-        <td class="visible-xs" colspan="2" ng-if="!vm.includeOrganizationName || vm.loading">
+        <td class="visible-xs" colspan="2">
           <strong ng-if="vm.loading">Loading...</strong>
           <strong ng-if="!vm.loading">No projects were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>

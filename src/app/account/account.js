@@ -4,6 +4,7 @@
   angular.module('app.account', [
     'directives.inputMatch',
     'ngMessages',
+    'ui.bootstrap',
     'ui.router',
 
     'exceptionless',

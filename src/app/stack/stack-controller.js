@@ -87,9 +87,23 @@
         return stackService.getById(_stackId).then(onSuccess, onFailure);
       }
 
+      function getProjectUserStats() {
+        function optionsCallback(options) {
+          options.filter = 'project:' + vm.stack.project_id;
+          return options;
+        }
+
+        function onSuccess(response) {
+          vm.total_users = response.data.numbers[0] || 0;
+          return response;
+        }
+
+        return statService.get('distinct:user.raw', optionsCallback).then(onSuccess);
+      }
+
       function getStats() {
         function buildFields(options) {
-          return options.filter(function(option) { return option.selected; })
+          return 'distinct:user.raw' + options.filter(function(option) { return option.selected; })
             .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
             .join(',');
         }
@@ -113,7 +127,7 @@
                 name: option.name,
                 stroke: 'rgba(0, 0, 0, 0.15)',
                 data: vm.stats.timeline.map(function (item) {
-                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index - 1]), data: item };
+                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index]), data: item };
                 })
               });
 
@@ -130,9 +144,11 @@
               seri.color = colors[index];
               return seri;
             });
+
+          return response;
         }
 
-        return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess);
+        return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess).then(getProjectUserStats);
       }
 
       function hasTags() {
@@ -445,6 +461,7 @@
       };
       vm.stack = {};
       vm.stats = {};
+      vm.total_users = 0;
       vm.updateIsCritical = updateIsCritical;
       vm.updateIsFixed = updateIsFixed;
       vm.updateIsHidden = updateIsHidden;

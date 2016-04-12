@@ -8,9 +8,10 @@
         </label>
       </th>
       <th>Summary</th>
+      <th class="percentage">Users</th>
       <th class="number">Count</th>
       <th class="date hidden-xs">First</th>
-      <th class="date">Last</th>
+      <th class="date hidden-xs">Last</th>
     </tr>
     </thead>
     <tbody>
@@ -21,19 +22,22 @@
       <td ng-click="vm.open(stack.id, $event)">
         <summary source="stack" show-type="vm.showType"></summary>
       </td>
+      <td ng-click="vm.open(stack.id, $event)" class="number">
+        <abbr title="{{stack.users | number:0}} of {{stack.total_users | number:0}} users">{{(stack.total_users > 0 ? stack.users / stack.total_users * 100.0 : 0) | percentage}}</abbr>
+      </td>
       <td ng-click="vm.open(stack.id, $event)" class="number">{{stack.total | number:0}}</td>
       <td ng-click="vm.open(stack.id, $event)" class="hidden-xs">
         <abbr title="{{::stack.first_occurrence | date : 'medium'}}">
           <timeago date="stack.first_occurrence"></timeago>
         </abbr>
       </td>
-      <td ng-click="vm.open(stack.id, $event)"><abbr title="{{::stack.last_occurrence | date : 'medium'}}">
+      <td ng-click="vm.open(stack.id, $event)" class="hidden-xs"><abbr title="{{::stack.last_occurrence | date : 'medium'}}">
         <timeago date="stack.last_occurrence"></timeago>
       </abbr></td>
     </tr>
     <tr ng-if="!vm.hasStacks() || vm.loading">
       <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
-      <td colspan="4" class="hidden-xs">
+      <td colspan="5" class="hidden-xs">
         <strong ng-if="vm.loading">Loading...</strong>
         <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
       </td>

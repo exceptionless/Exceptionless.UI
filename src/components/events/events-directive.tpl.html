@@ -8,6 +8,7 @@
         </label>
       </th>
       <th>Summary</th>
+      <th class="action-xl hidden-xs">User</th>
       <th ng-class="vm.relativeTo() ? 'relative-date' : 'date'">{{::vm.timeHeaderText}}</th>
     </tr>
     </thead>
@@ -16,6 +17,10 @@
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="event.id"><i></i></label></td>
         <td ng-click="vm.open(event.id, $event)">
           <summary source="event" show-type="vm.showType"></summary>
+        </td>
+        <td class="hidden-xs" ng-click="vm.open(event.id, $event)">
+          <abbr ng-if="event.data.Name && event.data.Identity" title="{{::event.data.Name}} ({{::event.data.Identity}})" truncate overwrite-tooltip="false">{{::event.data.Name}}</abbr>
+          <span ng-if="!event.data.Name || !event.data.Identity" truncate>{{::(event.data.Name || event.data.Identity)}}</span>
         </td>
         <td ng-click="vm.open(event.id, $event)">
           <span ng-if="vm.hideSessionStartTime && event.data.Type === 'session'">--</span>
@@ -29,7 +34,7 @@
       </tr>
       <tr ng-if="!vm.hasEvents() || vm.loading">
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
-        <td colspan="2">
+        <td colspan="3">
           <strong ng-if="vm.loading">Loading...</strong>
           <strong ng-if="!vm.loading">No events were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
         </td>

@@ -29,6 +29,12 @@
         </a>
       </li>
       <li>
+        <a ng-href="{{appVm.getUsersUrl('error')}}">
+          <i class="fa fa-users fa-fw"></i>
+          <span>Most Users</span>
+        </a>
+      </li>
+      <li>
         <a ng-href="{{appVm.getNewUrl('error')}}">
           <i class="fa fa-asterisk fa-fw"></i>
           <span>New</span>
@@ -63,6 +69,12 @@
         <a ng-href="{{appVm.getFrequentUrl('log')}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>Most Frequent</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.getUsersUrl('log')}}">
+          <i class="fa fa-users fa-fw"></i>
+          <span>Most Users</span>
         </a>
       </li>
       <li>
@@ -103,6 +115,12 @@
         </a>
       </li>
       <li>
+        <a ng-href="{{appVm.getUsersUrl('404')}}">
+          <i class="fa fa-users fa-fw"></i>
+          <span>Most Users</span>
+        </a>
+      </li>
+      <li>
         <a ng-href="{{appVm.getNewUrl('404')}}">
           <i class="fa fa-asterisk fa-fw"></i>
           <span>New</span>
@@ -139,6 +157,18 @@
           <span>Most Frequent</span>
         </a>
       </li>
+      <li>
+        <a ng-href="{{appVm.getUsersUrl('usage')}}">
+          <i class="fa fa-users fa-fw"></i>
+          <span>Most Users</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.getNewUrl('usage')}}">
+          <i class="fa fa-asterisk fa-fw"></i>
+          <span>New</span>
+        </a>
+      </li>
     </ul>
   </li>
   <li ng-class="{active: appVm.isAllMenuActive()}">
@@ -168,6 +198,12 @@
         <a ng-href="{{appVm.getFrequentUrl()}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>Most Frequent</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.getUsersUrl()}}">
+          <i class="fa fa-users fa-fw"></i>
+          <span>Most Users</span>
         </a>
       </li>
       <li>
