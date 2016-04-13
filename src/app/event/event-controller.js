@@ -9,18 +9,20 @@
       var vm = this;
 
       function addHotKeys() {
-        hotkeys.add({
-          combo: 'ctrl+up',
-          description: 'Go To Stack',
-          callback: function () {
-            $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.GoToStack')
-              .addTags('hotkeys')
-              .setProperty('id', _eventId)
-              .submit();
+        if (!vm.event.stack_id) {
+          hotkeys.add({
+            combo: 'ctrl+up',
+            description: 'Go To Stack',
+            callback: function () {
+              $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.GoToStack')
+                .addTags('hotkeys')
+                .setProperty('id', _eventId)
+                .submit();
 
-            $state.go('app.stack', { id: vm.event.stack_id });
-          }
-        });
+              $state.go('app.stack', {id: vm.event.stack_id});
+            }
+          });
+        }
 
         if (vm.previous) {
           hotkeys.add({
