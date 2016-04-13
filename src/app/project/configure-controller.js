@@ -14,6 +14,22 @@
         notificationService.success('Copied!');
       }
 
+      function onCopyError() {
+        function getCopyTooltip() {
+          if (/iPhone|iPad/i.test(navigator.userAgent)) {
+            return 'Copy not supported.';
+          } else if (/Mac/i.test(navigator.userAgent)) {
+            return 'Press ⌘-C to copy.';
+          } else {
+            return 'Press Ctrl-C to copy.';
+          }
+        }
+
+        var element = $('input.api-key');
+        element.tooltip({ placement: 'bottom', title: getCopyTooltip() });
+        element.select();
+      }
+
       function getDefaultApiKey() {
         function onSuccess(response) {
           vm.apiKey = response.data.id;
@@ -81,6 +97,7 @@
       vm.isJavaScript = isJavaScript;
       vm.isNode = isNode;
       vm.navigateToDashboard = navigateToDashboard;
+      vm.onCopyError = onCopyError;
       vm.project = {};
       vm.projectTypes = getProjectTypes();
 

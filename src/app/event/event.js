@@ -2,12 +2,13 @@
   'use strict';
 
   angular.module('app.event', [
+    'angular-clipboard',
     'angular-filters',
     'cfp.hotkeys',
-    'ngClipboard',
     'ui.router',
 
     'exceptionless',
+    'exceptionless.clipboard-enhancements',
     'exceptionless.error',
     'exceptionless.event',
     'exceptionless.events',

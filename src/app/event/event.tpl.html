@@ -7,7 +7,8 @@
         <i class="fa fa-calendar"></i> Event Occurrence
 
         <div class="pull-right hidden-print">
-          <a ui-sref="app.stack({ id: vm.event.stack_id })" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="Go To Stack"></a>
+          <a clipboard text="vm.event_json" on-copied="vm.copied()" hide-on-clipboard-not-supported ng-if="vm.event.stack_id" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Event JSON to Clipboard"></a>
+          <a ui-sref="app.stack({ id: vm.event.stack_id })" ng-class="{'disabled': !vm.event.stack_id}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="Go To Stack"></a>
           <a ui-sref="app.event({ id: vm.previous, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.previous}" class="btn btn-default btn-xs fa fa-fw fa-caret-left" role="button" title="Previous Occurrence"></a>
           <a ui-sref="app.event({ id: vm.next, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.next}" class="btn btn-default btn-xs fa fa-fw fa-caret-right" role="button" title="Next Occurrence"></a>
         </div>
@@ -20,14 +21,14 @@
         </uib-tabset>
 
         <uib-accordion class="visible-xs">
-          <uib-accordion-group ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" is-open="tab.index === vm.activeTabIndex">
+          <uib-accordion-group ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" is-open="tab.index === vm.activeTabIndex" ng-click="vm.activeTabIndex = tab.index">
             <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
           </uib-accordion-group>
         </uib-accordion>
       </div>
       <footer class="panel-footer hidden-xs">
         <div class="pull-right">
-          <a ui-sref="app.stack({ id: vm.event.stack_id })" class="btn btn-default" role="button">Go To Stack</a>
+          <a ui-sref="app.stack({ id: vm.event.stack_id })" ng-class="{'disabled': !vm.event.stack_id}" class="btn btn-default" role="button">Go To Stack</a>
         </div>
         <a ui-sref="app.event({ id: vm.previous, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.previous}" class="btn btn-primary" role="button">Previous Occurrence</a>
         <a ui-sref="app.event({ id: vm.next, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.next}" class="btn btn-primary" role="button">Next Occurrence</a>
