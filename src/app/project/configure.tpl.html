@@ -53,8 +53,8 @@
                 <p>Update the <code>&lt;exceptionless apiKey="API_KEY_HERE" /&gt;</code> section located in the project's {{vm.currentProjectType.config}} with your Exceptionless API key:</p>
 
                 <div class="input-group">
-                  <input class="form-control" type="text" ng-model="vm.apiKey" autofocus />
-                  <a class="input-group-addon" title="Copy to Clipboard" clip-copy="vm.apiKey" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></a>
+                  <input class="form-control api-key" type="text" ng-model="vm.apiKey" autofocus />
+                  <a class="input-group-addon" title="Copy to Clipboard" clipboard text="vm.apiKey" on-copied="vm.copied()" on-error="vm.onCopyError()"><i class="fa fa-copy"></i></a>
                 </div>
               </div>
 
@@ -62,8 +62,8 @@
                 <p>Configure the ExceptionlessClient with your Exceptionless API key:</p>
 
                 <div class="input-group">
-                  <input class="form-control" type="text" ng-model="vm.apiKey" autofocus />
-                  <a class="input-group-addon" title="Copy to Clipboard" clip-copy="vm.apiKey" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></a>
+                  <input class="form-control api-key" type="text" ng-model="vm.apiKey" autofocus />
+                  <a class="input-group-addon" title="Copy to Clipboard" clipboard text="vm.apiKey" on-copied="vm.copied()" on-error="vm.onCopyError()"><i class="fa fa-copy"></i></a>
                 </div>
 
                 <p style="margin-top: 15px;">You can set your Exceptionless API key by calling the following code on startup:<p>

@@ -9,7 +9,7 @@
   <tr ng-repeat="token in vm.tokens track by token.id">
     <td>{{::token.id}}</td>
     <td>
-      <button type="button" role="button" class="btn btn-sm btn-primary" title="Copy to Clipboard" clip-copy="token.id" clip-click="vm.copied()" clip-hide-on-no-flash><i class="fa fa-copy"></i></button>
+      <button type="button" role="button" class="btn btn-sm btn-primary" title="Copy to Clipboard" clipboard text="token.id" on-copied="vm.copied()" hide-on-clipboard-not-supported><i class="fa fa-copy"></i></button>
       <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-default" title="Delete"><i class="fa fa-times"></i></button>
     </td>
   </tr>

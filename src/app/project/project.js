@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('app.project', [
+    'angular-clipboard',
     'ngMessages',
     'ui.bootstrap',
     'ui.router',
@@ -13,6 +14,7 @@
     'exceptionless',
     'exceptionless.autofocus',
     'exceptionless.billing',
+    'exceptionless.clipboard-enhancements',
     'exceptionless.dialog',
     'exceptionless.organization-notifications',
     'exceptionless.project',

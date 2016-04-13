@@ -49,10 +49,6 @@
             }, {});
         }
 
-        function getDataAsJson() {
-          return angular.toJson(vm.data);
-        }
-
         function hasData() {
           return typeof vm.data !== 'undefined' && !angular.equals({}, vm.data);
         }
@@ -64,8 +60,8 @@
         vm.copied = copied;
         vm.canPromote = $scope.canPromote !== false;
         vm.data = getData($scope.data, $scope.excludedKeys);
+        vm.data_json = (hasData() ? angular.toJson(vm.data) : '');
         vm.demoteTab =  demoteTab;
-        vm.getDataAsJson = getDataAsJson;
         vm.hasData = hasData;
         vm.isPromoted =  $scope.isPromoted === true;
         vm.promoteTab = promoteTab;

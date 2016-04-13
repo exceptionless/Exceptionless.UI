@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
+    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'clipboard', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
       var source = 'app.event.Event';
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
       var vm = this;
 
       function addHotKeys() {
-        if (!vm.event.stack_id) {
+        if (vm.event.stack_id) {
           hotkeys.add({
             combo: 'ctrl+up',
             description: 'Go To Stack',
@@ -22,6 +22,23 @@
               $state.go('app.stack', {id: vm.event.stack_id});
             }
           });
+
+          if (isCommandSupported('copy')) {
+            hotkeys.add({
+              combo: 'ctrl+shift+c',
+              description: 'Copy Event JSON to Clipboard',
+              callback: function () {
+                $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.CopyEventJSON')
+                  .addTags('hotkeys')
+                  .setProperty('id', _eventId)
+                  .submit();
+
+                console.log('hotkey');
+                clipboard.copyText(vm.event_json);
+                copied();
+              }
+            });
+          }
         }
 
         if (vm.previous) {
@@ -150,6 +167,10 @@
         return false;
       }
 
+      function copied() {
+        notificationService.success('Copied!');
+      }
+
       function demoteTab(tabName) {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.success')
@@ -223,6 +244,7 @@
 
         function onSuccess(response) {
           vm.event = response.data.plain();
+          vm.event_json = angular.toJson(vm.event);
           vm.sessionEvents.relativeTo = vm.event.date;
 
           var links = linkService.getLinks(response.headers('link'));
@@ -340,6 +362,14 @@
         return vm.event.data && vm.event.data['@version'];
       }
 
+      function isCommandSupported(command) {
+        try {
+          return document && document.queryCommandSupported && document.queryCommandSupported(command);
+        } catch(e) {
+          return false;
+        }
+      }
+
       function isError() {
         return vm.event.type === 'error';
       }
@@ -406,14 +436,17 @@
         hotkeys.del('ctrl+up');
         hotkeys.del('ctrl+left');
         hotkeys.del('ctrl+right');
+        hotkeys.del('ctrl+shift+c');
       }
 
       $scope.$on('$destroy', removeHotKeys);
 
       vm.activeTabIndex = 0;
       vm.canRefresh = canRefresh;
+      vm.copied = copied;
       vm.demoteTab = demoteTab;
       vm.event = {};
+      vm.event_json = '';
       vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
       vm.getCurrentTab = getCurrentTab;
       vm.getDuration = getDuration;
