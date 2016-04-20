@@ -23,7 +23,7 @@
             }
           });
 
-          if (isCommandSupported('copy')) {
+          if (clipboard.supported) {
             hotkeys.add({
               combo: 'ctrl+shift+c',
               description: 'Copy Event JSON to Clipboard',
@@ -360,14 +360,6 @@
 
       function hasVersion() {
         return vm.event.data && vm.event.data['@version'];
-      }
-
-      function isCommandSupported(command) {
-        try {
-          return document && document.queryCommandSupported && document.queryCommandSupported(command);
-        } catch(e) {
-          return false;
-        }
       }
 
       function isError() {

@@ -14,7 +14,6 @@
     'exceptionless',
     'exceptionless.autofocus',
     'exceptionless.billing',
-    'exceptionless.clipboard-enhancements',
     'exceptionless.dialog',
     'exceptionless.organization-notifications',
     'exceptionless.project',
