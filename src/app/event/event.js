@@ -8,7 +8,6 @@
     'ui.router',
 
     'exceptionless',
-    'exceptionless.clipboard-enhancements',
     'exceptionless.error',
     'exceptionless.event',
     'exceptionless.events',
