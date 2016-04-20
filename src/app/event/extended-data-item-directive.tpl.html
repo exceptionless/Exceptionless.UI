@@ -1,6 +1,6 @@
 <div ng-if="vm.hasData()">
   <div class="pull-right hidden-print">
-    <button type="button" role="button" class="btn btn-dark btn-xs" title="Copy to Clipboard" clipboard text="vm.data_json" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-if="vm.clipboardSupported">
+    <button type="button" role="button" class="btn btn-dark btn-xs" title="Copy to Clipboard" clipboard text="vm.data_json" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.clipboardSupported">
       <i class="fa fa-copy"></i>
     </button>
     <div class="btn-group btn-group-xs">
