@@ -8,6 +8,8 @@
     'angular-intercom',
     'angular-rickshaw',
     'angular-stripe',
+    'angulartics',
+    'angulartics.google.tagmanager',
     'cfp.hotkeys',
     'checklist-model',
     'debounce',

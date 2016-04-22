@@ -3,6 +3,7 @@
 
   angular.module('exceptionless.billing', [
     'angularPayments',
+    'angulartics',
     'angular-stripe',
     'ui.bootstrap',
 

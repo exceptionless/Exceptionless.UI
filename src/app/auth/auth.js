@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('app.auth', [
+    'angulartics',
     'directives.inputMatch',
     'ngMessages',
     'satellizer',

@@ -28,6 +28,7 @@
     "angular-ui-router": "0.2.18",
     "angular-xeditable": "0.1.12",
     "angularjs-toaster": "2.0.0",
+    "angulartics": "1.0.3",
     "animate.css": "3.5.1",
     "base64": "0.3.0",
     "bootstrap": "3.3.6",
