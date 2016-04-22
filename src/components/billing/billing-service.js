@@ -2,10 +2,15 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .factory('billingService', ['$ExceptionlessClient', 'dialogs', 'dialogService', '$q', function ($ExceptionlessClient, dialogs, dialogService, $q) {
+    .factory('billingService', ['$analytics', '$ExceptionlessClient', 'dialogs', 'dialogService', '$q', function ($analytics, $ExceptionlessClient, dialogs, dialogService, $q) {
       var source = 'exceptionless.billing.billingService';
 
       function changePlan(organizationId) {
+        $analytics.eventTrack('InitiateCheckout');
+        $ExceptionlessClient.createFeatureUsage(source + '.changePlan')
+          .setProperty('OrganizationId', organizationId)
+          .submit();
+
         return dialogs.create('components/billing/change-plan-dialog.tpl.html', 'ChangePlanDialog as vm', organizationId).result;
       }
 

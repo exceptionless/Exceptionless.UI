@@ -28,6 +28,7 @@
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
         <link rel="dns-prefetch" href="https://js.stripe.com">
         <link rel="dns-prefetch" href="https://widget.intercom.io">
+        <link rel="dns-prefetch" href="//www.googletagmanager.com">
 
         <link rel='icon' href='/favicon.ico' type="image/x-icon" data-remove="false" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" data-remove="false" />
@@ -45,18 +46,16 @@
         <link href="app.less" type="text/css" rel="stylesheet/less" data-concat="true" data-remove="true" />
     </head>
     <body loading-bar>
+        <google-tag-manager></google-tag-manager>
         <release-notification></release-notification>
         <div class="app" id="app" ui-view autoscroll="true"></div>
         <toaster-container toaster-options="{'position-class': 'toast-bottom-right'}"></toaster-container>
 
+        <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js" data-concat="false" data-remove="false"></script><![endif]-->
         <script src="//code.jquery.com/jquery-2.2.3.min.js" data-concat="false" data-remove="false"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" data-concat="false" data-remove="false"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.1/lodash.min.js" data-concat="false" data-remove="false"></script>
         <script src="https://js.stripe.com/v2/" data-concat="false" data-remove="false"></script>
-
-        <!--[if lte IE 9]>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js" data-concat="false" data-remove="false"></script>
-        <![endif]-->
 
         <!-- Livereload script for development only (stripped during dist build) -->
         <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
@@ -85,7 +84,7 @@
         <script src="bower_components/angular-dialog-service/dist/dialogs.min.js"></script>
         <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
         <script src="bower_components/angular-gravatar/build/angular-gravatar.js"></script>
-        <script src="bower_components/angular-hotkeys/build/hotkeys.js"></script>
+        <script src="bower_components/angular-hotkeys/src/hotkeys.js"></script>
         <script src="bower_components/angular-input-match/dist/angular-input-match.js"></script>
         <script src="bower_components/angular-intercom/angular-intercom.js"></script>
         <script src="bower_components/angular-loading-bar/src/loading-bar.js"></script>
@@ -99,10 +98,13 @@
         <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
         <script src="bower_components/angularjs-toaster/toaster.js"></script>
+        <script src="bower_components/angulartics/src/angulartics.js"></script>
+        <script src="bower_components/angulartics/src/angulartics-gtm.js"></script>
         <script src="bower_components/checklist-model/checklist-model.js"></script>
-        <script src="bower_components/restangular/dist/restangular.js"></script>
+        <script src="bower_components/mousetrap/mousetrap.js"></script>
         <script src="bower_components/ng-debounce/angular-debounce.js"></script>
         <script src="bower_components/ng-filters/dist/angular-filters.js"></script>
+        <script src="bower_components/restangular/dist/restangular.js"></script>
         <script src="bower_components/satellizer/satellizer.js"></script>
 
         <script src="bower_components/signalr/jquery.signalR.js"></script>

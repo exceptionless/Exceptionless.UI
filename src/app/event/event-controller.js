@@ -158,8 +158,8 @@
       function canRefresh(data) {
         if (!!data && data.type === 'PersistentEvent') {
           // Refresh if the event id is set (non bulk) and the deleted event matches one of the events.
-          if (data.id === vm.event.id) {
-            return true;
+          if (data.id && vm.event.id) {
+            return data.id === vm.event.id;
           }
 
           return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });

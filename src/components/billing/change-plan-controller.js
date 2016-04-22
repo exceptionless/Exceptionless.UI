@@ -2,23 +2,30 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$uibModalInstance', 'adminService', 'Common', '$ExceptionlessClient', '$intercom', 'INTERCOM_APPID', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', '$window', 'data', function ($uibModalInstance, adminService, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, organizationId) {
+    .controller('ChangePlanDialog', ['$uibModalInstance', 'adminService', '$analytics', 'Common', '$ExceptionlessClient', '$intercom', 'INTERCOM_APPID', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', '$window', 'data', function ($uibModalInstance, adminService, $analytics, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, organizationId) {
       var source = 'exceptionless.billing.ChangePlanDialog';
       var contactSupport = 'Please contact support for more information.';
       var freePlanId = 'EX_FREE';
 
       var vm = this;
       function cancel() {
+        $analytics.eventTrack('Lead', getAnalyticsData());
         $ExceptionlessClient.createFeatureUsage(source + '.cancel')
           .setProperty('CurrentPlan', vm.currentPlan)
           .setProperty('CouponId', vm.coupon)
           .setProperty('IsNewCard', isNewCard())
+          .setProperty('OrganizationId', vm.currentOrganization.id)
           .submit();
 
         $uibModalInstance.dismiss('cancel');
       }
 
       function createStripeToken() {
+        function onSuccess(response) {
+          $analytics.eventTrack('AddPaymentInfo');
+          return response;
+        }
+
         var expiration = Common.parseExpiry(vm.card.expiry);
         var payload = {
           number: vm.card.number,
@@ -28,7 +35,11 @@
           name: vm.card.name
         };
 
-        return stripe.card.createToken(payload);
+        return stripe.card.createToken(payload).then(onSuccess);
+      }
+
+      function getAnalyticsData() {
+        return { content_name: vm.currentPlan.name, content_ids: [vm.currentPlan.id], content_type: 'product', currency: 'USD', value: vm.currentPlan.price };
       }
 
       function save(isValid) {
@@ -38,6 +49,7 @@
 
         function onSuccess(response) {
           if(!response.data.success) {
+            $analytics.eventTrack('Lead', getAnalyticsData());
             vm.paymentMessage = 'An error occurred while changing plans. Message: ' + response.data.message;
             $ExceptionlessClient.createException(new Error(response.data.message))
               .markAsCritical()
@@ -45,17 +57,20 @@
               .setProperty('CurrentPlan', vm.currentPlan)
               .setProperty('CouponId', vm.coupon)
               .setProperty('IsNewCard', isNewCard())
+              .setProperty('OrganizationId', vm.currentOrganization.id)
               .submit();
 
             return;
           }
 
+          $analytics.eventTrack('Purchase', getAnalyticsData());
           $ExceptionlessClient.createFeatureUsage(source + '.save')
             .markAsCritical()
             .setMessage(response.data.message)
             .setProperty('CurrentPlan', vm.currentPlan)
             .setProperty('CouponId', vm.coupon)
             .setProperty('IsNewCard', isNewCard())
+            .setProperty('OrganizationId', vm.currentOrganization.id)
             .submit();
 
           $uibModalInstance.close(vm.currentPlan);
@@ -69,12 +84,14 @@
             vm.paymentMessage = 'An error occurred while changing plans.';
           }
 
+          $analytics.eventTrack('Lead', getAnalyticsData());
           $ExceptionlessClient.createException(new Error(vm.paymentMessage))
             .markAsCritical()
             .setSource(source + '.save.error')
             .setProperty('CurrentPlan', vm.currentPlan)
             .setProperty('CouponId', vm.coupon)
             .setProperty('IsNewCard', isNewCard())
+            .setProperty('OrganizationId', vm.currentOrganization.id)
             .submit();
         }
 
@@ -103,6 +120,7 @@
               .setProperty('CurrentPlan', vm.currentPlan)
               .setProperty('CouponId', vm.coupon)
               .setProperty('IsNewCard', isNewCard())
+              .setProperty('OrganizationId', vm.currentOrganization.id)
               .submit();
             return null;
           }

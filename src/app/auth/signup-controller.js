@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', ['$ExceptionlessClient', '$state', '$stateParams', '$timeout', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($ExceptionlessClient, $state, $stateParams, $timeout, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
+    .controller('auth.Signup', ['$analytics', '$ExceptionlessClient', '$state', '$stateParams', '$timeout', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($analytics, $ExceptionlessClient, $state, $stateParams, $timeout, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
       var source = 'app.auth.Signup';
       var _canSignup = true;
       var vm = this;
@@ -17,6 +17,7 @@
 
       function authenticate(provider) {
         function onSuccess() {
+          $analytics.eventTrack('CompleteRegistration');
           $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).submit();
         }
 
@@ -92,6 +93,7 @@
         }
 
         function onSuccess() {
+          $analytics.eventTrack('CompleteRegistration');
           $ExceptionlessClient.submitFeatureUsage(source + '.signup');
         }
 
