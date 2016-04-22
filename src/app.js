@@ -10,6 +10,7 @@
     'angular-stripe',
     'angulartics',
     'angulartics.google.tagmanager',
+    'angulartics.facebook.pixel',
     'cfp.hotkeys',
     'checklist-model',
     'debounce',
