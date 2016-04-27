@@ -10,7 +10,7 @@
       });
 
       function validate(query) {
-        if (!query) {
+        if (!query || (query.trim && query.trim() === '*')) {
           var deferred = $q.defer();
           $timeout(function() {
             deferred.resolve({

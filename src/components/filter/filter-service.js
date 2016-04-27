@@ -26,24 +26,24 @@
           filters.push('type:' + _eventType);
         }
 
-        if (_raw) {
-          filters.push('(' + _raw + ')');
-        }
-
-        var filter = filters.join(' ');
-        var hasFixed = filter.search(/\bfixed:/i) !== -1;
-        var hasHidden = filter.search(/\bhidden:/i) !== -1;
-        if (!hasFixed || !hasHidden) {
+        var filter = _raw || '';
+        if (!filter || filter.trim() !== '*') {
+          var hasFixed = filter.search(/\bfixed:/i) !== -1;
           if (!hasFixed) {
-            filter += ' fixed:false';
+            filters.push('fixed:false');
           }
 
+          var hasHidden = filter.search(/\bhidden:/i) !== -1;
           if (!hasHidden) {
-            filter += ' hidden:false';
+            filters.push('hidden:false');
+          }
+
+          if (filter) {
+            filters.push('(' + filter + ')');
           }
         }
 
-        return filter.trim();
+        return filters.join(' ').trim();
       }
 
       function clearFilter() {
