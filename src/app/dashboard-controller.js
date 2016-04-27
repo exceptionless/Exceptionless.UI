@@ -23,15 +23,15 @@
           }
 
           vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.numbers[1], data: item};
+            return {x: moment.utc(item.date).unix(), y: item.numbers[0], data: item};
           });
 
           vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.numbers[0], data: item};
+            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
           });
         }
 
-        return statService.getTimeline('sum:count:1,distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess);
+        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess);
       }
 
       vm.canRefresh = canRefresh;

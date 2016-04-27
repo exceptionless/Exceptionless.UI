@@ -12,8 +12,8 @@
                   <i class="fa fa-calendar fa-4x"></i>
                 </div>
                 <div class="details">
-                  <span class="title">Count</span>
-                  <span class="sub">{{vm.stats.numbers[0] || 0 | number : 0}}</span>
+                  <span class="title">Total</span>
+                  <span class="sub">{{vm.stats.total || 0 | number : 0}}</span>
                 </div>
                 <i class="fa fa-chevron-right fa-2x more"></i>
               </a>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="details">
                   <span class="title">Unique</span>
-                  <span class="sub">{{vm.stats.numbers[1] || 0 | number : 0}}</span>
+                  <span class="sub">{{vm.stats.numbers[0] || 0 | number : 0}}</span>
                 </div>
                 <i class="fa fa-chevron-right fa-2x more"></i>
               </a>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="details">
                   <span class="title">New</span>
-                  <span class="sub">{{vm.stats.numbers[2] || 0 | number : 0}}</span>
+                  <span class="sub">{{vm.stats.numbers[1] || 0 | number : 0}}</span>
                 </div>
                 <i class="fa fa-chevron-right fa-2x more"></i>
               </a>

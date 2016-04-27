@@ -103,7 +103,7 @@
 
       function getStats() {
         function buildFields(options) {
-          return 'distinct:user.raw,' + options.filter(function(option) { return option.selected; })
+          return 'distinct:user.raw' + options.filter(function(option) { return option.selected; })
             .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
             .join(',');
         }
@@ -127,7 +127,7 @@
                 name: option.name,
                 stroke: 'rgba(0, 0, 0, 0.15)',
                 data: vm.stats.timeline.map(function (item) {
-                  return { x: moment.utc(item.date).unix(), y: item.numbers[index+1], data: item };
+                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index]), data: item };
                 })
               });
 
@@ -424,7 +424,7 @@
       };
 
       vm.chartOptions = [
-        { name: 'Occurrences', field: 'sum:count:1', title: '' , selected: true, render: false },
+        { name: 'Occurrences', selected: true, render: false },
         { name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true },
         { name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true }
       ];
