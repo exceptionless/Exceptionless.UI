@@ -66,12 +66,15 @@
     'app.stack',
     'app.status'
   ])
-  .config(['$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', '$analyticsProvider', 'dialogsProvider', 'gravatarServiceProvider', 'RestangularProvider', 'BASE_URL', 'EXCEPTIONLESS_API_KEY', '$ExceptionlessClient', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, $analyticsProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, $ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
+  .config(['$compileProvider', '$httpProvider', '$locationProvider', '$stateProvider', '$uiViewScrollProvider', '$urlRouterProvider', '$analyticsProvider', 'dialogsProvider', 'gravatarServiceProvider', 'RestangularProvider', 'BASE_URL', 'EXCEPTIONLESS_API_KEY', '$ExceptionlessClient', 'stripeProvider', 'STRIPE_PUBLISHABLE_KEY', 'USE_HTML5_MODE', function ($compileProvider, $httpProvider, $locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, $analyticsProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, $ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
     function setRouteFilter(filterService, organizationId, projectId, type) {
       filterService.setOrganizationId(organizationId, true);
       filterService.setProjectId(projectId, true);
       filterService.setEventType(type, true);
     }
+
+    $compileProvider.debugInfoEnabled(false);
+    $httpProvider.useApplyAsync(true);
 
     if (EXCEPTIONLESS_API_KEY) {
       var config = $ExceptionlessClient.config;
