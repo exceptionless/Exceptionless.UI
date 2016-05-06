@@ -98,7 +98,7 @@
               logFeatureUsage('Slack');
               $window.open('http://slack.exceptionless.com', '_blank');
             }
-          })
+          });
       }
 
       function canChangePlan() {
