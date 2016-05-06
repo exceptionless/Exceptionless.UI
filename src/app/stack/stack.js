@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('app.stack', [
+    'cfp.hotkeys',
     'ngMessages',
     'ui.bootstrap',
     'ui.router',

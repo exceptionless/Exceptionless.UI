@@ -7,6 +7,100 @@
       var _store = locker.driver('local').namespace('app');
       var vm = this;
 
+      function addHotkeys() {
+        function logFeatureUsage(name) {
+          $ExceptionlessClient.createFeatureUsage(source + '.hotkeys' + name).addTags('hotkeys').submit();
+        }
+
+        if (isIntercomEnabled()) {
+          hotkeys.bindTo($scope)
+            .add({
+              combo: 'c',
+              description: 'Chat with Support',
+              callback: function chatWithSupport() {
+                logFeatureUsage('Support');
+                showIntercom();
+              }
+            });
+        }
+
+        hotkeys.bindTo($scope)
+          .add({
+            combo: 'g w',
+            description: 'Go to Documentation',
+            callback: function goToDocumention() {
+              logFeatureUsage('Documentation');
+              $window.open('https://github.com/exceptionless/Exceptionless/wiki', '_blank');
+            }
+          })
+          .add({
+            combo: 's',
+            description: 'Focus Search Bar',
+            callback: function focusSearchBar(event) {
+              event.preventDefault();
+
+              logFeatureUsage('SearchBar');
+              $('#search').focus().select();
+            }
+          })
+          .add({
+            combo: 'g a',
+            description: 'Go to My Account',
+            callback: function goToMyAccount() {
+              logFeatureUsage('Account');
+              $state.go('app.account.manage', { tab: 'general' });
+            }
+          })
+          .add({
+            combo: 'g n',
+            description: 'Go to Notifications',
+            callback: function goToNotifications() {
+              logFeatureUsage('Notifications');
+              $state.go('app.account.manage', { tab: 'notifications' });
+            }
+          })
+          .add({
+            combo: 'g d',
+            description: 'Go to Dashboard',
+            callback: function goToDashboard() {
+              logFeatureUsage('Dashboard');
+              $window.open(getDashboardUrl(), '_self');
+            }
+          })
+          .add({
+            combo: 'g o',
+            description: 'Go to Organizations',
+            callback: function goToOrganizations() {
+              logFeatureUsage('Organizations');
+              $state.go('app.organization.list');
+            }
+          })
+          .add({
+            combo: 'g p',
+            description: 'Go to Projects',
+            callback: function goToProjects() {
+              logFeatureUsage('Projects');
+              $state.go('app.project.list');
+            }
+          })
+          .add({
+            combo: 'g+g',
+            description: 'Go to GitHub project',
+            callback: function goToGitHub() {
+              logFeatureUsage('GitHub');
+              $window.open('https://github.com/exceptionless/Exceptionless', '_blank');
+            }
+          })
+          .add({
+            combo: 'g s',
+            description: 'Go to public slack channel',
+            callback: function goToSlack() {
+              logFeatureUsage('Slack');
+              $window.open('http://slack.exceptionless.com', '_blank');
+            }
+          })
+      }
+
       function canChangePlan() {
         return !!STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
       }
@@ -144,6 +238,10 @@
       }
 
       function showIntercom() {
+        if (!isIntercomEnabled()) {
+          return;
+        }
+
         $ExceptionlessClient.submitFeatureUsage(source + '.showIntercom');
         $intercom.showNewMessage();
       }
@@ -152,16 +250,6 @@
         vm.isSideNavCollapsed = !vm.isSideNavCollapsed;
         _store.put('sideNavCollapsed', vm.isSideNavCollapsed);
       }
-
-      hotkeys.bindTo($scope)
-        .add({
-          combo: 'f1',
-          description: 'Documentation',
-          callback: function openDocumention() {
-            $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.Documentation').addTags('hotkeys').submit();
-            $window.open('https://github.com/exceptionless/Exceptionless/wiki', '_blank');
-          }
-        });
 
       $scope.$on('$destroy', signalRService.stop);
 
@@ -189,6 +277,7 @@
       vm.toggleSideNavCollapsed = toggleSideNavCollapsed;
       vm.user = {};
 
+      addHotkeys();
       getUser().then(getOrganizations).then(startSignalR);
     }]);
 }());

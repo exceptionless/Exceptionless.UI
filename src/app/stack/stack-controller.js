@@ -3,10 +3,82 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', ['$ExceptionlessClient', '$filter', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackService, statService) {
+    .controller('Stack', ['$scope', '$ExceptionlessClient', '$filter', 'hotkeys', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackService, statService) {
       var source = 'app.stack.Stack';
       var _stackId = $stateParams.id;
       var vm = this;
+
+      function addHotkeys() {
+        function logFeatureUsage(name) {
+          $ExceptionlessClient.createFeatureUsage(source + '.hotkeys' + name).addTags('hotkeys').submit();
+        }
+
+        hotkeys.del('shift+h');
+        hotkeys.del('shift+f');
+        hotkeys.del('shift+c');
+        hotkeys.del('shift+m');
+        hotkeys.del('shift+p');
+        hotkeys.del('shift+r');
+        hotkeys.del('shift+Fbackspace');
+
+        hotkeys.bindTo($scope)
+          .add({
+            combo: 'shift+h',
+            description: vm.isHidden() ? 'Mark Stack Unhidden' : 'Mark Stack Hidden',
+            callback: function markHidden() {
+              logFeatureUsage('Hidden');
+              vm.updateIsHidden();
+            }
+          })
+          .add({
+            combo: 'shift+f',
+            description: vm.isFixed() ? 'Mark Stack Not fixed' : 'Mark Stack Fixed',
+            callback: function markFixed() {
+              logFeatureUsage('Fixed');
+              vm.updateIsFixed();
+            }
+          })
+          .add({
+            combo: 'shift+c',
+            description: vm.isCritical() ? 'Future Stack Occurrences are Not Critical' : 'Future Stack Occurrences are Critical',
+            callback: function markCritical() {
+              logFeatureUsage('Critical');
+              vm.updateIsCritical();
+            }
+          })
+          .add({
+            combo: 'shift+m',
+            description: vm.notificationsDisabled() ? 'Enable Stack Notifications' : 'Disable Stack Notifications',
+            callback: function updateNotifications() {
+              logFeatureUsage('Notifications');
+              vm.updateNotifications();
+            }
+          })
+          .add({
+            combo: 'shift+p',
+            description: 'Promote Stack To External',
+            callback: function promote() {
+              logFeatureUsage('Promote');
+              vm.promoteToExternal();
+            }
+          })
+          .add({
+            combo: 'shift+r',
+            description: 'Add Stack Reference Link',
+            callback: function addReferenceLink() {
+              logFeatureUsage('Reference');
+              vm.addReferenceLink();
+            }
+          })
+          .add({
+            combo: 'shift+backspace',
+            description: 'Delete Stack',
+            callback: function deleteStack() {
+              logFeatureUsage('Delete');
+              vm.remove();
+            }
+          });
+      }
 
       function addReferenceLink() {
         $ExceptionlessClient.submitFeatureUsage(source + '.addReferenceLink');
@@ -72,6 +144,7 @@
         function onSuccess(response) {
           vm.stack = response.data.plain();
           vm.stack.references = vm.stack.references || [];
+          addHotkeys();
         }
 
         function onFailure(response) {
