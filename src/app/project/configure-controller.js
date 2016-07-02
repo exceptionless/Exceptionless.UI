@@ -59,8 +59,8 @@
 
       function getProjectTypes() {
         return [
-          { key: 'Exceptionless', name: 'Console and Service applications', config: 'app.config', platform: '.NET' },
-          { key: 'Exceptionless.Portable', name: 'Portable Class Library', platform: '.NET' },
+          { key: 'Exceptionless', name: 'Console and Service applications', platform: '.NET' },
+          { key: 'Exceptionless.AspNetCore', name: 'ASP.NET Core', platform: '.NET' },
           { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config', platform: '.NET' },
           { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config', platform: '.NET' },
           { key: 'Exceptionless.Web', name: 'ASP.NET Web Forms', config: 'web.config', platform: '.NET' },

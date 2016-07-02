@@ -49,7 +49,7 @@
               </div>
             </li>
             <li ng-if="vm.isDotNet()" style="margin-top: 15px;" >
-              <div ng-if="vm.currentProjectType.key !== 'Exceptionless.Portable'">
+              <div ng-if="vm.currentProjectType.key !== 'Exceptionless' && vm.currentProjectType.key !== 'Exceptionless.AspNetCore'">
                 <p>Update the <code>&lt;exceptionless apiKey="API_KEY_HERE" /&gt;</code> section located in the project's {{vm.currentProjectType.config}} with your Exceptionless API key:</p>
 
                 <div class="input-group">
@@ -58,52 +58,30 @@
                 </div>
               </div>
 
-              <div ng-if="vm.currentProjectType.key === 'Exceptionless.Portable'">
-                <p>Configure the ExceptionlessClient with your Exceptionless API key:</p>
-
-                <div class="input-group">
-                  <input class="form-control api-key" type="text" ng-model="vm.apiKey" autofocus />
-                  <a class="input-group-addon" title="Copy to Clipboard" clipboard text="vm.apiKey" on-copied="vm.copied()" on-error="vm.onCopyError()"><i class="fa fa-copy"></i></a>
-                </div>
-
-                <p style="margin-top: 15px;">You can set your Exceptionless API key by calling the following code on startup:<p>
-
-                <p><code>ExceptionlessClient.Default.Configuration.ApiKey = "{{vm.apiKey}}"</code></p>
-
-                <p>You can also configure the client via attributes. To configure the client using attributes please add
-                the following assembly attribute and your own Exceptionless api key to your project (E.G., AssemblyInfo class).</p>
-
-                <p><code>[assembly: Exceptionless.Configuration.Exceptionless("{{vm.apiKey}}")]</code></p>
-
-                <p>Next, you must call the following line of code to read your configuration from the attribute.</p>
-
-                <p><code>Exceptionless.ExceptionlessClient.Default.Configuration.ReadFromAttributes()</code></p>
-
-                <p>Please note that you will need to pass in the the assembly that contains the attributes if you place
-                place the above attribute outside of the  entry assembly or calling assembly.</p>
-
-                <p><code>Exceptionless.ExceptionlessClient.Default.Configuration.ReadFromAttributes(typeof(Program).Assembly)</code></p>
+              <div ng-if="vm.currentProjectType.key === 'Exceptionless'">
+                <p>Import the <code>Exceptionless</code> namespace and call the <code>ExceptionlessClient.Default.Startup("{{vm.apiKey}}")</code> method with your api key during the startup of your app.</p>
+                <p>If you are targeting Portable Class Libraries you may need to wire up to any unhandled exception events specific to your project type to start reporting them!
+                  Please see the <a target="_blank" href="https://github.com/exceptionless/Exceptionless.Net/wiki/Configuration#exceptionless-portable-class-library-pcl-configuration">Exceptionless docs</a> for more information.</p>
+              </div>
+              <div ng-if="vm.currentProjectType.key === 'Exceptionless.AspNetCore'">
+                <p>Import the <code>Exceptionless</code> namespace and call the <code>app.UseExceptionless("{{vm.apiKey}}")</code> method with your api key during the startup of your app.</p>
               </div>
             </li>
-            <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Portable'">
-              <p>Wire up to any unhandled exception events specific to your project type to start reporting them!
-              Please see the <a target="_blank" href="https://github.com/exceptionless/Exceptionless.Net/wiki/Configuration#exceptionless-portable-class-library-pcl-configuration">Exceptionless docs</a> for more information.</p>
-            </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Nancy'">
-              <p>Import the <code>Exceptionless</code> namespace and add a call to <code>Exceptionless.ExceptionlessClient.Default.RegisterNancy(pipelines)</code>
+              <p>Import the <code>Exceptionless</code> namespace and call the <code>Exceptionless.ExceptionlessClient.Default.RegisterNancy(pipelines)</code> method
                  with an instance of Nancy.Bootstrapper.IPipelines inside of your NancyBootstrapper's ApplicationStartup method.</p>
             </li>
-            <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless' || vm.currentProjectType.key === 'Exceptionless.Windows' || vm.currentProjectType.key === 'Exceptionless.Wpf'">
-              <p>Import the <code>Exceptionless</code> namespace and add a call to <code>ExceptionlessClient.Default.Register()</code> during the startup of your app.</p>
+            <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Windows' || vm.currentProjectType.key === 'Exceptionless.Wpf'">
+              <p>Import the <code>Exceptionless</code> namespace and call the <code>ExceptionlessClient.Default.Register()</code> method during the startup of your app.</p>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.WebApi'">
-              <p>Import the <code>Exceptionless</code> namespace and add a call to <code>ExceptionlessClient.Default.RegisterWebApi(config)</code> with an instance of HttpConfiguration during the startup of your app.</p>
+              <p>Import the <code>Exceptionless</code> namespace and call the <code>ExceptionlessClient.Default.RegisterWebApi(config)</code> method with an instance of HttpConfiguration during the startup of your app.</p>
               <p>If you are hosting Web API inside of ASP.NET, you would register Exceptionless like: <code>Exceptionless.ExceptionlessClient.Default.RegisterWebApi(GlobalConfiguration.Configuration)</code>
               </p>
             </li>
           </ol>
           <p ng-if="vm.currentProjectType.key"><strong>That's it!</strong>
-            <span ng-if="vm.currentProjectType.key !== 'Exceptionless.Portable'">Your project should now automatically be sending all unhandled exceptions to Exceptionless.</span>
+            Your project should now automatically be sending all unhandled exceptions to Exceptionless!
             <span ng-if="vm.isDotNet()">You can also <a href="https://github.com/exceptionless/Exceptionless.Net/wiki/Sending-Events" target="_blank">send handled exceptions to Exceptionless</a> using <code>ex.ToExceptionless().Submit()</code>.</span>
             <span ng-if="vm.isJavaScript()">You can also <a href="https://github.com/exceptionless/Exceptionless.JavaScript/wiki/Sending-Events" target="_blank">send handled exceptions to Exceptionless</a> using <code>client.submitException(ex);</code>.</span>
           </p>
