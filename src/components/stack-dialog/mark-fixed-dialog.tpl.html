@@ -1,0 +1,31 @@
+<form name="markFixedForm" role="form" class="form-validation" autocomplete="on">
+  <div class="modal-header dialog-header-confirm">
+    <button type="button" role="button" class="close" ng-click="vm.cancel()">&times;</button>
+    <h4 class="modal-title">
+      <span class="glyphicon glyphicon-check"></span>
+      (OPTIONAL) Please specify a fixed in version.
+    </h4>
+  </div>
+
+  <div class="modal-body">
+    Please enter the version in which the stack has been fixed. Any submitted occurrences with a higher version will
+    cause the stack to be marked as a regression.
+
+    <div class="form-group">
+      <label for="version">Fixed In Version</label>
+      <input id="version" name="version" type="text" class="form-control input-lg" placeholder="Please enter a valid semantic version"
+             ng-model="vm.data.version"
+             semantic-version-validator
+             autofocus />
+
+      <div class="error" ng-messages="markFixedForm.semver.$error" ng-if="markFixedForm.$submitted || markFixedForm.version.$touched">
+        <small ng-message="$error">Invalid semantic version.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.save(markFixedForm.$valid)" value="MARK FIXED" />
+  </div>
+</form>

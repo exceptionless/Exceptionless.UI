@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', ['$scope', '$ExceptionlessClient', '$filter', 'hotkeys', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'projectService', 'stackService', 'statService', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackService, statService) {
+    .controller('Stack', ['$scope', '$ExceptionlessClient', '$filter', 'hotkeys', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'projectService', 'stackDialogService', 'stackService', 'statService', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackDialogService, stackService, statService) {
       var source = 'app.stack.Stack';
       var _stackId = $stateParams.id;
       var vm = this;
@@ -249,7 +249,7 @@
       }
 
       function isFixed() {
-        return !!vm.stack.date_fixed;
+        return !!vm.stack.date_fixed && !isRegressed();
       }
 
       function isHidden() {
@@ -378,7 +378,9 @@
           return stackService.markNotFixed(_stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.markFixed(_stackId).then(onSuccess, onFailure);
+        return stackDialogService.markFixed().then(function (version) {
+          return stackService.markFixed(_stackId, version).then(onSuccess, onFailure);
+        });
       }
 
       function updateIsHidden() {

@@ -16,6 +16,7 @@
     'exceptionless.pagination',
     'exceptionless.refresh',
     'exceptionless.summary',
+    'exceptionless.stack-dialog',
     'exceptionless.timeago'
   ]);
 }());

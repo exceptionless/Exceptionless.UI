@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.stacks')
-    .factory('stacksActionsService', ['$ExceptionlessClient', 'dialogService', 'stackService', 'notificationService', '$q', function ($ExceptionlessClient, dialogService, stackService, notificationService, $q) {
+    .factory('stacksActionsService', ['$ExceptionlessClient', 'dialogService', 'stackDialogService', 'stackService', 'notificationService', '$q', function ($ExceptionlessClient, dialogService, stackDialogService, stackService, notificationService, $q) {
       var source = 'exceptionless.stacks.stacksActionsService';
 
       function executeAction(ids, action, onSuccess, onFailure) {
@@ -37,17 +37,19 @@
       var markFixedAction = {
         name: 'Mark Fixed',
         run: function (ids) {
-          function onSuccess() {
-            notificationService.info('Successfully queued the stacks to be marked as fixed.');
-          }
-
-          function onFailure() {
-            $ExceptionlessClient.createFeatureUsage(source + '.mark-fixed.error').setProperty('count', ids.length).submit();
-            notificationService.error('An error occurred while marking stacks as fixed.');
-          }
-
           $ExceptionlessClient.createFeatureUsage(source + '.mark-fixed').setProperty('count', ids.length).submit();
-          return executeAction(ids, stackService.markFixed, onSuccess, onFailure);
+          return stackDialogService.markFixed().then(function (version) {
+            function onSuccess() {
+              notificationService.info('Successfully queued the stacks to be marked as fixed.');
+            }
+
+            function onFailure() {
+              $ExceptionlessClient.createFeatureUsage(source + '.mark-fixed.error').setProperty('count', ids.length).submit();
+              notificationService.error('An error occurred while marking stacks as fixed.');
+            }
+
+            return executeAction(ids, function(ids) { return stackService.markFixed(ids, version); }, onSuccess, onFailure);
+          });
         }
       };
 
