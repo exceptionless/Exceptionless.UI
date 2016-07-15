@@ -11,7 +11,7 @@
       }
 
       function save(isValid) {
-        if (!isValid) {
+        if (isValid === false) {
           return;
         }
 
@@ -20,6 +20,7 @@
       }
 
       vm.cancel = cancel;
+      vm.data = {};
       vm.save = save;
       $ExceptionlessClient.submitFeatureUsage(source);
     }]);
