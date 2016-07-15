@@ -3,23 +3,28 @@
     <button type="button" role="button" class="close" ng-click="vm.cancel()">&times;</button>
     <h4 class="modal-title">
       <span class="glyphicon glyphicon-check"></span>
-      (OPTIONAL) Please specify a fixed in version.
+      Mark Fixed
     </h4>
   </div>
 
-  <div class="modal-body">
-    Please enter the version in which the stack has been fixed. Any submitted occurrences with a higher version will
-    cause the stack to be marked as a regression.
+  <div class="modal-body text-muted">
+    <p>Marks the stack as fixed. This will also prevent error occurrences from being displayed in the dashboard.</p>
+    <p>
+      <b>Optional:</b> Please enter the version in which the stack has been fixed. Any submitted occurrences with a lower version will
+      not cause a regression.
+      <a href="https://github.com/exceptionless/Exceptionless/wiki/Versioning" target="_blank" title="Versioning Documentation" aria-label="Versioning Documentation">
+        <i class="fa fa-fw fa-question-circle"></i>
+      </a>
+    </p>
 
     <div class="form-group">
-      <label for="version">Fixed In Version</label>
-      <input id="version" name="version" type="text" class="form-control input-lg" placeholder="Please enter a valid semantic version"
+      <input id="version" name="version" type="text" class="form-control input-lg" placeholder="Optional Version (Example: 1.2.3)"
              ng-model="vm.data.version"
              semantic-version-validator
              autofocus />
 
-      <div class="error" ng-messages="markFixedForm.semver.$error" ng-if="markFixedForm.$submitted || markFixedForm.version.$touched">
-        <small ng-message="$error">Invalid semantic version.</small>
+      <div class="error" ng-messages="markFixedForm.$error" ng-if="markFixedForm.$submitted || markFixedForm.version.$touched">
+        <small ng-message="semver">Invalid version.</small>
       </div>
     </div>
   </div>
