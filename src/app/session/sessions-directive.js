@@ -73,10 +73,6 @@
             return vm.events && vm.events.length > 0;
           }
 
-          function hasSelection() {
-            return vm.selectedIds.length > 0;
-          }
-
           function open(id, event) {
             var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
             $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
@@ -99,30 +95,6 @@
             return get(vm.previous);
           }
 
-          function save(action) {
-            function onSuccess() {
-              vm.selectedIds = [];
-            }
-
-            if (!hasSelection()) {
-              notificationService.info(null, 'Please select one or more events');
-            } else {
-              action.run(vm.selectedIds).then(onSuccess);
-            }
-          }
-
-          function updateSelection() {
-            if (!hasEvents())
-              return;
-
-            if (hasSelection())
-              vm.selectedIds = [];
-            else
-              vm.selectedIds = vm.events.map(function (event) {
-                return event.id;
-              });
-          }
-
           vm.canRefresh = canRefresh;
           vm.events = [];
           vm.get = get;
@@ -134,10 +106,7 @@
           vm.open = open;
           vm.nextPage = nextPage;
           vm.previousPage = previousPage;
-          vm.save = save;
-          vm.selectedIds = [];
           vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
-          vm.updateSelection = updateSelection;
           get();
         }],
         controllerAs: 'vm'
