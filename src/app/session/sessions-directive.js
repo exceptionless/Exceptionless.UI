@@ -101,7 +101,6 @@
           vm.getDuration = getDuration;
           vm.hasEvents = hasEvents;
           vm.hasFilter = filterService.hasFilter;
-          vm.hasSelection = hasSelection;
           vm.loading = true;
           vm.open = open;
           vm.nextPage = nextPage;
