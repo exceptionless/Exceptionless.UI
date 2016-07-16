@@ -20,7 +20,7 @@
           });
 
           // TODO: implement smarter delay logic. We shouldn't be updating stuff it the interval period is a hour, day, month, year..
-          var interval = $interval(setTimeagoText, 60 * 1000);
+          var interval = $interval(setTimeagoText, 15 * 1000);
           scope.$on('$destroy', function () {
             $interval.cancel(interval);
           });

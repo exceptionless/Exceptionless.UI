@@ -47,8 +47,8 @@
       return Restangular.one('stacks', id).one('mark-critical').remove();
     }
 
-    function markFixed(id) {
-      return Restangular.one('stacks', id).one('mark-fixed').post();
+    function markFixed(id, version) {
+      return Restangular.one('stacks', id).post('mark-fixed', null, { version: version });
     }
 
     function markNotFixed(id) {

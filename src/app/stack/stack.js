@@ -22,6 +22,7 @@
     'exceptionless.rate-limit',
     'exceptionless.refresh',
     'exceptionless.stack',
+    'exceptionless.stack-dialog',
     'exceptionless.stack-trace',
     'exceptionless.stat'
   ])

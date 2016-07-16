@@ -40,6 +40,7 @@
           function get(options) {
             function onSuccess(response) {
               vm.events = response.data.plain();
+              vm.selectedIds = vm.selectedIds.filter(function(id) { return vm.events.filter(function(e) { return e.id === id; }).length > 0; });
 
               var links = linkService.getLinksQueryParameters(response.headers('link'));
               vm.previous = links['previous'];
