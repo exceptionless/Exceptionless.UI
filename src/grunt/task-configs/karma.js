@@ -21,6 +21,9 @@ module.exports = function (grunt) {
             reporters: ['mocha'],
             autoWatch: false, //watching is handled by grunt-contrib-watch
             singleRun: true,
+          
+            browserDisconnectTimeout : 10000,
+            browserDisconnectTolerance: 2,
             browserNoActivityTimeout: 60000
         },
         all_tests: {
