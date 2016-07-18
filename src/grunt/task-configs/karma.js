@@ -17,10 +17,11 @@ module.exports = function (grunt) {
             preprocessors: {
                 'components/summary/**/*.html': ['ng-html2js']
             },
-            logLevel: 'DEBUG',
+            logLevel: 'ERROR',
             reporters: ['mocha'],
             autoWatch: false, //watching is handled by grunt-contrib-watch
-            singleRun: true
+            singleRun: true,
+            browserNoActivityTimeout: 60000
         },
         all_tests: {
             browsers: ['PhantomJS']
