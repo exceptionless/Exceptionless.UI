@@ -2,11 +2,26 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', 'clipboard', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
+    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', '$timeout', 'clipboard', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
       var source = 'app.event.Event';
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
       var vm = this;
+
+      function activateTab(tabName) {
+        for(var index = 0; index < vm.tabs.length; index++) {
+          if (vm.tabs[index].title !== tabName) {
+            continue;
+          }
+
+          vm.activeTabIndex = vm.tabs[index].index;
+          break;
+        }
+
+        if (vm.activeTabIndex >= vm.tabs.length) {
+          vm.activeTabIndex = 0;
+        }
+      }
 
       function addHotKeys() {
         hotkeys.del('mod+up');
@@ -141,18 +156,7 @@
         }
 
         vm.tabs = tabs;
-        for(var index = 0; index < tabs.length; index++) {
-          if (tabs[index].title !== tabNameToActivate) {
-            continue;
-          }
-
-          vm.activeTabIndex = tabs[index].index;
-          break;
-        }
-
-        if (vm.activeTabIndex >= vm.tabs.length) {
-          vm.activeTabIndex = 0;
-        }
+        $timeout(function() { activateTab(tabNameToActivate); }, 1);
       }
 
       function canRefresh(data) {
@@ -212,7 +216,7 @@
 
       function getCurrentTab() {
         var tab = vm.tabs.filter(function(t) { return t.index === vm.activeTabIndex; })[0];
-        return tab && tab.index > 0 ? tab.title : null;
+        return tab && tab.index > 0 ? tab.title : 'Overview';
       }
 
       function getDuration() {
