@@ -67,12 +67,18 @@
             // TODO: include the total event count for the organization.
             var currentOrganization = getCurrentOrganization();
             if (currentOrganization) {
+              var total = 0;
+              angular.forEach(currentOrganization.usage || [], function(data, key) {
+                total += data.total || 0;
+              });
+
               data.company = {
                 company_id: currentOrganization.id,
                 name: currentOrganization.name,
                 remote_created_at: objectIDService.create(currentOrganization.id).timestamp,
                 plan: currentOrganization.plan_id,
-                monthly_spend: currentOrganization.billing_price
+                monthly_spend: currentOrganization.billing_price,
+                total_events: total
               };
 
               if (currentOrganization.subscribe_date) {
