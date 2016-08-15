@@ -28,6 +28,8 @@
 <h3>Stack Trace</h3>
 <stack-trace exception="vm.event.data['@error']"></stack-trace>
 
+<extended-data-item can-promote="false" title="'Additional Data'" data="vm.event.data['@error'].data['@ext']"></extended-data-item>
+
 <div ng-if="vm.event.data['@error'].modules.length > 0">
   <h4>Loaded Modules</h4>
   <table class="table table-striped table-bordered table-fixed b-t">
@@ -45,5 +47,3 @@
     </tbody>
   </table>
 </div>
-
-<extended-data-item can-promote="false" title="'Additional Data'" data="vm.event.data['@error'].data['@ext']"></extended-data-item>
