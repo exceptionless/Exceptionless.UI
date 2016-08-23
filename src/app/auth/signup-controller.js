@@ -18,11 +18,11 @@
       function authenticate(provider) {
         function onSuccess() {
           $analytics.eventTrack('CompleteRegistration');
-          $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).submit();
+          $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).addTags(provider).submit();
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.authenticate.error').setProperty('InviteToken', vm.token).setProperty('response', response).submit();
+          $ExceptionlessClient.createFeatureUsage(source + '.authenticate.error').setProperty('InviteToken', vm.token).setProperty('response', response).addTags(provider).submit();
           notificationService.error(getMessage(response));
         }
 
