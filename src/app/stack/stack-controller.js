@@ -109,11 +109,30 @@
         }
       }
 
-      function get(data) {
-        if (data && data.type === 'Stack' && data.id !== _stackId) {
-          return;
+      function canRefresh(data) {
+        if (data && data.type === 'Stack' && data.id === _stackId) {
+          return true;
         }
 
+        if (data && data.type === 'PersistentEvent') {
+          if (data.organization_id && data.organization_id !== vm.stack.organization_id) {
+            return false;
+          }
+          if (data.project_id && data.project_id !== vm.stack.project_id) {
+            return false;
+          }
+
+          if (data.stack_id && data.stack_id !== _stackId) {
+            return false;
+          }
+
+          return true;
+        }
+
+        return false;
+      }
+
+      function get(data) {
         if (data && data.type === 'Stack' && data.deleted) {
           $state.go('app.dashboard');
           notificationService.error('The stack "' + _stackId + '" was deleted.');
@@ -121,10 +140,6 @@
         }
 
         if (data && data.type === 'PersistentEvent') {
-          if (!data.deleted || data.project_id !== vm.stack.project_id) {
-            return;
-          }
-
           return getStats();
         }
 
@@ -504,6 +519,7 @@
         { name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true }
       ];
 
+      vm.canRefresh = canRefresh;
       vm.get = get;
       vm.getStats = getStats;
       vm.hasTags = hasTags;
