@@ -10,15 +10,19 @@
 
       function activateTab(tabName) {
         for(var index = 0; index < vm.tabs.length; index++) {
-          if (vm.tabs[index].title !== tabName) {
+          var tab = vm.tabs[index];
+          if (tab.title !== tabName) {
+            tab.active = false;
             continue;
           }
 
-          vm.activeTabIndex = vm.tabs[index].index;
+          tab.active = true;
+          vm.activeTabIndex = tab.index;
           break;
         }
 
-        if (vm.activeTabIndex >= vm.tabs.length) {
+        if (vm.activeTabIndex < 0 || vm.activeTabIndex >= vm.tabs.length) {
+          vm.tabs[0].active = true;
           vm.activeTabIndex = 0;
         }
       }
@@ -431,7 +435,8 @@
         return projectService.promoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
 
-      vm.activeTabIndex = 0;
+      vm.activeTabIndex = -1;
+      vm.activateTab = activateTab;
       vm.canRefresh = canRefresh;
       vm.copied = copied;
       vm.demoteTab = demoteTab;

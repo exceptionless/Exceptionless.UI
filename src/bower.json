@@ -10,10 +10,10 @@
   "dependencies": {
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
-    "angular-bootstrap": "1.3.3",
-    "angular-clipboard": "1.4.2",
+    "angular-bootstrap": "2.1.3",
+    "angular-clipboard": "1.5.0",
     "angular-dialog-service": "5.3.0",
-    "angular-filter": "0.5.9",
+    "angular-filter": "0.5.11",
     "angular-gravatar": "0.4.2",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.7.0",
     "angular-input-match": "0.0.3",
@@ -27,9 +27,9 @@
     "angular-sanitize": "1.5.8",
     "angular-stripe": "4.2.12",
     "angular-ui-router": "0.2.18",
-    "angular-xeditable": "0.2.0",
+    "angular-xeditable": "0.3.0",
     "angularjs-toaster": "2.0.0",
-    "angulartics": "1.1.2",
+    "angulartics": "1.1.3",
     "animate.css": "3.5.2",
     "base64": "1.0.0",
     "bootstrap": "3.3.7",
@@ -44,8 +44,8 @@
     "jquery": "2.2.4",
     "less.js": "2.7.1",
     "li": "1.0.1",
-    "lodash": "4.14.1",
-    "moment": "2.14.1",
+    "lodash": "4.16.0",
+    "moment": "2.15.0",
     "mousetrap-js": "1.7.0",
     "ng-debounce": "0.1.7",
     "ng-filters": "1.3.0",
@@ -53,12 +53,13 @@
     "query-string": "4.2.2",
     "restangular": "1.5.2",
     "rickshaw": "1.5.1",
-    "satellizer": "0.15.4",
+    "satellizer": "0.15.5",
     "signalr": "2.2.1",
     "trunk8": "1.3.3",
-    "twix": "1.1.0"
+    "twix": "1.1.1"
   },
   "resolutions": {
-    "angular": "1.5.8"
+    "angular": "1.5.8",
+    "angular-bootstrap": "2.1.3"
   }
 }

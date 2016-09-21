@@ -15,15 +15,15 @@
       </div>
       <div class="panel-body">
         <uib-tabset class="tab-container hidden-xs" active="vm.activeTabIndex">
-          <uib-tab ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}">
+          <uib-tab ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" ng-click="vm.activateTab(tab.title)">
             <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
           </uib-tab>
         </uib-tabset>
 
         <uib-accordion class="visible-xs">
-          <uib-accordion-group ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" is-open="tab.index === vm.activeTabIndex" ng-click="vm.activeTabIndex = tab.index">
+          <div uib-accordion-group class="panel-default" ng-repeat="tab in vm.tabs" heading="{{::tab.title | toSpacedWords}}" is-open="tab.active" ng-click="vm.activateTab(tab.title)">
             <div ng-include="'app/event/tabs/' + tab.template_key + '.tpl.html'"></div>
-          </uib-accordion-group>
+          </div>
         </uib-accordion>
       </div>
       <footer class="panel-footer hidden-xs">
