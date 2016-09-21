@@ -83,7 +83,7 @@
 
         function onFailure(response) {
           if (response.status === 426) {
-            return billingService.confirmUpgradePlan(response.data.message).then(function () {
+            return billingService.confirmUpgradePlan(response.data.message, organization.id).then(function () {
               return createProject(organization);
             });
           }

@@ -164,7 +164,7 @@
             return vm.organizations;
           }
 
-          return  organizationService.getAll().then(onSuccess);
+          return  organizationService.getAll({}, false).then(onSuccess);
         }
 
         function onSuccess() {

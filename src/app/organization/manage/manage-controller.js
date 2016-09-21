@@ -41,7 +41,7 @@
       function createUser(emailAddress) {
         function onFailure(response) {
           if (response.status === 426) {
-            return billingService.confirmUpgradePlan(response.data.message).then(function() {
+            return billingService.confirmUpgradePlan(response.data.message, _organizationId).then(function() {
               return createUser(emailAddress);
             });
           }

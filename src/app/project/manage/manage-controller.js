@@ -30,7 +30,7 @@
       function createWebHook(data) {
         function onFailure(response) {
           if (response.status === 426) {
-            return billingService.confirmUpgradePlan(response.data.message).then(function () {
+            return billingService.confirmUpgradePlan(response.data.message, vm.project.organization_id).then(function () {
               return createWebHook(data);
             });
           }
