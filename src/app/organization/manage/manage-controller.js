@@ -291,7 +291,7 @@
         get: function (options, useCache) {
           return projectService.getByOrganizationId(_organizationId, options, useCache);
         },
-        hideOrganizationName: true,
+        organization: _organizationId,
         options: {
           limit: 10,
           mode: 'stats'

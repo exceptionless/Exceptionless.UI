@@ -52,6 +52,51 @@
             return vm.projects && vm.projects.length > 0;
           }
 
+          function canRefresh(data) {
+            if (!data || !data.type) {
+              return true;
+            }
+
+            var organizationId = vm.settings.organization;
+            if (data.type === 'Organization') {
+              if (!hasProjects() && data.id === organizationId) {
+                return true;
+              }
+
+              return vm.projects.filter(function (e) { return data.id === e.organization_id; }).length > 0;
+            }
+
+            if (data.type === 'Project') {
+              if (!hasProjects() && data.organization_id === organizationId) {
+                return true;
+              }
+
+              return vm.projects.filter(function (e) {
+                  if (data.id) {
+                    return data.id === e.id;
+                  } else {
+                    return data.organization_id = e.organization_id;
+                  }
+                }).length > 0
+            }
+
+            if ((data.type === 'PersistentEvent' && !data.updated)) {
+              if (!hasProjects() && data.organization_id === organizationId) {
+                return true;
+              }
+
+              return vm.projects.filter(function (e) {
+                  if (data.project_id) {
+                    return data.project_id === e.id;
+                  } else {
+                    return data.organization_id = e.organization_id;
+                  }
+                }).length > 0;
+            }
+
+            return false;
+          }
+
           function open(id, event) {
             var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
             $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
@@ -92,11 +137,12 @@
             });
           }
 
+          vm.canRefresh = canRefresh;
           vm.currentOptions = {};
           vm.get = get;
           vm.hasFilter = filterService.hasFilter;
           vm.hasProjects = hasProjects;
-          vm.includeOrganizationName = !vm.settings.hideOrganizationName;
+          vm.includeOrganizationName = !vm.settings.organization;
           vm.loading = true;
           vm.nextPage = nextPage;
           vm.open = open;
