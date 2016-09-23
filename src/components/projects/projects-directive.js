@@ -77,7 +77,7 @@
                   } else {
                     return data.organization_id = e.organization_id;
                   }
-                }).length > 0
+                }).length > 0;
             }
 
             if ((data.type === 'PersistentEvent' && !data.updated)) {
