@@ -24,7 +24,7 @@
               <div class="details">
                 <span class="title">Users</span>
                 <span class="sub">
-                  <abbr title="{{vm.stats.numbers[0] || 0 | number : 0}} of {{vm.total_users | number:0}} users">{{(vm.total_users > 0 ? (vm.stats.numbers[0] || 0) / vm.total_users * 100.0 : 0) | percentage}}</abbr>
+                  <abbr title="{{vm.stats.numbers[0] || 0 | number : 0}} of {{vm.total_users | number:0}} users">{{(vm.total_users > 0 ? (vm.stats.numbers[0] || 0) / vm.total_users * 100.0 : 0) | percentage:100}}</abbr>
                 </span>
               </div>
             </div>
