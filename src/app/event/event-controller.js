@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', '$timeout', 'clipboard', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
+    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', '$timeout', 'billingService', 'clipboard', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
       var source = 'app.event.Event';
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
@@ -268,7 +268,16 @@
           return vm.event;
         }
 
-        function onFailure() {
+        function onFailure(response) {
+          if (response && response.status === 426) {
+            return billingService.confirmUpgradePlan(response.data.message).then(function () {
+              return getEvent();
+            }, function () {
+                $state.go('app.dashboard');
+              }
+            );
+          }
+
           $state.go('app.dashboard');
           notificationService.error('The event "' + $stateParams.id + '" could not be found.');
         }

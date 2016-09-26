@@ -8,6 +8,7 @@
     'ui.router',
 
     'exceptionless',
+    'exceptionless.billing',
     'exceptionless.error',
     'exceptionless.event',
     'exceptionless.events',
