@@ -2,13 +2,26 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.List', ['$ExceptionlessClient', '$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'filterService', 'linkService', 'notificationService', 'organizationService', 'paginationService', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, filterService, linkService, notificationService, organizationService, paginationService) {
+    .controller('organization.List', ['$ExceptionlessClient', '$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'filterService', 'linkService', 'notificationService', 'organizationService', 'paginationService', 'STRIPE_PUBLISHABLE_KEY', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, filterService, linkService, notificationService, organizationService, paginationService, STRIPE_PUBLISHABLE_KEY) {
       var source = 'exceptionless.organization.List';
       var settings = { mode: 'stats' };
       var vm = this;
 
       function add() {
         return dialogs.create('app/organization/list/add-organization-dialog.tpl.html', 'AddOrganizationDialog as vm').result.then(createOrganization);
+      }
+
+      function canChangePlan() {
+        return !!STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
+      }
+
+      function changePlan(organizationId) {
+        if (!STRIPE_PUBLISHABLE_KEY) {
+          notificationService.error('Billing is currently disabled.');
+          return;
+        }
+
+        return billingService.changePlan(organizationId);
       }
 
       function createOrganization(name) {
@@ -124,6 +137,8 @@
       }
 
       vm.add = add;
+      vm.canChangePlan = canChangePlan;
+      vm.changePlan = changePlan;
       vm.get = get;
       vm.hasFilter = filterService.hasFilter;
       vm.leave = leave;

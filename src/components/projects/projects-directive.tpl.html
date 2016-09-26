@@ -4,8 +4,8 @@
       <tr>
         <th>Name</th>
         <th ng-if="vm.includeOrganizationName">Organization</th>
-        <th class="number hidden-xs">Stacks</th>
-        <th class="number hidden-xs">Events</th>
+        <th class="number hidden-xs"><abbr title="Total number of stacks">Stacks</abbr></th>
+        <th class="number hidden-xs"><abbr title="Total number of events within the retention period">Events</abbr></th>
         <th class="action">Actions</th>
       </tr>
     </thead>
@@ -25,6 +25,8 @@
               <li><a ui-sref="app.project.manage({ id: project.id })"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
               <li><a ui-sref="app.project.configure({ id: project.id })"><i class="fa fa-fw fa-cloud-download"></i> Download & Configure Client</a></li>
               <li><a ng-click="vm.remove(project)"><i class="fa fa-fw fa-times"></i> Delete</a></li>
+              <li class="divider"></li>
+              <li><a ui-sref="app.organization.manage({ id: project.organization_id })"><i class="fa fa-fw fa-group"></i> View Organization</a></li>
             </ul>
           </div>
         </td>
