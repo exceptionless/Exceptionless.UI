@@ -336,7 +336,7 @@
 
       function remove() {
         $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('id', _stackId).submit();
-        var message = 'Are you sure you want to delete this stack?';
+        var message = 'Are you sure you want to delete this stack (includes all stack events)?';
         return dialogService.confirmDanger(message, 'DELETE STACK').then(function () {
           function onSuccess() {
             notificationService.info('Successfully queued the stack for deletion.');

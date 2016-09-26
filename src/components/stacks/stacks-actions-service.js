@@ -19,7 +19,7 @@
         name: 'Delete',
         run: function (ids) {
           $ExceptionlessClient.createFeatureUsage(source + '.delete').setProperty('count', ids.length).submit();
-          return dialogService.confirmDanger('Are you sure you want to delete these stacks?', 'DELETE STACKS').then(function () {
+          return dialogService.confirmDanger('Are you sure you want to delete these stacks (includes all stack events)?', 'DELETE STACKS').then(function () {
             function onSuccess() {
               notificationService.info('Successfully queued the stacks for deletion.');
             }
