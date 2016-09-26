@@ -19,6 +19,7 @@
                 <p>Add the Exceptionless <a href="http://nuget.org" target="_blank">NuGet</a> package to your Visual
                   Studio project by running this command in the <a href="http://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
                 <pre><a ng-href="http://nuget.org/packages/{{vm.currentProjectType.key}}" target="_blank">Install-Package {{vm.currentProjectType.key}}</a></pre>
+                <p><em>A Strong-Named <code>{{vm.currentProjectType.key}}.Signed</code> package is also available on NuGet.</em></p>
               </div>
               <div ng-if="vm.isJavaScript()">
                 <div ng-if="!vm.isNode()">
