@@ -90,7 +90,7 @@
         </span>
 
         <div class="btn-toolbar pull-right hidden-print" role="toolbar" aria-label="Stack Options">
-          <div class="btn-group btn-group-sm" role="group" ng-if="vm.stack.type === 'error'">
+          <div class="btn-group btn-group-sm" role="group" ng-if="vm.stack.type === 'error' || vm.stack.type === '404'">
             <button type="button" role="button" class="btn btn-default" title="{{vm.isFixed() ? 'Mark this stack as not fixed' : 'Mark this stack as fixed'}}" promise-button="vm.updateIsFixed()" promise-button-busy-text="{{vm.isFixed() ? 'Marking Not Fixed' : 'Marking Fixed' }}" promise-button-busy-spinner-class="fa-size-sm">
               {{vm.isFixed() ? 'Mark Not Fixed' : 'Mark Fixed' }}
             </button>
