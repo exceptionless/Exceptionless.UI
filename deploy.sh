@@ -68,8 +68,9 @@ echo Updating configuration settings.
 
 cd "$DEPLOYMENT_SOURCE/app_data/jobs/triggered/config"
 npm config set strict-ssl false
-npm install -g replace
 npm install
+exitWithMessageOnError "Error installing npm packages"
+
 node ./run.js
 
 echo Deploying site content.
