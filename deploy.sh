@@ -25,7 +25,7 @@ exitWithMessageOnError "Missing node.js executable, please install node.js, if a
 
 # Setup
 # -----
-
+PATH=$PATH:"/d/Program Files (x86)/nodejs"
 SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
@@ -68,8 +68,9 @@ echo Updating configuration settings.
 
 cd "$DEPLOYMENT_SOURCE/app_data/jobs/triggered/config"
 npm config set strict-ssl false
-npm install -g replace
 npm install
+exitWithMessageOnError "Error installing npm packages"
+
 node ./run.js
 
 echo Deploying site content.
