@@ -27,7 +27,7 @@
         </div>
       </td>
     </tr>
-    <tr ng-if="!vm.hasInvoices()">
+    <tr ng-if="vm.invoices.length === 0">
       <td colspan="4">
         <strong>No invoices were found.</strong>
       </td>

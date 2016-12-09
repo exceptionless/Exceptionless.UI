@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.error', [])
-    .factory('errorService', [function () {
+    .factory('errorService', function () {
       function getExceptions(exception) {
         var exceptions = [];
         var currentException = exception;
@@ -40,5 +40,5 @@
         getTargetInfoMessage: getTargetInfoMessage
       };
       return service;
-    }]);
+    });
 }());

@@ -3,14 +3,11 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', ['$scope', '$ExceptionlessClient', '$filter', 'hotkeys', '$state', '$stateParams', 'billingService', 'dialogs', 'dialogService', 'eventService', 'filterService', 'notificationService', 'projectService', 'stackDialogService', 'stackService', 'statService', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackDialogService, stackService, statService) {
-      var source = 'app.stack.Stack';
-      var _stackId = $stateParams.id;
+    .controller('Stack', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackDialogService, stackService, statService) {
       var vm = this;
-
       function addHotkeys() {
         function logFeatureUsage(name) {
-          $ExceptionlessClient.createFeatureUsage(source + '.hotkeys' + name).addTags('hotkeys').submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys' + name).addTags('hotkeys').submit();
         }
 
         hotkeys.del('shift+h');
@@ -24,7 +21,7 @@
         hotkeys.bindTo($scope)
           .add({
             combo: 'shift+h',
-            description: vm.isHidden() ? 'Mark Stack Unhidden' : 'Mark Stack Hidden',
+            description: vm.stack.is_hidden ? 'Mark Stack Unhidden' : 'Mark Stack Hidden',
             callback: function markHidden() {
               logFeatureUsage('Hidden');
               vm.updateIsHidden();
@@ -32,7 +29,7 @@
           })
           .add({
             combo: 'shift+f',
-            description: vm.isFixed() ? 'Mark Stack Not fixed' : 'Mark Stack Fixed',
+            description: (vm.stack.date_fixed && !vm.stack.is_regressed) ? 'Mark Stack Not fixed' : 'Mark Stack Fixed',
             callback: function markFixed() {
               logFeatureUsage('Fixed');
               vm.updateIsFixed();
@@ -40,7 +37,7 @@
           })
           .add({
             combo: 'shift+c',
-            description: vm.isCritical() ? 'Future Stack Occurrences are Not Critical' : 'Future Stack Occurrences are Critical',
+            description: vm.stack.occurrences_are_critical ? 'Future Stack Occurrences are Not Critical' : 'Future Stack Occurrences are Critical',
             callback: function markCritical() {
               logFeatureUsage('Critical');
               vm.updateIsCritical();
@@ -48,7 +45,7 @@
           })
           .add({
             combo: 'shift+m',
-            description: vm.notificationsDisabled() ? 'Enable Stack Notifications' : 'Disable Stack Notifications',
+            description: vm.stack.disable_notifications ? 'Enable Stack Notifications' : 'Disable Stack Notifications',
             callback: function updateNotifications() {
               logFeatureUsage('Notifications');
               vm.updateNotifications();
@@ -81,36 +78,36 @@
       }
 
       function addReferenceLink() {
-        $ExceptionlessClient.submitFeatureUsage(source + '.addReferenceLink');
+        $ExceptionlessClient.submitFeatureUsage(vm._source + '.addReferenceLink');
         return dialogs.create('app/stack/add-reference-dialog.tpl.html', 'AddReferenceDialog as vm').result.then(function (url) {
           function onSuccess() {
-            $ExceptionlessClient.createFeatureUsage(source + '.addReferenceLink.success').setProperty('url', url).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.addReferenceLink.success').setProperty('url', url).submit();
             vm.stack.references.push(url);
           }
 
           function onFailure() {
-            $ExceptionlessClient.createFeatureUsage(source + '.addReferenceLink.error').setProperty('url', url).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.addReferenceLink.error').setProperty('url', url).submit();
             notificationService.error('An error occurred while adding the reference link.');
           }
 
           if (vm.stack.references.indexOf(url) < 0)
-            return stackService.addLink(_stackId, url).then(onSuccess, onFailure);
-        });
+            return stackService.addLink(vm._stackId, url).then(onSuccess, onFailure);
+        }).catch(function(e){});
       }
 
       function executeAction() {
         var action = $stateParams.action;
-        if (action === 'mark-fixed' && !isFixed()) {
+        if (action === 'mark-fixed' && !(vm.stack.date_fixed && !vm.stack.is_regressed)) {
           return updateIsFixed(true);
         }
 
-        if (action === 'stop-notifications' && !notificationsDisabled()) {
+        if (action === 'stop-notifications' && !vm.stack.disable_notifications) {
           return updateNotifications(true);
         }
       }
 
       function canRefresh(data) {
-        if (data && data.type === 'Stack' && data.id === _stackId) {
+        if (data && data.type === 'Stack' && data.id === vm._stackId) {
           return true;
         }
 
@@ -122,7 +119,7 @@
             return false;
           }
 
-          if (data.stack_id && data.stack_id !== _stackId) {
+          if (data.stack_id && data.stack_id !== vm._stackId) {
             return false;
           }
 
@@ -135,7 +132,7 @@
       function get(data) {
         if (data && data.type === 'Stack' && data.deleted) {
           $state.go('app.dashboard');
-          notificationService.error('The stack "' + _stackId + '" was deleted.');
+          notificationService.error('The stack "' + vm._stackId + '" was deleted.');
           return;
         }
 
@@ -166,13 +163,13 @@
           $state.go('app.dashboard');
 
           if (response.status === 404) {
-            notificationService.error('The stack "' + _stackId + '" could not be found.');
+            notificationService.error('The stack "' + vm._stackId + '" could not be found.');
           } else {
-            notificationService.error('An error occurred while loading the stack "' + _stackId + '".');
+            notificationService.error('An error occurred while loading the stack "' + vm._stackId + '".');
           }
         }
 
-        return stackService.getById(_stackId).then(onSuccess, onFailure);
+        return stackService.getById(vm._stackId).then(onSuccess, onFailure);
       }
 
       function getProjectUserStats() {
@@ -197,7 +194,7 @@
         }
 
         function optionsCallback(options) {
-          options.filter = ['stack:' + _stackId, options.filter].filter(function(f) { return f && f.length > 0; }).join(' ');
+          options.filter = ['stack:' + vm._stackId, options.filter].filter(function(f) { return f && f.length > 0; }).join(' ');
           return options;
         }
 
@@ -239,40 +236,8 @@
         return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess).then(getProjectUserStats);
       }
 
-      function hasTags() {
-        return vm.stack.tags && vm.stack.tags.length > 0;
-      }
-
-      function hasReference() {
-        return vm.stack.references && vm.stack.references.length > 0;
-      }
-
-      function hasReferences() {
-        return vm.stack.references && vm.stack.references.length > 1;
-      }
-
       function hasSelectedChartOption() {
         return vm.chartOptions.filter(function (o) { return o.render && o.selected; }).length > 0;
-      }
-
-      function hasSelectedOption() {
-        return vm.isHidden() || vm.isCritical() || vm.notificationsDisabled();
-      }
-
-      function isCritical() {
-        return vm.stack.occurrences_are_critical === true;
-      }
-
-      function isFixed() {
-        return !!vm.stack.date_fixed && !isRegressed();
-      }
-
-      function isHidden() {
-        return vm.stack.is_hidden === true;
-      }
-
-      function isRegressed() {
-        return vm.stack.is_regressed === true;
       }
 
       function isValidDate(date) {
@@ -280,284 +245,275 @@
         return !!date && d.isValid() && d.year() > 1;
       }
 
-      function notificationsDisabled() {
-        return vm.stack.disable_notifications === true;
-      }
-
       function promoteToExternal() {
-        $ExceptionlessClient.createFeatureUsage(source + '.promoteToExternal').setProperty('id', _stackId).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteToExternal').setProperty('id', vm._stackId).submit();
         if (vm.project && !vm.project.has_premium_features) {
           var message = 'Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.';
           return billingService.confirmUpgradePlan(message, vm.stack.organization_id).then(function () {
             return promoteToExternal();
-          });
+          }).catch(function(e){});
         }
 
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.promoteToExternal.success').setProperty('id', _stackId).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteToExternal.success').setProperty('id', vm._stackId).submit();
           notificationService.success('Successfully promoted stack!');
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.promoteToExternal.error').setProperty('id', _stackId).setProperty('response', response).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteToExternal.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
           if (response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message, vm.stack.organization_id).then(function () {
               return promoteToExternal();
-            });
+            }).catch(function(e){});
           }
 
           if (response.status === 501) {
             return dialogService.confirm(response.data.message, 'Manage Integrations').then(function () {
               $state.go('app.project.manage', { id: vm.stack.project_id });
-            });
+            }).catch(function(e){});
           }
 
           notificationService.error('An error occurred while promoting this stack.');
         }
 
-        return stackService.promote(_stackId).then(onSuccess, onFailure);
+        return stackService.promote(vm._stackId).then(onSuccess, onFailure);
       }
 
       function removeReferenceLink(reference) {
-        $ExceptionlessClient.createFeatureUsage(source + '.removeReferenceLink').setProperty('id', _stackId).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.removeReferenceLink').setProperty('id', vm._stackId).submit();
         return dialogService.confirmDanger('Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK').then(function () {
           function onSuccess() {
-            $ExceptionlessClient.createFeatureUsage(source + '.removeReferenceLink.success').setProperty('id', _stackId).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.removeReferenceLink.success').setProperty('id', vm._stackId).submit();
           }
 
           function onFailure(response) {
-            $ExceptionlessClient.createFeatureUsage(source + '.removeReferenceLink.error').setProperty('id', _stackId).setProperty('response', response).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.removeReferenceLink.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
             notificationService.info('An error occurred while deleting the external reference link.');
           }
 
-          return stackService.removeLink(_stackId, reference).then(onSuccess, onFailure);
-        });
+          return stackService.removeLink(vm._stackId, reference).then(onSuccess, onFailure);
+        }).catch(function(e){});
       }
 
       function remove() {
-        $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('id', _stackId).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.remove').setProperty('id', vm._stackId).submit();
         var message = 'Are you sure you want to delete this stack (includes all stack events)?';
         return dialogService.confirmDanger(message, 'DELETE STACK').then(function () {
           function onSuccess() {
             notificationService.info('Successfully queued the stack for deletion.');
-            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('id', _stackId).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('id', vm._stackId).submit();
             $state.go('app.project-dashboard', { projectId: vm.stack.project_id });
           }
 
           function onFailure(response) {
-            $ExceptionlessClient.createFeatureUsage(source + '.remove.error').setProperty('id', _stackId).setProperty('response', response).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
             notificationService.error('An error occurred while deleting this stack.');
           }
 
-          return stackService.remove(_stackId).then(onSuccess, onFailure);
-        });
+          return stackService.remove(vm._stackId).then(onSuccess, onFailure);
+        }).catch(function(e){});
       }
 
       function updateIsCritical() {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateIsCritical.success').setProperty('id', _stackId).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsCritical.success').setProperty('id', vm._stackId).submit();
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateIsCritical.error').setProperty('id', _stackId).setProperty('response', response).submit();
-          notificationService.error('An error occurred while marking future occurrences as ' + (isCritical() ? 'not critical.' : 'critical.'));
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsCritical.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
+          notificationService.error('An error occurred while marking future occurrences as ' + (vm.stack.occurrences_are_critical) ? 'not critical.' : 'critical.');
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.updateIsCritical').setProperty('id', _stackId).submit();
-        if (isCritical()) {
-          return stackService.markNotCritical(_stackId).then(onSuccess, onFailure);
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsCritical').setProperty('id', vm._stackId).submit();
+        if (vm.stack.occurrences_are_critical) {
+          return stackService.markNotCritical(vm._stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.markCritical(_stackId).catch(onSuccess, onFailure);
+        return stackService.markCritical(vm._stackId).catch(onSuccess, onFailure);
       }
 
       function updateIsFixed(showSuccessNotification) {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateIsFixed.success').setProperty('id', _stackId).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsFixed.success').setProperty('id', vm._stackId).submit();
           if (!showSuccessNotification) {
             return;
           }
 
-          var action = isFixed() ? ' not' : '';
+          var action = (vm.stack.date_fixed && !vm.stack.is_regressed) ? ' not' : '';
           notificationService.info('Successfully queued the stack to be marked as' + action + ' fixed.');
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateIsFixed.error').setProperty('id', _stackId).setProperty('response', response).submit();
-          var action = isFixed() ? ' not' : '';
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsFixed.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
+          var action = (vm.stack.date_fixed && !vm.stack.is_regressed) ? ' not' : '';
           notificationService.error('An error occurred while marking this stack as' + action + ' fixed.');
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.updateIsFixed').setProperty('id', _stackId).submit();
-        if (isFixed()) {
-          return stackService.markNotFixed(_stackId).then(onSuccess, onFailure);
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsFixed').setProperty('id', vm._stackId).submit();
+        if (vm.stack.date_fixed && !vm.stack.is_regressed) {
+          return stackService.markNotFixed(vm._stackId).then(onSuccess, onFailure);
         }
 
         return stackDialogService.markFixed().then(function (version) {
-          return stackService.markFixed(_stackId, version).then(onSuccess, onFailure);
-        });
+          return stackService.markFixed(vm._stackId, version).then(onSuccess, onFailure).catch(function(e){});
+        }).catch(function(e){});
       }
 
       function updateIsHidden() {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateIsHidden.success').setProperty('id', _stackId).submit();
-          notificationService.info('Successfully queued the stack to be marked as ' + (isHidden() ? 'shown.' : 'hidden.'));
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsHidden.success').setProperty('id', vm._stackId).submit();
+          notificationService.info('Successfully queued the stack to be marked as ' + (vm.stack.is_hidden ? 'shown.' : 'hidden.'));
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateIsHidden.error').setProperty('id', _stackId).setProperty('response', response).submit();
-          notificationService.error('An error occurred while marking this stack as ' + (isHidden() ? 'shown.' : 'hidden.'));
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsHidden.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
+          notificationService.error('An error occurred while marking this stack as ' + (vm.stack.is_hidden ? 'shown.' : 'hidden.'));
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.updateIsHidden').setProperty('id', _stackId).submit();
-        if (isHidden()) {
-          return stackService.markNotHidden(_stackId).then(onSuccess, onFailure);
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsHidden').setProperty('id', vm._stackId).submit();
+        if (vm.stack.is_hidden) {
+          return stackService.markNotHidden(vm._stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.markHidden(_stackId).then(onSuccess, onFailure);
+        return stackService.markHidden(vm._stackId).then(onSuccess, onFailure);
       }
 
       function updateNotifications(showSuccessNotification) {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateNotifications.success').setProperty('id', _stackId).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateNotifications.success').setProperty('id', vm._stackId).submit();
           if (!showSuccessNotification) {
             return;
           }
 
-          var action = notificationsDisabled() ? 'enabled' : 'disabled';
+          var action = vm.stack.disable_notifications ? 'enabled' : 'disabled';
           notificationService.info('Successfully ' + action + ' stack notifications.');
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.updateNotifications.error').setProperty('id', _stackId).setProperty('response', response).submit();
-          var action = notificationsDisabled() ? 'enabling' : 'disabling';
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateNotifications.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
+          var action = vm.stack.disable_notifications ? 'enabling' : 'disabling';
           notificationService.error('An error occurred while ' + action + ' stack notifications.');
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.updateNotifications').setProperty('id', _stackId).submit();
-        if (notificationsDisabled()) {
-          return stackService.enableNotifications(_stackId).then(onSuccess, onFailure);
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.updateNotifications').setProperty('id', vm._stackId).submit();
+        if (vm.stack.disable_notifications) {
+          return stackService.enableNotifications(vm._stackId).then(onSuccess, onFailure);
         }
 
-        return stackService.disableNotifications(_stackId).then(onSuccess, onFailure);
+        return stackService.disableNotifications(vm._stackId).then(onSuccess, onFailure);
       }
 
-      vm.addReferenceLink = addReferenceLink;
+      this.$onInit = function $onInit() {
+        vm._source = 'app.stack.Stack';
+        vm._stackId = $stateParams.id;
+        vm.addReferenceLink = addReferenceLink;
 
-      vm.chart = {
-        options: {
-          padding: { top: 0.085 },
-          renderer: 'stack',
-          stroke: true,
-          unstack: true
-        },
-        features: {
-          hover: {
-            render: function (args) {
-              var date = moment.unix(args.domainX);
-              var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
-              var content = '<div class="date">' + formattedDate + '</div>';
-              args.detail.sort(function (a, b) {
-                return a.order - b.order;
-              }).forEach(function (d) {
-                var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + '<br />';
-              }, this);
+        vm.chart = {
+          options: {
+            padding: {top: 0.085},
+            renderer: 'stack',
+            stroke: true,
+            unstack: true
+          },
+          features: {
+            hover: {
+              render: function (args) {
+                var date = moment.unix(args.domainX);
+                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                var content = '<div class="date">' + formattedDate + '</div>';
+                args.detail.sort(function (a, b) {
+                  return a.order - b.order;
+                }).forEach(function (d) {
+                  var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
+                  content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + '<br />';
+                }, this);
 
-              var xLabel = document.createElement('div');
-              xLabel.className = 'x_label';
-              xLabel.innerHTML = content;
-              this.element.appendChild(xLabel);
+                var xLabel = document.createElement('div');
+                xLabel.className = 'x_label';
+                xLabel.innerHTML = content;
+                this.element.appendChild(xLabel);
 
-              // If left-alignment results in any error, try right-alignment.
-              var leftAlignError = this._calcLayoutError([xLabel]);
-              if (leftAlignError > 0) {
-                xLabel.classList.remove('left');
-                xLabel.classList.add('right');
+                // If left-alignment results in any error, try right-alignment.
+                var leftAlignError = this._calcLayoutError([xLabel]);
+                if (leftAlignError > 0) {
+                  xLabel.classList.remove('left');
+                  xLabel.classList.add('right');
 
-                // If right-alignment is worse than left alignment, switch back.
-                var rightAlignError = this._calcLayoutError([xLabel]);
-                if (rightAlignError > leftAlignError) {
-                  xLabel.classList.remove('right');
-                  xLabel.classList.add('left');
+                  // If right-alignment is worse than left alignment, switch back.
+                  var rightAlignError = this._calcLayoutError([xLabel]);
+                  if (rightAlignError > leftAlignError) {
+                    xLabel.classList.remove('right');
+                    xLabel.classList.add('left');
+                  }
                 }
+
+                this.show();
               }
+            },
+            range: {
+              onSelection: function (position) {
+                var start = moment.unix(position.coordMinX).utc().local();
+                var end = moment.unix(position.coordMaxX).utc().local();
 
-              this.show();
+                filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+                $ExceptionlessClient.createFeatureUsage(vm._source + '.chart.range.onSelection')
+                  .setProperty('id', vm._stackId)
+                  .setProperty('start', start)
+                  .setProperty('end', end)
+                  .submit();
+
+                return false;
+              }
+            },
+            xAxis: {
+              timeFixture: new Rickshaw.Fixtures.Time.Local(),
+              overrideTimeFixtureCustomFormatters: true
+            },
+            yAxis: {
+              ticks: 5,
+              tickFormat: 'formatKMBT',
+              ticksTreatment: 'glow'
             }
-          },
-          range: {
-            onSelection: function (position) {
-              var start = moment.unix(position.coordMinX).utc().local();
-              var end = moment.unix(position.coordMaxX).utc().local();
-
-              filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
-              $ExceptionlessClient.createFeatureUsage(source + '.chart.range.onSelection')
-                .setProperty('id', _stackId)
-                .setProperty('start', start)
-                .setProperty('end', end)
-                .submit();
-
-              return false;
-            }
-          },
-          xAxis: {
-            timeFixture: new Rickshaw.Fixtures.Time.Local(),
-            overrideTimeFixtureCustomFormatters: true
-          },
-          yAxis: {
-            ticks: 5,
-            tickFormat: 'formatKMBT',
-            ticksTreatment: 'glow'
           }
-        }
+        };
+
+        vm.chartOptions = [
+          {name: 'Occurrences', selected: true, render: false},
+          {name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true},
+          {name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true}
+        ];
+
+        vm.canRefresh = canRefresh;
+        vm.get = get;
+        vm.getStats = getStats;
+        vm.hasSelectedChartOption = hasSelectedChartOption;
+        vm.isValidDate = isValidDate;
+        vm.promoteToExternal = promoteToExternal;
+        vm.project = {};
+        vm.remove = remove;
+        vm.removeReferenceLink = removeReferenceLink;
+        vm.recentOccurrences = {
+          get: function (options) {
+            return eventService.getByStackId(vm._stackId, options);
+          },
+          summary: {
+            showType: false
+          },
+          options: {
+            limit: 10,
+            mode: 'summary'
+          },
+          source: vm._source + '.Recent'
+        };
+        vm.stack = {};
+        vm.stats = {};
+        vm.total_users = 0;
+        vm.updateIsCritical = updateIsCritical;
+        vm.updateIsFixed = updateIsFixed;
+        vm.updateIsHidden = updateIsHidden;
+        vm.updateNotifications = updateNotifications;
+
+        get().then(executeAction);
       };
-
-      vm.chartOptions = [
-        { name: 'Occurrences', selected: true, render: false },
-        { name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true },
-        { name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true }
-      ];
-
-      vm.canRefresh = canRefresh;
-      vm.get = get;
-      vm.getStats = getStats;
-      vm.hasTags = hasTags;
-      vm.hasReference = hasReference;
-      vm.hasReferences = hasReferences;
-      vm.hasSelectedChartOption = hasSelectedChartOption;
-      vm.hasSelectedOption = hasSelectedOption;
-      vm.isCritical = isCritical;
-      vm.isFixed = isFixed;
-      vm.isHidden = isHidden;
-      vm.isRegressed = isRegressed;
-      vm.isValidDate = isValidDate;
-      vm.notificationsDisabled = notificationsDisabled;
-      vm.promoteToExternal = promoteToExternal;
-      vm.project = {};
-      vm.remove = remove;
-      vm.removeReferenceLink = removeReferenceLink;
-      vm.recentOccurrences = {
-        get: function (options) {
-          return eventService.getByStackId(_stackId, options);
-        },
-        summary: {
-          showType: false
-        },
-        options: {
-          limit: 10,
-          mode: 'summary'
-        },
-        source: source + '.Recent'
-      };
-      vm.stack = {};
-      vm.stats = {};
-      vm.total_users = 0;
-      vm.updateIsCritical = updateIsCritical;
-      vm.updateIsFixed = updateIsFixed;
-      vm.updateIsHidden = updateIsHidden;
-      vm.updateNotifications = updateNotifications;
-
-      get().then(executeAction);
-    }]);
+    });
 }());

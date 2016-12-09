@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('exceptionless.autofocus', [])
-    .directive('autofocus', ['$timeout', function ($timeout) {
+    .directive('autofocus', function ($timeout) {
       return {
         restrict: 'A',
         scope: false,
@@ -17,5 +17,5 @@
           });
         }
       };
-    }]);
+    });
 }());

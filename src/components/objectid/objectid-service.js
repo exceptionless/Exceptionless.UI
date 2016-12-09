@@ -4,7 +4,7 @@
   'use strict';
 
   angular.module('exceptionless.objectid', [])
-  .factory('objectIDService', [function () {
+  .factory('objectIDService', function () {
 
     function create(id) {
       return new ObjectId(id);
@@ -28,5 +28,5 @@
     };
 
     return service;
-  }]);
+  });
 }());

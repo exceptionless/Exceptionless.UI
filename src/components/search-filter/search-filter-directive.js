@@ -8,9 +8,8 @@
         replace: true,
         scope: true,
         templateUrl: 'components/search-filter/search-filter-directive.tpl.html',
-        controller: ['filterService', function (filterService) {
+        controller: function (filterService) {
           var vm = this;
-
           function setSearchFilter(filter) {
             filterService.setFilter(filter);
           }
@@ -18,13 +17,15 @@
           function updateFilter() {
             vm.filter = filterService.getFilter();
           }
-          
-          vm.searchFilterForm = {};
-          vm.setSearchFilter = setSearchFilter;
-          vm.updateFilter = updateFilter;
 
-          updateFilter();
-        }],
+          this.$onInit = function $onInit() {
+            vm.searchFilterForm = {};
+            vm.setSearchFilter = setSearchFilter;
+            vm.updateFilter = updateFilter;
+
+            updateFilter();
+          };
+        },
         controllerAs: 'vm'
       };
   });

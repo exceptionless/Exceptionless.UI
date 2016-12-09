@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.stacks')
-    .factory('stacksActionsService', ['$ExceptionlessClient', 'dialogService', 'stackDialogService', 'stackService', 'notificationService', '$q', function ($ExceptionlessClient, dialogService, stackDialogService, stackService, notificationService, $q) {
+    .factory('stacksActionsService', function ($ExceptionlessClient, dialogService, stackDialogService, stackService, notificationService, $q) {
       var source = 'exceptionless.stacks.stacksActionsService';
 
       function executeAction(ids, action, onSuccess, onFailure) {
@@ -30,7 +30,7 @@
             }
 
             return executeAction(ids, stackService.remove, onSuccess, onFailure);
-          });
+          }).catch(function(e){});
         }
       };
 
@@ -49,7 +49,7 @@
             }
 
             return executeAction(ids, function(ids) { return stackService.markFixed(ids, version); }, onSuccess, onFailure);
-          });
+          }).catch(function(e){});
         }
       };
 
@@ -113,5 +113,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

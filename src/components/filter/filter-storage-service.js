@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.filter')
-    .factory('filterStoreService', ['$window', 'locker', function ($window, locker) {
+    .factory('filterStoreService', function ($window, locker) {
       var _store = locker.driver('local').namespace('filter');
 
       function getTimeFilter() {
@@ -19,5 +19,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

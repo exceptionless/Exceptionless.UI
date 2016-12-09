@@ -11,9 +11,8 @@
           settings: '='
         },
         templateUrl: 'app/session/sessions-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService) {
+        controller: function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService) {
           var vm = this;
-          var source = vm.settings.source + '.sessions';
 
           function canRefresh(data) {
             if (!!data && data.type === 'PersistentEvent') {
@@ -62,6 +61,7 @@
           }
 
           function getDuration(ev) {
+            // TODO: this binding expression can be optimized.
             if (ev.data.SessionEnd) {
               return ev.data.Value || 0;
             }
@@ -69,13 +69,9 @@
             return moment().diff(ev.date, 'seconds');
           }
 
-          function hasEvents() {
-            return vm.events && vm.events.length > 0;
-          }
-
           function open(id, event) {
             var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
-            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
+            $ExceptionlessClient.createFeatureUsage(vm.source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
             if (openInNewTab) {
               $window.open($state.href('app.event', { id: id }, { absolute: true }), '_blank');
             } else {
@@ -86,28 +82,30 @@
           }
 
           function nextPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
+            $ExceptionlessClient.createFeatureUsage(vm.source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
+            $ExceptionlessClient.createFeatureUsage(vm.source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
-          vm.canRefresh = canRefresh;
-          vm.events = [];
-          vm.get = get;
-          vm.getDuration = getDuration;
-          vm.hasEvents = hasEvents;
-          vm.hasFilter = filterService.hasFilter;
-          vm.loading = true;
-          vm.open = open;
-          vm.nextPage = nextPage;
-          vm.previousPage = previousPage;
-          vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
-          get();
-        }],
+          this.$onInit = function $onInit() {
+            vm.source = vm.settings.source + '.sessions';
+            vm.canRefresh = canRefresh;
+            vm.events = [];
+            vm.get = get;
+            vm.getDuration = getDuration;
+            vm.hasFilter = filterService.hasFilter;
+            vm.loading = true;
+            vm.open = open;
+            vm.nextPage = nextPage;
+            vm.previousPage = previousPage;
+            vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
+            get();
+          };
+        },
         controllerAs: 'vm'
       };
     });

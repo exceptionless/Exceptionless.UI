@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.search', ['restangular'])
-    .factory('searchService', ['$cacheFactory', '$timeout', '$q', 'Restangular', function ($cacheFactory, $timeout, $q, Restangular) {
+    .factory('searchService', function ($cacheFactory, $timeout, $q, Restangular) {
       var _cache = $cacheFactory('http:search');
 
       var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
@@ -32,5 +32,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

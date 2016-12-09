@@ -15,9 +15,8 @@
         title: '='
       },
       templateUrl: 'app/event/extended-data-item-directive.tpl.html',
-      controller: ['$scope', 'notificationService', function ($scope, notificationService) {
+      controller: function ($scope, notificationService) {
         var vm = this;
-
         function copied() {
           notificationService.success('Copied!');
         }
@@ -49,25 +48,23 @@
             }, {});
         }
 
-        function hasData() {
-          return typeof vm.data !== 'undefined' && !angular.equals({}, vm.data);
-        }
-
         function promoteTab() {
           return $scope.promoteTab({ tabName: vm.title });
         }
 
-        vm.copied = copied;
-        vm.canPromote = $scope.canPromote !== false;
-        vm.data = getData($scope.data, $scope.excludedKeys);
-        vm.data_json = (hasData() ? angular.toJson(vm.data) : '');
-        vm.demoteTab =  demoteTab;
-        vm.hasData = hasData;
-        vm.isPromoted =  $scope.isPromoted === true;
-        vm.promoteTab = promoteTab;
-        vm.showRaw = false;
-        vm.title = $scope.title;
-      }],
+        this.$onInit = function $onInit() {
+          vm.copied = copied;
+          vm.canPromote = $scope.canPromote !== false;
+          vm.demoteTab = demoteTab;
+          vm.data = getData($scope.data, $scope.excludedKeys);
+          vm.hasData = typeof vm.data !== 'undefined' && !angular.equals({}, vm.data);
+          vm.data_json = (vm.hasData ? angular.toJson(vm.data) : '');
+          vm.isPromoted = $scope.isPromoted === true;
+          vm.promoteTab = promoteTab;
+          vm.showRaw = false;
+          vm.title = $scope.title;
+        };
+      },
       controllerAs: 'vm'
     };
   }]);

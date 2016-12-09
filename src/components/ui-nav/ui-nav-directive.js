@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.ui-nav', [])
-    .directive('uiNav', [function () {
+    .directive('uiNav', function () {
       return {
         restrict: 'AC',
         link: function(scope, element) {
@@ -97,5 +97,5 @@
           });
         }
       };
-    }]);
+    });
 }());

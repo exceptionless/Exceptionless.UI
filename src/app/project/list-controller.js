@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.List', ['projectService', function (projectService) {
+    .controller('project.List', function (projectService) {
       var vm = this;
       vm.projects = {
         get: projectService.getAll,
@@ -11,6 +11,5 @@
           mode: 'stats'
         }
       };
-    }
-    ]);
+    });
 }());

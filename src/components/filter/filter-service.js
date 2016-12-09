@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.filter')
-    .factory('filterService', ['$rootScope', 'filterStoreService', 'objectIDService', function ($rootScope, filterStoreService, objectIDService) {
+    .factory('filterService', function ($rootScope, filterStoreService, objectIDService) {
       var DEFAULT_TIME_FILTER = 'last week';
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
@@ -224,5 +224,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

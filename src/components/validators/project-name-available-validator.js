@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.validators')
-    .directive('projectNameAvailableValidator', ['$timeout', '$q', 'projectService', function($timeout, $q, projectService) {
+    .directive('projectNameAvailableValidator', function($timeout, $q, projectService) {
       return {
         restrict: 'A',
         require: 'ngModel',
@@ -30,5 +30,5 @@
           };
         }
       };
-    }]);
+    });
 }());

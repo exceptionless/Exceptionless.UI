@@ -1,5 +1,5 @@
 <ul class="nav">
-  <li ng-class="{active: appVm.isTypeMenuActive('error')}">
+  <li ng-class="{active: appVm.isMenuActive.error}">
     <a href="#" class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -11,38 +11,38 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">Exceptions</li>
       <li>
-        <a ng-href="{{appVm.getDashboardUrl('error')}}">
+        <a ng-href="{{appVm.urls.dashboard.error}}">
           <i class="fa fa-dashboard fa-fw"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getRecentUrl('error')}}">
+        <a ng-href="{{appVm.urls.recent.error}}">
           <i class="fa fa-calendar fa-fw"></i>
           <span>Most Recent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getFrequentUrl('error')}}">
+        <a ng-href="{{appVm.urls.frequent.error}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>Most Frequent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getUsersUrl('error')}}">
+        <a ng-href="{{appVm.urls.users.error}}">
           <i class="fa fa-users fa-fw"></i>
           <span>Most Users</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getNewUrl('error')}}">
+        <a ng-href="{{appVm.urls.new.error}}">
           <i class="fa fa-asterisk fa-fw"></i>
           <span>New</span>
         </a>
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isTypeMenuActive('log')}">
+  <li ng-class="{active: appVm.isMenuActive.log}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -54,38 +54,38 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">Log Messages</li>
       <li>
-        <a ng-href="{{appVm.getDashboardUrl('log')}}">
+        <a ng-href="{{appVm.urls.dashboard.log}}">
           <i class="fa fa-dashboard fa-fw"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getRecentUrl('log')}}">
+        <a ng-href="{{appVm.urls.recent.log}}">
           <i class="fa fa-calendar fa-fw"></i>
           <span>Most Recent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getFrequentUrl('log')}}">
+        <a ng-href="{{appVm.urls.frequent.log}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>Most Frequent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getUsersUrl('log')}}">
+        <a ng-href="{{appVm.urls.users.log}}">
           <i class="fa fa-users fa-fw"></i>
           <span>Most Users</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getNewUrl('log')}}">
+        <a ng-href="{{appVm.urls.new.log}}">
           <i class="fa fa-asterisk fa-fw"></i>
           <span>New</span>
         </a>
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isTypeMenuActive('404')}">
+  <li ng-class="{active: appVm.isMenuActive['404']}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -97,38 +97,38 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">Broken Links</li>
       <li>
-        <a ng-href="{{appVm.getDashboardUrl('404')}}">
+        <a ng-href="{{appVm.urls.dashboard['404']}}">
           <i class="fa fa-dashboard fa-fw"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getRecentUrl('404')}}">
+        <a ng-href="{{appVm.urls.recent['404']}}">
           <i class="fa fa-calendar fa-fw"></i>
           <span>Most Recent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getFrequentUrl('404')}}">
+        <a ng-href="{{appVm.urls.frequent['404']}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>Most Frequent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getUsersUrl('404')}}">
+        <a ng-href="{{appVm.urls.users['404']}}">
           <i class="fa fa-users fa-fw"></i>
           <span>Most Users</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getNewUrl('404')}}">
+        <a ng-href="{{appVm.urls.new['404']}}">
           <i class="fa fa-asterisk fa-fw"></i>
           <span>New</span>
         </a>
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isTypeMenuActive('usage')}">
+  <li ng-class="{active: appVm.isMenuActive.usage}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -140,38 +140,38 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">Feature Usages</li>
       <li>
-        <a ng-href="{{appVm.getDashboardUrl('usage')}}">
+        <a ng-href="{{appVm.urls.dashboard.usage}}">
           <i class="fa fa-dashboard fa-fw"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getRecentUrl('usage')}}">
+        <a ng-href="{{appVm.urls.recent.usage}}">
           <i class="fa fa-calendar fa-fw"></i>
           <span>Most Recent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getFrequentUrl('usage')}}">
+        <a ng-href="{{appVm.urls.frequent.usage}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>Most Frequent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getUsersUrl('usage')}}">
+        <a ng-href="{{appVm.urls.users.usage}}">
           <i class="fa fa-users fa-fw"></i>
           <span>Most Users</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getNewUrl('usage')}}">
+        <a ng-href="{{appVm.urls.new.usage}}">
           <i class="fa fa-asterisk fa-fw"></i>
           <span>New</span>
         </a>
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isAllMenuActive()}">
+  <li ng-class="{active: appVm.isMenuActive.all}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -183,38 +183,38 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">All Events</li>
       <li>
-        <a ng-href="{{appVm.getDashboardUrl()}}">
+        <a ng-href="{{appVm.urls.dashboard.all}}">
           <i class="fa fa-dashboard fa-fw"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getRecentUrl()}}">
+        <a ng-href="{{appVm.urls.recent.all}}">
           <i class="fa fa-calendar fa-fw"></i>
           <span>Most Recent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getFrequentUrl()}}">
+        <a ng-href="{{appVm.urls.frequent.all}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>Most Frequent</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getUsersUrl()}}">
+        <a ng-href="{{appVm.urls.users.all}}">
           <i class="fa fa-users fa-fw"></i>
           <span>Most Users</span>
         </a>
       </li>
       <li>
-        <a ng-href="{{appVm.getNewUrl()}}">
+        <a ng-href="{{appVm.urls.new.all}}">
           <i class="fa fa-asterisk fa-fw"></i>
           <span>New</span>
         </a>
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isReportsMenuActive()}">
+  <li ng-class="{active: appVm.isMenuActive.reports}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -226,14 +226,14 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">Reports</li>
       <li>
-        <a ng-href="{{appVm.getSessionDashboardUrl()}}">
+        <a ng-href="{{appVm.urls.sessionDashboard}}">
           <i class="fa fa-heartbeat fa-fw"></i>
           <span>Sessions</span>
         </a>
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isAdminMenuActive()}">
+  <li ng-class="{active: appVm.isMenuActive.admin}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>

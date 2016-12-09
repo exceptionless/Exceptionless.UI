@@ -2,15 +2,14 @@
   'use strict';
 
   angular.module('exceptionless.date-filter')
-    .directive('dateFilter', ['$interval', 'dateRangeParserService', function ($interval, dateRangeParserService) {
+    .directive('dateFilter', function ($interval, dateRangeParserService) {
       return {
         restrict: 'E',
         replace: true,
         scope: true,
         templateUrl: 'components/date-filter/date-filter-directive.tpl.html',
-        controller: ['$interval', '$scope', 'dialogs', 'filterService', function ($interval, $scope, dialogs, filterService) {
+        controller: function ($interval, $scope, dialogs, filterService) {
           var vm = this;
-
           function getFilteredDisplayName() {
             var time = filterService.getTime();
             if (time === 'last hour') {
@@ -82,7 +81,7 @@
               }
             }
 
-            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: start, end: end }).result.then(onSuccess);
+            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: start, end: end }).result.then(onSuccess).catch(function(e){});
           }
 
           function setFilter(filter) {
@@ -93,20 +92,22 @@
             vm.filteredDisplayName = getFilteredDisplayName();
           }
 
-          var interval = $interval(updateFilterDisplayName, 60 * 1000);
-          $scope.$on('$destroy', function () {
-            $interval.cancel(interval);
-          });
+          this.$onInit = function $onInit() {
+            var interval = $interval(updateFilterDisplayName, 60 * 1000);
+            $scope.$on('$destroy', function () {
+              $interval.cancel(interval);
+            });
 
-          vm.hasFilter = hasFilter;
-          vm.isActive = isActive;
-          vm.filteredDisplayName = getFilteredDisplayName();
-          vm.isDropDownOpen = false;
-          vm.setCustomFilter = setCustomFilter;
-          vm.setFilter = setFilter;
-          vm.updateFilterDisplayName = updateFilterDisplayName;
-        }],
+            vm.hasFilter = hasFilter;
+            vm.isActive = isActive;
+            vm.filteredDisplayName = getFilteredDisplayName();
+            vm.isDropDownOpen = false;
+            vm.setCustomFilter = setCustomFilter;
+            vm.setFilter = setFilter;
+            vm.updateFilterDisplayName = updateFilterDisplayName;
+          };
+        },
         controllerAs: 'vm'
       };
-    }]);
+    });
 }());

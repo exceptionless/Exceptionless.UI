@@ -75,15 +75,15 @@
       <div class="panel-heading">
         Stack
         <span class="labels">
-          <span class="label label-success" ng-if="vm.isFixed()">
+          <span class="label label-success" ng-if="!!vm.stack.date_fixed && !!vm.stack.is_regressed">
               <span class="hidden-xs">FIXED<span ng-if="vm.stack.fixed_in_version"> IN {{vm.stack.fixed_in_version}}</span></span>
               <span class="visible-xs">F</span>
           </span>
-          <span class="label label-success" ng-if="vm.isRegressed()">
+          <span class="label label-success" ng-if="!!vm.stack.is_regressed">
               <span class="hidden-xs">REGRESSED</span>
               <span class="visible-xs">R</span>
           </span>
-          <span class="label label-success" ng-if="vm.isHidden()">
+          <span class="label label-success" ng-if="!!vm.stack.is_hidden">
               <span class="hidden-xs">HIDDEN</span>
               <span class="visible-xs">H</span>
           </span>
@@ -91,8 +91,8 @@
 
         <div class="btn-toolbar pull-right hidden-print" role="toolbar" aria-label="Stack Options">
           <div class="btn-group btn-group-sm" role="group" ng-if="vm.stack.type === 'error' || vm.stack.type === '404'">
-            <button type="button" role="button" class="btn btn-default" title="{{vm.isFixed() ? 'Mark this stack as not fixed' : 'Mark this stack as fixed'}}" promise-button="vm.updateIsFixed()" promise-button-busy-text="{{vm.isFixed() ? 'Marking Not Fixed' : 'Marking Fixed' }}" promise-button-busy-spinner-class="fa-size-sm">
-              {{vm.isFixed() ? 'Mark Not Fixed' : 'Mark Fixed' }}
+            <button type="button" role="button" class="btn btn-default" title="{{(vm.stack.date_fixed && !vm.stack.is_regressed) ? 'Mark this stack as not fixed' : 'Mark this stack as fixed'}}" promise-button="vm.updateIsFixed()" promise-button-busy-text="{{(vm.stack.date_fixed && !vm.stack.is_regressed) ? 'Marking Not Fixed' : 'Marking Fixed' }}" promise-button-busy-spinner-class="fa-size-sm">
+              {{(vm.stack.date_fixed && !vm.stack.is_regressed) ? 'Mark Not Fixed' : 'Mark Fixed' }}
             </button>
           </div>
 
@@ -103,14 +103,14 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
-              <li><a ng-click="vm.updateIsHidden()" title="Hide this stack from reports and mutes occurrence notifications"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw" ng-class="{'fa-check': vm.isHidden()}"></i>Hide</a></li>
-              <li><a ng-click="vm.updateIsCritical()" title="All future occurrences will be marked as critical"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw" ng-class="{'fa-check': vm.isCritical()}"></i>Future Occurrences Are Critical</a></li>
-              <li><a ng-click="vm.updateNotifications()" title="Stop sending occurrence notifications for this stack"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw" ng-class="{'fa-check': vm.notificationsDisabled()}"></i>Disable Notifications</a></li>
+              <li><a ng-click="vm.updateIsHidden()" title="Hide this stack from reports and mutes occurrence notifications"><i ng-if="vm.stack.is_hidden || vm.stack.occurrences_are_critical || vm.stack.disable_notifications" class="fa fa-fw" ng-class="{'fa-check': !!vm.stack.is_hidden}"></i>Hide</a></li>
+              <li><a ng-click="vm.updateIsCritical()" title="All future occurrences will be marked as critical"><i ng-if="vm.stack.is_hidden || vm.stack.occurrences_are_critical || vm.stack.disable_notifications" class="fa fa-fw" ng-class="{'fa-check': !!vm.stack.occurrences_are_critical}"></i>Future Occurrences Are Critical</a></li>
+              <li><a ng-click="vm.updateNotifications()" title="Stop sending occurrence notifications for this stack"><i ng-if="vm.stack.is_hidden || vm.stack.occurrences_are_critical || vm.stack.disable_notifications" class="fa fa-fw" ng-class="{'fa-check': !!vm.stack.disable_notifications}"></i>Disable Notifications</a></li>
               <li class="divider"></li>
-              <li><a ng-click="vm.promoteToExternal()" title="Used to promote stacks to external systems."><i ng-if="vm.hasSelectedOption()" class="fa fa-fw"></i>Promote To External</a></li>
-              <li><a ng-click="vm.addReferenceLink()" title="Add a reference link to an external resource."><i ng-if="vm.hasSelectedOption()" class="fa fa-fw"></i>Add Reference Link</a></li>
+              <li><a ng-click="vm.promoteToExternal()" title="Used to promote stacks to external systems."><i ng-if="vm.stack.is_hidden || vm.stack.occurrences_are_critical || vm.stack.disable_notifications" class="fa fa-fw"></i>Promote To External</a></li>
+              <li><a ng-click="vm.addReferenceLink()" title="Add a reference link to an external resource."><i ng-if="vm.stack.is_hidden || vm.stack.occurrences_are_critical || vm.stack.disable_notifications" class="fa fa-fw"></i>Add Reference Link</a></li>
               <li class="divider"></li>
-              <li><a ng-click="vm.remove()" title="Delete this stack"><i ng-if="vm.hasSelectedOption()" class="fa fa-fw"></i>Delete</a></li>
+              <li><a ng-click="vm.remove()" title="Delete this stack"><i ng-if="vm.stack.is_hidden || vm.stack.occurrences_are_critical || vm.stack.disable_notifications" class="fa fa-fw"></i>Delete</a></li>
             </ul>
           </div>
         </div>
@@ -127,7 +127,7 @@
               <th>Project</th>
               <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
             </tr>
-            <tr ng-if="vm.isFixed()">
+            <tr ng-if="(vm.stack.date_fixed && !vm.stack.is_regressed)">
               <th>Date Fixed</th>
               <td><span>{{vm.stack.date_fixed | date: 'medium'}}</span></td>
             </tr>
@@ -135,21 +135,21 @@
               <th>Description</th>
               <td><span truncate lines="2">{{vm.stack.description}}</span></td>
             </tr>
-            <tr ng-if="vm.hasTags()">
+            <tr ng-if="vm.stack.tags.length > 0">
               <th>Tags</th>
               <td><span class="label label-info" ng-repeat="tag in vm.stack.tags track by tag">{{tag}}</span></td>
             </tr>
-            <tr ng-if="vm.hasReference()">
-              <th>{{vm.hasReferences() ? 'Reference Links' : 'Reference Link'}}</th>
+            <tr ng-if="vm.stack.references.length > 0">
+              <th>{{(vm.stack.references.length > 1) ? 'Reference Links' : 'Reference Link'}}</th>
               <td>
-                <ul ng-if="vm.hasReferences()">
+                <ul ng-if="vm.stack.references.length > 1">
                   <li ng-repeat="reference in vm.stack.references track by reference">
                     <a ng-href="{{::reference}}" target="_blank">{{::reference}}</a>
                     <a class="delete-link" ng-click="vm.removeReferenceLink(reference)"><i class="fa fa-fw fa-times"></i></a>
                   </li>
                 </ul>
 
-                <div ng-if="!vm.hasReferences()">
+                <div ng-if="vm.stack.references.length === 1">
                   <a ng-href="{{::vm.stack.references[0]}}" target="_blank">{{::vm.stack.references[0]}}</a>
                   <a class="delete-link" ng-click="vm.removeReferenceLink(vm.stack.references[0])"><i class="fa fa-fw fa-times"></i></a>
                 </div>
@@ -177,7 +177,7 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
               <li ng-repeat="o in vm.chartOptions | filter: { render: true } track by o.field">
-                <a ng-click="o.selected = !o.selected; vm.getStats();" title="{{::o.title}}"><i class="fa fa-fw" ng-class="{'fa-check': o.selected}" ng-if="vm.hasSelectedChartOption()"></i>Show {{::o.name}}</a>
+                <a ng-click="o.selected = !o.selected; vm.getStats();" title="{{::o.title}}"><i class="fa fa-fw" ng-class="{'fa-check': !!o.selected}" ng-if="vm.hasSelectedChartOption()"></i>Show {{::o.name}}</a>
               </li>
             </ul>
           </div>

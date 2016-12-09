@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.notification', ['toaster'])
-    .factory('notificationService', ['toaster', function (toaster) {
+    .factory('notificationService', function (toaster) {
       function error(title, text) {
         toaster.pop('error', title, text, 5000);
       }
@@ -32,5 +32,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

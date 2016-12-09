@@ -4,7 +4,7 @@
     <tr>
       <th class="selection hidden-xs">
         <label class="i-checks m-b-none">
-          <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.hasSelection()" ng-disabled="!vm.hasStacks()"><i></i>
+          <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.selectedIds.length > 0" ng-disabled="vm.stacks.length === 0"><i></i>
         </label>
       </th>
       <th>Summary</th>
@@ -15,7 +15,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr class="row-clickable" ng-repeat="stack in vm.stacks track by stack.id" ng-if="vm.hasStacks()">
+    <tr class="row-clickable" ng-repeat="stack in vm.stacks track by stack.id" ng-if="vm.stacks.length > 0">
       <td class="hidden-xs">
         <label class="i-checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="stack.id"><i></i></label>
       </td>
@@ -35,15 +35,15 @@
         <timeago date="stack.last_occurrence"></timeago>
       </abbr></td>
     </tr>
-    <tr ng-if="!vm.hasStacks() || vm.loading">
+    <tr ng-if="vm.stacks.length === 0 || vm.loading">
       <td class="hidden-xs"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
       <td colspan="5" class="hidden-xs">
         <strong ng-if="vm.loading">Loading...</strong>
-        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
+        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
       </td>
       <td colspan="3" class="visible-xs">
         <strong ng-if="vm.loading">Loading...</strong>
-        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
+        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
       </td>
     </tr>
     </tbody>

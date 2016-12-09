@@ -2,17 +2,10 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.List', ['$ExceptionlessClient', '$rootScope', '$scope', '$window', '$state', 'billingService', 'dialogs', 'dialogService', 'filterService', 'linkService', 'notificationService', 'organizationService', 'paginationService', 'STRIPE_PUBLISHABLE_KEY', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, filterService, linkService, notificationService, organizationService, paginationService, STRIPE_PUBLISHABLE_KEY) {
-      var source = 'exceptionless.organization.List';
-      var settings = { mode: 'stats' };
+    .controller('organization.List', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, filterService, linkService, notificationService, organizationService, paginationService, STRIPE_PUBLISHABLE_KEY) {
       var vm = this;
-
       function add() {
-        return dialogs.create('app/organization/list/add-organization-dialog.tpl.html', 'AddOrganizationDialog as vm').result.then(createOrganization);
-      }
-
-      function canChangePlan() {
-        return !!STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
+        return dialogs.create('app/organization/list/add-organization-dialog.tpl.html', 'AddOrganizationDialog as vm').result.then(createOrganization).catch(function(e){});
       }
 
       function changePlan(organizationId) {
@@ -21,19 +14,20 @@
           return;
         }
 
-        return billingService.changePlan(organizationId);
+        return billingService.changePlan(organizationId).catch(function(e){});
       }
 
       function createOrganization(name) {
         function onSuccess(response) {
           vm.organizations.push(response.data.plain());
+          vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organizations.length > 0;
         }
 
         function onFailure(response) {
           if (response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message).then(function () {
               return createOrganization(name);
-            });
+            }).catch(function(e){});
           }
 
           var message = 'An error occurred while creating the organization.';
@@ -51,6 +45,7 @@
       function get(options, useCache) {
         function onSuccess(response) {
           vm.organizations = response.data.plain();
+          vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organizations.length > 0;
 
           var links = linkService.getLinksQueryParameters(response.headers('link'));
           vm.previous = links['previous'];
@@ -66,7 +61,7 @@
         }
 
         vm.loading = vm.organizations.length === 0;
-        vm.currentOptions = options || settings;
+        vm.currentOptions = options || vm._settings;
         return organizationService.getAll(vm.currentOptions, useCache).then(onSuccess).finally(function() {
           vm.loading = false;
         });
@@ -76,6 +71,7 @@
         return dialogService.confirmDanger('Are you sure you want to leave this organization?', 'LEAVE ORGANIZATION').then(function () {
           function onSuccess() {
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
+            vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organizations.length > 0;
           }
 
           function onFailure(response) {
@@ -88,12 +84,12 @@
           }
 
           return organizationService.removeUser(organization.id, user.email_address).then(onSuccess, onFailure);
-        });
+        }).catch(function(e){});
       }
 
       function open(id, event) {
         var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
-        $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
         if (openInNewTab) {
           $window.open($state.href('app.organization.manage', { id: id }, { absolute: true }), '_blank');
         } else {
@@ -104,22 +100,23 @@
       }
 
       function nextPage() {
-        $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.nextPage').setProperty('next', vm.next).submit();
         return get(vm.next);
       }
 
       function previousPage() {
-        $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.previousPage').setProperty('previous', vm.previous).submit();
         return get(vm.previous);
       }
 
       function remove(organization) {
-        $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('organization', organization).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.remove').setProperty('organization', organization).submit();
         return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
           function onSuccess() {
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
+            vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organizations.length > 0;
             notificationService.info('Successfully queued the organization for deletion.');
-            $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('organization', organization).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('organization', organization).submit();
           }
 
           function onFailure(response) {
@@ -128,28 +125,32 @@
               message += ' Message: ' + response.data.message;
             }
 
-            $ExceptionlessClient.createFeatureUsage(source + '.remove.error').setProperty('organization', organization).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.error').setProperty('organization', organization).submit();
             notificationService.error(message);
           }
 
           return organizationService.remove(organization.id).then(onSuccess, onFailure);
-        });
+        }).catch(function(e){});
       }
 
-      vm.add = add;
-      vm.canChangePlan = canChangePlan;
-      vm.changePlan = changePlan;
-      vm.get = get;
-      vm.hasFilter = filterService.hasFilter;
-      vm.leave = leave;
-      vm.loading = true;
-      vm.nextPage = nextPage;
-      vm.open = open;
-      vm.organizations = [];
-      vm.previousPage = previousPage;
-      vm.remove = remove;
+      this.$onInit = function $onInit() {
+        vm._source = 'exceptionless.organization.List';
+        vm._settings = { mode: 'stats' };
+        vm.add = add;
+        vm.canChangePlan = false;
+        vm.changePlan = changePlan;
+        vm.get = get;
+        vm.hasFilter = filterService.hasFilter;
+        vm.leave = leave;
+        vm.loading = true;
+        vm.nextPage = nextPage;
+        vm.open = open;
+        vm.organizations = [];
+        vm.previousPage = previousPage;
+        vm.remove = remove;
 
-      $ExceptionlessClient.submitFeatureUsage(source);
-      get();
-    }]);
+        $ExceptionlessClient.submitFeatureUsage(vm._source);
+        get();
+      };
+    });
 }());

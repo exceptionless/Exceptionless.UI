@@ -28,7 +28,7 @@
     'exceptionless.validators',
     'exceptionless.web-hook'
   ])
-  .config(['$stateProvider', function ($stateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider.state('app.organization', {
       abstract: true,
       url: '/organization',
@@ -50,5 +50,5 @@
       controllerAs: 'vm',
       templateUrl: 'app/organization/manage/manage.tpl.html'
     });
-  }]);
+  });
 }());

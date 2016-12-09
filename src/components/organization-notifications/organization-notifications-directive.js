@@ -13,7 +13,7 @@
     'exceptionless.refresh',
     'exceptionless.search'
   ])
-  .directive('organizationNotifications', [function() {
+  .directive('organizationNotifications', function() {
     return {
       restrict: 'E',
       replace: true,
@@ -24,9 +24,8 @@
         requiresPremium: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
-      controller: ['$scope', 'billingService', 'filterService', 'INTERCOM_APPID', '$intercom', 'notificationService', 'organizationService', 'projectService', 'searchService', 'STRIPE_PUBLISHABLE_KEY', function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, STRIPE_PUBLISHABLE_KEY) {
+      controller: function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, STRIPE_PUBLISHABLE_KEY) {
         var vm = this;
-
         function get() {
           return getOrganizations().then(getProjects).then(getFilterUsesPremiumFeatures).then(getOrganizationNotifications);
         }
@@ -269,48 +268,50 @@
             organizationId = vm.freeOrganizations[0].id;
           }
 
-          return billingService.changePlan(organizationId);
+          return billingService.changePlan(organizationId).catch(function(e){});
         }
 
         function showIntercom() {
           $intercom.showNewMessage();
         }
 
-        vm.exceededRequestLimitOrganizations = [];
-        vm.freeOrganizations = [];
-        vm.get = get;
-        vm.getOrganizationNotifications = getOrganizationNotifications;
-        vm.hasExceededRequestLimitOrganizations = hasExceededRequestLimitOrganizations;
-        vm.hasFreeOrganizations = hasFreeOrganizations;
-        vm.hasHourlyOverageOrganizations = hasHourlyOverageOrganizations;
-        vm.hasMonthlyOverageOrganizations = hasMonthlyOverageOrganizations;
-        vm.hasNotifications = false;
-        vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
-        vm.hasOrganizations = hasOrganizations;
-        vm.hasOrganizationsWithoutPremiumFeatures = hasOrganizationsWithoutPremiumFeatures;
-        vm.hasOrganizationsWithNoProjects = hasOrganizationsWithNoProjects;
-        vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
-        vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
-        vm.hasSuspendedOrganizations = hasSuspendedOrganizations;
-        vm.isIntercomEnabled = isIntercomEnabled;
-        vm.onFilterChanged = onFilterChanged;
-        vm.organizations = [];
-        vm.organizationsWithoutPremiumFeatures = [];
-        vm.organizationsWithNoProjects = [];
-        vm.hourlyOverageOrganizations = [];
-        vm.monthlyOverageOrganizations = [];
-        vm.projects = [];
-        vm.projectsRequiringConfiguration = [];
-        vm.showChangePlanDialog = showChangePlanDialog;
-        vm.showIntercom = showIntercom;
-        vm.suspendedForBillingOrganizations = [];
-        vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
-        vm.suspendedOrganizations = [];
+        this.$onInit = function $onInit() {
+          vm.exceededRequestLimitOrganizations = [];
+          vm.freeOrganizations = [];
+          vm.get = get;
+          vm.getOrganizationNotifications = getOrganizationNotifications;
+          vm.hasExceededRequestLimitOrganizations = hasExceededRequestLimitOrganizations;
+          vm.hasFreeOrganizations = hasFreeOrganizations;
+          vm.hasHourlyOverageOrganizations = hasHourlyOverageOrganizations;
+          vm.hasMonthlyOverageOrganizations = hasMonthlyOverageOrganizations;
+          vm.hasNotifications = false;
+          vm.hasProjectsRequiringConfiguration = hasProjectsRequiringConfiguration;
+          vm.hasOrganizations = hasOrganizations;
+          vm.hasOrganizationsWithoutPremiumFeatures = hasOrganizationsWithoutPremiumFeatures;
+          vm.hasOrganizationsWithNoProjects = hasOrganizationsWithNoProjects;
+          vm.hasSuspendedForBillingOrganizations = hasSuspendedForBillingOrganizations;
+          vm.hasSuspendedForAbuseOrOverageOrNotActiveOrganizations = hasSuspendedForAbuseOrOverageOrNotActiveOrganizations;
+          vm.hasSuspendedOrganizations = hasSuspendedOrganizations;
+          vm.isIntercomEnabled = isIntercomEnabled;
+          vm.onFilterChanged = onFilterChanged;
+          vm.organizations = [];
+          vm.organizationsWithoutPremiumFeatures = [];
+          vm.organizationsWithNoProjects = [];
+          vm.hourlyOverageOrganizations = [];
+          vm.monthlyOverageOrganizations = [];
+          vm.projects = [];
+          vm.projectsRequiringConfiguration = [];
+          vm.showChangePlanDialog = showChangePlanDialog;
+          vm.showIntercom = showIntercom;
+          vm.suspendedForBillingOrganizations = [];
+          vm.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
+          vm.suspendedOrganizations = [];
 
-        get();
-      }],
+          get();
+        };
+      },
       controllerAs: 'vm'
     };
-  }]);
+  });
 }());
 

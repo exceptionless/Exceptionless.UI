@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.validators')
-    .directive('semanticVersionValidator', ['$timeout', '$q', 'searchService', function($timeout, $q, searchService) {
+    .directive('semanticVersionValidator', function() {
       return {
         restrict: 'A',
         require: 'ngModel',
@@ -26,5 +26,5 @@
           };
         }
       };
-    }]);
+    });
 }());

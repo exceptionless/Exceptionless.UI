@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.rate-limit')
-  .factory('rateLimitService', [function ($rootScope) {
+  .factory('rateLimitService', function ($rootScope) {
     var _rateLimit = -1;
     var _rateLimitExceeded = false;
     var _rateLimitRemaining = -1;
@@ -27,5 +27,5 @@
     };
 
     return service;
-  }]);
+  });
 }());

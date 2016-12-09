@@ -4,7 +4,7 @@
   'use strict';
 
   angular.module('exceptionless.object-dump')
-    .factory('handlebarsService', [function () {
+    .factory('handlebarsService', function () {
       var _defaultsRegistered = false;
       var _templates = { __default: '{{> valueDump}}' };
       var _compiledTemplates = {};
@@ -177,5 +177,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

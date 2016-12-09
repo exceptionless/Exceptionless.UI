@@ -4,7 +4,7 @@
   angular.module('exceptionless.stat', [
     'restangular',
     'exceptionless.filter'
-  ]).factory('statService', ['filterService', 'Restangular', function (filterService, Restangular) {
+  ]).factory('statService', function (filterService, Restangular) {
       function get(fields, optionsCallback) {
         var options = (fields && fields.length > 0) ? { fields: fields } : {};
         optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
@@ -23,5 +23,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

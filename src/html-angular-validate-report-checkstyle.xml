@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<checkstyle encoding="UTF-8" version="6.9">
+   <file name="C:\Code\Exceptionless.UI\src/index.html">
+      <error line="48" col="22" severity="error" source="html-angular-validate" message="Attribute &#8220;loading-bar&#8221; not allowed on element &#8220;body&#8221; at this point."/>
+      <error line="49" col="28" severity="error" source="html-angular-validate" message="Element &#8220;google-tag-manager&#8221; not allowed as child of element &#8220;body&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+      <error line="50" col="30" severity="error" source="html-angular-validate" message="Element &#8220;release-notification&#8221; not allowed as child of element &#8220;body&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/account/manage.tpl.html">
+      <error line="7" col="71" severity="error" source="html-angular-validate" message="Element &#8220;uib-tabset&#8221; not allowed as child of element &#8220;div&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+      <error line="9" col="94" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="34" col="101" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="64" col="56" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="170" col="79" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="208" col="228" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="215" col="229" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="216" col="227" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="217" col="235" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="218" col="227" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="236" col="62" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/admin/dashboard.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/app.tpl.html">
+      <error line="8" col="125" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/auth/forgot-password.tpl.html">
+      <error line="16" col="108" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="29" col="152" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/auth/login.tpl.html">
+      <error line="15" col="110" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="20" col="233" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="21" col="231" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="22" col="239" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="23" col="231" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="58" col="148" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/auth/reset-password.tpl.html">
+      <error line="16" col="92" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="44" col="155" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/auth/signup.tpl.html">
+      <error line="16" col="111" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="21" col="233" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="22" col="231" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="23" col="239" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="24" col="231" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="87" col="149" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/blocks/header.tpl.html">
+      <error line="3" col="150" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="6" col="140" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="30" col="129" severity="error" source="html-angular-validate" message="Element &#8220;img&#8221; is missing required attribute &#8220;src&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/blocks/nav.tpl.html">
+      <error line="46" col="13" severity="error" source="html-angular-validate" message="Attribute &#8220;href&#8221; without an explicit value seen. The attribute may be dropped by IE7."/>
+      <error line="89" col="13" severity="error" source="html-angular-validate" message="Attribute &#8220;href&#8221; without an explicit value seen. The attribute may be dropped by IE7."/>
+      <error line="132" col="13" severity="error" source="html-angular-validate" message="Attribute &#8220;href&#8221; without an explicit value seen. The attribute may be dropped by IE7."/>
+      <error line="175" col="13" severity="error" source="html-angular-validate" message="Attribute &#8220;href&#8221; without an explicit value seen. The attribute may be dropped by IE7."/>
+      <error line="218" col="13" severity="error" source="html-angular-validate" message="Attribute &#8220;href&#8221; without an explicit value seen. The attribute may be dropped by IE7."/>
+      <error line="237" col="13" severity="error" source="html-angular-validate" message="Attribute &#8220;href&#8221; without an explicit value seen. The attribute may be dropped by IE7."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/blocks/sidebar.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/dashboard.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/event.tpl.html">
+      <error line="10" col="258" severity="error" source="html-angular-validate" message="Attribute &#8220;clipboard&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="10" col="258" severity="error" source="html-angular-validate" message="Attribute &#8220;text&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="10" col="258" severity="error" source="html-angular-validate" message="Attribute &#8220;on-copied&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="10" col="258" severity="error" source="html-angular-validate" message="Attribute &#8220;supported&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="17" col="79" severity="error" source="html-angular-validate" message="Element &#8220;uib-tabset&#8221; not allowed as child of element &#8220;div&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+      <error line="23" col="42" severity="error" source="html-angular-validate" message="Element &#8220;uib-accordion&#8221; not allowed as child of element &#8220;div&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/extended-data-item-directive.tpl.html">
+      <error line="3" col="214" severity="error" source="html-angular-validate" message="Attribute &#8220;clipboard&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="3" col="214" severity="error" source="html-angular-validate" message="Attribute &#8220;text&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="3" col="214" severity="error" source="html-angular-validate" message="Attribute &#8220;on-copied&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="3" col="214" severity="error" source="html-angular-validate" message="Attribute &#8220;supported&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="3" col="214" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="7" col="106" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="8" col="131" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/reference.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/environment.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/error.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/extended-data.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/overview.tpl.html">
+      <error line="13" col="84" severity="error" source="html-angular-validate" message="Element &#8220;duration&#8221; not allowed as child of element &#8220;abbr&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/promoted.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/request.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/session.tpl.html">
+      <error line="23" col="86" severity="error" source="html-angular-validate" message="Element &#8220;duration&#8221; not allowed as child of element &#8220;abbr&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/event/tabs/simple-error.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/frequent.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/new.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/not-found.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/organization/list/add-organization-dialog.tpl.html">
+      <error line="1" col="72" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="31" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="32" col="99" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/organization/list/list.tpl.html">
+      <error line="27" col="126" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="68" col="90" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/organization/manage/add-user-dialog.tpl.html">
+      <error line="1" col="61" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="19" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="20" col="124" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/organization/manage/invoices-directive.tpl.html">
+      <error line="18" col="116" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/organization/manage/manage.tpl.html">
+      <error line="9" col="71" severity="error" source="html-angular-validate" message="Element &#8220;uib-tabset&#8221; not allowed as child of element &#8220;div&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+      <error line="11" col="83" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="54" col="98" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="67" col="111" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/payment/payment.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/add.tpl.html">
+      <error line="7" col="70" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="43" col="35" severity="error" source="html-angular-validate" message="A document must not include more than one &#8220;autofocus&#8221; attribute."/>
+      <error line="62" col="113" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/configure.tpl.html">
+      <error line="30" col="22" severity="error" source="html-angular-validate" message="No &#8220;p&#8221; element in scope but a &#8220;p&#8221; end tag seen."/>
+      <error line="34" col="139" severity="error" source="html-angular-validate" message="No &#8220;p&#8221; element in scope but a &#8220;p&#8221; end tag seen."/>
+      <error line="40" col="23" severity="error" source="html-angular-validate" message="Named character reference was not terminated by a semicolon. (Or &#8220;&amp;&#8221; should have been escaped as &#8220;&amp;amp;&#8221;.)"/>
+      <error line="40" col="95" severity="error" source="html-angular-validate" message="Named character reference was not terminated by a semicolon. (Or &#8220;&amp;&#8221; should have been escaped as &#8220;&amp;amp;&#8221;.)"/>
+      <error line="40" col="98" severity="error" source="html-angular-validate" message="Named character reference was not terminated by a semicolon. (Or &#8220;&amp;&#8221; should have been escaped as &#8220;&amp;amp;&#8221;.)"/>
+      <error line="40" col="108" severity="error" source="html-angular-validate" message="Named character reference was not terminated by a semicolon. (Or &#8220;&amp;&#8221; should have been escaped as &#8220;&amp;amp;&#8221;.)"/>
+      <error line="45" col="133" severity="error" source="html-angular-validate" message="No &#8220;p&#8221; element in scope but a &#8220;p&#8221; end tag seen."/>
+      <error line="49" col="144" severity="error" source="html-angular-validate" message="No &#8220;p&#8221; element in scope but a &#8220;p&#8221; end tag seen."/>
+      <error line="58" col="152" severity="error" source="html-angular-validate" message="Attribute &#8220;clipboard&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="58" col="152" severity="error" source="html-angular-validate" message="Attribute &#8220;text&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="58" col="152" severity="error" source="html-angular-validate" message="Attribute &#8220;on-copied&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="58" col="152" severity="error" source="html-angular-validate" message="Attribute &#8220;on-error&#8221; not allowed on element &#8220;a&#8221; at this point."/>
+      <error line="-2" col="6" severity="error" source="html-angular-validate" message="This document appears to be written in English. Consider adding &#8220;lang=&quot;en&quot;&#8221; (or variant) to the &#8220;html&#8221; start tag."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/list.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/manage/add-configuration-dialog.tpl.html">
+      <error line="1" col="70" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="25" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="26" col="126" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/manage/manage.tpl.html">
+      <error line="9" col="44" severity="error" source="html-angular-validate" message="Element &#8220;uib-tabset&#8221; not allowed as child of element &#8220;div&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+      <error line="44" col="111" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/manage/tabs/api-keys.tpl.html">
+      <error line="12" col="215" severity="error" source="html-angular-validate" message="Attribute &#8220;clipboard&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="12" col="215" severity="error" source="html-angular-validate" message="Attribute &#8220;text&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="12" col="215" severity="error" source="html-angular-validate" message="Attribute &#8220;on-copied&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="12" col="215" severity="error" source="html-angular-validate" message="Attribute &#8220;supported&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="12" col="215" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="13" col="121" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="22" col="85" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/manage/tabs/client-configuration.tpl.html">
+      <error line="23" col="58" severity="error" source="html-angular-validate" message="Attribute &#8220;editable-text&#8221; not allowed on element &#8220;div&#8221; at this point."/>
+      <error line="23" col="58" severity="error" source="html-angular-validate" message="Attribute &#8220;e-name&#8221; not allowed on element &#8220;div&#8221; at this point."/>
+      <error line="23" col="58" severity="error" source="html-angular-validate" message="Attribute &#8220;e-form&#8221; not allowed on element &#8220;div&#8221; at this point."/>
+      <error line="23" col="58" severity="error" source="html-angular-validate" message="Attribute &#8220;e-required&#8221; not allowed on element &#8220;div&#8221; at this point."/>
+      <error line="23" col="58" severity="error" source="html-angular-validate" message="Attribute &#8220;onbeforesave&#8221; not allowed on element &#8220;div&#8221; at this point."/>
+      <error line="23" col="58" severity="error" source="html-angular-validate" message="Attribute &#8220;onaftersave&#8221; not allowed on element &#8220;div&#8221; at this point."/>
+      <error line="26" col="101" severity="error" source="html-angular-validate" message="Attribute &#8220;editable-form&#8221; not allowed on element &#8220;form&#8221; at this point."/>
+      <error line="27" col="106" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="30" col="135" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="35" col="102" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="36" col="122" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/manage/tabs/general.tpl.html">
+      <error line="1" col="64" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/manage/tabs/integrations.tpl.html">
+      <error line="27" col="110" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="36" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/project/manage/tabs/settings.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/recent.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/session/dashboard.tpl.html">
+      <error line="49" col="74" severity="error" source="html-angular-validate" message="Element &#8220;duration&#8221; not allowed as child of element &#8220;span&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+      <error line="66" col="47" severity="error" source="html-angular-validate" message="Element &#8220;sessions&#8221; not allowed as child of element &#8220;div&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/session/sessions-directive.tpl.html">
+      <error line="22" col="50" severity="error" source="html-angular-validate" message="Element &#8220;duration&#8221; not allowed as child of element &#8220;abbr&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/stack/add-reference-dialog.tpl.html">
+      <error line="1" col="84" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="23" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="24" col="137" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/stack/stack.tpl.html">
+      <error line="94" col="397" severity="error" source="html-angular-validate" message="Attribute &#8220;promise-button&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="94" col="397" severity="error" source="html-angular-validate" message="Attribute &#8220;promise-button-busy-text&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="94" col="397" severity="error" source="html-angular-validate" message="Attribute &#8220;promise-button-busy-spinner-class&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="94" col="397" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="100" col="133" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="173" col="140" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/app/status/status.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/app/users.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/billing/change-plan-dialog.tpl.html">
+      <error line="1" col="85" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="129" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="131" col="95" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="134" col="158" severity="error" source="html-angular-validate" message="Attribute &#8220;promise-button&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="134" col="158" severity="error" source="html-angular-validate" message="Attribute &#8220;promise-button-busy-text&#8221; not allowed on element &#8220;button&#8221; at this point."/>
+      <error line="134" col="158" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/date-filter/custom-date-range-dialog.tpl.html">
+      <error line="1" col="66" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="18" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="19" col="100" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/date-filter/date-filter-directive.tpl.html">
+      <error line="1" col="94" severity="error" source="html-angular-validate" message="Element &#8220;li&#8221; not allowed as child of element &#8220;body&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/date-range-picker/date-range-picker-directive.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/dialog/confirm-dialog.tpl.html">
+      <error line="2" col="75" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="12" col="95" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="13" col="125" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/events/events-directive.tpl.html">
+      <error line="22" col="156" severity="error" source="html-angular-validate" message="Attribute &#8220;overwrite-tooltip&#8221; not allowed on element &#8220;abbr&#8221; at this point."/>
+      <error line="29" col="106" severity="error" source="html-angular-validate" message="Element &#8220;relative-time&#8221; not allowed as child of element &#8220;span&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+      <error line="49" col="155" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/intercom/intercom-directive.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/organization-notifications/organization-notifications-directive.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/project-filter/project-filter-directive.tpl.html">
+      <error line="1" col="119" severity="error" source="html-angular-validate" message="Element &#8220;li&#8221; not allowed as child of element &#8220;body&#8221; in this context. (Suppressing further errors from this subtree.)"/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/projects/projects-directive.tpl.html">
+      <error line="20" col="118" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="53" col="11" severity="error" source="html-angular-validate" message="A table row was 6 columns wide and exceeded the column count established by the first row (5)."/>
+      <error line="39" col="43" severity="error" source="html-angular-validate" message="Table columns in range 7…8 established by element &#8220;td&#8221; have no cells beginning in them."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/promise-button/promise-button-directive.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/rate-limit/rate-limit-directive.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/release-notification/release-notification-directive.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/search-filter/search-filter-directive.tpl.html">
+      <error line="12" col="42" severity="error" source="html-angular-validate" message="Attribute &#8220;uib-tooltip&#8221; not allowed on element &#8220;input&#8221; at this point."/>
+      <error line="12" col="42" severity="error" source="html-angular-validate" message="Attribute &#8220;tooltip-class&#8221; not allowed on element &#8220;input&#8221; at this point."/>
+      <error line="12" col="42" severity="error" source="html-angular-validate" message="Attribute &#8220;tooltip-is-open&#8221; not allowed on element &#8220;input&#8221; at this point."/>
+      <error line="12" col="42" severity="error" source="html-angular-validate" message="Attribute &#8220;tooltip-placement&#8221; not allowed on element &#8220;input&#8221; at this point."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/stack-dialog/mark-fixed-dialog.tpl.html">
+      <error line="1" col="81" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="24" col="25" severity="error" source="html-angular-validate" message="Attribute &#8220;semantic-version-validator&#8221; not allowed on element &#8220;input&#8221; at this point."/>
+      <error line="33" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="34" col="125" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/stacks/stacks-directive.tpl.html">
+      <error line="48" col="9" severity="error" source="html-angular-validate" message="A table row was 9 columns wide and exceeded the column count established by the first row (6)."/>
+      <error line="44" col="41" severity="error" source="html-angular-validate" message="Table columns in range 8…9 established by element &#8220;td&#8221; have no cells beginning in them."/>
+      <error line="56" col="155" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+   </file>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/event-error-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/event-feature-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/event-log-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/event-notfound-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/event-session-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/event-simple-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/event-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/stack-error-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/stack-feature-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/stack-log-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/stack-notfound-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/stack-session-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/stack-simple-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/summary/templates/stack-summary.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/users/users-directive.tpl.html"/>
+   <file name="C:\Code\Exceptionless.UI\src/components/web-hook/add-web-hook-dialog.tpl.html">
+      <error line="1" col="85" severity="error" source="html-angular-validate" message="Element &#8220;form&#8221; does not need a &#8220;role&#8221; attribute."/>
+      <error line="3" col="77" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="41" col="87" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;button&#8221;."/>
+      <error line="42" col="134" severity="error" source="html-angular-validate" message="The &#8220;button&#8221; role is unnecessary for element &#8220;input&#8221; whose type is &#8220;submit&#8221;."/>
+   </file>
+</checkstyle>

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.organization', ['restangular'])
-    .factory('organizationService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
+    .factory('organizationService', function ($cacheFactory, $rootScope, Restangular) {
       var _cache = $cacheFactory('http:organization');
       $rootScope.$on('cache:clear', _cache.removeAll);
       $rootScope.$on('cache:clear-organization', _cache.removeAll);
@@ -91,5 +91,5 @@
         update: update
       };
       return service;
-    }]);
+    });
 }());

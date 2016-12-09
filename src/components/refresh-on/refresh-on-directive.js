@@ -4,7 +4,7 @@
   angular.module('exceptionless.refresh', [
     'debounce'
   ])
-  .directive('refreshOn', ['$parse', '$rootScope', 'debounce', function ($parse, $rootScope, debounce) {
+  .directive('refreshOn', function ($parse, $rootScope, debounce) {
     return {
       restrict: 'AE',
       link: function (scope, element, attrs) {
@@ -50,5 +50,5 @@
         }
       }
     };
-  }]);
+  });
 }());

@@ -6,7 +6,7 @@
 
     'exceptionless.filter'
   ])
-  .factory('stackService', ['filterService', 'Restangular', function (filterService, Restangular) {
+  .factory('stackService', function (filterService, Restangular) {
     function addLink(id, url) {
       return Restangular.one('stacks', id).one('add-link').customPOST(url);
     }
@@ -96,5 +96,5 @@
     };
 
     return service;
-  }]);
+  });
 }());

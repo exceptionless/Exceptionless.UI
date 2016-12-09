@@ -1,7 +1,7 @@
 <form name="vm.projectForm" role="form" class="form-validation">
   <div class="form-group">
     <label for="name">Project Name</label>
-    <div ng-class="{'input-group': vm.projectForm.$pending }">
+    <div ng-class="{'input-group': !!vm.projectForm.$pending }">
       <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
              ng-model="vm.project.name"
              ng-model-options="{ debounce: 500 }"

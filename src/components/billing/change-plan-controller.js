@@ -2,15 +2,11 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', ['$uibModalInstance', 'adminService', '$analytics', 'Common', '$ExceptionlessClient', '$intercom', 'INTERCOM_APPID', 'notificationService', 'organizationService', 'stripe', 'STRIPE_PUBLISHABLE_KEY', 'userService', '$window', 'data', function ($uibModalInstance, adminService, $analytics, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, organizationId) {
-      var source = 'exceptionless.billing.ChangePlanDialog';
-      var contactSupport = 'Please contact support for more information.';
-      var freePlanId = 'EX_FREE';
-
+    .controller('ChangePlanDialog', function ($uibModalInstance, adminService, $analytics, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, data) {
       var vm = this;
       function cancel() {
         $analytics.eventTrack('Lead', getAnalyticsData());
-        $ExceptionlessClient.createFeatureUsage(source + '.cancel')
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.cancel')
           .setProperty('CurrentPlan', vm.currentPlan)
           .setProperty('CouponId', vm.coupon)
           .setProperty('IsNewCard', isNewCard())
@@ -53,7 +49,7 @@
             vm.paymentMessage = 'An error occurred while changing plans. Message: ' + response.data.message;
             $ExceptionlessClient.createException(new Error(response.data.message))
               .markAsCritical()
-              .setSource(source + '.save.error')
+              .setSource(vm._source + '.save.error')
               .setProperty('CurrentPlan', vm.currentPlan)
               .setProperty('CouponId', vm.coupon)
               .setProperty('IsNewCard', isNewCard())
@@ -64,7 +60,7 @@
           }
 
           $analytics.eventTrack('Purchase', getAnalyticsData());
-          $ExceptionlessClient.createFeatureUsage(source + '.save')
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.save')
             .markAsCritical()
             .setMessage(response.data.message)
             .setProperty('CurrentPlan', vm.currentPlan)
@@ -87,7 +83,7 @@
           $analytics.eventTrack('Lead', getAnalyticsData());
           $ExceptionlessClient.createException(new Error(vm.paymentMessage))
             .markAsCritical()
-            .setSource(source + '.save.error')
+            .setSource(vm._source + '.save.error')
             .setProperty('CurrentPlan', vm.currentPlan)
             .setProperty('CouponId', vm.coupon)
             .setProperty('IsNewCard', isNewCard())
@@ -100,12 +96,12 @@
         }
 
         vm.paymentMessage = null;
-        if (vm.currentOrganization.plan_id === freePlanId && vm.currentPlan.id === freePlanId) {
+        if (vm.currentOrganization.plan_id === vm._freePlanId && vm.currentPlan.id === vm._freePlanId) {
           cancel();
           return;
         }
 
-        if (hasAdminRole() || vm.currentPlan.id === freePlanId) {
+        if (hasAdminRole() || vm.currentPlan.id === vm._freePlanId) {
           return changePlan(hasAdminRole()).then(onSuccess, onFailure);
         }
 
@@ -116,7 +112,7 @@
             vm.paymentMessage = 'An error occurred while changing plans.';
             $ExceptionlessClient.createException(error)
               .markAsCritical()
-              .setSource(source + '.save.error')
+              .setSource(vm._source + '.save.error')
               .setProperty('CurrentPlan', vm.currentPlan)
               .setProperty('CouponId', vm.coupon)
               .setProperty('IsNewCard', isNewCard())
@@ -149,10 +145,10 @@
             return vm.organizations;
           }
 
-          if (!organizationId || vm.organizations.filter(function(o) { return o.id === organizationId; })[0])
+          if (!data || vm.organizations.filter(function(o) { return o.id === data; })[0])
             return;
 
-          return organizationService.getById(organizationId, false).then(onSuccess);
+          return organizationService.getById(data, false).then(onSuccess);
         }
 
         function getAllOrganizations() {
@@ -168,7 +164,7 @@
         }
 
         function onSuccess() {
-          vm.currentOrganization = vm.organizations.filter(function(o) { return o.id === (vm.currentOrganization.id || organizationId); })[0];
+          vm.currentOrganization = vm.organizations.filter(function(o) { return o.id === (vm.currentOrganization.id || data); })[0];
           if (!vm.currentOrganization) {
             vm.currentOrganization = vm.organizations.length > 0 ? vm.organizations[0] : {};
           }
@@ -177,8 +173,8 @@
         }
 
         function onFailure(response) {
-          notificationService.error('An error occurred while loading your organizations. ' + contactSupport);
-          $ExceptionlessClient.createFeatureUsage(source + '.getOrganizations.error')
+          notificationService.error('An error occurred while loading your organizations. ' + vm._contactSupport);
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.getOrganizations.error')
             .markAsCritical()
             .setMessage(response && response.data && response.data.message)
             .submit();
@@ -203,8 +199,8 @@
         }
 
         function onFailure(response) {
-          notificationService.error('An error occurred while loading available billing plans. ' + contactSupport);
-          $ExceptionlessClient.createFeatureUsage(source + '.getPlans.error')
+          notificationService.error('An error occurred while loading available billing plans. ' + vm._contactSupport);
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.getPlans.error')
             .markAsCritical()
             .setMessage(response && response.data && response.data.message)
             .submit();
@@ -227,8 +223,8 @@
         }
 
         function onFailure(response) {
-          notificationService.error('An error occurred while loading your user account. ' + contactSupport);
-          $ExceptionlessClient.createFeatureUsage(source + '.getUser.error')
+          notificationService.error('An error occurred while loading your user account. ' + vm._contactSupport);
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.getUser.error')
             .markAsCritical()
             .setMessage(response && response.data && response.data.message)
             .submit();
@@ -252,7 +248,7 @@
       }
 
       function isCancellingPlan() {
-        return vm.currentPlan && vm.currentPlan.id === freePlanId && vm.currentOrganization.plan_id !== freePlanId;
+        return vm.currentPlan && vm.currentPlan.id === vm._freePlanId && vm.currentOrganization.plan_id !== vm._freePlanId;
       }
 
       function isNewCard() {
@@ -264,7 +260,7 @@
       }
 
       function showIntercom() {
-        $ExceptionlessClient.submitFeatureUsage(source + '.showIntercom');
+        $ExceptionlessClient.submitFeatureUsage(vm._source + '.showIntercom');
         if (INTERCOM_APPID) {
           $intercom.showNewMessage();
         } else {
@@ -272,27 +268,32 @@
         }
       }
 
-      vm.cancel = cancel;
-      vm.card = { };
-      vm.changeOrganization = changeOrganization;
-      vm.coupon = null;
-      vm.currentOrganization = {};
-      vm.currentPlan = {};
-      vm.getPlans = getPlans;
-      vm.hasAdminRole = hasAdminRole;
-      vm.hasExistingCard = hasExistingCard;
-      vm.isBillingEnabled = isBillingEnabled;
-      vm.isCancellingPlan = isCancellingPlan;
-      vm.isNewCard = isNewCard;
-      vm.isPaidPlan = isPaidPlan;
-      vm.organizations = [];
-      vm.paymentMessage = !isBillingEnabled() ? 'Billing is currently disabled.' : null;
-      vm.plans = [];
-      vm.save = save;
-      vm.showIntercom = showIntercom;
-      vm.stripe = {};
+      this.$onInit = function $onInit() {
+        vm._source = 'exceptionless.billing.ChangePlanDialog';
+        vm._contactSupport = 'Please contact support for more information.';
+        vm._freePlanId = 'EX_FREE';
+        vm.cancel = cancel;
+        vm.card = {};
+        vm.changeOrganization = changeOrganization;
+        vm.coupon = null;
+        vm.currentOrganization = {};
+        vm.currentPlan = {};
+        vm.getPlans = getPlans;
+        vm.hasAdminRole = hasAdminRole;
+        vm.hasExistingCard = hasExistingCard;
+        vm.isBillingEnabled = isBillingEnabled;
+        vm.isCancellingPlan = isCancellingPlan;
+        vm.isNewCard = isNewCard;
+        vm.isPaidPlan = isPaidPlan;
+        vm.organizations = [];
+        vm.paymentMessage = !isBillingEnabled() ? 'Billing is currently disabled.' : null;
+        vm.plans = [];
+        vm.save = save;
+        vm.showIntercom = showIntercom;
+        vm.stripe = {};
 
-      $ExceptionlessClient.submitFeatureUsage(source);
-      getOrganizations().then(getPlans).then(getUser);
-    }]);
+        $ExceptionlessClient.submitFeatureUsage(vm._source);
+        getOrganizations().then(getPlans).then(getUser);
+      };
+    });
 }());

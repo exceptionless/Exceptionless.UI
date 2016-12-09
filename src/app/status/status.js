@@ -8,7 +8,7 @@
     'exceptionless.state',
     'exceptionless.status'
   ])
-  .config(['$stateProvider', function ($stateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider.state('status', {
       title: 'Status',
       url: '/status?redirect',
@@ -16,5 +16,5 @@
       controllerAs: 'vm',
       templateUrl: 'app/status/status.tpl.html'
     });
-  }]);
+  });
 }());

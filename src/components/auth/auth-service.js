@@ -9,7 +9,7 @@
     'exceptionless',
     'exceptionless.state'
   ])
-  .factory('authService', ['$auth', '$ExceptionlessClient', '$rootScope', '$state', 'stateService', 'Restangular', function ($auth, $ExceptionlessClient, $rootScope, $state, stateService, Restangular) {
+  .factory('authService', function ($auth, $ExceptionlessClient, $rootScope, $state, stateService, Restangular) {
     function authenticate(provider, userData) {
       function onSuccess() {
         $rootScope.$emit('auth:login', {});
@@ -105,5 +105,5 @@
     };
 
     return service;
-  }]);
+  });
 }());

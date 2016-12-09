@@ -2,10 +2,8 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', ['$stateParams', '$timeout', 'authService', 'billingService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'userService', function ($stateParams, $timeout, authService, billingService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
-      var _canSaveEmailAddress = true;
+    .controller('account.Manage', function ($stateParams, $timeout, authService, billingService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
       var vm = this;
-
       function activateTab(tabName) {
         switch (tabName) {
           case 'notifications':
@@ -34,10 +32,6 @@
         }
 
         return authService.authenticate(provider).catch(onFailure);
-      }
-
-      function canRemoveOAuthAccount() {
-        return hasLocalAccount() || (vm.user.o_auth_accounts && vm.user.o_auth_accounts.length > 1);
       }
 
       function changePassword(isValid) {
@@ -101,6 +95,7 @@
             vm.currentProject = vm.projects.length > 0 ? vm.projects[0] : {};
           }
 
+          vm.hasPremiumFeatures = vm.currentProject && vm.currentProject.has_premium_features;
           return vm.projects;
         }
 
@@ -115,6 +110,7 @@
         function onSuccess(response) {
           vm.user = response.data.plain();
           vm.user.o_auth_accounts = vm.user.o_auth_accounts || [];
+          vm.hasLocalAccount = vm.user.has_local_account === true;
           return vm.user;
         }
 
@@ -130,28 +126,8 @@
         return userService.getCurrentUser().then(onSuccess, onFailure);
       }
 
-      function hasEmailNotifications() {
-        return vm.user.email_notifications_enabled && vm.emailNotificationSettings;
-      }
-
-      function hasLocalAccount() {
-        return vm.user.has_local_account === true;
-      }
-
-      function hasOAuthAccounts() {
-        return vm.user && vm.user.o_auth_accounts && vm.user.o_auth_accounts.length > 0;
-      }
-
-      function hasPremiumFeatures() {
-        return vm.currentProject && vm.currentProject.has_premium_features;
-      }
-
-      function hasProjects() {
-        return vm.projects.length > 0;
-      }
-
       function hasPremiumEmailNotifications() {
-        return hasEmailNotifications() && hasPremiumFeatures();
+        return vm.user.email_notifications_enabled && vm.emailNotificationSettings && vm.hasPremiumFeatures;
       }
 
       function isExternalLoginEnabled(provider) {
@@ -188,7 +164,7 @@
 
       function saveEmailAddress(isRetrying) {
         function resetCanSaveEmailAddress() {
-          _canSaveEmailAddress = true;
+          vm._canSaveEmailAddress = true;
         }
 
         function retry(delay) {
@@ -207,8 +183,8 @@
           return retry();
         }
 
-        if (_canSaveEmailAddress) {
-          _canSaveEmailAddress = false;
+        if (vm._canSaveEmailAddress) {
+          vm._canSaveEmailAddress = false;
         } else {
           return;
         }
@@ -273,7 +249,7 @@
       }
 
       function showChangePlanDialog() {
-        return billingService.changePlan(vm.currentProject ? vm.currentProject.organization_id : null);
+        return billingService.changePlan(vm.currentProject ? vm.currentProject.organization_id : null).catch(function(e){});
       }
 
       function unlink(account) {
@@ -293,35 +269,34 @@
         return authService.unlink(account.provider, account.provider_user_id).then(onSuccess, onFailure);
       }
 
-      vm.activeTabIndex = 0;
-      vm.authenticate = authenticate;
-      vm.canRemoveOAuthAccount = canRemoveOAuthAccount;
-      vm.changePassword = changePassword;
-      vm.currentProject = {};
-      vm.emailAddressForm = {};
-      vm.emailNotificationSettings = null;
-      vm.getEmailNotificationSettings = getEmailNotificationSettings;
-      vm.hasEmailNotifications = hasEmailNotifications;
-      vm.hasLocalAccount = hasLocalAccount;
-      vm.get = get;
-      vm.hasOAuthAccounts = hasOAuthAccounts;
-      vm.hasPremiumEmailNotifications = hasPremiumEmailNotifications;
-      vm.hasPremiumFeatures = hasPremiumFeatures;
-      vm.hasProjects = hasProjects;
-      vm.isExternalLoginEnabled = isExternalLoginEnabled;
-      vm.password = {};
-      vm.passwordForm = {};
-      vm.projects = [];
-      vm.resendVerificationEmail = resendVerificationEmail;
-      vm.saveEmailAddress = saveEmailAddress;
-      vm.saveEmailNotificationSettings = saveEmailNotificationSettings;
-      vm.saveEnableEmailNotification = saveEnableEmailNotification;
-      vm.saveUser = saveUser;
-      vm.showChangePlanDialog = showChangePlanDialog;
-      vm.unlink = unlink;
-      vm.user = {};
+      this.$onInit = function $onInit() {
+        vm.activeTabIndex = 0;
+        vm.authenticate = authenticate;
+        vm._canSaveEmailAddress = true;
+        vm.changePassword = changePassword;
+        vm.currentProject = {};
+        vm.emailAddressForm = {};
+        vm.emailNotificationSettings = null;
+        vm.getEmailNotificationSettings = getEmailNotificationSettings;
+        vm.hasLocalAccount = false;
+        vm.get = get;
+        vm.hasPremiumFeatures = false;
+        vm.hasPremiumEmailNotifications = hasPremiumEmailNotifications;
+        vm.isExternalLoginEnabled = isExternalLoginEnabled;
+        vm.password = {};
+        vm.passwordForm = {};
+        vm.projects = [];
+        vm.resendVerificationEmail = resendVerificationEmail;
+        vm.saveEmailAddress = saveEmailAddress;
+        vm.saveEmailNotificationSettings = saveEmailNotificationSettings;
+        vm.saveEnableEmailNotification = saveEnableEmailNotification;
+        vm.saveUser = saveUser;
+        vm.showChangePlanDialog = showChangePlanDialog;
+        vm.unlink = unlink;
+        vm.user = {};
 
-      activateTab($stateParams.tab);
-      get();
-    }]);
+        activateTab($stateParams.tab);
+        get();
+      };
+    });
 }());

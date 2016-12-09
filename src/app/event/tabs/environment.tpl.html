@@ -7,58 +7,58 @@
       )
     </td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].machine_name">
+  <tr ng-if="vm.environment.machine_name">
     <th>Machine Name</th>
-    <td><span truncate>{{::vm.event.data['@environment'].machine_name}}</span></td>
+    <td><span truncate>{{::vm.environment.machine_name}}</span></td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].ip_address">
+  <tr ng-if="vm.environment.ip_address">
     <th>IP Address</th>
-    <td>{{::vm.event.data['@environment'].ip_address}}</td>
+    <td>{{::vm.environment.ip_address}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].processor_count">
+  <tr ng-if="vm.environment.processor_count">
     <th>Processor Count</th>
-    <td>{{::vm.event.data['@environment'].processor_count}}</td>
+    <td>{{::vm.environment.processor_count}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].total_physical_memory">
+  <tr ng-if="vm.environment.total_physical_memory">
     <th>Total Memory</th>
-    <td>{{::vm.event.data['@environment'].total_physical_memory | bytes}}</td>
+    <td>{{::vm.environment.total_physical_memory | bytes}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].available_physical_memory">
+  <tr ng-if="vm.environment.available_physical_memory">
     <th>Available Memory</th>
-    <td>{{::vm.event.data['@environment'].available_physical_memory | bytes}}</td>
+    <td>{{::vm.environment.available_physical_memory | bytes}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].process_memory_size">
+  <tr ng-if="vm.environment.process_memory_size">
     <th>Process Memory</th>
-    <td>{{::vm.event.data['@environment'].process_memory_size | bytes}}</td>
+    <td>{{::vm.environment.process_memory_size | bytes}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].o_s_name">
+  <tr ng-if="vm.environment.o_s_name">
     <th>OS Name</th>
-    <td><span truncate>{{::vm.event.data['@environment'].o_s_name}}</span></td>
+    <td><span truncate>{{::vm.environment.o_s_name}}</span></td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].o_s_version">
+  <tr ng-if="vm.environment.o_s_version">
     <th>OS Version</th>
-    <td>{{::vm.event.data['@environment'].o_s_version}}</td>
+    <td>{{::vm.environment.o_s_version}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].architecture">
+  <tr ng-if="vm.environment.architecture">
     <th>Architecture</th>
-    <td>{{::vm.event.data['@environment'].architecture}}</td>
+    <td>{{::vm.environment.architecture}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].runtime_version">
+  <tr ng-if="vm.environment.runtime_version">
     <th>Runtime Version</th>
-    <td>{{::vm.event.data['@environment'].runtime_version}}</td>
+    <td>{{::vm.environment.runtime_version}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].process_id">
+  <tr ng-if="vm.environment.process_id">
     <th>Process ID</th>
-    <td>{{::vm.event.data['@environment'].process_id}}</td>
+    <td>{{::vm.environment.process_id}}</td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].process_name">
+  <tr ng-if="vm.environment.process_name">
     <th>Process Name</th>
-    <td><span truncate>{{::vm.event.data['@environment'].process_name}}</span></td>
+    <td><span truncate>{{::vm.environment.process_name}}</span></td>
   </tr>
-  <tr ng-if="vm.event.data['@environment'].command_line">
+  <tr ng-if="vm.environment.command_line">
     <th>Command Line</th>
-    <td><span truncate lines="2">{{::vm.event.data['@environment'].command_line}}</span></td>
+    <td><span truncate lines="2">{{::vm.environment.command_line}}</span></td>
   </tr>
 </table>
 
-<extended-data-item can-promote="false" title="'Additional Data'" data="vm.event.data['@environment'].data"></extended-data-item>
+<extended-data-item can-promote="false" title="'Additional Data'" data="vm.environment.data"></extended-data-item>

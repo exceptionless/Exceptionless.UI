@@ -8,13 +8,12 @@
         restrict: 'E',
         replace: true,
         templateUrl: 'components/intercom/intercom-directive.tpl.html',
-        controller: ['$interval', '$scope', 'authService', 'filterService', 'INTERCOM_APPID', '$intercom', 'objectIDService', 'organizationService', 'projectService', 'userService', function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, objectIDService, organizationService, projectService, userService) {
+        controller: function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, objectIDService, organizationService, projectService, userService) {
           if (!authService.isAuthenticated()) {
             return;
           }
 
           var vm = this;
-
           function get() {
             return getUser().then(getOrganizations).then(getProjects);
           }
@@ -151,21 +150,23 @@
             return $intercom.update(getIntercomData());
           }
 
-          var interval = $interval(updateIntercom, 90000);
-          $scope.$on('$destroy', function () {
-            $interval.cancel(interval);
-          });
+          this.$onInit = function $onInit() {
+            var interval = $interval(updateIntercom, 90000);
+            $scope.$on('$destroy', function () {
+              $interval.cancel(interval);
+            });
 
-          vm.getOrganizations = getOrganizations;
-          vm.getProjects = getProjects;
-          vm.getUser = getUser;
-          vm.hide = hide;
-          vm.IntercomAppId = INTERCOM_APPID;
-          vm.shutdown = shutdown;
-          vm.updateIntercom = updateIntercom;
+            vm.getOrganizations = getOrganizations;
+            vm.getProjects = getProjects;
+            vm.getUser = getUser;
+            vm.hide = hide;
+            vm.IntercomAppId = INTERCOM_APPID;
+            vm.shutdown = shutdown;
+            vm.updateIntercom = updateIntercom;
 
-          get().then(initializeIntercom);
-        }],
+            get().then(initializeIntercom);
+          };
+        },
         controllerAs: 'vm'
       };
   }]);

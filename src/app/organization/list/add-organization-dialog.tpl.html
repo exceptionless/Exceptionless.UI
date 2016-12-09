@@ -7,7 +7,7 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="name">Organization Name</label>
-      <div ng-class="{'input-group': vm.addOrganizationForm.$pending }">
+      <div ng-class="{'input-group': !!vm.addOrganizationForm.$pending }">
         <input id="name" name="name" type="text" class="form-control input-lg" placeholder="Organization Name"
                ng-model="vm.data.name"
                ng-model-options="{ debounce: 500 }"

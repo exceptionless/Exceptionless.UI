@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .factory('billingService', ['$analytics', '$ExceptionlessClient', 'dialogs', 'dialogService', '$q', function ($analytics, $ExceptionlessClient, dialogs, dialogService, $q) {
+    .factory('billingService', function ($analytics, $ExceptionlessClient, dialogs, dialogService, $q) {
       var source = 'exceptionless.billing.billingService';
 
       function changePlan(organizationId) {
@@ -32,7 +32,7 @@
           .setMessage(message)
           .setProperty('OrganizationId', organizationId)
           .submit();
-        return dialogService.confirm(message, 'Upgrade Plan').then(onSuccess, onFailure);
+        return dialogService.confirm(message, 'Upgrade Plan').then(onSuccess, onFailure).catch(function(e){});
       }
 
       var service = {
@@ -41,6 +41,5 @@
       };
 
       return service;
-    }
-    ]);
+    });
 }());

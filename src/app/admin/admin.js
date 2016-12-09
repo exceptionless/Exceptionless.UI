@@ -4,7 +4,7 @@
   angular.module('app.admin', [
     'ui.router'
   ])
-  .config(['$stateProvider', function ($stateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider.state('app.admin', {
       abstract: true,
       url: '/admin',
@@ -18,5 +18,5 @@
       controllerAs: 'vm',
       templateUrl: 'app/admin/dashboard.tpl.html'
     });
-  }]);
+  });
 }());

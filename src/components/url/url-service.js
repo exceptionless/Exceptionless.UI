@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.url', [])
-    .factory('urlService', ['$state', function ($state) {
+    .factory('urlService', function ($state) {
       function buildFilterUrl(options) {
         var routeParts = [];
         var routeParams = {};
@@ -71,6 +71,5 @@
       };
 
       return service;
-    }
-    ]);
+    });
 }());

@@ -26,7 +26,7 @@
     'exceptionless.stack-trace',
     'exceptionless.stat'
   ])
-  .config(['$stateProvider', function ($stateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider.state('app.stack', {
       title: 'Stack',
       url: '/stack/{id:[0-9a-fA-F]{24}}',
@@ -42,5 +42,5 @@
       controllerAs: 'vm',
       templateUrl: 'app/stack/stack.tpl.html'
     });
-  }]);
+  });
 }());

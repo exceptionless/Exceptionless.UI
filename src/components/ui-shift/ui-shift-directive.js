@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.ui-shift', [])
-    .directive('uiShift', ['$timeout', function ($timeout) {
+    .directive('uiShift', function ($timeout) {
       return {
         restrict: 'A',
         link: function (scope, el, attr) {
@@ -61,5 +61,5 @@
           });
         }
       };
-    }]);
+    });
 }());

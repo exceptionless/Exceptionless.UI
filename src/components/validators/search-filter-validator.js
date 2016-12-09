@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.validators')
-    .directive('searchFilterValidator', ['$timeout', '$q', 'searchService', function($timeout, $q, searchService) {
+    .directive('searchFilterValidator', function($timeout, $q, searchService) {
       return {
         restrict: 'A',
         require: 'ngModel',
@@ -29,5 +29,5 @@
           };
         }
       };
-    }]);
+    });
 }());

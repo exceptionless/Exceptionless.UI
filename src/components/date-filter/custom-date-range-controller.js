@@ -2,12 +2,10 @@
   'use strict';
 
   angular.module('exceptionless.date-filter')
-    .controller('CustomDateRangeDialog', ['$ExceptionlessClient', '$uibModalInstance', 'data', function ($ExceptionlessClient, $uibModalInstance, data) {
-      var source = 'exceptionless.date-filter.CustomDateRangeDialog';
+    .controller('CustomDateRangeDialog', function ($ExceptionlessClient, $uibModalInstance, data) {
       var vm = this;
-
       function cancel() {
-        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
+        $ExceptionlessClient.submitFeatureUsage(vm._source + '.cancel');
         $uibModalInstance.dismiss('cancel');
       }
 
@@ -28,19 +26,22 @@
           vm.range.end = vm.range.end.endOf('day');
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('Range', vm.range).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.save').setProperty('Range', vm.range).submit();
         $uibModalInstance.close(vm.range);
       }
 
-      vm.cancel = cancel;
-      vm.maxDate = moment();
-      vm.minDate = moment(new Date(2012, 1, 1));
-      vm.range = {
-        start: data.start,
-        end: data.end
-      };
-      vm.save = save;
+      this.$onInit = function $onInit() {
+        vm._source = 'exceptionless.date-filter.CustomDateRangeDialog';
+        vm.cancel = cancel;
+        vm.maxDate = moment();
+        vm.minDate = moment(new Date(2012, 1, 1));
+        vm.range = {
+          start: data.start,
+          end: data.end
+        };
+        vm.save = save;
 
-      $ExceptionlessClient.submitFeatureUsage(source);
-    }]);
+        $ExceptionlessClient.submitFeatureUsage(vm._source);
+      };
+    });
 }());

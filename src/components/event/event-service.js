@@ -6,7 +6,7 @@
 
     'exceptionless.filter'
   ])
-  .factory('eventService', ['filterService', 'Restangular', function (filterService, Restangular) {
+  .factory('eventService', function (filterService, Restangular) {
     function getAll(options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
       return Restangular.all('events').getList(optionsCallback(filterService.apply(options)));
@@ -58,5 +58,5 @@
       remove: remove
     };
     return service;
-  }]);
+  });
 }());

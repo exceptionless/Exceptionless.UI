@@ -17,7 +17,7 @@
     'exceptionless.user',
     'exceptionless.validators'
   ])
-    .config(['$stateProvider', function ($stateProvider) {
+    .config(function ($stateProvider) {
       $stateProvider.state('app.account', {
         abstract: true,
         url: '/account',
@@ -38,5 +38,5 @@
         template: null,
         controller: 'account.Verify'
       });
-    }]);
+    });
 }());

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.relative-time', [])
-    .directive('relativeTime', ['$interval', function ($interval) {
+    .directive('relativeTime', function ($interval) {
       return {
         restrict: 'AE',
         scope: {
@@ -34,5 +34,5 @@
           });
         }
       };
-    }]);
+    });
 }());

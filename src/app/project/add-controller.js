@@ -2,15 +2,11 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Add', ['$state', '$stateParams', '$timeout', 'billingService', 'organizationService', 'projectService', 'notificationService', function ($state, $stateParams, $timeout, billingService, organizationService, projectService, notificationService) {
-      var _canAdd = true;
-      var _newOrganizationId = '__newOrganization';
-
+    .controller('project.Add', function ($state, $stateParams, $timeout, billingService, organizationService, projectService, notificationService) {
       var vm = this;
-
       function add(isRetrying) {
         function resetCanAdd() {
-          _canAdd = true;
+          vm._canAdd = true;
         }
 
         function retry(delay) {
@@ -29,8 +25,8 @@
           return retry();
         }
 
-        if (_canAdd) {
-          _canAdd = false;
+        if (vm._canAdd) {
+          vm._canAdd = false;
         } else {
           return;
         }
@@ -43,7 +39,7 @@
       }
 
       function canCreateOrganization() {
-        return vm.currentOrganization.id === _newOrganizationId || !hasOrganizations();
+        return vm.currentOrganization.id === vm._newOrganizationId || !hasOrganizations();
       }
 
       function createOrganization(name) {
@@ -57,7 +53,7 @@
           if (response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message).then(function () {
               return createOrganization(name);
-            });
+            }).catch(function(e){});
           }
 
           var message = 'An error occurred while creating the organization.';
@@ -73,7 +69,7 @@
 
       function createProject(organization) {
         if (!organization) {
-          _canAdd = true;
+          vm._canAdd = true;
           return;
         }
 
@@ -85,7 +81,7 @@
           if (response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message, organization.id).then(function () {
               return createProject(organization);
-            });
+            }).catch(function(e){});
           }
 
           var message = 'An error occurred while creating the project.';
@@ -102,7 +98,7 @@
       function getOrganizations() {
         function onSuccess(response) {
           vm.organizations = response.data;
-          vm.organizations.push({id: _newOrganizationId, name: '<New Organization>'});
+          vm.organizations.push({id: vm._newOrganizationId, name: '<New Organization>'});
 
           var currentOrganizationId = vm.currentOrganization.id ? vm.currentOrganization.id : $stateParams.organizationId;
           vm.currentOrganization = vm.organizations.filter(function(o) { return o.id === currentOrganizationId; })[0];
@@ -116,18 +112,22 @@
 
       function hasOrganizations() {
         return vm.organizations.filter(function (o) {
-            return o.id !== _newOrganizationId;
+            return o.id !== vm._newOrganizationId;
           }).length > 0;
       }
 
-      vm.add = add;
-      vm.addForm = {};
-      vm.canCreateOrganization = canCreateOrganization;
-      vm.currentOrganization = {};
-      vm.getOrganizations = getOrganizations;
-      vm.hasOrganizations = hasOrganizations;
-      vm.organizations = [];
+      this.$onInit = function $onInit() {
+        vm._canAdd = true;
+        vm._newOrganizationId = '__newOrganization';
+        vm.add = add;
+        vm.addForm = {};
+        vm.canCreateOrganization = canCreateOrganization;
+        vm.currentOrganization = {};
+        vm.getOrganizations = getOrganizations;
+        vm.hasOrganizations = hasOrganizations;
+        vm.organizations = [];
 
-      getOrganizations();
-    }]);
+        getOrganizations();
+      };
+    });
 }());

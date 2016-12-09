@@ -7,7 +7,7 @@
     'exceptionless',
     'exceptionless.simple-error'
   ])
-    .directive('simpleStackTrace', ['$ExceptionlessClient', '$sanitize', '$sce', 'simpleErrorService', function ($ExceptionlessClient, $sanitize, $sce, simpleErrorService) {
+    .directive('simpleStackTrace', function ($ExceptionlessClient, $sanitize, $sce, simpleErrorService) {
       function buildStackFrames(exceptions) {
         var frames = '';
         for (var index = 0; index < exceptions.length; index++) {
@@ -83,5 +83,5 @@
         }],
         controllerAs: 'vm'
       };
-    }]);
+    });
 }());

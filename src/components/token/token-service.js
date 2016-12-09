@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.token', ['restangular'])
-    .factory('tokenService', ['Restangular', function (Restangular) {
+    .factory('tokenService', function (Restangular) {
       function create(options) {
         var token = {
           'organization_id': options.organization_id,
@@ -42,6 +42,5 @@
         remove: remove
       };
       return service;
-    }
-    ]);
+    });
 }());

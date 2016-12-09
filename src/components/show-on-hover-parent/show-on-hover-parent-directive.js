@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.show-on-hover-parent', [])
-    .directive('showOnHoverParent', [function () {
+    .directive('showOnHoverParent', function () {
       return {
         restrict: 'A',
         link : function(scope, element) {
@@ -17,5 +17,5 @@
           element.hide();
         }
       };
-    }]);
+    });
 }());

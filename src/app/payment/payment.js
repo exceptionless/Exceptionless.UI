@@ -7,7 +7,7 @@
     'exceptionless.organization',
     'exceptionless.rate-limit'
   ])
-  .config(['$stateProvider', function ($stateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider.state('payment', {
       title: 'View Invoice',
       url: '/payment/:id',
@@ -16,5 +16,5 @@
       parent: null,
       templateUrl: 'app/payment/payment.tpl.html'
     });
-  }]);
+  });
 }());

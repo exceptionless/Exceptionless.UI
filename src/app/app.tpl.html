@@ -1,4 +1,4 @@
-<div class="app-header-fixed app-aside-fixed" ng-class="{'app-aside-folded': appVm.isSideNavCollapsed}">
+<div class="app-header-fixed app-aside-fixed" ng-class="{'app-aside-folded': !!appVm.isSideNavCollapsed}">
   <nav ng-include="'app/blocks/header.tpl.html'" class="app-header navbar navbar-default bg-black"></nav>
 
   <div ng-include="'app/blocks/sidebar.tpl.html'" class="app-aside hidden-xs bg-dark"></div>
@@ -7,8 +7,8 @@
     <div refresh-on="OrganizationChanged" refresh-action="appVm.getOrganizations()" refresh-debounce="5000"></div>
     <button type="button" role="button" class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside"></button>
 
-    <div class="alert alert-danger alert-banner m-b-none" ng-if="appVm.hasSystemNotificationMessage()">
-      <div ng-bind-html="appVm.getSystemNotificationMessage()"></div>
+    <div class="alert alert-danger alert-banner m-b-none" ng-if="!!appVm.systemNotificationMessage">
+      <div ng-bind-html="appVm.systemNotificationMessage()"></div>
     </div>
     <rate-limit></rate-limit>
 

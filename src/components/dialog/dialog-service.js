@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.dialog')
-    .factory('dialogService', ['dialogs', function (dialogs) {
+    .factory('dialogService', function (dialogs) {
       function confirm(message, confirmButtonText) {
         return dialogs.create('components/dialog/confirm-dialog.tpl.html', 'confirmDialog as vm', {
           message: message,
@@ -24,6 +24,5 @@
       };
 
       return service;
-    }
-    ]);
+    });
 }());

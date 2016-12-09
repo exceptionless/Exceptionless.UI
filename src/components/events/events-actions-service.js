@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.events')
-    .factory('eventsActionsService', ['$ExceptionlessClient', 'dialogService', 'eventService', 'notificationService', '$q', function ($ExceptionlessClient, dialogService, eventService, notificationService, $q) {
+    .factory('eventsActionsService', function ($ExceptionlessClient, dialogService, eventService, notificationService, $q) {
       var source = 'exceptionless.events.eventsActionsService';
 
       var deleteAction = {
@@ -26,7 +26,7 @@
 
             deferred.resolve();
             return promise;
-          });
+          }).catch(function(e){});
         }
       };
 
@@ -39,5 +39,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

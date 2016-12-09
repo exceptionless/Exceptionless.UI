@@ -2,15 +2,17 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Users', ['stackService', function (stackService) {
+    .controller('app.Users', function (stackService) {
       var vm = this;
-      vm.mostUsers = {
-        get: stackService.getUsers,
-        options: {
-          limit: 20,
-          mode: 'summary'
-        },
-        source: 'app.MostUsers'
+      this.$onInit = function $onInit() {
+        vm.mostUsers = {
+          get: stackService.getUsers,
+          options: {
+            limit: 20,
+            mode: 'summary'
+          },
+          source: 'app.MostUsers'
+        };
       };
-    }]);
+    });
 }());

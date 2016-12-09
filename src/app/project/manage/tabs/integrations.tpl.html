@@ -1,4 +1,4 @@
-<div class="alert in fade alert-success" ng-if="!vm.hasPremiumFeatures()">
+<div class="alert in fade alert-success" ng-if="!vm.hasPremiumFeatures">
   <a ng-click="vm.showChangePlanDialog()">Upgrade now</a> to enable integrations!
 </div>
 
@@ -27,7 +27,7 @@
       <button type="button" role="button" class="btn btn-sm" title="Delete" ng-click="vm.removeWebHook(hook)"><i class="fa fa-times"></i></button>
     </td>
   </tr>
-  <tr ng-if="!vm.hasWebHook()">
+  <tr ng-if="vm.webHooks.length === 0">
     <td colspan="3">This project does not contain any integrations.</td>
   </tr>
   </tbody>

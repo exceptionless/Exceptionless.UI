@@ -5,7 +5,7 @@
   'use strict';
 
   angular.module('angular-rickshaw', ['debounce'])
-    .directive('rickshaw', ['$compile', '$window', 'debounce', function ($compile, $window, debounce) {
+    .directive('rickshaw', function ($compile, $window, debounce) {
       return {
         restrict: 'E',
         scope: {
@@ -222,5 +222,5 @@
         },
         template: '<div class="rickshaw-container"></div>'
       };
-    }]);
+    });
 }());

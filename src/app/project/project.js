@@ -23,7 +23,7 @@
     'exceptionless.token',
     'exceptionless.validators'
   ])
-  .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider.state('app.project', {
       abstract: true,
       url: '/project',
@@ -61,5 +61,5 @@
       controllerAs: 'vm',
       templateUrl: 'app/project/manage/manage.tpl.html'
     });
-  }]);
+  });
 }());

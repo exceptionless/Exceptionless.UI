@@ -2,12 +2,10 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('AddReferenceDialog', ['$ExceptionlessClient', '$uibModalInstance', function ($ExceptionlessClient, $uibModalInstance) {
-      var source = 'app.stack.AddReferenceDialog';
+    .controller('AddReferenceDialog', function ($ExceptionlessClient, $uibModalInstance) {
       var vm = this;
-
       function cancel() {
-        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
+        $ExceptionlessClient.submitFeatureUsage(vm._source + '.cancel');
         $uibModalInstance.dismiss('cancel');
       }
 
@@ -16,12 +14,15 @@
           return;
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('url', vm.data.url).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.save').setProperty('url', vm.data.url).submit();
         $uibModalInstance.close(vm.data.url);
       }
 
-      vm.cancel = cancel;
-      vm.save = save;
-      $ExceptionlessClient.submitFeatureUsage(source);
-    }]);
+      this.$onInit = function $onInit() {
+        vm._source = 'app.stack.AddReferenceDialog';
+        vm.cancel = cancel;
+        vm.save = save;
+        $ExceptionlessClient.submitFeatureUsage(vm._source);
+      };
+    });
 }());

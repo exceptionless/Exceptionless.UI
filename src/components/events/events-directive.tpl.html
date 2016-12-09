@@ -13,7 +13,7 @@
     </tr>
     </thead>
     <tbody>
-      <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.hasEvents()">
+      <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.events.length > 0">
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="event.id"><i></i></label></td>
         <td ng-click="vm.open(event.id, $event)">
           <summary source="event" show-type="vm.showType"></summary>
@@ -32,11 +32,11 @@
           </span>
         </td>
       </tr>
-      <tr ng-if="!vm.hasEvents() || vm.loading">
+      <tr ng-if="vm.events.length === 0 || vm.loading">
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="i-checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
         <td colspan="3">
           <strong ng-if="vm.loading">Loading...</strong>
-          <strong ng-if="!vm.loading">No events were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
+          <strong ng-if="!vm.loading">No events were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
         </td>
       </tr>
     </tbody>

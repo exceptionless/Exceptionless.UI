@@ -29,7 +29,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
                       <li><a ui-sref="app.organization.manage({ id: organization.id })"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
-                      <li ng-if="vm.canChangePlan()"><a ng-click="vm.changePlan(organization.id)"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
+                      <li ng-if="vm.canChangePlan"><a ng-click="vm.changePlan(organization.id)"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
                       <li><a ui-sref="app.organization.manage({ id: organization.id, tab: 'billing' })"><i class="fa fa-fw fa-file"></i> View Invoices</a></li>
                       <li><a ng-click="vm.leave(organization, appVm.user)"><i class="fa fa-fw fa-sign-out"></i> Leave Organization</a></li>
                       <li><a ng-click="vm.remove(organization)"><i class="fa fa-fw fa-times"></i> Delete</a></li>

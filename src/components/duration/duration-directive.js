@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.duration', [])
-    .directive('duration', ['$interval', function ($interval) {
+    .directive('duration', function ($interval) {
       return {
         restrict: 'AE',
         scope: {
@@ -31,5 +31,5 @@
           });
         }
       };
-    }]);
+    });
 }());

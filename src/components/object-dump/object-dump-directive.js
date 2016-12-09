@@ -4,7 +4,7 @@
   // NOTE: We had a ton of existing handlebars code that would of been time consuming to convert to angular.
   // We will convert this when porting to angular 2.0.
   angular.module('exceptionless.object-dump')
-    .directive('objectDump', ['handlebarsService', function (handlebarsService) {
+    .directive('objectDump', function (handlebarsService) {
       return {
         restrict: 'E',
         scope: {
@@ -29,5 +29,5 @@
           }
         }
       };
-    }]);
+    });
 }());

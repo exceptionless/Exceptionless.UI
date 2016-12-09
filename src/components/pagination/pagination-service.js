@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.pagination', [])
-    .factory('paginationService', [function () {
+    .factory('paginationService', function () {
       function getCurrentPageSummary(data, page, limit) {
         page = page ? parseInt(page) : 1;
         limit = limit ? parseInt(limit) : 100;
@@ -18,5 +18,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

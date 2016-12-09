@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.admin', ['restangular'])
-    .factory('adminService', ['Restangular', function (Restangular) {
+    .factory('adminService', function (Restangular) {
       function changePlan(options) {
         return Restangular.one('admin').customPOST(null, 'change-plan', options);
       }
@@ -12,5 +12,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

@@ -4,7 +4,7 @@
   angular.module('exceptionless.status', [
     'restangular'
   ])
-  .factory('statusService', ['Restangular', function (Restangular) {
+  .factory('statusService', function (Restangular) {
     function get() {
       return Restangular.one('status').get();
     }
@@ -14,5 +14,5 @@
     };
 
     return service;
-  }]);
+  });
 }());

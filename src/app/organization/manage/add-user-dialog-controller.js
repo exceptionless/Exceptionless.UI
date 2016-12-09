@@ -2,12 +2,10 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('AddUserDialog', ['$ExceptionlessClient', '$uibModalInstance', function ($ExceptionlessClient, $uibModalInstance) {
-      var source = 'app.organization.AddUserDialog';
+    .controller('AddUserDialog', function ($ExceptionlessClient, $uibModalInstance) {
       var vm = this;
-
       function cancel() {
-        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
+        $ExceptionlessClient.submitFeatureUsage(vm._source + '.cancel');
         $uibModalInstance.dismiss('cancel');
       }
 
@@ -16,12 +14,15 @@
           return;
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('email', vm.data.email).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.save').setProperty('email', vm.data.email).submit();
         $uibModalInstance.close(vm.data.email);
       }
 
-      vm.cancel = cancel;
-      vm.save = save;
-      $ExceptionlessClient.submitFeatureUsage(source);
-    }]);
+      this.$onInit = function $onInit() {
+        vm._source = 'app.organization.AddUserDialog';
+        vm.cancel = cancel;
+        vm.save = save;
+        $ExceptionlessClient.submitFeatureUsage(vm._source);
+      };
+    });
 }());

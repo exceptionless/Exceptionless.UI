@@ -24,7 +24,7 @@
     'exceptionless.timeago',
     'exceptionless.url'
   ])
-    .config(['$stateProvider', function ($stateProvider) {
+    .config(function ($stateProvider) {
       $stateProvider.state('app.event', {
         title: 'Event',
         url: '/event/{id:[0-9a-fA-F]{24}}?tab',
@@ -40,5 +40,5 @@
         controllerAs: 'vm',
         templateUrl: 'app/event/reference.tpl.html'
       });
-    }]);
+    });
 }());

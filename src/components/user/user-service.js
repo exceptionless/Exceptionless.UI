@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.user', ['restangular'])
-    .factory('userService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
+    .factory('userService', function ($cacheFactory, $rootScope, Restangular) {
       var _cache = $cacheFactory('http:user');
       $rootScope.$on('cache:clear', _cache.removeAll);
       $rootScope.$on('cache:clear-user', _cache.removeAll);
@@ -76,5 +76,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

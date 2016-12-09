@@ -18,7 +18,7 @@
     'exceptionless.user',
     'exceptionless.validators'
   ])
-  .config(['$authProvider', '$stateProvider', 'BASE_URL', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', function ($authProvider, $stateProvider, BASE_URL, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID) {
+  .config(function ($authProvider, $stateProvider, BASE_URL, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID) {
     $authProvider.baseUrl = BASE_URL + '/api/v2';
     $authProvider.facebook({
       clientId: FACEBOOK_APPID
@@ -80,5 +80,5 @@
       controllerAs: 'vm',
       templateUrl: 'app/auth/signup.tpl.html'
     });
-  }]);
+  });
 }());

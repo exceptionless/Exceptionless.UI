@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.rate-limit')
-    .directive('rateLimit', [function() {
+    .directive('rateLimit', function() {
       return {
         restrict: 'E',
         replace: true,
@@ -12,16 +12,18 @@
           ignoreConfigureProjects: '='
         },
         templateUrl: "components/rate-limit/rate-limit-directive.tpl.html",
-        controller: ['rateLimitService', function(rateLimitService) {
+        controller: function(rateLimitService) {
+          var vm = this;
           function rateLimitExceeded() {
             return rateLimitService.rateLimitExceeded();
           }
 
-          var vm = this;
-          vm.rateLimitExceeded = rateLimitExceeded;
-        }],
+          this.$onInit = function $onInit() {
+            vm.rateLimitExceeded = rateLimitExceeded;
+          };
+        },
         controllerAs: 'vm'
       };
-    }]);
+    });
 }());
 

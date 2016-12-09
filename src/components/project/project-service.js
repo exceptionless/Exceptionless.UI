@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.project', ['restangular'])
-    .factory('projectService', ['$cacheFactory', '$rootScope', 'Restangular', function ($cacheFactory, $rootScope, Restangular) {
+    .factory('projectService', function ($cacheFactory, $rootScope, Restangular) {
       var _cache = $cacheFactory('http:project');
       $rootScope.$on('cache:clear', _cache.removeAll);
       $rootScope.$on('cache:clear-project', _cache.removeAll);
@@ -125,6 +125,5 @@
         update: update
       };
       return service;
-    }
-    ]);
+    });
 }());

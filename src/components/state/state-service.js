@@ -5,7 +5,7 @@
     'angular-locker',
     'ui.router'
   ])
-  .factory('stateService', ['$location', '$state', 'locker', function ($location, $state, locker) {
+  .factory('stateService', function ($location, $state, locker) {
     var _store = locker.driver('session').namespace('state');
     function clear() {
       _store.forget(['name', 'params']);
@@ -42,5 +42,5 @@
     };
 
     return service;
-  }]);
+  });
 }());

@@ -2,12 +2,10 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Configure', ['$rootScope', '$state', '$stateParams', 'notificationService', 'projectService', 'tokenService', function ($rootScope, $state, $stateParams, notificationService, projectService, tokenService) {
-      var _projectId = $stateParams.id;
-      var _canRedirect = $stateParams.redirect === 'true';
-
+    .controller('project.Configure', function ($rootScope, $state, $stateParams, notificationService, projectService, tokenService) {
+      var vm = this;
       function canRedirect(data) {
-        return _canRedirect && !!data && data.project_id === _projectId;
+        return vm._canRedirect && !!data && data.project_id === vm._projectId;
       }
 
       function copied() {
@@ -40,7 +38,7 @@
           notificationService.error('An error occurred while getting the API key for your project.');
         }
 
-        return tokenService.getProjectDefault(_projectId).then(onSuccess, onFailure);
+        return tokenService.getProjectDefault(vm._projectId).then(onSuccess, onFailure);
       }
 
       function getProject() {
@@ -51,10 +49,10 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The project "' + _projectId + '" could not be found.');
+          notificationService.error('The project "' + vm._projectId + '" could not be found.');
         }
 
-        return projectService.getById(_projectId, true).then(onSuccess, onFailure);
+        return projectService.getById(vm._projectId, true).then(onSuccess, onFailure);
       }
 
       function getProjectTypes() {
@@ -85,22 +83,25 @@
       }
 
       function navigateToDashboard() {
-        $state.go('app.project-dashboard', { projectId: _projectId } );
+        $state.go('app.project-dashboard', { projectId: vm._projectId } );
       }
 
-      var vm = this;
-      vm.apiKey = null;
-      vm.canRedirect = canRedirect;
-      vm.copied = copied;
-      vm.currentProjectType = {};
-      vm.isDotNet = isDotNet;
-      vm.isJavaScript = isJavaScript;
-      vm.isNode = isNode;
-      vm.navigateToDashboard = navigateToDashboard;
-      vm.onCopyError = onCopyError;
-      vm.project = {};
-      vm.projectTypes = getProjectTypes();
+      this.$onInit = function $onInit() {
+        vm._projectId = $stateParams.id;
+        vm._canRedirect = $stateParams.redirect === 'true';
+        vm.apiKey = null;
+        vm.canRedirect = canRedirect;
+        vm.copied = copied;
+        vm.currentProjectType = {};
+        vm.isDotNet = isDotNet;
+        vm.isJavaScript = isJavaScript;
+        vm.isNode = isNode;
+        vm.navigateToDashboard = navigateToDashboard;
+        vm.onCopyError = onCopyError;
+        vm.project = {};
+        vm.projectTypes = getProjectTypes();
 
-      getDefaultApiKey().then(getProject);
-    }]);
+        getDefaultApiKey().then(getProject);
+      };
+    });
 }());

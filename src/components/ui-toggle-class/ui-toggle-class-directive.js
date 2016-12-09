@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.ui-toggle-class', [])
-    .directive('uiToggleClass', ['$timeout', '$document', function ($timeout, $document) {
+    .directive('uiToggleClass', function () {
       return {
         restrict: 'AC',
         link: function (scope, el, attr) {
@@ -41,5 +41,5 @@
           });
         }
       };
-    }]);
+    });
 }());

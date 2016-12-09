@@ -16,17 +16,53 @@
       replace: true,
       scope: true,
       templateUrl: 'components/project-filter/project-filter-directive.tpl.html',
-      controller: ['$scope', '$state', '$stateParams', '$window', 'debounce', 'filterService', 'notificationService', 'organizationService', 'projectService', 'urlService', function ($scope, $state, $stateParams, $window, debounce, filterService, notificationService, organizationService, projectService, urlService) {
-        function get() {
-          return getOrganizations().then(getProjects);
-        }
+      controller: function ($rootScope, $scope, $state, $stateParams, $window, debounce, filterService, notificationService, organizationService, projectService, urlService) {
+        var vm = this;
+        function buildUrls() {
+          function getOrganizationUrl(organization) {
+            if (isOnSessionDashboard()) {
+              return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', organizationId: organization.id });
+            }
 
-        function getAllProjectsUrl() {
-          if (isOnSessionDashboard()) {
-            return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session' });
+            return urlService.buildFilterUrl({ route: getStateName(), organizationId: organization.id, type: $stateParams.type });
           }
 
-          return urlService.buildFilterUrl({ route: getStateName(), type: $stateParams.type });
+          function getAllProjectsUrl() {
+            if (isOnSessionDashboard()) {
+              return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session' });
+            }
+
+            return urlService.buildFilterUrl({ route: getStateName(), type: $stateParams.type });
+          }
+
+          function getProjectUrl(project) {
+            if (isOnSessionDashboard()) {
+              return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', projectId: project.id });
+            }
+
+            return urlService.buildFilterUrl({ route: getStateName(), projectId: project.id, type: $stateParams.type });
+          }
+
+          var result = {
+            organizations: {},
+            projects: {
+              all: getAllProjectsUrl()
+            }
+          };
+
+          vm.organizations.forEach(function(organization) {
+            result.organizations[organization.id] = getOrganizationUrl(organization);
+          });
+
+          vm.projects.forEach(function(project) {
+            result.projects[project.id] = getProjectUrl(project);
+          });
+
+          return result;
+        }
+
+        function get() {
+          return getOrganizations().then(getProjects);
         }
 
         function getFilterName() {
@@ -52,13 +88,13 @@
         function getOrganizations() {
           function onSuccess(response) {
             vm.organizations = response.data.plain();
-
             if (filterService.getOrganizationId() && !vm.organizations.filter(function(o) { return o.id === filterService.getOrganizationId(); })) {
               filterService.setOrganizationId();
             }
 
-            vm.filteredDisplayName = getFilterName();
+            update();
             vm.isLoadingOrganizations = false;
+            return response;
           }
 
           function onFailure() {
@@ -69,24 +105,16 @@
           return organizationService.getAll().then(onSuccess, onFailure);
         }
 
-        function getOrganizationUrl(organization) {
-          if (isOnSessionDashboard()) {
-            return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', organizationId: organization.id });
-          }
-
-          return urlService.buildFilterUrl({ route: getStateName(), organizationId: organization.id, type: $stateParams.type });
-        }
-
         function getProjects() {
           function onSuccess(response) {
             vm.projects = response.data.plain();
-
             if (filterService.getProjectId() && !vm.projects.filter(function(p) { return p.id === filterService.getProjectId(); })) {
               filterService.setProjectId();
             }
 
-            vm.filteredDisplayName = getFilterName();
+            update();
             vm.isLoadingProjects = false;
+            return response;
           }
 
           function onFailure() {
@@ -99,14 +127,6 @@
 
         function getProjectsByOrganizationId(id) {
           return vm.projects.filter(function (project) { return project.organization_id === id; });
-        }
-
-        function getProjectUrl(project) {
-          if (isOnSessionDashboard()) {
-            return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', projectId: project.id });
-          }
-
-          return urlService.buildFilterUrl({ route: getStateName(), projectId: project.id, type: $stateParams.type });
         }
 
         function getStateName() {
@@ -133,39 +153,39 @@
           return $state.current.name.contains('session-') || $state.current.name === 'app.session.dashboard';
         }
 
-        var updateFilterDropDownMaxHeight = debounce(function() {
-          vm.filterDropDownMaxHeight = angular.element($window).height() - 100;
-        }, 150);
+        function update() {
+          vm.filteredDisplayName = getFilterName();
+          vm.urls = buildUrls();
+        }
 
-        var window = angular.element($window);
-        window.bind('resize', updateFilterDropDownMaxHeight);
+        this.$onInit = function $onInit() {
+          var updateFilterDropDownMaxHeight = debounce(function() {
+            vm.filterDropDownMaxHeight = angular.element($window).height() - 100;
+          }, 150);
 
-        // NOTE: We need to watch on getFilterName because the filterChangedEvents might not be called depending on suspendNotifications option.
-        var unbind = $scope.$watch(function() { return vm.getFilterName(); }, function (filterName) {
-          vm.filteredDisplayName = filterName;
-        });
+          var window = angular.element($window);
+          window.bind('resize', updateFilterDropDownMaxHeight);
 
-        $scope.$on('$destroy', function() {
-          unbind();
-          window.unbind('resize', updateFilterDropDownMaxHeight);
-        });
+          $rootScope.$on('$stateChangeSuccess', update);
+          var unbind = $scope.$on('$destroy', function() {
+            unbind();
+            window.unbind('resize', updateFilterDropDownMaxHeight);
+          });
 
-        var vm = this;
-        vm.filteredDisplayName = 'Loading';
-        vm.get = get;
-        vm.getAllProjectsUrl = getAllProjectsUrl;
-        vm.getFilterName = getFilterName;
-        vm.getOrganizationUrl = getOrganizationUrl;
-        vm.getProjectUrl = getProjectUrl;
-        vm.getProjectsByOrganizationId = getProjectsByOrganizationId;
-        vm.isLoadingOrganizations = true;
-        vm.isLoadingProjects = true;
-        vm.organizations = [];
-        vm.projects = [];
+          vm.filteredDisplayName = 'Loading';
+          vm.get = get;
+          vm.getProjectsByOrganizationId = getProjectsByOrganizationId;
+          vm.isLoadingOrganizations = true;
+          vm.isLoadingProjects = true;
+          vm.organizations = [];
+          vm.projects = [];
+          vm.urls = buildUrls();
+          vm.update = update;
 
-        updateFilterDropDownMaxHeight();
-        get();
-      }],
+          updateFilterDropDownMaxHeight();
+          get();
+        };
+      },
       controllerAs: 'vm'
     };
   }]);

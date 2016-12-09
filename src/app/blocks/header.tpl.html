@@ -32,7 +32,7 @@
         </a>
         <ul class="dropdown-menu">
           <li><a ui-sref="app.account.manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
-          <li><a ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
+          <li><a ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
           <li><a ui-sref="app.account.manage({ tab: 'password' })"><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
           <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> Documentation</a></li>
           <li ng-if="appVm.isIntercomEnabled()"><a ng-click="appVm.showIntercom()"><i class="fa fa-comment fa-fw"></i> Support</a></li>
@@ -45,7 +45,7 @@
 
     <ul class="nav navbar-nav visible-xs hidden-sm" auto-active>
       <li><a ui-sref="app.account.manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
-      <li><a ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
+      <li><a ng-click="appVm.changePlan()" ng-if="appVm.canChangePlan"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
       <li><a ui-sref="app.account.manage({ tab: 'password' })"><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
       <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> Documentation</a></li>
       <li ng-if="appVm.isIntercomEnabled()"><a ng-click="appVm.showIntercom()"><i class="fa fa-comment fa-fw"></i> Support</a></li>

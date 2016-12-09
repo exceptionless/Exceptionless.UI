@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.promise-button', [])
-    .directive('promiseButton', ['$compile', function ($compile) {
+    .directive('promiseButton', function ($compile) {
       return {
         restrict: 'A',
         scope: {
@@ -37,5 +37,5 @@
           $compile(element)(scope);
         }
       };
-    }]);
+    });
 }());

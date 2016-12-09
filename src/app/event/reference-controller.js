@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Reference', ['eventService', '$state', '$stateParams', function (eventService, $state, $stateParams) {
+    .controller('Reference', function (eventService, $state, $stateParams) {
       var vm = this;
 
       vm.references = {
@@ -22,5 +22,5 @@
         },
         source: 'app.event.Reference'
       };
-    }]);
+    });
 }());

@@ -8,17 +8,18 @@
     return {
       restrict: 'E',
       templateUrl: "components/release-notification/release-notification-directive.tpl.html",
-      controller: ['$window', function($window) {
+      controller: function($window) {
         var vm = this;
-
         function processNotification(notification) {
           if (notification && notification.critical) {
             $window.location.reload();
           }
         }
 
-        vm.processNotification = processNotification;
-      }],
+        this.$onInit = function $onInit() {
+          vm.processNotification = processNotification;
+        };
+      },
       controllerAs: 'vm'
     };
   }]);

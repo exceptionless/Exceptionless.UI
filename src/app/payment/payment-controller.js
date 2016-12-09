@@ -2,10 +2,8 @@
   'use strict';
 
   angular.module('app.payment')
-    .controller('Payment', ['$state', '$stateParams', 'notificationService', 'organizationService', function ($state, $stateParams, notificationService, organizationService) {
-      var invoiceId = $stateParams.id;
+    .controller('Payment', function ($state, $stateParams, notificationService, organizationService) {
       var vm = this;
-
       function getInvoice() {
         function onSuccess(response) {
           vm.invoice = response.data.plain();
@@ -14,19 +12,17 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The invoice "' + invoiceId + '" could not be found.');
+          notificationService.error('The invoice "' + vm._invoiceId + '" could not be found.');
         }
 
-        return organizationService.getInvoice(invoiceId).then(onSuccess, onFailure);
+        return organizationService.getInvoice(vm._invoiceId).then(onSuccess, onFailure);
       }
 
-      function isPaid() {
-        return vm.invoice && vm.invoice.paid;
-      }
+      this.$onInit = function $onInit() {
+        vm._invoiceId = $stateParams.id;
+        vm.invoice = {};
 
-      vm.isPaid = isPaid;
-      vm.invoice = {};
-
-      getInvoice();
-    }]);
+        getInvoice();
+      };
+    });
 }());

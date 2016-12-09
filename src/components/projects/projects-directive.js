@@ -20,10 +20,8 @@
           settings: "="
         },
         templateUrl: 'components/projects/projects-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', 'dialogService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'projectService', function ($ExceptionlessClient, $window, $state, dialogService, filterService, linkService, notificationService, paginationService, projectService) {
-          var source = 'exceptionless.projects';
+        controller: function ($ExceptionlessClient, $window, $state, dialogService, filterService, linkService, notificationService, paginationService, projectService) {
           var vm = this;
-
           function get(options, useCache) {
             function onSuccess(response) {
               vm.projects = response.data.plain();
@@ -99,7 +97,7 @@
 
           function open(id, event) {
             var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
-            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
             if (openInNewTab) {
               $window.open($state.href('app.project.manage', { id: id }, { absolute: true }), '_blank');
             } else {
@@ -110,49 +108,52 @@
           }
 
           function nextPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
           function remove(project) {
-            $ExceptionlessClient.createFeatureUsage(source + '.remove').setProperty('project', project).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.remove').setProperty('project', project).submit();
             return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
               function onSuccess() {
                 vm.projects.splice(vm.projects.indexOf(project), 1);
                 notificationService.info('Successfully queued the project for deletion.');
-                $ExceptionlessClient.createFeatureUsage(source + '.remove.success').setProperty('project', project).submit();
+                $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('project', project).submit();
               }
 
               function onFailure() {
-                $ExceptionlessClient.createFeatureUsage(source + '.remove.error').setProperty('project', project).submit();
+                $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.error').setProperty('project', project).submit();
                 notificationService.error('An error occurred while trying to remove the project.');
               }
 
               return projectService.remove(project.id).then(onSuccess, onFailure);
-            });
+            }).catch(function(e){});
           }
 
-          vm.canRefresh = canRefresh;
-          vm.currentOptions = {};
-          vm.get = get;
-          vm.hasFilter = filterService.hasFilter;
-          vm.hasProjects = hasProjects;
-          vm.includeOrganizationName = !vm.settings.organization;
-          vm.loading = true;
-          vm.nextPage = nextPage;
-          vm.open = open;
-          vm.previousPage = previousPage;
-          vm.projects = [];
-          vm.remove = remove;
+          this.$onInit = function $onInit() {
+            vm._source = 'exceptionless.projects';
+            vm.canRefresh = canRefresh;
+            vm.currentOptions = {};
+            vm.get = get;
+            vm.hasFilter = filterService.hasFilter;
+            vm.hasProjects = hasProjects;
+            vm.includeOrganizationName = !vm.settings.organization;
+            vm.loading = true;
+            vm.nextPage = nextPage;
+            vm.open = open;
+            vm.previousPage = previousPage;
+            vm.projects = [];
+            vm.remove = remove;
 
-          $ExceptionlessClient.submitFeatureUsage(source);
-          get();
-        }],
+            $ExceptionlessClient.submitFeatureUsage(vm._source);
+            get();
+          };
+        },
         controllerAs: 'vm'
       };
     });

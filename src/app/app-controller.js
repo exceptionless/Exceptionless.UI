@@ -2,14 +2,11 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', ['$scope', '$state', '$stateParams', '$window', 'authService', 'billingService', '$ExceptionlessClient', 'filterService', 'hotkeys', 'INTERCOM_APPID', '$intercom', 'locker', 'notificationService', 'organizationService', 'signalRService', 'stateService', 'STRIPE_PUBLISHABLE_KEY', 'SYSTEM_NOTIFICATION_MESSAGE', 'urlService', 'userService', function ($scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, SYSTEM_NOTIFICATION_MESSAGE, urlService, userService) {
-      var source = 'app.App';
-      var _store = locker.driver('local').namespace('app');
+    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, SYSTEM_NOTIFICATION_MESSAGE, urlService, userService) {
       var vm = this;
-
       function addHotkeys() {
         function logFeatureUsage(name) {
-          $ExceptionlessClient.createFeatureUsage(source + '.hotkeys' + name).addTags('hotkeys').submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys' + name).addTags('hotkeys').submit();
         }
 
         if (isIntercomEnabled()) {
@@ -64,7 +61,7 @@
             description: 'Go to Dashboard',
             callback: function goToDashboard() {
               logFeatureUsage('Dashboard');
-              $window.open(getDashboardUrl(), '_self');
+              $window.open(vm.dashboardUrl.all, '_self');
             }
           })
           .add({
@@ -101,8 +98,82 @@
           });
       }
 
-      function canChangePlan() {
-        return !!STRIPE_PUBLISHABLE_KEY && vm.organizations && vm.organizations.length > 0;
+      function buildMenus() {
+        function getFilterUrl(route, type) {
+          return urlService.buildFilterUrl({ route: route, projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+        }
+
+        function buildUrls() {
+          var result = {
+            dashboard: {},
+            sessionDashboard: urlService.buildFilterUrl({ route: 'dashboard', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() }),
+            recent: {},
+            frequent: {},
+            users: {},
+            new: {}
+          };
+
+          [undefined, 'error', 'log', '404', 'usage'].forEach(function(type) {
+            var key = !type ? 'all' : type;
+            result.dashboard[key] = getFilterUrl('dashboard', type);
+            result.recent[key] = getFilterUrl('recent', type);
+            result.frequent[key] = getFilterUrl('frequent', type);
+            result.users[key] = getFilterUrl('users', type);
+            result.new[key] = getFilterUrl('new', type);
+          });
+
+          return result;
+        }
+
+        function isAllMenuActive(state, params) {
+          return dashboards.filter(function(dashboard) {
+            if (state.includes('app.' + dashboard, params) ||
+              state.includes('app.project-' + dashboard, params) ||
+              state.includes('app.organization-' + dashboard, params)) {
+              return true;
+            }
+
+            return false;
+          }).length > 0;
+        }
+
+        function isAdminMenuActive(state, params) {
+          return state.includes('app.project.list', params) ||
+            state.includes('app.organization.list', params) ||
+            state.includes('app.account.manage', params) ||
+            state.includes('app.admin.dashboard', params);
+        }
+
+        function isReportsMenuActive(state, params) {
+          return state.includes('app.session-dashboard', params) ||
+            state.includes('app.session-project-dashboard', params) ||
+            state.includes('app.session-organization-dashboard', params);
+        }
+
+        function isTypeMenuActive(state, params, type) {
+          var parameters = angular.extend({}, params, { type: type });
+          return dashboards.filter(function(dashboard) {
+            if (state.includes('app.type-' + dashboard, parameters) ||
+              state.includes('app.project-type-' + dashboard, parameters) ||
+              state.includes('app.organization-type-' + dashboard, parameters)) {
+              return true;
+            }
+
+            return false;
+          }).length > 0;
+        }
+
+        var dashboards = ['dashboard', 'frequent', 'new', 'recent', 'users'];
+        vm.urls = buildUrls();
+        vm.isMenuActive = {
+          all: isAllMenuActive($state, $stateParams),
+          error: isTypeMenuActive($state, $stateParams, 'error'),
+          log: isTypeMenuActive($state, $stateParams, 'log'),
+          '404': isTypeMenuActive($state, $stateParams, '404'),
+          usage: isTypeMenuActive($state, $stateParams, 'usage'),
+          admin: isAdminMenuActive($state, $stateParams),
+          reports: isReportsMenuActive($state, $stateParams)
+        };
       }
 
       function changePlan(organizationId) {
@@ -111,40 +182,13 @@
           return;
         }
 
-        return billingService.changePlan(organizationId);
-      }
-
-      function getFilterUrl(route, type) {
-        return urlService.buildFilterUrl({ route: route, projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
-      }
-
-      function getDashboardUrl(type) {
-        return getFilterUrl('dashboard', type);
-      }
-
-      function getSessionDashboardUrl() {
-        return urlService.buildFilterUrl({ route: 'dashboard', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() });
-      }
-
-      function getRecentUrl(type) {
-        return getFilterUrl('recent', type);
-      }
-
-      function getFrequentUrl(type) {
-        return getFilterUrl('frequent', type);
-      }
-
-      function getUsersUrl(type) {
-        return getFilterUrl('users', type);
-      }
-
-      function getNewUrl(type) {
-        return getFilterUrl('new', type);
+        return billingService.changePlan(organizationId).catch(function(e){});
       }
 
       function getOrganizations() {
         function onSuccess(response) {
           vm.organizations = response.data.plain();
+          vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organizations.length > 0;
           return response;
         }
 
@@ -166,75 +210,12 @@
         return userService.getCurrentUser().then(onSuccess);
       }
 
-      function getSystemNotificationMessage() {
-        return SYSTEM_NOTIFICATION_MESSAGE;
-      }
-
-      function hasAdminRole() {
-        return userService.hasAdminRole(vm.user);
-      }
-
-      function hasSystemNotificationMessage() {
-        return !!SYSTEM_NOTIFICATION_MESSAGE;
-      }
-
-      var dashboards = ['dashboard', 'frequent', 'new', 'recent', 'users'];
-      function isAllMenuActive() {
-        for (var dashboard in dashboards) {
-          if ($state.includes('app.' + dashboard, $stateParams) ||
-            $state.includes('app.project-' + dashboard, $stateParams) ||
-            $state.includes('app.organization-' + dashboard, $stateParams)) {
-            return true;
-          }
-        }
-        return false;
-      }
-
-      function isAdminMenuActive() {
-        return $state.includes('app.project.list', $stateParams) ||
-          $state.includes('app.organization.list', $stateParams) ||
-          $state.includes('app.account.manage', $stateParams) ||
-          $state.includes('app.admin.dashboard', $stateParams);
-      }
-
-      function isReportsMenuActive() {
-        return $state.includes('app.session-dashboard', $stateParams) ||
-          $state.includes('app.session-project-dashboard', $stateParams) ||
-          $state.includes('app.session-organization-dashboard', $stateParams);
-      }
-
       function isIntercomEnabled() {
         return authService.isAuthenticated() && INTERCOM_APPID;
       }
 
-      function isSmartDevice($window) {
-        var ua = $window.navigator.userAgent || $window.navigator.vendor || $window.opera;
-        return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
-      }
-
-      function isTypeMenuActive(type) {
-        var params = angular.extend({}, $stateParams, { type: type });
-
-        for (var dashboard in dashboards) {
-          if ($state.includes('app.type-' + dashboard, params) ||
-            $state.includes('app.project-type-' + dashboard, params) ||
-            $state.includes('app.organization-type-' + dashboard, params)) {
-            return true;
-          }
-        }
-        return false;
-      }
-
       function startSignalR() {
         return signalRService.startDelayed(1000);
-      }
-
-      if (!!navigator.userAgent.match(/MSIE/i)) {
-        angular.element($window.document.body).addClass('ie');
-      }
-
-      if (isSmartDevice($window)) {
-        angular.element($window.document.body).addClass('smart');
       }
 
       function showIntercom() {
@@ -242,42 +223,58 @@
           return;
         }
 
-        $ExceptionlessClient.submitFeatureUsage(source + '.showIntercom');
+        $ExceptionlessClient.submitFeatureUsage(vm._source + '.showIntercom');
         $intercom.showNewMessage();
       }
 
       function toggleSideNavCollapsed() {
         vm.isSideNavCollapsed = !vm.isSideNavCollapsed;
-        _store.put('sideNavCollapsed', vm.isSideNavCollapsed);
+        vm._store.put('sideNavCollapsed', vm.isSideNavCollapsed);
       }
 
-      $scope.$on('$destroy', signalRService.stop);
+      this.$onInit = function $onInit() {
+        function isSmartDevice($window) {
+          var ua = $window.navigator.userAgent || $window.navigator.vendor || $window.opera;
+          return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
+        }
 
-      vm.canChangePlan = canChangePlan;
-      vm.changePlan = changePlan;
-      vm.getDashboardUrl = getDashboardUrl;
-      vm.getSessionDashboardUrl = getSessionDashboardUrl;
-      vm.getRecentUrl = getRecentUrl;
-      vm.getFrequentUrl = getFrequentUrl;
-      vm.getUsersUrl = getUsersUrl;
-      vm.getNewUrl = getNewUrl;
-      vm.getOrganizations = getOrganizations;
-      vm.getUser = getUser;
-      vm.getSystemNotificationMessage = getSystemNotificationMessage;
-      vm.hasAdminRole = hasAdminRole;
-      vm.hasSystemNotificationMessage = hasSystemNotificationMessage;
-      vm.isAllMenuActive = isAllMenuActive;
-      vm.isAdminMenuActive = isAdminMenuActive;
-      vm.isReportsMenuActive = isReportsMenuActive;
-      vm.isIntercomEnabled = isIntercomEnabled;
-      vm.isSideNavCollapsed = _store.get('sideNavCollapsed') === true;
-      vm.isTypeMenuActive = isTypeMenuActive;
-      vm.organizations = [];
-      vm.showIntercom = showIntercom;
-      vm.toggleSideNavCollapsed = toggleSideNavCollapsed;
-      vm.user = {};
+        if (!!navigator.userAgent.match(/MSIE/i)) {
+          angular.element($window.document.body).addClass('ie');
+        }
 
-      addHotkeys();
-      getUser().then(getOrganizations).then(startSignalR);
-    }]);
+        if (isSmartDevice($window)) {
+          angular.element($window.document.body).addClass('smart');
+        }
+
+        $rootScope.$on('$stateChangeSuccess', buildMenus);
+        $scope.$on('$destroy', signalRService.stop);
+        vm._source = 'app.App';
+        vm._store = locker.driver('local').namespace('app');
+
+        vm.canChangePlan = false;
+        vm.changePlan = changePlan;
+        vm.urls = {
+          dashboard: {},
+          sessionDashboard: '',
+          recent: {},
+          frequent: {},
+          users: {},
+          new: {}
+        };
+        vm.getOrganizations = getOrganizations;
+        vm.getUser = getUser;
+        vm.isMenuActive = {};
+        vm.isIntercomEnabled = isIntercomEnabled;
+        vm.isSideNavCollapsed = vm._store.get('sideNavCollapsed') === true;
+        vm.organizations = [];
+        vm.showIntercom = showIntercom;
+        vm.systemNotificationMessage = SYSTEM_NOTIFICATION_MESSAGE;
+        vm.toggleSideNavCollapsed = toggleSideNavCollapsed;
+        vm.user = {};
+
+        addHotkeys();
+        buildMenus();
+        getUser().then(getOrganizations).then(startSignalR);
+      };
+    });
 }());

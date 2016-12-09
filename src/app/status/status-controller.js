@@ -2,38 +2,37 @@
   'use strict';
 
   angular.module('app.status')
-    .controller('Status', ['$interval', '$scope', '$state', '$stateParams', 'authService', 'stateService', 'statusService', 'Restangular', function ($interval, $scope, $state, $stateParams, authService, stateService, statusService, Restangular) {
-      var lastChecked = moment();
-      var message = null;
-      var redirect = !!$stateParams.redirect;
+    .controller('Status', function ($interval, $scope, $state, $stateParams, authService, stateService, statusService, Restangular) {
       var vm = this;
-
       function getMessage() {
-        if (redirect) {
-          return "We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information.";
+        var underMaintenance = "We're sorry but the website is currently undergoing maintenance.";
+        var contactSupport = 'Please contact support for more information.';
+
+        if (vm._redirect) {
+          return underMaintenance + ' You’ll be automatically redirected when the the maintenance is completed. ' + contactSupport;
         }
 
-        if (!!message) {
-          return message;
+        if (!!vm._message) {
+          return vm._message;
         }
 
-        return "We're sorry but the website is currently undergoing maintenance. Please contact support for more information.";
+        return underMaintenance + ' ' + contactSupport;
       }
 
       function updateStatus() {
         function updateMessage(response) {
           if (response && response.data && response.data.message) {
-            message = response.data.message;
+            vm._message = response.data.message;
             if (response.status !== 200) {
-              message += ' Please contact support for more information.';
+              vm._message += ' Please contact support for more information.';
             }
           } else {
-            message = null;
+            vm._message = '';
           }
         }
 
         function onSuccess(response) {
-          if (redirect && moment().diff(lastChecked, 'seconds') > 30) {
+          if (vm._redirect && moment().diff(vm._lastChecked, 'seconds') > 30) {
             if (!authService.isAuthenticated()) {
               return $state.go('auth.login');
             }
@@ -48,13 +47,18 @@
         return statusService.get().then(onSuccess, updateMessage);
       }
 
-      var interval = $interval(updateStatus, 30 * 1000);
-      $scope.$on('$destroy', function () {
-        $interval.cancel(interval);
-      });
+      this.$onInit = function $onInit() {
+        vm._lastChecked = moment();
+        vm._message = null;
+        vm._redirect = !!$stateParams.redirect;
 
+        var interval = $interval(updateStatus, 30 * 1000);
+        $scope.$on('$destroy', function () {
+          $interval.cancel(interval);
+        });
 
-      vm.getMessage = getMessage;
-      updateStatus();
-    }]);
+        vm.getMessage = getMessage;
+        updateStatus();
+      };
+    });
 }());

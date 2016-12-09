@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.web-hook')
-    .factory('webHookService', ['Restangular', function (Restangular) {
+    .factory('webHookService', function (Restangular) {
       function create(webHook) {
         return Restangular.all('webhooks').post(webHook);
       }
@@ -36,6 +36,5 @@
         remove: remove
       };
       return service;
-    }
-    ]);
+    });
 }());

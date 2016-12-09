@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.validators')
-    .directive('emailAddressAvailableValidator', ['$timeout', '$q', 'authService', function($timeout, $q, authService) {
+    .directive('emailAddressAvailableValidator', function($timeout, $q, authService) {
       return {
         restrict: 'A',
         require: 'ngModel',
@@ -30,5 +30,5 @@
           };
         }
       };
-    }]);
+    });
 }());

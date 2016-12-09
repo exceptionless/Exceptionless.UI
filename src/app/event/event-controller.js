@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', ['$ExceptionlessClient', '$scope', '$state', '$stateParams', '$timeout', 'billingService', 'clipboard', 'errorService', 'eventService', 'filterService', 'hotkeys', 'linkService', 'notificationService', 'projectService', 'urlService', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
+    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
       var source = 'app.event.Event';
       var _eventId = $stateParams.id;
       var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
@@ -118,11 +118,11 @@
         var tabIndex = 0;
         var tabs = [{index: tabIndex, title: 'Overview', template_key: 'overview'}];
 
-        if (vm.event.reference_id && isSessionStart()) {
+        if (vm.event.reference_id && vm.isSessionStart) {
           tabs.push({index: ++tabIndex, title: 'Session Events', template_key: 'session'});
         }
 
-        if (isError()) {
+        if (vm.isError) {
           if (vm.event.data['@error']) {
             tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'error'});
           } else if (vm.event.data['@simple_error']) {
@@ -130,11 +130,11 @@
           }
         }
 
-        if (hasRequestInfo()) {
-          tabs.push({index: ++tabIndex, title: isSessionStart() ? 'Browser' : 'Request', template_key: 'request'});
+        if (vm.request) {
+          tabs.push({index: ++tabIndex, title: vm.isSessionStart ? 'Browser' : 'Request', template_key: 'request'});
         }
 
-        if (hasEnvironmentInfo()) {
+        if (vm.environment) {
           tabs.push({index: ++tabIndex, title: 'Environment', template_key: 'environment'});
         }
 
@@ -224,22 +224,8 @@
       }
 
       function getDuration() {
+        // TODO: this binding expression can be optimized.
         return vm.event.value || moment().diff(vm.event.date, 'seconds');
-      }
-
-      function getErrorType() {
-        if (vm.event.data['@error']) {
-          var type = errorService.getTargetInfoExceptionType(vm.event.data['@error']);
-          if (type) {
-            return type;
-          }
-        }
-
-        if (vm.event.data['@simple_error']) {
-          return vm.event.data['@simple_error'].type;
-        }
-
-        return 'Unknown';
       }
 
       function getEvent() {
@@ -254,9 +240,73 @@
         }
 
         function onSuccess(response) {
+          function getErrorType(event) {
+            if (event.data['@error']) {
+              var type = errorService.getTargetInfoExceptionType(event.data['@error']);
+              if (type) {
+                return type;
+              }
+            }
+
+            if (event.data['@simple_error']) {
+              return event.data['@simple_error'].type;
+            }
+
+            return 'Unknown';
+          }
+
+          function getLocation(event) {
+            var location = event.data ? event.data['@location'] : null;
+            if (!location) {
+              return;
+            }
+
+            return [location.locality, location.level1, location.country]
+              .filter(function(value) { return value && value.length; })
+              .reduce(function(a, b, index) {
+                a += (index > 0 ? ', ' : '') + b;
+                return a;
+              }, '');
+          }
+
+          function getMessage(event) {
+            if (event.data && event.data['@error']) {
+              var message = errorService.getTargetInfoMessage(event.data['@error']);
+              if (message) {
+                return message;
+              }
+            }
+
+            return event.message;
+          }
+
           vm.event = response.data.plain();
           vm.event_json = angular.toJson(vm.event);
           vm.sessionEvents.relativeTo = vm.event.date;
+          vm.errorType = getErrorType(vm.event);
+          vm.environment = vm.event.data['@environment'];
+          vm.location = getLocation(vm.event);
+          vm.message = getMessage(vm.event);
+          vm.isError = vm.event.type === 'error';
+          vm.isSessionStart = vm.event.type === 'session';
+          vm.level = !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
+          vm.isLevelSuccess = vm.level === 'trace' || vm.level === 'debug';
+          vm.isLevelInfo = vm.level === 'info';
+          vm.isLevelWarning = vm.level === 'warn';
+          vm.isLevelError = vm.level === 'error';
+
+          vm.request = vm.event.data['@request'];
+          vm.hasCookies = vm.request && !!vm.request.cookies && Object.keys(vm.request.cookies).length > 0;
+          vm.requestUrl = vm.request && urlService.buildUrl(vm.request.is_secure, vm.request.host, vm.request.port, vm.request.path, vm.request.query_string);
+
+          vm.user = vm.event.data['@user'];
+          vm.userIdentity = vm.user && vm.user.identity;
+          vm.userName = vm.user && vm.user.name;
+
+          vm.userDescription = vm.event.data['@user_description'];
+          vm.userEmail = vm.userDescription && vm.userDescription.email_address;
+          vm.userDescription = vm.userDescription && vm.userDescription.description;
+          vm.version = vm.event.data['@version'];
 
           var links = linkService.getLinks(response.headers('link'));
           vm.previous = links['previous'] ? links['previous'].split('/').pop() : null;
@@ -289,17 +339,6 @@
         return eventService.getById(_eventId, {}, optionsCallback).then(onSuccess, onFailure);
       }
 
-      function getMessage() {
-        if (vm.event && vm.event.data && vm.event.data['@error']) {
-          var message = errorService.getTargetInfoMessage(vm.event.data['@error']);
-          if (message) {
-            return message;
-          }
-        }
-
-        return vm.event.message;
-      }
-
       function getProject() {
         function onSuccess(response) {
           vm.project = response.data.plain();
@@ -319,100 +358,12 @@
         return projectService.getById(vm.event.project_id, true).then(onSuccess, onFailure);
       }
 
-      function getLocation() {
-        var location = vm.event.data ? vm.event.data['@location'] : null;
-        if (!location) {
-          return;
-        }
-
-        return [location.locality, location.level1, location.country]
-          .filter(function(value) { return value && value.length; })
-          .reduce(function(a, b, index) {
-            a += (index > 0 ? ', ' : '') + b;
-            return a;
-          }, '');
-      }
-
-      function getRequestUrl() {
-        var request = vm.event.data ? vm.event.data['@request'] : null;
-        return request ? urlService.buildUrl(request.is_secure, request.host, request.port, request.path, request.query_string) : null;
-      }
-
-      function getVersion() {
-        return vm.event.data['@version'];
-      }
-
-      function hasCookies() {
-        return !!vm.event.data['@request'].cookies && Object.keys(vm.event.data['@request'].cookies).length > 0;
-      }
-
-      function hasEnvironmentInfo() {
-        return vm.event.data && vm.event.data['@environment'];
-      }
-
-      function hasIdentity() {
-        return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].identity;
-      }
-
-      function hasUserName() {
-        return vm.event.data && vm.event.data['@user'] && vm.event.data['@user'].name;
-      }
-
-      function hasLevel() {
-        return vm.event.data && vm.event.data['@level'];
-      }
-
-      function hasRequestInfo() {
-        return vm.event.data && vm.event.data['@request'];
-      }
-
-      function hasUserEmail() {
-        return vm.event.data && vm.event.data['@user_description'] && vm.event.data['@user_description'].email_address;
-      }
-
-      function hasUserDescription() {
-        return vm.event.data && vm.event.data['@user_description'] && vm.event.data['@user_description'].description;
-      }
-
-      function hasTags() {
-        return vm.event.tags && vm.event.tags.length > 0;
-      }
-
-      function hasVersion() {
-        return vm.event.data && vm.event.data['@version'];
-      }
-
-      function isError() {
-        return vm.event.type === 'error';
-      }
-
-      function isLevelSuccess() {
-        var level = hasLevel() ? vm.event.data['@level'].toLowerCase() : null;
-        return level === 'trace' || level === 'debug';
-      }
-
-      function isLevelInfo() {
-        return hasLevel() && vm.event.data['@level'].toLowerCase() === 'info';
-      }
-
-      function isLevelWarning() {
-        return hasLevel() && vm.event.data['@level'].toLowerCase() === 'warn';
-      }
-
-      function isLevelError() {
-        return hasLevel() && vm.event.data['@level'].toLowerCase() === 'error';
-      }
-
       function isPromoted(tabName) {
         if (!vm.project || !vm.project.promoted_tabs) {
           return false;
         }
 
         return vm.project.promoted_tabs.filter(function (tab) { return tab === tabName; }).length > 0;
-      }
-
-      function isSessionStart() {
-        return vm.event.type === 'session';
       }
 
       function promoteTab(tabName) {
@@ -444,62 +395,66 @@
         return projectService.promoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
 
-      vm.activeTabIndex = -1;
-      vm.activateTab = activateTab;
-      vm.canRefresh = canRefresh;
-      vm.copied = copied;
-      vm.demoteTab = demoteTab;
-      vm.event = {};
-      vm.event_json = '';
-      vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
-      vm.getCurrentTab = getCurrentTab;
-      vm.getDuration = getDuration;
-      vm.getErrorType = getErrorType;
-      vm.getEvent = getEvent;
-      vm.getLocation = getLocation;
-      vm.getMessage = getMessage;
-      vm.getRequestUrl = getRequestUrl;
-      vm.getVersion = getVersion;
-      vm.hasCookies = hasCookies;
-      vm.hasIdentity = hasIdentity;
-      vm.hasUserName = hasUserName;
-      vm.hasLevel = hasLevel;
-      vm.hasRequestInfo = hasRequestInfo;
-      vm.hasTags = hasTags;
-      vm.hasUserDescription = hasUserDescription;
-      vm.hasUserEmail = hasUserEmail;
-      vm.hasVersion = hasVersion;
-      vm.isError = isError;
-      vm.isLevelSuccess = isLevelSuccess;
-      vm.isLevelInfo = isLevelInfo;
-      vm.isLevelWarning = isLevelWarning;
-      vm.isLevelError = isLevelError;
-      vm.isPromoted = isPromoted;
-      vm.isSessionStart = isSessionStart;
-      vm.project = {};
-      vm.promoteTab = promoteTab;
-      vm.references = [];
-      vm.sessionEvents = {
-        get: function (options) {
-          function optionsCallback(options) {
-            options.filter = '-type:heartbeat';
-            options.time = null;
-            return options;
-          }
+      this.$onInit = function $onInit() {
+        vm.activeTabIndex = -1;
+        vm.activateTab = activateTab;
+        vm.canRefresh = canRefresh;
+        vm.copied = copied;
+        vm.demoteTab = demoteTab;
+        vm.event = {};
+        vm.event_json = '';
+        vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
+        vm.getCurrentTab = getCurrentTab;
+        vm.getDuration = getDuration;
+        vm.errorType = 'Unknown';
+        vm.environment = {};
+        vm.location = '';
+        vm.message = '';
+        vm.isError = false;
+        vm.isSessionStart = false;
+        vm.level = '';
+        vm.isLevelSuccess = false;
+        vm.isLevelInfo = false;
+        vm.isLevelWarning = false;
+        vm.isLevelError = false;
+        vm.isPromoted = isPromoted;
+        vm.request = {};
+        vm.requestUrl = '';
+        vm.hasCookies = false;
+        vm.user = {};
+        vm.userIdentity = '';
+        vm.userName = '';
+        vm.userDescription = {};
+        vm.userEmail = '';
+        vm.userDescription = '';
+        vm.version = '';
+        vm.project = {};
+        vm.promoteTab = promoteTab;
+        vm.references = [];
+        vm.sessionEvents = {
+          get: function (options) {
+            function optionsCallback(options) {
+              options.filter = '-type:heartbeat';
+              options.time = null;
+              return options;
+            }
 
-          return eventService.getBySessionId(vm.event.reference_id, options, optionsCallback);
-        },
-        options: {
-          limit: 10,
-          mode: 'summary'
-        },
-        source: source + '.Recent',
-        timeHeaderText: 'Session Time',
-        hideActions: true,
-        hideSessionStartTime: true
+            return eventService.getBySessionId(vm.event.reference_id, options, optionsCallback);
+          },
+          options: {
+            limit: 10,
+            mode: 'summary'
+          },
+          source: source + '.Recent',
+          timeHeaderText: 'Session Time',
+          hideActions: true,
+          hideSessionStartTime: true
+        };
+        vm.tabs = [];
+
+        getEvent().then(getProject).then(function () {
+          buildTabs($stateParams.tab);
+        });
       };
-      vm.tabs = [];
-
-      getEvent().then(getProject).then(function() { buildTabs($stateParams.tab); });
-    }]);
+    });
 }());

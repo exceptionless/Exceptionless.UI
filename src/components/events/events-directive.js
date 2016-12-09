@@ -13,8 +13,6 @@
         templateUrl: 'components/events/events-directive.tpl.html',
         controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService) {
           var vm = this;
-          var source = vm.settings.source + '.events';
-
           function canRefresh(data) {
             if (!!data && data.type === 'PersistentEvent') {
               // We are already listening to the stack changed event... This prevents a double refresh.
@@ -62,17 +60,9 @@
             });
           }
 
-          function hasEvents() {
-            return vm.events && vm.events.length > 0;
-          }
-
-          function hasSelection() {
-            return vm.selectedIds.length > 0;
-          }
-
           function open(id, event) {
             var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
-            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
+            $ExceptionlessClient.createFeatureUsage(vm.source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
             if (openInNewTab) {
               $window.open($state.href('app.event', { id: id }, { absolute: true }), '_blank');
             } else {
@@ -83,12 +73,12 @@
           }
 
           function nextPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
+            $ExceptionlessClient.createFeatureUsage(vm.source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
+            $ExceptionlessClient.createFeatureUsage(vm.source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
@@ -97,7 +87,7 @@
               vm.selectedIds = [];
             }
 
-            if (!hasSelection()) {
+            if (vm.selectedIds.length === 0) {
               notificationService.info(null, 'Please select one or more events');
             } else {
               action.run(vm.selectedIds).then(onSuccess);
@@ -105,10 +95,10 @@
           }
 
           function updateSelection() {
-            if (!hasEvents())
+            if (vm.events && vm.events.length > 0)
               return;
 
-            if (hasSelection())
+            if (vm.selectedIds.length > 0)
               vm.selectedIds = [];
             else
               vm.selectedIds = vm.events.map(function (event) {
@@ -116,25 +106,26 @@
               });
           }
 
-          vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
-          vm.canRefresh = canRefresh;
-          vm.events = [];
-          vm.get = get;
-          vm.hasEvents = hasEvents;
-          vm.hasFilter = filterService.hasFilter;
-          vm.hasSelection = hasSelection;
-          vm.hideSessionStartTime = vm.settings.hideSessionStartTime || false;
-          vm.loading = true;
-          vm.open = open;
-          vm.nextPage = nextPage;
-          vm.previousPage = previousPage;
-          vm.timeHeaderText = vm.settings.timeHeaderText || 'Date';
-          vm.relativeTo = function() { return vm.settings.relativeTo; };
-          vm.save = save;
-          vm.selectedIds = [];
-          vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
-          vm.updateSelection = updateSelection;
-          get();
+          this.$onInit = function $onInit() {
+            vm.source = vm.settings.source + '.events';
+            vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
+            vm.canRefresh = canRefresh;
+            vm.events = [];
+            vm.get = get;
+            vm.hasFilter = filterService.hasFilter;
+            vm.hideSessionStartTime = vm.settings.hideSessionStartTime || false;
+            vm.loading = true;
+            vm.open = open;
+            vm.nextPage = nextPage;
+            vm.previousPage = previousPage;
+            vm.timeHeaderText = vm.settings.timeHeaderText || 'Date';
+            vm.relativeTo = function() { return vm.settings.relativeTo; };
+            vm.save = save;
+            vm.selectedIds = [];
+            vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
+            vm.updateSelection = updateSelection;
+            get();
+          };
         }],
         controllerAs: 'vm'
       };

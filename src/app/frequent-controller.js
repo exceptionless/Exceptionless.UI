@@ -2,15 +2,17 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Frequent', ['stackService', function (stackService) {
+    .controller('app.Frequent', function (stackService) {
       var vm = this;
-      vm.mostFrequent = {
-        get: stackService.getFrequent,
-        options: {
-          limit: 20,
-          mode: 'summary'
-        },
-        source: 'app.Frequent'
+      this.$onInit = function $onInit() {
+        vm.mostFrequent = {
+          get: stackService.getFrequent,
+          options: {
+            limit: 20,
+            mode: 'summary'
+          },
+          source: 'app.Frequent'
+        };
       };
-    }]);
+    });
 }());

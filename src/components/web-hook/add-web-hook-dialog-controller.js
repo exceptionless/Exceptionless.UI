@@ -2,12 +2,10 @@
   'use strict';
 
   angular.module('exceptionless.web-hook')
-    .controller('AddWebHookDialog', ['$ExceptionlessClient', '$uibModalInstance', function ($ExceptionlessClient, $uibModalInstance) {
-      var source = 'exceptionless.web-hook.AddWebHookDialog';
+    .controller('AddWebHookDialog', function ($ExceptionlessClient, $uibModalInstance) {
       var vm = this;
-
       function cancel() {
-        $ExceptionlessClient.submitFeatureUsage(source + '.cancel');
+        $ExceptionlessClient.submitFeatureUsage(vm._source + '.cancel');
         $uibModalInstance.dismiss('cancel');
       }
 
@@ -55,17 +53,20 @@
           return;
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.save').setProperty('WebHook', vm.data).submit();
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.save').setProperty('WebHook', vm.data).submit();
         $uibModalInstance.close(vm.data);
       }
 
-      vm.addWebHookForm = {};
-      vm.cancel = cancel;
-      vm.data = { };
-      vm.eventTypes = getEventTypes();
-      vm.hasEventTypeSelection = hasEventTypeSelection;
-      vm.save = save;
+      this.$onInit = function $onInit() {
+        vm._source = 'exceptionless.web-hook.AddWebHookDialog';
+        vm.addWebHookForm = {};
+        vm.cancel = cancel;
+        vm.data = {};
+        vm.eventTypes = getEventTypes();
+        vm.hasEventTypeSelection = hasEventTypeSelection;
+        vm.save = save;
 
-      $ExceptionlessClient.submitFeatureUsage(source);
-    }]);
+        $ExceptionlessClient.submitFeatureUsage(vm._source);
+      };
+    });
 }());

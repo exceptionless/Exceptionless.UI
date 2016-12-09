@@ -22,7 +22,7 @@
       'exceptionless.timeago',
       'exceptionless.users'
     ])
-    .config(['$stateProvider', function ($stateProvider) {
+    .config(function ($stateProvider) {
       var onEnterSetTypeFilter = ['filterService', function (filterService) {
         filterService.setOrganizationId(null, true);
         filterService.setProjectId(null, true);
@@ -95,5 +95,5 @@
           }]
         }
       });
-    }]);
+    });
 }());

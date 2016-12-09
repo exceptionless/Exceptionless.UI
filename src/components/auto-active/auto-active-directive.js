@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('exceptionless.auto-active', [])
-    .directive('autoActive', ['$location', '$timeout', function ($location, $timeout) {
+    .directive('autoActive', function ($location, $timeout) {
       return {
         restrict: 'A',
         scope: false,
@@ -52,5 +52,5 @@
           });
         }
       };
-    }]);
+    });
 }());

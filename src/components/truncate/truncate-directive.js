@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.truncate', ['debounce'])
-    .directive('truncate', ['$window', '$timeout', 'debounce', function ($window, $timeout, debounce) {
+    .directive('truncate', function ($window, $timeout, debounce) {
       return {
         restrict: 'A',
         link: function (scope, element, attrs) {
@@ -22,5 +22,5 @@
           });
         }
       };
-    }]);
+    });
 }());

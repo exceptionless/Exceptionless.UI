@@ -6,7 +6,7 @@
     'exceptionless',
     'exceptionless.auth'
   ])
-  .factory('signalRService', ['$ExceptionlessClient', '$rootScope', '$interval', '$timeout', 'authService', 'BASE_URL', function ($ExceptionlessClient, $rootScope, $interval, $timeout, authService, BASE_URL) {
+  .factory('signalRService', function ($ExceptionlessClient, $rootScope, $interval, $timeout, authService, BASE_URL) {
     var source = 'exceptionless.signalr.signalRService';
     var _connection;
     var _signalRTimeout;
@@ -85,5 +85,5 @@
     };
 
     return service;
-  }]);
+  });
 }());

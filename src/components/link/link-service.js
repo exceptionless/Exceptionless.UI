@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('exceptionless.link', [])
-    .factory('linkService', [function () {
+    .factory('linkService', function () {
       function getLinks(linkHeader) {
         if (linkHeader == null)
           return {};
@@ -66,5 +66,5 @@
       };
 
       return service;
-    }]);
+    });
 }());

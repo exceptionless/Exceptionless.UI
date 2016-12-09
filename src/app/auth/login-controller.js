@@ -2,8 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', ['$ExceptionlessClient', '$state', '$stateParams', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($ExceptionlessClient, $state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
-      var source = 'app.auth.Login';
+    .controller('auth.Login', function ($ExceptionlessClient, $state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
       var vm = this;
 
       function getMessage(response) {
@@ -16,11 +15,11 @@
 
       function authenticate(provider) {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).addTags(provider).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.authenticate').setProperty('InviteToken', vm.token).addTags(provider).submit();
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.authenticate.error').setProperty('InviteToken', vm.token).setProperty('response', response).addTags(provider).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.authenticate.error').setProperty('InviteToken', vm.token).setProperty('response', response).addTags(provider).submit();
           notificationService.error(getMessage(response));
         }
 
@@ -52,11 +51,11 @@
         }
 
         function onSuccess() {
-          $ExceptionlessClient.submitFeatureUsage(source + '.login');
+          $ExceptionlessClient.submitFeatureUsage(vm._source + '.login');
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.login.error').setUserIdentity(vm.user.email).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.login.error').setUserIdentity(vm.user.email).submit();
           notificationService.error(getMessage(response));
         }
 
@@ -84,11 +83,14 @@
         authService.logout();
       }
 
-      vm.authenticate = authenticate;
-      vm.isExternalLoginEnabled = isExternalLoginEnabled;
-      vm.login = login;
-      vm.loginForm = {};
-      vm.token = $stateParams.token;
-      vm.user = { invite_token: vm.token };
-    }]);
+      this.$onInit = function $onInit() {
+        vm._source = 'app.auth.Login';
+        vm.authenticate = authenticate;
+        vm.isExternalLoginEnabled = isExternalLoginEnabled;
+        vm.login = login;
+        vm.loginForm = {};
+        vm.token = $stateParams.token;
+        vm.user = {invite_token: vm.token};
+      };
+    });
 }());

@@ -11,10 +11,8 @@
           settings: '='
         },
         templateUrl: 'components/stacks/stacks-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'linkService', 'filterService', 'notificationService', 'paginationService', 'stacksActionsService', function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
+        controller: function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
           var vm = this;
-          var source = vm.settings.source + '.stacks';
-
           function canRefresh(data) {
             if (!!data && data.type === 'Stack') {
               return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
@@ -48,17 +46,9 @@
             });
           }
 
-          function hasStacks() {
-            return vm.stacks && vm.stacks.length > 0;
-          }
-
-          function hasSelection() {
-            return vm.selectedIds.length > 0;
-          }
-
           function open(id, event) {
             var openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
-            $ExceptionlessClient.createFeatureUsage(source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.open').setProperty('id', id).setProperty('_blank', openInNewTab).submit();
             if (openInNewTab) {
               $window.open($state.href('app.stack', { id: id }, { absolute: true }), '_blank');
             } else {
@@ -69,12 +59,12 @@
           }
 
           function nextPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.nextPage').setProperty('next', vm.next).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.nextPage').setProperty('next', vm.next).submit();
             return get(vm.next);
           }
 
           function previousPage() {
-            $ExceptionlessClient.createFeatureUsage(source + '.previousPage').setProperty('previous', vm.previous).submit();
+            $ExceptionlessClient.createFeatureUsage(vm._source + '.previousPage').setProperty('previous', vm.previous).submit();
             return get(vm.previous);
           }
 
@@ -83,7 +73,7 @@
               vm.selectedIds = [];
             }
 
-            if (!hasSelection()) {
+            if (vm.selectedIds.length === 0) {
               notificationService.info(null, 'Please select one or more stacks');
             } else {
               action.run(vm.selectedIds).then(onSuccess);
@@ -91,10 +81,10 @@
           }
 
           function updateSelection() {
-            if (!hasStacks())
+            if (vm.stacks && vm.stacks.length === 0)
               return;
 
-            if (hasSelection())
+            if (vm.selectedIds.length > 0)
               vm.selectedIds = [];
             else
               vm.selectedIds = vm.stacks.map(function (stack) {
@@ -102,24 +92,25 @@
               });
           }
 
-          vm.actions = stacksActionsService.getActions();
-          vm.canRefresh = canRefresh;
-          vm.get = get;
-          vm.hasFilter = filterService.hasFilter;
-          vm.hasStacks = hasStacks;
-          vm.hasSelection = hasSelection;
-          vm.loading = true;
-          vm.nextPage = nextPage;
-          vm.open = open;
-          vm.previousPage = previousPage;
-          vm.save = save;
-          vm.selectedIds = [];
-          vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
-          vm.stacks = [];
-          vm.updateSelection = updateSelection;
+          this.$onInit = function $onInit() {
+            vm._source = vm.settings.source + '.stacks';
+            vm.actions = stacksActionsService.getActions();
+            vm.canRefresh = canRefresh;
+            vm.get = get;
+            vm.hasFilter = filterService.hasFilter;
+            vm.loading = true;
+            vm.nextPage = nextPage;
+            vm.open = open;
+            vm.previousPage = previousPage;
+            vm.save = save;
+            vm.selectedIds = [];
+            vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
+            vm.stacks = [];
+            vm.updateSelection = updateSelection;
 
-          get();
-        }],
+            get();
+          };
+        },
         controllerAs: 'vm'
       };
     });

@@ -2,11 +2,8 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', ['$analytics', '$ExceptionlessClient', '$state', '$stateParams', '$timeout', 'authService', 'FACEBOOK_APPID', 'GOOGLE_APPID', 'GITHUB_APPID', 'LIVE_APPID', 'notificationService', 'projectService', 'stateService', function ($analytics, $ExceptionlessClient, $state, $stateParams, $timeout, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
-      var source = 'app.auth.Signup';
-      var _canSignup = true;
+    .controller('auth.Signup', function ($analytics, $ExceptionlessClient, $state, $stateParams, $timeout, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
       var vm = this;
-
       function getMessage(response) {
         var message = 'An error occurred while signing up.  Please contact support for more information.';
         if (response.data && response.data.message)
@@ -18,11 +15,11 @@
       function authenticate(provider) {
         function onSuccess() {
           $analytics.eventTrack('CompleteRegistration');
-          $ExceptionlessClient.createFeatureUsage(source + '.authenticate').setProperty('InviteToken', vm.token).addTags(provider).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.authenticate').setProperty('InviteToken', vm.token).addTags(provider).submit();
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.authenticate.error').setProperty('InviteToken', vm.token).setProperty('response', response).addTags(provider).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.authenticate.error').setProperty('InviteToken', vm.token).setProperty('response', response).addTags(provider).submit();
           notificationService.error(getMessage(response));
         }
 
@@ -67,7 +64,7 @@
 
       function signup(isRetrying) {
         function resetCanSignup() {
-          _canSignup = true;
+          vm._canSignup = true;
         }
 
         function retry(delay) {
@@ -86,19 +83,19 @@
           return retry();
         }
 
-        if (_canSignup) {
-          _canSignup = false;
+        if (vm._canSignup) {
+          vm._canSignup = false;
         } else {
           return;
         }
 
         function onSuccess() {
           $analytics.eventTrack('CompleteRegistration');
-          $ExceptionlessClient.submitFeatureUsage(source + '.signup');
+          $ExceptionlessClient.submitFeatureUsage(vm._source + '.signup');
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.signup.error').setUserIdentity(vm.user.email).submit();
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.signup.error').setUserIdentity(vm.user.email).submit();
           notificationService.error(getMessage(response));
         }
 
@@ -109,11 +106,15 @@
         authService.logout(true, $stateParams);
       }
 
-      vm.authenticate = authenticate;
-      vm.isExternalLoginEnabled = isExternalLoginEnabled;
-      vm.signup = signup;
-      vm.signupForm = {};
-      vm.token = $stateParams.token;
-      vm.user = { invite_token: vm.token };
-    }]);
+      this.$onInit = function $onInit() {
+        vm._source = 'app.auth.Signup';
+        vm._canSignup = true;
+        vm.authenticate = authenticate;
+        vm.isExternalLoginEnabled = isExternalLoginEnabled;
+        vm.signup = signup;
+        vm.signupForm = {};
+        vm.token = $stateParams.token;
+        vm.user = {invite_token: vm.token};
+      };
+    });
 }());

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.summary', ['exceptionless.truncate'])
-    .directive('summary', [function () {
+    .directive('summary', function () {
       return {
         restrict: 'E',
         scope: {
@@ -20,5 +20,5 @@
           scope.templateUrl = 'components/summary/templates/' + scope.source.template_key + '.tpl.html';
         }
       };
-    }]);
+    });
 }());

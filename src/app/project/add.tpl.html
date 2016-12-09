@@ -13,7 +13,7 @@
             </div>
 
             <div class="form-group" ng-if="vm.canCreateOrganization()">
-              <div ng-class="{'input-group': vm.addForm.$pending }">
+              <div ng-class="{'input-group': !!vm.addForm.$pending }">
                 <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
                        ng-model="vm.organization_name"
                        ng-model-options="{ debounce: 500 }"
@@ -34,7 +34,7 @@
 
             <div class="form-group">
               <label for="project_name">Project Name</label>
-              <div ng-class="{'input-group': vm.addForm.$pending }">
+              <div ng-class="{'input-group': !!vm.addForm.$pending }">
                 <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name"
                        ng-model="vm.project_name"
                        ng-model-options="{ debounce: 500 }"

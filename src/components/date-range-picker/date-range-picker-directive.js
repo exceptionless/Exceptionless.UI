@@ -4,7 +4,7 @@
   angular.module('exceptionless.date-range-picker', [
     'exceptionless.autofocus'
   ])
-  .directive('dateRangePicker', ['$compile', '$parse', function ($parse) {
+  .directive('dateRangePicker', function () {
     return {
       restrict: 'E',
       scope: {
@@ -56,5 +56,5 @@
         element.data('daterangepicker').setEndDate(vm.range.end);
       }
     };
-  }]);
+  });
 }());

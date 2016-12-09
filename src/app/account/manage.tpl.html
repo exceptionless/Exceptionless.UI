@@ -34,7 +34,7 @@
               <form name="vm.emailAddressForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
                   <label for="email">Email Address</label>
-                  <div ng-class="{'input-group': vm.emailAddressForm.$pending }">
+                  <div ng-class="{'input-group': !!vm.emailAddressForm.$pending }">
                     <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                            placeholder="Email Address"
                            ng-model="vm.user.email_address"
@@ -76,7 +76,7 @@
                   </label>
                 </div>
 
-                <div ng-if="vm.hasProjects()">
+                <div ng-if="vm.projects.length > 0">
                   <hr/>
 
                   <p>Choose how often you want to receive notifications for event occurrences in this project.</p>
@@ -84,7 +84,7 @@
                   <select class="form-control"
                           ng-model="vm.currentProject"
                           ng-change="vm.getEmailNotificationSettings()"
-                          ng-disabled="!vm.hasEmailNotifications()"
+                          ng-disabled="!(vm.user.email_notifications_enabled && vm.emailNotificationSettings)"
                           ng-options="project.name group by project.organization_name for project in vm.projects | orderBy: 'name' track by project.id"></select>
 
                   <div class="checkbox">
@@ -93,14 +93,14 @@
                              ng-model="vm.emailNotificationSettings.send_daily_summary"
                              ng-model-options="{ debounce: 500 }"
                              ng-change="vm.saveEmailNotificationSettings()"
-                             ng-disabled="!vm.hasEmailNotifications()">
+                             ng-disabled="!(vm.user.email_notifications_enabled && vm.emailNotificationSettings)">
                       <i></i>
                       Send daily project summary
                     </label>
                   </div>
 
-                  <hr ng-if="!vm.hasPremiumFeatures()"/>
-                  <div class="alert in fade alert-success" ng-if="!vm.hasPremiumFeatures()">
+                  <hr ng-if="!vm.hasPremiumFeatures"/>
+                  <div class="alert in fade alert-success" ng-if="!vm.hasPremiumFeatures">
                     <a ng-click="vm.showChangePlanDialog()">Upgrade now</a> to enable occurrence level notifications!
                   </div>
 
@@ -168,7 +168,7 @@
             </uib-tab>
             <uib-tab heading="Password">
               <form name="vm.passwordForm" role="form" class="form-validation">
-                <div class="form-group" ng-if="vm.hasLocalAccount()">
+                <div class="form-group" ng-if="vm.hasLocalAccount">
                   <label for="current">Current Password</label>
                   <input id="current" name="current" type="password" class="form-control" ng-model="vm.password.current_password" required />
 
@@ -205,7 +205,7 @@
                   </div>
                 </div>
 
-                <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="{{vm.hasLocalAccount() ? 'Changing Password' : 'Setting Password'}}">{{vm.hasLocalAccount() ? 'Change Password' : 'Set Password'}}</button>
+                <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="{{vm.hasLocalAccount ? 'Changing Password' : 'Setting Password'}}">{{vm.hasLocalAccount ? 'Change Password' : 'Set Password'}}</button>
               </form>
             </uib-tab>
             <uib-tab heading="External Logins" ng-if="vm.isExternalLoginEnabled()">
@@ -228,17 +228,17 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="account in vm.user.o_auth_accounts" ng-if="vm.hasOAuthAccounts()">
+                    <tr ng-repeat="account in vm.user.o_auth_accounts" ng-if="vm.user.o_auth_accounts.length > 0">
                       <td>{{::account.provider}} ({{::account.username || account.provider_user_id}})</td>
                       <td>
                         <button type="button" role="button" class="btn btn-sm" title="Remove"
-                                ng-disabled="!vm.canRemoveOAuthAccount()"
+                                ng-disabled="!(vm.hasLocalAccount || vm.user.o_auth_accounts.length > 1)"
                                 ng-click="vm.unlink(account)">
                           <i class="fa fa-times"></i>
                         </button>
                       </td>
                     </tr>
-                    <tr ng-if="!vm.hasOAuthAccounts()">
+                    <tr ng-if="vm.user.o_auth_accounts.length === 0">
                       <td colspan="2">
                         <strong>No external logins were found.</strong>
                       </td>
