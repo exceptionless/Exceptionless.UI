@@ -7,6 +7,12 @@
     'exceptionless.filter'
   ])
   .factory('eventService', function (filterService, Restangular) {
+    function count(aggregations, optionsCallback) {
+      var options = (aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {};
+      optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
+      return Restangular.one('events', 'count').get(optionsCallback(filterService.apply(options)));
+    }
+
     function getAll(options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
       return Restangular.all('events').getList(optionsCallback(filterService.apply(options)));
@@ -47,6 +53,7 @@
     }
 
     var service = {
+      count: count,
       getAll: getAll,
       getAllSessions: getAllSessions,
       getById: getById,

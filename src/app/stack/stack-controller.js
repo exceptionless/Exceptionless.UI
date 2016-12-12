@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackDialogService, stackService, statService) {
+    .controller('Stack', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackDialogService, stackService) {
       var vm = this;
       function addHotkeys() {
         function logFeatureUsage(name) {
@@ -179,18 +179,18 @@
         }
 
         function onSuccess(response) {
-          vm.total_users = response.data.numbers[0] || 0;
+          vm.total_users = response.data.aggregations['cardinality_user'].value || 0;
           return response;
         }
 
-        return statService.get('distinct:user.raw', optionsCallback).then(onSuccess).catch(function(e) {});
+        return eventService.count('cardinality:user', optionsCallback).then(onSuccess).catch(function(e) {});
       }
 
       function getStats() {
         function buildFields(options) {
-          return 'distinct:user.raw' + options.filter(function(option) { return option.selected; })
+          return 'cardinality:user' + options.filter(function(option) { return option.selected; })
             .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
-            .join(',');
+            .join(' ');
         }
 
         function optionsCallback(options) {
@@ -200,8 +200,8 @@
 
         function onSuccess(response) {
           vm.stats = response.data.plain();
-          if (!vm.stats.timeline) {
-            vm.stats.timeline = [];
+          if (!vm.stats.aggregations['date_date'].buckets) {
+            vm.stats.aggregations['date_date'].buckets = [];
           }
 
           var colors = ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'];
@@ -211,8 +211,16 @@
               series.push({
                 name: option.name,
                 stroke: 'rgba(0, 0, 0, 0.15)',
-                data: vm.stats.timeline.map(function (item) {
-                  return { x: moment.utc(item.date).unix(), y: (index === 0 ? item.total : item.numbers[index]), data: item };
+                data: vm.stats.aggregations['date_date'].buckets.map(function (item) {
+                  function getYValue(item, index){
+                    if (index === 0) {
+                      return item.total;
+                    }
+
+                    return item.aggregations[option.field.replace(':', '_')].value;
+                  }
+
+                  return { x: moment.utc(item.date).unix(), y: getYValue(item, index), data: item };
                 })
               });
 
@@ -233,7 +241,7 @@
           return response;
         }
 
-        return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess).then(getProjectUserStats).catch(function(e) {});
+        return eventService.count('date:(date ' + buildFields(vm.chartOptions) + ')', optionsCallback).then(onSuccess).then(getProjectUserStats).catch(function(e) {});
       }
 
       function hasSelectedChartOption() {

@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, stackService, statService) {
+    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, stackService) {
       var vm = this;
       function canRefresh(data) {
         if (!data || data.type !== 'PersistentEvent') {
@@ -16,20 +16,20 @@
       function get() {
         function onSuccess(response) {
           vm.stats = response.data.plain();
-          if (!vm.stats.timeline) {
-            vm.stats.timeline = [];
+          if (!vm.stats.aggregations['date_date'].buckets) {
+            vm.stats.aggregations['date_date'].buckets = [];
           }
 
-          vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.numbers[0], data: item};
+          vm.chart.options.series[0].data = vm.stats.aggregations['date_date'].buckets.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.aggregations['term_is_first_occurrence'].buckets[0].total, data: item};
           });
 
-          vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
+          vm.chart.options.series[1].data = vm.stats.aggregations['date_date'].buckets.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.aggregations['cardinality_stack_id'].value, data: item};
           });
         }
 
-        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess).catch(function(e) {});
+        return eventService.count('date:(date cardinality:stack_id term:(is_first_occurrence @include:true))').then(onSuccess).catch(function(e) {});
       }
 
       this.$onInit = function $onInit() {

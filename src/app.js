@@ -47,7 +47,6 @@
     'exceptionless.signalr',
     'exceptionless.stack',
     'exceptionless.stacks',
-    'exceptionless.stat',
     'exceptionless.state',
     'exceptionless.ui-nav',
     'exceptionless.ui-scroll',

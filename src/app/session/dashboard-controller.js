@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService, notificationService, organizationService, statService) {
+    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService, notificationService, organizationService) {
       var vm = this;
       function get() {
         function optionsCallback(options) {
@@ -13,20 +13,20 @@
 
         function onSuccess(response) {
           vm.stats = response.data.plain();
-          if (!vm.stats.timeline) {
-            vm.stats.timeline = [];
+          if (!vm.stats.aggregations['date_date'].buckets) {
+            vm.stats.aggregations['date_date'].buckets = [];
           }
 
-          vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.numbers[1], data: item};
+          vm.chart.options.series[0].data = vm.stats.aggregations['date_date'].buckets.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.aggregations['avg_value'].value, data: item};
           });
 
-          vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
+          vm.chart.options.series[1].data = vm.stats.aggregations['date_date'].buckets.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.aggregations['cardinality_user'].value, data: item};
           });
         }
 
-        return statService.getTimeline('avg:value,distinct:user.raw').then(onSuccess).catch(function(e) {});
+        return eventService.count('date:(date avg:value cardinality:user)', optionsCallback).then(onSuccess).catch(function(e) {});
       }
 
       this.$onInit = function $onInit() {

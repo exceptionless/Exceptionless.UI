@@ -23,8 +23,7 @@
     'exceptionless.refresh',
     'exceptionless.stack',
     'exceptionless.stack-dialog',
-    'exceptionless.stack-trace',
-    'exceptionless.stat'
+    'exceptionless.stack-trace'
   ])
   .config(function ($stateProvider) {
     $stateProvider.state('app.stack', {
