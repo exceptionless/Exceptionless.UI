@@ -29,7 +29,7 @@
           });
         }
 
-        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess);
+        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess).catch(function(e) {});
       }
 
       this.$onInit = function $onInit() {

@@ -21,6 +21,7 @@
         vm._source = 'app.stack-dialog.MarkFixedDialog';
         vm.cancel = cancel;
         vm.data = {};
+        vm.markFixedForm = {};
         vm.save = save;
         $ExceptionlessClient.submitFeatureUsage(vm._source);
       };

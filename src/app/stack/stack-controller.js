@@ -140,7 +140,7 @@
           return getStats();
         }
 
-        return getStack().then(getStats).then(getProject);
+        return getStack().then(getStats).then(getProject).catch(function(e) {});
       }
 
       function getProject() {
@@ -149,7 +149,7 @@
           return vm.project;
         }
 
-        return projectService.getById(vm.stack.project_id, true).then(onSuccess);
+        return projectService.getById(vm.stack.project_id, true).then(onSuccess).catch(function(e) {});
       }
 
       function getStack() {
@@ -183,7 +183,7 @@
           return response;
         }
 
-        return statService.get('distinct:user.raw', optionsCallback).then(onSuccess);
+        return statService.get('distinct:user.raw', optionsCallback).then(onSuccess).catch(function(e) {});
       }
 
       function getStats() {
@@ -233,7 +233,7 @@
           return response;
         }
 
-        return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess).then(getProjectUserStats);
+        return statService.getTimeline(buildFields(vm.chartOptions), optionsCallback).then(onSuccess).then(getProjectUserStats).catch(function(e) {});
       }
 
       function hasSelectedChartOption() {

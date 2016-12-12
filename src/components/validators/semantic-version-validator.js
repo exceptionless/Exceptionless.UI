@@ -9,12 +9,12 @@
         link: function(scope, element, attrs, ngModel) {
           ngModel.$validators.semver = function (modelValue, viewValue) {
             if (typeof viewValue !== 'string') {
-              return undefined;
+              return true;
             }
 
             var version = viewValue.trim();
             if (version.length === 0) {
-              return undefined;
+              return true;
             }
 
             if (version.length > 256) {

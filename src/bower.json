@@ -10,7 +10,7 @@
   "dependencies": {
     "angular": "1.6.0",
     "angular-animate": "1.6.0",
-    "angular-bootstrap": "2.3.0",
+    "angular-bootstrap": "2.3.1",
     "angular-clipboard": "1.5.0",
     "angular-dialog-service": "5.3.0",
     "angular-filter": "0.5.14",

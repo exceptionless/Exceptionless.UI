@@ -26,7 +26,7 @@
           });
         }
 
-        return statService.getTimeline('avg:value,distinct:user.raw').then(onSuccess);
+        return statService.getTimeline('avg:value,distinct:user.raw').then(onSuccess).catch(function(e) {});
       }
 
       this.$onInit = function $onInit() {

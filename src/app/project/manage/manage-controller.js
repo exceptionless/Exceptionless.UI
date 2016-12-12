@@ -53,7 +53,7 @@
           return;
         }
 
-        return getProject().then(getTokens).then(getConfiguration).then(getWebHooks);
+        return getProject().then(getTokens).then(getConfiguration).then(getWebHooks).catch(function(e) {});
       }
 
       function getProject() {

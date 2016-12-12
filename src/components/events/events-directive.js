@@ -55,7 +55,7 @@
 
             vm.loading = vm.events.length === 0;
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions).then(onSuccess).finally(function() {
+            return vm.settings.get(vm.currentOptions).then(onSuccess).catch(function(e) {}).finally(function() {
               vm.loading = false;
             });
           }
