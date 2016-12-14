@@ -15,21 +15,27 @@
 
       function get() {
         function onSuccess(response) {
-          vm.stats = response.data.plain();
-          if (!vm.stats.aggregations['date_date'].buckets) {
-            vm.stats.aggregations['date_date'].buckets = [];
-          }
+          var results = response.data.plain();
+          var first_occurrence = results.aggregations['min_date'].value;
+          var last_occurrence = results.aggregations['max_date'].value;
 
-          vm.chart.options.series[0].data = vm.stats.aggregations['date_date'].buckets.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.aggregations['term_is_first_occurrence'].buckets[0].total, data: item};
+          vm.stats = {
+            total: $filter('number')(results.total, 0),
+            unique: $filter('number')(results.aggregations['cardinality_stack_id'].value, 0),
+            new: $filter('number')(results.aggregations['terms_is_first_occurrence'].items[0].total, 0),
+            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, first_occurrence, last_occurrence), 1)
+          };
+
+          vm.chart.options.series[0].data = results.aggregations['date_date'].items.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.aggregations['terms_is_first_occurrence'].items[0].total, data: item};
           });
 
-          vm.chart.options.series[1].data = vm.stats.aggregations['date_date'].buckets.map(function (item) {
+          vm.chart.options.series[1].data = results.aggregations['date_date'].items.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.aggregations['cardinality_stack_id'].value, data: item};
           });
         }
 
-        return eventService.count('date:(date cardinality:stack_id term:(is_first_occurrence @include:true))').then(onSuccess).catch(function(e) {});
+        return eventService.count('min:date max:date date:(date cardinality:stack_id terms:(is_first_occurrence @include:true)) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess).catch(function(e) {});
       }
 
       this.$onInit = function $onInit() {
@@ -131,7 +137,12 @@
           },
           source: vm._source + '.Recent'
         };
-        vm.stats = {};
+        vm.stats = {
+          total: 0,
+          unique: 0,
+          new: 0,
+          avg_per_hour: 0.0
+        };
         vm.type = $stateParams.type;
 
         get();

@@ -95,6 +95,18 @@
         }).catch(function(e){});
       }
 
+      function buildUserStat(users, totalUsers) {
+        if (totalUsers === 0) {
+          return 0;
+        }
+
+        return $filter('percentage')((users / totalUsers * 100.0), 100)
+      }
+
+      function buildUserStatTitle(users, totalUsers) {
+        return $filter('number')(users, 0) + ' of ' + $filter('number')(totalUsers, 0) +  ' users';
+      }
+
       function executeAction() {
         var action = $stateParams.action;
         if (action === 'mark-fixed' && !(vm.stack.date_fixed && !vm.stack.is_regressed)) {
@@ -179,7 +191,9 @@
         }
 
         function onSuccess(response) {
-          vm.total_users = response.data.aggregations['cardinality_user'].value || 0;
+          vm._total_users = response.data.aggregations['cardinality_user'].value || 0;
+          vm.stats.users = buildUserStat(vm._users, vm._total_users);
+          vm.stats.usersTitle = buildUserStatTitle(vm._users, vm._total_users);
           return response;
         }
 
@@ -199,10 +213,15 @@
         }
 
         function onSuccess(response) {
-          vm.stats = response.data.plain();
-          if (!vm.stats.aggregations['date_date'].buckets) {
-            vm.stats.aggregations['date_date'].buckets = [];
-          }
+          var results = response.data.plain();
+          vm._users = results.aggregations['cardinality_user'].value || 0;
+          vm.stats = {
+            total: $filter('number')(results.total, 0),
+            users: buildUserStat(vm._users, vm._total_users),
+            usersTitle: buildUserStatTitle(vm._users, vm._total_users),
+            first_occurrence: results.aggregations['min_date'].value,
+            last_occurrence: results.aggregations['max_date'].value
+          };
 
           var colors = ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'];
           vm.chart.options.series = vm.chartOptions
@@ -211,7 +230,7 @@
               series.push({
                 name: option.name,
                 stroke: 'rgba(0, 0, 0, 0.15)',
-                data: vm.stats.aggregations['date_date'].buckets.map(function (item) {
+                data: results.aggregations['date_date'].items.map(function (item) {
                   function getYValue(item, index){
                     if (index === 0) {
                       return item.total;
@@ -241,7 +260,7 @@
           return response;
         }
 
-        return eventService.count('date:(date ' + buildFields(vm.chartOptions) + ')', optionsCallback).then(onSuccess).then(getProjectUserStats).catch(function(e) {});
+        return eventService.count('min:date max:date cardinality:user date:(date ' + buildFields(vm.chartOptions) + ')', optionsCallback).then(onSuccess).then(getProjectUserStats).catch(function(e) {});
       }
 
       function hasSelectedChartOption() {
@@ -514,8 +533,16 @@
           source: vm._source + '.Recent'
         };
         vm.stack = {};
-        vm.stats = {};
-        vm.total_users = 0;
+        vm.stats = {
+          total: 0,
+          users: buildUserStat(0, 0),
+          usersTitle: buildUserStatTitle(0, 0),
+          first_occurrence: undefined,
+          last_occurrence: undefined
+        };
+
+        vm._users = 0;
+        vm._total_users = 0;
         vm.updateIsCritical = updateIsCritical;
         vm.updateIsFixed = updateIsFixed;
         vm.updateIsHidden = updateIsHidden;

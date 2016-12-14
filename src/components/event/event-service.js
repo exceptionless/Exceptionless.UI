@@ -7,6 +7,20 @@
     'exceptionless.filter'
   ])
   .factory('eventService', function (filterService, Restangular) {
+    function calculateAveragePerHour(total, minDate, maxDate) {
+      if (!minDate || !maxDate) {
+        return 0.0;
+      }
+
+      var min = moment.utc(minDate);
+      var max = moment.utc(maxDate);
+      if (!min.isValid() || min.year() < 1 || !max.isValid() || max.year() < 1) {
+        return 0.0;
+      }
+
+      return total / max.diff(min, 'hours', true);
+    }
+
     function count(aggregations, optionsCallback) {
       var options = (aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {};
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
@@ -53,6 +67,7 @@
     }
 
     var service = {
+      calculateAveragePerHour: calculateAveragePerHour,
       count: count,
       getAll: getAll,
       getAllSessions: getAllSessions,
