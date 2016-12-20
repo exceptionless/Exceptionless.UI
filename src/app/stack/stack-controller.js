@@ -100,7 +100,7 @@
           return 0;
         }
 
-        return $filter('percentage')((users / totalUsers * 100.0), 100)
+        return $filter('percentage')((users / totalUsers * 100.0), 100);
       }
 
       function buildUserStatTitle(users, totalUsers) {

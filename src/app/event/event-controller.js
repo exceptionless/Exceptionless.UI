@@ -130,11 +130,11 @@
           }
         }
 
-        if (vm.request) {
+        if (Object.keys(vm.request).length > 0) {
           tabs.push({index: ++tabIndex, title: vm.isSessionStart ? 'Browser' : 'Request', template_key: 'request'});
         }
 
-        if (vm.environment) {
+        if (Object.keys(vm.environment).length > 0) {
           tabs.push({index: ++tabIndex, title: 'Environment', template_key: 'environment'});
         }
 
@@ -241,14 +241,14 @@
 
         function onSuccess(response) {
           function getErrorType(event) {
-            if (event.data['@error']) {
+            if (event.data && event.data['@error']) {
               var type = errorService.getTargetInfoExceptionType(event.data['@error']);
               if (type) {
                 return type;
               }
             }
 
-            if (event.data['@simple_error']) {
+            if (event.data && event.data['@simple_error']) {
               return event.data['@simple_error'].type;
             }
 
@@ -289,24 +289,24 @@
           vm.message = getMessage(vm.event);
           vm.isError = vm.event.type === 'error';
           vm.isSessionStart = vm.event.type === 'session';
-          vm.level = !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
+          vm.level = event.data && !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
           vm.isLevelSuccess = vm.level === 'trace' || vm.level === 'debug';
           vm.isLevelInfo = vm.level === 'info';
           vm.isLevelWarning = vm.level === 'warn';
           vm.isLevelError = vm.level === 'error';
 
-          vm.request = vm.event.data['@request'];
+          vm.request = event.data && vm.event.data['@request'];
           vm.hasCookies = vm.request && !!vm.request.cookies && Object.keys(vm.request.cookies).length > 0;
           vm.requestUrl = vm.request && urlService.buildUrl(vm.request.is_secure, vm.request.host, vm.request.port, vm.request.path, vm.request.query_string);
 
-          vm.user = vm.event.data['@user'];
+          vm.user = event.data && vm.event.data['@user'];
           vm.userIdentity = vm.user && vm.user.identity;
           vm.userName = vm.user && vm.user.name;
 
-          vm.userDescription = vm.event.data['@user_description'];
+          vm.userDescription = event.data && vm.event.data['@user_description'];
           vm.userEmail = vm.userDescription && vm.userDescription.email_address;
           vm.userDescription = vm.userDescription && vm.userDescription.description;
-          vm.version = vm.event.data['@version'];
+          vm.version = event.data && vm.event.data['@version'];
 
           var links = linkService.getLinks(response.headers('link'));
           vm.previous = links['previous'] ? links['previous'].split('/').pop() : null;
@@ -336,7 +336,7 @@
           onFailure();
         }
 
-        return eventService.getById(_eventId, {}, optionsCallback).then(onSuccess, onFailure);
+        return eventService.getById(_eventId, {}, optionsCallback).then(onSuccess, onFailure).catch(function (e) {});
       }
 
       function getProject() {
