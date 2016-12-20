@@ -79,7 +79,9 @@
         template: '<pre class="stack-trace"><code ng-bind-html="vm.stackTrace"></code></pre>',
         controller: [function () {
           var vm = this;
-          vm.stackTrace = $sce.trustAsHtml(buildStackTrace(simpleErrorService.getExceptions(vm.exception)));
+          this.$onInit = function $onInit() {
+            vm.stackTrace = $sce.trustAsHtml(buildStackTrace(simpleErrorService.getExceptions(vm.exception)));
+          }
         }],
         controllerAs: 'vm'
       };
