@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('AddConfigurationDialog', function ($ExceptionlessClient, $uibModalInstance, configuration) {
+    .controller('AddConfigurationDialog', function ($ExceptionlessClient, $uibModalInstance, data) {
       var vm = this;
       function cancel() {
         $ExceptionlessClient.submitFeatureUsage(vm._source + '.cancel');
@@ -21,7 +21,7 @@
       this.$onInit = function $onInit() {
         vm._source = 'app.project.AddConfigurationDialog';
         vm.cancel = cancel;
-        vm.configuration = configuration;
+        vm.configuration = data;
         vm.data = {};
         vm.save = save;
         $ExceptionlessClient.submitFeatureUsage(vm._source);
