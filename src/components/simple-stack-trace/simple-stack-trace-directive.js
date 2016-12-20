@@ -81,7 +81,7 @@
           var vm = this;
           this.$onInit = function $onInit() {
             vm.stackTrace = $sce.trustAsHtml(buildStackTrace(simpleErrorService.getExceptions(vm.exception)));
-          }
+          };
         }],
         controllerAs: 'vm'
       };
