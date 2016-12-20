@@ -33,7 +33,11 @@
               return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
             }
 
-            return true;
+            if (!!data && data.type === 'Organization' || data.type === 'Project') {
+              return filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+            }
+
+            return !data;
           }
 
           function get(options) {
@@ -55,7 +59,7 @@
 
             vm.loading = vm.events.length === 0;
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions).then(onSuccess).catch(function(e) {}).finally(function() {
+            return vm.settings.get(vm.currentOptions).then(onSuccess).finally(function() {
               vm.loading = false;
             });
           }

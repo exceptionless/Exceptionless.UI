@@ -3,9 +3,13 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService, notificationService, organizationService) {
+    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService, organizationService) {
       var vm = this;
       function get() {
+        return getOrganizations().then(getStats).catch(function(e){});
+      }
+
+      function getStats() {
         function optionsCallback(options) {
           options.filter += ' type:session';
           return options;
@@ -13,28 +17,37 @@
 
         function onSuccess(response) {
           var results = response.data.plain();
-          var first_occurrence = results.aggregations['min_date'].value;
-          var last_occurrence = results.aggregations['max_date'].value;
           vm.stats = {
             total: $filter('number')(results.total, 0),
             users: $filter('number')(results.aggregations['cardinality_user'].value, 0),
             avg_duration: results.aggregations['avg_value'].value,
-            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, first_occurrence, last_occurrence), 1)
+            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, vm._organizations), 1)
           };
 
-          vm.chart.options.series[0].data = results.aggregations['date_date'].items.map(function (item) {
+          var dateAggregation = results.aggregations['date_date'].items || [];
+          vm.chart.options.series[0].data = dateAggregation.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.aggregations['avg_value'].value, data: item};
           });
 
-          vm.chart.options.series[1].data = results.aggregations['date_date'].items.map(function (item) {
+          vm.chart.options.series[1].data = dateAggregation.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.aggregations['cardinality_user'].value, data: item};
           });
         }
 
-        return eventService.count('min:date max:date date:(date avg:value cardinality:user)', optionsCallback).then(onSuccess).catch(function(e) {});
+        return eventService.count('date:(date avg:value cardinality:user)', optionsCallback).then(onSuccess);
+      }
+
+      function getOrganizations() {
+        function onSuccess(response) {
+          vm._organizations = response.data.plain();
+          return vm._organizations;
+        }
+
+        return organizationService.getAll().then(onSuccess);
       }
 
       this.$onInit = function $onInit() {
+        vm._organizations = [];
         vm._source = 'app.session.Dashboard';
         vm.chart = {
           options: {

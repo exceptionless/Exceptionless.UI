@@ -152,7 +152,7 @@
           return getStats();
         }
 
-        return getStack().then(getStats).then(getProject).catch(function(e) {});
+        return getStack().then(getStats).then(getProject);
       }
 
       function getProject() {
@@ -161,7 +161,7 @@
           return vm.project;
         }
 
-        return projectService.getById(vm.stack.project_id, true).then(onSuccess).catch(function(e) {});
+        return projectService.getById(vm.stack.project_id, true).then(onSuccess);
       }
 
       function getStack() {
@@ -197,7 +197,7 @@
           return response;
         }
 
-        return eventService.count('cardinality:user', optionsCallback).then(onSuccess).catch(function(e) {});
+        return eventService.count('cardinality:user', optionsCallback).then(onSuccess);
       }
 
       function getStats() {
@@ -223,6 +223,7 @@
             last_occurrence: results.aggregations['max_date'].value
           };
 
+          var dateAggregation = results.aggregations['date_date'].items || [];
           var colors = ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'];
           vm.chart.options.series = vm.chartOptions
             .filter(function(option) { return option.selected; })
@@ -230,7 +231,7 @@
               series.push({
                 name: option.name,
                 stroke: 'rgba(0, 0, 0, 0.15)',
-                data: results.aggregations['date_date'].items.map(function (item) {
+                data: dateAggregation.map(function (item) {
                   function getYValue(item, index){
                     if (index === 0) {
                       return item.total;
@@ -260,7 +261,7 @@
           return response;
         }
 
-        return eventService.count('min:date max:date cardinality:user date:(date ' + buildFields(vm.chartOptions) + ')', optionsCallback).then(onSuccess).then(getProjectUserStats).catch(function(e) {});
+        return eventService.count('min:date max:date cardinality:user date:(date ' + buildFields(vm.chartOptions) + ')', optionsCallback).then(onSuccess).then(getProjectUserStats);
       }
 
       function hasSelectedChartOption() {

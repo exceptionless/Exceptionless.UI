@@ -177,7 +177,11 @@
           return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
         }
 
-        return false;
+        if (!!data && data.type === 'Organization' || data.type === 'Project') {
+          return filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        }
+
+        return !data;
       }
 
       function copied() {

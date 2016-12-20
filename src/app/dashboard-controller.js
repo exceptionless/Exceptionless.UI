@@ -3,42 +3,59 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, stackService) {
+    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService) {
       var vm = this;
       function canRefresh(data) {
-        if (!data || data.type !== 'PersistentEvent') {
-          return true;
+        if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
+          return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
         }
 
-        return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+        if (!!data && data.type === 'Organization' || data.type === 'Project') {
+          return filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        }
+
+        return !data;
       }
 
       function get() {
+        return getOrganizations().then(getStats).catch(function(e){});
+      }
+
+      function getStats() {
         function onSuccess(response) {
           var results = response.data.plain();
-          var first_occurrence = results.aggregations['min_date'].value;
-          var last_occurrence = results.aggregations['max_date'].value;
-
+          var termsAggregation = results.aggregations['terms_is_first_occurrence'].items;
           vm.stats = {
             total: $filter('number')(results.total, 0),
             unique: $filter('number')(results.aggregations['cardinality_stack_id'].value, 0),
-            new: $filter('number')(results.aggregations['terms_is_first_occurrence'].items[0].total, 0),
-            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, first_occurrence, last_occurrence), 1)
+            new: $filter('number')(termsAggregation && termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
+            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, vm._organizations), 1)
           };
 
-          vm.chart.options.series[0].data = results.aggregations['date_date'].items.map(function (item) {
+          var dateAggregation = results.aggregations['date_date'].items || [];
+          vm.chart.options.series[0].data = dateAggregation.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.aggregations['terms_is_first_occurrence'].items[0].total, data: item};
           });
 
-          vm.chart.options.series[1].data = results.aggregations['date_date'].items.map(function (item) {
+          vm.chart.options.series[1].data = dateAggregation.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.aggregations['cardinality_stack_id'].value, data: item};
           });
         }
 
-        return eventService.count('min:date max:date date:(date cardinality:stack_id terms:(is_first_occurrence @include:true)) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess).catch(function(e) {});
+        return eventService.count('date:(date cardinality:stack_id terms:(is_first_occurrence @include:true)) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess);
+      }
+
+      function getOrganizations() {
+        function onSuccess(response) {
+          vm._organizations = response.data.plain();
+          return vm._organizations;
+        }
+
+        return organizationService.getAll().then(onSuccess);
       }
 
       this.$onInit = function $onInit() {
+        vm._organizations = [];
         vm._source = 'app.Dashboard';
         vm.canRefresh = canRefresh;
         vm.chart = {

@@ -4,21 +4,31 @@
   angular.module('exceptionless.event', [
     'restangular',
 
-    'exceptionless.filter'
+    'exceptionless.filter',
+    'exceptionless.objectid'
   ])
-  .factory('eventService', function (filterService, Restangular) {
-    function calculateAveragePerHour(total, minDate, maxDate) {
-      if (!minDate || !maxDate) {
-        return 0.0;
+  .factory('eventService', function (filterService, objectIDService, Restangular) {
+    function calculateAveragePerHour(total, organizations) {
+      function getCreationDateFromFilterOrOrganizations(organizations) {
+        var date = objectIDService.getDate(filterService.getOrganizationId() || filterService.getProjectId());
+        if (!date && organizations.length > 1) {
+          date = new Date(organizations.reduce(function(o1, o2) { return Math.min(objectIDService.create(o1.id).timestamp, objectIDService.create(o2.id).timestamp); }) * 1000);
+        }
+
+        if (!date && organizations.length === 1) {
+          date = objectIDService.getDate(organizations[0].id);
+        }
+
+        return date ? moment(date).subtract(3, 'days') : moment(new Date(2012, 1, 1));
       }
 
-      var min = moment.utc(minDate);
-      var max = moment.utc(maxDate);
-      if (!min.isValid() || min.year() < 1 || !max.isValid() || max.year() < 1) {
-        return 0.0;
-      }
+      var absoluteMinEventDate = getCreationDateFromFilterOrOrganizations(organizations || []);
+      var range = filterService.getTimeRange();
+      range.start = moment.max([range.start, absoluteMinEventDate].filter(function(d){ return !!d; }));
+      range.end = range.end || moment();
 
-      return total / max.diff(min, 'hours', true);
+      var result = total / range.end.diff(range.start, 'hours', true);
+      return !isNaN(parseFloat(result)) && isFinite(result) ? result : 0.0;
     }
 
     function count(aggregations, optionsCallback) {

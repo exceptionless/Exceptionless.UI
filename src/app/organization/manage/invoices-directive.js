@@ -32,7 +32,7 @@
             }
 
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions, useCache).then(onSuccess).catch(function(e) {});
+            return vm.settings.get(vm.currentOptions, useCache).then(onSuccess);
           }
 
           function hasAdminRole(user) {

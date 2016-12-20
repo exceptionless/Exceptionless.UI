@@ -61,27 +61,8 @@
               return range;
             }
 
-            var start = moment().subtract(7, 'days').startOf('day');
-            var end = moment();
-
-            var time = filterService.getTime();
-            if (time === 'last hour') {
-              start = moment().subtract(1, 'hours');
-            } else if (time === 'last 24 hours') {
-              start = moment().subtract(24, 'hours');
-            } else if (time === 'last week' || time === 'all') {
-              start = moment().subtract(7, 'days').startOf('day');
-            } else if (time === 'last 30 days') {
-              start = moment().subtract(30, 'days').startOf('day');
-            } else {
-              var range = dateRangeParserService.parse(time);
-              if (range && range.start && range.end) {
-                start = moment(range.start);
-                end = moment(range.end);
-              }
-            }
-
-            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: start, end: end }).result.then(onSuccess).catch(function(e){});
+            var range = filterService.getTimeRange();
+            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: range.start || moment().subtract(7, 'days'), end: range.end || moment() }).result.then(onSuccess).catch(function(e){});
           }
 
           function setFilter(filter) {

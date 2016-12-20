@@ -22,9 +22,18 @@
       return true;
     }
 
+    function getDate(id) {
+      if (!isValid(id)) {
+        return undefined;
+      }
+
+      return create(id).getDate();
+    }
+
     var service = {
       create: create,
-      isValid: isValid
+      isValid: isValid,
+      getDate: getDate
     };
 
     return service;

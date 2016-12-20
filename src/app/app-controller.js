@@ -192,7 +192,7 @@
           return response;
         }
 
-        return organizationService.getAll().then(onSuccess).catch(function(e) {});
+        return organizationService.getAll().then(onSuccess);
       }
 
       function getUser(data) {
@@ -207,7 +207,7 @@
           return authService.logout(true);
         }
 
-        return userService.getCurrentUser().then(onSuccess).catch(function(e) {});
+        return userService.getCurrentUser().then(onSuccess);
       }
 
       function isIntercomEnabled() {
