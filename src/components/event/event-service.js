@@ -7,24 +7,10 @@
     'exceptionless.filter',
     'exceptionless.objectid'
   ])
-  .factory('eventService', function (filterService, objectIDService, Restangular) {
+  .factory('eventService', function (filterService, objectIDService, organizationService, Restangular) {
     function calculateAveragePerHour(total, organizations) {
-      function getCreationDateFromFilterOrOrganizations(organizations) {
-        var date = objectIDService.getDate(filterService.getOrganizationId() || filterService.getProjectId());
-        if (!date && organizations.length > 1) {
-          date = new Date(organizations.reduce(function(o1, o2) { return Math.min(objectIDService.create(o1.id).timestamp, objectIDService.create(o2.id).timestamp); }) * 1000);
-        }
-
-        if (!date && organizations.length === 1) {
-          date = objectIDService.getDate(organizations[0].id);
-        }
-
-        return date ? moment(date).subtract(3, 'days') : moment(new Date(2012, 1, 1));
-      }
-
-      var absoluteMinEventDate = getCreationDateFromFilterOrOrganizations(organizations || []);
       var range = filterService.getTimeRange();
-      range.start = moment.max([range.start, absoluteMinEventDate].filter(function(d){ return !!d; }));
+      range.start = moment.max([range.start, moment(filterService.getOldestPossibleEventDate()), moment(organizationService.getOldestPossibleEventDate(organizations))].filter(function(d){ return !!d; }));
       range.end = range.end || moment();
 
       var result = total / range.end.diff(range.start, 'hours', true);

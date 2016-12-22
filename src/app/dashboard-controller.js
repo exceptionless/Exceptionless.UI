@@ -34,15 +34,18 @@
 
           var dateAggregation = results.aggregations['date_date'].items || [];
           vm.chart.options.series[0].data = dateAggregation.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.aggregations['terms_is_first_occurrence'].items[0].total, data: item};
+            var isFirstAggregation = item.aggregations['terms_is_first_occurrence'].items;
+            return {x: moment(item.key).unix(), y: isFirstAggregation ? isFirstAggregation[0].total : 0, data: item};
           });
 
           vm.chart.options.series[1].data = dateAggregation.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.aggregations['cardinality_stack_id'].value, data: item};
+            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_stack_id'].value, data: item};
           });
         }
 
-        return eventService.count('date:(date cardinality:stack_id terms:(is_first_occurrence @include:true)) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess);
+        var interval = filterService.getInterval(vm._organizations);
+        var offset = filterService.getTimeOffset();
+        return eventService.count('date:(date'+ (interval && '~' + interval) + (offset && '^' + offset) + ' cardinality:stack_id terms:(is_first_occurrence @include:true)) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess);
       }
 
       function getOrganizations() {

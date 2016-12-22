@@ -57,7 +57,6 @@
                   .setProperty('id', _eventId)
                   .submit();
 
-                console.log('hotkey');
                 clipboard.copyText(vm.event_json);
                 copied();
               }

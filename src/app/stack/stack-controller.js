@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, projectService, stackDialogService, stackService) {
+    .controller('Stack', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, organizationService, projectService, stackDialogService, stackService) {
       var vm = this;
       function addHotkeys() {
         function logFeatureUsage(name) {
@@ -149,10 +149,19 @@
         }
 
         if (data && data.type === 'PersistentEvent') {
-          return getStats();
+          return updateStats();
         }
 
-        return getStack().then(getStats).then(getProject);
+        return getStack().then(updateStats).then(getProject);
+      }
+
+      function getOrganizations() {
+        function onSuccess(response) {
+          vm._organizations = response.data.plain();
+          return vm._organizations;
+        }
+
+        return organizationService.getAll().then(onSuccess);
       }
 
       function getProject() {
@@ -200,9 +209,13 @@
         return eventService.count('cardinality:user', optionsCallback).then(onSuccess);
       }
 
+      function updateStats() {
+        return getOrganizations().then(getStats);
+      }
+
       function getStats() {
         function buildFields(options) {
-          return 'cardinality:user' + options.filter(function(option) { return option.selected; })
+          return ' cardinality:user' + options.filter(function(option) { return option.selected; })
             .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
             .join(' ');
         }
@@ -240,7 +253,7 @@
                     return item.aggregations[option.field.replace(':', '_')].value;
                   }
 
-                  return { x: moment.utc(item.date).unix(), y: getYValue(item, index), data: item };
+                  return { x: moment(item.key).unix(), y: getYValue(item, index), data: item };
                 })
               });
 
@@ -261,7 +274,9 @@
           return response;
         }
 
-        return eventService.count('min:date max:date cardinality:user date:(date ' + buildFields(vm.chartOptions) + ')', optionsCallback).then(onSuccess).then(getProjectUserStats);
+        var interval = filterService.getInterval(vm._organizations);
+        var offset = filterService.getTimeOffset();
+        return eventService.count('date:(date'+ (interval && '~' + interval) + (offset && '^' + offset) + buildFields(vm.chartOptions) + ') min:date max:date cardinality:user', optionsCallback).then(onSuccess).then(getProjectUserStats);
       }
 
       function hasSelectedChartOption() {
@@ -432,6 +447,7 @@
       }
 
       this.$onInit = function $onInit() {
+        vm._organizations = [];
         vm._source = 'app.stack.Stack';
         vm._stackId = $stateParams.id;
         vm.addReferenceLink = addReferenceLink;
@@ -513,7 +529,7 @@
 
         vm.canRefresh = canRefresh;
         vm.get = get;
-        vm.getStats = getStats;
+        vm.updateStats = updateStats;
         vm.hasSelectedChartOption = hasSelectedChartOption;
         vm.isValidDate = isValidDate;
         vm.promoteToExternal = promoteToExternal;

@@ -15,7 +15,7 @@
           }
 
           setTimeagoText();
-          scope.$watch('date', function(value) {
+          scope.$watch('date', function() {
             setTimeagoText();
           });
 
