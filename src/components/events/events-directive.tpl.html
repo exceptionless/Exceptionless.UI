@@ -4,7 +4,7 @@
     <tr>
       <th class="selection hidden-xs" ng-if="vm.actions.length > 0">
         <label class="i-checks m-b-none">
-          <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.hasSelection()" ng-disabled="!vm.hasEvents()"><i></i>
+          <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.selectedIds.length > 0" ng-disabled="vm.events.length === 0"><i></i>
         </label>
       </th>
       <th>Summary</th>

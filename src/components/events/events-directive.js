@@ -99,7 +99,7 @@
           }
 
           function updateSelection() {
-            if (vm.events && vm.events.length > 0)
+            if (vm.events && vm.events.length === 0)
               return;
 
             if (vm.selectedIds.length > 0)
