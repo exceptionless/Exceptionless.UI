@@ -98,27 +98,6 @@
         return _raw;
       }
 
-      function getInterval(organizations, desiredDataPoints) {
-        var range = getTimeRange();
-        var start = moment.max([range.start, moment(getOldestPossibleEventDate()), moment(organizationService.getOldestPossibleEventDate(organizations))].filter(function(d){ return !!d; }));
-        var end = range.end || moment();
-
-        var timePerBlockInMinutes = end.diff(start, 'minutes', true) / (desiredDataPoints || 100);
-        if (timePerBlockInMinutes > (60 * 24)) { // days
-          return Math.round(timePerBlockInMinutes / (60 * 24)) + 'd';
-        }
-
-        if (timePerBlockInMinutes > 60) { // hours
-          return Math.round(timePerBlockInMinutes / 60) + 'h';
-        }
-
-        if (timePerBlockInMinutes > 1) { // minutes
-          return Math.round(timePerBlockInMinutes) + 'm';
-        }
-
-        return (timePerBlockInMinutes > (1 / 4) ? 15 : Math.round(timePerBlockInMinutes)) + 's';
-      }
-
       function getProjectId() {
         return _projectId;
       }
@@ -273,7 +252,6 @@
         clearOrganizationAndProjectFilter: clearOrganizationAndProjectFilter,
         getEventType: getEventType,
         getFilter: getFilter,
-        getInterval: getInterval,
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
         getOldestPossibleEventDate: getOldestPossibleEventDate,

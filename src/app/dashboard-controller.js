@@ -43,9 +43,8 @@
           });
         }
 
-        var interval = filterService.getInterval(vm._organizations);
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date'+ (interval && '~' + interval) + (offset && '^' + offset) + ' cardinality:stack_id terms:(is_first_occurrence @include:true)) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess);
+        return eventService.count('date:(date' + (offset && '^' + offset) + ' cardinality:stack_id terms:(is_first_occurrence @include:true)) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess);
       }
 
       function getOrganizations() {

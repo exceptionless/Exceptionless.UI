@@ -34,9 +34,8 @@
           });
         }
 
-        var interval = filterService.getInterval(vm._organizations);
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date'+ (interval && '~' + interval) + (offset && '^' + offset) + ' avg:value cardinality:user)', optionsCallback).then(onSuccess);
+        return eventService.count('date:(date' + (offset && '^' + offset) + ' avg:value cardinality:user)', optionsCallback).then(onSuccess);
       }
 
       function getOrganizations() {
