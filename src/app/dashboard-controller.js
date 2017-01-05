@@ -35,11 +35,11 @@
           var dateAggregation = results.aggregations['date_date'].items || [];
           vm.chart.options.series[0].data = dateAggregation.map(function (item) {
             var isFirstAggregation = item.aggregations['terms_is_first_occurrence'].items;
-            return {x: moment(item.key).unix(), y: isFirstAggregation ? isFirstAggregation[0].total : 0, data: item};
+            return {x: moment(item.key).unix(), y: isFirstAggregation ? isFirstAggregation[0].total || 0 : 0, data: item};
           });
 
           vm.chart.options.series[1].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_stack_id'].value, data: item};
+            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_stack_id'].value || 0, data: item};
           });
         }
 

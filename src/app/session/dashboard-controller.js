@@ -26,16 +26,16 @@
 
           var dateAggregation = results.aggregations['date_date'].items || [];
           vm.chart.options.series[0].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.aggregations['avg_value'].value, data: item};
+            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_user'].value || 0, data: item};
           });
 
           vm.chart.options.series[1].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_user'].value, data: item};
+            return {x: moment(item.key).unix(), y: item.total || 0, data: item};
           });
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date' + (offset && '^' + offset) + ' avg:value cardinality:user)', optionsCallback).then(onSuccess);
+        return eventService.count('avg:value cardinality:user date:(date' + (offset && '^' + offset) + ' cardinality:user)', optionsCallback).then(onSuccess);
       }
 
       function getOrganizations() {

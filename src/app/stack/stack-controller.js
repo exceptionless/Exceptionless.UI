@@ -250,7 +250,7 @@
                       return item.total;
                     }
 
-                    return item.aggregations[option.field.replace(':', '_')].value;
+                    return item.aggregations[option.field.replace(':', '_')].value || 0;
                   }
 
                   return { x: moment(item.key).unix(), y: getYValue(item, index), data: item };
