@@ -73,9 +73,9 @@
       return Restangular.one('events', 'by-ref').all(id).getList(filterService.apply(options));
     }
 
-    function getBySessionId(id, options, optionsCallback) {
+    function getBySessionId(projectId, id, options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
-      return Restangular.one('events', 'sessions').all(id).getList(optionsCallback(filterService.apply(options)));
+      return Restangular.one('projects', projectId).one('events', 'sessions').all(id).getList(optionsCallback(filterService.apply(options)));
     }
 
     function getByStackId(id, options) {

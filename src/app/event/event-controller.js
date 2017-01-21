@@ -439,11 +439,11 @@
           get: function (options) {
             function optionsCallback(options) {
               options.filter = '-type:heartbeat';
-              options.time = null;
+              options.time = moment.utc(vm.event.date).local().format('YYYY-MM-DDTHH:mm:ss') + '-now';
               return options;
             }
 
-            return eventService.getBySessionId(vm.event.reference_id, options, optionsCallback);
+            return eventService.getBySessionId(vm.event.project_id, vm.event.reference_id, options, optionsCallback);
           },
           options: {
             limit: 10,
@@ -456,7 +456,7 @@
         };
         vm.tabs = [];
 
-        getEvent().then(getProject).then(function () {
+        return getEvent().then(getProject).then(function () {
           buildTabs($stateParams.tab);
         });
       };
