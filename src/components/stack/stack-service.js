@@ -20,6 +20,16 @@
     }
 
     function getAll(options) {
+      var organization = filterService.getOrganizationId();
+      if (organization) {
+        return Restangular.one('organizations', organization).all('stacks').getList(filterService.apply(options));
+      }
+
+      var project = filterService.getProjectId();
+      if (project) {
+        return Restangular.one('projects', project).all('stacks').getList(filterService.apply(options));
+      }
+
       return Restangular.all('stacks').getList(filterService.apply(options));
     }
 
@@ -28,14 +38,44 @@
     }
 
     function getFrequent(options) {
+      var organization = filterService.getOrganizationId();
+      if (organization) {
+        return Restangular.one('organizations', organization).one('stacks').all('frequent').getList(filterService.apply(options));
+      }
+
+      var project = filterService.getProjectId();
+      if (project) {
+        return Restangular.one('projects', project).one('stacks').all('frequent').getList(filterService.apply(options));
+      }
+
       return Restangular.one('stacks').all('frequent').getList(filterService.apply(options));
     }
 
     function getUsers(options) {
+      var organization = filterService.getOrganizationId();
+      if (organization) {
+        return Restangular.one('organizations', organization).one('stacks').all('users').getList(filterService.apply(options));
+      }
+
+      var project = filterService.getProjectId();
+      if (project) {
+        return Restangular.one('projects', project).one('stacks').all('users').getList(filterService.apply(options));
+      }
+
       return Restangular.one('stacks').all('users').getList(filterService.apply(options));
     }
 
     function getNew(options) {
+      var organization = filterService.getOrganizationId();
+      if (organization) {
+        return Restangular.one('organizations', organization).one('stacks').all('new').getList(filterService.apply(options));
+      }
+
+      var project = filterService.getProjectId();
+      if (project) {
+        return Restangular.one('projects', project).one('stacks').all('new').getList(filterService.apply(options));
+      }
+
       return Restangular.one('stacks').all('new').getList(filterService.apply(options));
     }
 

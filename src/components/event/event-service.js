@@ -20,15 +20,47 @@
     function count(aggregations, optionsCallback) {
       var options = (aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {};
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
+
+      var organization = filterService.getOrganizationId();
+      if (organization) {
+        return Restangular.one('organizations', organization).one('events', 'count').get(optionsCallback(filterService.apply(options)));
+      }
+
+      var project = filterService.getProjectId();
+      if (project) {
+        return Restangular.one('projects', project).one('events', 'count').get(optionsCallback(filterService.apply(options)));
+      }
+
       return Restangular.one('events', 'count').get(optionsCallback(filterService.apply(options)));
     }
 
     function getAll(options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
+
+      var organization = filterService.getOrganizationId();
+      if (organization) {
+        return Restangular.one('organizations', organization).all('events').getList(optionsCallback(filterService.apply(options)));
+      }
+
+      var project = filterService.getProjectId();
+      if (project) {
+        return Restangular.one('projects', project).all('events').getList(optionsCallback(filterService.apply(options)));
+      }
+
       return Restangular.all('events').getList(optionsCallback(filterService.apply(options)));
     }
 
     function getAllSessions(options) {
+      var organization = filterService.getOrganizationId();
+      if (organization) {
+        return Restangular.one('organizations', organization).one('events').all('sessions').getList(filterService.apply(options));
+      }
+
+      var project = filterService.getProjectId();
+      if (project) {
+        return Restangular.one('projects', project).one('events').all('sessions').getList(filterService.apply(options));
+      }
+
       return Restangular.one('events').all('sessions').getList(filterService.apply(options));
     }
 
