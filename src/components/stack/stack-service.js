@@ -20,17 +20,18 @@
     }
 
     function getAll(options) {
+      var mergedOptions = filterService.apply(options);
       var organization = filterService.getOrganizationId();
       if (organization) {
-        return Restangular.one('organizations', organization).all('stacks').getList(filterService.apply(options));
+        return Restangular.one('organizations', organization).all('stacks').getList(mergedOptions);
       }
 
       var project = filterService.getProjectId();
       if (project) {
-        return Restangular.one('projects', project).all('stacks').getList(filterService.apply(options));
+        return Restangular.one('projects', project).all('stacks').getList(mergedOptions);
       }
 
-      return Restangular.all('stacks').getList(filterService.apply(options));
+      return Restangular.all('stacks').getList(mergedOptions);
     }
 
     function getById(id) {
@@ -38,45 +39,48 @@
     }
 
     function getFrequent(options) {
+      var mergedOptions = filterService.apply(options);
       var organization = filterService.getOrganizationId();
       if (organization) {
-        return Restangular.one('organizations', organization).one('stacks').all('frequent').getList(filterService.apply(options));
+        return Restangular.one('organizations', organization).one('stacks').all('frequent').getList(mergedOptions);
       }
 
       var project = filterService.getProjectId();
       if (project) {
-        return Restangular.one('projects', project).one('stacks').all('frequent').getList(filterService.apply(options));
+        return Restangular.one('projects', project).one('stacks').all('frequent').getList(mergedOptions);
       }
 
-      return Restangular.one('stacks').all('frequent').getList(filterService.apply(options));
+      return Restangular.one('stacks').all('frequent').getList(mergedOptions);
     }
 
     function getUsers(options) {
+      var mergedOptions = filterService.apply(options);
       var organization = filterService.getOrganizationId();
       if (organization) {
-        return Restangular.one('organizations', organization).one('stacks').all('users').getList(filterService.apply(options));
+        return Restangular.one('organizations', organization).one('stacks').all('users').getList(mergedOptions);
       }
 
       var project = filterService.getProjectId();
       if (project) {
-        return Restangular.one('projects', project).one('stacks').all('users').getList(filterService.apply(options));
+        return Restangular.one('projects', project).one('stacks').all('users').getList(mergedOptions);
       }
 
-      return Restangular.one('stacks').all('users').getList(filterService.apply(options));
+      return Restangular.one('stacks').all('users').getList(mergedOptions);
     }
 
     function getNew(options) {
+      var mergedOptions = filterService.apply(options);
       var organization = filterService.getOrganizationId();
       if (organization) {
-        return Restangular.one('organizations', organization).one('stacks').all('new').getList(filterService.apply(options));
+        return Restangular.one('organizations', organization).one('stacks').all('new').getList(mergedOptions);
       }
 
       var project = filterService.getProjectId();
       if (project) {
-        return Restangular.one('projects', project).one('stacks').all('new').getList(filterService.apply(options));
+        return Restangular.one('projects', project).one('stacks').all('new').getList(mergedOptions);
       }
 
-      return Restangular.one('stacks').all('new').getList(filterService.apply(options));
+      return Restangular.one('stacks').all('new').getList(mergedOptions);
     }
 
     function markCritical(id) {

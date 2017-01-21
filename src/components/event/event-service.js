@@ -18,36 +18,37 @@
     }
 
     function count(aggregations, optionsCallback) {
-      var options = (aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {};
-      optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
+      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {});
+      options = angular.isFunction(optionsCallback) ? optionsCallback(options) : options;
 
       var organization = filterService.getOrganizationId();
       if (organization) {
-        return Restangular.one('organizations', organization).one('events', 'count').get(optionsCallback(filterService.apply(options)));
+        return Restangular.one('organizations', organization).one('events', 'count').get(options);
       }
 
       var project = filterService.getProjectId();
       if (project) {
-        return Restangular.one('projects', project).one('events', 'count').get(optionsCallback(filterService.apply(options)));
+        return Restangular.one('projects', project).one('events', 'count').get(options);
       }
 
-      return Restangular.one('events', 'count').get(optionsCallback(filterService.apply(options)));
+      return Restangular.one('events', 'count').get(options);
     }
 
     function getAll(options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
+      var mergedOptions = optionsCallback(filterService.apply(options));
 
       var organization = filterService.getOrganizationId();
       if (organization) {
-        return Restangular.one('organizations', organization).all('events').getList(optionsCallback(filterService.apply(options)));
+        return Restangular.one('organizations', organization).all('events').getList(mergedOptions);
       }
 
       var project = filterService.getProjectId();
       if (project) {
-        return Restangular.one('projects', project).all('events').getList(optionsCallback(filterService.apply(options)));
+        return Restangular.one('projects', project).all('events').getList(mergedOptions);
       }
 
-      return Restangular.all('events').getList(optionsCallback(filterService.apply(options)));
+      return Restangular.all('events').getList(mergedOptions);
     }
 
     function getAllSessions(options) {
