@@ -439,7 +439,10 @@
           get: function (options) {
             function optionsCallback(options) {
               options.filter = '-type:heartbeat';
-              options.time = moment.utc(vm.event.date).local().format('YYYY-MM-DDTHH:mm:ss') + '-now';
+
+              var start = moment.utc(vm.event.date).local();
+              var end = (vm.event.value > 0) ? start.add(vm.event.value, 'seconds').format('YYYY-MM-DDTHH:mm:ss') : 'now';
+              options.time = start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end;
               return options;
             }
 
