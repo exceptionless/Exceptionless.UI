@@ -441,7 +441,7 @@
               options.filter = '-type:heartbeat';
 
               var start = moment.utc(vm.event.date).local();
-              var end = (vm.event.value > 0) ? start.add(vm.event.value, 'seconds').format('YYYY-MM-DDTHH:mm:ss') : 'now';
+              var end = (vm.event.data && vm.event.data.sessionend) ? moment.utc(vm.event.data.sessionend).add(1, 'seconds').local().format('YYYY-MM-DDTHH:mm:ss') : 'now';
               options.time = start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end;
               return options;
             }
