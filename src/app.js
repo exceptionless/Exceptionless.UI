@@ -48,6 +48,7 @@
     'exceptionless.stack',
     'exceptionless.stacks',
     'exceptionless.state',
+    'exceptionless.system-notification',
     'exceptionless.ui-nav',
     'exceptionless.ui-scroll',
     'exceptionless.ui-shift',

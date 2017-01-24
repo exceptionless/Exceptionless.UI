@@ -7,9 +7,8 @@
     <div refresh-on="OrganizationChanged" refresh-action="appVm.getOrganizations()" refresh-debounce="5000"></div>
     <button type="button" role="button" class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside"></button>
 
-    <div class="alert alert-danger alert-banner m-b-none" ng-if="!!appVm.systemNotificationMessage">
-      <div ng-bind-html="appVm.systemNotificationMessage()"></div>
-    </div>
+    <system-notification></system-notification>
+    <release-notification></release-notification>
     <rate-limit></rate-limit>
 
     <div class="app-content-body fade-in" ui-view autoscroll="true"></div>

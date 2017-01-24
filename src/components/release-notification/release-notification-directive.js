@@ -9,18 +9,23 @@
       restrict: 'E',
       templateUrl: "components/release-notification/release-notification-directive.tpl.html",
       controller: function($window) {
-        var vm = this;
-        function processNotification(notification) {
-          if (notification && notification.critical) {
-            $window.location.reload();
+        var rvm = this;
+        function processReleaseNotification(notification) {
+          if (notification) {
+            if (notification.critical) {
+              $window.location.reload();
+            }
+
+            rvm.releaseNotificationMessage = notification.message;
           }
         }
 
         this.$onInit = function $onInit() {
-          vm.processNotification = processNotification;
+          rvm.processReleaseNotification = processReleaseNotification;
+          rvm.releaseNotificationMessage = '';
         };
       },
-      controllerAs: 'vm'
+      controllerAs: 'rvm'
     };
   }]);
 }());
