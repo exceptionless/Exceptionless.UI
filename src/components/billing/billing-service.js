@@ -32,7 +32,7 @@
           .setMessage(message)
           .setProperty('OrganizationId', organizationId)
           .submit();
-        return dialogService.confirm(message, 'Upgrade Plan').then(onSuccess, onFailure).catch(function(e){});
+        return dialogService.confirm(message, 'Upgrade Plan').then(onSuccess, onFailure);
       }
 
       var service = {
