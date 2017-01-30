@@ -24,17 +24,17 @@
       function getStats() {
         function onSuccess(response) {
           var results = response.data.plain();
-          var termsAggregation = results.aggregations['terms_is_first_occurrence'].items;
+          var termsAggregation = results.aggregations['terms_first'].items;
           vm.stats = {
             total: $filter('number')(results.total, 0),
-            unique: $filter('number')(results.aggregations['cardinality_stack_id'].value, 0),
+            unique: $filter('number')(results.aggregations['cardinality_stack'].value, 0),
             new: $filter('number')(termsAggregation && termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
             avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, vm._organizations), 1)
           };
 
           var dateAggregation = results.aggregations['date_date'].items || [];
           vm.chart.options.series[0].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_stack_id'].value || 0, data: item};
+            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_stack'].value || 0, data: item};
           });
 
           vm.chart.options.series[1].data = dateAggregation.map(function (item) {
@@ -43,7 +43,7 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date' + (offset && '^' + offset) + ' cardinality:stack_id) cardinality:stack_id terms:(is_first_occurrence @include:true)').then(onSuccess);
+        return eventService.count('date:(date' + (offset && '^' + offset) + ' cardinality:stack) cardinality:stack terms:(first @include:true)').then(onSuccess);
       }
 
       function getOrganizations() {
