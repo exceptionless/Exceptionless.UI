@@ -17,7 +17,6 @@
       'exceptionless.organization',
       'exceptionless.organization-notifications',
       'exceptionless.project',
-      'exceptionless.stat',
       'exceptionless.summary',
       'exceptionless.timeago',
       'exceptionless.users'

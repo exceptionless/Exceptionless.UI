@@ -4,6 +4,8 @@
   angular.module('exceptionless.filter', [
     'angular-locker',
 
-    'exceptionless.objectid'
+    'exceptionless.date-range-parser',
+    'exceptionless.objectid',
+    'exceptionless.organization'
   ]);
 }());

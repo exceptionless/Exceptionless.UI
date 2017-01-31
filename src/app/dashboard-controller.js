@@ -3,36 +3,60 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, stackService, statService) {
+    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService) {
       var vm = this;
       function canRefresh(data) {
-        if (!data || data.type !== 'PersistentEvent') {
-          return true;
+        if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
+          return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
         }
 
-        return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+        if (!!data && data.type === 'Organization' || data.type === 'Project') {
+          return filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        }
+
+        return !data;
       }
 
       function get() {
-        function onSuccess(response) {
-          vm.stats = response.data.plain();
-          if (!vm.stats.timeline) {
-            vm.stats.timeline = [];
-          }
+        return getOrganizations().then(getStats).catch(function(e){});
+      }
 
-          vm.chart.options.series[0].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.numbers[0], data: item};
+      function getStats() {
+        function onSuccess(response) {
+          var results = response.data.plain();
+          var termsAggregation = results.aggregations['terms_first'].items;
+          vm.stats = {
+            total: $filter('number')(results.total, 0),
+            unique: $filter('number')(results.aggregations['cardinality_stack'].value, 0),
+            new: $filter('number')(termsAggregation && termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
+            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, vm._organizations), 1)
+          };
+
+          var dateAggregation = results.aggregations['date_date'].items || [];
+          vm.chart.options.series[0].data = dateAggregation.map(function (item) {
+            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_stack'].value || 0, data: item};
           });
 
-          vm.chart.options.series[1].data = vm.stats.timeline.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
+          vm.chart.options.series[1].data = dateAggregation.map(function (item) {
+            return {x: moment(item.key).unix(), y: item.total || 0, data: item};
           });
         }
 
-        return statService.getTimeline('distinct:stack_id,term:is_first_occurrence:-F').then(onSuccess).catch(function(e) {});
+        var offset = filterService.getTimeOffset();
+        return eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack) cardinality:stack terms:(first @include:true)').then(onSuccess);
+      }
+
+      function getOrganizations() {
+        function onSuccess(response) {
+          vm._organizations = response.data.plain();
+          return vm._organizations;
+        }
+
+        return organizationService.getAll().then(onSuccess);
       }
 
       this.$onInit = function $onInit() {
+        vm._organizations = [];
         vm._source = 'app.Dashboard';
         vm.canRefresh = canRefresh;
         vm.chart = {
@@ -131,7 +155,12 @@
           },
           source: vm._source + '.Recent'
         };
-        vm.stats = {};
+        vm.stats = {
+          total: 0,
+          unique: 0,
+          new: 0,
+          avg_per_hour: 0.0
+        };
         vm.type = $stateParams.type;
 
         get();

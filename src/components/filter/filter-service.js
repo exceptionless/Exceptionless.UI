@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.filter')
-    .factory('filterService', function ($rootScope, filterStoreService, objectIDService) {
+    .factory('filterService', function ($rootScope, dateRangeParserService, filterStoreService, objectIDService, organizationService) {
       var DEFAULT_TIME_FILTER = 'last week';
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
@@ -75,7 +75,12 @@
       }
 
       function getDefaultOptions() {
-        var options = { offset: getTimeZoneOffset() };
+        var options = {};
+
+        var offset = getTimeOffset();
+        if (offset) {
+          angular.extend(options, { offset: offset });
+        }
 
         var filter = buildFilter();
         if (filter) {
@@ -105,12 +110,48 @@
         return _eventType;
       }
 
+      function getOldestPossibleEventDate() {
+        var date = objectIDService.getDate(getOrganizationId() || getProjectId());
+        return date ? moment(date).subtract(3, 'days').toDate() : new Date(2012, 1, 1);
+      }
+
       function getTime() {
         return _time || DEFAULT_TIME_FILTER;
       }
 
-      function getTimeZoneOffset() {
-        return new Date().getTimezoneOffset() * -1;
+      function getTimeRange() {
+        var time = getTime();
+        if (time === 'all') {
+          return { start: undefined, end: undefined };
+        }
+
+        if (time === 'last hour') {
+          return { start: moment().subtract(1, 'hours'), end: undefined };
+        }
+
+        if (time === 'last 24 hours') {
+          return { start: moment().subtract(24, 'hours'), end: undefined };
+        }
+
+        if (time === 'last week') {
+          return { start: moment().subtract(7, 'days').startOf('day'), end: undefined };
+        }
+
+        if (time === 'last 30 days') {
+          return { start: moment().subtract(30, 'days').startOf('day'), end: undefined };
+        }
+
+        var range = dateRangeParserService.parse(time);
+        if (range && range.start && range.end) {
+          return { start: moment(range.start), end: moment(range.end) };
+        }
+
+        return { start: moment().subtract(7, 'days').startOf('day'), end: undefined };
+      }
+
+      function getTimeOffset() {
+        var offset = new Date().getTimezoneOffset();
+        return offset !== 0 ? offset * -1 + 'm' : undefined;
       }
 
       function hasFilter() {
@@ -213,7 +254,10 @@
         getFilter: getFilter,
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
+        getOldestPossibleEventDate: getOldestPossibleEventDate,
         getTime: getTime,
+        getTimeRange: getTimeRange,
+        getTimeOffset: getTimeOffset,
         hasFilter: hasFilter,
         includedInProjectOrOrganizationFilter: includedInProjectOrOrganizationFilter,
         setEventType: setEventType,

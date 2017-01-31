@@ -18,7 +18,11 @@
               return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
             }
 
-            return true;
+            if (!!data && data.type === 'Organization' || data.type === 'Project') {
+              return filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+            }
+
+            return !data;
           }
 
           function get(options) {
@@ -39,9 +43,14 @@
               return vm.stacks;
             }
 
+            function onFailure(response) {
+              $ExceptionlessClient.createLog(vm._source + '.get', 'Error while loading events', 'Error').setProperty('options', options).setProperty('response', response).submit();
+              return response;
+            }
+
             vm.loading = vm.stacks.length === 0;
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions).then(onSuccess).catch(function(e) {}).finally(function() {
+            return vm.settings.get(vm.currentOptions).then(onSuccess, onFailure).finally(function() {
               vm.loading = false;
             });
           }

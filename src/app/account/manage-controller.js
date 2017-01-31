@@ -64,7 +64,7 @@
           return authService.logout(true);
         }
 
-        return getUser().then(getProjects).then(getEmailNotificationSettings).catch(function(e) {});
+        return getUser().then(getProjects).then(getEmailNotificationSettings);
       }
 
       function getEmailNotificationSettings() {

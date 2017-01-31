@@ -62,7 +62,7 @@
 
         vm.loading = vm.organizations.length === 0;
         vm.currentOptions = options || vm._settings;
-        return organizationService.getAll(vm.currentOptions, useCache).then(onSuccess).catch(function(e) {}).finally(function() {
+        return organizationService.getAll(vm.currentOptions, useCache).then(onSuccess).finally(function() {
           vm.loading = false;
         });
       }

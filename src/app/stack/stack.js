@@ -16,6 +16,7 @@
     'exceptionless.event',
     'exceptionless.events',
     'exceptionless.filter',
+    'exceptionless.organization',
     'exceptionless.organization-notifications',
     'exceptionless.promise-button',
     'exceptionless.notification',
@@ -23,8 +24,7 @@
     'exceptionless.refresh',
     'exceptionless.stack',
     'exceptionless.stack-dialog',
-    'exceptionless.stack-trace',
-    'exceptionless.stat'
+    'exceptionless.stack-trace'
   ])
   .config(function ($stateProvider) {
     $stateProvider.state('app.stack', {

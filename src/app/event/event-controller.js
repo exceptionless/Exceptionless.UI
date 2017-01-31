@@ -3,9 +3,6 @@
 
   angular.module('app.event')
     .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
-      var source = 'app.event.Event';
-      var _eventId = $stateParams.id;
-      var _knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
       var vm = this;
 
       function activateTab(tabName) {
@@ -38,9 +35,9 @@
             combo: 'mod+up',
             description: 'Go To Stack',
             callback: function () {
-              $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.GoToStack')
+              $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.GoToStack')
                 .addTags('hotkeys')
-                .setProperty('id', _eventId)
+                .setProperty('id', vm._eventId)
                 .submit();
 
               $state.go('app.stack', {id: vm.event.stack_id});
@@ -52,12 +49,11 @@
               combo: 'mod+shift+c',
               description: 'Copy Event JSON to Clipboard',
               callback: function () {
-                $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.CopyEventJSON')
+                $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.CopyEventJSON')
                   .addTags('hotkeys')
-                  .setProperty('id', _eventId)
+                  .setProperty('id', vm._eventId)
                   .submit();
 
-                console.log('hotkey');
                 clipboard.copyText(vm.event_json);
                 copied();
               }
@@ -70,9 +66,9 @@
             combo: 'mod+left',
             description: 'Previous Occurrence',
             callback: function () {
-              $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.PreviousOccurrence')
+              $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.PreviousOccurrence')
                 .addTags('hotkeys')
-                .setProperty('id', _eventId)
+                .setProperty('id', vm._eventId)
                 .submit();
 
               $state.go('app.event', { id: vm.previous, tab: vm.getCurrentTab() });
@@ -85,9 +81,9 @@
             combo: 'mod+right',
             description: 'Next Occurrence',
             callback: function () {
-              $ExceptionlessClient.createFeatureUsage(source + '.hotkeys.NextOccurrence')
+              $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.NextOccurrence')
                 .addTags('hotkeys')
-                .setProperty('id', _eventId)
+                .setProperty('id', vm._eventId)
                 .submit();
 
               $state.go('app.event', { id: vm.next, tab: vm.getCurrentTab() });
@@ -130,11 +126,11 @@
           }
         }
 
-        if (vm.request) {
+        if (vm.request && Object.keys(vm.request).length > 0) {
           tabs.push({index: ++tabIndex, title: vm.isSessionStart ? 'Browser' : 'Request', template_key: 'request'});
         }
 
-        if (vm.environment) {
+        if (vm.environment && Object.keys(vm.environment).length > 0) {
           tabs.push({index: ++tabIndex, title: 'Environment', template_key: 'environment'});
         }
 
@@ -150,7 +146,7 @@
 
           if (isPromoted(key)) {
             tabs.push({index: ++tabIndex, title: key, template_key: 'promoted', data: data});
-          } else if (_knownDataKeys.indexOf(key) < 0) {
+          } else if (vm._knownDataKeys.indexOf(key) < 0) {
             extendedDataItems.push({title: key, data: data});
           }
         }, tabs);
@@ -177,7 +173,11 @@
           return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
         }
 
-        return false;
+        if (!!data && data.type === 'Organization' || data.type === 'Project') {
+          return filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        }
+
+        return !data;
       }
 
       function copied() {
@@ -186,8 +186,8 @@
 
       function demoteTab(tabName) {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.success')
-            .setProperty('id', _eventId)
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteTab.success')
+            .setProperty('id', vm._eventId)
             .setProperty('TabName', tabName)
             .submit();
 
@@ -196,8 +196,8 @@
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.error')
-            .setProperty('id', _eventId)
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteTab.error')
+            .setProperty('id', vm._eventId)
             .setProperty('response', response)
             .setProperty('TabName', tabName)
             .submit();
@@ -210,8 +210,8 @@
           return;
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.demoteTab')
-          .setProperty('id', _eventId)
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.demoteTab')
+          .setProperty('id', vm._eventId)
           .setProperty('TabName', tabName)
           .submit();
 
@@ -241,14 +241,14 @@
 
         function onSuccess(response) {
           function getErrorType(event) {
-            if (event.data['@error']) {
+            if (event.data && event.data['@error']) {
               var type = errorService.getTargetInfoExceptionType(event.data['@error']);
               if (type) {
                 return type;
               }
             }
 
-            if (event.data['@simple_error']) {
+            if (event.data && event.data['@simple_error']) {
               return event.data['@simple_error'].type;
             }
 
@@ -289,24 +289,24 @@
           vm.message = getMessage(vm.event);
           vm.isError = vm.event.type === 'error';
           vm.isSessionStart = vm.event.type === 'session';
-          vm.level = !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
+          vm.level = vm.event.data && !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
           vm.isLevelSuccess = vm.level === 'trace' || vm.level === 'debug';
           vm.isLevelInfo = vm.level === 'info';
           vm.isLevelWarning = vm.level === 'warn';
           vm.isLevelError = vm.level === 'error';
 
-          vm.request = vm.event.data['@request'];
+          vm.request = vm.event.data && vm.event.data['@request'];
           vm.hasCookies = vm.request && !!vm.request.cookies && Object.keys(vm.request.cookies).length > 0;
           vm.requestUrl = vm.request && urlService.buildUrl(vm.request.is_secure, vm.request.host, vm.request.port, vm.request.path, vm.request.query_string);
 
-          vm.user = vm.event.data['@user'];
+          vm.user = vm.event.data && vm.event.data['@user'];
           vm.userIdentity = vm.user && vm.user.identity;
           vm.userName = vm.user && vm.user.name;
 
-          vm.userDescription = vm.event.data['@user_description'];
+          vm.userDescription = vm.event.data && vm.event.data['@user_description'];
           vm.userEmail = vm.userDescription && vm.userDescription.email_address;
           vm.userDescription = vm.userDescription && vm.userDescription.description;
-          vm.version = vm.event.data['@version'];
+          vm.version = vm.event.data && vm.event.data['@version'];
 
           var links = linkService.getLinks(response.headers('link'));
           vm.previous = links['previous'] ? links['previous'].split('/').pop() : null;
@@ -321,8 +321,8 @@
         function onFailure(response) {
           if (response && response.status === 426) {
             return billingService.confirmUpgradePlan(response.data.message).then(function () {
-              return getEvent();
-            }, function () {
+                return getEvent();
+              }, function () {
                 $state.go('app.dashboard');
               }
             );
@@ -332,11 +332,11 @@
           notificationService.error('The event "' + $stateParams.id + '" could not be found.');
         }
 
-        if (!_eventId) {
+        if (!vm._eventId) {
           onFailure();
         }
 
-        return eventService.getById(_eventId, {}, optionsCallback).then(onSuccess, onFailure);
+        return eventService.getById(vm._eventId, {}, optionsCallback).then(onSuccess, onFailure).catch(function (e) {});
       }
 
       function getProject() {
@@ -368,8 +368,8 @@
 
       function promoteTab(tabName) {
         function onSuccess() {
-          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.success')
-            .setProperty('id', _eventId)
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteTab.success')
+            .setProperty('id', vm._eventId)
             .setProperty('TabName', tabName)
             .submit();
 
@@ -378,8 +378,8 @@
         }
 
         function onFailure(response) {
-          $ExceptionlessClient.createFeatureUsage(source + '.promoteTab.error')
-            .setProperty('id', _eventId)
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteTab.error')
+            .setProperty('id', vm._eventId)
             .setProperty('response', response)
             .setProperty('TabName', tabName)
             .submit();
@@ -387,8 +387,8 @@
           notificationService.error('An error occurred promoting tab.');
         }
 
-        $ExceptionlessClient.createFeatureUsage(source + '.promoteTab')
-          .setProperty('id', _eventId)
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteTab')
+          .setProperty('id', vm._eventId)
           .setProperty('TabName', tabName)
           .submit();
 
@@ -396,6 +396,10 @@
       }
 
       this.$onInit = function $onInit() {
+        vm._source = 'app.event.Event';
+        vm._eventId = $stateParams.id;
+        vm._knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
+
         vm.activeTabIndex = -1;
         vm.activateTab = activateTab;
         vm.canRefresh = canRefresh;
@@ -435,24 +439,27 @@
           get: function (options) {
             function optionsCallback(options) {
               options.filter = '-type:heartbeat';
-              options.time = null;
+
+              var start = moment.utc(vm.event.date).local();
+              var end = (vm.event.data && vm.event.data.sessionend) ? moment.utc(vm.event.data.sessionend).add(1, 'seconds').local().format('YYYY-MM-DDTHH:mm:ss') : 'now';
+              options.time = start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end;
               return options;
             }
 
-            return eventService.getBySessionId(vm.event.reference_id, options, optionsCallback);
+            return eventService.getBySessionId(vm.event.project_id, vm.event.reference_id, options, optionsCallback);
           },
           options: {
             limit: 10,
             mode: 'summary'
           },
-          source: source + '.Recent',
+          source: vm._source + '.Recent',
           timeHeaderText: 'Session Time',
           hideActions: true,
           hideSessionStartTime: true
         };
         vm.tabs = [];
 
-        getEvent().then(getProject).then(function () {
+        return getEvent().then(getProject).then(function () {
           buildTabs($stateParams.tab);
         });
       };
