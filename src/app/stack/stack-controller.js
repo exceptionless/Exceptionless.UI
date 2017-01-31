@@ -275,7 +275,7 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date' + (offset && '^' + offset) + buildFields(vm.chartOptions) + ') min:date max:date cardinality:user', optionsCallback).then(onSuccess).then(getProjectUserStats);
+        return eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(vm.chartOptions) + ') min:date max:date cardinality:user', optionsCallback).then(onSuccess).then(getProjectUserStats);
       }
 
       function hasSelectedChartOption() {

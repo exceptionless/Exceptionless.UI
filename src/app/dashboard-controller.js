@@ -43,7 +43,7 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date' + (offset && '^' + offset) + ' cardinality:stack) cardinality:stack terms:(first @include:true)').then(onSuccess);
+        return eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack) cardinality:stack terms:(first @include:true)').then(onSuccess);
       }
 
       function getOrganizations() {

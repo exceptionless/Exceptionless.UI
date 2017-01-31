@@ -35,7 +35,7 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('avg:value cardinality:user date:(date' + (offset && '^' + offset) + ' cardinality:user)', optionsCallback).then(onSuccess);
+        return eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback).then(onSuccess);
       }
 
       function getOrganizations() {
