@@ -17,6 +17,8 @@
               $timeout(function() {
                 deferred.resolve(true);
               }, 0);
+            } else if (scope.organizationId == "__newOrganization") {
+              deferred.resolve(true);
             } else {
               projectService.isNameAvailable(scope.organizationId, name).then(function(response) {
                 if (response.status === 201) {
