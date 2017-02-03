@@ -6,6 +6,9 @@
       return {
         restrict: 'A',
         require: 'ngModel',
+        scope: {
+          organizationId: "="
+        },
         link: function(scope, element, attrs, ngModel) {
           ngModel.$asyncValidators.unique = function(name) {
             var deferred = $q.defer();
@@ -14,8 +17,10 @@
               $timeout(function() {
                 deferred.resolve(true);
               }, 0);
+            } else if (scope.organizationId === "__newOrganization") {
+              deferred.resolve(true);
             } else {
-              projectService.isNameAvailable(name).then(function(response) {
+              projectService.isNameAvailable(scope.organizationId, name).then(function(response) {
                 if (response.status === 201) {
                   deferred.reject('');
                 } else {
@@ -28,6 +33,10 @@
 
             return deferred.promise;
           };
+
+          scope.$watch("organizationId", function() {
+            ngModel.$validate();
+          });
         }
       };
     });

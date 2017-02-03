@@ -60,8 +60,8 @@
         return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
       }
 
-      function isNameAvailable(name) {
-        return Restangular.one('projects', 'check-name').get({ name: encodeURIComponent(name) });
+      function isNameAvailable(organizationId, name) {
+        return Restangular.one('organizations', organizationId).one('projects', 'check-name').get({ name: encodeURIComponent(name) });
       }
 
       function promoteTab(id, name) {
