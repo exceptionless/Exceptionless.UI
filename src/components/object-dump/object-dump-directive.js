@@ -17,12 +17,17 @@
           }
 
           try {
-            var content = scope.content;
+            var content = scope.content,
+                template = handlebarsService.getTemplate(scope.templateKey);
+
             if (typeof content === 'string' || content instanceof String) {
-              content = JSON.parse(scope.content);
+              try {
+                content = JSON.parse(scope.content);
+              } catch (ex) {
+                template = handlebarsService.getTemplate('pre');
+              }
             }
 
-            var template = handlebarsService.getTemplate(scope.templateKey);
             element.html(template(content));
           } catch (ex) {
             element.text(scope.content);
