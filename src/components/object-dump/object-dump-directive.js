@@ -17,8 +17,8 @@
           }
 
           try {
-            var content = scope.content,
-                template = handlebarsService.getTemplate(scope.templateKey);
+            var content = scope.content;
+            var template = handlebarsService.getTemplate(scope.templateKey);
 
             if (typeof content === 'string' || content instanceof String) {
               try {
