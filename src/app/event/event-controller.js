@@ -284,7 +284,7 @@
           vm.event_json = angular.toJson(vm.event);
           vm.sessionEvents.relativeTo = vm.event.date;
           vm.errorType = getErrorType(vm.event);
-          vm.environment = vm.event.data['@environment'];
+          vm.environment = vm.event.data && vm.event.data['@environment'];
           vm.location = getLocation(vm.event);
           vm.message = getMessage(vm.event);
           vm.isError = vm.event.type === 'error';
