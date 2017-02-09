@@ -215,7 +215,7 @@
 
       function getStats() {
         function buildFields(options) {
-          return ' cardinality:user' + options.filter(function(option) { return option.selected; })
+          return ' cardinality:user ' + options.filter(function(option) { return option.selected; })
             .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
             .join(' ');
         }
@@ -229,7 +229,7 @@
           var results = response.data.plain();
           vm._users = results.aggregations['cardinality_user'].value || 0;
           vm.stats = {
-            total: $filter('number')(results.total, 0),
+            count: $filter('number')(results.aggregations['sum_count'].value, 0),
             users: buildUserStat(vm._users, vm._total_users),
             usersTitle: buildUserStatTitle(vm._users, vm._total_users),
             first_occurrence: results.aggregations['min_date'].value,
@@ -246,11 +246,13 @@
                 stroke: 'rgba(0, 0, 0, 0.15)',
                 data: dateAggregation.map(function (item) {
                   function getYValue(item, index){
-                    if (index === 0) {
-                      return item.total;
+                    var field = option.field.replace(':', '_');
+                    var proximity = field.indexOf('~');
+                    if (proximity !== -1) {
+                      field = field.substring(0, proximity);
                     }
 
-                    return item.aggregations[option.field.replace(':', '_')].value || 0;
+                    return item.aggregations[field].value || 0;
                   }
 
                   return { x: moment(item.key).unix(), y: getYValue(item, index), data: item };
@@ -275,7 +277,7 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(vm.chartOptions) + ') min:date max:date cardinality:user', optionsCallback).then(onSuccess).then(getProjectUserStats);
+        return eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(vm.chartOptions) + ') min:date max:date cardinality:user sum:count~1', optionsCallback).then(onSuccess).then(getProjectUserStats);
       }
 
       function hasSelectedChartOption() {
@@ -521,7 +523,7 @@
         };
 
         vm.chartOptions = [
-          {name: 'Occurrences', selected: true, render: false},
+          {name: 'Occurrences', field: 'sum:count~1', title: '', selected: true, render: false},
           {name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true},
           {name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true}
         ];
@@ -550,7 +552,7 @@
         };
         vm.stack = {};
         vm.stats = {
-          total: 0,
+          count: 0,
           users: buildUserStat(0, 0),
           usersTitle: buildUserStatTitle(0, 0),
           first_occurrence: undefined,

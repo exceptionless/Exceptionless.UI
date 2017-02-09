@@ -25,11 +25,12 @@
         function onSuccess(response) {
           var results = response.data.plain();
           var termsAggregation = results.aggregations['terms_first'].items;
+          var count = results.aggregations['sum_count'].value;
           vm.stats = {
-            total: $filter('number')(results.total, 0),
+            count: $filter('number')(count, 0),
             unique: $filter('number')(results.aggregations['cardinality_stack'].value, 0),
             new: $filter('number')(termsAggregation && termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
-            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, vm._organizations), 1)
+            avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(count, vm._organizations), 1)
           };
 
           var dateAggregation = results.aggregations['date_date'].items || [];
@@ -38,12 +39,12 @@
           });
 
           vm.chart.options.series[1].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.total || 0, data: item};
+            return {x: moment(item.key).unix(), y: item.aggregations['sum_count'].value || 0, data: item};
           });
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack) cardinality:stack terms:(first @include:true)').then(onSuccess);
+        return eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1').then(onSuccess);
       }
 
       function getOrganizations() {
@@ -68,7 +69,7 @@
               color: 'rgba(60, 116, 0, .9)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }, {
-              name: 'Total',
+              name: 'Count',
               color: 'rgba(124, 194, 49, .7)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }
@@ -156,7 +157,7 @@
           source: vm._source + '.Recent'
         };
         vm.stats = {
-          total: 0,
+          count: 0,
           unique: 0,
           new: 0,
           avg_per_hour: 0.0
