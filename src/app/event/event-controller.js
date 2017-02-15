@@ -118,12 +118,10 @@
           tabs.push({index: ++tabIndex, title: 'Session Events', template_key: 'session'});
         }
 
-        if (vm.isError) {
-          if (vm.event.data['@error']) {
-            tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'error'});
-          } else if (vm.event.data['@simple_error']) {
-            tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'simple-error'});
-          }
+        if (vm.event.data && vm.event.data['@error']) {
+          tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'error'});
+        } else if (vm.event.data && vm.event.data['@simple_error']) {
+          tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'simple-error'});
         }
 
         if (vm.request && Object.keys(vm.request).length > 0) {
@@ -241,18 +239,14 @@
 
         function onSuccess(response) {
           function getErrorType(event) {
-            if (event.data && event.data['@error']) {
-              var type = errorService.getTargetInfoExceptionType(event.data['@error']);
-              if (type) {
-                return type;
-              }
+            var error = event.data && event.data['@error'];
+            if (error) {
+              var type = errorService.getTargetInfoExceptionType(error);
+              return type || error.type || 'Unknown';
             }
 
-            if (event.data && event.data['@simple_error']) {
-              return event.data['@simple_error'].type;
-            }
-
-            return 'Unknown';
+            var simpleError = event.data && event.data['@simple_error'];
+            return (simpleError && simpleError.type) ? simpleError.type : 'Unknown';
           }
 
           function getLocation(event) {
@@ -287,7 +281,7 @@
           vm.environment = vm.event.data && vm.event.data['@environment'];
           vm.location = getLocation(vm.event);
           vm.message = getMessage(vm.event);
-          vm.isError = vm.event.type === 'error';
+          vm.hasError = vm.event.data && (vm.event.data['@error'] || vm.event.data['@simple_error']);
           vm.isSessionStart = vm.event.type === 'session';
           vm.level = vm.event.data && !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
           vm.isLevelSuccess = vm.level === 'trace' || vm.level === 'debug';
@@ -414,7 +408,6 @@
         vm.environment = {};
         vm.location = '';
         vm.message = '';
-        vm.isError = false;
         vm.isSessionStart = false;
         vm.level = '';
         vm.isLevelSuccess = false;
@@ -425,6 +418,7 @@
         vm.request = {};
         vm.requestUrl = '';
         vm.hasCookies = false;
+        vm.hasError = false;
         vm.user = {};
         vm.userIdentity = '';
         vm.userName = '';

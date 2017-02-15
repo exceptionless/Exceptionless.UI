@@ -32,11 +32,11 @@
     <th>Level</th>
     <td><span class="label label-default" ng-class="{ 'label-success': vm.isLevelSuccess, 'label-info': vm.isLevelInfo, 'label-warning': vm.isLevelWarning, 'label-danger': vm.isLevelError }">{{::vm.level}}</span></td>
   </tr>
-  <tr ng-if="!vm.isError">
+  <tr ng-if="vm.event.type !== 'error'">
     <th>Event Type</th>
     <td><span truncate>{{::vm.event.type}}</span></td>
   </tr>
-  <tr class="hidden-print" ng-if="vm.isError">
+  <tr class="hidden-print" ng-if="vm.hasError">
     <th>Error Type</th>
     <td><span truncate>{{::vm.errorType}}</span></td>
   </tr>
@@ -93,7 +93,7 @@
   </table>
 </div>
 
-<div class="hidden-print" ng-if="vm.isError">
+<div class="hidden-print" ng-if="vm.hasError">
   <h4>Stack Trace</h4>
   <stack-trace class="stack-trace-mini" exception="vm.event.data['@error']" ng-if="vm.event.data['@error']"></stack-trace>
   <simple-stack-trace class="stack-trace-mini" exception="vm.event.data['@simple_error']" ng-if="vm.event.data['@simple_error']"></simple-stack-trace>
