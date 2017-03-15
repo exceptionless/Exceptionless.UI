@@ -23,23 +23,33 @@
 
       function getStats() {
         function onSuccess(response) {
+          function getAggregationValue(data, name, defaultValue) {
+            var aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].value || defaultValue;
+          }
+
+          function getAggregationItems(data, name, defaultValue) {
+            var aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].items || defaultValue;
+          }
+
           var results = response.data.plain();
-          var termsAggregation = results.aggregations['terms_first'].items;
-          var count = results.aggregations['sum_count'].value;
+          var termsAggregation = getAggregationItems(results, 'terms_first', []);
+          var count = getAggregationValue(results, 'sum_count', 0);
           vm.stats = {
             count: $filter('number')(count, 0),
-            unique: $filter('number')(results.aggregations['cardinality_stack'].value, 0),
-            new: $filter('number')(termsAggregation && termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
+            unique: $filter('number')(getAggregationValue(results, 'cardinality_stack', 0), 0),
+            new: $filter('number')(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
             avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(count, vm._organizations), 1)
           };
 
-          var dateAggregation = results.aggregations['date_date'].items || [];
+          var dateAggregation = getAggregationItems(results, 'date_date', []);
           vm.chart.options.series[0].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_stack'].value || 0, data: item};
+            return {x: moment(item.key).unix(), y: getAggregationValue(item, 'cardinality_stack', 0), data: item};
           });
 
           vm.chart.options.series[1].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.aggregations['sum_count'].value || 0, data: item};
+            return {x: moment(item.key).unix(), y: getAggregationValue(item, 'sum_count', 0), data: item};
           });
         }
 

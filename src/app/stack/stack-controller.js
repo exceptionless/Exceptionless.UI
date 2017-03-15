@@ -200,7 +200,12 @@
         }
 
         function onSuccess(response) {
-          vm._total_users = response.data.aggregations['cardinality_user'].value || 0;
+          function getAggregationValue(data, name, defaultValue) {
+            var aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].value || defaultValue;
+          }
+
+          vm._total_users = getAggregationValue(response.data, 'cardinality_user', 0);
           vm.stats.users = buildUserStat(vm._users, vm._total_users);
           vm.stats.usersTitle = buildUserStatTitle(vm._users, vm._total_users);
           return response;
@@ -226,17 +231,27 @@
         }
 
         function onSuccess(response) {
-          var results = response.data.plain();
-          vm._users = results.aggregations['cardinality_user'].value || 0;
+          function getAggregationValue(data, name, defaultValue) {
+            var aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].value || defaultValue;
+          }
+
+          function getAggregationItems(data, name, defaultValue) {
+            var aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].items || defaultValue;
+          }
+
+          var results = response.data.plain();=
+          vm._users = getAggregationValue(results, 'cardinality_user', 0);
           vm.stats = {
-            count: $filter('number')(results.aggregations['sum_count'].value, 0),
+            count: $filter('number')(getAggregationValue(results, 'sum_count', 0), 0),
             users: buildUserStat(vm._users, vm._total_users),
             usersTitle: buildUserStatTitle(vm._users, vm._total_users),
-            first_occurrence: results.aggregations['min_date'].value,
-            last_occurrence: results.aggregations['max_date'].value
+            first_occurrence: getAggregationValue(results, 'min_date'),
+            last_occurrence: getAggregationValue(results, 'max_date')
           };
 
-          var dateAggregation = results.aggregations['date_date'].items || [];
+          var dateAggregation = getAggregationItems(results, 'date_date', []);
           var colors = ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'];
           vm.chart.options.series = vm.chartOptions
             .filter(function(option) { return option.selected; })
@@ -252,7 +267,7 @@
                       field = field.substring(0, proximity);
                     }
 
-                    return item.aggregations[field].value || 0;
+                    return getAggregationValue(item, field, 0);
                   }
 
                   return { x: moment(item.key).unix(), y: getYValue(item, index), data: item };

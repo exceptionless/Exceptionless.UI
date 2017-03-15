@@ -16,17 +16,27 @@
         }
 
         function onSuccess(response) {
+          function getAggregationValue(data, name, defaultValue) {
+            var aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].value || defaultValue;
+          }
+
+          function getAggregationItems(data, name, defaultValue) {
+            var aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].items || defaultValue;
+          }
+
           var results = response.data.plain();
           vm.stats = {
             total: $filter('number')(results.total, 0),
-            users: $filter('number')(results.aggregations['cardinality_user'].value, 0),
-            avg_duration: results.aggregations['avg_value'].value,
+            users: $filter('number')(getAggregationValue(results, 'cardinality_user', 0), 0),
+            avg_duration: getAggregationValue(results, 'avg_value'),
             avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(results.total, vm._organizations), 1)
           };
 
-          var dateAggregation = results.aggregations['date_date'].items || [];
+          var dateAggregation = getAggregationItems(results, 'date_date', []);
           vm.chart.options.series[0].data = dateAggregation.map(function (item) {
-            return {x: moment(item.key).unix(), y: item.aggregations['cardinality_user'].value || 0, data: item};
+            return {x: moment(item.key).unix(), y: getAggregationValue(item, 'cardinality_user', 0), data: item};
           });
 
           vm.chart.options.series[1].data = dateAggregation.map(function (item) {
