@@ -10,7 +10,8 @@
           options: {
             limit: 20,
             mode: 'summary'
-          }
+          },
+          source: 'app.New'
         };
       };
     });
