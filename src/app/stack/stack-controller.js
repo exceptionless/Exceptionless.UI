@@ -241,7 +241,7 @@
             return aggs && aggs[name] && aggs[name].items || defaultValue;
           }
 
-          var results = response.data.plain();=
+          var results = response.data.plain();
           vm._users = getAggregationValue(results, 'cardinality_user', 0);
           vm.stats = {
             count: $filter('number')(getAggregationValue(results, 'sum_count', 0), 0),
