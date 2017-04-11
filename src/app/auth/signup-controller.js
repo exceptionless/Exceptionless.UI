@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', function ($analytics, $ExceptionlessClient, $state, $stateParams, $timeout, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
+    .controller('auth.Signup', function ($analytics, $ExceptionlessClient, $location, $state, $stateParams, $timeout, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
       var vm = this;
       function getMessage(response) {
         var message = 'An error occurred while signing up.  Please contact support for more information.';
@@ -14,7 +14,7 @@
 
       function authenticate(provider) {
         function onSuccess() {
-          $analytics.eventTrack('CompleteRegistration');
+          $analytics.eventTrack('CompleteRegistration', vm._analyticsData);
           $ExceptionlessClient.createFeatureUsage(vm._source + '.authenticate').setProperty('InviteToken', vm.token).addTags(provider).submit();
         }
 
@@ -90,7 +90,7 @@
         }
 
         function onSuccess() {
-          $analytics.eventTrack('CompleteRegistration');
+          $analytics.eventTrack('CompleteRegistration', vm._analyticsData);
           $ExceptionlessClient.submitFeatureUsage(vm._source + '.signup');
         }
 
@@ -107,6 +107,16 @@
       }
 
       this.$onInit = function $onInit() {
+        var search = $location.search();
+        vm._analyticsData = {
+          domain: search.domain,
+          medium: search.medium,
+          type: search.type,
+          campaign: search.campaign,
+          content: search.content,
+          keyword: search.keyword
+        };
+
         vm._source = 'app.auth.Signup';
         vm._canSignup = true;
         vm.authenticate = authenticate;
