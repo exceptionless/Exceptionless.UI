@@ -77,6 +77,7 @@
                 remote_created_at: objectIDService.create(currentOrganization.id).timestamp,
                 plan: currentOrganization.plan_id,
                 monthly_spend: currentOrganization.billing_price,
+                billing_changed_by_user_id: currentOrganization.billing_changed_by_user_id,
                 total_events: total
               };
 
