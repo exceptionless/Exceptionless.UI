@@ -5,6 +5,7 @@
     'angular-intercom',
 
     'app.config',
+    'exceptionless.analytics',
     'exceptionless.objectid'
   ])
   .config(function ($intercomProvider, INTERCOM_APPID) {

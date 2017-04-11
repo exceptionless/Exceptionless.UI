@@ -2,11 +2,11 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .factory('billingService', function ($analytics, $ExceptionlessClient, dialogs, dialogService, $q) {
+    .factory('billingService', function ($ExceptionlessClient, analyticsService, dialogs, dialogService, $q) {
       var source = 'exceptionless.billing.billingService';
 
       function changePlan(organizationId) {
-        $analytics.eventTrack('InitiateCheckout');
+        analyticsService.initiateCheckout();
         $ExceptionlessClient.createFeatureUsage(source + '.changePlan')
           .setProperty('OrganizationId', organizationId)
           .submit();

@@ -8,7 +8,7 @@
         restrict: 'E',
         replace: true,
         templateUrl: 'components/intercom/intercom-directive.tpl.html',
-        controller: function ($interval, $scope, authService, filterService, INTERCOM_APPID, $intercom, objectIDService, organizationService, projectService, userService) {
+        controller: function ($interval, $scope, analyticsService, authService, filterService, INTERCOM_APPID, $intercom, objectIDService, organizationService, projectService, userService) {
           if (!authService.isAuthenticated()) {
             return;
           }
@@ -51,13 +51,13 @@
               return;
             }
 
-            var data = {
+            var data = angular.extend({}, analyticsService.getRegistrationQueryStringData(), {
               user_id: vm.user.id,
               user_hash: vm.user.hash,
               name: vm.user.full_name,
               email: vm.user.email_address,
               remote_created_at: objectIDService.create(vm.user.id).timestamp
-            };
+            });
 
             var versionParts = '@@version'.split('.');
             if (versionParts.length === 3)

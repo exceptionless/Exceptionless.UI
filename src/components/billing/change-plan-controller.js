@@ -2,10 +2,10 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', function ($uibModalInstance, adminService, $analytics, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, data) {
+    .controller('ChangePlanDialog', function ($uibModalInstance, adminService, analyticsService, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, data) {
       var vm = this;
       function cancel() {
-        $analytics.eventTrack('Lead', getAnalyticsData());
+        analyticsService.lead(getAnalyticsData());
         $ExceptionlessClient.createFeatureUsage(vm._source + '.cancel')
           .setProperty('CurrentPlan', vm.currentPlan)
           .setProperty('CouponId', vm.coupon)
@@ -18,7 +18,7 @@
 
       function createStripeToken() {
         function onSuccess(response) {
-          $analytics.eventTrack('AddPaymentInfo');
+          analyticsService.addPaymentInfo();
           return response;
         }
 
@@ -45,7 +45,7 @@
 
         function onSuccess(response) {
           if(!response.data.success) {
-            $analytics.eventTrack('Lead', getAnalyticsData());
+            analyticsService.lead(getAnalyticsData());
             vm.paymentMessage = 'An error occurred while changing plans. Message: ' + response.data.message;
             $ExceptionlessClient.createException(new Error(response.data.message))
               .markAsCritical()
@@ -59,7 +59,7 @@
             return;
           }
 
-          $analytics.eventTrack('Purchase', getAnalyticsData());
+          analyticsService.purchase(getAnalyticsData());
           $ExceptionlessClient.createFeatureUsage(vm._source + '.save')
             .markAsCritical()
             .setMessage(response.data.message)
@@ -80,7 +80,7 @@
             vm.paymentMessage = 'An error occurred while changing plans.';
           }
 
-          $analytics.eventTrack('Lead', getAnalyticsData());
+          analyticsService.lead(getAnalyticsData());
           $ExceptionlessClient.createException(new Error(vm.paymentMessage))
             .markAsCritical()
             .setSource(vm._source + '.save.error')

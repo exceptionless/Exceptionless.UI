@@ -2,7 +2,6 @@
   'use strict';
 
   angular.module('app.auth', [
-    'angulartics',
     'directives.inputMatch',
     'ngMessages',
     'satellizer',
@@ -10,6 +9,7 @@
 
     'app.config',
     'exceptionless',
+    'exceptionless.analytics',
     'exceptionless.auth',
     'exceptionless.autofocus',
     'exceptionless.notification',

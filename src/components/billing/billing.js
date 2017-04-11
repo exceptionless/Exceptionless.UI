@@ -3,7 +3,6 @@
 
   angular.module('exceptionless.billing', [
     'angularPayments',
-    'angulartics',
     'angular-stripe',
     'ui.bootstrap',
 
@@ -13,6 +12,7 @@
     'app.config',
     'exceptionless',
     'exceptionless.admin',
+    'exceptionless.analytics',
     'exceptionless.autofocus',
     'exceptionless.dialog',
     'exceptionless.notification',
