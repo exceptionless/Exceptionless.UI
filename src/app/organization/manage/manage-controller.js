@@ -101,6 +101,8 @@
           vm.chart.options.series[3].data = vm.organization.usage.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.limit, data: item};
           });
+
+          return vm.organization;
         }
 
         function onFailure() {

@@ -50,5 +50,12 @@
       controllerAs: 'vm',
       templateUrl: 'app/organization/manage/manage.tpl.html'
     });
+
+    $stateProvider.state('app.organization.upgrade', {
+      title: 'Upgrade Organization',
+      url: '/{id:[0-9a-fA-F]{24}}/upgrade',
+      controller: 'organization.Upgrade',
+      template: null
+    });
   });
 }());
