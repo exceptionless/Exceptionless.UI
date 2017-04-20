@@ -22,6 +22,7 @@ module.exports = function (grunt) {
             autoWatch: false, //watching is handled by grunt-contrib-watch
             singleRun: true,
 
+            port: Math.floor((Math.random() * 500) + 9500),
             browserDisconnectTimeout : 10000,
             browserDisconnectTolerance: 2,
             browserNoActivityTimeout: 60000
