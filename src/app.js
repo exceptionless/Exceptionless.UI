@@ -257,9 +257,15 @@
       }
 
       rateLimitService.updateFromResponseHeader(response);
+      var currentState = $state.current.name;
+
+      // Preserve original behavior on 401s on the auth pages... Logout could cause a 401.
+      if (currentState && currentState.startsWith('auth.') && response.status === 401) {
+        return true;
+      }
 
       // Lets retry as long as we are not on the status page.
-      if ($state.current.name !== 'status' && (response.status === 0 || response.status === 503)) {
+      if (currentState !== 'status' && (response.status === 0 || response.status === 503)) {
         // No request interceptors will be called on the retry.
         $http(response.config).then(responseHandler, function (response) {
           if (!handleError(response)) {

@@ -1,6 +1,6 @@
 {
   "name": "exceptionless",
-  "version": "2.6.2",
+  "version": "2.6.3",
   "main": "index.html",
   "ignore": [
     "**/.*",
@@ -56,7 +56,7 @@
     "satellizer": "0.15.5",
     "signalr": "2.2.1",
     "trunk8": "1.3.3",
-    "twix": "1.1.4"
+    "twix": "1.1.5"
   },
   "resolutions": {
     "angular": "1.6.4",

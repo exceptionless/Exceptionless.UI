@@ -24,7 +24,12 @@
     }
 
     function changePassword(changePasswordModel) {
-      return Restangular.one('auth', 'change-password').customPOST(changePasswordModel);
+      function onSuccess(response) {
+        $auth.setToken(response.data.token);
+        return response;
+      }
+
+      return Restangular.one('auth', 'change-password').customPOST(changePasswordModel).then(onSuccess);
     }
 
     function forgotPassword(email) {
@@ -50,19 +55,23 @@
     }
 
     function logout(withRedirect, params) {
-      function onSuccess() {
-        $ExceptionlessClient.submitSessionEnd();
-        $ExceptionlessClient.config.setUserIdentity();
-        $rootScope.$emit('auth:logout', {});
+      function logoutLocally() {
+        function redirect() {
+          $ExceptionlessClient.submitSessionEnd();
+          $ExceptionlessClient.config.setUserIdentity();
+          $rootScope.$emit('auth:logout', {});
 
-        if (withRedirect) {
-          stateService.save(['auth.']);
-          return $state.go('auth.login', params);
+          if (withRedirect) {
+            stateService.save(['auth.']);
+            return $state.go('auth.login', params);
+          }
         }
+
+        stateService.clear();
+        return $auth.logout().then(redirect, redirect);
       }
 
-      stateService.clear();
-      return $auth.logout().then(onSuccess);
+      return Restangular.one('auth', 'logout').get().then(logoutLocally, logoutLocally);
     }
 
     function onLoginSuccess(user) {
@@ -77,7 +86,7 @@
 
     function signup(user) {
       function onSuccess(response) {
-        $auth.setToken(response);
+        $auth.setToken(response.data.token);
         onLoginSuccess(user);
         return response;
       }
@@ -86,7 +95,12 @@
     }
 
     function unlink(providerName, providerUserId) {
-      return Restangular.one('auth', 'unlink').one(providerName).customPOST(providerUserId);
+      function onSuccess(response) {
+        $auth.setToken(response.data.token);
+        return response;
+      }
+
+      return Restangular.one('auth', 'unlink').one(providerName).customPOST(providerUserId).then(onSuccess);
     }
 
     var service = {
