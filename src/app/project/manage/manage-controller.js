@@ -1,3 +1,4 @@
+/* global Rickshaw:false */
 (function () {
   'use strict';
 
