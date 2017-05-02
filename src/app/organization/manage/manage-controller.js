@@ -252,6 +252,7 @@
                   .setProperty('end', end)
                   .submit();
 
+                $state.go('app.organization-dashboard', { organizationId: vm.organization.id });
                 return false;
               }
             },
