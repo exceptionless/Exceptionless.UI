@@ -33,13 +33,18 @@
         return Restangular.one('tokens', id).remove();
       }
 
+      function update(id, token) {
+        return Restangular.one('tokens', id).patch(token);
+      }
+
       var service = {
         create: create,
         getById: getById,
         getByOrganizationId: getByOrganizationId,
         getByProjectId: getByProjectId,
         getProjectDefault: getProjectDefault,
-        remove: remove
+        remove: remove,
+        update: update
       };
       return service;
     });

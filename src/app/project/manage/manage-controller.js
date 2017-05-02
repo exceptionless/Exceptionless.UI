@@ -84,7 +84,7 @@
           vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organization;
 
           vm.organization.usage = (vm.organization.usage || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: vm.organization.max_events_per_month, too_big: 0 }]).filter(function (usage) {
-            return vm.project.usage.some(function(u) { return moment(u.date).isSame(usage.date) });
+            return vm.project.usage.some(function(u) { return moment(u.date).isSame(usage.date); });
           });
 
 
@@ -264,6 +264,14 @@
         return projectService.update(vm._projectId, vm.project).catch(onFailure);
       }
 
+      function saveApiKeyNote(data) {
+        function onFailure() {
+          notificationService.error('An error occurred while saving the API key note.');
+        }
+
+        return tokenService.update(data.id, { notes: data.notes }).catch(onFailure);
+      }
+
       function saveClientConfiguration(data) {
         function onFailure() {
           notificationService.error('An error occurred while saving the configuration setting.');
@@ -330,6 +338,14 @@
 
       function showChangePlanDialog() {
         return billingService.changePlan(vm.project.organization_id).catch(function(e){});
+      }
+
+      function validateApiKeyNote(original, data) {
+        if (original === data) {
+          return false;
+        }
+
+        return null;
       }
 
       function validateClientConfiguration(original, data) {
@@ -459,6 +475,7 @@
         vm.removeWebHook = removeWebHook;
         vm.resetData = resetData;
         vm.save = save;
+        vm.saveApiKeyNote = saveApiKeyNote;
         vm.saveClientConfiguration = saveClientConfiguration;
         vm.saveCommonMethods = saveCommonMethods;
         vm.saveDataExclusion = saveDataExclusion;
@@ -469,6 +486,7 @@
         vm.tokens = [];
         vm.user_agents = null;
         vm.user_namespaces = null;
+        vm.validateApiKeyNote = validateApiKeyNote;
         vm.validateClientConfiguration = validateClientConfiguration;
         vm.webHooks = [];
         get();
