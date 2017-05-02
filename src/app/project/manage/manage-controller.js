@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Manage', function ($state, $stateParams, billingService, projectService, tokenService, webHookService, notificationService, dialogs, dialogService) {
+    .controller('project.Manage', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, filterService, organizationService, projectService, tokenService, webHookService, notificationService, STRIPE_PUBLISHABLE_KEY, dialogs, dialogService) {
       var vm = this;
       function addConfiguration() {
         return dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm', vm.config).result.then(saveClientConfiguration).catch(function(e){});
@@ -22,6 +22,10 @@
           data.project_id = vm._projectId;
           return createWebHook(data);
         }).catch(function(e){});
+      }
+
+      function changePlan() {
+        return billingService.changePlan(vm.organization.id).catch(function(e){});
       }
 
       function createWebHook(data) {
@@ -53,7 +57,65 @@
           return;
         }
 
-        return getProject().then(getTokens).then(getConfiguration).then(getWebHooks);
+        return getProject().then(getOrganization).then(getConfiguration).then(getTokens).then(getWebHooks);
+      }
+
+      function getOrganization() {
+        function onSuccess(response) {
+          function getRemainingEventLimit(organization) {
+            if (!organization.max_events_per_month) {
+              return 0;
+            }
+
+            var bonusEvents = moment.utc().isBefore(moment.utc(organization.bonus_expiration)) ? organization.bonus_events_per_month : 0;
+            var usage = organization.usage && organization.usage[vm.organization.usage.length - 1];
+            if (usage && moment.utc(usage.date).isSame(moment.utc().startOf('month'))) {
+              var remaining = usage.limit - (usage.total - usage.blocked);
+              return remaining > 0 ? remaining : 0;
+            }
+
+            return organization.max_events_per_month + bonusEvents;
+          }
+
+          vm.organization = response.data.plain();
+          vm.hasMonthlyUsage = vm.organization.max_events_per_month > 0;
+          vm.remainingEventLimit = getRemainingEventLimit(vm.organization);
+          vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organization;
+
+          vm.organization.usage = (vm.organization.usage || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: vm.organization.max_events_per_month, too_big: 0 }]).filter(function (usage) {
+            return vm.project.usage.some(function(u) { return moment(u.date).isSame(usage.date) });
+          });
+
+
+          vm.chart.options.series[0].data = vm.organization.usage.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
+          });
+
+          vm.chart.options.series[1].data = vm.project.usage.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
+          });
+
+          vm.chart.options.series[2].data = vm.project.usage.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.blocked, data: item};
+          });
+
+          vm.chart.options.series[3].data = vm.project.usage.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.too_big, data: item};
+          });
+
+          vm.chart.options.series[4].data = vm.organization.usage.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.limit, data: item};
+          });
+
+          return vm.organization;
+        }
+
+        function onFailure() {
+          $state.go('app.dashboard');
+          notificationService.error('The organization "' + vm.project.organization_id + '" could not be found.');
+        }
+
+        return organizationService.getById(vm.project.organization_id, false).then(onSuccess, onFailure);
       }
 
       function getProject() {
@@ -68,6 +130,7 @@
             vm.user_namespaces = vm.project.data['UserNamespaces'];
           }
 
+          vm.project.usage = vm.project.usage || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: 3000, too_big: 0 }];
           return vm.project;
         }
 
@@ -282,16 +345,113 @@
         vm.addToken = addToken;
         vm.addConfiguration = addConfiguration;
         vm.addWebHook = addWebHook;
+        vm.canChangePlan = false;
+        vm.changePlan = changePlan;
+        vm.chart = {
+          options: {
+            padding: {top: 0.085},
+            renderer: 'multi',
+            series: [{
+              name: 'Allowed in Organization',
+              color: '#f5f5f5',
+              renderer: 'area'
+            },
+            {
+              name: 'Allowed',
+              color: '#a4d56f',
+              renderer: 'stack'
+            }, {
+              name: 'Blocked',
+              color: '#e2e2e2',
+              renderer: 'stack'
+            }, {
+              name: 'Too Big',
+              color: '#ccc',
+              renderer: 'stack'
+            }, {
+              name: 'Limit',
+              color: '#a94442',
+              renderer: 'dotted_line'
+            }]
+          },
+          features: {
+            hover: {
+              render: function (args) {
+                var date = moment.utc(args.domainX, 'X');
+                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                var content = '<div class="date">' + formattedDate + '</div>';
+                args.detail.sort(function (a, b) {
+                  return a.order - b.order;
+                }).forEach(function (d) {
+                  var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
+                  content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + '<br />';
+                }, this);
+
+                content += '<span class="detail-swatch"></span>' + $filter('number')(args.detail[1].value.data.total) + ' Total<br />';
+
+                var xLabel = document.createElement('div');
+                xLabel.className = 'x_label';
+                xLabel.innerHTML = content;
+                this.element.appendChild(xLabel);
+
+                // If left-alignment results in any error, try right-alignment.
+                var leftAlignError = this._calcLayoutError([xLabel]);
+                if (leftAlignError > 0) {
+                  xLabel.classList.remove('left');
+                  xLabel.classList.add('right');
+
+                  // If right-alignment is worse than left alignment, switch back.
+                  var rightAlignError = this._calcLayoutError([xLabel]);
+                  if (rightAlignError > leftAlignError) {
+                    xLabel.classList.remove('right');
+                    xLabel.classList.add('left');
+                  }
+                }
+
+                this.show();
+              }
+            },
+            range: {
+              onSelection: function (position) {
+                var start = moment.unix(position.coordMinX).utc().local();
+                var end = moment.unix(position.coordMaxX).utc().local();
+
+                filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+                $ExceptionlessClient.createFeatureUsage(vm._source + '.chart.range.onSelection')
+                  .setProperty('start', start)
+                  .setProperty('end', end)
+                  .submit();
+
+                $state.go('app.project-dashboard', { projectId: vm.project.id });
+                return false;
+              }
+            },
+            xAxis: {
+              timeFixture: new Rickshaw.Fixtures.Time.Local(),
+              overrideTimeFixtureCustomFormatters: true
+            },
+            yAxis: {
+              ticks: 5,
+              tickFormat: 'formatKMBT',
+              ticksTreatment: 'glow'
+            }
+          }
+        };
         vm.config = [];
         vm.copied = copied;
         vm.common_methods = null;
         vm.data_exclusions = null;
         vm.get = get;
+        vm.getOrganization = getOrganization;
         vm.getTokens = getTokens;
         vm.getWebHooks = getWebHooks;
+        vm.hasMonthlyUsage = true;
         vm.hasPremiumFeatures = false;
+        vm.next_billing_date = moment().startOf('month').add(1, 'months').toDate();
+        vm.organization = {};
         vm.project = {};
         vm.projectForm = {};
+        vm.remainingEventLimit = 3000;
         vm.removeConfig = removeConfig;
         vm.removeProject = removeProject;
         vm.removeToken = removeToken;
