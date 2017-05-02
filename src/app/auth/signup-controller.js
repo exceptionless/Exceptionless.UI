@@ -16,6 +16,7 @@
         function onSuccess() {
           analyticsService.completeRegistration($location.search());
           $ExceptionlessClient.createFeatureUsage(vm._source + '.authenticate').setProperty('InviteToken', vm.token).addTags(provider).submit();
+          return redirectOnSignup();
         }
 
         function onFailure(response) {
@@ -23,7 +24,7 @@
           notificationService.error(getMessage(response));
         }
 
-        return authService.authenticate(provider, { InviteToken: vm.token }).then(onSuccess, onFailure).then(redirectOnSignup);
+        return authService.authenticate(provider, { InviteToken: vm.token }).then(onSuccess, onFailure);
       }
 
       function isExternalLoginEnabled(provider) {
@@ -92,6 +93,7 @@
         function onSuccess() {
           analyticsService.completeRegistration($location.search());
           $ExceptionlessClient.submitFeatureUsage(vm._source + '.signup');
+          return redirectOnSignup();
         }
 
         function onFailure(response) {
@@ -99,7 +101,7 @@
           notificationService.error(getMessage(response));
         }
 
-        return authService.signup(vm.user).then(onSuccess, onFailure).then(redirectOnSignup).then(resetCanSignup, resetCanSignup);
+        return authService.signup(vm.user).then(onSuccess, onFailure).then(resetCanSignup, resetCanSignup);
       }
 
       if (authService.isAuthenticated()) {

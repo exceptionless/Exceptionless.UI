@@ -49,6 +49,7 @@
               return $interval.cancel(_reconnectInterval);
             }
 
+            _connection.qs.access_token = authService.getToken();
             _connection.start().then(function() {
               $interval.cancel(_reconnectInterval);
             });
