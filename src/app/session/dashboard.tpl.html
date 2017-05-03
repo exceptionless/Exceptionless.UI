@@ -55,7 +55,16 @@
       </div>
 
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-bar-chart-o"></i>Sessions and Users</div>
+        <div class="panel-heading">
+          <i class="fa fa-bar-chart-o"></i> Sessions and Users
+          <div class="pull-right">
+            <label class="switch bg-success">
+              <input type="checkbox" ng-model="vm.includeLiveFilter" ng-click="vm.updateLiveFilter(vm.includeLiveFilter)">
+              <i></i>
+            </label>
+            <div class="switch-text" ng-class="{'text-success': vm.includeLiveFilter}" ng-click="vm.updateLiveFilter(!vm.includeLiveFilter)">View Active</div>
+          </div>
+        </div>
         <div class="panel-body">
           <rickshaw options="vm.chart.options" features="vm.chart.features"></rickshaw>
         </div>
