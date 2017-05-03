@@ -38,7 +38,7 @@
         <div class="row" ng-if="vm.hasExistingCard()">
           <div class="form-group col-sm-6">
             <div class="radio">
-              <label class="i-checks">
+              <label class="checks">
                 <input type="radio" class="form-control" ng-model="vm.card.mode" ng-disabled="!vm.isBillingEnabled()" value="existing" />
                 <i></i> Use credit card ending in {{vm.currentOrganization.card_last4}}
               </label>
@@ -47,7 +47,7 @@
 
           <div class="form-group col-sm-6">
             <div class="radio">
-              <label class="i-checks">
+              <label class="checks">
                 <input type="radio" class="form-control" ng-model="vm.card.mode" ng-disabled="!vm.isBillingEnabled()" value="new" />
                 <i></i> Use a new credit card
               </label>

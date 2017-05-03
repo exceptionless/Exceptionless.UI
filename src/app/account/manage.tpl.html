@@ -66,7 +66,7 @@
                   Email notifications are currently disabled. <span ng-if="!vm.user.is_email_address_verified">To enable email notifications you must first verify your email address. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</span>
                 </div>
                 <div class="checkbox">
-                  <label class="i-checks">
+                  <label class="checks">
                     <input type="checkbox"
                            ng-model="vm.user.email_notifications_enabled"
                            ng-model-options="{ debounce: 500 }"
@@ -88,7 +88,7 @@
                           ng-options="project.name group by project.organization_name for project in vm.projects | orderBy: 'name' track by project.id"></select>
 
                   <div class="checkbox">
-                    <label class="i-checks">
+                    <label class="checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.send_daily_summary"
                              ng-model-options="{ debounce: 500 }"
@@ -105,7 +105,7 @@
                   </div>
 
                   <div class="checkbox">
-                    <label class="i-checks">
+                    <label class="checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.report_new_errors"
                              ng-model-options="{ debounce: 500 }"
@@ -117,7 +117,7 @@
                   </div>
 
                   <div class="checkbox">
-                    <label class="i-checks">
+                    <label class="checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.report_critical_errors"
                              ng-model-options="{ debounce: 500 }"
@@ -129,7 +129,7 @@
                   </div>
 
                   <div class="checkbox">
-                    <label class="i-checks">
+                    <label class="checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.report_event_regressions"
                              ng-model-options="{ debounce: 500 }"
@@ -141,7 +141,7 @@
                   </div>
 
                   <div class="checkbox">
-                    <label class="i-checks">
+                    <label class="checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.report_new_events"
                              ng-model-options="{ debounce: 500 }"
@@ -153,7 +153,7 @@
                   </div>
 
                   <div class="checkbox">
-                    <label class="i-checks">
+                    <label class="checks">
                       <input type="checkbox"
                              ng-model="vm.emailNotificationSettings.report_critical_events"
                              ng-model-options="{ debounce: 500 }"
