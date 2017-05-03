@@ -17,8 +17,8 @@
       return !isNaN(parseFloat(result)) && isFinite(result) ? result : 0.0;
     }
 
-    function count(aggregations, optionsCallback) {
-      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {});
+    function count(aggregations, optionsCallback, includeHiddenAndFixedFilter) {
+      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, includeHiddenAndFixedFilter);
       options = angular.isFunction(optionsCallback) ? optionsCallback(options) : options;
 
       var organization = filterService.getOrganizationId();
@@ -34,9 +34,9 @@
       return Restangular.one('events', 'count').get(options);
     }
 
-    function getAll(options, optionsCallback) {
+    function getAll(options, optionsCallback, includeHiddenAndFixedFilter) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
-      var mergedOptions = optionsCallback(filterService.apply(options));
+      var mergedOptions = optionsCallback(filterService.apply(options, includeHiddenAndFixedFilter));
 
       var organization = filterService.getOrganizationId();
       if (organization) {
@@ -51,18 +51,21 @@
       return Restangular.all('events').getList(mergedOptions);
     }
 
-    function getAllSessions(options) {
+    function getAllSessions(options, optionsCallback) {
+      optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
+      var mergedOptions = optionsCallback(filterService.apply(options, false));
+
       var organization = filterService.getOrganizationId();
       if (organization) {
-        return Restangular.one('organizations', organization).one('events').all('sessions').getList(filterService.apply(options));
+        return Restangular.one('organizations', organization).one('events').all('sessions').getList(mergedOptions);
       }
 
       var project = filterService.getProjectId();
       if (project) {
-        return Restangular.one('projects', project).one('events').all('sessions').getList(filterService.apply(options));
+        return Restangular.one('projects', project).one('events').all('sessions').getList(mergedOptions);
       }
 
-      return Restangular.one('events').all('sessions').getList(filterService.apply(options));
+      return Restangular.one('events').all('sessions').getList(mergedOptions);
     }
 
     function getById(id, options, optionsCallback) {
@@ -71,16 +74,16 @@
     }
 
     function getByReferenceId(id, options) {
-      return Restangular.one('events', 'by-ref').all(id).getList(filterService.apply(options));
+      return Restangular.one('events', 'by-ref').all(id).getList(filterService.apply(options, false));
     }
 
     function getBySessionId(projectId, id, options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
-      return Restangular.one('projects', projectId).one('events', 'sessions').all(id).getList(optionsCallback(filterService.apply(options)));
+      return Restangular.one('projects', projectId).one('events', 'sessions').all(id).getList(optionsCallback(filterService.apply(options, false)));
     }
 
     function getByStackId(id, options) {
-      return Restangular.one('stacks', id).all('events').getList(filterService.apply(options));
+      return Restangular.one('stacks', id).all('events').getList(filterService.apply(options, false));
     }
 
     function markCritical(id) {

@@ -3,15 +3,15 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService, organizationService) {
+    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService) {
       var vm = this;
       function get() {
-        return getOrganizations().then(getStats).catch(function(e){});
-      }
-
-      function getStats() {
         function optionsCallback(options) {
           options.filter += ' type:session';
+          if (vm.includeLiveFilter) {
+            options.filter += ' _missing_:data.sessionend';
+          }
+
           return options;
         }
 
@@ -45,20 +45,15 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback).then(onSuccess);
+        return eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback, false).then(onSuccess).catch(function(e){});
       }
 
-      function getOrganizations() {
-        function onSuccess(response) {
-          vm._organizations = response.data.plain();
-          return vm._organizations;
-        }
-
-        return organizationService.getAll().then(onSuccess);
+      function updateLiveFilter(isLive) {
+        vm.includeLiveFilter = isLive;
+        filterService.fireFilterChanged(false);
       }
 
       this.$onInit = function $onInit() {
-        vm._organizations = [];
         vm._source = 'app.session.Dashboard';
         vm.chart = {
           options: {
@@ -139,9 +134,19 @@
         };
 
         vm.get = get;
+        vm.includeLiveFilter = false;
+        vm.updateLiveFilter = updateLiveFilter;
         vm.recentSessions = {
           get: function (options) {
-            return eventService.getAllSessions(options);
+            function optionsCallback(options) {
+              if (vm.includeLiveFilter) {
+                options.filter += ' _missing_:data.sessionend';
+              }
+
+              return options;
+            }
+
+            return eventService.getAllSessions(options, optionsCallback);
           },
           summary: {
             showType: false

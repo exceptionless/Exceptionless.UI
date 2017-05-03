@@ -7,11 +7,12 @@
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
 
-      function apply(source) {
-        return angular.extend({}, getDefaultOptions(), source);
+      function apply(source, includeHiddenAndFixedFilter) {
+        return angular.extend({}, getDefaultOptions(includeHiddenAndFixedFilter), source);
       }
 
-      function buildFilter() {
+      function buildFilter(includeHiddenAndFixedFilter) {
+        includeHiddenAndFixedFilter = (typeof includeHiddenAndFixedFilter !== 'undefined') ?  includeHiddenAndFixedFilter : true;
         var filters = [];
 
         if (_organizationId) {
@@ -27,7 +28,8 @@
         }
 
         var filter = _raw || '';
-        if (!filter || filter.trim() !== '*') {
+        var isWildCardFilter = filter.trim() === '*';
+        if (includeHiddenAndFixedFilter && !isWildCardFilter) {
           var hasFixed = filter.search(/\bfixed:/i) !== -1;
           if (!hasFixed) {
             filters.push('fixed:false');
@@ -37,10 +39,10 @@
           if (!hasHidden) {
             filters.push('hidden:false');
           }
+        }
 
-          if (filter) {
-            filters.push('(' + filter + ')');
-          }
+        if (!!filter && !isWildCardFilter) {
+          filters.push('(' + filter + ')');
         }
 
         return filters.join(' ').trim();
@@ -64,17 +66,17 @@
         fireFilterChanged();
       }
 
-      function fireFilterChanged() {
+      function fireFilterChanged(includeHiddenAndFixedFilter) {
         var options = {
           organization_id: _organizationId,
           project_id: _projectId,
           type: _eventType
         };
 
-        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions()));
+        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeHiddenAndFixedFilter)));
       }
 
-      function getDefaultOptions() {
+      function getDefaultOptions(includeHiddenAndFixedFilter) {
         var options = {};
 
         var offset = getTimeOffset();
@@ -82,7 +84,7 @@
           angular.extend(options, { offset: offset });
         }
 
-        var filter = buildFilter();
+        var filter = buildFilter(includeHiddenAndFixedFilter);
         if (filter) {
           angular.extend(options, { filter: filter });
         }
@@ -250,6 +252,7 @@
         apply: apply,
         clearFilter: clearFilter,
         clearOrganizationAndProjectFilter: clearOrganizationAndProjectFilter,
+        fireFilterChanged: fireFilterChanged,
         getEventType: getEventType,
         getFilter: getFilter,
         getProjectId: getProjectId,
