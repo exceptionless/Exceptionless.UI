@@ -9,6 +9,17 @@
         return dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm', vm.config).result.then(saveClientConfiguration).catch(function(e){});
       }
 
+      function addSlack() {
+        function onFailure() {
+          notificationService.error('An error occurred while adding Slack to your project.');
+        }
+
+        var options = {organization_id: vm.project.organization_id, project_id: vm._projectId};
+        return projectService.addSlack(vm._projectId).catch(onFailure);
+
+        // TODO: handle 426 here and server side.
+      }
+
       function addToken() {
         function onFailure() {
           notificationService.error('An error occurred while creating a new API key for your project.');
@@ -222,6 +233,16 @@
         }).catch(function(e){});
       }
 
+      function removeSlack() {
+        return dialogService.confirmDanger('Are you sure you want to remove slack support?', 'REMOVE SLACK').then(function () {
+          function onFailure() {
+            notificationService.error('An error occurred while trying to remove slack.');
+          }
+
+          return projectService.removeSlack(vm._projectId).catch(onFailure);
+        }).catch(function(e){});
+      }
+
       function removeToken(token) {
         return dialogService.confirmDanger('Are you sure you want to delete this API key?', 'DELETE API KEY').then(function () {
           function onFailure() {
@@ -359,6 +380,7 @@
       this.$onInit = function $onInit() {
         vm._ignoreRefresh = false;
         vm._projectId = $stateParams.id;
+        vm.addSlack = addSlack;
         vm.addToken = addToken;
         vm.addConfiguration = addConfiguration;
         vm.addWebHook = addWebHook;
@@ -471,6 +493,7 @@
         vm.remainingEventLimit = 3000;
         vm.removeConfig = removeConfig;
         vm.removeProject = removeProject;
+        vm.removeSlack = removeSlack;
         vm.removeToken = removeToken;
         vm.removeWebHook = removeWebHook;
         vm.resetData = resetData;

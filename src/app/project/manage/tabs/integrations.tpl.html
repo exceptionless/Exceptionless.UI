@@ -2,6 +2,23 @@
   <a ng-click="vm.showChangePlanDialog()">Upgrade now</a> to enable integrations!
 </div>
 
+<div ng-if="appVm.isSlackEnabled">
+<h4>Error Stacking</h4>
+  <p>
+    Integrate with Slack and get instant notifications to your whole team.
+  </p>
+
+  <p>
+    <a ng-if="!vm.project.data['@slack']" ng-click="vm.addSlack()" class="btn btn-primary" role="button" title="Add to Slack">
+      <i class="fa fa-fw fa-slack"></i> Add to Slack
+    </a>
+    <a ng-if="vm.project.data['@slack']" ng-click="vm.removeSlack()" class="btn btn-danger" role="button" title="Remove Slack">
+      <i class="fa fa-fw fa-slack"></i> Remove Slack
+    </a>
+  </p>
+</div>
+
+<h4>Web hooks</h4>
 <p>
   The following web hooks will be called for this project. We also support
   <a href="http://zapier.com/" target="_blank">Zapier</a> which allows

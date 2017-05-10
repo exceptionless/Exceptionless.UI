@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, signalRService, stateService, STRIPE_PUBLISHABLE_KEY, urlService, userService) {
+    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, signalRService, stateService, SLACK_APPID, STRIPE_PUBLISHABLE_KEY, urlService, userService) {
       var vm = this;
       function addHotkeys() {
         function logFeatureUsage(name) {
@@ -265,6 +265,7 @@
         vm.getUser = getUser;
         vm.isMenuActive = {};
         vm.isIntercomEnabled = isIntercomEnabled;
+        vm.isSlackEnabled = !!SLACK_APPID;
         vm.isSideNavCollapsed = vm._store.get('sideNavCollapsed') === true;
         vm.organizations = [];
         vm.showIntercom = showIntercom;

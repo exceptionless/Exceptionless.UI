@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  angular.module('exceptionless.project', ['restangular'])
-    .factory('projectService', function ($cacheFactory, $rootScope, Restangular) {
+  angular.module('exceptionless.project')
+    .factory('projectService', function ($auth, $cacheFactory, $rootScope, Restangular) {
       var _cache = $cacheFactory('http:project');
       $rootScope.$on('cache:clear', _cache.removeAll);
       $rootScope.$on('cache:clear-project', _cache.removeAll);
@@ -19,6 +19,14 @@
       var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
         RestangularConfigurer.setDefaultHttpFields({ cache: _cache });
       });
+
+      function addSlack(id) {
+        function onSuccess(response) {
+          return Restangular.one('projects', id).post('slack', null, { code: response.code });
+        }
+
+        return $auth.link('slack').then(onSuccess);
+      }
 
       function create(organizationId, name) {
         return Restangular.all('projects').post({'organization_id': organizationId, 'name': name, delete_bot_data_enabled: true  });
@@ -80,6 +88,10 @@
         return Restangular.one('projects', id).one('data').remove({ key: key });
       }
 
+      function removeSlack(id) {
+        return Restangular.one('projects', id).one('slack').remove();
+      }
+
       function removeNotificationSettings(id, userId) {
         return Restangular.one('users', userId).one('projects', id).one('notifications').remove();
       }
@@ -105,6 +117,7 @@
       }
 
       var service = {
+        addSlack: addSlack,
         create: create,
         demoteTab: demoteTab,
         getAll: getAll,
@@ -118,6 +131,7 @@
         removeConfig: removeConfig,
         removeData: removeData,
         removeNotificationSettings: removeNotificationSettings,
+        removeSlack: removeSlack,
         resetData: resetData,
         setConfig: setConfig,
         setData: setData,
