@@ -19,7 +19,8 @@
           scope: ['incoming-webhook'],
           scopeDelimiter: ' ',
           display: 'popup',
-          popupOptions: { width: 580, height: 630 }
+          popupOptions: { width: 580, height: 630 },
+          state: function () { return encodeURIComponent(Math.random().toString(36).substr(2)); }
         });
       }
     });
