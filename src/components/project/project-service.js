@@ -68,6 +68,10 @@
         return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
       }
 
+      function getIntegrationNotificationSettings(id, integration) {
+        return _cachedRestangular.one('projects', id).one(integration, 'notifications').get();
+      }
+
       function isNameAvailable(organizationId, name) {
         return Restangular.one('organizations', organizationId).one('projects', 'check-name').get({ name: encodeURIComponent(name) });
       }
@@ -116,6 +120,10 @@
         return Restangular.one('users', userId).one('projects', id).post('notifications', settings);
       }
 
+      function setIntegrationNotificationSettings(id, integration, settings) {
+        return Restangular.one('projects', id).one(integration).post('notifications', settings);
+      }
+
       var service = {
         addSlack: addSlack,
         create: create,
@@ -125,6 +133,7 @@
         getByOrganizationId: getByOrganizationId,
         getConfig: getConfig,
         getNotificationSettings: getNotificationSettings,
+        getIntegrationNotificationSettings: getIntegrationNotificationSettings,
         isNameAvailable: isNameAvailable,
         promoteTab: promoteTab,
         remove: remove,
@@ -136,6 +145,7 @@
         setConfig: setConfig,
         setData: setData,
         setNotificationSettings: setNotificationSettings,
+        setIntegrationNotificationSettings: setIntegrationNotificationSettings,
         update: update
       };
       return service;
