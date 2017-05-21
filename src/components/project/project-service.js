@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  angular.module('exceptionless.project', ['restangular'])
-    .factory('projectService', function ($cacheFactory, $rootScope, Restangular) {
+  angular.module('exceptionless.project')
+    .factory('projectService', function ($auth, $cacheFactory, $rootScope, Restangular) {
       var _cache = $cacheFactory('http:project');
       $rootScope.$on('cache:clear', _cache.removeAll);
       $rootScope.$on('cache:clear-project', _cache.removeAll);
@@ -19,6 +19,14 @@
       var _cachedRestangular = Restangular.withConfig(function(RestangularConfigurer) {
         RestangularConfigurer.setDefaultHttpFields({ cache: _cache });
       });
+
+      function addSlack(id) {
+        function onSuccess(response) {
+          return Restangular.one('projects', id).post('slack', null, { code: response.code });
+        }
+
+        return $auth.link('slack').then(onSuccess);
+      }
 
       function create(organizationId, name) {
         return Restangular.all('projects').post({'organization_id': organizationId, 'name': name, delete_bot_data_enabled: true  });
@@ -60,6 +68,10 @@
         return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
       }
 
+      function getIntegrationNotificationSettings(id, integration) {
+        return _cachedRestangular.one('projects', id).one(integration, 'notifications').get();
+      }
+
       function isNameAvailable(organizationId, name) {
         return Restangular.one('organizations', organizationId).one('projects', 'check-name').get({ name: encodeURIComponent(name) });
       }
@@ -78,6 +90,10 @@
 
       function removeData(id, key) {
         return Restangular.one('projects', id).one('data').remove({ key: key });
+      }
+
+      function removeSlack(id) {
+        return Restangular.one('projects', id).one('slack').remove();
       }
 
       function removeNotificationSettings(id, userId) {
@@ -104,7 +120,12 @@
         return Restangular.one('users', userId).one('projects', id).post('notifications', settings);
       }
 
+      function setIntegrationNotificationSettings(id, integration, settings) {
+        return Restangular.one('projects', id).one(integration).post('notifications', settings);
+      }
+
       var service = {
+        addSlack: addSlack,
         create: create,
         demoteTab: demoteTab,
         getAll: getAll,
@@ -112,16 +133,19 @@
         getByOrganizationId: getByOrganizationId,
         getConfig: getConfig,
         getNotificationSettings: getNotificationSettings,
+        getIntegrationNotificationSettings: getIntegrationNotificationSettings,
         isNameAvailable: isNameAvailable,
         promoteTab: promoteTab,
         remove: remove,
         removeConfig: removeConfig,
         removeData: removeData,
         removeNotificationSettings: removeNotificationSettings,
+        removeSlack: removeSlack,
         resetData: resetData,
         setConfig: setConfig,
         setData: setData,
         setNotificationSettings: setNotificationSettings,
+        setIntegrationNotificationSettings: setIntegrationNotificationSettings,
         update: update
       };
       return service;

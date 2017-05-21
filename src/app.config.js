@@ -9,6 +9,7 @@
     .constant('GOOGLE_APPID')
     .constant('INTERCOM_APPID')
     .constant('LIVE_APPID')
+    .constant('SLACK_APPID')
     .constant('STRIPE_PUBLISHABLE_KEY')
     .constant('SYSTEM_NOTIFICATION_MESSAGE')
     .constant('USE_HTML5_MODE', false)

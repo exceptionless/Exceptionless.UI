@@ -12,6 +12,7 @@ function updateAppConfig() {
   var googleAppId = process.env.Exceptionless_GoogleAppId ? process.env.Exceptionless_GoogleAppId : '';
   var intercomId = process.env.Exceptionless_IntercomAppId ? process.env.Exceptionless_IntercomAppId : '';
   var liveAppId = process.env.Exceptionless_MicrosoftAppId ? process.env.Exceptionless_MicrosoftAppId : '';
+  var slackAppId = process.env.Exceptionless_SlackAppId ? process.env.Exceptionless_SlackAppId : '';
   var stripePubKey = process.env.Exceptionless_StripePublishableApiKey ? process.env.Exceptionless_StripePublishableApiKey : '';
   var notificationMessage = process.env.Exceptionless_Message ? process.env.Exceptionless_Message : '';
   var useHTML5Mode = process.env.Exceptionless_HTML5Mode ? process.env.Exceptionless_HTML5Mode === 'true' : false;
@@ -29,6 +30,7 @@ function updateAppConfig() {
     '    .constant("GOOGLE_APPID", "' + googleAppId + '")',
     '    .constant("INTERCOM_APPID", "' + intercomId + '")',
     '    .constant("LIVE_APPID", "' + liveAppId + '")',
+    '    .constant("SLACK_APPID", "' + slackAppId + '")',
     '    .constant("STRIPE_PUBLISHABLE_KEY", "' + stripePubKey + '")',
     '    .constant("SYSTEM_NOTIFICATION_MESSAGE", "' + notificationMessage + '")',
     '    .constant("USE_HTML5_MODE", ' + useHTML5Mode + ')',

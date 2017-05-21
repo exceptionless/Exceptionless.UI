@@ -9,6 +9,24 @@
         return dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm', vm.config).result.then(saveClientConfiguration).catch(function(e){});
       }
 
+      function addSlack() {
+        if (!vm.hasPremiumFeatures) {
+          return billingService.confirmUpgradePlan("Please upgrade your plan to enable slack integration.", vm.project.organization_id).then(function () {
+            return addSlackIntegration();
+          }).catch(function(e){});
+        }
+
+        return addSlackIntegration();
+      }
+
+      function addSlackIntegration() {
+        function onFailure() {
+          notificationService.error('An error occurred while adding Slack to your project.');
+        }
+
+        return projectService.addSlack(vm._projectId).catch(onFailure);
+      }
+
       function addToken() {
         function onFailure() {
           notificationService.error('An error occurred while creating a new API key for your project.');
@@ -58,7 +76,7 @@
           return;
         }
 
-        return getProject().then(getOrganization).then(getConfiguration).then(getTokens).then(getWebHooks);
+        return getProject().then(getOrganization).then(getConfiguration).then(getTokens).then(getSlackNotificationSettings).then(getWebHooks);
       }
 
       function getOrganization() {
@@ -182,6 +200,20 @@
         return projectService.getConfig(vm._projectId).then(onSuccess, onFailure);
       }
 
+      function getSlackNotificationSettings() {
+        function onSuccess(response) {
+          vm.slackNotificationSettings = response.data.plain();
+          return vm.slackNotificationSettings;
+        }
+
+        function onFailure() {
+          notificationService.error('An error occurred while loading the slack notification settings.');
+        }
+
+        vm.slackNotificationSettings = null;
+        return projectService.getIntegrationNotificationSettings(vm._projectId, 'slack').then(onSuccess, onFailure);
+      }
+
       function getWebHooks() {
         function onSuccess(response) {
           vm.webHooks = response.data.plain();
@@ -219,6 +251,16 @@
 
           vm._ignoreRefresh = true;
           return projectService.remove(vm._projectId).then(onSuccess, onFailure);
+        }).catch(function(e){});
+      }
+
+      function removeSlack() {
+        return dialogService.confirmDanger('Are you sure you want to remove slack support?', 'REMOVE SLACK').then(function () {
+          function onFailure() {
+            notificationService.error('An error occurred while trying to remove slack.');
+          }
+
+          return projectService.removeSlack(vm._projectId).catch(onFailure);
         }).catch(function(e){});
       }
 
@@ -336,6 +378,22 @@
         }
       }
 
+      function saveSlackNotificationSettings() {
+        function onFailure(response) {
+          if (response.status === 426) {
+            return billingService.confirmUpgradePlan(response.data.message, vm.project.organization_id).then(function () {
+              return saveSlackNotificationSettings();
+            }).catch(function(e){
+              return getSlackNotificationSettings();
+            });
+          }
+
+          notificationService.error('An error occurred while saving your slack notification settings.');
+        }
+
+        return projectService.setIntegrationNotificationSettings(vm._projectId, 'slack', vm.slackNotificationSettings).catch(onFailure);
+      }
+
       function showChangePlanDialog() {
         return billingService.changePlan(vm.project.organization_id).catch(function(e){});
       }
@@ -359,6 +417,7 @@
       this.$onInit = function $onInit() {
         vm._ignoreRefresh = false;
         vm._projectId = $stateParams.id;
+        vm.addSlack = addSlack;
         vm.addToken = addToken;
         vm.addConfiguration = addConfiguration;
         vm.addWebHook = addWebHook;
@@ -462,6 +521,7 @@
         vm.getOrganization = getOrganization;
         vm.getTokens = getTokens;
         vm.getWebHooks = getWebHooks;
+        vm.getSlackNotificationSettings = getSlackNotificationSettings;
         vm.hasMonthlyUsage = true;
         vm.hasPremiumFeatures = false;
         vm.next_billing_date = moment().startOf('month').add(1, 'months').toDate();
@@ -471,6 +531,7 @@
         vm.remainingEventLimit = 3000;
         vm.removeConfig = removeConfig;
         vm.removeProject = removeProject;
+        vm.removeSlack = removeSlack;
         vm.removeToken = removeToken;
         vm.removeWebHook = removeWebHook;
         vm.resetData = resetData;
@@ -480,9 +541,11 @@
         vm.saveCommonMethods = saveCommonMethods;
         vm.saveDataExclusion = saveDataExclusion;
         vm.saveDeleteBotDataEnabled = saveDeleteBotDataEnabled;
+        vm.saveSlackNotificationSettings = saveSlackNotificationSettings;
         vm.saveUserAgents = saveUserAgents;
         vm.saveUserNamespaces = saveUserNamespaces;
         vm.showChangePlanDialog = showChangePlanDialog;
+        vm.slackNotificationSettings = null;
         vm.tokens = [];
         vm.user_agents = null;
         vm.user_namespaces = null;
