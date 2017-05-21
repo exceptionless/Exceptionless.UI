@@ -391,10 +391,6 @@
           notificationService.error('An error occurred while saving your slack notification settings.');
         }
 
-        if (!vm.project.has_slack_integration) {
-          return addSlack();
-        }
-
         return projectService.setIntegrationNotificationSettings(vm._projectId, 'slack', vm.slackNotificationSettings).catch(onFailure);
       }
 

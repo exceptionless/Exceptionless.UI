@@ -3,79 +3,81 @@
 </div>
 
 <div ng-if="appVm.isSlackEnabled">
-<h4>Slack</h4>
-  <p>Choose how often you want to receive slack notifications for event occurrences in this project.</p>
+  <h4>Slack</h4>
 
-  <div class="checkbox">
-    <label class="checks">
-      <input type="checkbox"
-             ng-model="vm.slackNotificationSettings.send_daily_summary"
-             ng-model-options="{ debounce: 500 }"
-             ng-change="vm.saveSlackNotificationSettings()">
-      <i></i>
-      Send daily project summary <strong>(Coming soon!)</strong>
-    </label>
-  </div>
+  <div ng-if="vm.project.has_slack_integration">
+    <p>Choose how often you want to receive slack notifications for event occurrences in this project.</p>
 
-  <div class="checkbox">
-    <label class="checks">
-      <input type="checkbox"
-             ng-model="vm.slackNotificationSettings.report_new_errors"
-             ng-model-options="{ debounce: 500 }"
-             ng-change="vm.saveSlackNotificationSettings()">
-      <i></i>
-      Notify me on new errors
-    </label>
-  </div>
+    <div class="checkbox">
+      <label class="checks">
+        <input type="checkbox"
+               ng-model="vm.slackNotificationSettings.send_daily_summary"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveSlackNotificationSettings()">
+        <i></i>
+        Send daily project summary <strong>(Coming soon!)</strong>
+      </label>
+    </div>
 
-  <div class="checkbox">
-    <label class="checks">
-      <input type="checkbox"
-             ng-model="vm.slackNotificationSettings.report_critical_errors"
-             ng-model-options="{ debounce: 500 }"
-             ng-change="vm.saveSlackNotificationSettings()">
-      <i></i>
-      Notify me on critical errors
-    </label>
-  </div>
+    <div class="checkbox">
+      <label class="checks">
+        <input type="checkbox"
+               ng-model="vm.slackNotificationSettings.report_new_errors"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveSlackNotificationSettings()">
+        <i></i>
+        Notify me on new errors
+      </label>
+    </div>
 
-  <div class="checkbox">
-    <label class="checks">
-      <input type="checkbox"
-             ng-model="vm.slackNotificationSettings.report_event_regressions"
-             ng-model-options="{ debounce: 500 }"
-             ng-change="vm.saveSlackNotificationSettings()">
-      <i></i>
-      Notify me on error regressions
-    </label>
-  </div>
+    <div class="checkbox">
+      <label class="checks">
+        <input type="checkbox"
+               ng-model="vm.slackNotificationSettings.report_critical_errors"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveSlackNotificationSettings()">
+        <i></i>
+        Notify me on critical errors
+      </label>
+    </div>
 
-  <div class="checkbox">
-    <label class="checks">
-      <input type="checkbox"
-             ng-model="vm.slackNotificationSettings.report_new_events"
-             ng-model-options="{ debounce: 500 }"
-             ng-change="vm.saveSlackNotificationSettings()">
-      <i></i>
-      Notify me on new events
-    </label>
-  </div>
+    <div class="checkbox">
+      <label class="checks">
+        <input type="checkbox"
+               ng-model="vm.slackNotificationSettings.report_event_regressions"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveSlackNotificationSettings()">
+        <i></i>
+        Notify me on error regressions
+      </label>
+    </div>
 
-  <div class="checkbox">
-    <label class="checks">
-      <input type="checkbox"
-             ng-model="vm.slackNotificationSettings.report_critical_events"
-             ng-model-options="{ debounce: 500 }"
-             ng-change="vm.saveSlackNotificationSettings()">
-      <i></i>
-      Notify me on critical events
-    </label>
+    <div class="checkbox">
+      <label class="checks">
+        <input type="checkbox"
+               ng-model="vm.slackNotificationSettings.report_new_events"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveSlackNotificationSettings()">
+        <i></i>
+        Notify me on new events
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label class="checks">
+        <input type="checkbox"
+               ng-model="vm.slackNotificationSettings.report_critical_events"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveSlackNotificationSettings()">
+        <i></i>
+        Notify me on critical events
+      </label>
+    </div>
   </div>
-</div>
 
   <p>
     <a ng-if="!vm.project.has_slack_integration" ng-click="vm.addSlack()" class="btn btn-primary" role="button" title="Add to Slack">
-      <i class="fa fa-fw fa-slack"></i> Add to Slack
+      <i class="fa fa-fw fa-slack"></i> Add Slack Notifications
     </a>
     <a ng-if="vm.project.has_slack_integration" ng-click="vm.removeSlack()" class="btn btn-danger" role="button" title="Remove Slack">
       <i class="fa fa-fw fa-slack"></i> Remove Slack
