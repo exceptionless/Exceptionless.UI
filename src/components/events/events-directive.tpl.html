@@ -9,7 +9,11 @@
       </th>
       <th>Summary</th>
       <th class="action-xl hidden-xs">User</th>
-      <th ng-class="vm.relativeTo() ? 'relative-date' : 'date'">{{::vm.timeHeaderText}}</th>
+      <th class="clickable" ng-class="{ 'relative-date': vm.relativeTo(), 'date': !vm.relativeTo(), 'dropup': !vm.sortByDateDescending }" ng-click="vm.toggleDateSort()">
+        <abbr title="{{vm.sortByDateDescending ? 'Sort Descending' : 'Sort Ascending'}}">
+          {{::vm.timeHeaderText}} <span class="caret"></span>
+        </abbr>
+      </th>
     </tr>
     </thead>
     <tbody>
