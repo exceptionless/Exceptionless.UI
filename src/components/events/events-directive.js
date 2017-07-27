@@ -115,6 +115,17 @@
               });
           }
 
+          function toggleDateSort() {
+            vm.settings.sortByDateDescending = !vm.sortByDateDescending;
+            vm.sortByDateDescending = vm.settings.sortByDateDescending;
+
+            var options = vm.currentOptions;
+            var sortPrefix = vm.sortByDateDescending ? "-" : "+";
+            options.sort = sortPrefix + "date";
+
+            get(options);
+          }
+
           this.$onInit = function $onInit() {
             vm._source = vm.settings.source + '.events';
             vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
@@ -129,6 +140,8 @@
             vm.previousPage = previousPage;
             vm.timeHeaderText = vm.settings.timeHeaderText || 'Date';
             vm.relativeTo = function() { return vm.settings.relativeTo; };
+            vm.toggleDateSort = toggleDateSort;
+            vm.sortByDateDescending = vm.settings.sortByDateDescending === undefined ? true : vm.sortByDateDescending;
             vm.save = save;
             vm.selectedIds = [];
             vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
