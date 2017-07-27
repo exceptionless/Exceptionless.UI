@@ -1,4 +1,4 @@
-<div class="table-responsive" refresh-on="filterChanged" refresh-action="vm.get()">
+<div class="table-responsive" reDescending"filterChaAscendingesh-action="vm.get()">
   <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable" refresh-on="StackChanged PlanChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <thead refresh-on="PersistentEventChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <tr>
@@ -9,7 +9,11 @@
       </th>
       <th>Summary</th>
       <th class="action-xl hidden-xs">User</th>
-      <th ng-class="{ 'relative-date': vm.relativeTo(), 'date': !vm.relativeTo(), 'dropup': vm.sortByDateDescending }" ng-click="vm.toggleDateSort()">{{::vm.timeHeaderText}} <span class="caret"></span></th>
+      <th class="clickable" ng-class="{ 'relative-date': vm.relativeTo(), 'date': !vm.relativeTo(), 'dropup': !vm.sortByDateDescending }" ng-click="vm.toggleDateSort()">
+        <abbr title="{{vm.sortByDateDescending ? 'Sort Descending' : 'Sort Ascending'}}">
+          {{::vm.timeHeaderText}} <span class="caret"></span>
+        </abbr>
+      </th>
     </tr>
     </thead>
     <tbody>
