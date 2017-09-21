@@ -11,7 +11,7 @@
                 <i class="fa fa-calendar fa-4x"></i>
               </div>
               <div class="details">
-                <span class="title">Count</span>
+                <span class="title">{{'Count' | translate}}</span>
                 <span class="sub">{{vm.stats.count}}</span>
               </div>
             </div>
@@ -22,7 +22,7 @@
                 <i class="fa fa-users fa-4x"></i>
               </div>
               <div class="details">
-                <span class="title">Users</span>
+                <span class="title">{{'UserRatio' | translate}}</span>
                 <span class="sub">
                   <abbr title="{{vm.stats.usersTitle}}">{{vm.stats.users}}</abbr>
                 </span>
@@ -35,7 +35,7 @@
                 <i class="fa fa-arrow-circle-left fa-4x"></i>
               </div>
               <div class="details">
-                <span class="title">First</span>
+                <span class="title">{{'First' | translate}}</span>
                 <span class="sub visible-md visible-lg"><timeago date="vm.stats.first_occurrence"></timeago></span>
                 <span class="sub visible-sm">
                   <span ng-if="vm.isValidDate(vm.stats.first_occurrence)">{{vm.stats.first_occurrence | date:'shortDate' }}</span>
@@ -54,7 +54,7 @@
                 <i class="fa fa-arrow-circle-right fa-4x"></i>
               </div>
               <div class="details">
-                <span class="title">Last</span>
+                <span class="title">{{'Last' | translate}}</span>
                 <span class="sub visible-md visible-lg"><timeago date="vm.stats.last_occurrence"></timeago></span>
                 <span class="sub visible-sm">
                   <span ng-if="vm.isValidDate(vm.stats.last_occurrence)">{{vm.stats.last_occurrence | date:'shortDate' }}</span>
@@ -73,7 +73,7 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
-        Stack
+        {{'Stack' | translate}}
         <span class="labels">
           <span class="label label-success" ng-if="vm.stack.date_fixed && !vm.stack.is_regressed">
               <span class="hidden-xs">FIXED<span ng-if="vm.stack.fixed_in_version"> IN {{vm.stack.fixed_in_version}}</span></span>

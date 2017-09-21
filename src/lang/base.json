@@ -1,0 +1,79 @@
+{
+    // 顶部
+    "Change Plan":"",
+    "Change Password":"",
+    "Logout":"",
+
+    // 导航菜单
+    "Exceptions":"",
+    "Log Messages":"",
+    "Broken Links":"",
+    "Feature Usages":"",
+    "All Events":"",
+    "Reports":"",
+    "Admin":"",
+    "Dashboard":"",
+    "Most Recent":"",
+    "Most Frequent":"",
+    "Most Users":"",
+    "New Exception":"",
+    "New LogMessage":"",
+    "New BrokenLink":"",
+    "New FeatureUsage":"",
+    "New Event":"",
+    "Sessions":"",
+    "Project Manager":"",
+    "Organization Manager":"",
+    "My Account":"",
+    "Documentation":"",
+    "Support":"",
+
+    // 仪表面板
+    "Count":"",
+    "Unique":"",
+    "New":"",
+    "Per Hour":"",
+    "History":"",
+    "Newest":"",
+
+    // 找不到页面
+    "Page Not Found":"",
+    "We're sorry but the page was not found on this site.":"",
+
+    // 服务页
+    "Service Status":"",
+    "We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information.":"",
+
+    // 堆栈页面
+    "Please enter a Reference Link":"",
+    "Reference Link":"",
+    "Please enter a valid URL":"",
+    "Reference Link is required.":"",
+    "Save Reference Link":"",
+    "UserRatio":"",
+    "First":"",
+    "Last":"",
+    "Stack":"",
+    "Options":"",
+    "Hide":"",
+    "Future Occurrences Are Critical":"",
+    "Disable Notifications":"",
+    "Promote To External":"",
+    "Add Reference Link":"",
+    "Title":"",
+    "Project":"",
+    "Date Fixed":"",
+    "Description":"",
+    "Tags":"",
+    "Stacking Information":"",
+    "ExceptionType":"",
+    "Method":"",
+    "Chart Options":"",
+    "Show Average Value":"",
+    "Show Value Sum":"",
+    "Recent Occurrences":"",
+    "Reference Links":"",    
+
+    "Delete":"",
+    "Cancel":""
+}

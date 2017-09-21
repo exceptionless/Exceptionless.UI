@@ -1,0 +1,41 @@
+{    
+    "Change Plan":"Change Plan",
+    "Change Password":"Change Password",
+    "Logout":"Logout",
+
+    "Exceptions":"Exceptions",
+    "Log Messages":"Log Messages",
+    "Broken Links":"Broken Links",
+    "Feature Usages":"Feature Usages",
+    "All Events":"All Events",
+    "Reports":"Reports",
+    "Admin":"Admin",
+    "Dashboard":"Dashboard",
+    "Most Recent":"Most Recent",
+    "Most Frequent":"Most Frequent",
+    "Most Users":"Most Users",
+    "New Exception":"New",
+    "New LogMessage":"New",
+    "New BrokenLink":"New",
+    "New FeatureUsage":"New",
+    "New Event":"New",
+    "Sessions":"Sessions",
+    "Project Manager":"Projects",
+    "Organization Manager":"Organizations",
+    "My Account":"My Account",
+    "Documentation":"Documentation",
+    "Support":"Support",
+
+    "Count":"Count",
+    "Unique":"Unique",
+    "New":"New",
+    "Per Hour":"Per Hour",
+    "History":"History",
+    "Newest":"Newest",
+
+    "Page Not Found":"Page Not Found",
+    "We're sorry but the page was not found on this site.":"We're sorry but the page was not found on this site.",
+
+    "Service Status":"Service Status",
+    "We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information.":"We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information."
+}
