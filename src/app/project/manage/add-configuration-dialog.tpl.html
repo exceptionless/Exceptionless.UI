@@ -1,7 +1,7 @@
 <form name="addConfigurationForm" role="form" class="form-validation">
   <div class="modal-header dialog-header-confirm">
     <button type="button" role="button" class="close" ng-click="vm.cancel()">&times;</button>
-    <h4 class="modal-title">Please enter a configuration setting</h4>
+    <h4 class="modal-title">{{'Please enter a configuration setting' | translate}}</h4>
   </div>
 
   <div class="modal-body">
@@ -22,7 +22,7 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.save(addConfigurationForm.$valid)" value="Save" />
+    <button type="button" role="button" class="btn btn-default" ng-click="vm.cancel()">{{'Cancel' | translate}}</button>
+    <input type="submit" role="button" class="btn btn-primary" ng-click="vm.save(addConfigurationForm.$valid)" value="{{'Save' | translate}}" />
   </div>
 </form>

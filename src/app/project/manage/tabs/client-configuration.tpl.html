@@ -9,7 +9,7 @@
   <tr>
     <th>Key</th>
     <th>Value</th>
-    <th class="action-lg">Actions</th>
+    <th class="action-lg">{{'Actions' | translate}}</th>
   </tr>
   </thead>
   <tbody>
@@ -25,15 +25,15 @@
     <td>
       <form name="rowform" editable-form ng-show="rowform.$visible" class="form-buttons form-inline">
         <button type="submit" role="button" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
-          Save
+          {{'Save' | translate}}
         </button>
         <button type="button" role="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
-          Cancel
+          {{'Cancel' | translate}}
         </button>
       </form>
       <div class="buttons" ng-show="!rowform.$visible">
-        <button type="button" role="button" class="btn btn-sm btn-default" ng-click="rowform.$show()">Edit</button>
-        <button type="button" role="button" class="btn btn-sm btn-danger" title="Delete" ng-click="vm.removeConfig(conf)"><i class="fa fa-times"></i></button>
+        <button type="button" role="button" class="btn btn-sm btn-default" ng-click="rowform.$show()">{{'Edit' | translate}}</button>
+        <button type="button" role="button" class="btn btn-sm btn-danger" title="{{'Delete' | translate}}" ng-click="vm.removeConfig(conf)"><i class="fa fa-times"></i></button>
       </div>
     </td>
   </tr>
@@ -43,4 +43,4 @@
   </tbody>
 </table>
 
-<button ng-click="vm.addConfiguration()" class="btn btn-primary">New Client Configuration</button>
+<button ng-click="vm.addConfiguration()" class="btn btn-primary">{{'New Client Configuration' | translate}}</button>

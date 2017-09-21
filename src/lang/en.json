@@ -1,4 +1,4 @@
-{    
+{
     "Change Plan":"Change Plan",
     "Change Password":"Change Password",
     "Logout":"Logout",
@@ -37,5 +37,8 @@
     "We're sorry but the page was not found on this site.":"We're sorry but the page was not found on this site.",
 
     "Service Status":"Service Status",
-    "We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information.":"We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information."
+    "We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information.":"We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information.",
+
+
+    "DateTime":"{{date | date: 'medium'}}"
 }
