@@ -220,6 +220,37 @@
     "UserManager":"",
     "Billing":"",
 
+    // 我的帐户
+    "Full Name":"",
+    "Email Address":"",
+    "Notifications":"",
+    "Password":"",
+    "Current Password":"",
+    "New Password":"",
+    "Confirm password":"",
+    "Set Password":"",
+
+    // 登录
+    "Log in":"",
+    "Signup":"",
+    "Forgot password?":"",
+    "Create an account":"",
+    "Create My Account":"",
+    "Log In":"",
+    "Change password":"",
+    "Reset your password":"",
+    "Forgot Password":"",
+
+    // 用户组件
+    "Admin":"",
+    "Invited":"",
+    "Resend Invite Email":"",
+    "Revoke Invite":"",
+    "Remove User":"",        
+    "Add Admin Role":"",
+    "Remove Admin Role":"",
+    "No users were found.":"",
+
     "Delete":"",
     "Cancel":"",
     "Apply":"",
