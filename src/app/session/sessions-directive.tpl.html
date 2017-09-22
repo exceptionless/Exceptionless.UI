@@ -2,9 +2,9 @@
   <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable" refresh-on="StackChanged PlanChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <thead refresh-on="PersistentEventChanged" refresh-if="vm.canRefresh(data)" refresh-action="vm.get(vm.currentOptions)" refresh-throttle="10000">
     <tr>
-      <th>Summary</th>
-      <th class="date">Created</th>
-      <th class="date">Duration</th>
+      <th>{{'Summary' | translate}}</th>
+      <th class="date">{{'Created' | translate}}</th>
+      <th class="date">{{'Duration' | translate}}</th>
     </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
       </tr>
       <tr ng-if="vm.events.length === 0 || vm.loading">
         <td colspan="3">
-          <strong ng-if="vm.loading">Loading...</strong>
+          <strong ng-if="vm.loading">{{'Loading...' | translate}}</strong>
           <strong ng-if="!vm.loading">No sessions were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
         </td>
       </tr>

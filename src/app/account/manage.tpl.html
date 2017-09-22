@@ -2,10 +2,10 @@
   <div class="col" refresh-on="UserChanged ProjectChanged" refresh-action="vm.get(data)" refresh-debounce="1000">
     <div class="wrapper-md">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-user"></i> My Account</div>
+        <div class="panel-heading"><i class="fa fa-user"></i> {{'My Account' | translate}}</div>
         <div class="panel-body m-b-n">
           <uib-tabset class="tab-container" active="vm.activeTabIndex">
-            <uib-tab heading="General">
+            <uib-tab heading="{{'General' | translate}}">
               <form name="fullNameForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
                   <img gravatar-src="vm.user.email_address" gravatar-size="100" alt="{{vm.user.full_name}}" class="img-thumbnail">
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="name">Full Name</label>
+                  <label for="name">{{'Full Name' | translate}}</label>
                   <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                          placeholder="Your first and last name"
                          ng-model="vm.user.full_name"
@@ -33,7 +33,7 @@
 
               <form name="vm.emailAddressForm" role="form" class="form-validation" autocomplete="on">
                 <div class="form-group">
-                  <label for="email">Email Address</label>
+                  <label for="email">{{'Email Address' | translate}}</label>
                   <div ng-class="{'input-group': !!vm.emailAddressForm.$pending }">
                     <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                            placeholder="Email Address"
@@ -60,7 +60,7 @@
                 </div>
               </form>
             </uib-tab>
-            <uib-tab heading="Notifications">
+            <uib-tab heading="{{'Notifications' | translate}}">
               <form role="form" class="form-validation">
                 <div class="alert in fade alert-danger" ng-if="!vm.user.is_email_address_verified || !vm.user.email_notifications_enabled">
                   Email notifications are currently disabled. <span ng-if="!vm.user.is_email_address_verified">To enable email notifications you must first verify your email address. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</span>
@@ -166,10 +166,10 @@
                 </div>
               </form>
             </uib-tab>
-            <uib-tab heading="Password">
+            <uib-tab heading="{{'Password' | translate}}">
               <form name="vm.passwordForm" role="form" class="form-validation">
                 <div class="form-group" ng-if="vm.hasLocalAccount">
-                  <label for="current">Current Password</label>
+                  <label for="current">{{"Current Password" | translate}}</label>
                   <input id="current" name="current" type="password" class="form-control" ng-model="vm.password.current_password" required />
 
                   <div class="error" ng-messages="vm.passwordForm.current.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.current.$touched">
@@ -178,7 +178,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="newPassword">New Password</label>
+                  <label for="newPassword">{{'New Password' | translate}}</label>
                   <input id="newPassword" name="newPassword" type="password" class="form-control" ng-model="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
 
                   <div class="error" ng-messages="vm.passwordForm.newPassword.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.newPassword.$touched">
@@ -189,7 +189,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="confirmPassword">Confirm password</label>
+                  <label for="confirmPassword">{{'Confirm password' | translate}}</label>
                   <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
                          ng-model="vm.password.confirm_password"
                          match="vm.password.password"
@@ -205,7 +205,7 @@
                   </div>
                 </div>
 
-                <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="{{vm.hasLocalAccount ? 'Changing Password' : 'Setting Password'}}">{{vm.hasLocalAccount ? 'Change Password' : 'Set Password'}}</button>
+                <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="{{vm.hasLocalAccount ? 'Changing Password' : 'Setting Password'}}">{{vm.hasLocalAccount ? 'Change Password' : 'Set Password' | translate}}</button>
               </form>
             </uib-tab>
             <uib-tab heading="External Logins" ng-if="vm.isExternalLoginEnabled()">
@@ -252,10 +252,10 @@
         <footer class="panel-footer">
           <div class="pull-right">
             <div ng-if="!vm.currentProject.id">
-              <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
+              <a ui-sref="app.dashboard" class="btn btn-default" role="button">{{'Go To Dashboard' | translate}}</a>
             </div>
             <div ng-if="vm.currentProject.id">
-              <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+              <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">{{'Go To Dashboard' | translate}}</a>
             </div>
           </div>
           <div class="clearfix"></div>

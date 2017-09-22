@@ -31,11 +31,11 @@
                     </div>
                   </div>
 
-                  <h4>Create an account</h4>
+                  <h4>{{'Create an account' | translate}}</h4>
                 </div>
 
                 <div class="form-group">
-                  <label for="name" class="col-sm-2 control-label">Name</label>
+                  <label for="name" class="col-sm-2 control-label">{{'Name' | translate}}</label>
                   <div class="col-sm-10">
                     <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name"
                            x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
@@ -49,7 +49,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="email" class="col-sm-2 control-label">Email</label>
+                  <label for="email" class="col-sm-2 control-label">{{'Email' | translate}}</label>
                   <div class="col-sm-10">
                     <div ng-class="{'input-group': !!vm.signupForm.$pending }">
                       <input id="email" name="email" type="email" class="form-control" placeholder="Email address (no spam)"
@@ -72,7 +72,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="password" class="col-sm-2 control-label">Password</label>
+                  <label for="password" class="col-sm-2 control-label">{{'Password' | translate}}</label>
                   <div class="col-sm-10">
                     <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required="true" />
                     <div class="error" ng-messages="vm.signupForm.password.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.password.$touched">
@@ -84,8 +84,8 @@
                 </div>
                 <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
-                    <input type="submit" role="button" id="signup" ng-click="vm.signup()" class="btn btn-primary btn-lg" value="Create My Account" />
-                    <p>Already have an account? <a ui-sref="auth.login({ token: vm.token })">Log In</a></p>
+                    <input type="submit" role="button" id="signup" ng-click="vm.signup()" class="btn btn-primary btn-lg" value="{{'Create My Account' | translate}}" />
+                    <p>Already have an account? <a ui-sref="auth.login({ token: vm.token })">{{'Log In' | translate}}</a></p>
                   </div>
                 </div>
               </form>

@@ -2,11 +2,11 @@
   <div class="col" refresh-on="OrganizationChanged" refresh-action="vm.getOrganizations()" refresh-throttle="10000">
     <div class="wrapper-md">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-asterisk"></i> Project Information</div>
+        <div class="panel-heading"><i class="fa fa-asterisk"></i> {{'Project Information' | translate}}</div>
         <div class="panel-body">
           <form name="vm.addForm" role="form" class="form-validation">
             <div class="form-group" ng-if="vm.hasOrganizations()">
-              <label for="organization">Organization Name</label>
+              <label for="organization">{{'Organization Name' | translate}}</label>
               <select id="organization" class="form-control"
                       ng-model="vm.currentOrganization"
                       ng-options="organization.name for organization in vm.organizations track by organization.id"></select>
@@ -14,7 +14,7 @@
 
             <div class="form-group" ng-if="vm.canCreateOrganization()">
               <div ng-class="{'input-group': !!vm.addForm.$pending }">
-                <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
+                <input name="organization_name" type="text" class="form-control" placeholder="{{'New Organization Name' | translate}}"
                        ng-model="vm.organization_name"
                        ng-model-options="{ debounce: 500 }"
                        organization-name-available-validator
@@ -33,9 +33,9 @@
             </div>
 
             <div class="form-group">
-              <label for="project_name">Project Name</label>
+              <label for="project_name">{{'Project Name' | translate}}</label>
               <div ng-class="{'input-group': !!vm.addForm.$pending }">
-                <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name"
+                <input id="project_name" name="project_name" type="text" class="form-control" placeholder="{{'New Project Name' | translate}}"
                        ng-model="vm.project_name"
                        ng-model-options="{ debounce: 500 }"
                        project-name-available-validator
@@ -57,10 +57,10 @@
         </div>
         <footer class="panel-footer">
           <div class="pull-right">
-            <a ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
+            <a ui-sref="app.dashboard" ng-if="vm.hasOrganizations()" class="btn btn-default" role="button">{{'Go To Dashboard' | translate}}</a>
           </div>
           <div class="clearfix">
-            <input ng-click="vm.add()" type="submit" role="button" class="btn btn-primary" value="Add Project" />
+            <input ng-click="vm.add()" type="submit" role="button" class="btn btn-primary" value="{{'Add Project' | translate}}" />
           </div>
         </footer>
       </div>
