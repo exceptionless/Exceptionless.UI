@@ -9,7 +9,7 @@
   .factory('stackService', function (filterService, Restangular) {
     function addLink(id, url) {
       return Restangular.one('stacks', id).one('add-link').customPOST(url, undefined, undefined, {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'text/plain; charset=UTF-8'
       });
     }
 
@@ -119,7 +119,7 @@
 
     function removeLink(id, url) {
       return Restangular.one('stacks', id).one('remove-link').customPOST(url, undefined, undefined, {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'text/plain; charset=UTF-8'
       });
     }
 
