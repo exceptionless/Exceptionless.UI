@@ -114,35 +114,35 @@
     }
 
     function startDelayed(delay) {
+      function startImpl() {
+        _connection = new ResilientWebSocket(getPushUrl());
+        _connection.onmessage = function (ev) {
+          var data = ev.data ? JSON.parse(ev.data) : null;
+          if (!data || !data.type) {
+            return;
+          }
+
+          if (data.message && data.message.change_type >= 0) {
+            data.message.added = data.message.change_type === 0;
+            data.message.updated = data.message.change_type === 1;
+            data.message.deleted = data.message.change_type === 2;
+          }
+
+          $rootScope.$emit(data.type, data.message);
+
+          // This event is fired when a user is added or removed from an organization.
+          if (data.type === 'UserMembershipChanged' && data.message && data.message.organization_id) {
+            $rootScope.$emit('OrganizationChanged', data.message);
+            $rootScope.$emit('ProjectChanged', data.message);
+          }
+        };
+      }
+
       if (_connection || _websocketTimeout) {
         stop();
       }
 
-      _connection = new ResilientWebSocket(getPushUrl());
-      _connection.onmessage = function (ev) {
-        var data = ev.data ? JSON.parse(ev.data) : null;
-        if (!data || !data.type) {
-          return;
-        }
-
-        if (data.message && data.message.change_type >= 0) {
-          data.message.added = data.message.change_type === 0;
-          data.message.updated = data.message.change_type === 1;
-          data.message.deleted = data.message.change_type === 2;
-        }
-
-        $rootScope.$emit(data.type, data.message);
-
-        // This event is fired when a user is added or removed from an organization.
-        if (data.type === 'UserMembershipChanged' && data.message && data.message.organization_id) {
-          $rootScope.$emit('OrganizationChanged', data.message);
-          $rootScope.$emit('ProjectChanged', data.message);
-        }
-      };
-
-      _websocketTimeout = $timeout(function () {
-        _connection.start();
-      }, delay || 1000);
+      _websocketTimeout = $timeout(startImpl, delay || 1000);
     }
 
     function stop() {
