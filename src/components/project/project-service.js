@@ -109,11 +109,15 @@
       }
 
       function setConfig(id, key, value) {
-        return Restangular.one('projects', id).post('config', value, { key: key });
+        return Restangular.one('projects', id).post('config', value, { key: key }, {
+          'Content-Type': 'text/plain; charset=UTF-8'
+        });
       }
 
       function setData(id, key, value) {
-        return Restangular.one('projects', id).post('data', value, { key: key });
+        return Restangular.one('projects', id).post('data', value, { key: key }, {
+          'Content-Type': 'text/plain; charset=UTF-8'
+        });
       }
 
       function setNotificationSettings(id, userId, settings) {
