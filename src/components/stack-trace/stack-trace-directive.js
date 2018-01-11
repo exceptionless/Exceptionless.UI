@@ -45,7 +45,7 @@
       return result + ')';
     }
 
-    function buildStackFrame(frame) {
+    function buildStackFrame(frame, includeHTML) {
       if (!frame) {
         return '<null>\r\n';
       }
@@ -83,43 +83,61 @@
         }
       }
 
-      return escapeHTML(result + '\r\n');
+      if (includeHTML) {
+        return escapeHTML(result + '\r\n');
+      } else {
+        return result + '\r\n';
+      }
     }
 
-    function buildStackFrames(exceptions) {
+    function buildStackFrames(exceptions, includeHTML) {
       var frames = '';
       for (var index = 0; index < exceptions.length; index++) {
         var stackTrace = exceptions[index].stack_trace;
         if (!!stackTrace) {
-          frames += '<div class="stack-frame">';
+          if (includeHTML) {
+            frames += '<div class="stack-frame">';
+          }
 
           for (var frameIndex = 0; frameIndex < stackTrace.length; frameIndex++) {
-            frames += escapeHTML(buildStackFrame(stackTrace[frameIndex]));
+            if (includeHTML) {
+              frames += escapeHTML(buildStackFrame(stackTrace[frameIndex], includeHTML));
+            } else {
+              frames += buildStackFrame(stackTrace[frameIndex], includeHTML);
+            }
           }
 
           if (index < (exceptions.length - 1)) {
-            frames += '<div>--- End of inner exception stack trace ---</div>';
+            if (includeHTML) {
+              frames += '<div>--- End of inner exception stack trace ---</div>';
+            } else {
+              frames += '--- End of inner exception stack trace ---';
+            }
           }
 
-          frames += '</div>';
+          if (includeHTML) {
+            frames += '</div>';
+          }
         }
       }
 
       return frames;
     }
 
-    function buildStackTrace(exceptions) {
+    function buildStackTrace(exceptions, includeHTML) {
       if (!exceptions) {
         return null;
       }
 
-      return buildStackTraceHeader(exceptions) + buildStackFrames(exceptions.reverse());
+      return buildStackTraceHeader(exceptions, includeHTML) + buildStackFrames(exceptions.reverse(), includeHTML);
     }
 
-    function buildStackTraceHeader(exceptions) {
+    function buildStackTraceHeader(exceptions, includeHTML) {
       var header = '';
       for (var index = 0; index < exceptions.length; index++) {
-        header += '<span class="ex-header">';
+        if (includeHTML) {
+          header += '<span class="ex-header">';
+        }
 
         if (index > 0) {
           header += ' ---> ';
@@ -127,15 +145,27 @@
 
         var hasType = !!exceptions[index].type;
         if (hasType) {
-          header += '<span class="ex-type">' + escapeHTML(exceptions[index].type) + '</span>: ';
+          if (includeHTML) {
+            header += '<span class="ex-type">' + escapeHTML(exceptions[index].type) + '</span>: ';
+          } else {
+            header += exceptions[index].type + ': ';
+          }
         }
 
         if (exceptions[index].message) {
-          header += '<span class="ex-message">' + escapeHTML(exceptions[index].message) + '</span>';
+          if (includeHTML) {
+            header += '<span class="ex-message">' + escapeHTML(exceptions[index].message) + '</span>';
+          } else {
+            header += exceptions[index].message;
+          }
         }
 
         if (hasType) {
-          header += '</span>';
+          if (includeHTML) {
+            header += '</span>';
+          } else {
+            header += '\r\n';
+          }
         }
       }
 
@@ -160,13 +190,16 @@
       restrict: 'E',
       replace: true,
       scope: {
-        exception: "="
+        exception: "=",
+        textStackTrace: "=?"
       },
       template: '<pre class="stack-trace"><code ng-bind-html="vm.stackTrace"></code></pre>',
       controller: [function () {
         var vm = this;
         this.$onInit = function $onInit() {
-          vm.stackTrace = $sce.trustAsHtml(buildStackTrace(errorService.getExceptions(vm.exception)));
+          var errors = errorService.getExceptions(vm.exception);
+          vm.stackTrace = $sce.trustAsHtml(buildStackTrace(errors, true));
+          vm.textStackTrace = buildStackTrace(errors, false);
         };
       }],
       controllerAs: 'vm'
