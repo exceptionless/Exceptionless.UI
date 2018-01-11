@@ -7,6 +7,7 @@ var replace = require("replace");
 function updateAppConfig() {
   var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:5000';
   var exceptionlessApiKey = process.env.Exceptionless_ApiKey ? process.env.Exceptionless_ApiKey : '';
+  var exceptionlessServerUrl = process.env.Exceptionless_ServerUrl ? process.env.Exceptionless_ServerUrl : '';
   var facebookAppId = process.env.Exceptionless_FacebookAppId ? process.env.Exceptionless_FacebookAppId : '';
   var gitHubAppId = process.env.Exceptionless_GitHubAppId ? process.env.Exceptionless_GitHubAppId : '';
   var googleAppId = process.env.Exceptionless_GoogleAppId ? process.env.Exceptionless_GoogleAppId : '';
@@ -25,6 +26,7 @@ function updateAppConfig() {
     '  angular.module("app.config", [])',
     '    .constant("BASE_URL", "' + baseURL + '")',
     '    .constant("EXCEPTIONLESS_API_KEY", "' + exceptionlessApiKey + '")',
+    '    .constant("EXCEPTIONLESS_SERVER_URL", "' + exceptionlessServerUrl + '")',
     '    .constant("FACEBOOK_APPID", "' + facebookAppId + '")',
     '    .constant("GITHUB_APPID", "' + gitHubAppId + '")',
     '    .constant("GOOGLE_APPID", "' + googleAppId + '")',

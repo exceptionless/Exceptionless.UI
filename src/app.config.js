@@ -4,6 +4,7 @@
   angular.module('app.config', [])
     .constant('BASE_URL', 'http://localhost:5000')
     .constant('EXCEPTIONLESS_API_KEY')
+    .constant('EXCEPTIONLESS_SERVER_URL')
     .constant('FACEBOOK_APPID')
     .constant('GITHUB_APPID')
     .constant('GOOGLE_APPID')
