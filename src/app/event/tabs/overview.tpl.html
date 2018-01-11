@@ -91,6 +91,9 @@
 </div>
 
 <div class="hidden-print" ng-if="vm.hasError">
+  <div class="pull-right">
+    <a clipboard text="vm.textStackTrace" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.textStackTrace && vm.clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+  </div>
   <h4>Stack Trace</h4>
   <stack-trace class="stack-trace-mini" exception="vm.event.data['@error']" ng-if="vm.event.data['@error']"></stack-trace>
   <simple-stack-trace class="stack-trace-mini" exception="vm.event.data['@simple_error']" ng-if="vm.event.data['@simple_error']"></simple-stack-trace>

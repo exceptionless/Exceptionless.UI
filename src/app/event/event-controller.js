@@ -401,6 +401,7 @@
         vm.demoteTab = demoteTab;
         vm.event = {};
         vm.event_json = '';
+        vm.textStackTrace = '';
         vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
         vm.getCurrentTab = getCurrentTab;
         vm.getDuration = getDuration;
