@@ -2,6 +2,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/18th2gqmbt86p5y0/branch/master?svg=true)](https://ci.appveyor.com/project/Exceptionless/exceptionless-ui) 
 [![Slack Status](https://slack.exceptionless.com/badge.svg)](https://slack.exceptionless.com)
 [![Donate](https://img.shields.io/badge/donorbox-donate-blue.svg)](https://donorbox.org/exceptionless) 
+[![Help Contribute to Open Source](https://www.codetriage.com/exceptionless/exceptionless.ui/badges/users.svg)](https://www.codetriage.com/exceptionless/exceptionless.ui)
 
 Exceptionless User Interface
 
