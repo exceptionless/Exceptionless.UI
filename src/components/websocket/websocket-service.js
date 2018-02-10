@@ -6,7 +6,7 @@
     'exceptionless',
     'exceptionless.auth'
   ])
-  .factory('websocketService', function ($ExceptionlessClient, $rootScope, $timeout, $log, authService, BASE_URL) {
+  .factory('websocketService', function ($ExceptionlessClient, $rootScope, $timeout, authService, BASE_URL) {
     var ResilientWebSocket = (function () {
       function ResilientWebSocket(url, protocols) {
         if (protocols === void 0) { protocols = []; }
@@ -30,17 +30,14 @@
         var _this = this;
         this.ws = new WebSocket(this.url, this.protocols);
         this.onconnecting();
-        $log.debug('connect', this.url);
         var localWs = this.ws;
         var timeout = setTimeout(function () {
-          $log.debug('timeout');
           _this.timedOut = true;
           localWs.close();
           _this.timedOut = false;
         }, this.timeoutInterval);
         this.ws.onopen = function (event) {
           clearTimeout(timeout);
-          $log.debug('onopen');
           _this.readyState = WebSocket.OPEN;
           reconnectAttempt = false;
           _this.onopen(event);
@@ -48,7 +45,6 @@
         this.ws.onclose = function (event) {
           clearTimeout(timeout);
           _this.ws = null;
-          $log.debug('onclose');
           if (_this.forcedClose) {
             _this.readyState = WebSocket.CLOSED;
             _this.onclose(event);
@@ -57,7 +53,6 @@
             _this.readyState = WebSocket.CONNECTING;
             _this.onconnecting();
             if (!reconnectAttempt && !_this.timedOut) {
-              $log.debug('onclose', _this.url);
               _this.onclose(event);
             }
             setTimeout(function () {
@@ -66,17 +61,14 @@
           }
         };
         this.ws.onmessage = function (event) {
-          $log.debug('onmessage', event.data);
           _this.onmessage(event);
         };
         this.ws.onerror = function (event) {
-          $log.debug('onerror', _this.url, event);
           _this.onerror(event);
         };
       };
       ResilientWebSocket.prototype.send = function (data) {
         if (this.ws) {
-          $log.debug('send', data);
           return this.ws.send(data);
         }
         else {
@@ -84,7 +76,6 @@
         }
       };
       ResilientWebSocket.prototype.close = function () {
-        $log.debug('close');
         if (this.ws) {
           this.forcedClose = true;
           this.ws.close();
@@ -93,7 +84,6 @@
         return false;
       };
       ResilientWebSocket.prototype.refresh = function () {
-        $log.debug('refresh');
         if (this.ws) {
           this.ws.close();
           return true;
