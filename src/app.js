@@ -52,7 +52,7 @@
     'exceptionless.ui-scroll',
     'exceptionless.ui-shift',
     'exceptionless.ui-toggle-class',
-    'exceptionless.user',    
+    'exceptionless.user',
     'app.account',
     'app.admin',
     'app.auth',
