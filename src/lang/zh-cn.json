@@ -207,6 +207,7 @@
     "UserManager":"用户管理",
     "Billing":"发票",
 
+	  "Email":"邮箱",
     "Full Name":"姓名",
     "Email Address":"邮箱地址",
     "Notifications":"通知",
@@ -241,5 +242,14 @@
     "DateTime":"{{date | date: 'yyyy-MM-dd HH:mm:ss'}}",
     "Go To Dashboard":"前往仪表面板",
     "Save":"保存",
-    "Edit":"修改"
+    "Edit":"修改",
+	
+	  "Email Address is required":"请填写邮件地址",
+	  "Password is required":"请填写密码",
+	  "Password must be at least 6 characters long":"请填写长度不小于6位的密码",
+	  "Password must be less than 101 characters long":"请填写长度不大于101位的密码",
+	  "Signup for a FREE account in seconds":"在几秒钟内注册一个免费帐户",
+	  "Full Name is required":"请填写名称",
+	  "A user already exists with this email address":"邮箱已存在",
+	  "Already have an account?":"已经有账户?"
 }

@@ -207,6 +207,7 @@
     "UserManager":"User",
     "Billing":"Billing",
 
+	  "Email":"Email",
     "Full Name":"Full Name",
     "Email Address":"Email Address",
     "Notifications":"Notifications",
@@ -241,5 +242,14 @@
     "DateTime":"{{date | date: 'medium'}}",
     "Go To Dashboard":"Go To Dashboard",
     "Save":"Save",
-    "Edit":"Edit"
+    "Edit":"Edit",
+	
+	  "Email Address is required":"Email Address is required",
+	  "Password is required":"Password is required",
+	  "Password must be at least 6 characters long":"Password must be at least 6 characters long",
+	  "Password must be less than 101 characters long":"Password must be less than 101 characters long",
+	  "Signup for a FREE account in seconds":"Signup for a FREE account in seconds",
+	  "Full Name is required":"Full Name is required",
+	  "A user already exists with this email address":"A user already exists with this email address",
+	  "Already have an account?":"Already have an account?"
 }

@@ -3,7 +3,6 @@
 
   angular.module('app.config', [])
     .constant('BASE_URL', 'http://localhost:50000')
-    .constant('LANGUAGE','zh-cn')
     .constant('EXCEPTIONLESS_API_KEY')
     .constant('FACEBOOK_APPID')
     .constant('GITHUB_APPID')

@@ -1,10 +1,10 @@
 {
-    // 顶部
+    // Top
     "Change Plan":"",
     "Change Password":"",
     "Logout":"",
 
-    // 导航菜单
+    // Navigation Menu
     "Exceptions":"",
     "Log Messages":"",
     "Broken Links":"",
@@ -28,7 +28,7 @@
     "Documentation":"",
     "Support":"",
 
-    // 仪表面板
+    // Dashboard
     "Count":"",
     "Unique":"",
     "New":"",
@@ -36,15 +36,15 @@
     "History":"",
     "Newest":"",
 
-    // 找不到页面
+    // Not Found Page
     "Page Not Found":"",
     "We're sorry but the page was not found on this site.":"",
 
-    // 服务页
+    // Service Page
     "Service Status":"",
     "We're sorry but the website is currently undergoing maintenance. You’ll be automatically redirected when the the maintenance is completed. Please contact support for more information.":"",
 
-    // 堆栈页面
+    // Stack Page
     "Please enter a Reference Link":"",
     "Reference Link":"",
     "Please enter a valid URL":"",
@@ -76,7 +76,7 @@
     "Mark Not Fixed":"",
     "Mark Fixed":"",
 
-    // 会话页面
+    // Session Page
     "Summary":"",
     "Created":"",
     "Duration":"",
@@ -87,7 +87,7 @@
     "View Active":"",
     "Recent Sessions":"",
 
-    // 事件
+    // Event
     "Occurred On":"",
     "Reference":"",
     "Level":"",
@@ -146,7 +146,7 @@
     "Extended Data":"",
     "Request":"",
 
-    // 事件组件
+    // Event Component
     "User":"",
     "Bulk Action":"",
     "Mark Hidden":"",
@@ -155,13 +155,13 @@
     "Sort Ascending":"",
     "Date":"",
 
-    // 项目过滤器组件
+    // Project Filter Component
     "All Projects":"",
     "Loading Organizations...":"",
     "Loading Projects...":"",
     "Add New Project":"",
 
-    // 时间过滤器组件
+    // Time Filter Component
     "Last Hour": "",
     "Last 24 Hours": "",
     "Last Week": "",
@@ -170,7 +170,7 @@
     "Custom": "",
     "Select Date Range": "",
 
-    // 项目
+    // Project
     "My Projects":"",
     "Project Information":"",
     "Organization Name":"",
@@ -207,7 +207,7 @@
     "Events":"",
     "View Organization":"",
 
-    // 组织
+    // Organization
     "My Organizations":"",
     "Plan":"",
     "Projects":"",
@@ -220,7 +220,8 @@
     "UserManager":"",
     "Billing":"",
 
-    // 我的帐户
+    // Account
+	  "Email":"",
     "Full Name":"",
     "Email Address":"",
     "Notifications":"",
@@ -230,7 +231,7 @@
     "Confirm password":"",
     "Set Password":"",
 
-    // 登录
+    // Login
     "Log in":"",
     "Signup":"",
     "Forgot password?":"",
@@ -241,7 +242,7 @@
     "Reset your password":"",
     "Forgot Password":"",
 
-    // 用户组件
+    // User Component
     "Admin":"",
     "Invited":"",
     "Resend Invite Email":"",
@@ -257,5 +258,15 @@
     "DateTime":"",
     "Go To Dashboard":"",
     "Save":"",
-    "Edit":""
+    "Edit":"",
+	
+	  // Tips
+	  "Email Address is required":"",
+	  "Password is required":"",
+	  "Password must be at least 6 characters long":"",
+	  "Password must be less than 101 characters long":"",
+	  "Signup for a FREE account in seconds":"",
+	  "Full Name is required":"",
+	  "A user already exists with this email address":"",
+	  "Already have an account?":""
 }
