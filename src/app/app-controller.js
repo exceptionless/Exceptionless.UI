@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, signalRService, stateService, SLACK_APPID, STRIPE_PUBLISHABLE_KEY, urlService, userService) {
+    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, websocketService, stateService, SLACK_APPID, STRIPE_PUBLISHABLE_KEY, urlService, userService) {
       var vm = this;
       function addHotkeys() {
         function logFeatureUsage(name) {
@@ -214,8 +214,8 @@
         return authService.isAuthenticated() && INTERCOM_APPID;
       }
 
-      function startSignalR() {
-        return signalRService.startDelayed(1000);
+      function startWebSocket() {
+        return websocketService.startDelayed(1000);
       }
 
       function showIntercom() {
@@ -247,7 +247,7 @@
         }
 
         $rootScope.$on('$stateChangeSuccess', buildMenus);
-        $scope.$on('$destroy', signalRService.stop);
+        $scope.$on('$destroy', websocketService.stop);
         vm._source = 'app.App';
         vm._store = locker.driver('local').namespace('app');
 
@@ -274,7 +274,7 @@
 
         addHotkeys();
         buildMenus();
-        getUser().then(getOrganizations).then(startSignalR);
+        getUser().then(getOrganizations).then(startWebSocket);
       };
     });
 }());

@@ -43,7 +43,6 @@
     'exceptionless.refresh',
     'exceptionless.release-notification',
     'exceptionless.search-filter',
-    'exceptionless.signalr',
     'exceptionless.stack',
     'exceptionless.stacks',
     'exceptionless.state',
@@ -53,6 +52,7 @@
     'exceptionless.ui-shift',
     'exceptionless.ui-toggle-class',
     'exceptionless.user',
+    'exceptionless.websocket',
     'app.account',
     'app.admin',
     'app.auth',
@@ -85,7 +85,7 @@
     if (EXCEPTIONLESS_API_KEY) {
       var config = $ExceptionlessClient.config;
       config.apiKey = EXCEPTIONLESS_API_KEY;
-      config.serverUrl = BASE_URL;
+      config.serverUrl = EXCEPTIONLESS_SERVER_URL || BASE_URL;
       config.defaultTags.push('UI');
       config.setVersion('@@version');
       config.useReferenceIds();

@@ -8,7 +8,9 @@
   ])
   .factory('stackService', function (filterService, Restangular) {
     function addLink(id, url) {
-      return Restangular.one('stacks', id).one('add-link').customPOST(url);
+      return Restangular.one('stacks', id).one('add-link').customPOST(url, undefined, undefined, {
+        'Content-Type': 'text/plain; charset=UTF-8'
+      });
     }
 
     function disableNotifications(id) {
@@ -116,7 +118,9 @@
     }
 
     function removeLink(id, url) {
-      return Restangular.one('stacks', id).one('remove-link').customPOST(url);
+      return Restangular.one('stacks', id).one('remove-link').customPOST(url, undefined, undefined, {
+        'Content-Type': 'text/plain; charset=UTF-8'
+      });
     }
 
     var service = {

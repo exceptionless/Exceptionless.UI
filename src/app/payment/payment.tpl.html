@@ -18,11 +18,11 @@
               <td>{{vm.invoice.organization_name}}</td>
             </tr>
             <tr>
-              <th>Payment #</th>
+              <th>Invoice #</th>
               <td>{{vm.invoice.id}}</td>
             </tr>
             <tr>
-              <th>Date</th>
+              <th>Invoice Date</th>
               <td>{{vm.invoice.date | date}}</td>
             </tr>
             <tr>
@@ -36,7 +36,7 @@
     <div class="row">
       <div class="col-xs-12 hbox hbox-auto-xs hbox-auto-sm">
         <div class="panel panel-default">
-          <div class="panel-heading"> <i class="fa fa-file"></i> {{vm.invoice.paid ? "Receipt" : "Payment"}}</div>
+          <div class="panel-heading"> <i class="fa fa-file"></i> {{vm.invoice.paid ? "Receipt" : "Invoice"}}</div>
            <div class="table-responsive">
             <table class="table table-striped table-bordered table-fixed b-t invoice">
               <thead>

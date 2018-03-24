@@ -18,7 +18,10 @@
   </tr>
 </table>
 
+<div class="pull-right m-t-xs hidden-print">
+  <a clipboard text="vm.textStackTrace" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.textStackTrace && vm.clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+</div>
 <h3>{{'Stack Trace' | translate}}</h3>
-<simple-stack-trace exception="vm.event.data['@simple_error']"></simple-stack-trace>
+<simple-stack-trace exception="vm.event.data['@simple_error']" text-stack-trace="vm.textStackTrace"></simple-stack-trace>
 
 <extended-data-item can-promote="false" title="'Additional Data'" data="vm.event.data['@error'].data"></extended-data-item>
