@@ -65,7 +65,7 @@
     'app.stack',
     'app.status'
   ])
-    .config(function ($compileProvider, $httpProvider, $locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, $translateProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, $ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
+    .config(function ($compileProvider, $httpProvider, $locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, $translateProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, EXCEPTIONLESS_SERVER_URL,$ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
     var lang = navigator.language ? navigator.language : navigator.browserLanguage;
     $translateProvider.preferredLanguage(lang.toLocaleLowerCase());
     $translateProvider.useStaticFilesLoader({
