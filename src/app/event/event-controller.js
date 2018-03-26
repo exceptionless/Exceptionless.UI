@@ -392,7 +392,7 @@
       this.$onInit = function $onInit() {
         vm._source = 'app.event.Event';
         vm._eventId = $stateParams.id;
-        vm._knownDataKeys = ['error', 'simple_error', 'request', 'environment', 'user', 'user_description', 'sessionend', 'session_id', 'version'];
+        vm._knownDataKeys = ['error', '@error', '@simple_error', '@request', '@trace', '@environment', '@user', '@user_description', '@version', '@level', '@location', '@submission_method', '@submission_client', 'session_id', 'sessionend', 'haserror', '@stack'];
 
         vm.activeTabIndex = -1;
         vm.activateTab = activateTab;
