@@ -23,6 +23,7 @@
     'dialogs.default-translations',
 
     'exceptionless',
+    'exceptionless.translate',
     'exceptionless.analytics',
     'exceptionless.auth',
     'exceptionless.auto-active',
@@ -64,7 +65,14 @@
     'app.stack',
     'app.status'
   ])
-  .config(function ($compileProvider, $httpProvider, $locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, EXCEPTIONLESS_SERVER_URL, $ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
+    .config(function ($compileProvider, $httpProvider, $locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, $translateProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, EXCEPTIONLESS_SERVER_URL,$ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
+    var lang = navigator.language ? navigator.language : navigator.browserLanguage;
+    $translateProvider.preferredLanguage(lang.toLocaleLowerCase());
+    $translateProvider.useStaticFilesLoader({
+        prefix: '/lang/',
+        suffix: '.json'
+    });
+
     function setRouteFilter(filterService, organizationId, projectId, type) {
       filterService.setOrganizationId(organizationId, true);
       filterService.setProjectId(projectId, true);

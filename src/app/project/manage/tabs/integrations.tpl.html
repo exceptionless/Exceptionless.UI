@@ -97,8 +97,8 @@
   <thead>
   <tr>
     <th>Url</th>
-    <th>Event Types</th>
-    <th class="action">Actions</th>
+    <th>{{'Event Types' | translate}}</th>
+    <th class="action">{{'Actions' | translate}}</th>
   </tr>
   </thead>
   <tbody>
@@ -108,7 +108,7 @@
       <span class="label label-success" ng-repeat="type in hook.event_types track by type">{{::type}}</span>
     </td>
     <td>
-      <button type="button" role="button" class="btn btn-sm" title="Delete" ng-click="vm.removeWebHook(hook)"><i class="fa fa-times"></i></button>
+      <button type="button" role="button" class="btn btn-sm" title="{{'Delete' | translate}}" ng-click="vm.removeWebHook(hook)"><i class="fa fa-times"></i></button>
     </td>
   </tr>
   <tr ng-if="vm.webHooks.length === 0">
@@ -117,4 +117,4 @@
   </tbody>
 </table>
 
-<button type="button" role="button" ng-click="vm.addWebHook()" class="btn btn-primary">Add Web Hook</button>
+<button type="button" role="button" ng-click="vm.addWebHook()" class="btn btn-primary">{{'Add Web Hook' | translate}}</button>
