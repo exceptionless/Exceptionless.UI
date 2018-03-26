@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', function ($stateParams, $timeout, authService, billingService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
+    .controller('account.Manage', function ($stateParams, $timeout, authService, billingService, dialogService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
       var vm = this;
       function activateTab(tabName) {
         switch (tabName) {
@@ -124,6 +124,21 @@
         }
 
         return userService.getCurrentUser().then(onSuccess, onFailure);
+      }
+
+      function deleteAccount() {
+        return dialogService.confirmDanger('Are you sure you want to delete your account?', 'DELETE ACCOUNT').then(function () {
+          function onSuccess() {
+            notificationService.info('Successfully removed your user account.');
+            authService.logout();
+          }
+
+          function onFailure(response) {
+            notificationService.error('An error occurred while trying remove your user account. ' + response.data.message);
+          }
+
+          return userService.removeCurrentUser().then(onSuccess, onFailure);
+        }).catch(function(e){});
       }
 
       function hasPremiumEmailNotifications() {
@@ -275,6 +290,7 @@
         vm._canSaveEmailAddress = true;
         vm.changePassword = changePassword;
         vm.currentProject = {};
+        vm.deleteAccount = deleteAccount;
         vm.emailAddressForm = {};
         vm.emailNotificationSettings = null;
         vm.getEmailNotificationSettings = getEmailNotificationSettings;

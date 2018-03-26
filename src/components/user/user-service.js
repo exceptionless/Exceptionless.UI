@@ -18,12 +18,12 @@
       }
 
       function getCurrentUser(useCache) {
-          if (useCache === undefined || useCache) {
-            return _cachedRestangular.one('users', 'me').get();
-          }
-
-          return Restangular.one('users', 'me').get();
+        if (useCache === undefined || useCache) {
+          return _cachedRestangular.one('users', 'me').get();
         }
+
+        return Restangular.one('users', 'me').get();
+      }
 
       function getById(id) {
         return Restangular.one('users', id).get();
@@ -43,6 +43,10 @@
 
       function removeAdminRole(id) {
         return Restangular.one('users', id).one('admin-role').remove();
+      }
+
+      function removeCurrentUser() {
+        return Restangular.one('users', 'me').remove();
       }
 
       function resendVerificationEmail(id) {
@@ -69,6 +73,7 @@
         hasAdminRole: hasAdminRole,
         hasRole: hasRole,
         removeAdminRole: removeAdminRole,
+        removeCurrentUser: removeCurrentUser,
         resendVerificationEmail: resendVerificationEmail,
         update: update,
         updateEmailAddress: updateEmailAddress,
