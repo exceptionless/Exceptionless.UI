@@ -179,7 +179,9 @@
     "Delete Project":"删除项目",
     "API Key":"API Key",
     "Notes":"备注",
+    "Payment Number":"付款编号",
     "Actions":"操作",
+    "Status":"状态",
     "New API Key":"添加 API 密钥",
     "New Client Configuration":"添加客户端配置",
     "Event Types":"事件类型",
@@ -216,6 +218,7 @@
     "New Password":"新密码",
     "Confirm password":"确认密码",
     "Set Password":"设置密码",
+    "DELETE ACCOUNT":"删除帐户",
 
     "Log in":"登录",
     "Signup":"注册",
@@ -223,7 +226,7 @@
     "Create an account":"创建帐户",
     "Create My Account":"创建我的帐户",
     "Log In":"登录",
-    "Change password":"更改密码",    
+    "Change password":"更改密码",
     "Reset your password":"重置密码",
     "Forgot Password":"忘记密码",
 
@@ -243,7 +246,7 @@
     "Go To Dashboard":"前往仪表面板",
     "Save":"保存",
     "Edit":"修改",
-	
+
 	  "Email Address is required":"请填写邮件地址",
 	  "Password is required":"请填写密码",
 	  "Password must be at least 6 characters long":"请填写长度不小于6位的密码",
@@ -251,5 +254,20 @@
 	  "Signup for a FREE account in seconds":"在几秒钟内注册一个免费帐户",
 	  "Full Name is required":"请填写名称",
 	  "A user already exists with this email address":"邮箱已存在",
-	  "Already have an account?":"已经有账户?"
+	  "Already have an account?":"已经有账户?",
+
+    "DIALOGS_ERROR": "错误",
+    "DIALOGS_ERROR_MSG": "出现未知错误。",
+    "DIALOGS_CLOSE": "关闭",
+    "DIALOGS_PLEASE_WAIT": "请稍候",
+    "DIALOGS_PLEASE_WAIT_ELIPS": "请稍候...",
+    "DIALOGS_PLEASE_WAIT_MSG": "请等待操作完成。",
+    "DIALOGS_PERCENT_COMPLETE": "% 已完成",
+    "DIALOGS_NOTIFICATION": "通知",
+    "DIALOGS_NOTIFICATION_MSG": "未知应用程序的通知。",
+    "DIALOGS_CONFIRMATION": "确认",
+    "DIALOGS_CONFIRMATION_MSG": "确认要求。",
+    "DIALOGS_OK": "确定",
+    "DIALOGS_YES": "确认",
+    "DIALOGS_NO": "取消"
 }

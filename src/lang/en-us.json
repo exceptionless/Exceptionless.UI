@@ -158,7 +158,7 @@
     "All Time": "All Time",
     "Custom": "Custom",
     "Select Date Range": "Select Date Range",
-    
+
     "My Projects":"My Projects",
     "Project Information":"Project Information",
     "Organization Name":"Organization Name",
@@ -179,7 +179,9 @@
     "Delete Project":"Delete Project",
     "API Key":"API Key",
     "Notes":"Notes",
+    "Payment Number":"Payment Number",
     "Actions":"Actions",
+    "Status":"Status",
     "New API Key":"New API Key",
     "New Client Configuration":"New Client Configuration",
     "Event Types":"Event Types",
@@ -216,6 +218,7 @@
     "New Password":"New Password",
     "Confirm password":"Confirm password",
     "Set Password":"Set Password",
+    "DELETE ACCOUNT":"DELETE ACCOUNT",
 
     "Log in":"Log in",
     "Signup":"Signup",
@@ -231,7 +234,7 @@
     "Invited":"Invited",
     "Resend Invite Email":"Resend Invite Email",
     "Revoke Invite":"Revoke Invite",
-    "Remove User":"Remove User",        
+    "Remove User":"Remove User",
     "Add Admin Role":"Add Admin Role",
     "Remove Admin Role":"Remove Admin Role",
     "No users were found.":"No users were found.",
@@ -243,7 +246,7 @@
     "Go To Dashboard":"Go To Dashboard",
     "Save":"Save",
     "Edit":"Edit",
-	
+
 	  "Email Address is required":"Email Address is required",
 	  "Password is required":"Password is required",
 	  "Password must be at least 6 characters long":"Password must be at least 6 characters long",
@@ -251,5 +254,20 @@
 	  "Signup for a FREE account in seconds":"Signup for a FREE account in seconds",
 	  "Full Name is required":"Full Name is required",
 	  "A user already exists with this email address":"A user already exists with this email address",
-	  "Already have an account?":"Already have an account?"
+	  "Already have an account?":"Already have an account?",
+
+    "DIALOGS_ERROR": "Error",
+    "DIALOGS_ERROR_MSG": "An unknown error has occurred.",
+    "DIALOGS_CLOSE": "Close",
+    "DIALOGS_PLEASE_WAIT": "Please Wait",
+    "DIALOGS_PLEASE_WAIT_ELIPS": "Please Wait...",
+    "DIALOGS_PLEASE_WAIT_MSG": "Waiting on operation to complete.",
+    "DIALOGS_PERCENT_COMPLETE": "% Complete",
+    "DIALOGS_NOTIFICATION": "Notification",
+    "DIALOGS_NOTIFICATION_MSG": "Unknown application notification.",
+    "DIALOGS_CONFIRMATION": "Confirmation",
+    "DIALOGS_CONFIRMATION_MSG": "Confirmation required.",
+    "DIALOGS_OK": "OK",
+    "DIALOGS_YES": "Yes",
+    "DIALOGS_NO": "No"
 }

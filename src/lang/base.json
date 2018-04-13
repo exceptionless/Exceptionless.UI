@@ -191,7 +191,9 @@
     "Delete Project":"",
     "API Key":"",
     "Notes":"",
+    "Payment Number":"",
     "Actions":"",
+    "Status":"",
     "New API Key":"",
     "New Client Configuration":"",
     "Event Types":"",
@@ -230,6 +232,7 @@
     "New Password":"",
     "Confirm password":"",
     "Set Password":"",
+    "DELETE ACCOUNT":"",
 
     // Login
     "Log in":"",
@@ -247,7 +250,7 @@
     "Invited":"",
     "Resend Invite Email":"",
     "Revoke Invite":"",
-    "Remove User":"",        
+    "Remove User":"",
     "Add Admin Role":"",
     "Remove Admin Role":"",
     "No users were found.":"",
@@ -259,7 +262,7 @@
     "Go To Dashboard":"",
     "Save":"",
     "Edit":"",
-	
+
 	  // Tips
 	  "Email Address is required":"",
 	  "Password is required":"",
@@ -268,5 +271,21 @@
 	  "Signup for a FREE account in seconds":"",
 	  "Full Name is required":"",
 	  "A user already exists with this email address":"",
-	  "Already have an account?":""
+	  "Already have an account?":"",
+
+    // copied from angular-dialog-service
+    "DIALOGS_ERROR": "",
+    "DIALOGS_ERROR_MSG": "",
+    "DIALOGS_CLOSE": "",
+    "DIALOGS_PLEASE_WAIT": "",
+    "DIALOGS_PLEASE_WAIT_ELIPS": "",
+    "DIALOGS_PLEASE_WAIT_MSG": "",
+    "DIALOGS_PERCENT_COMPLETE": "",
+    "DIALOGS_NOTIFICATION": "",
+    "DIALOGS_NOTIFICATION_MSG": "",
+    "DIALOGS_CONFIRMATION": "",
+    "DIALOGS_CONFIRMATION_MSG": "",
+    "DIALOGS_OK": "",
+    "DIALOGS_YES": "",
+    "DIALOGS_NO": ""
 }

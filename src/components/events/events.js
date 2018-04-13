@@ -6,7 +6,6 @@
     'ui.bootstrap',
 
     'dialogs.main',
-    'dialogs.default-translations',
 
     'exceptionless',
     'exceptionless.filter',
