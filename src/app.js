@@ -72,6 +72,7 @@
         prefix: '/lang/',
         suffix: '.json'
     });
+    moment.locale(lang.toLocaleLowerCase());
 
     function setRouteFilter(filterService, organizationId, projectId, type) {
       filterService.setOrganizationId(organizationId, true);

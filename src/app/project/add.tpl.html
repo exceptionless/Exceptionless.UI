@@ -27,8 +27,8 @@
               </div>
 
               <div class="error" ng-messages="vm.addForm.organization_name.$error" ng-if="vm.addForm.$submitted || vm.addForm.organization_name.$touched">
-                <small ng-message="required">Organization Name is required.</small>
-                <small ng-message="unique">A organizations with this name already exists.</small>
+                <small ng-message="required">{{'Organization Name is required.' | translate}}</small>
+                <small ng-message="unique">{{'A organizations with this name already exists.' | translate}}</small>
               </div>
             </div>
 
@@ -49,8 +49,8 @@
               </div>
 
               <div class="error" ng-messages="vm.addForm.project_name.$error" ng-if="vm.addForm.$submitted || vm.addForm.project_name.$touched">
-                <small ng-message="required">Project Name is required.</small>
-                <small ng-message="unique">A project with this name already exists.</small>
+                <small ng-message="required">{{'Project Name is required.' | translate}}</small>
+                <small ng-message="unique">{{'A project with this name already exists.' | translate}}</small>
               </div>
             </div>
           </form>

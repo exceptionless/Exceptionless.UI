@@ -11,7 +11,7 @@
           settings: '='
         },
         templateUrl: 'components/stacks/stacks-directive.tpl.html',
-        controller: function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService) {
+        controller: function ($ExceptionlessClient, $window, $state, $stateParams, linkService, filterService, notificationService, paginationService, stacksActionsService, translateService) {
           var vm = this;
           function canRefresh(data) {
             if (!!data && data.type === 'Stack') {
@@ -83,7 +83,7 @@
             }
 
             if (vm.selectedIds.length === 0) {
-              notificationService.info(null, 'Please select one or more stacks');
+              notificationService.info(null, translateService.T('Please select one or more stacks'));
             } else {
               action.run(vm.selectedIds).then(onSuccess);
             }

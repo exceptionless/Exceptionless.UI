@@ -25,15 +25,15 @@
         </button>
       </form>
       <div class="buttons" ng-show="!rowform.$visible">
-        <button type="button" role="button" class="btn btn-sm btn-primary" title="Copy to Clipboard" clipboard text="token.id" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.clipboardSupported"><i class="fa fa-copy"></i></button>
+        <button type="button" role="button" class="btn btn-sm btn-primary" title="{{'Copy to Clipboard' | translate}}" clipboard text="token.id" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.clipboardSupported"><i class="fa fa-copy"></i></button>
         <button type="button" role="button" class="btn btn-sm btn-default hidden-xs" ng-click="rowform.$show()">{{'Edit' | translate}}</button>
         <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-danger" title="{{'Delete' | translate}}"><i class="fa fa-times"></i></button>
       </div>
     </td>
   </tr>
   <tr ng-if="vm.tokens.length === 0">
-    <td colspan="2" class="text-warning visible-xs">This project does not have an API Key.</td>
-    <td colspan="3" class="text-warning hidden-xs">This project does not have an API Key.</td>
+    <td colspan="2" class="text-warning visible-xs">{{'This project does not have an API Key.' | translate}}</td>
+    <td colspan="3" class="text-warning hidden-xs">{{'This project does not have an API Key.' | translate}}</td>
   </tr>
   </tbody>
 </table>

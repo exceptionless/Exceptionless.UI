@@ -18,7 +18,7 @@
       controller: function ($scope, notificationService) {
         var vm = this;
         function copied() {
-          notificationService.success('Copied!');
+          notificationService.success(translateService.T('Copied!'));
         }
 
         function demoteTab() {

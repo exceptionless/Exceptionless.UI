@@ -7,10 +7,10 @@
         <i class="fa fa-calendar"></i> {{'Event Occurrence' | translate}}
 
         <div class="pull-right hidden-print">
-          <a clipboard text="vm.event_json" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.event.stack_id && vm.clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Event JSON to Clipboard"></a>
-          <a ui-sref="app.stack({ id: vm.event.stack_id })" ng-class="{'disabled': !vm.event.stack_id}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="Go To Stack"></a>
-          <a ui-sref="app.event({ id: vm.previous, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.previous}" class="btn btn-default btn-xs fa fa-fw fa-caret-left" role="button" title="Previous Occurrence"></a>
-          <a ui-sref="app.event({ id: vm.next, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.next}" class="btn btn-default btn-xs fa fa-fw fa-caret-right" role="button" title="Next Occurrence"></a>
+          <a clipboard text="vm.event_json" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.event.stack_id && vm.clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{'Copy Event JSON to Clipboard' | translate}}"></a>
+          <a ui-sref="app.stack({ id: vm.event.stack_id })" ng-class="{'disabled': !vm.event.stack_id}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="{{'Go To Stack' | translate}}"></a>
+          <a ui-sref="app.event({ id: vm.previous, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.previous}" class="btn btn-default btn-xs fa fa-fw fa-caret-left" role="button" title="{{'Previous Occurrence' | translate}}"></a>
+          <a ui-sref="app.event({ id: vm.next, tab: vm.getCurrentTab() })" ng-class="{'disabled': !vm.next}" class="btn btn-default btn-xs fa fa-fw fa-caret-right" role="button" title="{{'Next Occurrence' | translate}}"></a>
         </div>
       </div>
       <div class="panel-body">

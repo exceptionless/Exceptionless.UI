@@ -1,4 +1,4 @@
-<h3 class="visible-print">Request</h3>
+<h3 class="visible-print">{{'Request' | translate}}</h3>
 <table class="table table-striped table-bordered table-fixed table-key-value b-t">
   <tr>
     <th>{{'Occurred On' | translate}}</th>
@@ -43,15 +43,15 @@
   </tr>
 </table>
 
-<extended-data-item can-promote="false" title="'Post Data | translate'" data="vm.request.post_data"></extended-data-item>
+<extended-data-item can-promote="false" title="{{'Post Data' | translate}}" data="vm.request.post_data"></extended-data-item>
 
 <div ng-if="vm.hasCookies">
-  <h4>Cookie Values</h4>
+  <h4>{{'Cookie Values' | translate}}</h4>
   <table class="table table-striped table-bordered table-fixed table-key-value b-t">
     <thead>
     <tr>
-      <th>Name</th>
-      <th>Value</th>
+      <th>{{'Name' | translate}}</th>
+      <th>{{'Value' | translate}}</th>
     </tr>
     </thead>
     <tbody>
@@ -63,4 +63,4 @@
   </table>
 </div>
 
-<extended-data-item can-promote="false" title="'Additional Data'" data="vm.request.data" excluded-keys="vm.excludedAdditionalData"></extended-data-item>
+<extended-data-item can-promote="false" title="{{'Additional Data' | translate}}" data="vm.request.data" excluded-keys="vm.excludedAdditionalData"></extended-data-item>

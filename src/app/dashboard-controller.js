@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService) {
+    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService, translateService) {
       var vm = this;
       function canRefresh(data) {
         if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
@@ -75,11 +75,11 @@
             padding: {top: 0.085},
             renderer: 'stack',
             series: [{
-              name: 'Unique',
+              name: translateService.T('Unique'),
               color: 'rgba(60, 116, 0, .9)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }, {
-              name: 'Count',
+              name: translateService.T('Count'),
               color: 'rgba(124, 194, 49, .7)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }

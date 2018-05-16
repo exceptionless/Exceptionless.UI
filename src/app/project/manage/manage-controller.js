@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Manage', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, filterService, organizationService, projectService, tokenService, webHookService, notificationService, STRIPE_PUBLISHABLE_KEY, dialogs, dialogService) {
+    .controller('project.Manage', function ($ExceptionlessClient, $filter, $state, $stateParams, billingService, filterService, organizationService, projectService, tokenService, webHookService, notificationService, STRIPE_PUBLISHABLE_KEY, dialogs, dialogService, translateService) {
       var vm = this;
       function addConfiguration() {
         return dialogs.create('app/project/manage/add-configuration-dialog.tpl.html', 'AddConfigurationDialog as vm', vm.config).result.then(saveClientConfiguration).catch(function(e){});
@@ -11,7 +11,7 @@
 
       function addSlack() {
         if (!vm.hasPremiumFeatures) {
-          return billingService.confirmUpgradePlan("Please upgrade your plan to enable slack integration.", vm.project.organization_id).then(function () {
+          return billingService.confirmUpgradePlan(translateService.T("Please upgrade your plan to enable slack integration."), vm.project.organization_id).then(function () {
             return addSlackIntegration();
           }).catch(function(e){});
         }
@@ -21,7 +21,7 @@
 
       function addSlackIntegration() {
         function onFailure() {
-          notificationService.error('An error occurred while adding Slack to your project.');
+          notificationService.error(translateService.T('An error occurred while adding Slack to your project.'));
         }
 
         return projectService.addSlack(vm._projectId).catch(onFailure);
@@ -29,7 +29,7 @@
 
       function addToken() {
         function onFailure() {
-          notificationService.error('An error occurred while creating a new API key for your project.');
+          notificationService.error(translateService.T('An error occurred while creating a new API key for your project.'));
         }
 
         var options = {organization_id: vm.project.organization_id, project_id: vm._projectId};
@@ -55,14 +55,14 @@
             }).catch(function(e){});
           }
 
-          notificationService.error('An error occurred while saving the configuration setting.');
+          notificationService.error(translateService.T('An error occurred while saving the configuration setting.'));
         }
 
         return webHookService.create(data).catch(onFailure);
       }
 
       function copied() {
-        notificationService.success('Copied!');
+        notificationService.success(translateService.T('Copied!'));
       }
 
       function get(data) {
@@ -72,7 +72,7 @@
 
         if (data && data.type === 'Project' && data.deleted && data.id === vm._projectId) {
           $state.go('app.project.list');
-          notificationService.error('The project "' + vm._projectId + '" was deleted.');
+          notificationService.error(translateService.T('Project_Deleted', {projectId: vm._projectId}));
           return;
         }
 
@@ -131,7 +131,7 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The organization "' + vm.project.organization_id + '" could not be found.');
+          notificationService.error(translateService.T('Cannot_Find_Organization',{organizationId: vm.project.organization_id}));
         }
 
         return organizationService.getById(vm.project.organization_id, false).then(onSuccess, onFailure);
@@ -155,7 +155,7 @@
 
         function onFailure() {
           $state.go('app.project.list');
-          notificationService.error('The project "' + vm._projectId + '" could not be found.');
+          notificationService.error(translateService.T('Cannot_Find_Project',{projectId: vm._projectId}));
         }
 
         return projectService.getById(vm._projectId).then(onSuccess, onFailure);
@@ -168,7 +168,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred loading the api keys.');
+          notificationService.error(translateService.T('An error occurred loading the api keys.'));
         }
 
         return tokenService.getByProjectId(vm._projectId).then(onSuccess, onFailure);
@@ -194,7 +194,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred loading the notification settings.');
+          notificationService.error(translateService.T('An error occurred loading the notification settings.'));
         }
 
         return projectService.getConfig(vm._projectId).then(onSuccess, onFailure);
@@ -207,7 +207,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred while loading the slack notification settings.');
+          notificationService.error(translateService.T('An error occurred while loading the slack notification settings.'));
         }
 
         vm.slackNotificationSettings = null;
@@ -221,16 +221,16 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred loading the notification settings.');
+          notificationService.error(translateService.T('An error occurred loading the notification settings.'));
         }
 
         return webHookService.getByProjectId(vm._projectId).then(onSuccess, onFailure);
       }
 
       function removeConfig(config) {
-        return dialogService.confirmDanger('Are you sure you want to delete this configuration setting?', 'DELETE CONFIGURATION SETTING').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this configuration setting?'), translateService.T('DELETE CONFIGURATION SETTING')).then(function () {
           function onFailure() {
-            notificationService.error('An error occurred while trying to delete the configuration setting.');
+            notificationService.error(translateService.T('An error occurred while trying to delete the configuration setting.'));
           }
 
           return projectService.removeConfig(vm._projectId, config.key).catch(onFailure);
@@ -238,14 +238,14 @@
       }
 
       function removeProject() {
-        return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this project?'), translateService.T('Delete Project')).then(function () {
           function onSuccess() {
-            notificationService.info('Successfully queued the project for deletion.');
+            notificationService.info(translateService.T('Successfully queued the project for deletion.'));
             $state.go('app.project.list');
           }
 
           function onFailure() {
-            notificationService.error('An error occurred while trying to delete the project.');
+            notificationService.error(translateService.T('An error occurred while trying to delete the project.'));
             vm._ignoreRefresh = false;
           }
 
@@ -255,9 +255,9 @@
       }
 
       function removeSlack() {
-        return dialogService.confirmDanger('Are you sure you want to remove slack support?', 'REMOVE SLACK').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to remove slack support?'), translateService.T('Remove Slack')).then(function () {
           function onFailure() {
-            notificationService.error('An error occurred while trying to remove slack.');
+            notificationService.error(translateService.T('An error occurred while trying to remove slack.'));
           }
 
           return projectService.removeSlack(vm._projectId).catch(onFailure);
@@ -265,9 +265,9 @@
       }
 
       function removeToken(token) {
-        return dialogService.confirmDanger('Are you sure you want to delete this API key?', 'DELETE API KEY').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this API key?'), translateService.T('DELETE API KEY')).then(function () {
           function onFailure() {
-            notificationService.error('An error occurred while trying to delete the API Key.');
+            notificationService.error(translateService.T('An error occurred while trying to delete the API Key.'));
           }
 
           return tokenService.remove(token.id).catch(onFailure);
@@ -275,9 +275,9 @@
       }
 
       function removeWebHook(hook) {
-        return dialogService.confirmDanger('Are you sure you want to delete this web hook?', 'DELETE WEB HOOK').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this web hook?'), translateService.T('DELETE WEB HOOK')).then(function () {
           function onFailure() {
-            notificationService.error('An error occurred while trying to delete the web hook.');
+            notificationService.error(translateService.T('An error occurred while trying to delete the web hook.'));
           }
 
           return webHookService.remove(hook.id).catch(onFailure);
@@ -285,9 +285,9 @@
       }
 
       function resetData() {
-        return dialogService.confirmDanger('Are you sure you want to reset the data for this project?', 'RESET PROJECT DATA').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to reset the data for this project?'), translateService.T('RESET PROJECT DATA')).then(function () {
           function onFailure() {
-            notificationService.error('An error occurred while resetting project data.');
+            notificationService.error(translateService.T('An error occurred while resetting project data.'));
           }
 
           return projectService.resetData(vm._projectId).catch(onFailure);
@@ -300,7 +300,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred while saving the project.');
+          notificationService.error(translateService.T('An error occurred while saving the project.'));
         }
 
         return projectService.update(vm._projectId, vm.project).catch(onFailure);
@@ -308,7 +308,7 @@
 
       function saveApiKeyNote(data) {
         function onFailure() {
-          notificationService.error('An error occurred while saving the API key note.');
+          notificationService.error(translateService.T('An error occurred while saving the API key note.'));
         }
 
         return tokenService.update(data.id, { notes: data.notes }).catch(onFailure);
@@ -316,7 +316,7 @@
 
       function saveClientConfiguration(data) {
         function onFailure() {
-          notificationService.error('An error occurred while saving the configuration setting.');
+          notificationService.error(translateService.T('An error occurred while saving the configuration setting.'));
         }
 
         return projectService.setConfig(vm._projectId, data.key, data.value).catch(onFailure);
@@ -324,7 +324,7 @@
 
       function saveCommonMethods() {
         function onFailure() {
-          notificationService.error('An error occurred while saving the common methods.');
+          notificationService.error(translateService.T('An error occurred while saving the common methods.'));
         }
 
         if (vm.common_methods) {
@@ -336,7 +336,7 @@
 
       function saveDataExclusion() {
         function onFailure() {
-          notificationService.error('An error occurred while saving the the data exclusion.');
+          notificationService.error(translateService.T('An error occurred while saving the the data exclusion.'));
         }
 
         if (vm.data_exclusions) {
@@ -348,7 +348,7 @@
 
       function saveDeleteBotDataEnabled() {
         function onFailure() {
-          notificationService.error('An error occurred while saving the project.');
+          notificationService.error(translateService.T('An error occurred while saving the project.'));
         }
 
         return projectService.update(vm._projectId, {'delete_bot_data_enabled': vm.project.delete_bot_data_enabled}).catch(onFailure);
@@ -356,7 +356,7 @@
 
       function saveUserAgents() {
         function onFailure() {
-          notificationService.error('An error occurred while saving the user agents.');
+          notificationService.error(translateService.T('An error occurred while saving the user agents.'));
         }
 
         if (vm.user_agents) {
@@ -368,7 +368,7 @@
 
       function saveUserNamespaces() {
         function onFailure() {
-          notificationService.error('An error occurred while saving the user namespaces.');
+          notificationService.error(translateService.T('An error occurred while saving the user namespaces.'));
         }
 
         if (vm.user_namespaces) {
@@ -388,7 +388,7 @@
             });
           }
 
-          notificationService.error('An error occurred while saving your slack notification settings.');
+          notificationService.error(translateService.T('An error occurred while saving your slack notification settings.'));
         }
 
         return projectService.setIntegrationNotificationSettings(vm._projectId, 'slack', vm.slackNotificationSettings).catch(onFailure);
@@ -411,7 +411,7 @@
           return false;
         }
 
-        return !data ? 'Please enter a valid value.' : null;
+        return !data ? translateService.T('Please enter a valid value.') : null;
       }
 
       this.$onInit = function $onInit() {
@@ -428,24 +428,24 @@
             padding: {top: 0.085},
             renderer: 'multi',
             series: [{
-              name: 'Allowed in Organization',
+              name: translateService.T('Allowed in Organization'),
               color: '#f5f5f5',
               renderer: 'area'
             },
             {
-              name: 'Allowed',
+              name: translateService.T('Allowed'),
               color: '#a4d56f',
               renderer: 'stack'
             }, {
-              name: 'Blocked',
+              name: translateService.T('Blocked'),
               color: '#e2e2e2',
               renderer: 'stack'
             }, {
-              name: 'Too Big',
+              name: translateService.T('Too Big'),
               color: '#ccc',
               renderer: 'stack'
             }, {
-              name: 'Limit',
+              name: translateService.T('Limit'),
               color: '#a94442',
               renderer: 'dotted_line'
             }]

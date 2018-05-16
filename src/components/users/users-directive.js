@@ -20,7 +20,7 @@
           settings: "="
         },
         templateUrl: 'components/users/users-directive.tpl.html',
-        controller: function ($ExceptionlessClient, $window, $state, dialogService, linkService, notificationService, organizationService, paginationService, userService) {
+        controller: function ($ExceptionlessClient, $window, $state, dialogService, linkService, notificationService, organizationService, paginationService, userService, translateService) {
           var vm = this;
           function get(options, useCache) {
             function onSuccess(response) {
@@ -63,14 +63,14 @@
 
           function remove(user) {
             $ExceptionlessClient.createFeatureUsage(vm._source + '.remove').setProperty('user', user).submit();
-            return dialogService.confirmDanger('Are you sure you want to remove this user from your organization?', 'REMOVE USER').then(function () {
+            return dialogService.confirmDanger(translateService.T('Are you sure you want to remove this user from your organization?'), translateService.T('Remove User')).then(function () {
               function onSuccess() {
                 $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('user', user).submit();
               }
 
               function onFailure() {
                 $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.error').setProperty('user', user).submit();
-                notificationService.error('An error occurred while trying to remove the user.');
+                notificationService.error(translateService.T('An error occurred while trying to remove the user.'));
               }
 
               return organizationService.removeUser(vm.settings.organizationId, user.email_address).then(onSuccess, onFailure);
@@ -79,7 +79,7 @@
 
           function resendNotification(user) {
             function onFailure() {
-              notificationService.error('An error occurred while trying to resend the notification.');
+              notificationService.error(translateService.T('An error occurred while trying to resend the notification.'));
             }
 
             return organizationService.addUser(vm.settings.organizationId, user.email_address).catch(onFailure);
@@ -87,15 +87,15 @@
 
           function updateAdminRole(user) {
             $ExceptionlessClient.createFeatureUsage(vm._source + '.updateAdminRole').setProperty('user', user).submit();
-            var message = 'Are you sure you want to ' + (!userService.hasAdminRole(user) ? 'add' : 'remove') + ' the admin role for this user?';
-            return dialogService.confirmDanger(message, (!userService.hasAdminRole(user) ? 'ADD' : 'REMOVE')).then(function () {
+            var message = (!userService.hasAdminRole(user) ? 'Are you sure you want to add the admin role for this user?' : 'Are you sure you want to remove the admin role from this user?');
+            return dialogService.confirmDanger(translateService.T(message), translateService.T(!userService.hasAdminRole(user) ? 'Add' : 'Remove')).then(function () {
               function onSuccess() {
                 $ExceptionlessClient.createFeatureUsage(vm._source + '.updateAdminRole.success').setProperty('user', user).submit();
               }
 
               function onFailure() {
                 $ExceptionlessClient.createFeatureUsage(vm._source + '.updateAdminRole.error').setProperty('user', user).submit();
-                notificationService.error('An error occurred while ' + (!userService.hasAdminRole(user) ? 'add' : 'remove') + ' the admin role.');
+                notificationService.error(translateService.T(!userService.hasAdminRole(user) ? 'An error occurred while add the admin role.' : 'An error occurred while remove the admin role.'));
               }
 
               if (!userService.hasAdminRole(user)) {

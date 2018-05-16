@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('app.status')
-    .controller('Status', function ($interval, $scope, $state, $stateParams, authService, stateService, statusService, Restangular) {
+    .controller('Status', function ($interval, $scope, $state, $stateParams, authService, stateService, statusService, translateService, Restangular) {
       var vm = this;
       function getMessage() {
-        var underMaintenance = "We're sorry but the website is currently undergoing maintenance.";
-        var contactSupport = 'Please contact support for more information.';
+        var underMaintenance = translateService.T("We're sorry but the website is currently undergoing maintenance.");
+        var contactSupport = translateService.T('Please contact support for more information.');
 
         if (vm._redirect) {
-          return underMaintenance + ' You’ll be automatically redirected when the the maintenance is completed. ' + contactSupport;
+          return underMaintenance + ' ' + translateService.T('You’ll be automatically redirected when the the maintenance is completed.') + ' ' + contactSupport;
         }
 
         if (!!vm._message) {
@@ -24,7 +24,7 @@
           if (response && response.data && response.data.message) {
             vm._message = response.data.message;
             if (response.status !== 200) {
-              vm._message += ' Please contact support for more information.';
+              vm._message += ' ' + contactSupport;
             }
           } else {
             vm._message = '';

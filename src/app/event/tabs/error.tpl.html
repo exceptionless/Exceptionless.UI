@@ -1,4 +1,4 @@
-<h3 class="visible-print">Exception</h3>
+<h3 class="visible-print">{{'Exception' | translate}}</h3>
 <table class="table table-striped table-bordered table-fixed table-key-value b-t">
   <tr>
     <th>{{'Occurred On' | translate}}</th>
@@ -23,12 +23,12 @@
 </table>
 
 <div class="pull-right m-t-xs hidden-print">
-  <a clipboard text="vm.textStackTrace" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.textStackTrace && vm.clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+  <a clipboard text="vm.textStackTrace" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.textStackTrace && vm.clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{'Copy Stack Trace to Clipboard' | translate}}"></a>
 </div>
 <h3>{{'Stack Trace' | translate}}</h3>
 <stack-trace exception="vm.event.data['@error']" text-stack-trace="vm.textStackTrace"></stack-trace>
 
-<extended-data-item can-promote="false" title="'Additional Data' | translate" data="vm.event.data['@error'].data['@ext']"></extended-data-item>
+<extended-data-item can-promote="false" title="{{'Additional Data' | translate}}" data="vm.event.data['@error'].data['@ext']"></extended-data-item>
 
 <div ng-if="vm.event.data['@error'].modules.length > 0">
   <h4>{{'Loaded Modules' | translate}}</h4>

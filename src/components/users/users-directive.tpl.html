@@ -11,7 +11,7 @@
       <tr ng-repeat="user in vm.users">
         <td>
           <span>{{::user.email_address}}</span>
-          <span ng-if="user.has_admin_role" class="label label-info">{{'Admin' | translate}}</span>
+          <span ng-if="user.has_admin_role" class="label label-info">{{'AdminRole' | translate}}</span>
           <span ng-if="user.is_invite" class="label label-default">{{'Invited' | translate}}</span>
         </td>
         <td>

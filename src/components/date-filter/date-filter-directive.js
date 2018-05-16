@@ -8,8 +8,9 @@
         replace: true,
         scope: true,
         templateUrl: 'components/date-filter/date-filter-directive.tpl.html',
-        controller: function ($interval, $scope, dialogs, filterService) {
+        controller: function ($interval, $scope, dialogs, filterService, translateService) {
           var vm = this;
+          var format = translateService.T('DateTimeFormat');
           function getFilteredDisplayName() {
             var time = filterService.getTime();
             if (time === 'last hour') {
@@ -34,7 +35,7 @@
 
             var range = dateRangeParserService.parse(time);
             if (range && range.start && range.end) {
-              return moment(range.start).twix(moment(range.end)).format();
+              return moment(range.start).twix(moment(range.end)).simpleFormat(format);
             }
 
             setFilter('last week');
@@ -62,7 +63,7 @@
             }
 
             var range = filterService.getTimeRange();
-            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: range.start || moment().subtract(7, 'days'), end: range.end || moment() }).result.then(onSuccess).catch(function(e){});
+            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: (range.start || moment().subtract(7, 'days')).format(format), end: (range.end || moment()).format(format) }).result.then(onSuccess).catch(function(e){});
           }
 
           function setFilter(filter) {

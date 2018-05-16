@@ -60,11 +60,11 @@
             padding: {top: 0.085},
             renderer: 'stack',
             series: [{
-              name: 'Users',
+              name: translateService.T('Users'),
               color: 'rgba(60, 116, 0, .9)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }, {
-              name: 'Sessions',
+              name: translateService.T('Sessions'),
               color: 'rgba(124, 194, 49, .7)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }

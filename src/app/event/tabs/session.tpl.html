@@ -1,9 +1,9 @@
 <div class="hidden-print">
   <div ng-if="!vm.project.has_premium_features">
     <div class="alert alert-danger alert-banner m-b-none">
-      <h4><a ng-click="appVm.changePlan(vm.project.organization_id)">{{vm.project.organization_name}}</a> is attempting to use a premium feature.</h4>
+      <h4><a ng-click="appVm.changePlan(vm.project.organization_id)">{{vm.project.organization_name}}</a> {{'is attempting to use a premium feature.' | translate}}</h4>
 
-      <p><a ng-click="appVm.changePlan(vm.project.organization_id)">Upgrade now</a> to enable sessions and other premium features!</p>
+      <p><a ng-click="appVm.changePlan(vm.project.organization_id)">{{'Upgrade now' | translate}}</a> {{'to enable sessions and other premium features!' | translate}}</p>
     </div>
     <br />
   </div>
@@ -16,10 +16,10 @@
     <tr ng-if="vm.isSessionStart">
       <th>{{'Duration' | translate}}</th>
       <td>
-        <span ng-if="!vm.event.data.sessionend" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
-        <abbr title="{{vm.getDuration()}} seconds"><duration value="vm.getDuration()"></duration></abbr>
+        <span ng-if="!vm.event.data.sessionend" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="{{'Online' | translate}}"></span>
+        <abbr title="{{'Seconds' | translate:{duration : vm.getDuration()}}}"><duration value="vm.getDuration()"></duration></abbr>
         <span ng-if="vm.event.data.sessionend">
-          (ended <timeago date="vm.event.data.sessionend"></timeago>)
+          ({{'ended' | translate}} <timeago date="vm.event.data.sessionend"></timeago>)
         </span>
       </td>
     </tr>
