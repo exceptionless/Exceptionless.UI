@@ -669,6 +669,7 @@
       "Value Sum":"",
       "Log source":"",
       "Add":"",
+      "Total":"",
 
     // copied from angular-dialog-service
     "DIALOGS_ERROR": "",

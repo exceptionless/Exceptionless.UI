@@ -35,7 +35,11 @@
 
             var range = dateRangeParserService.parse(time);
             if (range && range.start && range.end) {
-              return moment(range.start).twix(moment(range.end)).simpleFormat(format);
+              if(format) {
+                return moment(range.start).twix(moment(range.end)).simpleFormat(format);
+              } else {
+                return moment(range.start).twix(moment(range.end))
+              }
             }
 
             setFilter('last week');

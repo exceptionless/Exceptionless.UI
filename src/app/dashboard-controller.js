@@ -91,7 +91,9 @@
             hover: {
               render: function (args) {
                 var date = moment.unix(args.domainX);
-                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                var dateTimeFormat = translateService.T('DateTimeFormat');
+                var dateFormat = translateService.T('DateFormat');
+                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
                 var content = '<div class="date">' + formattedDate + '</div>';
                 args.detail.sort(function (a, b) {
                   return a.order - b.order;
