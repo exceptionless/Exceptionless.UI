@@ -4,9 +4,9 @@
   angular.module('app.status')
     .controller('Status', function ($interval, $scope, $state, $stateParams, authService, stateService, statusService, translateService, Restangular) {
       var vm = this;
+      var contactSupport = translateService.T('Please contact support for more information.');
       function getMessage() {
         var underMaintenance = translateService.T("We're sorry but the website is currently undergoing maintenance.");
-        var contactSupport = translateService.T('Please contact support for more information.');
 
         if (vm._redirect) {
           return underMaintenance + ' ' + translateService.T('You’ll be automatically redirected when the the maintenance is completed.') + ' ' + contactSupport;

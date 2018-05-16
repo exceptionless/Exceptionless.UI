@@ -38,7 +38,7 @@
               if(format) {
                 return moment(range.start).twix(moment(range.end)).simpleFormat(format);
               } else {
-                return moment(range.start).twix(moment(range.end))
+                return moment(range.start).twix(moment(range.end));
               }
             }
 
