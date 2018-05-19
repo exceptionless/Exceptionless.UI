@@ -15,18 +15,18 @@
             <div class="panel-body">
               <form name="vm.signupForm" role="form" class="form-horizontal form-validation" autocomplete="on">
                 <div class="form-horizontal col-sm-offset-2">
-                  <h4 ng-if="vm.isExternalLoginEnabled()">Login with</h4>
+                  <h4 ng-if="vm.isExternalLoginEnabled()">{{'Login with' | translate}}</h4>
 
                   <div class="form-group" style="margin-left:0px;" ng-if="vm.isExternalLoginEnabled()">
-                    <button type="button" role="button" ng-click="vm.authenticate('live')" ng-if="vm.isExternalLoginEnabled('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
-                    <button type="button" role="button" ng-click="vm.authenticate('google')" ng-if="vm.isExternalLoginEnabled('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
-                    <button type="button" role="button" ng-click="vm.authenticate('facebook')" ng-if="vm.isExternalLoginEnabled('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
-                    <button type="button" role="button" ng-click="vm.authenticate('github')" ng-if="vm.isExternalLoginEnabled('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
+                    <button type="button" role="button" ng-click="vm.authenticate('live')" ng-if="vm.isExternalLoginEnabled('live')" class="btn btn-large image-button icon-login-microsoft" title="{{'Log in using your Microsoft account' | translate}}"></button>
+                    <button type="button" role="button" ng-click="vm.authenticate('google')" ng-if="vm.isExternalLoginEnabled('google')" class="btn btn-large image-button icon-login-google" title="{{'Log in using your Google account' | translate}}"></button>
+                    <button type="button" role="button" ng-click="vm.authenticate('facebook')" ng-if="vm.isExternalLoginEnabled('facebook')" class="btn btn-large image-button icon-login-facebook" title="{{'Log in using your Facebook account' | translate}}"></button>
+                    <button type="button" role="button" ng-click="vm.authenticate('github')" ng-if="vm.isExternalLoginEnabled('github')" class="btn btn-large image-button icon-login-github" title="{{'Log in using your GitHub account' | translate}}"></button>
                   </div>
 
                   <div class="form-group" ng-if="vm.isExternalLoginEnabled()">
                     <div class="col-sm-10 horizontal-divider">
-                      <p>OR</p>
+                      <p>{{'OR' | translate}}</p>
                       <span></span>
                     </div>
                   </div>
@@ -37,14 +37,14 @@
                 <div class="form-group">
                   <label for="name" class="col-sm-2 control-label">{{'Name' | translate}}</label>
                   <div class="col-sm-10">
-                    <input id="name" name="name" type="text" class="form-control" placeholder="Your first and last name"
+                    <input id="name" name="name" type="text" class="form-control" placeholder="{{'Your first and last name' | translate}}"
                            x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                            ng-model="vm.user.name"
                            ng-required="true"
                            autofocus />
 
                     <div class="error" ng-messages="vm.signupForm.name.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.name.$touched">
-                      <small ng-message="required">{{'Full Name is required' | translate}}</small>
+                      <small ng-message="required">{{'Full Name is required.' | translate}}</small>
                     </div>
                   </div>
                 </div>
@@ -52,7 +52,7 @@
                   <label for="email" class="col-sm-2 control-label">{{'Email' | translate}}</label>
                   <div class="col-sm-10">
                     <div ng-class="{'input-group': !!vm.signupForm.$pending }">
-                      <input id="email" name="email" type="email" class="form-control" placeholder="Email address (no spam)"
+                      <input id="email" name="email" type="email" class="form-control" placeholder="{{'Email address (no spam)' | translate}}"
                              x-autocompletetype="email" autocorrect="off" spellcheck="false"
                              ng-model="vm.user.email"
                              ng-model-options="{ debounce: 1000 }"
@@ -65,16 +65,16 @@
                     </div>
 
                     <div class="error" ng-messages="vm.signupForm.email.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.email.$touched">
-                      <small ng-message="required">{{'Email Address is required' | translate}}</small>
-                      <small ng-message="email">{{'Email Address is required' | translate}}</small>
-                      <small ng-message="unique">{{'A user already exists with this email address' | translate}}</small>
+                      <small ng-message="required">{{'Email Address is required.' | translate}}</small>
+                      <small ng-message="email">{{'Email Address is required.' | translate}}</small>
+                      <small ng-message="unique">{{'A user already exists with this email address.' | translate}}</small>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="password" class="col-sm-2 control-label">{{'Password' | translate}}</label>
                   <div class="col-sm-10">
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required="true" />
+                    <input id="password" name="password" type="password" class="form-control" placeholder="{{'Password' | translate}}" ng-model="vm.user.password" ng-minlength="6" ng-maxlength="100" ng-required="true" />
                     <div class="error" ng-messages="vm.signupForm.password.$error" ng-if="vm.signupForm.$submitted || vm.signupForm.password.$touched">
                       <small ng-message="required">{{'Password is required' | translate}}</small>
                       <small ng-message="minlength">{{'Password must be at least 6 characters long' | translate}}</small>
@@ -92,8 +92,7 @@
             </div>
           </div>
 
-          <div class="text-center">
-            By signing up, you agree to our <a href="https://exceptionless.com/privacy" target="_blank">Privacy Policy</a> and <a href="https://exceptionless.com/terms" target="_blank">Terms of Service</a>.
+          <div class="text-center" ng-bind-html="'NOTICE_SIGNINGUP' | translate">
           </div>
         </div>
       </div>

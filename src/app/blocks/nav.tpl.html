@@ -13,19 +13,19 @@
       <li>
         <a ng-href="{{appVm.urls.dashboard.error}}">
           <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{'Dashboard' | translate}}</span>
+          <span>{{'Exception Dashboard' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.recent.error}}">
           <i class="fa fa-calendar fa-fw"></i>
-          <span>{{'Most Recent' | translate}}</span>
+          <span>{{'Most Recent Exceptions' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.frequent.error}}">
           <i class="fa fa-signal fa-fw"></i>
-          <span>{{'Most Frequent' | translate}}</span>
+          <span>{{'Most Frequent Exceptions' | translate}}</span>
         </a>
       </li>
       <li>
@@ -56,19 +56,19 @@
       <li>
         <a ng-href="{{appVm.urls.dashboard.log}}">
           <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{'Dashboard' | translate}}</span>
+          <span>{{'Message Dashboard' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.recent.log}}">
           <i class="fa fa-calendar fa-fw"></i>
-          <span>{{'Most Recent' | translate}}</span>
+          <span>{{'Most Recent Messages' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.frequent.log}}">
           <i class="fa fa-signal fa-fw"></i>
-          <span>{{'Most Frequent' | translate}}</span>
+          <span>{{'Most Frequent Messages' | translate}}</span>
         </a>
       </li>
       <li>
@@ -99,19 +99,19 @@
       <li>
         <a ng-href="{{appVm.urls.dashboard['404']}}">
           <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{'Dashboard' | translate}}</span>
+          <span>{{'Broken Links Dashboard' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.recent['404']}}">
           <i class="fa fa-calendar fa-fw"></i>
-          <span>{{'Most Recent' | translate}}</span>
+          <span>{{'Most Recent Links' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.frequent['404']}}">
           <i class="fa fa-signal fa-fw"></i>
-          <span>{{'Most Frequent' | translate}}</span>
+          <span>{{'Most Frequent Links' | translate}}</span>
         </a>
       </li>
       <li>
@@ -142,19 +142,19 @@
       <li>
         <a ng-href="{{appVm.urls.dashboard.usage}}">
           <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{'Dashboard' | translate}}</span>
+          <span>{{'Feature Dashboard' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.recent.usage}}">
           <i class="fa fa-calendar fa-fw"></i>
-          <span>{{'Most Recent' | translate}}</span>
+          <span>{{'Most Recent Features' | translate}}</span>
         </a>
       </li>
       <li>
         <a ng-href="{{appVm.urls.frequent.usage}}">
           <i class="fa fa-signal fa-fw"></i>
-          <span>{{'Most Frequent' | translate}}</span>
+          <span>{{'Most Frequent Features' | translate}}</span>
         </a>
       </li>
       <li>
@@ -185,7 +185,7 @@
       <li>
         <a ng-href="{{appVm.urls.dashboard.all}}">
           <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{'Dashboard' | translate}}</span>
+          <span>{{'Event Dashboard' | translate}}</span>
         </a>
       </li>
       <li>
@@ -265,13 +265,13 @@
     </ul>
   </li>
   <li>
-    <a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank" title="Documentation">
+    <a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank" title="{{'Documentation' | translate}}">
       <i class="fa fa-book fa-fw"></i>
       <span>{{'Documentation' | translate}}</span>
     </a>
   </li>
   <li ng-if="appVm.isIntercomEnabled()">
-    <a ng-click="appVm.showIntercom()" title="Support">
+    <a ng-click="appVm.showIntercom()" title="{{'Support' | translate}}">
       <i class="fa fa-comment fa-fw"></i>
       <span>{{'Support' | translate}}</span>
     </a>

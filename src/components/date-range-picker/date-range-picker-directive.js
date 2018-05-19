@@ -18,11 +18,19 @@
         timePicker12Hour: '='
       },
       templateUrl: 'components/date-range-picker/date-range-picker-directive.tpl.html',
+      controller: function($scope, translateService){
+        var vm = $scope;
+        this.$onInit = function $onInit() {
+          vm.applyLabel = translateService.T('Apply');
+          vm.cancelLabel = translateService.T('Cancel');
+          vm.format = translateService.T('DateTimeFormat');
+        };
+      },
       link: function (scope, element) {
         var vm = scope;
+        var format = vm.format || 'YYYY-MM-DD HH:mm:ss';
         var options = {
           endDate: vm.range.end,
-          format: vm.format || 'YYYY-MM-DD',
           maxDate: vm.maxDate,
           minDate: vm.minDate,
           showDropdowns: !!vm.showDropdowns,
@@ -30,7 +38,12 @@
           timePicker: !!vm.timePicker,
           timePicker12Hour: !!vm.timePicker12Hour,
           timePickerSeconds: !!vm.timePickerSeconds,
-          timePickerIncrement: vm.timePickerIncrement || 1
+          timePickerIncrement: vm.timePickerIncrement || 1,
+          locale: {
+            format: format,
+            applyLabel: vm.applyLabel,
+            cancelLabel: vm.cancelLabel
+          }
         };
 
         var watcher = scope.$watch(vm.range, function (r) {
@@ -48,7 +61,7 @@
 
         element.daterangepicker(options, function(start, end) {
           scope.$apply(function () {
-            vm.range = { start: start, end: end };
+            vm.range = { start: start.format(format), end: end.format(format) };
           });
         });
 

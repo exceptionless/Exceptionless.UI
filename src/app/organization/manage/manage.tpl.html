@@ -25,8 +25,8 @@
                   </div>
 
                   <div class="error" ng-messages="vm.organizationForm.name.$error" ng-if="vm.organizationForm.$submitted || vm.organizationForm.name.$touched">
-                    <small ng-message="required">Organization Name is required.</small>
-                    <small ng-message="unique">A organizations with this name already exists.</small>
+                    <small ng-message="required">{{'Organization Name is required.' | translate}}</small>
+                    <small ng-message="unique">{{'A organizations with this name already exists.' | translate}}</small>
                   </div>
                 </div>
               </form>
@@ -36,11 +36,11 @@
                 <p>
                   You are currently on the <a ng-if="vm.canChangePlan" ng-click="vm.changePlan()"><strong>{{vm.organization.plan_name}}</strong> plan</a> with
                   <b ng-class="{'text-warning': vm.remainingEventLimit === 0}">{{vm.remainingEventLimit | number}}</b> events remaining until this billing period's limit is reset on <b>{{vm.next_billing_date | date: 'longDate'}}</b> (<timeago date="vm.next_billing_date"></timeago>).
-                  <a ng-if="vm.canChangePlan" ng-click="vm.changePlan()">Click here to change your plan or billing information.</a>
+                  <a ng-if="vm.canChangePlan" ng-click="vm.changePlan()">{{'Click here to change your plan or billing information.' | translate}}</a>
                 </p>
                 <rickshaw options="vm.chart.options" features="vm.chart.features"></rickshaw>
                 <br class="clearfix" />
-                <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
+                <h6><em>{{'The usage data above is refreshed periodically and may not reflect current totals.' | translate}}</em></h6>
               </div>
             </uib-tab>
             <uib-tab heading="{{'Projects' | translate}}">
@@ -54,7 +54,7 @@
               <button type="button" role="button" ng-click="vm.addUser()" class="btn btn-primary">{{'Invite User' | translate}}</button>
             </uib-tab>
             <uib-tab heading="{{'Billing' | translate}}">
-              <p>You are currently on the <strong>{{vm.organization.plan_name}}</strong> plan. <a ng-if="vm.canChangePlan" ng-click="vm.changePlan()">Change your plan or billing information.</a></p>
+              <p><span ng-bind-html="'Organization_Billing_Plan' | translate:{planName: vm.organization.plan_name}"></span> <a ng-if="vm.canChangePlan" ng-click="vm.changePlan()">{{'Change your plan or billing information.' | translate}}</a></p>
               <invoices settings="vm.invoices"></invoices>
             </uib-tab>
           </uib-tabset>

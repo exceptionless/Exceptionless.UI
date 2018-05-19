@@ -20,7 +20,7 @@
           settings: "="
         },
         templateUrl: 'components/projects/projects-directive.tpl.html',
-        controller: function ($ExceptionlessClient, $window, $state, dialogService, filterService, linkService, notificationService, paginationService, projectService) {
+        controller: function ($ExceptionlessClient, $window, $state, dialogService, filterService, linkService, notificationService, paginationService, projectService, translateService) {
           var vm = this;
           function get(options, useCache) {
             function onSuccess(response) {
@@ -119,16 +119,16 @@
 
           function remove(project) {
             $ExceptionlessClient.createFeatureUsage(vm._source + '.remove').setProperty('project', project).submit();
-            return dialogService.confirmDanger('Are you sure you want to delete this project?', 'DELETE PROJECT').then(function () {
+            return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this project?'), translateService.T('Delete Project')).then(function () {
               function onSuccess() {
                 vm.projects.splice(vm.projects.indexOf(project), 1);
-                notificationService.info('Successfully queued the project for deletion.');
+                notificationService.info(translateService.T('Successfully queued the project for deletion.'));
                 $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('project', project).submit();
               }
 
               function onFailure() {
                 $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.error').setProperty('project', project).submit();
-                notificationService.error('An error occurred while trying to remove the project.');
+                notificationService.error(translateService.T('An error occurred while trying to remove the project.'));
               }
 
               return projectService.remove(project.id).then(onSuccess, onFailure);

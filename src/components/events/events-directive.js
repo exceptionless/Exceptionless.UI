@@ -11,7 +11,7 @@
           settings: '='
         },
         templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'translateService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService, translateService) {
           var vm = this;
           function canRefresh(data) {
             if (!!data && data.type === 'PersistentEvent') {
@@ -97,7 +97,7 @@
             }
 
             if (vm.selectedIds.length === 0) {
-              notificationService.info(null, 'Please select one or more events');
+              notificationService.info(null, translateService.T('Please select one or more events'));
             } else {
               action.run(vm.selectedIds).then(onSuccess);
             }

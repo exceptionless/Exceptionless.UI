@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService) {
+    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService, translateService) {
       var vm = this;
 
       function activateTab(tabName) {
@@ -33,7 +33,7 @@
         if (vm.event.stack_id) {
           hotkeys.bindTo($scope).add({
             combo: 'mod+up',
-            description: 'Go To Stack',
+            description: translateService.T('Go To Stack'),
             callback: function () {
               $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.GoToStack')
                 .addTags('hotkeys')
@@ -47,7 +47,7 @@
           if (clipboard.supported) {
             hotkeys.bindTo($scope).add({
               combo: 'mod+shift+c',
-              description: 'Copy Event JSON to Clipboard',
+              description: translateService.T('Copy Event JSON to Clipboard'),
               callback: function () {
                 $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.CopyEventJSON')
                   .addTags('hotkeys')
@@ -64,7 +64,7 @@
         if (vm.previous) {
           hotkeys.bindTo($scope).add({
             combo: 'mod+left',
-            description: 'Previous Occurrence',
+            description: translateService.T('Previous Occurrence'),
             callback: function () {
               $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.PreviousOccurrence')
                 .addTags('hotkeys')
@@ -79,7 +79,7 @@
         if (vm.next) {
           hotkeys.bindTo($scope).add({
             combo: 'mod+right',
-            description: 'Next Occurrence',
+            description: translateService.T('Next Occurrence'),
             callback: function () {
               $ExceptionlessClient.createFeatureUsage(vm._source + '.hotkeys.NextOccurrence')
                 .addTags('hotkeys')
@@ -112,24 +112,24 @@
 
       function buildTabs(tabNameToActivate) {
         var tabIndex = 0;
-        var tabs = [{index: tabIndex, title: 'Overview', template_key: 'overview'}];
+        var tabs = [{index: tabIndex, title: translateService.T('Overview'), template_key: 'overview'}];
 
         if (vm.event.reference_id && vm.isSessionStart) {
-          tabs.push({index: ++tabIndex, title: 'Session Events', template_key: 'session'});
+          tabs.push({index: ++tabIndex, title: translateService.T('Session Events'), template_key: 'session'});
         }
 
         if (vm.event.data && vm.event.data['@error']) {
-          tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'error'});
+          tabs.push({index: ++tabIndex, title: translateService.T('Exception'), template_key: 'error'});
         } else if (vm.event.data && vm.event.data['@simple_error']) {
-          tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'simple-error'});
+          tabs.push({index: ++tabIndex, title: translateService.T('Exception'), template_key: 'simple-error'});
         }
 
         if (vm.request && Object.keys(vm.request).length > 0) {
-          tabs.push({index: ++tabIndex, title: vm.isSessionStart ? 'Browser' : 'Request', template_key: 'request'});
+          tabs.push({index: ++tabIndex, title: translateService.T(vm.isSessionStart ? 'Browser' : 'Request'), template_key: 'request'});
         }
 
         if (vm.environment && Object.keys(vm.environment).length > 0) {
-          tabs.push({index: ++tabIndex, title: 'Environment', template_key: 'environment'});
+          tabs.push({index: ++tabIndex, title: translateService.T('Environment'), template_key: 'environment'});
         }
 
         var extendedDataItems = [];
@@ -150,7 +150,7 @@
         }, tabs);
 
         if (extendedDataItems.length > 0) {
-          tabs.push({index: ++tabIndex, title: 'Extended Data', template_key: 'extended-data', data: extendedDataItems});
+          tabs.push({index: ++tabIndex, title: translateService.T('Extended Data'), template_key: 'extended-data', data: extendedDataItems});
         }
 
         vm.tabs = tabs;
@@ -179,7 +179,7 @@
       }
 
       function copied() {
-        notificationService.success('Copied!');
+        notificationService.success(translateService.T('Copied!'));
       }
 
       function demoteTab(tabName) {
@@ -190,7 +190,7 @@
             .submit();
 
           vm.project.promoted_tabs.splice(indexOf, 1);
-          buildTabs('Extended Data');
+          buildTabs(translateService.T('Extended Data'));
         }
 
         function onFailure(response) {
@@ -200,7 +200,7 @@
             .setProperty('TabName', tabName)
             .submit();
 
-          notificationService.error('An error occurred promoting tab.');
+          notificationService.error(translateService.T('An error occurred promoting tab.'));
         }
 
         var indexOf = vm.project.promoted_tabs.indexOf(tabName);
@@ -218,7 +218,7 @@
 
       function getCurrentTab() {
         var tab = vm.tabs.filter(function(t) { return t.index === vm.activeTabIndex; })[0];
-        return tab && tab.index > 0 ? tab.title : 'Overview';
+        return tab && tab.index > 0 ? tab.title : translateService.T('Overview');
       }
 
       function getDuration() {
@@ -323,7 +323,7 @@
           }
 
           $state.go('app.dashboard');
-          notificationService.error('The event "' + $stateParams.id + '" could not be found.');
+          notificationService.error(translateService.T('Cannot_Find_Event', {eventId : $stateParams.id}));
         }
 
         if (!vm._eventId) {
@@ -378,7 +378,7 @@
             .setProperty('TabName', tabName)
             .submit();
 
-          notificationService.error('An error occurred promoting tab.');
+          notificationService.error(translateService.T('An error occurred promoting tab.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteTab')

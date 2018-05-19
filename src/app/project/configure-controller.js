@@ -2,24 +2,24 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Configure', function ($rootScope, $state, $stateParams, notificationService, projectService, tokenService) {
+    .controller('project.Configure', function ($rootScope, $state, $stateParams, notificationService, projectService, tokenService, translateService) {
       var vm = this;
       function canRedirect(data) {
         return vm._canRedirect && !!data && data.project_id === vm._projectId;
       }
 
       function copied() {
-        notificationService.success('Copied!');
+        notificationService.success(translateService.T('Copied!'));
       }
 
       function onCopyError() {
         function getCopyTooltip() {
           if (/iPhone|iPad/i.test(navigator.userAgent)) {
-            return 'Copy not supported.';
+            return translateService.T('Copy not supported.');
           } else if (/Mac/i.test(navigator.userAgent)) {
-            return 'Press ⌘-C to copy.';
+            return translateService.T('Press ⌘-C to copy.');
           } else {
-            return 'Press Ctrl-C to copy.';
+            return translateService.T('Press Ctrl-C to copy.');
           }
         }
 
@@ -35,7 +35,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred while getting the API key for your project.');
+          notificationService.error(translateService.T('An error occurred while getting the API key for your project.'));
         }
 
         return tokenService.getProjectDefault(vm._projectId).then(onSuccess, onFailure);
@@ -44,12 +44,13 @@
       function getProject() {
         function onSuccess(response) {
           vm.project = response.data.plain();
+          vm.projectName = vm.project.name ? ('"' + vm.project.name + '"') : '';
           return vm.project;
         }
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The project "' + vm._projectId + '" could not be found.');
+          notificationService.error(translateService.T('Cannot_Find_Project', { projectId : vm._projectId }));
         }
 
         return projectService.getById(vm._projectId, true).then(onSuccess, onFailure);
@@ -57,7 +58,7 @@
 
       function getProjectTypes() {
         return [
-          { key: 'Exceptionless', name: 'Console and Service applications', platform: '.NET' },
+          { key: 'Exceptionless', name: translateService.T('Console and Service applications'), platform: '.NET' },
           { key: 'Exceptionless.AspNetCore', name: 'ASP.NET Core', platform: '.NET' },
           { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config', platform: '.NET' },
           { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config', platform: '.NET' },
@@ -65,7 +66,7 @@
           { key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config', platform: '.NET' },
           { key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config', platform: '.NET' },
           { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config', platform: '.NET' },
-          { key: 'Exceptionless.JavaScript', name: 'Browser applications', platform: 'JavaScript' },
+          { key: 'Exceptionless.JavaScript', name: translateService.T('Browser applications'), platform: 'JavaScript' },
           { key: 'Exceptionless.Node', name: 'Node.js', platform: 'JavaScript' }
         ];
       }

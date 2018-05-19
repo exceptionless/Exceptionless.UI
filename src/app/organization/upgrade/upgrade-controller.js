@@ -2,13 +2,13 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.Upgrade', function ($ExceptionlessClient, $state, $stateParams, billingService, organizationService, notificationService, STRIPE_PUBLISHABLE_KEY) {
+    .controller('organization.Upgrade', function ($ExceptionlessClient, $state, $stateParams, billingService, organizationService, notificationService, translateService, STRIPE_PUBLISHABLE_KEY) {
       var vm = this;
 
       function get() {
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The organization "' + vm._organizationId + '" could not be found.');
+          notificationService.error(translateService.T('Cannot_Find_Organization',{organizationId : vm._organizationId}));
         }
 
         return organizationService.getById(vm._organizationId, false).catch(onFailure);
@@ -28,7 +28,7 @@
 
         if (!STRIPE_PUBLISHABLE_KEY) {
           $state.go('app.organization.manage', { id: vm._organizationId });
-          return notificationService.error('Billing is currently disabled!');
+          return notificationService.error(translateService.T('Billing is currently disabled.'));
         }
 
         $ExceptionlessClient.submitFeatureUsage('organization.Upgrade');

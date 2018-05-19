@@ -40,7 +40,7 @@
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
         <td colspan="3">
           <strong ng-if="vm.loading">{{'Loading...' | translate}}</strong>
-          <strong ng-if="!vm.loading">No events were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
+          <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No events were found with the current filter.': 'No events were found.' | translate}}</strong>
         </td>
       </tr>
     </tbody>

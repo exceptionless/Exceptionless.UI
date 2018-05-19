@@ -11,7 +11,7 @@
       <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.events.length > 0">
         <td ng-click="vm.open(event.id, $event)">
           <div>
-            <span ng-if="!event.data.SessionEnd" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
+            <span ng-if="!event.data.SessionEnd" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="{{'Online' | translate}}"></span>
             <summary source="event" show-type="vm.showType"></summary>
           </div>
         </td>
@@ -25,7 +25,7 @@
       <tr ng-if="vm.events.length === 0 || vm.loading">
         <td colspan="3">
           <strong ng-if="vm.loading">{{'Loading...' | translate}}</strong>
-          <strong ng-if="!vm.loading">No sessions were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
+          <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No sessions were found with the current filter.': 'No sessions were found.' | translate}}</strong>
         </td>
       </tr>
     </tbody>

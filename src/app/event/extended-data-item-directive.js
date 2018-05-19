@@ -15,10 +15,10 @@
         title: '='
       },
       templateUrl: 'app/event/extended-data-item-directive.tpl.html',
-      controller: function ($scope, notificationService) {
+      controller: function ($scope, notificationService, translateService) {
         var vm = this;
         function copied() {
-          notificationService.success('Copied!');
+          notificationService.success(translateService.T('Copied!'));
         }
 
         function demoteTab() {
