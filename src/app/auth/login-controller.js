@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', function ($ExceptionlessClient, $state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService) {
+    .controller('auth.Login', function ($ExceptionlessClient, $state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, ENABLE_SIGNUP, notificationService, projectService, stateService) {
       var vm = this;
 
       function getMessage(response) {
@@ -25,6 +25,10 @@
         }
 
         return authService.authenticate(provider, { InviteToken: vm.token }).then(onSuccess, onFailure);
+      }
+
+      function isSignupEnabled() {
+        return !!ENABLE_SIGNUP;
       }
 
       function isExternalLoginEnabled(provider) {
@@ -89,6 +93,7 @@
         vm._source = 'app.auth.Login';
         vm.authenticate = authenticate;
         vm.isExternalLoginEnabled = isExternalLoginEnabled;
+        vm.isSignupEnabled = isSignupEnabled;
         vm.login = login;
         vm.loginForm = {};
         vm.token = $stateParams.token;

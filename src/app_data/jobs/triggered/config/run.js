@@ -5,7 +5,8 @@ var md5 = require('md5');
 var replace = require("replace");
 
 function updateAppConfig() {
-  var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:50000';
+  var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:50001';
+  var enableSignup = process.env.Exceptionless_SignUpEnabled ? process.env.Exceptionless_SignUpEnabled : true;
   var exceptionlessApiKey = process.env.Exceptionless_ApiKey ? process.env.Exceptionless_ApiKey : '';
   var exceptionlessServerUrl = process.env.Exceptionless_ServerUrl ? process.env.Exceptionless_ServerUrl : '';
   var facebookAppId = process.env.Exceptionless_FacebookAppId ? process.env.Exceptionless_FacebookAppId : '';
@@ -25,6 +26,7 @@ function updateAppConfig() {
     '',
     '  angular.module("app.config", [])',
     '    .constant("BASE_URL", "' + baseURL + '")',
+    '    .constant("ENABLE_SIGNUP", "' + enableSignup + '")',
     '    .constant("EXCEPTIONLESS_API_KEY", "' + exceptionlessApiKey + '")',
     '    .constant("EXCEPTIONLESS_SERVER_URL", "' + exceptionlessServerUrl + '")',
     '    .constant("FACEBOOK_APPID", "' + facebookAppId + '")',
