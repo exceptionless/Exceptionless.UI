@@ -6,12 +6,12 @@
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-cloud-download"></i><span ng-bind="'Download_Configure_Project' | translate:{projectName: vm.projectName}"></span></div>
         <div class="panel-body m-b-n">
-          <p>{{'The Exceptionless client can be integrated into your project in just a few easy steps.' | translate}}</p>
+          <p>{{::'The Exceptionless client can be integrated into your project in just a few easy steps.' | translate}}</p>
           <ol>
             <li>
-              <p>{{'Select your project type:' | translate}}</p>
+              <p>{{::'Select your project type:' | translate}}</p>
               <select class="form-control" ng-model="vm.currentProjectType" ng-options="projectType.name group by projectType.platform for projectType in vm.projectTypes">
-                <option value="" ng-if="!vm.currentProjectType.key">{{'Please select a project type' | translate}}</option>
+                <option value="" ng-if="!vm.currentProjectType.key">{{::'Please select a project type' | translate}}</option>
               </select>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key">
@@ -35,16 +35,16 @@
               </div>
             </li>
             <li ng-if="vm.isJavaScript() && !vm.isNode()" style="margin-top: 15px;">
-              <p>{{'Add the script to your HTML page:' | translate}}
+              <p>{{::'Add the script to your HTML page:' | translate}}
               <pre>&ltscript src="bower_components/exceptionless/dist/exceptionless.min.js"&gt&lt/script&gt</pre>
             </li>
             <li ng-if="vm.isJavaScript()" style="margin-top: 15px;">
               <div ng-if="!vm.isNode()">
-                <p>{{'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
+                <p>{{::'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
                 <pre>var client = exceptionless.ExceptionlessClient.default;<br />client.config.apiKey = '{{::vm.apiKey}}';</pre></p>
               </div>
               <div ng-if="vm.isNode()">
-                <p>{{'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
+                <p>{{::'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
                 <pre>var client = require('exceptionless').ExceptionlessClient.default;<br />client.config.apiKey = '{{::vm.apiKey}}';</pre></p>
               </div>
             </li>
@@ -54,7 +54,7 @@
 
                 <div class="input-group">
                   <input class="form-control api-key" type="text" ng-model="vm.apiKey" autofocus />
-                  <a class="input-group-addon" title="{{'Copy to Clipboard' | translate}}" clipboard text="vm.apiKey" on-copied="vm.copied()" on-error="vm.onCopyError()"><i class="fa fa-copy"></i></a>
+                  <a class="input-group-addon" title="{{::'Copy to Clipboard' | translate}}" clipboard text="vm.apiKey" on-copied="vm.copied()" on-error="vm.onCopyError()"><i class="fa fa-copy"></i></a>
                 </div>
               </div>
 
@@ -77,8 +77,8 @@
               <p ng-bind-html="'Notice_Hosting_WebApi_In_AspNet' | translate"></p>
             </li>
           </ol>
-          <p ng-if="vm.currentProjectType.key"><strong>{{'That's it!' | translate}}</strong>
-            {{'Your project should now automatically be sending all unhandled exceptions to Exceptionless!' | translate}}
+          <p ng-if="vm.currentProjectType.key"><strong>{{::'That's it!' | translate}}</strong>
+            {{::'Your project should now automatically be sending all unhandled exceptions to Exceptionless!' | translate}}
             <span ng-if="vm.isDotNet()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.Net/wiki/Sending-Events', sampleCode: 'ex.ToExceptionless().Submit()'}"></span>
             <span ng-if="vm.isJavaScript()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.JavaScript/wiki/Sending-Events', sampleCode: 'client.submitException(ex);'}"></span>
           </p>
@@ -90,13 +90,13 @@
         </div>
         <footer class="panel-footer">
           <div class="pull-right">
-            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">{{'Go To Dashboard' | translate}}</a>
+            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">{{::'Go To Dashboard' | translate}}</a>
           </div>
-          <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="{{'Manage Notification Settings' | translate}}">
-            <i class="fa fa-fw fa-envelope"></i> <span class="hidden-xs">{{'Manage Notification Settings' | translate}}</span>
+          <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="{{::'Manage Notification Settings' | translate}}">
+            <i class="fa fa-fw fa-envelope"></i> <span class="hidden-xs">{{::'Manage Notification Settings' | translate}}</span>
           </a>
-          <a ui-sref="app.project.manage({ id: vm.project.id })" class="btn btn-primary" role="button" title="{{'Manage Project' | translate}}">
-            <i class="fa fa-fw fa-gear"></i> <span class="hidden-xs">{{'Manage Project' | translate}}</span>
+          <a ui-sref="app.project.manage({ id: vm.project.id })" class="btn btn-primary" role="button" title="{{::'Manage Project' | translate}}">
+            <i class="fa fa-fw fa-gear"></i> <span class="hidden-xs">{{::'Manage Project' | translate}}</span>
           </a>
         </footer>
       </div>

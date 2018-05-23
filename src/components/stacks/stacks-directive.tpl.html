@@ -7,11 +7,11 @@
           <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.selectedIds.length > 0" ng-disabled="vm.stacks.length === 0"><i></i>
         </label>
       </th>
-      <th>{{'Summary' | translate}}</th>
-      <th class="percentage">{{'UserRatio' | translate}}</th>
-      <th class="number">{{'Count' | translate}}</th>
-      <th class="date hidden-xs">{{'First' | translate}}</th>
-      <th class="date hidden-xs">{{'Last' | translate}}</th>
+      <th>{{::'Summary' | translate}}</th>
+      <th class="percentage">{{::'UserRatio' | translate}}</th>
+      <th class="number">{{::'Count' | translate}}</th>
+      <th class="date hidden-xs">{{::'First' | translate}}</th>
+      <th class="date hidden-xs">{{::'Last' | translate}}</th>
     </tr>
     </thead>
     <tbody>
@@ -38,11 +38,11 @@
     <tr ng-if="vm.stacks.length === 0 || vm.loading">
       <td class="hidden-xs"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
       <td colspan="5" class="hidden-xs">
-        <strong ng-if="vm.loading">{{'Loading...' | translate}}</strong>
+        <strong ng-if="vm.loading">{{::'Loading...' | translate}}</strong>
         <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No stacks were found with the current filter.': 'No stacks were found.' | translate}}</strong>
       </td>
       <td colspan="3" class="visible-xs">
-        <strong ng-if="vm.loading">{{'Loading...' | translate}}</strong>
+        <strong ng-if="vm.loading">{{::'Loading...' | translate}}</strong>
         <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No stacks were found with the current filter.': 'No stacks were found.' | translate}}</strong>
       </td>
     </tr>
@@ -54,7 +54,7 @@
       <div class="col-sm-4 hidden-xs">
         <div class="dropdown">
           <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            {{'Bulk Action' | translate}}
+            {{::'Bulk Action' | translate}}
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
