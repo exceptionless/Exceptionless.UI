@@ -3,6 +3,7 @@
 BaseUrl="${BaseUrl:-http://ex-ui.localtest.me:5000}"
 Html5Mode="${Html5Mode:-false}"
 EnableSsl="${EnableSsl:-false}"
+EnableAccountCreation="${EnableSsl:-true}"
 
 echo "(function () {
   'use strict';
@@ -20,7 +21,8 @@ echo "(function () {
     .constant('STRIPE_PUBLISHABLE_KEY', '$StripePublishableApiKey')
     .constant('SYSTEM_NOTIFICATION_MESSAGE', '$NotificationMessage')
     .constant('USE_HTML5_MODE', $Html5Mode)
-    .constant('USE_SSL', $EnableSsl);
+    .constant('USE_SSL', $EnableSsl)
+    .constant('ENABLE_ACCOUNT_CREATION', $EnableAccountCreation);
 }());" > "/app/app.config.js"
 
 echo "Running NGINX"

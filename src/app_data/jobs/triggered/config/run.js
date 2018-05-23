@@ -18,7 +18,7 @@ function updateAppConfig() {
   var notificationMessage = process.env.Exceptionless_Message ? process.env.Exceptionless_Message : '';
   var useHTML5Mode = process.env.Exceptionless_HTML5Mode ? process.env.Exceptionless_HTML5Mode === 'true' : false;
   var useSSL = process.env.Exceptionless_EnableSSL ? process.env.Exceptionless_EnableSSL === 'true' : false;
-  var enableAccountCreation = process.env.Exceptionless_EnableAccountCreation ? process.env.Exceptionless_EnableAccountCreation : true;
+  var enableAccountCreation = process.env.Exceptionless_EnableAccountCreation ? process.env.Exceptionless_EnableAccountCreation === 'true' : true;
 
   var content = [
     '(function () {',

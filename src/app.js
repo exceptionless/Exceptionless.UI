@@ -46,6 +46,7 @@
     'exceptionless.stacks',
     'exceptionless.state',
     'exceptionless.system-notification',
+    'exceptionless.translate',
     'exceptionless.ui-nav',
     'exceptionless.ui-scroll',
     'exceptionless.ui-shift',
@@ -65,14 +66,18 @@
     'app.status'
   ])
     .config(function ($compileProvider, $httpProvider, $locationProvider, $stateProvider, $uiViewScrollProvider, $urlRouterProvider, $translateProvider, dialogsProvider, gravatarServiceProvider, RestangularProvider, BASE_URL, EXCEPTIONLESS_API_KEY, EXCEPTIONLESS_SERVER_URL,$ExceptionlessClient, stripeProvider, STRIPE_PUBLISHABLE_KEY, USE_HTML5_MODE) {
-    var lang = navigator.language ? navigator.language : navigator.browserLanguage;
+    var lang = (navigator.language ? navigator.language : navigator.browserLanguage || '').toLocaleLowerCase();
+    if (lang !== 'zh-cn') {
+      lang = 'en-us';
+    }
+
+    moment.locale(lang);
     $translateProvider.useSanitizeValueStrategy('escapeParameters');
-    $translateProvider.preferredLanguage(lang.toLocaleLowerCase());
+    $translateProvider.preferredLanguage(lang);
     $translateProvider.useStaticFilesLoader({
         prefix: '/lang/',
         suffix: '.json'
     });
-    moment.locale(lang.toLocaleLowerCase());
 
     function setRouteFilter(filterService, organizationId, projectId, type) {
       filterService.setOrganizationId(organizationId, true);
