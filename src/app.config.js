@@ -2,10 +2,9 @@
   'use strict';
 
   angular.module('app.config', [])
-  .constant("BASE_URL", "https://api.exceptionless.io")
-    .constant('ENABLE_SIGNUP', false)
-    .constant("EXCEPTIONLESS_API_KEY", "LbGm5NmU0TO5MR9Sko7UmxslHAXsbE20YsUu0N5w")
-    .constant("EXCEPTIONLESS_SERVER_URL", "https://collector.exceptionless.io")
+    .constant('BASE_URL', 'http://localhost:50000')
+    .constant('EXCEPTIONLESS_API_KEY')
+    .constant('EXCEPTIONLESS_SERVER_URL')
     .constant('FACEBOOK_APPID')
     .constant('GITHUB_APPID')
     .constant('GOOGLE_APPID')
