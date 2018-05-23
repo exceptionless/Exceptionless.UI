@@ -37,8 +37,8 @@ function updateAppConfig() {
     '    .constant("STRIPE_PUBLISHABLE_KEY", "' + stripePubKey + '")',
     '    .constant("SYSTEM_NOTIFICATION_MESSAGE", "' + notificationMessage + '")',
     '    .constant("USE_HTML5_MODE", ' + useHTML5Mode + ')',
-    '    .constant("USE_SSL", ' + useSSL + ');',
-    '    .constant("ENABLE_ACCOUNT_CREATION", "' + enableAccountCreation + '")',
+    '    .constant("USE_SSL", ' + useSSL + ')',
+    '    .constant("ENABLE_ACCOUNT_CREATION", "' + enableAccountCreation + '");',
     '}());'
   ].join('\n');
 
