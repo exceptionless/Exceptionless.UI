@@ -6,7 +6,6 @@ var replace = require("replace");
 
 function updateAppConfig() {
   var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:50000';
-  var enableSignup = process.env.Exceptionless_SignUpEnabled ? process.env.Exceptionless_SignUpEnabled : true;
   var exceptionlessApiKey = process.env.Exceptionless_ApiKey ? process.env.Exceptionless_ApiKey : '';
   var exceptionlessServerUrl = process.env.Exceptionless_ServerUrl ? process.env.Exceptionless_ServerUrl : '';
   var facebookAppId = process.env.Exceptionless_FacebookAppId ? process.env.Exceptionless_FacebookAppId : '';
@@ -19,6 +18,7 @@ function updateAppConfig() {
   var notificationMessage = process.env.Exceptionless_Message ? process.env.Exceptionless_Message : '';
   var useHTML5Mode = process.env.Exceptionless_HTML5Mode ? process.env.Exceptionless_HTML5Mode === 'true' : false;
   var useSSL = process.env.Exceptionless_EnableSSL ? process.env.Exceptionless_EnableSSL === 'true' : false;
+  var enableAccountCreation = process.env.Exceptionless_EnableAccountCreation ? process.env.Exceptionless_EnableAccountCreation : true;
 
   var content = [
     '(function () {',
@@ -26,7 +26,6 @@ function updateAppConfig() {
     '',
     '  angular.module("app.config", [])',
     '    .constant("BASE_URL", "' + baseURL + '")',
-    '    .constant("ENABLE_SIGNUP", "' + enableSignup + '")',
     '    .constant("EXCEPTIONLESS_API_KEY", "' + exceptionlessApiKey + '")',
     '    .constant("EXCEPTIONLESS_SERVER_URL", "' + exceptionlessServerUrl + '")',
     '    .constant("FACEBOOK_APPID", "' + facebookAppId + '")',
@@ -39,6 +38,7 @@ function updateAppConfig() {
     '    .constant("SYSTEM_NOTIFICATION_MESSAGE", "' + notificationMessage + '")',
     '    .constant("USE_HTML5_MODE", ' + useHTML5Mode + ')',
     '    .constant("USE_SSL", ' + useSSL + ');',
+    '    .constant("ENABLE_ACCOUNT_CREATION", "' + enableAccountCreation + '")'
     '}());'
   ].join('\n');
 
