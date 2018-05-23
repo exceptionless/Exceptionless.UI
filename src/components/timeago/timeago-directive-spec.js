@@ -4,6 +4,7 @@
   describe('Directive: timeago', function () {
 
     beforeEach(module('exceptionless.timeago'));
+    moment.locale('en');
 
     var scope, compile;
 

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.account')
-    .controller('account.Manage', function ($stateParams, $timeout, authService, billingService, dialogService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService) {
+    .controller('account.Manage', function ($stateParams, $timeout, authService, billingService, dialogService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, userService, translateService) {
       var vm = this;
       function activateTab(tabName) {
         switch (tabName) {
@@ -23,9 +23,9 @@
 
       function authenticate(provider) {
         function onFailure(response) {
-          var message = 'An error occurred while adding external login.';
+          var message = translateService.T('An error occurred while adding external login.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -40,16 +40,16 @@
         }
 
         function onSuccess() {
-          notificationService.info('You have successfully changed your password.');
+          notificationService.info(translateService.T('You have successfully changed your password.'));
           vm.password = {};
           vm.passwordForm.$setUntouched(true);
           vm.passwordForm.$setPristine(true);
         }
 
         function onFailure(response) {
-          var message = 'An error occurred while trying to change your password.';
+          var message = translateService.T('An error occurred while trying to change your password.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -60,7 +60,7 @@
 
       function get(data) {
         if (data && data.type === 'User' && data.deleted && data.id === vm.user.id) {
-          notificationService.error('Your user account was deleted. Please create a new account.');
+          notificationService.error(translateService.T('Your user account was deleted. Please create a new account.'));
           return authService.logout(true);
         }
 
@@ -74,7 +74,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred while loading the notification settings.');
+          notificationService.error(translateService.T('An error occurred while loading the notification settings.'));
         }
 
         vm.emailNotificationSettings = null;
@@ -100,7 +100,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred while loading the projects.');
+          notificationService.error(translateService.T('An error occurred while loading the projects.'));
         }
 
         return projectService.getAll().then(onSuccess, onFailure);
@@ -115,9 +115,9 @@
         }
 
         function onFailure(response) {
-          var message = 'An error occurred while loading your user profile.';
+          var message = translateService.T('An error occurred while loading your user profile.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -127,14 +127,14 @@
       }
 
       function deleteAccount() {
-        return dialogService.confirmDanger('Are you sure you want to delete your account?', 'DELETE ACCOUNT').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete your account?'), translateService.T('DELETE ACCOUNT')).then(function () {
           function onSuccess() {
-            notificationService.info('Successfully removed your user account.');
+            notificationService.info(translateService.T('Successfully removed your user account.'));
             authService.logout();
           }
 
           function onFailure(response) {
-            notificationService.error('An error occurred while trying remove your user account. ' + response.data.message);
+            notificationService.error(translateService.T('An error occurred while trying remove your user account.') + ' ' + response.data.message);
           }
 
           return userService.removeCurrentUser().then(onSuccess, onFailure);
@@ -166,9 +166,9 @@
 
       function resendVerificationEmail() {
         function onFailure(response) {
-          var message = 'An error occurred while sending your verification email.';
+          var message = translateService.T('An error occurred while sending your verification email.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -209,9 +209,9 @@
         }
 
         function onFailure(response) {
-          var message = 'An error occurred while saving your email address.';
+          var message = translateService.T('An error occurred while saving your email address.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -222,9 +222,9 @@
 
       function saveEmailNotificationSettings() {
         function onFailure(response) {
-          var message = 'An error occurred while saving your notification settings.';
+          var message = translateService.T('An error occurred while saving your notification settings.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -235,9 +235,9 @@
 
       function saveEnableEmailNotification() {
         function onFailure(response) {
-          var message = 'An error occurred while saving your email notification preferences.';
+          var message = translateService.T('An error occurred while saving your email notification preferences.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -252,9 +252,9 @@
         }
 
         function onFailure(response) {
-          var message = 'An error occurred while saving your full name.';
+          var message = translateService.T('An error occurred while saving your full name.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -273,9 +273,9 @@
         }
 
         function onFailure(response) {
-          var message = 'An error occurred while removing the external login.';
+          var message = translateService.T('An error occurred while removing the external login.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);

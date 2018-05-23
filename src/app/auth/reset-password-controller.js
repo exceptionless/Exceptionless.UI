@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.ResetPassword', function ($ExceptionlessClient, $state, $stateParams, authService, notificationService) {
+    .controller('auth.ResetPassword', function ($ExceptionlessClient, $state, $stateParams, authService, notificationService, translateService) {
       var vm = this;
       function changePassword(isValid) {
         if (!isValid) {
@@ -11,15 +11,15 @@
 
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.changePassword.success').setProperty('ResetToken', vm._resetToken).submit();
-          notificationService.info('You have successfully changed your password.');
+          notificationService.info(translateService.T('You have successfully changed your password.'));
           return $state.go('auth.login');
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.changePassword.error').setProperty('ResetToken', vm._resetToken).setProperty('response', response).submit();
-          var message = 'An error occurred while trying to change your password.';
+          var message = translateService.T('An error occurred while trying to change your password.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);

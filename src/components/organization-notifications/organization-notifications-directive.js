@@ -24,7 +24,7 @@
         requiresPremium: '='
       },
       templateUrl: "components/organization-notifications/organization-notifications-directive.tpl.html",
-      controller: function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, STRIPE_PUBLISHABLE_KEY) {
+      controller: function($scope, billingService, filterService, INTERCOM_APPID, $intercom, notificationService, organizationService, projectService, searchService, translateService, STRIPE_PUBLISHABLE_KEY) {
         var vm = this;
         function get() {
           return getOrganizations().then(getProjects).then(getFilterUsesPremiumFeatures).then(getOrganizationNotifications);
@@ -247,7 +247,7 @@
 
         function showChangePlanDialog(organizationId) {
           if (!STRIPE_PUBLISHABLE_KEY) {
-            notificationService.error('Billing is currently disabled.');
+            notificationService.error(translateService.T('Billing is currently disabled.'));
             return;
           }
 

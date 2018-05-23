@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.List', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, filterService, linkService, notificationService, organizationService, paginationService, STRIPE_PUBLISHABLE_KEY) {
+    .controller('organization.List', function ($ExceptionlessClient, $rootScope, $scope, $window, $state, billingService, dialogs, dialogService, filterService, linkService, notificationService, organizationService, paginationService, translateService, STRIPE_PUBLISHABLE_KEY) {
       var vm = this;
       function add() {
         return dialogs.create('app/organization/list/add-organization-dialog.tpl.html', 'AddOrganizationDialog as vm').result.then(createOrganization).catch(function(e){});
@@ -10,7 +10,7 @@
 
       function changePlan(organizationId) {
         if (!STRIPE_PUBLISHABLE_KEY) {
-          notificationService.error('Billing is currently disabled.');
+          notificationService.error(translateService.T('Billing is currently disabled.'));
           return;
         }
 
@@ -30,9 +30,9 @@
             }).catch(function(e){});
           }
 
-          var message = 'An error occurred while creating the organization.';
+          var message = translateService.T('An error occurred while creating the organization.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -68,16 +68,16 @@
       }
 
       function leave(organization, user) {
-        return dialogService.confirmDanger('Are you sure you want to leave this organization?', 'LEAVE ORGANIZATION').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to leave this organization?'), translateService.T('Leave Organization')).then(function () {
           function onSuccess() {
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
             vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organizations.length > 0;
           }
 
           function onFailure(response) {
-            var message = 'An error occurred while trying to leave the organization.';
+            var message = translateService.T('An error occurred while trying to leave the organization.');
             if (response.status === 400) {
-              message += ' Message: ' + response.data.message;
+              message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
             }
 
             notificationService.error(message);
@@ -111,18 +111,18 @@
 
       function remove(organization) {
         $ExceptionlessClient.createFeatureUsage(vm._source + '.remove').setProperty('organization', organization).submit();
-        return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this organization?'), translateService.T('Delete Organization')).then(function () {
           function onSuccess() {
             vm.organizations.splice(vm.organizations.indexOf(organization), 1);
             vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organizations.length > 0;
-            notificationService.info('Successfully queued the organization for deletion.');
+            notificationService.info(translateService.T('Successfully queued the organization for deletion.'));
             $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('organization', organization).submit();
           }
 
           function onFailure(response) {
-            var message = 'An error occurred while trying to delete the organization.';
+            var message = translateService.T('An error occurred while trying to delete the organization.');
             if (response.status === 400) {
-              message += ' Message: ' + response.data.message;
+              message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
             }
 
             $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.error').setProperty('organization', organization).submit();

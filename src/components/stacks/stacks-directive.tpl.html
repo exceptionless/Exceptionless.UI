@@ -7,11 +7,11 @@
           <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.selectedIds.length > 0" ng-disabled="vm.stacks.length === 0"><i></i>
         </label>
       </th>
-      <th>Summary</th>
-      <th class="percentage">Users</th>
-      <th class="number">Count</th>
-      <th class="date hidden-xs">First</th>
-      <th class="date hidden-xs">Last</th>
+      <th>{{::'Summary' | translate}}</th>
+      <th class="percentage">{{::'UserRatio' | translate}}</th>
+      <th class="number">{{::'Count' | translate}}</th>
+      <th class="date hidden-xs">{{::'First' | translate}}</th>
+      <th class="date hidden-xs">{{::'Last' | translate}}</th>
     </tr>
     </thead>
     <tbody>
@@ -38,12 +38,12 @@
     <tr ng-if="vm.stacks.length === 0 || vm.loading">
       <td class="hidden-xs"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
       <td colspan="5" class="hidden-xs">
-        <strong ng-if="vm.loading">Loading...</strong>
-        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
+        <strong ng-if="vm.loading">{{::'Loading...' | translate}}</strong>
+        <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No stacks were found with the current filter.': 'No stacks were found.' | translate}}</strong>
       </td>
       <td colspan="3" class="visible-xs">
-        <strong ng-if="vm.loading">Loading...</strong>
-        <strong ng-if="!vm.loading">No stacks were found{{vm.hasFilter() ? ' with the current filter': ''}}.</strong>
+        <strong ng-if="vm.loading">{{::'Loading...' | translate}}</strong>
+        <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No stacks were found with the current filter.': 'No stacks were found.' | translate}}</strong>
       </td>
     </tr>
     </tbody>
@@ -54,11 +54,11 @@
       <div class="col-sm-4 hidden-xs">
         <div class="dropdown">
           <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Bulk Action
+            {{::'Bulk Action' | translate}}
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
-            <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name}}</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{::action.name | translate}}</a></li>
           </ul>
         </div>
       </div>

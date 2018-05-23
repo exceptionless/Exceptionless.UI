@@ -15,10 +15,10 @@
         title: '='
       },
       templateUrl: 'app/event/extended-data-item-directive.tpl.html',
-      controller: function ($scope, notificationService) {
+      controller: function ($scope, notificationService, translateService) {
         var vm = this;
         function copied() {
-          notificationService.success('Copied!');
+          notificationService.success(translateService.T('Copied!'));
         }
 
         function demoteTab() {
@@ -62,7 +62,7 @@
           vm.isPromoted = $scope.isPromoted === true;
           vm.promoteTab = promoteTab;
           vm.showRaw = false;
-          vm.title = $scope.title;
+          vm.title = translateService.T($scope.title);
         };
       },
       controllerAs: 'vm'

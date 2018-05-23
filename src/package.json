@@ -40,5 +40,8 @@
     "rimraf": "2.6.2",
     "streamqueue": "1.1.2",
     "traceur": "0.0.111"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1"
   }
 }

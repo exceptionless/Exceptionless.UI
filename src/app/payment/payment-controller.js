@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.payment')
-    .controller('Payment', function ($state, $stateParams, notificationService, organizationService) {
+    .controller('Payment', function ($state, $stateParams, notificationService, organizationService, translateService) {
       var vm = this;
       function getInvoice() {
         function onSuccess(response) {
@@ -12,7 +12,7 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The invoice "' + vm._invoiceId + '" could not be found.');
+          notificationService.error(translateService.T('Cannot_Find_Invoice', { invoiceId : vm._invoiceId }));
         }
 
         return organizationService.getInvoice(vm._invoiceId).then(onSuccess, onFailure);

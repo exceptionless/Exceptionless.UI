@@ -1,10 +1,10 @@
 <table class="table table-striped table-bordered table-fixed b-t">
   <thead>
   <tr>
-    <th>API Key</th>
-    <th class="hidden-xs">Notes</th>
-    <th class="action-lg visible-xs">Actions</th>
-    <th class="hidden-xs action-xl">Actions</th>
+    <th>{{::'API Key' | translate}}</th>
+    <th class="hidden-xs">{{::'Notes' | translate}}</th>
+    <th class="action-lg visible-xs">{{::'Actions' | translate}}</th>
+    <th class="hidden-xs action-xl">{{::'Actions' | translate}}</th>
   </tr>
   </thead>
   <tbody>
@@ -18,24 +18,24 @@
     <td>
       <form name="rowform" editable-form ng-show="rowform.$visible" class="form-buttons form-inline">
         <button type="submit" role="button" ng-disabled="rowform.$waiting" class="btn btn-sm btn-primary">
-          Save
+          {{::'Save' | translate}}
         </button>
         <button type="button" role="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
-          Cancel
+          {{::'Cancel' | translate}}
         </button>
       </form>
       <div class="buttons" ng-show="!rowform.$visible">
-        <button type="button" role="button" class="btn btn-sm btn-primary" title="Copy to Clipboard" clipboard text="token.id" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.clipboardSupported"><i class="fa fa-copy"></i></button>
-        <button type="button" role="button" class="btn btn-sm btn-default hidden-xs" ng-click="rowform.$show()">Edit</button>
-        <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-times"></i></button>
+        <button type="button" role="button" class="btn btn-sm btn-primary" title="{{::'Copy to Clipboard' | translate}}" clipboard text="token.id" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.clipboardSupported"><i class="fa fa-copy"></i></button>
+        <button type="button" role="button" class="btn btn-sm btn-default hidden-xs" ng-click="rowform.$show()">{{::'Edit' | translate}}</button>
+        <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-danger" title="{{::'Delete' | translate}}"><i class="fa fa-times"></i></button>
       </div>
     </td>
   </tr>
   <tr ng-if="vm.tokens.length === 0">
-    <td colspan="2" class="text-warning visible-xs">This project does not have an API Key.</td>
-    <td colspan="3" class="text-warning hidden-xs">This project does not have an API Key.</td>
+    <td colspan="2" class="text-warning visible-xs">{{::'This project does not have an API Key.' | translate}}</td>
+    <td colspan="3" class="text-warning hidden-xs">{{::'This project does not have an API Key.' | translate}}</td>
   </tr>
   </tbody>
 </table>
 
-<button type="button" role="button" ng-click="vm.addToken()" class="btn btn-primary">New API Key</button>
+<button type="button" role="button" ng-click="vm.addToken()" class="btn btn-primary">{{::'New API Key' | translate}}</button>

@@ -4,109 +4,99 @@
   <div class="col">
     <div class="wrapper-md">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-cloud-download"></i> Download & Configure {{ vm.project.name ? 'Project "' + vm.project.name + '"' : 'Project'}} Client</div>
+        <div class="panel-heading"><i class="fa fa-cloud-download"></i><span ng-bind="'Download_Configure_Project' | translate:{projectName: vm.projectName}"></span></div>
         <div class="panel-body m-b-n">
-          <p>The Exceptionless client can be integrated into your project in just a few easy steps.</p>
+          <p>{{::'The Exceptionless client can be integrated into your project in just a few easy steps.' | translate}}</p>
           <ol>
             <li>
-              <p>Select your project type:</p>
+              <p>{{::'Select your project type:' | translate}}</p>
               <select class="form-control" ng-model="vm.currentProjectType" ng-options="projectType.name group by projectType.platform for projectType in vm.projectTypes">
-                <option value="" ng-if="!vm.currentProjectType.key">Please select a project type</option>
+                <option value="" ng-if="!vm.currentProjectType.key">{{::'Please select a project type' | translate}}</option>
               </select>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key">
               <div ng-if="vm.isDotNet()">
-                <p>Add the Exceptionless <a href="http://nuget.org" target="_blank">NuGet</a> package to your Visual
-                  Studio project by running this command in the <a href="http://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
+                <p ng-bind-html="'Notice_Install_Nuget_Package' | translate"></p>
                 <pre><a ng-href="http://nuget.org/packages/{{vm.currentProjectType.key}}" target="_blank">Install-Package {{vm.currentProjectType.key}}</a></pre>
-                <p><em>A Strong-Named <code>{{vm.currentProjectType.key}}.Signed</code> package is also available on NuGet.</em></p>
+                <p><em ng-bind-html="'Notice_Strong_Named_Package' | translate:{key: vm.currentProjectType.key}"></em></p>
               </div>
               <div ng-if="vm.isJavaScript()">
                 <div ng-if="!vm.isNode()">
                   <p>
-                    Install Exceptionless using <a href="http://bower.io" target="_blank">Bower</a>:
+                    <span ng-bind-html="'Notice_Install_Bower_Package' | translate"></span>
                     <pre><a href="http://bower.io/search/?q=exceptionless" target="_blank">bower install exceptionless</a></pre>
-                  If you wish to install manually or from a CDN please view the <a href="https://github.com/exceptionless/Exceptionless.JavaScript" target="_blank">readme</a>.
+                    <span ng-bind-html="'Notice_Install_Manually' | translate"></span>
                   </p>
                 </div>
                 <div ng-if="vm.isNode()">
-                  <p>Install Exceptionless using the <a href="https://www.npmjs.com" target="_blank">Node Package Manager</a>:
+                  <p><span ng-bind-html="'Notice_Install_Node_Package' | translate"></span>
                   <pre><a href="https://www.npmjs.com/package/exceptionless" target="_blank">npm install exceptionless --save</a></pre></p>
                 </div>
               </div>
             </li>
             <li ng-if="vm.isJavaScript() && !vm.isNode()" style="margin-top: 15px;">
-              <p>Add the script to your HTML page:
+              <p>{{::'Add the script to your HTML page:' | translate}}
               <pre>&ltscript src="bower_components/exceptionless/dist/exceptionless.min.js"&gt&lt/script&gt</pre>
             </li>
             <li ng-if="vm.isJavaScript()" style="margin-top: 15px;">
               <div ng-if="!vm.isNode()">
-                <p>Configure the ExceptionlessClient with your Exceptionless API key:
+                <p>{{::'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
                 <pre>var client = exceptionless.ExceptionlessClient.default;<br />client.config.apiKey = '{{::vm.apiKey}}';</pre></p>
               </div>
               <div ng-if="vm.isNode()">
-                <p>Configure the ExceptionlessClient with your Exceptionless API key:
+                <p>{{::'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
                 <pre>var client = require('exceptionless').ExceptionlessClient.default;<br />client.config.apiKey = '{{::vm.apiKey}}';</pre></p>
               </div>
             </li>
             <li ng-if="vm.isDotNet()" style="margin-top: 15px;" >
               <div ng-if="vm.currentProjectType.key !== 'Exceptionless' && vm.currentProjectType.key !== 'Exceptionless.AspNetCore'">
-                <p>Update the <code>&lt;exceptionless apiKey="API_KEY_HERE" /&gt;</code> section located in the project's {{vm.currentProjectType.config}} with your Exceptionless API key:</p>
+                <p ng-bind-html="'Notice_Update_ApiKey' | translate:{config: vm.currentProjectType.config}"></p>
 
                 <div class="input-group">
                   <input class="form-control api-key" type="text" ng-model="vm.apiKey" autofocus />
-                  <a class="input-group-addon" title="Copy to Clipboard" clipboard text="vm.apiKey" on-copied="vm.copied()" on-error="vm.onCopyError()"><i class="fa fa-copy"></i></a>
+                  <a class="input-group-addon" title="{{::'Copy to Clipboard' | translate}}" clipboard text="vm.apiKey" on-copied="vm.copied()" on-error="vm.onCopyError()"><i class="fa fa-copy"></i></a>
                 </div>
               </div>
 
               <div ng-if="vm.currentProjectType.key === 'Exceptionless'">
-                <p>Import the <code>Exceptionless</code> namespace and call the <code>ExceptionlessClient.Default.Startup("{{vm.apiKey}}")</code> method with your api key during the startup of your app.</p>
-                <p>If you are targeting Portable Class Libraries you may need to wire up to any unhandled exception events specific to your project type to start reporting them!
-                  Please see the <a target="_blank" href="https://github.com/exceptionless/Exceptionless.Net/wiki/Configuration#exceptionless-portable-class-library-pcl-configuration">Exceptionless docs</a> for more information.</p>
+                <p ng-bind-html="'Notice_Application_Startup_NetFx' | translate:{apiKey: vm.apiKey}"></p>
+                <p ng-bind-html="'Notice_Unhandled_Exception' | translate"></p>
               </div>
               <div ng-if="vm.currentProjectType.key === 'Exceptionless.AspNetCore'">
-                <p>Import the <code>Exceptionless</code> namespace and call the <code>app.UseExceptionless("{{vm.apiKey}}")</code> method with your api key during the startup of your app.</p>
+                  <p ng-bind-html="'Notice_Application_Startup_NetCore' | translate:{apiKey: vm.apiKey}"></p>
               </div>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Nancy'">
-              <p>Import the <code>Exceptionless</code> namespace and call the <code>Exceptionless.ExceptionlessClient.Default.RegisterNancy(pipelines)</code> method
-                 with an instance of Nancy.Bootstrapper.IPipelines inside of your NancyBootstrapper's ApplicationStartup method.</p>
+              <p ng-bind-html="'Notice_Application_Startup_Nancy' | translate"></p>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.Windows' || vm.currentProjectType.key === 'Exceptionless.Wpf'">
-              <p>Import the <code>Exceptionless</code> namespace and call the <code>ExceptionlessClient.Default.Register()</code> method during the startup of your app.</p>
+              <p ng-bind-html="'Notice_Application_Startup_Windows' | translate"></p>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key === 'Exceptionless.WebApi'">
-              <p>Import the <code>Exceptionless</code> namespace and call the <code>ExceptionlessClient.Default.RegisterWebApi(config)</code> method with an instance of HttpConfiguration during the startup of your app.</p>
-              <p>If you are hosting Web API inside of ASP.NET, you would register Exceptionless like: <code>Exceptionless.ExceptionlessClient.Default.RegisterWebApi(GlobalConfiguration.Configuration)</code>
-              </p>
+              <p ng-bind-html="'Notice_Application_Startup_WebApi' | translate"></p>
+              <p ng-bind-html="'Notice_Hosting_WebApi_In_AspNet' | translate"></p>
             </li>
           </ol>
-          <p ng-if="vm.currentProjectType.key"><strong>That's it!</strong>
-            Your project should now automatically be sending all unhandled exceptions to Exceptionless!
-            <span ng-if="vm.isDotNet()">You can also <a href="https://github.com/exceptionless/Exceptionless.Net/wiki/Sending-Events" target="_blank">send handled exceptions to Exceptionless</a> using <code>ex.ToExceptionless().Submit()</code>.</span>
-            <span ng-if="vm.isJavaScript()">You can also <a href="https://github.com/exceptionless/Exceptionless.JavaScript/wiki/Sending-Events" target="_blank">send handled exceptions to Exceptionless</a> using <code>client.submitException(ex);</code>.</span>
+          <p ng-if="vm.currentProjectType.key"><strong>{{::'That's it!' | translate}}</strong>
+            {{::'Your project should now automatically be sending all unhandled exceptions to Exceptionless!' | translate}}
+            <span ng-if="vm.isDotNet()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.Net/wiki/Sending-Events', sampleCode: 'ex.ToExceptionless().Submit()'}"></span>
+            <span ng-if="vm.isJavaScript()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.JavaScript/wiki/Sending-Events', sampleCode: 'client.submitException(ex);'}"></span>
           </p>
 
           <div class="alert alert-success" ng-if="vm.currentProjectType.key">
-            <span ng-if="vm.isDotNet()">
-              For more information and troubleshooting tips, view the
-              <a target="_blank" href="https://github.com/exceptionless/Exceptionless.Net/wiki">Exceptionless docs</a>.
-            </span>
-            <span ng-if="vm.isJavaScript()">
-              For more information and platform specific integrations (E.G., angularjs, expressjs) view the
-              <a target="_blank" href="https://github.com/exceptionless/Exceptionless.JavaScript/wiki">Exceptionless docs</a>.
-            </span>
+            <span ng-if="vm.isDotNet()" ng-bind-html="'Notice_DotNet_Application' | translate"></span>
+            <span ng-if="vm.isJavaScript()" ng-bind-html="'Notice_JavaScript_Application' | translate"></span>
           </div>
         </div>
         <footer class="panel-footer">
           <div class="pull-right">
-            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">{{::'Go To Dashboard' | translate}}</a>
           </div>
-          <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="Manage Notification Settings">
-            <i class="fa fa-fw fa-envelope"></i> <span class="hidden-xs">Manage Notification Settings</span>
+          <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="{{::'Manage Notification Settings' | translate}}">
+            <i class="fa fa-fw fa-envelope"></i> <span class="hidden-xs">{{::'Manage Notification Settings' | translate}}</span>
           </a>
-          <a ui-sref="app.project.manage({ id: vm.project.id })" class="btn btn-primary" role="button" title="Manage Project">
-            <i class="fa fa-fw fa-gear"></i> <span class="hidden-xs">Manage Project</span>
+          <a ui-sref="app.project.manage({ id: vm.project.id })" class="btn btn-primary" role="button" title="{{::'Manage Project' | translate}}">
+            <i class="fa fa-fw fa-gear"></i> <span class="hidden-xs">{{::'Manage Project' | translate}}</span>
           </a>
         </footer>
       </div>

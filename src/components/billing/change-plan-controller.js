@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.billing')
-    .controller('ChangePlanDialog', function ($uibModalInstance, adminService, analyticsService, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, $window, data) {
+    .controller('ChangePlanDialog', function ($uibModalInstance, adminService, analyticsService, Common, $ExceptionlessClient, $intercom, INTERCOM_APPID, notificationService, organizationService, stripe, STRIPE_PUBLISHABLE_KEY, userService, translateService, $window, data) {
       var vm = this;
       function cancel() {
         analyticsService.lead(getAnalyticsData());
@@ -46,7 +46,7 @@
         function onSuccess(response) {
           if(!response.data.success) {
             analyticsService.lead(getAnalyticsData());
-            vm.paymentMessage = 'An error occurred while changing plans. Message: ' + response.data.message;
+            vm.paymentMessage = translateService.T('An error occurred while changing plans.') + ' ' + translateService.T('Message:') + ' ' + response.data.message;
             $ExceptionlessClient.createException(new Error(response.data.message))
               .markAsCritical()
               .setSource(vm._source + '.save.error')
@@ -70,14 +70,14 @@
             .submit();
 
           $uibModalInstance.close(vm.currentPlan);
-          notificationService.success('Thanks! Your billing plan has been successfully changed.');
+          notificationService.success(translateService.T('Thanks! Your billing plan has been successfully changed.'));
         }
 
         function onFailure(response) {
           if (response.error && response.error.message) {
             vm.paymentMessage = response.error.message;
           } else {
-            vm.paymentMessage = 'An error occurred while changing plans.';
+            vm.paymentMessage = translateService.T('An error occurred while changing plans.');
           }
 
           analyticsService.lead(getAnalyticsData());
@@ -109,7 +109,7 @@
           try {
             return createStripeToken().then(onCreateTokenSuccess, onFailure);
           } catch (error) {
-            vm.paymentMessage = 'An error occurred while changing plans.';
+            vm.paymentMessage = translateService.T('An error occurred while changing plans.');
             $ExceptionlessClient.createException(error)
               .markAsCritical()
               .setSource(vm._source + '.save.error')
@@ -173,7 +173,7 @@
         }
 
         function onFailure(response) {
-          notificationService.error('An error occurred while loading your organizations. ' + vm._contactSupport);
+          notificationService.error(translateService.T('An error occurred while loading your organizations.') + ' ' + vm._contactSupport);
           $ExceptionlessClient.createFeatureUsage(vm._source + '.getOrganizations.error')
             .markAsCritical()
             .setMessage(response && response.data && response.data.message)
@@ -199,7 +199,7 @@
         }
 
         function onFailure(response) {
-          notificationService.error('An error occurred while loading available billing plans. ' + vm._contactSupport);
+          notificationService.error(translateService.T('An error occurred while loading available billing plans.') + ' ' + vm._contactSupport);
           $ExceptionlessClient.createFeatureUsage(vm._source + '.getPlans.error')
             .markAsCritical()
             .setMessage(response && response.data && response.data.message)
@@ -223,7 +223,7 @@
         }
 
         function onFailure(response) {
-          notificationService.error('An error occurred while loading your user account. ' + vm._contactSupport);
+          notificationService.error(translateService.T('An error occurred while loading your user account.') + ' ' + vm._contactSupport);
           $ExceptionlessClient.createFeatureUsage(vm._source + '.getUser.error')
             .markAsCritical()
             .setMessage(response && response.data && response.data.message)
@@ -270,7 +270,7 @@
 
       this.$onInit = function $onInit() {
         vm._source = 'exceptionless.billing.ChangePlanDialog';
-        vm._contactSupport = 'Please contact support for more information.';
+        vm._contactSupport = translateService.T('Please contact support for more information.');
         vm._freePlanId = 'EX_FREE';
         vm.cancel = cancel;
         vm.card = {};
@@ -286,7 +286,7 @@
         vm.isNewCard = isNewCard;
         vm.isPaidPlan = isPaidPlan;
         vm.organizations = [];
-        vm.paymentMessage = !isBillingEnabled() ? 'Billing is currently disabled.' : null;
+        vm.paymentMessage = !isBillingEnabled() ? translateService.T('Billing is currently disabled.') : null;
         vm.plans = [];
         vm.save = save;
         vm.showIntercom = showIntercom;

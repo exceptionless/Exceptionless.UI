@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.stack')
-    .controller('Stack', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, organizationService, projectService, stackDialogService, stackService) {
+    .controller('Stack', function ($scope, $ExceptionlessClient, $filter, hotkeys, $state, $stateParams, billingService, dialogs, dialogService, eventService, filterService, notificationService, organizationService, projectService, stackDialogService, stackService, translateService) {
       var vm = this;
       function addHotkeys() {
         function logFeatureUsage(name) {
@@ -21,7 +21,7 @@
         hotkeys.bindTo($scope)
           .add({
             combo: 'shift+h',
-            description: vm.stack.is_hidden ? 'Mark Stack Unhidden' : 'Mark Stack Hidden',
+            description: translateService.T(vm.stack.is_hidden ? 'Mark Stack Unhidden' : 'Mark Stack Hidden'),
             callback: function markHidden() {
               logFeatureUsage('Hidden');
               vm.updateIsHidden();
@@ -29,7 +29,7 @@
           })
           .add({
             combo: 'shift+f',
-            description: (vm.stack.date_fixed && !vm.stack.is_regressed) ? 'Mark Stack Not fixed' : 'Mark Stack Fixed',
+            description: translateService.T((vm.stack.date_fixed && !vm.stack.is_regressed) ? 'Mark Stack Not fixed' : 'Mark Stack Fixed'),
             callback: function markFixed() {
               logFeatureUsage('Fixed');
               vm.updateIsFixed();
@@ -37,7 +37,7 @@
           })
           .add({
             combo: 'shift+c',
-            description: vm.stack.occurrences_are_critical ? 'Future Stack Occurrences are Not Critical' : 'Future Stack Occurrences are Critical',
+            description: translateService.T(vm.stack.occurrences_are_critical ? 'Future Stack Occurrences are Not Critical' : 'Future Stack Occurrences are Critical'),
             callback: function markCritical() {
               logFeatureUsage('Critical');
               vm.updateIsCritical();
@@ -45,7 +45,7 @@
           })
           .add({
             combo: 'shift+m',
-            description: vm.stack.disable_notifications ? 'Enable Stack Notifications' : 'Disable Stack Notifications',
+            description: translateService.T(vm.stack.disable_notifications ? 'Enable Stack Notifications' : 'Disable Stack Notifications'),
             callback: function updateNotifications() {
               logFeatureUsage('Notifications');
               vm.updateNotifications();
@@ -53,7 +53,7 @@
           })
           .add({
             combo: 'shift+p',
-            description: 'Promote Stack To External',
+            description: translateService.T('Promote Stack To External'),
             callback: function promote() {
               logFeatureUsage('Promote');
               vm.promoteToExternal();
@@ -61,7 +61,7 @@
           })
           .add({
             combo: 'shift+r',
-            description: 'Add Stack Reference Link',
+            description: translateService.T('Add Stack Reference Link'),
             callback: function addReferenceLink() {
               logFeatureUsage('Reference');
               vm.addReferenceLink();
@@ -69,7 +69,7 @@
           })
           .add({
             combo: 'shift+backspace',
-            description: 'Delete Stack',
+            description: translateService.T('Delete Stack'),
             callback: function deleteStack() {
               logFeatureUsage('Delete');
               vm.remove();
@@ -87,7 +87,7 @@
 
           function onFailure() {
             $ExceptionlessClient.createFeatureUsage(vm._source + '.addReferenceLink.error').setProperty('url', url).submit();
-            notificationService.error('An error occurred while adding the reference link.');
+            notificationService.error(translateService.T('An error occurred while adding the reference link.'));
           }
 
           if (vm.stack.references.indexOf(url) < 0)
@@ -144,7 +144,7 @@
       function get(data) {
         if (data && data.type === 'Stack' && data.deleted) {
           $state.go('app.dashboard');
-          notificationService.error('The stack "' + vm._stackId + '" was deleted.');
+          notificationService.error(translateService.T('Stack_Deleted', {stackId: vm._stackId}));
           return;
         }
 
@@ -184,9 +184,9 @@
           $state.go('app.dashboard');
 
           if (response.status === 404) {
-            notificationService.error('The stack "' + vm._stackId + '" could not be found.');
+            notificationService.error(translateService.T('Cannot_Find_Stack', {stackId: vm._stackId}));
           } else {
-            notificationService.error('An error occurred while loading the stack "' + vm._stackId + '".');
+            notificationService.error(translateService.T('Error_Load_Stack', {stackId: vm._stackId}));
           }
         }
 
@@ -307,7 +307,7 @@
       function promoteToExternal() {
         $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteToExternal').setProperty('id', vm._stackId).submit();
         if (vm.project && !vm.project.has_premium_features) {
-          var message = 'Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.';
+          var message = translateService.T('Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.');
           return billingService.confirmUpgradePlan(message, vm.stack.organization_id).then(function () {
             return promoteToExternal();
           }).catch(function(e){});
@@ -315,7 +315,7 @@
 
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.promoteToExternal.success').setProperty('id', vm._stackId).submit();
-          notificationService.success('Successfully promoted stack!');
+          notificationService.success(translateService.T('Successfully promoted stack!'));
         }
 
         function onFailure(response) {
@@ -327,12 +327,12 @@
           }
 
           if (response.status === 501) {
-            return dialogService.confirm(response.data.message, 'Manage Integrations').then(function () {
+            return dialogService.confirm(response.data.message, translateService.T('Manage Integrations')).then(function () {
               $state.go('app.project.manage', { id: vm.stack.project_id });
             }).catch(function(e){});
           }
 
-          notificationService.error('An error occurred while promoting this stack.');
+          notificationService.error(translateService.T('An error occurred while promoting this stack.'));
         }
 
         return stackService.promote(vm._stackId).then(onSuccess, onFailure);
@@ -340,14 +340,14 @@
 
       function removeReferenceLink(reference) {
         $ExceptionlessClient.createFeatureUsage(vm._source + '.removeReferenceLink').setProperty('id', vm._stackId).submit();
-        return dialogService.confirmDanger('Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this reference link?'), translateService.T('DELETE REFERENCE LINK')).then(function () {
           function onSuccess() {
             $ExceptionlessClient.createFeatureUsage(vm._source + '.removeReferenceLink.success').setProperty('id', vm._stackId).submit();
           }
 
           function onFailure(response) {
             $ExceptionlessClient.createFeatureUsage(vm._source + '.removeReferenceLink.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-            notificationService.info('An error occurred while deleting the external reference link.');
+            notificationService.info(translateService.T('An error occurred while deleting the external reference link.'));
           }
 
           return stackService.removeLink(vm._stackId, reference).then(onSuccess, onFailure);
@@ -356,17 +356,17 @@
 
       function remove() {
         $ExceptionlessClient.createFeatureUsage(vm._source + '.remove').setProperty('id', vm._stackId).submit();
-        var message = 'Are you sure you want to delete this stack (includes all stack events)?';
-        return dialogService.confirmDanger(message, 'DELETE STACK').then(function () {
+        var message = translateService.T('Are you sure you want to delete this stack (includes all stack events)?');
+        return dialogService.confirmDanger(message, translateService.T('DELETE STACK')).then(function () {
           function onSuccess() {
-            notificationService.info('Successfully queued the stack for deletion.');
+            notificationService.info(translateService.T('Successfully queued the stack for deletion.'));
             $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('id', vm._stackId).submit();
             $state.go('app.project-dashboard', { projectId: vm.stack.project_id });
           }
 
           function onFailure(response) {
             $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-            notificationService.error('An error occurred while deleting this stack.');
+            notificationService.error(translateService.T('An error occurred while deleting this stack.'));
           }
 
           return stackService.remove(vm._stackId).then(onSuccess, onFailure);
@@ -380,7 +380,7 @@
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsCritical.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          notificationService.error('An error occurred while marking future occurrences as ' + (vm.stack.occurrences_are_critical) ? 'not critical.' : 'critical.');
+          notificationService.error(translateService.T(vm.stack.occurrences_are_critical ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsCritical').setProperty('id', vm._stackId).submit();
@@ -398,14 +398,12 @@
             return;
           }
 
-          var action = (vm.stack.date_fixed && !vm.stack.is_regressed) ? ' not' : '';
-          notificationService.info('Successfully queued the stack to be marked as' + action + ' fixed.');
+          notificationService.info(translateService.T((vm.stack.date_fixed && !vm.stack.is_regressed) ? 'Successfully queued the stack to be marked as not fixed.' : 'Successfully queued the stack to be marked as fixed.'));
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsFixed.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          var action = (vm.stack.date_fixed && !vm.stack.is_regressed) ? ' not' : '';
-          notificationService.error('An error occurred while marking this stack as' + action + ' fixed.');
+          notificationService.error(translateService.T((vm.stack.date_fixed && !vm.stack.is_regressed) ? 'An error occurred while marking this stack as not fixed.' : 'An error occurred while marking this stack as fixed.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsFixed').setProperty('id', vm._stackId).submit();
@@ -421,12 +419,12 @@
       function updateIsHidden() {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsHidden.success').setProperty('id', vm._stackId).submit();
-          notificationService.info('Successfully queued the stack to be marked as ' + (vm.stack.is_hidden ? 'shown.' : 'hidden.'));
+          notificationService.info(translateService.T(vm.stack.is_hidden ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.'));
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsHidden.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          notificationService.error('An error occurred while marking this stack as ' + (vm.stack.is_hidden ? 'shown.' : 'hidden.'));
+          notificationService.error(translateService.T(vm.stack.is_hidden ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIsHidden').setProperty('id', vm._stackId).submit();
@@ -444,14 +442,12 @@
             return;
           }
 
-          var action = vm.stack.disable_notifications ? 'enabled' : 'disabled';
-          notificationService.info('Successfully ' + action + ' stack notifications.');
+          notificationService.info(translateService.T(vm.stack.disable_notifications ? 'Successfully enabled stack notifications.' : 'Successfully disabled stack notifications.'));
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateNotifications.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          var action = vm.stack.disable_notifications ? 'enabling' : 'disabling';
-          notificationService.error('An error occurred while ' + action + ' stack notifications.');
+          notificationService.error(translateService.T(vm.stack.disable_notifications ? 'An error occurred while enabling stack notifications.' : 'An error occurred while disabling stack notifications.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateNotifications').setProperty('id', vm._stackId).submit();
@@ -479,7 +475,9 @@
             hover: {
               render: function (args) {
                 var date = moment.unix(args.domainX);
-                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                var dateTimeFormat = translateService.T('DateTimeFormat');
+                var dateFormat = translateService.T('DateFormat');
+                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
                 var content = '<div class="date">' + formattedDate + '</div>';
                 args.detail.sort(function (a, b) {
                   return a.order - b.order;
@@ -538,9 +536,9 @@
         };
 
         vm.chartOptions = [
-          {name: 'Occurrences', field: 'sum:count~1', title: '', selected: true, render: false},
-          {name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true},
-          {name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true}
+          {name: translateService.T('Occurrences'), field: 'sum:count~1', title: '', selected: true, render: false},
+          {name: translateService.T('Average Value'), field: 'avg:value', title: translateService.T('The average of all event values'), render: true},
+          {name: translateService.T('Value Sum'), field: 'sum:value', title: translateService.T('The sum of all event values'), render: true}
         ];
 
         vm.canRefresh = canRefresh;
