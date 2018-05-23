@@ -5,7 +5,7 @@ var md5 = require('md5');
 var replace = require("replace");
 
 function updateAppConfig() {
-  var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:50001';
+  var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:50000';
   var enableSignup = process.env.Exceptionless_SignUpEnabled ? process.env.Exceptionless_SignUpEnabled : true;
   var exceptionlessApiKey = process.env.Exceptionless_ApiKey ? process.env.Exceptionless_ApiKey : '';
   var exceptionlessServerUrl = process.env.Exceptionless_ServerUrl ? process.env.Exceptionless_ServerUrl : '';
