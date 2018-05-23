@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', function ($ExceptionlessClient, $location, $state, $stateParams, $timeout, analyticsService, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService, translateService) {
+    .controller('auth.Signup', function ($ExceptionlessClient, $location, $state, $stateParams, $timeout, analyticsService, authService, ENABLE_ACCOUNT_CREATION, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService, translateService) {
       var vm = this;
       function getMessage(response) {
         var message = translateService.T('An error occurred while signing up.  Please contact support for more information.');
@@ -110,7 +110,7 @@
 
       this.$onInit = function $onInit() {
         vm._source = 'app.auth.Signup';
-        vm._canSignup = true;
+        vm._canSignup = !!ENABLE_ACCOUNT_CREATION;
         vm.authenticate = authenticate;
         vm.isExternalLoginEnabled = isExternalLoginEnabled;
         vm.signup = signup;
