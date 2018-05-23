@@ -27,10 +27,6 @@
         return authService.authenticate(provider, { InviteToken: vm.token }).then(onSuccess, onFailure);
       }
 
-      function isSignupEnabled() {
-        return !!ENABLE_SIGNUP;
-      }
-
       function isExternalLoginEnabled(provider) {
         if (!provider) {
           return !!FACEBOOK_APPID || !!GITHUB_APPID || !!GOOGLE_APPID || !!LIVE_APPID;
