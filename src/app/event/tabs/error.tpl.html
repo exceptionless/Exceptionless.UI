@@ -28,7 +28,7 @@
 <h3>{{'Stack Trace' | translate}}</h3>
 <stack-trace exception="vm.event.data['@error']" text-stack-trace="vm.textStackTrace"></stack-trace>
 
-<extended-data-item can-promote="false" title="{{'Additional Data' | translate}}" data="vm.event.data['@error'].data['@ext']"></extended-data-item>
+<extended-data-item can-promote="false" title="'Additional Data'" data="vm.event.data['@error'].data['@ext']"></extended-data-item>
 
 <div ng-if="vm.event.data['@error'].modules.length > 0">
   <h4>{{'Loaded Modules' | translate}}</h4>

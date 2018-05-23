@@ -28,7 +28,7 @@
       },
       link: function (scope, element) {
         var vm = scope;
-        var format = vm.format || 'YYYY-MM-DD HH:mm:ss';
+        var format = vm.format || 'YYYY-MM-DD';
         var options = {
           endDate: vm.range.end,
           maxDate: vm.maxDate,
@@ -61,7 +61,7 @@
 
         element.daterangepicker(options, function(start, end) {
           scope.$apply(function () {
-            vm.range = { start: start.format(format), end: end.format(format) };
+            vm.range = { start: start, end: end };
           });
         });
 
