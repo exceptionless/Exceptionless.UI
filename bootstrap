@@ -3,7 +3,7 @@
 BaseUrl="${BaseUrl:-http://ex-ui.localtest.me:5000}"
 Html5Mode="${Html5Mode:-false}"
 EnableSsl="${EnableSsl:-false}"
-EnableAccountCreation="${EnableSsl:-true}"
+EnableAccountCreation="${EnableAccountCreation:-true}"
 
 echo "(function () {
   'use strict';
