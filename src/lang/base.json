@@ -256,7 +256,7 @@
     "Please enter the version in which the stack has been fixed. Any submitted occurrences with a lower version will not cause a regression.":"",
     "Versioning Documentation":"",
     "Optional Version (Example: 1.2.3)":"",
-    "Invalid version.":"", 
+    "Invalid version.":"",
     "Mark this stack as not fixed":"",
     "Mark this stack as fixed":"",
     "Marking Not Fixed":"",
@@ -294,7 +294,8 @@
     "All Time": "",
     "Custom": "",
     "Select Date Range": "",
-    "DateTimeFormat":"",
+    "DateFormat":"ddd, MMM D, YYYY",
+    "DateTimeFormat":"ddd, MMM D, YYYY h:mma",
 
     // Search Filter Component
     "Filter":"",
