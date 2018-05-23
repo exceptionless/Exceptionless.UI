@@ -35,7 +35,7 @@ FROM build AS testrunner
 WORKDIR /app
 
 USER pptruser
-RUN npx grunt test
+ENTRYPOINT [ "npx", "grunt", "test" ]
 
 # ui
 

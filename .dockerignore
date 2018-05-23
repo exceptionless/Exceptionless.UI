@@ -9,4 +9,4 @@ LICENSE
 .circleci
 **/node_modules/
 **/bower_components/
-**/out/
+**/results/

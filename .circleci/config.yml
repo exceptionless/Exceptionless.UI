@@ -12,7 +12,7 @@ jobs:
           command: | 
             docker build --target testrunner -t exceptionless:test .
             mkdir TestResults
-            docker run --network host -v $(pwd)/TestResults:/app/src/results/ exceptionless:test
+            docker run -v $(pwd)/TestResults:/app/results/ exceptionless:test
       - store_test_results:
           path: TestResults
       - run:
