@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', function ($ExceptionlessClient, $state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, ENABLE_SIGNUP, notificationService, projectService, stateService) {
+    .controller('auth.Login', function ($ExceptionlessClient, $state, $stateParams, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, ENABLE_ACCOUNT_CREATION, notificationService, projectService, stateService) {
       var vm = this;
 
       function getMessage(response) {
@@ -93,7 +93,7 @@
         vm._source = 'app.auth.Login';
         vm.authenticate = authenticate;
         vm.isExternalLoginEnabled = isExternalLoginEnabled;
-        vm.isSignupEnabled = isSignupEnabled;
+        vm.enableAccountCreation = !!ENABLE_ACCOUNT_CREATION;
         vm.login = login;
         vm.loginForm = {};
         vm.token = $stateParams.token;
