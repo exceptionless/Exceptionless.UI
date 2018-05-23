@@ -56,7 +56,7 @@
                 <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
                     <input type="submit" role="button" id="login" ng-click="vm.login(vm.loginForm.$valid)" class="btn btn-primary" value="Log in" />
-                    <a class="btn btn-default" role="button" ui-sref="auth.signup({ token: vm.token })" ng-show="vm.isSignupEnabled()">Signup</a>
+                    <a class="btn btn-default" role="button" ui-sref="auth.signup({ token: vm.token })" ng-show="vm.enableAccountCreation">Signup</a>
                     <p><a ui-sref="auth.forgot-password">Forgot password?</a></p>
                   </div>
                 </div>
