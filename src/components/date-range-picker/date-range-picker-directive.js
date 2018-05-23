@@ -23,7 +23,7 @@
         this.$onInit = function $onInit() {
           vm.applyLabel = translateService.T('Apply');
           vm.cancelLabel = translateService.T('Cancel');
-          vm.format = translateService.T('DateTimeFormat');
+          //vm.format = translateService.T('DateTimeFormat');
         };
       },
       link: function (scope, element) {
@@ -31,6 +31,7 @@
         var format = vm.format || 'YYYY-MM-DD';
         var options = {
           endDate: vm.range.end,
+          format: format,
           maxDate: vm.maxDate,
           minDate: vm.minDate,
           showDropdowns: !!vm.showDropdowns,
@@ -40,7 +41,6 @@
           timePickerSeconds: !!vm.timePickerSeconds,
           timePickerIncrement: vm.timePickerIncrement || 1,
           locale: {
-            format: format,
             applyLabel: vm.applyLabel,
             cancelLabel: vm.cancelLabel
           }
