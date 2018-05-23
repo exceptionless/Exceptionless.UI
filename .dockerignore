@@ -1,0 +1,12 @@
+Dockerfile*
+docker-compose*
+.dockerignore
+.git
+.gitignore
+README.md
+LICENSE
+.vscode
+.circleci
+**/node_modules/
+**/bower_components/
+**/results/

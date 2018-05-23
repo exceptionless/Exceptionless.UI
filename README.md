@@ -19,20 +19,18 @@ _In appreciation for anyone who submits a non-trivial pull request, we will give
 Please read the [contributing document](https://github.com/exceptionless/Exceptionless/blob/master/CONTRIBUTING.md) and follow the steps below to start configuring your Exceptionless development environment.
 
 1. You will need to clone this repo.
-2. Install [grunt](http://gruntjs.com/) and the development dependencies using [npm](https://www.npmjs.com/).
+2. Install dependencies using [npm](https://www.npmjs.com/).
 
    ```javascript
-   npm install -g grunt-cli
-   npm install -g bower
    npm install
    ```
 3. Download the JavaScript dependencies by running the following [bower](http://bower.io/) command.
 
    ```javascript
-   bower install
+   npx bower install
    ```
 4. Start a web server and view it on [`http://localhost:9001`](http://localhost:9001) by running the following grunt command.
 
    ```javascript
-   grunt serve
+   npx grunt serve
    ```
