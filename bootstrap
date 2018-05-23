@@ -1,0 +1,27 @@
+#!/bin/sh
+
+Exceptionless_BaseURL="${Exceptionless_BaseURL:-http://localhost:5000}"
+Exceptionless_HTML5Mode="${Exceptionless_HTML5Mode:-false}"
+Exceptionless_EnableSSL="${Exceptionless_EnableSSL:-false}"
+
+echo "(function () {
+  'use strict';
+
+  angular.module('app.config', [])
+    .constant('BASE_URL', '$Exceptionless_BaseURL')
+    .constant('EXCEPTIONLESS_API_KEY', '$Exceptionless_ApiKey')
+    .constant('EXCEPTIONLESS_SERVER_URL', '$Exceptionless_ServerUrl')
+    .constant('FACEBOOK_APPID', '$Exceptionless_FacebookAppId')
+    .constant('GITHUB_APPID', '$Exceptionless_GitHubAppId')
+    .constant('GOOGLE_APPID', '$Exceptionless_GoogleAppId')
+    .constant('INTERCOM_APPID', '$Exceptionless_IntercomAppId')
+    .constant('LIVE_APPID', '$Exceptionless_MicrosoftAppId')
+    .constant('SLACK_APPID', '$Exceptionless_SlackAppId')
+    .constant('STRIPE_PUBLISHABLE_KEY', '$Exceptionless_StripePublishableApiKey')
+    .constant('SYSTEM_NOTIFICATION_MESSAGE', '$Exceptionless_Message')
+    .constant('USE_HTML5_MODE', $Exceptionless_HTML5Mode)
+    .constant('USE_SSL', $Exceptionless_EnableSSL);
+}());" > "/app/app.config.js"
+
+echo "Running NGINX"
+nginx
