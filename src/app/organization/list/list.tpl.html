@@ -2,17 +2,17 @@
   <div class="col" refresh-on=" PlanChanged PersistentEventChanged" refresh-action="vm.get(vm.currentOptions, false)" refresh-throttle="10000">
     <div class="wrapper-md">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-group"></i> My Organizations</div>
+        <div class="panel-heading"><i class="fa fa-group"></i> {{::'My Organizations' | translate}}</div>
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-fixed b-t">
             <thead>
             <tr>
-              <th>Name</th>
-              <th>Plan</th>
-              <th class="number hidden-xs"><abbr title="Total number of projects">Projects</abbr></th>
-              <th class="number hidden-xs"><abbr title="Total number of stacks">Stacks</abbr></th>
-              <th class="number hidden-xs"><abbr title="Total number of events within the retention period">Events</abbr></th>
-              <th class="action">Actions</th>
+              <th>{{::'Name' | translate}}</th>
+              <th>{{::'Plan' | translate}}</th>
+              <th class="number hidden-xs"><abbr title="{{::'Total number of projects' | translate}}">{{::'Projects' | translate}}</abbr></th>
+              <th class="number hidden-xs"><abbr title="{{::'Total number of stacks' | translate}}">{{::'Stacks' | translate}}</abbr></th>
+              <th class="number hidden-xs"><abbr title="{{::'Total number of events within the retention period' | translate}}">{{::'Events' | translate}}</abbr></th>
+              <th class="action">{{::'Actions' | translate}}</th>
             </tr>
             </thead>
             <tbody>
@@ -28,19 +28,19 @@
                       <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                      <li><a ui-sref="app.organization.manage({ id: organization.id })"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
-                      <li ng-if="vm.canChangePlan"><a ng-click="vm.changePlan(organization.id)"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
-                      <li><a ui-sref="app.organization.manage({ id: organization.id, tab: 'billing' })"><i class="fa fa-fw fa-file"></i> View Invoices</a></li>
-                      <li><a ng-click="vm.leave(organization, appVm.user)"><i class="fa fa-fw fa-sign-out"></i> Leave Organization</a></li>
-                      <li><a ng-click="vm.remove(organization)"><i class="fa fa-fw fa-times"></i> Delete</a></li>
+                      <li><a ui-sref="app.organization.manage({ id: organization.id })"><i class="fa fa-fw fa-edit"></i> {{::'Edit' | translate}}</a></li>
+                      <li ng-if="vm.canChangePlan"><a ng-click="vm.changePlan(organization.id)"><i class="fa fa-credit-card fa-fw"></i> {{::'Change Plan' | translate}}</a></li>
+                      <li><a ui-sref="app.organization.manage({ id: organization.id, tab: 'billing' })"><i class="fa fa-fw fa-file"></i> {{::'View Invoices' | translate}}</a></li>
+                      <li><a ng-click="vm.leave(organization, appVm.user)"><i class="fa fa-fw fa-sign-out"></i> {{::'Leave Organization' | translate}}</a></li>
+                      <li><a ng-click="vm.remove(organization)"><i class="fa fa-fw fa-times"></i> {{::'Delete' | translate}}</a></li>
                     </ul>
                   </div>
                 </td>
               </tr>
               <tr ng-if="vm.organizations.length === 0 || vm.loading">
                 <td colspan="6">
-                  <strong ng-if="vm.loading">Loading...</strong>
-                  <strong ng-if="!vm.loading">No organizations were found{{vm.hasFilter ? ' with the current filter': ''}}.</strong>
+                  <strong ng-if="vm.loading">{{::'Loading...' | translate}}</strong>
+                  <strong ng-if="!vm.loading">{{vm.hasFilter ? 'No organizations were found with the current filter.': 'No organizations were found.' | translate}}</strong>
                 </td>
               </tr>
             </tbody>
@@ -63,9 +63,9 @@
 
         <footer class="panel-footer">
           <div class="pull-right">
-            <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
+            <a ui-sref="app.dashboard" class="btn btn-default" role="button">{{::'Go To Dashboard' | translate}}</a>
           </div>
-          <button type="button" role="button" ng-click="vm.add()" class="btn btn-primary">New Organization</button>
+          <button type="button" role="button" ng-click="vm.add()" class="btn btn-primary">{{::'New Organization' | translate}}</button>
         </footer>
       </div>
     </div>

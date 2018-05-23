@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService) {
+    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService, translateService) {
       var vm = this;
       function canRefresh(data) {
         if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
@@ -75,11 +75,11 @@
             padding: {top: 0.085},
             renderer: 'stack',
             series: [{
-              name: 'Unique',
+              name: translateService.T('Unique'),
               color: 'rgba(60, 116, 0, .9)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }, {
-              name: 'Count',
+              name: translateService.T('Count'),
               color: 'rgba(124, 194, 49, .7)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }
@@ -91,7 +91,9 @@
             hover: {
               render: function (args) {
                 var date = moment.unix(args.domainX);
-                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                var dateTimeFormat = translateService.T('DateTimeFormat');
+                var dateFormat = translateService.T('DateFormat');
+                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
                 var content = '<div class="date">' + formattedDate + '</div>';
                 args.detail.sort(function (a, b) {
                   return a.order - b.order;

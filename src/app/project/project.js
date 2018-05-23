@@ -8,7 +8,6 @@
     'ui.router',
 
     'dialogs.main',
-    'dialogs.default-translations',
     'xeditable',
 
     'exceptionless',

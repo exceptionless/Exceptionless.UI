@@ -62,7 +62,7 @@
             }
 
             var range = filterService.getTimeRange();
-            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: range.start || moment().subtract(7, 'days'), end: range.end || moment() }).result.then(onSuccess).catch(function(e){});
+            return dialogs.create('components/date-filter/custom-date-range-dialog.tpl.html', 'CustomDateRangeDialog as vm', { start: (range.start || moment().subtract(7, 'days')), end: (range.end || moment()) }).result.then(onSuccess).catch(function(e){});
           }
 
           function setFilter(filter) {

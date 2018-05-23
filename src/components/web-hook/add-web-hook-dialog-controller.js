@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('exceptionless.web-hook')
-    .controller('AddWebHookDialog', function ($ExceptionlessClient, $uibModalInstance) {
+    .controller('AddWebHookDialog', function ($ExceptionlessClient, $uibModalInstance, translateService) {
       var vm = this;
       function cancel() {
         $ExceptionlessClient.submitFeatureUsage(vm._source + '.cancel');
@@ -13,33 +13,33 @@
         return [
           {
             key: 'NewError',
-            name: 'New Error',
-            description: 'Occurs when a new error that has never been seen before is reported to your project.'
+            name: translateService.T('New Error'),
+            description: translateService.T('Occurs when a new error that has never been seen before is reported to your project.')
           },
           {
             key: 'CriticalError',
-            name: 'Critical Error',
-            description: 'Occurs when an error that has been marked as critical is reported to your project.'
+            name: translateService.T('Critical Error'),
+            description: translateService.T('Occurs when an error that has been marked as critical is reported to your project.')
           },
           {
             key: 'StackRegression',
-            name: 'Regression',
-            description: 'Occurs when an event that has been marked as fixed has reoccurred in your project.'
+            name: translateService.T('Regression'),
+            description: translateService.T('Occurs when an event that has been marked as fixed has reoccurred in your project.')
           },
           {
             key: 'NewEvent',
-            name: 'New Event',
-            description: 'Occurs when a new event that has never been seen before is reported to your project.'
+            name: translateService.T('New Event'),
+            description: translateService.T('Occurs when a new event that has never been seen before is reported to your project.')
           },
           {
             key: 'CriticalEvent',
-            name: 'Critical Event',
-            description: 'Occurs when an event that has been marked as critical is reported to your project.'
+            name: translateService.T('Critical Event'),
+            description: translateService.T('Occurs when an event that has been marked as critical is reported to your project.')
           },
           {
             key: 'StackPromoted',
-            name: 'Promoted',
-            description: 'Used to promote event stacks to external systems.'
+            name: translateService.T('Promoted'),
+            description: translateService.T('Used to promote event stacks to external systems.')
           }
         ];
       }

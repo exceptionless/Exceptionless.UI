@@ -1,3 +1,7 @@
+/* jslint node: true */
+var puppeteer = require('puppeteer');
+process.env.CHROME_BIN = puppeteer.executablePath();
+
 module.exports = function (grunt) {
     return {
         options: {
@@ -18,7 +22,12 @@ module.exports = function (grunt) {
                 'components/summary/**/*.html': ['ng-html2js']
             },
             logLevel: 'ERROR',
-            reporters: ['mocha'],
+            reporters: ['mocha', 'junit'],
+            junitReporter: {
+              outputDir: 'results',
+              outputFile: 'tests.xml',
+              useBrowserName: false
+            },
             autoWatch: false, //watching is handled by grunt-contrib-watch
             singleRun: true,
 
@@ -28,10 +37,22 @@ module.exports = function (grunt) {
             browserNoActivityTimeout: 60000
         },
         all_tests: {
-            browsers: ['PhantomJS']
+            browsers: ['ChromeNoSandbox'],
+            customLaunchers: {
+              ChromeNoSandbox: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox']
+              }
+            }
         },
         during_watch: {
-            browsers: ['PhantomJS']
+            browsers: ['ChromeNoSandbox'],
+            customLaunchers: {
+              ChromeNoSandbox: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox']
+              }
+            }
         }
     };
 };

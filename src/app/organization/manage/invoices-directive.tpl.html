@@ -2,10 +2,10 @@
   <table class="table table-striped table-bordered table-fixed b-t" refresh-on="OrganizationChanged PlanChanged" refresh-action="vm.get(vm.currentOptions, false)" refresh-throttle="10000">
     <thead>
     <tr>
-      <th>Payment Number</th>
-      <th>Date</th>
-      <th class="number">Status</th>
-      <th class="action">Actions</th>
+      <th>{{::'Payment Number' | translate}}</th>
+      <th>{{::'Date' | translate}}</th>
+      <th class="number">{{::'Status' | translate}}</th>
+      <th class="action">{{::'Actions' | translate}}</th>
     </tr>
     </thead>
     <tbody>
@@ -19,9 +19,9 @@
             <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
           </button>
           <ul class="dropdown-menu dropdown-menu-right" role="menu">
-            <li><a ng-click="vm.open(invoice.id)"><i class="fa fa-file"></i> View Payment</a></li>
+            <li><a ng-click="vm.open(invoice.id)"><i class="fa fa-file"></i> {{::'View Payment' | translate}}</a></li>
             <li ng-if="vm.hasAdminRole(appVm.user)">
-              <a ng-href="https://manage.stripe.com/invoices/in_{{::invoice.id}}" target="_blank"><i class="fa fa-credit-card"></i> View Stripe Invoice</a>
+              <a ng-href="https://manage.stripe.com/invoices/in_{{::invoice.id}}" target="_blank"><i class="fa fa-credit-card"></i> {{::'View Stripe Invoice' | translate}}</a>
             </li>
           </ul>
         </div>
@@ -29,7 +29,7 @@
     </tr>
     <tr ng-if="vm.invoices.length === 0">
       <td colspan="4">
-        <strong>No invoices were found.</strong>
+        <strong>{{::'No invoices were found.' | translate}}</strong>
       </td>
     </tr>
     </tbody>

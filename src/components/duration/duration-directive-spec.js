@@ -4,7 +4,8 @@
   describe('Directive: duration', function () {
 
     beforeEach(module('exceptionless.duration'));
-
+    moment.locale('en');
+    
     var scope, compile;
 
     beforeEach(inject(function ($rootScope, $compile) {

@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    machine:
+      docker_layer_caching: true
+    environment:
+      - UI_DOCKER_IMAGE=ui-ci
+    steps:
+      - checkout
+      - run:
+          name: Tests
+          command: | 
+            docker build --target testrunner -t exceptionless:test .
+            mkdir TestResults
+            docker run -v $(pwd)/TestResults:/app/results/ exceptionless:test
+      - store_test_results:
+          path: TestResults
+      - run:
+          name: Build UI docker image
+          command: docker build --target ui -t $UI_DOCKER_IMAGE .
+      - deploy:
+          name: Push docker image
+          command: |
+            # Login to Docker
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+            # Tag and push docker image
+            for tag in {$CIRCLE_BUILD_NUM,latest}; do
+              (
+                docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
+                docker push exceptionless/$UI_DOCKER_IMAGE:$tag
+              ) &
+            done
+            wait

@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Add', function ($state, $stateParams, $timeout, billingService, organizationService, projectService, notificationService) {
+    .controller('project.Add', function ($state, $stateParams, $timeout, billingService, organizationService, projectService, notificationService, translateService) {
       var vm = this;
       function add(isRetrying) {
         function resetCanAdd() {
@@ -56,9 +56,9 @@
             }).catch(function(e){});
           }
 
-          var message = 'An error occurred while creating the organization.';
+          var message = translateService.T('An error occurred while creating the organization.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -84,9 +84,9 @@
             }).catch(function(e){});
           }
 
-          var message = 'An error occurred while creating the project.';
+          var message = translateService.T('An error occurred while creating the project.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -98,7 +98,7 @@
       function getOrganizations() {
         function onSuccess(response) {
           vm.organizations = response.data;
-          vm.organizations.push({id: vm._newOrganizationId, name: '<New Organization>'});
+          vm.organizations.push({id: vm._newOrganizationId, name: translateService.T('<New Organization>')});
 
           var currentOrganizationId = vm.currentOrganization.id ? vm.currentOrganization.id : $stateParams.organizationId;
           vm.currentOrganization = vm.organizations.filter(function(o) { return o.id === currentOrganizationId; })[0];

@@ -5,7 +5,6 @@
     'ui.bootstrap',
 
     'dialogs.main',
-    'dialogs.default-translations',
 
     'exceptionless.autofocus',
     'exceptionless.validators'

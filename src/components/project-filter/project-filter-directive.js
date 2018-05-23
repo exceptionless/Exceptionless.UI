@@ -16,7 +16,7 @@
       replace: true,
       scope: true,
       templateUrl: 'components/project-filter/project-filter-directive.tpl.html',
-      controller: function ($rootScope, $scope, $state, $stateParams, $window, debounce, filterService, notificationService, organizationService, projectService, urlService) {
+      controller: function ($rootScope, $scope, $state, $stateParams, $window, debounce, filterService, notificationService, organizationService, projectService, urlService, translateService) {
         var vm = this;
         function buildUrls() {
           function getOrganizationUrl(organization) {
@@ -82,7 +82,7 @@
             }
           }
 
-          return 'All Projects';
+          return translateService.T('All Projects');
         }
 
         function getOrganizations() {
@@ -99,7 +99,7 @@
 
           function onFailure() {
             vm.isLoadingOrganizations = false;
-            notificationService.error('An error occurred while loading your organizations.');
+            notificationService.error(translateService.T('An error occurred while loading your organizations.'));
           }
 
           return organizationService.getAll().then(onSuccess, onFailure);
@@ -119,7 +119,7 @@
 
           function onFailure() {
             vm.isLoadingProjects = false;
-            notificationService.error('An error occurred while loading your projects.');
+            notificationService.error(translateService.T('An error occurred while loading your projects.'));
           }
 
           return projectService.getAll().then(onSuccess, onFailure);

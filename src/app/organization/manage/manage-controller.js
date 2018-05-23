@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.organization')
-    .controller('organization.Manage', function ($ExceptionlessClient, filterService, $filter, $state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, dialogs, STRIPE_PUBLISHABLE_KEY) {
+    .controller('organization.Manage', function ($ExceptionlessClient, filterService, $filter, $state, $stateParams, $window, billingService, dialogService, organizationService, projectService, userService, notificationService, translateService, dialogs, STRIPE_PUBLISHABLE_KEY) {
       var vm = this;
       function activateTab(tabName) {
         switch (tabName) {
@@ -38,9 +38,9 @@
             }).catch(function(e){});
           }
 
-          var message = 'An error occurred while inviting the user.';
+          var message = translateService.T('An error occurred while inviting the user.');
           if (response.data && response.data.message) {
-            message += ' Message: ' + response.data.message;
+            message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
           }
 
           notificationService.error(message);
@@ -56,7 +56,7 @@
 
         if (data && data.type === 'Organization' && data.deleted && data.id === vm._organizationId) {
           $state.go('app.dashboard');
-          notificationService.error('The organization "' + vm._organizationId + '" was deleted.');
+          notificationService.error(translateService.T('Organization_Deleted', {organizationId : vm._organizationId}));
           return;
         }
 
@@ -107,7 +107,7 @@
 
         function onFailure() {
           $state.go('app.dashboard');
-          notificationService.error('The organization "' + vm._organizationId + '" could not be found.');
+          notificationService.error(translateService.T('Cannot_Find_Organization', {organizationId : vm._organizationId}));
         }
 
         return organizationService.getById(vm._organizationId, false).then(onSuccess, onFailure);
@@ -119,15 +119,15 @@
       }
 
       function leaveOrganization(currentUser){
-        return dialogService.confirmDanger('Are you sure you want to leave this organization?', 'LEAVE ORGANIZATION').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to leave this organization?'), translateService.T('Leave Organization')).then(function () {
           function onSuccess() {
             $state.go('app.organization.list');
           }
 
           function onFailure(response) {
-            var message = 'An error occurred while trying to leave the organization.';
+            var message = translateService.T('An error occurred while trying to leave the organization.');
             if (response.status === 400) {
-              message += ' Message: ' + response.data.message;
+              message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
             }
 
             notificationService.error(message);
@@ -140,16 +140,16 @@
       }
 
       function removeOrganization() {
-        return dialogService.confirmDanger('Are you sure you want to delete this organization?', 'DELETE ORGANIZATION').then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this organization?'), translateService.T('Delete Organization')).then(function () {
           function onSuccess() {
-            notificationService.info('Successfully queued the organization for deletion.');
+            notificationService.info(translateService.T('Successfully queued the organization for deletion.'));
             $state.go('app.organization.list');
           }
 
           function onFailure(response) {
-            var message = 'An error occurred while trying to delete the organization.';
+            var message = translateService.T('An error occurred while trying to delete the organization.');
             if (response.status === 400) {
-              message += ' Message: ' + response.data.message;
+              message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
             }
 
             notificationService.error(message);
@@ -167,7 +167,7 @@
         }
 
         function onFailure() {
-          notificationService.error('An error occurred while saving the organization.');
+          notificationService.error(translateService.T('An error occurred while saving the organization.'));
         }
 
         return organizationService.update(vm._organizationId, vm.organization).catch(onFailure);
@@ -187,19 +187,19 @@
             padding: {top: 0.085},
             renderer: 'multi',
             series: [{
-              name: 'Allowed',
+              name: translateService.T('Allowed'),
               color: '#a4d56f',
               renderer: 'stack'
             }, {
-              name: 'Blocked',
+              name: translateService.T('Blocked'),
               color: '#e2e2e2',
               renderer: 'stack'
             }, {
-              name: 'Too Big',
+              name: translateService.T('Too Big'),
               color: '#ccc',
               renderer: 'stack'
             }, {
-              name: 'Limit',
+              name: translateService.T('Limit'),
               color: '#a94442',
               renderer: 'dotted_line'
             }]
@@ -208,7 +208,9 @@
             hover: {
               render: function (args) {
                 var date = moment.utc(args.domainX, 'X');
-                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                var dateTimeFormat = translateService.T('DateTimeFormat');
+                var dateFormat = translateService.T('DateFormat');
+                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
                 var content = '<div class="date">' + formattedDate + '</div>';
                 args.detail.sort(function (a, b) {
                   return a.order - b.order;

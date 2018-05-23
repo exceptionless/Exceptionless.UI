@@ -7,7 +7,6 @@
     'ui.bootstrap',
 
     'dialogs.main',
-    'dialogs.default-translations',
 
     'app.config',
     'exceptionless',

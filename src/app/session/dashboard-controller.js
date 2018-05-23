@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService) {
+    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService, translateService) {
       var vm = this;
       function get() {
         function optionsCallback(options) {
@@ -60,11 +60,11 @@
             padding: {top: 0.085},
             renderer: 'stack',
             series: [{
-              name: 'Users',
+              name: translateService.T('Users'),
               color: 'rgba(60, 116, 0, .9)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }, {
-              name: 'Sessions',
+              name: translateService.T('Sessions'),
               color: 'rgba(124, 194, 49, .7)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }
@@ -76,7 +76,9 @@
             hover: {
               render: function (args) {
                 var date = moment.unix(args.domainX);
-                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                var dateTimeFormat = translateService.T('DateTimeFormat');
+                var dateFormat = translateService.T('DateFormat');
+                var formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
                 var content = '<div class="date">' + formattedDate + '</div>';
                 args.detail.sort(function (a, b) {
                   return a.order - b.order;

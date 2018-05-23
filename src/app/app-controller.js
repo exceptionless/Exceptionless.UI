@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, websocketService, stateService, SLACK_APPID, STRIPE_PUBLISHABLE_KEY, urlService, userService) {
+    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, websocketService, stateService, SLACK_APPID, STRIPE_PUBLISHABLE_KEY, urlService, userService, translateService) {
       var vm = this;
       function addHotkeys() {
         function logFeatureUsage(name) {
@@ -13,7 +13,7 @@
           hotkeys.bindTo($scope)
             .add({
               combo: 'c',
-              description: 'Chat with Support',
+              description: translateService.T('Chat with Support'),
               callback: function chatWithSupport() {
                 logFeatureUsage('Support');
                 showIntercom();
@@ -24,7 +24,7 @@
         hotkeys.bindTo($scope)
           .add({
             combo: 'g w',
-            description: 'Go to Documentation',
+            description: translateService.T('Go To Documentation'),
             callback: function goToDocumention() {
               logFeatureUsage('Documentation');
               $window.open('https://github.com/exceptionless/Exceptionless/wiki', '_blank');
@@ -32,7 +32,7 @@
           })
           .add({
             combo: 's',
-            description: 'Focus Search Bar',
+            description: translateService.T('Focus Search Bar'),
             callback: function focusSearchBar(event) {
               event.preventDefault();
 
@@ -42,7 +42,7 @@
           })
           .add({
             combo: 'g a',
-            description: 'Go to My Account',
+            description: translateService.T('Go To My Account'),
             callback: function goToMyAccount() {
               logFeatureUsage('Account');
               $state.go('app.account.manage', { tab: 'general' });
@@ -50,7 +50,7 @@
           })
           .add({
             combo: 'g n',
-            description: 'Go to Notifications',
+            description: translateService.T('Go To Notifications'),
             callback: function goToNotifications() {
               logFeatureUsage('Notifications');
               $state.go('app.account.manage', { tab: 'notifications' });
@@ -58,7 +58,7 @@
           })
           .add({
             combo: 'g d',
-            description: 'Go to Dashboard',
+            description: translateService.T('Go To Dashboard'),
             callback: function goToDashboard() {
               logFeatureUsage('Dashboard');
               $window.open(vm.dashboardUrl.all, '_self');
@@ -66,7 +66,7 @@
           })
           .add({
             combo: 'g o',
-            description: 'Go to Organizations',
+            description: translateService.T('Go To Organizations'),
             callback: function goToOrganizations() {
               logFeatureUsage('Organizations');
               $state.go('app.organization.list');
@@ -74,7 +74,7 @@
           })
           .add({
             combo: 'g p',
-            description: 'Go to Projects',
+            description: translateService.T('Go To Projects'),
             callback: function goToProjects() {
               logFeatureUsage('Projects');
               $state.go('app.project.list');
@@ -82,7 +82,7 @@
           })
           .add({
             combo: 'g+g',
-            description: 'Go to GitHub project',
+            description: translateService.T('Go To GitHub project'),
             callback: function goToGitHub() {
               logFeatureUsage('GitHub');
               $window.open('https://github.com/exceptionless/Exceptionless', '_blank');
@@ -90,7 +90,7 @@
           })
           .add({
             combo: 'g s',
-            description: 'Go to public slack channel',
+            description: translateService.T('Go to public slack channel'),
             callback: function goToSlack() {
               logFeatureUsage('Slack');
               $window.open('http://slack.exceptionless.com', '_blank');
@@ -178,7 +178,7 @@
 
       function changePlan(organizationId) {
         if (!STRIPE_PUBLISHABLE_KEY) {
-          notificationService.error('Billing is currently disabled.');
+          notificationService.error(translateService.T('Billing is currently disabled.'));
           return;
         }
 
@@ -203,7 +203,7 @@
         }
 
         if (data && data.type === 'User' && data.deleted && data.id === vm.user.id) {
-          notificationService.error('Your user account was deleted. Please create a new account.');
+          notificationService.error(translateService.T('Your user account was deleted. Please create a new account.'));
           return authService.logout(true);
         }
 
