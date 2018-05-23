@@ -27,7 +27,7 @@ jobs:
             # Tag and push docker image
             for tag in {$CIRCLE_BUILD_NUM,latest}; do
               (
-                docker tag $image exceptionless/$UI_DOCKER_IMAGE:$tag
+                docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
                 docker push exceptionless/$UI_DOCKER_IMAGE:$tag
               ) &
             done
