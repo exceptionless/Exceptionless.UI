@@ -62,7 +62,7 @@
           vm.isPromoted = $scope.isPromoted === true;
           vm.promoteTab = promoteTab;
           vm.showRaw = false;
-          vm.title = $scope.title;
+          vm.title = translateService.T($scope.title);
         };
       },
       controllerAs: 'vm'

@@ -7,10 +7,10 @@
           <input type="checkbox" ng-click="vm.updateSelection()" ng-checked="vm.selectedIds.length > 0" ng-disabled="vm.events.length === 0"><i></i>
         </label>
       </th>
-      <th>{{'Summary' | translate}}</th>
-      <th class="action-xl hidden-xs">{{'User' | translate}}</th>
+      <th>{{::'Summary' | translate}}</th>
+      <th class="action-xl hidden-xs">{{::'User' | translate}}</th>
       <th class="clickable" ng-class="{ 'relative-date': vm.relativeTo(), 'date': !vm.relativeTo(), 'dropup': !vm.sortByDateDescending }" ng-click="vm.toggleDateSort()">
-        <abbr title="{{vm.sortByDateDescending ? 'Sort Descending' : 'Sort Ascending' | translate}}">
+        <abbr title="{{::vm.sortByDateDescending ? 'Sort Descending' : 'Sort Ascending' | translate}}">
           {{::vm.timeHeaderText | translate}} <span class="caret"></span>
         </abbr>
       </th>
@@ -39,7 +39,7 @@
       <tr ng-if="vm.events.length === 0 || vm.loading">
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
         <td colspan="3">
-          <strong ng-if="vm.loading">{{'Loading...' | translate}}</strong>
+          <strong ng-if="vm.loading">{{::'Loading...' | translate}}</strong>
           <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No events were found with the current filter.': 'No events were found.' | translate}}</strong>
         </td>
       </tr>
@@ -51,7 +51,7 @@
       <div class="col-sm-4 hidden-xs">
         <div class="dropdown" ng-if="vm.actions.length > 0">
           <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            {{'Bulk Action' | translate}}
+            {{::'Bulk Action' | translate}}
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">

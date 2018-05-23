@@ -14,19 +14,19 @@
         <table class="table table-bordered bg-white">
           <tbody>
             <tr>
-              <th>{{'Organization' | translate}}</th>
+              <th>{{::'Organization' | translate}}</th>
               <td>{{vm.invoice.organization_name}}</td>
             </tr>
             <tr>
-              <th>{{'Invoice #' | translate}}</th>
+              <th>{{::'Invoice #' | translate}}</th>
               <td>{{vm.invoice.id}}</td>
             </tr>
             <tr>
-              <th>{{'Invoice Date' | translate}}</th>
+              <th>{{::'Invoice Date' | translate}}</th>
               <td>{{vm.invoice.date | date}}</td>
             </tr>
             <tr>
-              <th>{{'Status' | translate}}</th>
+              <th>{{::'Status' | translate}}</th>
               <td>{{vm.invoice.paid ? 'Paid' : 'Unpaid' | translate}}</td>
             </tr>
           </tbody>
@@ -41,9 +41,9 @@
             <table class="table table-striped table-bordered table-fixed b-t invoice">
               <thead>
                 <tr>
-                  <th>{{'Description' | translate}}</th>
-                  <th class="date">{{'Date' | translate}}</th>
-                  <th class="amount"><div class="text-right">{{'Amount' | translate}}</div></th>
+                  <th>{{::'Description' | translate}}</th>
+                  <th class="date">{{::'Date' | translate}}</th>
+                  <th class="amount"><div class="text-right">{{::'Amount' | translate}}</div></th>
                 </tr>
               </thead>
               <tbody>
@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                   <td>&nbsp;</td>
-                  <td><strong>{{'Total' | translate}}</strong></td>
+                  <td><strong>{{::'Total' | translate}}</strong></td>
                   <td><div class="text-right"><strong>{{vm.invoice.total | currency}}</strong></div></td>
                 </tr>
               </tbody>
@@ -66,10 +66,10 @@
 
     <div class="row">
       <div class="col-xs-6">
-        <strong>{{'Email:' | translate}}</strong> <a href="mailto:team@exceptionless.com">sales@exceptionless.com</a>
+        <strong>{{::'Email:' | translate}}</strong> <a href="mailto:team@exceptionless.com">sales@exceptionless.com</a>
       </div>
       <div class="col-xs-6">
-        <strong>{{'Website:' | translate}}</strong> <a href="https://exceptionless.com">https://exceptionless.com</a>
+        <strong>{{::'Website:' | translate}}</strong> <a href="https://exceptionless.com">https://exceptionless.com</a>
       </div>
     </div>
   </div>
