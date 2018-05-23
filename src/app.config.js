@@ -14,5 +14,6 @@
     .constant('STRIPE_PUBLISHABLE_KEY')
     .constant('SYSTEM_NOTIFICATION_MESSAGE')
     .constant('USE_HTML5_MODE', false)
-    .constant('USE_SSL', false);
+    .constant('USE_SSL', false)
+    .constant('ENABLE_ACCOUNT_CREATION', true);
 }());

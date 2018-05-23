@@ -18,6 +18,7 @@ function updateAppConfig() {
   var notificationMessage = process.env.Exceptionless_Message ? process.env.Exceptionless_Message : '';
   var useHTML5Mode = process.env.Exceptionless_HTML5Mode ? process.env.Exceptionless_HTML5Mode === 'true' : false;
   var useSSL = process.env.Exceptionless_EnableSSL ? process.env.Exceptionless_EnableSSL === 'true' : false;
+  var enableAccountCreation = process.env.Exceptionless_EnableAccountCreation ? process.env.Exceptionless_EnableAccountCreation : true;
 
   var content = [
     '(function () {',
@@ -37,6 +38,7 @@ function updateAppConfig() {
     '    .constant("SYSTEM_NOTIFICATION_MESSAGE", "' + notificationMessage + '")',
     '    .constant("USE_HTML5_MODE", ' + useHTML5Mode + ')',
     '    .constant("USE_SSL", ' + useSSL + ');',
+    '    .constant("ENABLE_ACCOUNT_CREATION", "' + enableAccountCreation + '")'
     '}());'
   ].join('\n');
 
