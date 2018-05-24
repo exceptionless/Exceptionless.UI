@@ -76,7 +76,7 @@
         {{::'Stack' | translate}}
         <span class="labels">
           <span class="label label-success" ng-if="vm.stack.date_fixed && !vm.stack.is_regressed">
-              <span class="hidden-xs">FIXED<span ng-if="vm.stack.fixed_in_version"> IN {{vm.stack.fixed_in_version}}</span></span>
+              <span class="hidden-xs" ng-bind-html="vm.stack.fixed_in_version?'Fixed_With_Version':'Fixed' | translate:vm.stack"></span>
               <span class="visible-xs">F</span>
           </span>
           <span class="label label-success" ng-if="vm.stack.is_regressed">
@@ -129,7 +129,7 @@
             </tr>
             <tr ng-if="(vm.stack.date_fixed && !vm.stack.is_regressed)">
               <th>{{::'Date Fixed' | translate}}</th>
-              <td><span>{{vm.stack.date_fixed | date: 'medium'}}</span></td>
+              <td><span>{{'DateTime' | translate : {'date' : vm.stack.date_fixed} }}</span></td>
             </tr>
             <tr ng-if="vm.stack.description">
               <th>{{::'Description' | translate}}</th>

@@ -8,7 +8,7 @@
         replace: true,
         scope: true,
         templateUrl: 'components/date-filter/date-filter-directive.tpl.html',
-        controller: function ($interval, $scope, dialogs, filterService) {
+        controller: function ($interval, $scope, dialogs, filterService, translateService) {
           var vm = this;
           function getFilteredDisplayName() {
             var time = filterService.getTime();
@@ -34,7 +34,7 @@
 
             var range = dateRangeParserService.parse(time);
             if (range && range.start && range.end) {
-              return moment(range.start).twix(moment(range.end)).format();
+              return moment(range.start).twix(moment(range.end)).format({dayFormat:translateService.T('DayFormat')});
             }
 
             setFilter('last week');
