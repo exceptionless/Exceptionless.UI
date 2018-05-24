@@ -537,8 +537,8 @@
 
         vm.chartOptions = [
           {name: translateService.T('Occurrences'), field: 'sum:count~1', title: '', selected: true, render: false},
-          {name: translateService.T('Average Value'), field: 'avg:value', title: translateService.T('The average of all event values'), render: true},
-          {name: translateService.T('Value Sum'), field: 'sum:value', title: translateService.T('The sum of all event values'), render: true}
+          {name: translateService.T('Average Value'), field: 'avg:value', title: translateService.T('The average of all event values'), render: true, menuName: translateService.T('Show Average Value')},
+          {name: translateService.T('Value Sum'), field: 'sum:value', title: translateService.T('The sum of all event values'), render: true, menuName: translateService.T('Show Value Sum')}
         ];
 
         vm.canRefresh = canRefresh;

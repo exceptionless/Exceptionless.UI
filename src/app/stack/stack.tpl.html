@@ -177,7 +177,7 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
               <li ng-repeat="o in vm.chartOptions | filter: { render: true } track by o.field">
-                <a ng-click="o.selected = !o.selected; vm.updateStats();" title="{{::o.title}}"><i class="fa fa-fw" ng-class="{'fa-check': !!o.selected}" ng-if="vm.hasSelectedChartOption()"></i>{{::'Show '+o.name | translate}}</a>
+                <a ng-click="o.selected = !o.selected; vm.updateStats();" title="{{::o.title}}"><i class="fa fa-fw" ng-class="{'fa-check': !!o.selected}" ng-if="vm.hasSelectedChartOption()"></i>{{::o.menuName}}</a>
               </li>
             </ul>
           </div>
