@@ -5,7 +5,7 @@ Html5Mode="${Html5Mode:-false}"
 EnableSsl="${EnableSsl:-false}"
 EnableAccountCreation="${EnableAccountCreation:-true}"
 
-echo "(function () {
+config="(function () {
   'use strict';
 
   angular.module('app.config', [])
@@ -23,7 +23,11 @@ echo "(function () {
     .constant('USE_HTML5_MODE', $Html5Mode)
     .constant('USE_SSL', $EnableSsl)
     .constant('ENABLE_ACCOUNT_CREATION', $EnableAccountCreation);
-}());" > "/app/app.config.js"
+}());"
+
+checksum=`echo -n $config | md5sum | cut -c 1-32`
+echo $config > "/app/app.config.$checksum.js"
+sed -i -E "s/app\.config\..+\.js/app.config.$checksum.js/" /app/index.html
 
 echo "Running NGINX"
 nginx
