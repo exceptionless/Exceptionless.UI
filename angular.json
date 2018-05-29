@@ -10,11 +10,7 @@
             "prefix": "app",
             "schematics": {
                 "@schematics/angular:component": {
-                    "prefix": "app",
-                    "styleExt": "less"
-                },
-                "@schematics/angular:directive": {
-                    "prefix": "app"
+                    "styleext": "less"
                 }
             },
             "architect": {

@@ -271,12 +271,14 @@ body{
 			bottom: 0;
 			width: @app-aside-width;
 			z-index: 1000;
+            overflow: visible !important;
 			.navi-wrap{
-				width: @app-aside-width + @scroll-bar-width;
+				/*width: @app-aside-width + @scroll-bar-width;*/
+				width: @app-aside-width;
 				position: relative;
 				height: 100%;
-				overflow-x:hidden;
-				overflow-y: scroll;
+				/*overflow-x:hidden;
+				overflow-y: scroll;*/
 				-webkit-overflow-scrolling: touch;
 				&::-webkit-scrollbar {
 				  -webkit-appearance: none;
@@ -298,7 +300,8 @@ body{
 			.aside-wrap{
 				width: @app-aside-folded-width;
 				.navi-wrap{
-					width: @app-aside-folded-width + @scroll-bar-width;
+					/*width: @app-aside-folded-width + @scroll-bar-width;*/
+					width: @app-aside-folded-width;
 				}
 				.smart & .navi-wrap{
 					width: @app-aside-folded-width;

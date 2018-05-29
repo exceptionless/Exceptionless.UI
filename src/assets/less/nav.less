@@ -139,7 +139,7 @@
           }
         }
         ul {
-          height: 0 !important;
+          height: 0px !important;
           position: absolute;
           left: 100%;
           top: 0 !important;
@@ -185,6 +185,24 @@
       }
     }
   }
+
+    .app-aside-folded .navi > ul > li:hover {
+        position: relative !important;
+        z-index: 10000;
+        display: block !important;
+    }
+
+    .app-aside-folded .navi > ul > li:hover {
+        > ul.nav {
+            width: 210px;
+            position: absolute;
+            z-index: 2000;
+            left: 60px;
+            margin-top: 0;
+            top: 100%;
+            display: block !important;
+        }
+    }
 }
 
 @media (max-width: 767px) {
