@@ -1,15 +1,15 @@
 <ul class="nav navbar-nav navbar-left">
-<li class="dropdown" refresh-on="filterChanged">
-    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last Hour<span class="caret"></span></a>
+    <li class="dropdown" refresh-on="filterChanged" open>
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last Hour<span class="caret"></span></a>
 
-    <ul class="dropdown-menu">
-        <li><a ng-click="vm.setFilter('last hour')">Last Hour</a></li>
-        <li><a ng-click="vm.setFilter('last 24 hours')">Last 24 Hours</a></li>
-        <li><a ng-click="vm.setFilter('last week')">Last Week</a></li>
-        <li><a ng-click="vm.setFilter('last 30 days')">Last 30 Days</a></li>
-        <li><a ng-click="vm.setFilter('all')">All Time</a></li>
-        <li role="separator" class="divider hidden-xs"></li>
-        <li class="hidden-xs"><a>Custom</a></li>
-    </ul>
-</li>
+        <ul class="dropdown-menu">
+            <li><a ng-click="vm.setFilter('last hour')">Last Hour</a></li>
+            <li><a ng-click="vm.setFilter('last 24 hours')">Last 24 Hours</a></li>
+            <li><a ng-click="vm.setFilter('last week')">Last Week</a></li>
+            <li><a ng-click="vm.setFilter('last 30 days')">Last 30 Days</a></li>
+            <li><a ng-click="vm.setFilter('all')">All Time</a></li>
+            <li role="separator" class="divider hidden-xs"></li>
+            <li class="hidden-xs"><a>Custom</a></li>
+        </ul>
+    </li>
 </ul>

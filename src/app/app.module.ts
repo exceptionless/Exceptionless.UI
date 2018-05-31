@@ -31,7 +31,34 @@ import { ReportsComponent } from './type/reports/reports.component';
 import { AdminComponent } from './type/admin/admin.component';
 import { DocumentationComponent } from './type/documentation/documentation.component';
 import { SupportComponent } from './type/support/support.component';
-
+import { ErrorRecentComponent } from './type/error/error-recent/error-recent.component';
+import { ErrorFrequentComponent } from './type/error/error-frequent/error-frequent.component';
+import { ErrorUsersComponent } from './type/error/error-users/error-users.component';
+import { ErrorNewComponent } from './type/error/error-new/error-new.component';
+import { LogDashboardComponent } from './type/log/log-dashboard/log-dashboard.component';
+import { LogFrequentComponent } from './type/log/log-frequent/log-frequent.component';
+import { LogNewComponent } from './type/log/log-new/log-new.component';
+import { LogRecentComponent } from './type/log/log-recent/log-recent.component';
+import { LogUsersComponent } from './type/log/log-users/log-users.component';
+import { BrokenDashboardComponent } from './type/broken/broken-dashboard/broken-dashboard.component';
+import { BrokenFrequentComponent } from './type/broken/broken-frequent/broken-frequent.component';
+import { BrokenNewComponent } from './type/broken/broken-new/broken-new.component';
+import { BrokenRecentComponent } from './type/broken/broken-recent/broken-recent.component';
+import { BrokenUsersComponent } from './type/broken/broken-users/broken-users.component';
+import { FeatureDashboardComponent } from './type/feature/feature-dashboard/feature-dashboard.component';
+import { FeatureFrequentComponent } from './type/feature/feature-frequent/feature-frequent.component';
+import { FeatureNewComponent } from './type/feature/feature-new/feature-new.component';
+import { FeatureRecentComponent } from './type/feature/feature-recent/feature-recent.component';
+import { FeatureUsersComponent } from './type/feature/feature-users/feature-users.component';
+import { EventsDashboardComponent } from './type/events/events-dashboard/events-dashboard.component';
+import { EventsFrequentComponent } from './type/events/events-frequent/events-frequent.component';
+import { EventsNewComponent } from './type/events/events-new/events-new.component';
+import { EventsRecentComponent } from './type/events/events-recent/events-recent.component';
+import { EventsUsersComponent } from './type/events/events-users/events-users.component';
+import { ProjectComponent } from './type/admin/project/project.component';
+import { OrganizationComponent } from './type/admin/organization/organization.component';
+import { AccountManageComponent } from './type/admin/account-manage/account-manage.component';
+import { OpenDirective } from './directives/open.directive';
 
 @NgModule({
     declarations: [
@@ -55,6 +82,34 @@ import { SupportComponent } from './type/support/support.component';
         AdminComponent,
         DocumentationComponent,
         SupportComponent,
+        ErrorRecentComponent,
+        ErrorFrequentComponent,
+        ErrorUsersComponent,
+        ErrorNewComponent,
+        LogDashboardComponent,
+        LogFrequentComponent,
+        LogNewComponent,
+        LogRecentComponent,
+        LogUsersComponent,
+        BrokenDashboardComponent,
+        BrokenFrequentComponent,
+        BrokenNewComponent,
+        BrokenRecentComponent,
+        BrokenUsersComponent,
+        FeatureDashboardComponent,
+        FeatureFrequentComponent,
+        FeatureNewComponent,
+        FeatureRecentComponent,
+        FeatureUsersComponent,
+        EventsDashboardComponent,
+        EventsFrequentComponent,
+        EventsNewComponent,
+        EventsRecentComponent,
+        EventsUsersComponent,
+        ProjectComponent,
+        OrganizationComponent,
+        AccountManageComponent,
+        OpenDirective,
     ],
     imports: [
         BrowserModule,

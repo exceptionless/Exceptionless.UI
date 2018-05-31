@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-project-filter',
-  templateUrl: './project-filter.component.html',
-  styleUrls: ['./project-filter.component.less']
+    selector: 'app-project-filter',
+    templateUrl: './project-filter.component.html',
+    styleUrls: ['./project-filter.component.less']
 })
 export class ProjectFilterComponent implements OnInit {
+    opened: boolean = false;
 
-  constructor() { }
+    constructor() {
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
+    toggleOpen() {
+        this.opened = !this.opened
+    }
 }

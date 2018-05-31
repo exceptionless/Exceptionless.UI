@@ -1,13 +1,13 @@
 <ul class="nav navbar-nav navbar-left">
+    <li class="dropdown" refresh-on="OrganizationChanged ProjectChanged" refresh-throttle="5000"  open>
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >All Projects <span class="caret"></span></a>
 
-<li class="dropdown" refresh-on="OrganizationChanged ProjectChanged" refresh-throttle="5000">
-    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >All Projects <span class="caret"></span></a>
-
-    <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" auto-active>
-        <li><a>All Projects</a></li>
-        <li role="separator" class="divider"></li>
-        <li ng-repeat-end role="separator" class="divider"></li>
-        <li><a>Add New Project</a></li>
-    </ul>
-</li>
+        <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" auto-active>
+            <li><a>All Projects</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a>Magento</a></li>
+            <li ng-repeat-end role="separator" class="divider"></li>
+            <li><a>Add New Project</a></li>
+        </ul>
+    </li>
 </ul>
