@@ -8,7 +8,7 @@
             <nav class="navi">
                 <ul class="nav">
                     <li routerLinkActive="active">
-                        <a routerLink="/type/error" class="auto">
+                        <a routerLink="/type/{{ types.exceptions }}/dashboard" class="auto">
                             <span class="pull-right text-muted">
                             <i class="fa fa-fw fa-angle-right text"></i>
                             <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -18,32 +18,32 @@
                         </a>
                         <ul class="nav nav-sub dk">
                             <li class="nav-sub-header">Exceptions</li>
-                            <li routerLink="/type/error/dashboard" routerLinkActive="active">
-                                <a routerLink="/type/error/dashboard">
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.exceptions }}/{{ panel.dashboard }}">
                                     <i class="fa fa-dashboard fa-fw"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.exceptions }}/{{ panel.recent }}">
                                     <i class="fa fa-calendar fa-fw"></i>
                                     <span>Most Recent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.exceptions }}/{{ panel.frequent }}">
                                     <i class="fa fa-signal fa-fw"></i>
                                     <span>Most Frequent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.exceptions }}/{{ panel.users }}">
                                     <i class="fa fa-users fa-fw"></i>
                                     <span>Most Users</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.exceptions }}/{{ panel.new }}">
                                     <i class="fa fa-asterisk fa-fw"></i>
                                     <span>New</span>
                                 </a>
@@ -51,7 +51,7 @@
                         </ul>
                     </li>
                     <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/type/log">
+                        <a href class="auto" routerLink="/type/{{ types.log }}/{{ panel.dashboard }}">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -61,32 +61,32 @@
                         </a>
                         <ul class="nav nav-sub dk" auto-active>
                             <li class="nav-sub-header">Log Messages</li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.log }}/{{ panel.dashboard }}">
                                     <i class="fa fa-dashboard fa-fw"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.log }}/{{ panel.recent }}">
                                     <i class="fa fa-calendar fa-fw"></i>
                                     <span>Most Recent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.log }}/{{ panel.frequent }}">
                                     <i class="fa fa-signal fa-fw"></i>
                                     <span>Most Frequent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.log }}/{{ panel.users }}">
                                     <i class="fa fa-users fa-fw"></i>
                                     <span>Most Users</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.log }}/{{ panel.new }}">
                                     <i class="fa fa-asterisk fa-fw"></i>
                                     <span>New</span>
                                 </a>
@@ -94,7 +94,7 @@
                         </ul>
                     </li>
                     <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/type/404">
+                        <a href class="auto" routerLink="/type/{{ types.broken }}/{{ panel.dashboard }}">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -104,32 +104,32 @@
                         </a>
                         <ul class="nav nav-sub dk" auto-active>
                             <li class="nav-sub-header">Broken Links</li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.broken }}/{{ panel.dashboard }}">
                                     <i class="fa fa-dashboard fa-fw"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.broken }}/{{ panel.recent }}">
                                     <i class="fa fa-calendar fa-fw"></i>
                                     <span>Most Recent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.broken }}/{{ panel.frequent }}">
                                     <i class="fa fa-signal fa-fw"></i>
                                     <span>Most Frequent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.broken }}/{{ panel.users }}">
                                     <i class="fa fa-users fa-fw"></i>
                                     <span>Most Users</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.broken }}/{{ panel.new }}">
                                     <i class="fa fa-asterisk fa-fw"></i>
                                     <span>New</span>
                                 </a>
@@ -137,7 +137,7 @@
                         </ul>
                     </li>
                     <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/type/usage">
+                        <a href class="auto" routerLink="/type/{{ types.feature }}/{{ panel.dashboard }}">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -147,32 +147,32 @@
                         </a>
                         <ul class="nav nav-sub dk" auto-active>
                             <li class="nav-sub-header">Feature Usages</li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.feature }}/{{ panel.dashboard }}">
                                     <i class="fa fa-dashboard fa-fw"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.feature }}/{{ panel.recent }}">
                                     <i class="fa fa-calendar fa-fw"></i>
                                     <span>Most Recent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.feature }}/{{ panel.frequent }}">
                                     <i class="fa fa-signal fa-fw"></i>
                                     <span>Most Frequent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.feature }}/{{ panel.users }}">
                                     <i class="fa fa-users fa-fw"></i>
                                     <span>Most Users</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.feature }}/{{ panel.recent }}">
                                     <i class="fa fa-asterisk fa-fw"></i>
                                     <span>New</span>
                                 </a>
@@ -180,7 +180,7 @@
                         </ul>
                     </li>
                     <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/type/events">
+                        <a href class="auto" routerLink="/type/{{ types.events }}/{{ panel.dashboard }}">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -190,32 +190,32 @@
                         </a>
                         <ul class="nav nav-sub dk" auto-active>
                             <li class="nav-sub-header">All Events</li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.events }}/{{ panel.dashboard }}">
                                     <i class="fa fa-dashboard fa-fw"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.events }}/{{ panel.recent }}">
                                     <i class="fa fa-calendar fa-fw"></i>
                                     <span>Most Recent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.events }}/{{ panel.frequent }}">
                                     <i class="fa fa-signal fa-fw"></i>
                                     <span>Most Frequent</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.events }}/{{ panel.users }}">
                                     <i class="fa fa-users fa-fw"></i>
                                     <span>Most Users</span>
                                 </a>
                             </li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/{{ types.events }}/{{ panel.new }}">
                                     <i class="fa fa-asterisk fa-fw"></i>
                                     <span>New</span>
                                 </a>
@@ -223,7 +223,7 @@
                         </ul>
                     </li>
                     <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/type/reports">
+                        <a href class="auto" routerLink="session/dashboard">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -233,8 +233,8 @@
                         </a>
                         <ul class="nav nav-sub dk" auto-active>
                             <li class="nav-sub-header">Reports</li>
-                            <li>
-                                <a>
+                            <li routerLinkActive="active">
+                                <a routerLink="session/dashboard">
                                     <i class="fa fa-heartbeat fa-fw"></i>
                                     <span>Sessions</span>
                                 </a>
@@ -242,7 +242,7 @@
                         </ul>
                     </li>
                     <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/type/admin">
+                        <a href class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -272,7 +272,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li routerLinkActive="active">
                         <a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank" title="Documentation">
                             <i class="fa fa-book fa-fw"></i>
                             <span>Documentation</span>
