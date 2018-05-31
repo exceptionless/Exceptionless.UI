@@ -7,7 +7,7 @@ import {Component, OnInit} from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
     types: object;
-    panel: object;
+    actions: object;
 
     constructor() {
         this.types = {
@@ -15,16 +15,13 @@ export class SidebarComponent implements OnInit {
             log: 'log',
             broken: '404',
             feature: 'usage',
-            events: 'events',
+            events: 'events'
         };
 
-        this.panel = {
-            dashboard: 'dashboard',
-            recent: 'recent',
-            frequent: 'frequent',
-            users: 'users',
-            new: 'new',
-        }
+        this.actions = {
+            list: 'list',
+            edit: 'edit'
+        };
     }
 
     ngOnInit() {
