@@ -30,7 +30,9 @@
                             "src/assets/app.less",
                             "src/styles.less"
                         ],
-                        "scripts": []
+                        "scripts": [
+
+                        ]
                     },
                     "configurations": {
                         "production": {

@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BasicService } from './basic.service';
+import { GlobalVariables } from "../global-variables";
 
 @Injectable()
 export class AuthService extends BasicService {
     constructor(
-        http: HttpClient
+        http: HttpClient,
+        _global: GlobalVariables,
     ) {
-        super(http);
+        super(http, _global);
         this.route = '';
         this.type = '';
         this.data = {};
+        this.authentication = false;
     }
 
     login(credential) {

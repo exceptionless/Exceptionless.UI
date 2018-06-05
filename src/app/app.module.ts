@@ -1,11 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
+import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,6 +34,13 @@ import { RecentComponent } from './type/common/recent/recent.component';
 import { UsersComponent } from './type/common/users/users.component';
 import { NewComponent } from './type/common/new/new.component';
 import { FrequentComponent } from './type/common/frequent/frequent.component';
+import { OrganizationNotificationComponent } from './type/components/organization-notification/organization-notification.component';
+import { GlobalVariables } from "./global-variables";
+import { OrganizationService } from "./service/organization.service";
+import { FilterService } from "./service/filter.service";
+import { RickshawComponent } from './type/rickshaw/rickshaw.component';
+import { StacksComponent } from './type/stacks/stacks.component';
+import { EventsComponent } from './type/events/events.component';
 
 @NgModule({
     declarations: [
@@ -60,17 +67,21 @@ import { FrequentComponent } from './type/common/frequent/frequent.component';
         UsersComponent,
         NewComponent,
         FrequentComponent,
+        OrganizationNotificationComponent,
+        RickshawComponent,
+        StacksComponent,
+        EventsComponent,
     ],
     imports: [
         BrowserModule,
         FormsModule,
-        HttpModule,
         AppRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule, // required animations module
         ToastrModule.forRoot(), // ToastrModule added
+        LockerModule
     ],
-    providers: [BasicService, AuthService],
+    providers: [GlobalVariables, BasicService, AuthService, OrganizationService, FilterService],
     bootstrap: [AppComponent]
 })
 
