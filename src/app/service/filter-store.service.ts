@@ -9,7 +9,6 @@ export class FilterStoreService {
     constructor(
         private locker: Locker,
     ) {
-
         this.locker.setDriverFallback(DRIVERS.LOCAL);
         this.locker.setNamespace('filter');
     }

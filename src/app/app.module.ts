@@ -7,6 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 
+import 'd3';
+import 'rickshaw';
+import { RickshawModule } from 'ng2-rickshaw';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
@@ -79,7 +83,8 @@ import { EventsComponent } from './type/events/events.component';
         HttpClientModule,
         BrowserAnimationsModule, // required animations module
         ToastrModule.forRoot(), // ToastrModule added
-        LockerModule
+        LockerModule,
+        RickshawModule
     ],
     providers: [GlobalVariables, BasicService, AuthService, OrganizationService, FilterService],
     bootstrap: [AppComponent]

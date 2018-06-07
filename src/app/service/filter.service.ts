@@ -31,12 +31,95 @@ export class FilterService extends BasicService {
         this._time = this.filterStoreService.getTimeFilter() || this.DEFAULT_TIME_FILTER;
     }
 
-    apply(source, includeHiddenAndFixedFilter) {};
-    buildFilter(includeHiddenAndFixedFilter) {};
-    clearFilter() {};
-    clearOrganizationAndProjectFilter() {};
-    fireFilterChanged() {};
-    getDefaultOptions() {};
+    apply(source, includeHiddenAndFixedFilter) {
+        return Object.assign({}, this.getDefaultOptions(includeHiddenAndFixedFilter), source);
+    };
+
+    buildFilter(includeHiddenAndFixedFilter) {
+        includeHiddenAndFixedFilter = (typeof includeHiddenAndFixedFilter !== 'undefined') ?  includeHiddenAndFixedFilter : true;
+        let filters: any[] = [];
+
+        if (this._organizationId) {
+            filters.push('organization:' + this._organizationId);
+        }
+
+        if (this._projectId) {
+            filters.push('project:' + this._projectId);
+        }
+
+        if (this._eventType) {
+            filters.push('type:' + this._eventType);
+        }
+
+        let filter = this._raw || '';
+        let isWildCardFilter = filter.trim() === '*';
+
+        if (includeHiddenAndFixedFilter && !isWildCardFilter) {
+            let hasFixed = filter.search(/\bfixed:/i) !== -1;
+            if (!hasFixed) {
+                filters.push('fixed:false');
+            }
+
+            let hasHidden = filter.search(/\bhidden:/i) !== -1;
+            if (!hasHidden) {
+                filters.push('hidden:false');
+            }
+        }
+
+        if (!!filter && !isWildCardFilter) {
+            filters.push('(' + filter + ')');
+        }
+
+        return filters.join(' ').trim();
+    };
+
+    clearFilter() {
+        if (!this._raw) {
+            return;
+        }
+
+        this.setFilter(null, false);
+        this.fireFilterChanged();
+    };
+
+    clearOrganizationAndProjectFilter() {
+        if (!this._organizationId && !this._projectId) {
+            return;
+        }
+
+        this._organizationId = this._projectId = null;
+        this.fireFilterChanged();
+    };
+
+    fireFilterChanged(includeHiddenAndFixedFilter?) {
+        let options = {
+            organization_id: this._organizationId,
+            project_id: this._projectId,
+            type: this._eventType
+        };
+
+        //$rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeHiddenAndFixedFilter)));
+    };
+
+    getDefaultOptions(includeHiddenAndFixedFilter) {
+        let options = {};
+
+        let offset = this.getTimeOffset();
+        if (offset) {
+            Object.assign(options, { offset: offset });
+        }
+
+        let filter = this.buildFilter(includeHiddenAndFixedFilter);
+        if (filter) {
+            Object.assign(options, { filter: filter });
+        }
+
+        if (!!this._time && this._time !== 'all') {
+            Object.assign(options, { time: this._time });
+        }
+
+        return options;
+    };
 
     getFilter() {
         return this._raw;
