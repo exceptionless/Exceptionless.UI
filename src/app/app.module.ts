@@ -11,6 +11,8 @@ import 'd3';
 import 'rickshaw';
 import { RickshawModule } from 'ng2-rickshaw';
 
+import { ModalDialogModule } from 'ngx-modal-dialog';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
@@ -42,9 +44,11 @@ import { OrganizationNotificationComponent } from './type/components/organizatio
 import { GlobalVariables } from "./global-variables";
 import { OrganizationService } from "./service/organization.service";
 import { FilterService } from "./service/filter.service";
+import { DialogService } from "./service/dialog.service"
 import { RickshawComponent } from './type/rickshaw/rickshaw.component';
 import { StacksComponent } from './type/stacks/stacks.component';
 import { EventsComponent } from './type/events/events.component';
+import { ConfirmDialogComponent } from './type/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
     declarations: [
@@ -75,6 +79,7 @@ import { EventsComponent } from './type/events/events.component';
         RickshawComponent,
         StacksComponent,
         EventsComponent,
+        ConfirmDialogComponent,
     ],
     imports: [
         BrowserModule,
@@ -84,10 +89,12 @@ import { EventsComponent } from './type/events/events.component';
         BrowserAnimationsModule, // required animations module
         ToastrModule.forRoot(), // ToastrModule added
         LockerModule,
-        RickshawModule
+        RickshawModule,
+        ModalDialogModule.forRoot()
     ],
     providers: [GlobalVariables, BasicService, AuthService, OrganizationService, FilterService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [ConfirmDialogComponent]
 })
 
 export class AppModule {

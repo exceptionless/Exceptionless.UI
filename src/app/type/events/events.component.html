@@ -40,7 +40,7 @@
             <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
             <td colspan="3">
                 <strong ng-if="vm.loading">Loading...</strong>
-                <strong ng-if="!vm.loading">{{vm.hasFilter() ? 'No events were found with the current filter.': 'No events were found.'}}</strong>
+                <strong ng-if="!vm.loading">No events were found with the current filter.</strong>
             </td>
         </tr>
         </tbody>
@@ -55,12 +55,12 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">{{ action.name }}</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" ng-repeat="action in vm.actions" ng-click="vm.save(action)">Save</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-sm-4 text-center" ng-class="vm.previous || vm.next ? 'col-xs-8': 'col-xs-12'" ng-if="vm.pageSummary">
-                <small class="text-muted inline m-t-xs">{{vm.pageSummary}}</small>
+                <small class="text-muted inline m-t-xs">Sample Page</small>
             </div>
             <div class="col-sm-4 col-xs-4 text-right" ng-if="vm.previous || vm.next">
                 <ul class="pagination pagination-sm m-t-none m-b-none">

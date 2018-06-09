@@ -31,7 +31,7 @@ export class FilterService extends BasicService {
         this._time = this.filterStoreService.getTimeFilter() || this.DEFAULT_TIME_FILTER;
     }
 
-    apply(source, includeHiddenAndFixedFilter) {
+    apply(source, includeHiddenAndFixedFilter?) {
         return Object.assign({}, this.getDefaultOptions(includeHiddenAndFixedFilter), source);
     };
 

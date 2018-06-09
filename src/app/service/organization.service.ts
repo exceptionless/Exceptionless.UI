@@ -96,7 +96,7 @@ export class OrganizationService extends  BasicService {
         return retentionDays <= 0 ? new Date(2012, 1, 1) : moment().subtract(retentionDays, 'days').toDate();
     };
 
-    getOldestPossibleEventDate(organizations, maximumRetentionDays) {
+    getOldestPossibleEventDate(organizations, maximumRetentionDays?) {
         return moment.max([
             moment(this.getOldestCreationDate(organizations)).subtract(3, 'days'),
             moment(this.getOldestRetentionStartDate(organizations, maximumRetentionDays))

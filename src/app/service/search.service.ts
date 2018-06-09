@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BasicService } from './basic.service';
 import { GlobalVariables } from "../global-variables";
 import { ToastrService } from 'ngx-toastr';

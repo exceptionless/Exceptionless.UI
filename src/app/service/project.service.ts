@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BasicService} from './basic.service';
-import {GlobalVariables} from "../global-variables";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BasicService } from './basic.service';
+import { GlobalVariables } from "../global-variables";
 
 @Injectable({
     providedIn: 'root'
