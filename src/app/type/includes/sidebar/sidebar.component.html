@@ -242,7 +242,7 @@
                         </ul>
                     </li>
                     <li routerLinkActive="active">
-                        <a href class="auto">
+                        <a href class="auto" routerLink="/type/project/list">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -252,20 +252,20 @@
                         </a>
                         <ul class="nav nav-sub dk" auto-active>
                             <li class="nav-sub-header">Admin</li>
-                            <li>
-                                <a ui-sref="app.project.list">
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/project/list">
                                     <i class="fa fa-briefcase fa-fw"></i>
                                     <span>Project Manager</span>
                                 </a>
                             </li>
-                            <li>
-                                <a ui-sref="app.organization.list">
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/organization/list">
                                     <i class="fa fa-group fa-fw"></i>
                                     <span>Organization Manager</span>
                                 </a>
                             </li>
-                            <li>
-                                <a ui-sref="app.account.manage">
+                            <li routerLinkActive="active">
+                                <a routerLink="/type/account/manage">
                                     <i class="fa fa-user fa-fw"></i>
                                     <span>My Account</span>
                                 </a>
@@ -285,7 +285,6 @@
                         </a>
                     </li>
                 </ul>
-
             </nav>
         </div>
     </div>

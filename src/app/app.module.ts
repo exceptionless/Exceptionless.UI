@@ -13,6 +13,8 @@ import { RickshawModule } from 'ng2-rickshaw';
 
 import { ModalDialogModule } from 'ngx-modal-dialog';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
@@ -49,6 +51,12 @@ import { RickshawComponent } from './type/rickshaw/rickshaw.component';
 import { StacksComponent } from './type/stacks/stacks.component';
 import { EventsComponent } from './type/events/events.component';
 import { ConfirmDialogComponent } from './type/confirm-dialog/confirm-dialog.component';
+import { ProjectListComponent } from './type/admin/project/project-list/project-list.component';
+import { ProjectNewComponent } from './type/admin/project/project-new/project-new.component';
+import { OrganizationNewComponent } from './type/admin/organization/organization-new/organization-new.component';
+import { OrganizationListComponent } from './type/admin/organization/organization-list/organization-list.component';
+import { ProjectEditComponent } from './type/admin/project/project-edit/project-edit.component';
+import { OrganizationEditComponent } from './type/admin/organization/organization-edit/organization-edit.component';
 
 @NgModule({
     declarations: [
@@ -80,6 +88,12 @@ import { ConfirmDialogComponent } from './type/confirm-dialog/confirm-dialog.com
         StacksComponent,
         EventsComponent,
         ConfirmDialogComponent,
+        ProjectListComponent,
+        ProjectNewComponent,
+        OrganizationNewComponent,
+        OrganizationListComponent,
+        ProjectEditComponent,
+        OrganizationEditComponent,
     ],
     imports: [
         BrowserModule,
@@ -90,7 +104,8 @@ import { ConfirmDialogComponent } from './type/confirm-dialog/confirm-dialog.com
         ToastrModule.forRoot(), // ToastrModule added
         LockerModule,
         RickshawModule,
-        ModalDialogModule.forRoot()
+        ModalDialogModule.forRoot(),
+        NgbModule.forRoot()
     ],
     providers: [GlobalVariables, BasicService, AuthService, OrganizationService, FilterService],
     bootstrap: [AppComponent],
