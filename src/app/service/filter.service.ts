@@ -238,7 +238,7 @@ export class FilterService extends BasicService {
         }
     };
 
-    setTime(time, suspendNotifications) {
+    setTime(time, suspendNotifications?) {
         if (time == this._time) {
             return;
         }

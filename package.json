@@ -20,7 +20,10 @@
         "@angular/platform-browser": "^6.0.2",
         "@angular/platform-browser-dynamic": "^6.0.2",
         "@angular/router": "^6.0.2",
+        "@auth0/angular-jwt": "^2.0.0",
         "@ng-bootstrap/ng-bootstrap": "^2.1.0",
+        "angular-2-daterangepicker": "^1.1.42",
+        "angular-oauth2-oidc": "^4.0.2",
         "angular-safeguard": "^2.0.2",
         "bootstrap": "^3.3.7",
         "bson-objectid": "^1.2.3",
@@ -35,6 +38,7 @@
         "ngx-toastr": "^8.7.3",
         "rickshaw": "^1.6.6",
         "rxjs-compat": "^6.2.0",
+        "twix": "^1.2.1",
         "zone.js": "^0.8.26"
     },
     "devDependencies": {

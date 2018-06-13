@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { JwtModule, JwtModuleOptions, JwtHelperService  } from '@auth0/angular-jwt'
+import { OAuthModule } from 'angular-oauth2-oidc';
+
 import { ToastrModule } from 'ngx-toastr';
 import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 
@@ -15,6 +18,8 @@ import { ModalDialogModule } from 'ngx-modal-dialog';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { DaterangepickerModule } from 'angular-2-daterangepicker';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
@@ -23,6 +28,8 @@ import { SignupComponent } from './auth/signup/signup.component';
 
 import { BasicService } from './service/basic.service';
 import { AuthService } from './service/auth.service';
+import { AuthCheckService } from "./service/auth-check.service";
+import { AuthGuardService } from "./service/auth-guard.service"
 import { TypeComponent } from './type/type.component';
 import { HeaderComponent } from './type/includes/header/header.component';
 import { SidebarComponent } from './type/includes/sidebar/sidebar.component';
@@ -57,6 +64,20 @@ import { OrganizationNewComponent } from './type/admin/organization/organization
 import { OrganizationListComponent } from './type/admin/organization/organization-list/organization-list.component';
 import { ProjectEditComponent } from './type/admin/project/project-edit/project-edit.component';
 import { OrganizationEditComponent } from './type/admin/organization/organization-edit/organization-edit.component';
+import { CustomDateRangeDialogComponent } from './type/custom-date-range-dialog/custom-date-range-dialog.component';
+
+const helper = new JwtHelperService();
+
+export function tokenGetter() {
+    return localStorage.getItem('access_token');
+}
+
+const JWT_Module_Options: JwtModuleOptions = {
+    config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['https://exceptionless.com']
+    }
+};
 
 @NgModule({
     declarations: [
@@ -94,8 +115,10 @@ import { OrganizationEditComponent } from './type/admin/organization/organizatio
         OrganizationListComponent,
         ProjectEditComponent,
         OrganizationEditComponent,
+        CustomDateRangeDialogComponent,
     ],
     imports: [
+        OAuthModule.forRoot(),
         BrowserModule,
         FormsModule,
         AppRoutingModule,
@@ -105,11 +128,13 @@ import { OrganizationEditComponent } from './type/admin/organization/organizatio
         LockerModule,
         RickshawModule,
         ModalDialogModule.forRoot(),
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        JwtModule.forRoot(JWT_Module_Options),
+        DaterangepickerModule
     ],
-    providers: [GlobalVariables, BasicService, AuthService, OrganizationService, FilterService],
+    providers: [GlobalVariables, BasicService, AuthCheckService, AuthGuardService, AuthService, OrganizationService, FilterService],
     bootstrap: [AppComponent],
-    entryComponents: [ConfirmDialogComponent]
+    entryComponents: [ConfirmDialogComponent, CustomDateRangeDialogComponent]
 })
 
 export class AppModule {

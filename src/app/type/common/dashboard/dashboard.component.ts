@@ -20,10 +20,10 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.modalDialogService.openDialog(this.viewRef, {
+        /*this.modalDialogService.openDialog(this.viewRef, {
             title: 'Some modal title',
             childComponent: ConfirmDialogComponent
-        });
+        });*/
     }
 
 }

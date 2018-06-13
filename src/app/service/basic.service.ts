@@ -34,7 +34,7 @@ export class BasicService {
                 const httpOptions = {
                     headers: new HttpHeaders({
                         'Content-Type':  'application/json',
-                        'Authorization': 'Bearer FH3nPP9K6YTV0j0bgreKTZK2XzrqZcvAjwnsBLME'
+                        'Authorization': 'Bearer UlJHDTNVl9YwgeNrpRaG7zY7ilYYJQ0HXmHPKtqJ'
                     })
                 };
 
@@ -42,7 +42,7 @@ export class BasicService {
                     const httpOptions = {
                         headers: new HttpHeaders({
                             'Content-Type':  this.contentType,
-                            'Authorization': 'Bearer FH3nPP9K6YTV0j0bgreKTZK2XzrqZcvAjwnsBLME'
+                            'Authorization': 'Bearer UlJHDTNVl9YwgeNrpRaG7zY7ilYYJQ0HXmHPKtqJ'
                         })
                     };
 
@@ -59,7 +59,7 @@ export class BasicService {
                 const httpOptions = {
                     headers: new HttpHeaders({
                         'Content-Type':  'application/json',
-                        'Authorization': 'Bearer FH3nPP9K6YTV0j0bgreKTZK2XzrqZcvAjwnsBLME'
+                        'Authorization': 'Bearer UlJHDTNVl9YwgeNrpRaG7zY7ilYYJQ0HXmHPKtqJ'
                     })
                 };
 
@@ -67,7 +67,7 @@ export class BasicService {
                     const httpOptions = {
                         headers: new HttpHeaders({
                             'Content-Type':  this.contentType,
-                            'Authorization': 'Bearer FH3nPP9K6YTV0j0bgreKTZK2XzrqZcvAjwnsBLME'
+                            'Authorization': 'Bearer UlJHDTNVl9YwgeNrpRaG7zY7ilYYJQ0HXmHPKtqJ'
                         })
                     };
 
@@ -89,7 +89,7 @@ export class BasicService {
                 const httpOptions = {
                     headers: new HttpHeaders({
                         'Content-Type':  'application/json',
-                        'Authorization': 'Bearer FH3nPP9K6YTV0j0bgreKTZK2XzrqZcvAjwnsBLME'
+                        'Authorization': 'Bearer UlJHDTNVl9YwgeNrpRaG7zY7ilYYJQ0HXmHPKtqJ'
                     })
                 };
 
@@ -102,7 +102,7 @@ export class BasicService {
                 const httpOptions = {
                     headers: new HttpHeaders({
                         'Content-Type':  'application/json',
-                        'Authorization': 'Bearer FH3nPP9K6YTV0j0bgreKTZK2XzrqZcvAjwnsBLME'
+                        'Authorization': 'Bearer UlJHDTNVl9YwgeNrpRaG7zY7ilYYJQ0HXmHPKtqJ'
                     })
                 };
 

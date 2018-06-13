@@ -1,11 +1,24 @@
 <ul class="nav navbar-nav navbar-left">
     <li class="dropdown" refresh-on="OrganizationChanged ProjectChanged" refresh-throttle="5000"  open>
-        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >All Projects <span class="caret"></span></a>
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >{{ filteredDisplayName }} <span class="caret"></span></a>
 
         <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" auto-active>
-            <li><a>All Projects</a></li>
+            <li><a (click)="setItem('','All Projects');">All Projects</a></li>
             <li role="separator" class="divider"></li>
-            <li><a>Magento</a></li>
+            <li *ngIf="isLoadingOrganizations" disabled><a href="#">Loading Organizations...</a></li>
+            <li *ngFor="let organization of organizations">
+                <a (click)="setItem(organization.id, organization.name);">
+                    {{ organization.name }}
+                    <span class="icon-right"><i class="fa fa-gear fa-fw"></i></span>
+                </a>
+            </li>
+            <li *ngIf="isLoadingProjects" class="child-menu" disabled><a href="#">Loading Projects...</a></li>
+            <li *ngFor="let project of projects" class="child-menu">
+                <a (click)="setItem(project.id, project.name);">
+                    {{ project.name }}
+                    <span class="icon-right"><i class="fa fa-gear fa-fw"></i></span>
+                </a>
+            </li>
             <li ng-repeat-end role="separator" class="divider"></li>
             <li><a>Add New Project</a></li>
         </ul>

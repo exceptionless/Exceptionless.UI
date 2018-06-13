@@ -104,7 +104,7 @@ export class OrganizationService extends  BasicService {
     };
 
     getAll(options, useCache) {
-        this.route = 'api/v2/organizations';
+        this.route = 'api/v2/organizations/' + options;
         this.type = 'get';
         this.authentication = true;
         this.data = {};

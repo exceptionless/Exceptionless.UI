@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, CanActivate } from '@angular/router';
+import { AuthGuardService  as AuthGuard } from "./service/auth-guard.service"
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
@@ -53,9 +54,10 @@ const routes: Routes = [
                 ]
             },
             { path: 'account/manage', component: AccountManageComponent },
-        ]
+        ],
+        canActivate: [AuthGuard]
     },
-    { path: 'session/dashboard',    component: ReportsComponent },
+    { path: 'session/dashboard',    component: ReportsComponent, canActivate: [AuthGuard]},
     { path: '',   redirectTo: '/login', pathMatch: 'full' },
 ];
 
