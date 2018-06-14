@@ -8,6 +8,10 @@
 # dependencies
 /node_modules
 /bower_components
+/src/bower_components
+/src/node_modules
+/src/dist
+/src/results
 
 # IDEs and editors
 /.idea
