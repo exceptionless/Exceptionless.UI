@@ -35,7 +35,7 @@ export class EventService extends BasicService {
         return !isNaN(result) && isFinite(result) ? result : 0.0;
     };
 
-    count(aggregations, optionsCallback, includeHiddenAndFixedFilter) {
+    count(aggregations, optionsCallback?, includeHiddenAndFixedFilter?) {
         let options = this.filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, includeHiddenAndFixedFilter);
         options = typeof optionsCallback == 'function' ? optionsCallback(options) : options;
 
@@ -44,6 +44,7 @@ export class EventService extends BasicService {
             this.route = 'api/v2/organizations/' + organization + '/events/count';
             this.type = 'get';
             this.data = options;
+            this.authentication = true;
 
             return this.call();
         }
@@ -53,6 +54,7 @@ export class EventService extends BasicService {
             this.route = 'api/v2/projects/' + project + '/events/count';
             this.type = 'get';
             this.data = options;
+            this.authentication = true;
 
             return this.call();
         }
@@ -60,6 +62,7 @@ export class EventService extends BasicService {
         this.route = 'api/v2/events/count';
         this.type = 'get';
         this.data = options;
+        this.authentication = true;
 
         return this.call();
     };

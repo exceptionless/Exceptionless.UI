@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import * as moment from "moment";
-import "twix";
 import { FilterService } from "../../../service/filter.service";
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { CustomDateRangeDialogComponent } from "../../custom-date-range-dialog/custom-date-range-dialog.component";
@@ -28,6 +27,7 @@ export class DateFilterComponent implements OnInit {
 
     getFilteredDisplayName() {
         let time = this.filterService.getTime();
+
         if (time === 'last hour') {
             return 'Last Hour';
         }
@@ -50,7 +50,7 @@ export class DateFilterComponent implements OnInit {
 
         let range = this.dateRangeParserService.parse(time);
         if (range && range.start && range.end) {
-            return moment(range.start).twix(moment(range.end)).format();
+            return moment(range.start).format('MMM DD, hh:ss A') + ' - ' + moment(range.end).format('MMM DD, hh:ss A');
         }
 
         this.setFilter('last week');

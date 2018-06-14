@@ -63,8 +63,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-bar-chart-o"></i>History</div>
                 <div class="panel-body">
-                    <app-rickshaw></app-rickshaw>
-                    <!--<rickshaw options="vm.chart.options" features="vm.chart.features"></rickshaw>-->
+                    <app-rickshaw [options]="chart['options']" [features]="chart['features']"></app-rickshaw>
                 </div>
             </div>
 

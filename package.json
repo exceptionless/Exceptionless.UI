@@ -22,6 +22,8 @@
         "@angular/router": "^6.0.2",
         "@auth0/angular-jwt": "^2.0.0",
         "@ng-bootstrap/ng-bootstrap": "^2.1.0",
+        "@types/moment": "^2.13.0",
+        "@types/twix": "^0.6.37",
         "angular-2-daterangepicker": "^1.1.42",
         "angular-oauth2-oidc": "^4.0.2",
         "angular-safeguard": "^2.0.2",
