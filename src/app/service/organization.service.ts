@@ -63,8 +63,8 @@ export class OrganizationService extends  BasicService {
     getOldestCreationDate(organizations) {
         if (organizations) {
             if (organizations.length > 1) {
-                return new Date(organizations.reduce(function (o1, o2) {
-                    return Math.min(this.objectIdService.create(o1.id).timestamp, this.objectIdService.create(o2.id).timestamp);
+                return new Date(organizations.reduce((o1, o2)  => {
+                    return Math.min(this.objectIdService.create(o1.id).getTimestamp(), this.objectIdService.create(o2.id).getTimestamp());
                 }) * 1000);
             }
 

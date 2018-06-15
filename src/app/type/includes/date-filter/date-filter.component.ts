@@ -23,6 +23,7 @@ export class DateFilterComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.updateFilterDisplayName();
     }
 
     getFilteredDisplayName() {
@@ -61,7 +62,7 @@ export class DateFilterComponent implements OnInit {
     setFilter(filter) {
         this.filterService.setTime(filter);
 
-        this.filteredDisplayName = this.getFilteredDisplayName();
+        this.updateFilterDisplayName();
     };
 
     setCustomFilter() {
@@ -80,4 +81,8 @@ export class DateFilterComponent implements OnInit {
 
         return true;
     };
+
+    updateFilterDisplayName() {
+        this.filteredDisplayName = this.getFilteredDisplayName();
+    }
 }
