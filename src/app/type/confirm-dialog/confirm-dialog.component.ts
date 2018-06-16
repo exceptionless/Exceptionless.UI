@@ -1,5 +1,5 @@
 import { Component, ComponentRef } from '@angular/core';
-import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal-dialog';
+import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
 
 @Component({
     selector: 'app-confirm-dialog',
@@ -8,13 +8,9 @@ import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal
 })
 
 export class ConfirmDialogComponent implements IModalDialog {
-    actionButtons: IModalDialogButton[];
+    text: string = 'Are you sure you want to delete your account?';
 
     constructor() {
-        this.actionButtons = [
-            { text: 'Close', buttonClass: 'btn btn-default', onAction: () => true }, // no special processing here
-            { text: 'Confirm', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => false }
-        ];
     }
 
     ngOnInit() {
@@ -22,5 +18,9 @@ export class ConfirmDialogComponent implements IModalDialog {
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed
-    }
+    };
+
+    setText(content) {
+        this.text = content;
+    };
 }

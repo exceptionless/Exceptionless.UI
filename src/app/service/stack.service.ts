@@ -83,7 +83,7 @@ export class StackService extends BasicService {
         return this.call();
     };
 
-    getFrequent(options) {
+    getFrequent(options?) {
         let mergedOptions = this.filterService.apply(options);
         let organization = this.filterService.getOrganizationId();
         if (organization) {
@@ -103,9 +103,10 @@ export class StackService extends BasicService {
             return this.call();
         }
 
-        this.route = 'api/v2/stacks/frequent/' + mergedOptions;
+        this.route = 'api/v2/stacks/frequent';
         this.type = 'get';
-        this.data = {};
+        this.data = mergedOptions;
+        this.authentication =  true;
 
         return this.call();
     };
@@ -191,7 +192,7 @@ export class StackService extends BasicService {
         return this.call();
     };
 
-    markNotFixed(id) {
+    markNotFixed(id?) {
         this.route = 'api/v2/stacks/' + id + '/mark-fixed';
         this.type = 'delete';
         this.data = {};
@@ -199,7 +200,7 @@ export class StackService extends BasicService {
         return this.call();
     };
 
-    markHidden(id) {
+    markHidden(id?) {
         this.route = 'api/v2/stacks/' + id + '/mark-hidden';
         this.type = 'post';
         this.data = {};
@@ -207,7 +208,7 @@ export class StackService extends BasicService {
         return this.call();
     };
 
-    markNotHidden(id) {
+    markNotHidden(id?) {
         this.route = 'api/v2/stacks/' + id + '/mark-hidden';
         this.type = 'delete';
         this.data = {};
@@ -223,7 +224,7 @@ export class StackService extends BasicService {
         return this.call();
     };
 
-    remove(id) {
+    remove(id?) {
         this.route = 'api/v2/stacks/' + id;
         this.type = 'delete';
         this.data = {};

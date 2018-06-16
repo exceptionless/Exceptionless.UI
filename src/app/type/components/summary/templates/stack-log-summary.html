@@ -1,0 +1,8 @@
+<span *ngIf="showType">
+    <strong>Log source</strong>:&nbsp;
+</span>
+
+<a ui-sref="app.stack({ id: source.id })" truncate lines="2">
+    <abbr *ngIf="source.data.Source" title="{{ source.data.Source }}">{{ source.data.SourceShortName }}</abbr>
+    <span *ngIf="!source.data.Source">{{ source.title }}</span>
+</a>

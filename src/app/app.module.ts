@@ -33,9 +33,9 @@ import { AuthGuardService } from "./service/auth-guard.service"
 import { TypeComponent } from './type/type.component';
 import { HeaderComponent } from './type/includes/header/header.component';
 import { SidebarComponent } from './type/includes/sidebar/sidebar.component';
-import { SearchFilterComponent } from './type/includes/search-filter/search-filter.component';
-import { ProjectFilterComponent } from './type/includes/project-filter/project-filter.component';
-import { DateFilterComponent } from './type/includes/date-filter/date-filter.component';
+import { SearchFilterComponent } from "./type/components/search-filter/search-filter.component";
+import { ProjectFilterComponent } from "./type/components/project-filter/project-filter.component";
+import { DateFilterComponent } from "./type/components/date-filter/date-filter.component";
 import { ReportsComponent } from './type/reports/reports.component';
 import { AdminComponent } from './type/admin/admin.component';
 import { DocumentationComponent } from './type/documentation/documentation.component';
@@ -54,9 +54,7 @@ import { GlobalVariables } from "./global-variables";
 import { OrganizationService } from "./service/organization.service";
 import { FilterService } from "./service/filter.service";
 import { DialogService } from "./service/dialog.service"
-import { RickshawComponent } from './type/rickshaw/rickshaw.component';
-import { StacksComponent } from './type/stacks/stacks.component';
-import { EventsComponent } from './type/events/events.component';
+import { RickshawComponent } from "./type/components/rickshaw/rickshaw.component"
 import { ConfirmDialogComponent } from './type/confirm-dialog/confirm-dialog.component';
 import { ProjectListComponent } from './type/admin/project/project-list/project-list.component';
 import { ProjectNewComponent } from './type/admin/project/project-new/project-new.component';
@@ -65,6 +63,10 @@ import { OrganizationListComponent } from './type/admin/organization/organizatio
 import { ProjectEditComponent } from './type/admin/project/project-edit/project-edit.component';
 import { OrganizationEditComponent } from './type/admin/organization/organization-edit/organization-edit.component';
 import { CustomDateRangeDialogComponent } from './type/custom-date-range-dialog/custom-date-range-dialog.component';
+import { SummaryComponent } from "./type/components/summary/summary.component";
+import { StacksComponent } from "./type/components/stacks/stacks.component";
+import { EventsComponent } from "./type/components/events/events.component";
+import { TimeagoComponent } from './type/components/timeago/timeago.component';
 
 const helper = new JwtHelperService();
 
@@ -116,6 +118,8 @@ const JWT_Module_Options: JwtModuleOptions = {
         ProjectEditComponent,
         OrganizationEditComponent,
         CustomDateRangeDialogComponent,
+        SummaryComponent,
+        TimeagoComponent,
     ],
     imports: [
         OAuthModule.forRoot(),
