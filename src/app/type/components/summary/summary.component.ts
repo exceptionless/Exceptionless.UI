@@ -7,10 +7,9 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 })
 
 export class SummaryComponent implements OnInit {
-    @Input() source;
+    @Input() source: Object;
     @Input() showType;
 
-    templateUrl: string = '';
     isLevelSuccess: any;
     isLevelInfo: any;
     isLevelWarning: any;
@@ -20,12 +19,10 @@ export class SummaryComponent implements OnInit {
     }
 
     ngOnInit() {
-        let level =  this.source && this.data && this.source.data.Level ? this.source.data.Level.toLowerCase() : null;
+        let level =  this.source && this.source['data'] && this.source['data']['Level'] ? this.source['data']['Level'].toLowerCase() : null;
         this.isLevelSuccess = level === 'trace' || level === 'debug';
         this.isLevelInfo = level === 'info';
         this.isLevelWarning = level === 'warn';
         this.isLevelError = level === 'error';
-
-        this.templateUrl = './templates/' + this.source.template_key + '.html';
     }
 }

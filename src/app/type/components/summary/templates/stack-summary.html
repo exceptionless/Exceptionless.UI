@@ -1,5 +1,0 @@
-<strong *ngIf="showType">{{ source.data.Type }}</strong>
-<span *ngIf="showType && source.data.Source">&nbsp;in&nbsp;</span>
-<strong *ngIf="source.data.Source">{{ source.data.Source }}</strong>
-<span *ngIf="showType || source.data.Source">:&nbsp;</span>
-<a ui-sref="app.stack({ id: source.id })" truncate lines="2">{{ source.title }}</a>

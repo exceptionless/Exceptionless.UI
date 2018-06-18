@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { BasicService } from './basic.service';
 import { GlobalVariables } from "../global-variables";
 import { FilterService } from "./filter.service";
+import { Observable } from 'rxjs/Observable';
 
 @Injectable({
     providedIn: 'root'
@@ -83,7 +84,7 @@ export class StackService extends BasicService {
         return this.call();
     };
 
-    getFrequent(options?) {
+    getFrequent(options?): Observable<HttpResponse<any>> {
         let mergedOptions = this.filterService.apply(options);
         let organization = this.filterService.getOrganizationId();
         if (organization) {
@@ -91,7 +92,13 @@ export class StackService extends BasicService {
             this.type = 'get';
             this.data = {};
 
-            return this.call();
+            return this.http.get(this.route, {
+                observe: 'response',
+                headers: new HttpHeaders({
+                    'Content-Type':  'application/json',
+                    'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+                })
+            });
         }
 
         var project = this.filterService.getProjectId();
@@ -100,15 +107,33 @@ export class StackService extends BasicService {
             this.type = 'get';
             this.data = {};
 
-            return this.call();
+            return this.http.get(this.route, {
+                observe: 'response',
+                headers: new HttpHeaders({
+                    'Content-Type':  'application/json',
+                    'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+                })
+            });
         }
 
         this.route = 'api/v2/stacks/frequent';
         this.type = 'get';
         this.data = mergedOptions;
         this.authentication =  true;
+        let full_url = this._global.BASE_URL + this.route ;
+        full_url = full_url + '?token=9229slsdi3d';
+        for (let key in this.data) {
+            const value = this.data[key];
+            full_url = full_url + '&' + key + '=' + value;
+        }
 
-        return this.call();
+        return this.http.get(full_url, {
+            observe: 'response',
+            headers: new HttpHeaders({
+                'Content-Type':  'application/json',
+                'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+            })
+        });
     };
 
     getUsers(options) {

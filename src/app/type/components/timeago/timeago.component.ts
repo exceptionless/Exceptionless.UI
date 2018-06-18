@@ -20,6 +20,6 @@ export class TimeagoComponent implements OnInit {
 
     setTimeagoText() {
         let dateInstance = moment(this.date);
-        this.date = (!!this.date && dateInstance.isValid() && dateInstance.year() > 1) ? dateInstance.fromNow() : 'never';
+        this.text = (!!this.date && dateInstance.isValid() && dateInstance.year() > 1) ? dateInstance.fromNow() : 'never';
     };
 }

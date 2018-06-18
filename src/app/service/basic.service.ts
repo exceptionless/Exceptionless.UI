@@ -12,8 +12,8 @@ export class BasicService {
     contentType: string = ''
 
     constructor(
-        private http: HttpClient,
-        private _global: GlobalVariables,
+        public http: HttpClient,
+        public _global: GlobalVariables,
     ) {
         this.data = {};
         this.type = 'post';

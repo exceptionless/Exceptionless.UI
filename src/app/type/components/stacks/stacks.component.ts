@@ -18,7 +18,7 @@ export class StacksComponent implements OnInit {
         options: {
             limit: 10,
             mode: 'summary'
-        },
+        }
     };
     next: string;
     previous: string;
@@ -28,6 +28,7 @@ export class StacksComponent implements OnInit {
     pageSummary: string;
     currentOptions: any;
     loading: boolean = true;
+    showType: any;
 
     constructor(
         private filterService: FilterService,
@@ -41,6 +42,7 @@ export class StacksComponent implements OnInit {
 
     ngOnInit() {
         this.actions = this.stacksActionsService.getActions();
+        this.showType = this.settings['summary'] ? this.settings['showType'] : !this.filterService.getEventType();
         this.get();
     }
 
@@ -57,20 +59,22 @@ export class StacksComponent implements OnInit {
     };
 
     get(options?) {
-        let onSuccess = (response) => {
+        let onSuccess = (response, link) => {
             this.stacks = JSON.parse(JSON.stringify(response));
 
-            this.selectedIds = this.selectedIds.filter(function (id) {
-                return this.stacks.filter(function (e) {
-                    return e.id === id;
-                }).length > 0;
-            });
+            if(this.selectedIds) {
+                this.selectedIds = this.selectedIds.filter((id) => {
+                    return this.stacks.filter(function (e) {
+                        return e.id === id;
+                    }).length > 0;
+                });
+            }
 
-            let links = this.linkService.getLinksQueryParameters(response.headers('link'));
+            let links = this.linkService.getLinksQueryParameters(link);
             this.previous = links['previous'];
             this.next = links['next'];
 
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response.data, this.currentOptions.page, this.currentOptions.limit);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
 
             if (this.stacks.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
                 return this.get();
@@ -89,7 +93,7 @@ export class StacksComponent implements OnInit {
         return new Promise((resolve, reject) => {
             this.stackService.getFrequent(this.currentOptions).subscribe(
                 res => {
-                    onSuccess(res);
+                    onSuccess(res.body, res.headers.get('link'));
                     this.loading = false;
 
                     resolve(this.stacks);
