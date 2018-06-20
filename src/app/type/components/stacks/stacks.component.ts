@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FilterService } from "../../../service/filter.service";
 import { StackService } from "../../../service/stack.service";
 import { LinkService } from "../../../service/link.service";
@@ -13,13 +13,14 @@ import { StacksActionsService } from "../../../service/stacks-actions.service";
 })
 
 export class StacksComponent implements OnInit {
-    settings = {
+    @Input() settings;
+    /*settings = {
         get: this.stackService.getFrequent(),
         options: {
             limit: 10,
             mode: 'summary'
         }
-    };
+    };*/
     next: string;
     previous: string;
     stacks: any[];
@@ -86,7 +87,7 @@ export class StacksComponent implements OnInit {
         let onFailure = (response) => {
         };
 
-        this.loading = false;
+        this.loading = true;
         this.stacks = [];
         this.currentOptions = options || this.settings.options;
 
@@ -103,7 +104,7 @@ export class StacksComponent implements OnInit {
 
                     reject(err);
                 },
-                () => console.log('Organization Service called!')
+                () => console.log('Stacks Service called!')
             );
         });
     };

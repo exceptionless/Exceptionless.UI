@@ -67,6 +67,7 @@ import { SummaryComponent } from "./type/components/summary/summary.component";
 import { StacksComponent } from "./type/components/stacks/stacks.component";
 import { EventsComponent } from "./type/components/events/events.component";
 import { TimeagoComponent } from './type/components/timeago/timeago.component';
+import { RelativeTimeComponent } from './type/components/relative-time/relative-time.component';
 
 const helper = new JwtHelperService();
 
@@ -120,6 +121,7 @@ const JWT_Module_Options: JwtModuleOptions = {
         CustomDateRangeDialogComponent,
         SummaryComponent,
         TimeagoComponent,
+        RelativeTimeComponent,
     ],
     imports: [
         OAuthModule.forRoot(),

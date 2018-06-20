@@ -69,14 +69,12 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-signal"></i>Most Frequent</div>
-                <!--<stacks settings="vm.mostFrequent"></stacks>-->
-                <app-stacks></app-stacks>
+                <app-stacks [settings]="mostFrequent"></app-stacks>
             </div>
 
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-calendar"></i>Most Recent</div>
-                <!--<events settings="vm.mostRecent"></events>-->
-                <app-events></app-events>
+                <app-events [settings]="mostRecent"></app-events>
             </div>
         </div>
     </div>

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { BasicService } from './basic.service';
 import { GlobalVariables } from "../global-variables";
 import { FilterService } from "./filter.service";
 import { OrganizationService } from "./organization.service";
+import { Observable } from 'rxjs/Observable';
 import * as moment from "moment";
 
 @Injectable({
@@ -67,7 +68,7 @@ export class EventService extends BasicService {
         return this.call();
     };
 
-    getAll(options, optionsCallback, includeHiddenAndFixedFilter) {
+    getAll(options, optionsCallback?, includeHiddenAndFixedFilter?): Observable<HttpResponse<any>> {
         optionsCallback = typeof optionsCallback == 'function' ? optionsCallback : function(o){ return o; };
         let mergedOptions = optionsCallback(this.filterService.apply(options, includeHiddenAndFixedFilter));
 
@@ -77,7 +78,13 @@ export class EventService extends BasicService {
             this.type = 'get';
             this.data = {};
 
-            return this.call();
+            return this.http.get(this.route, {
+                observe: 'response',
+                headers: new HttpHeaders({
+                    'Content-Type':  'application/json',
+                    'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+                })
+            });
         }
 
         var project = this.filterService.getProjectId();
@@ -86,14 +93,32 @@ export class EventService extends BasicService {
             this.type = 'get';
             this.data = {};
 
-            return this.call();
+            return this.http.get(this.route, {
+                observe: 'response',
+                headers: new HttpHeaders({
+                    'Content-Type':  'application/json',
+                    'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+                })
+            });
         }
 
         this.route = 'api/v2/events';
         this.type = 'get';
         this.data = mergedOptions;
+        let full_url = this._global.BASE_URL + this.route ;
+        full_url = full_url + '?token=9229slsdi3d';
+        for (let key in this.data) {
+            const value = this.data[key];
+            full_url = full_url + '&' + key + '=' + value;
+        }
 
-        return this.call();
+        return this.http.get(full_url, {
+            observe: 'response',
+            headers: new HttpHeaders({
+                'Content-Type':  'application/json',
+                'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+            })
+        });
     };
 
     getAllSessions(options, optionsCallback) {

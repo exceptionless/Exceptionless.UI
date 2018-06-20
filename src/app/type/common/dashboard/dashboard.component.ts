@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as moment from "moment";
 import { FilterService } from "../../../service/filter.service"
 import { EventService } from "../../../service/event.service"
+import { StackService } from "../../../service/stack.service"
 import { OrganizationService } from "../../../service/organization.service"
 import { NotificationService } from "../../../service/notification.service"
 
@@ -37,11 +38,27 @@ export class DashboardComponent implements OnInit {
     };
     organizations: any[];
     stats: Object;
+    mostFrequent: any = {
+        get: this.stackService.getFrequent(),
+        options: {
+            limit: 10,
+            mode: 'summary'
+        }
+    };
+    mostRecent: any = {
+        header: 'Most Recent',
+        get: this.eventService.getAll,
+        options: {
+            limit: 10,
+            mode: 'summary'
+        }
+    };
 
     constructor(
         private route: ActivatedRoute,
         private filterService: FilterService,
         private eventService: EventService,
+        private stackService: StackService,
         private organizationService: OrganizationService,
         private notificationService: NotificationService
     ) {
