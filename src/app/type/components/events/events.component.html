@@ -4,7 +4,7 @@
             <tr>
                 <th class="selection hidden-xs" *ngIf="actions.length > 0">
                     <label class="checks m-b-none">
-                        <input type="checkbox" (click)="updateSelection()" ng-checked="selectedIds.length > 0" ng-disabled="events.length === 0"><i></i>
+                        <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds.length > 0" [disabled]="events.length === 0"><i></i>
                     </label>
                 </th>
                 <th>Summary</th>
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
             <tr class="row-clickable" *ngFor="let event of events">
-                <td class="hidden-xs" *ngIf="actions.length > 0"><label class="checks m-b-none"><input type="checkbox" checklist-model="selectedIds" checklist-value="event.id"><i></i></label></td>
+                <td class="hidden-xs" *ngIf="actions.length > 0"><label class="checks m-b-none"><input type="checkbox" [(checklist)]="selectedIds" [checklistValue]="event.id"><i></i></label></td>
                 <td (click)="open(event.id, $event)">
                     <app-summary [source]="event" [showType]="showType"></app-summary>
                 </td>

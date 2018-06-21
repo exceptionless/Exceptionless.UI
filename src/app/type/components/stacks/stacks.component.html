@@ -4,7 +4,7 @@
             <tr>
                 <th class="selection hidden-xs">
                     <label class="checks m-b-none">
-                        <input type="checkbox" (click)="updateSelection()" ng-checked="vm.selectedIds.length > 0" ng-disabled="vm.stacks.length === 0"><i></i>
+                        <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds.length > 0" [disabled]="stacks.length === 0"><i></i>
                     </label>
                 </th>
                 <th>Summary</th>
@@ -17,7 +17,7 @@
         <tbody>
             <tr class="row-clickable" *ngFor="let stack of stacks">
                 <td class="hidden-xs">
-                    <label class="checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="stack.id"><i></i></label>
+                    <label class="checks m-b-none"><input type="checkbox" [(checklist)]="selectedIds" [checklistValue]="stack.id"><i></i></label>
                 </td>
                 <td (click)="open(stack.id, $event)">
                     <app-summary [source]="stack" [showType]="showType"></app-summary>
@@ -40,11 +40,11 @@
             <tr *ngIf="stacks.length === 0 || loading">
                 <td class="hidden-xs"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
                 <td colspan="5" class="hidden-xs">
-                    <strong *ngIf="loading">Loading</strong>
+                    <strong *ngIf="loading">Loading...</strong>
                     <strong *ngIf="!loading">No stacks were found with the current filter.</strong>
                 </td>
                 <td colspan="3" class="visible-xs">
-                    <strong *ngIf="loading">Loading</strong>
+                    <strong *ngIf="loading">Loading...</strong>
                     <strong *ngIf="!loading">No stacks were found with the current filter.</strong>
                 </td>
             </tr>

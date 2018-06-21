@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
     selector: 'app-summary',
     templateUrl: './summary.component.html',
-    styleUrls: ['./summary.component.less']
+    styleUrls: ['./summary.component.less'],
 })
 
 export class SummaryComponent implements OnInit {

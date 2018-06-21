@@ -14,19 +14,11 @@ import { EventService } from "../../../service/event.service";
 
 export class EventsComponent implements OnInit {
     @Input() settings;
-    /*settings = {
-        header: 'Most Recent',
-        get: this.eventService.getAll,
-        options: {
-            limit: 10,
-            mode: 'summary'
-        }
-    };*/
     next: string;
     previous: string;
-    events: any[];
+    events: any[] = [];
     actions: any[];
-    selectedIds: any[];
+    selectedIds: any[] = [];
     pageSummary: string;
     currentOptions: any;
     loading: boolean = true;
@@ -109,7 +101,7 @@ export class EventsComponent implements OnInit {
 
         };
 
-        this.loading = false;
+        this.loading = true;
         this.events = [];
         this.currentOptions = options || this.settings.options;
 

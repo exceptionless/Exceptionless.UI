@@ -9,23 +9,16 @@ import { StacksActionsService } from "../../../service/stacks-actions.service";
 @Component({
     selector: 'app-stacks',
     templateUrl: './stacks.component.html',
-    styleUrls: ['./stacks.component.less']
+    styleUrls: ['./stacks.component.less'],
 })
 
 export class StacksComponent implements OnInit {
     @Input() settings;
-    /*settings = {
-        get: this.stackService.getFrequent(),
-        options: {
-            limit: 10,
-            mode: 'summary'
-        }
-    };*/
     next: string;
     previous: string;
-    stacks: any[];
+    stacks: any[] = [];
     actions: any[];
-    selectedIds: any[];
+    selectedIds: any[] = [];
     pageSummary: string;
     currentOptions: any;
     loading: boolean = true;

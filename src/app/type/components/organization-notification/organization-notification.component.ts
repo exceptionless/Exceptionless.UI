@@ -186,7 +186,7 @@ export class OrganizationNotificationComponent implements OnInit {
             }
         });
 
-        this.hasNotifications = true;
+            this.hasNotifications = true;
     };
 
     getOrganizations() {

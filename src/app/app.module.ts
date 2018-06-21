@@ -20,6 +20,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DaterangepickerModule } from 'angular-2-daterangepicker';
 
+import { ChecklistModule } from 'angular-checklist';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
@@ -136,7 +138,8 @@ const JWT_Module_Options: JwtModuleOptions = {
         ModalDialogModule.forRoot(),
         NgbModule.forRoot(),
         JwtModule.forRoot(JWT_Module_Options),
-        DaterangepickerModule
+        DaterangepickerModule,
+        ChecklistModule
     ],
     providers: [GlobalVariables, BasicService, AuthCheckService, AuthGuardService, AuthService, OrganizationService, FilterService],
     bootstrap: [AppComponent],

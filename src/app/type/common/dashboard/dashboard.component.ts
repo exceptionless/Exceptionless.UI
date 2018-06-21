@@ -37,7 +37,12 @@ export class DashboardComponent implements OnInit {
         }
     };
     organizations: any[];
-    stats: Object;
+    stats: any = {
+        count: 0,
+        unique: 0,
+        new: 0,
+        avg_per_hour: 0.0
+    };
     mostFrequent: any = {
         get: this.stackService.getFrequent(),
         options: {
