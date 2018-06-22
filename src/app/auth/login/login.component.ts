@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Login } from './login.class';
-import { AuthService } from '../../service/auth.service';
-import { ToastrService } from 'ngx-toastr';
-import { JwtHelperService  } from '@auth0/angular-jwt'
+import { AuthService } from 'ng2-ui-auth';
+import { NotificationService } from "../../service/notification.service";
 
 @Component({
     selector: 'app-login',
@@ -16,10 +15,9 @@ export class LoginComponent implements OnInit {
     submitted = false;
 
     constructor(
-        private authService: AuthService,
-        private toastr: ToastrService,
+        private auth: AuthService,
+        private notificationService: NotificationService,
         private router: Router,
-        private jwtHelperService: JwtHelperService
     ) {}
 
     ngOnInit() {
@@ -29,19 +27,17 @@ export class LoginComponent implements OnInit {
         this.submitted = true;
 
         if (isValid) {
-            const data = {
+            const loginData = {
                 email: this.model.email,
                 password: this.model.password
             };
 
-            this.authService.login(data).subscribe(
+            this.auth.login(loginData).subscribe(
                 res => {
-                    localStorage.setItem('access_token', res['token']);
-
                     this.router.navigate(['/type/error/dashboard']);
                 },
                 err => {
-                    this.toastr.error('Login failed!', 'Failed');
+                    this.notificationService.error('Login failed!', 'Failed');
                 }
             );
         }

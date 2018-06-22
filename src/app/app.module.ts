@@ -1,14 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { JwtModule, JwtModuleOptions, JwtHelperService  } from '@auth0/angular-jwt'
-import { OAuthModule } from 'angular-oauth2-oidc';
+import { Ng2UiAuthModule } from 'ng2-ui-auth';
 
 import { ToastrModule } from 'ngx-toastr';
-import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
+import { LockerModule } from 'angular-safeguard';
+
+import { GlobalVariables } from "./global-variables";
 
 import 'd3';
 import 'rickshaw';
@@ -28,9 +29,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { SignupComponent } from './auth/signup/signup.component';
 
+import { TokenInterceptor } from "./service/token.interceptor";
 import { BasicService } from './service/basic.service';
-import { AuthService } from './service/auth.service';
-import { AuthCheckService } from "./service/auth-check.service";
 import { AuthGuardService } from "./service/auth-guard.service"
 import { TypeComponent } from './type/type.component';
 import { HeaderComponent } from './type/includes/header/header.component';
@@ -52,7 +52,6 @@ import { UsersComponent } from './type/common/users/users.component';
 import { NewComponent } from './type/common/new/new.component';
 import { FrequentComponent } from './type/common/frequent/frequent.component';
 import { OrganizationNotificationComponent } from './type/components/organization-notification/organization-notification.component';
-import { GlobalVariables } from "./global-variables";
 import { OrganizationService } from "./service/organization.service";
 import { FilterService } from "./service/filter.service";
 import { DialogService } from "./service/dialog.service"
@@ -71,17 +70,15 @@ import { EventsComponent } from "./type/components/events/events.component";
 import { TimeagoComponent } from './type/components/timeago/timeago.component';
 import { RelativeTimeComponent } from './type/components/relative-time/relative-time.component';
 
-const helper = new JwtHelperService();
-
-export function tokenGetter() {
-    return localStorage.getItem('access_token');
-}
-
-const JWT_Module_Options: JwtModuleOptions = {
-    config: {
-        tokenGetter: tokenGetter,
-        whitelistedDomains: ['https://exceptionless.com']
-    }
+export const AuthConfig = {
+    defaultHeaders: {'Content-Type': 'application/json'},
+    providers: {
+        google: { clientId: '' },
+        facebook: { clientId: '' }
+    },
+    tokenName: 'token',
+    tokenPrefix: '',
+    baseUrl: 'https://api.exceptionless.io/api/v2'
 };
 
 @NgModule({
@@ -126,7 +123,6 @@ const JWT_Module_Options: JwtModuleOptions = {
         RelativeTimeComponent,
     ],
     imports: [
-        OAuthModule.forRoot(),
         BrowserModule,
         FormsModule,
         AppRoutingModule,
@@ -137,11 +133,22 @@ const JWT_Module_Options: JwtModuleOptions = {
         RickshawModule,
         ModalDialogModule.forRoot(),
         NgbModule.forRoot(),
-        JwtModule.forRoot(JWT_Module_Options),
         DaterangepickerModule,
-        ChecklistModule
+        ChecklistModule,
+        Ng2UiAuthModule.forRoot(AuthConfig),
     ],
-    providers: [GlobalVariables, BasicService, AuthCheckService, AuthGuardService, AuthService, OrganizationService, FilterService],
+    providers: [
+        GlobalVariables,
+        BasicService,
+        AuthGuardService,
+        OrganizationService,
+        FilterService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptor,
+            multi: true
+        }
+    ],
     bootstrap: [AppComponent],
     entryComponents: [ConfirmDialogComponent, CustomDateRangeDialogComponent]
 })

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Signup } from './signup.class';
-import { AuthService } from '../../service/auth.service';
-import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from "../../service/notification.service";
+import { AuthService } from "ng2-ui-auth";
 
 @Component({
     selector: 'app-signup',
@@ -13,10 +14,10 @@ export class SignupComponent implements OnInit {
     submitted = false;
 
     constructor(
-        private authService: AuthService,
-        private toastr: ToastrService
+        private router: Router,
+        private auth: AuthService,
+        private notificationService: NotificationService
     ) {
-
     }
 
     ngOnInit() {
@@ -32,28 +33,25 @@ export class SignupComponent implements OnInit {
                 password: this.model.password
             };
 
-            this.authService.signup(data).subscribe(
+            this.auth.signup(data).subscribe(
                 res => {
-                    this.toastr.success('Signup success!', 'Success');
-                    if (res['token']) {
-                        console.log(res['token']);
-                    }
+                    this.router.navigate(['/type/error/dashboard']);
                 },
                 err => {
-                    this.toastr.error('Signup failed!', 'Failed');
+                    this.notificationService.error('Signup failed!', 'Failed');
                 }
             );
         }
     }
 
     checkEmailValidation() {
-        this.authService.checkEmailUnique(this.model.email).subscribe(
+        /*this.authService.checkEmailUnique(this.model.email).subscribe(
             res => {
                 console.log(this.model.email);
             },
             err => {
                 console.log(err.status);
             }
-        );
+        );*/
     }
 }

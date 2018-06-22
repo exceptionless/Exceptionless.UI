@@ -80,10 +80,6 @@ export class EventService extends BasicService {
 
             return this.http.get(this.route, {
                 observe: 'response',
-                headers: new HttpHeaders({
-                    'Content-Type':  'application/json',
-                    'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
-                })
             });
         }
 
@@ -95,10 +91,6 @@ export class EventService extends BasicService {
 
             return this.http.get(this.route, {
                 observe: 'response',
-                headers: new HttpHeaders({
-                    'Content-Type':  'application/json',
-                    'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
-                })
             });
         }
 
@@ -114,10 +106,6 @@ export class EventService extends BasicService {
 
         return this.http.get(full_url, {
             observe: 'response',
-            headers: new HttpHeaders({
-                'Content-Type':  'application/json',
-                'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
-            })
         });
     };
 

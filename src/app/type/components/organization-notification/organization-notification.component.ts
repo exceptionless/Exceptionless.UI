@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import 'rxjs/add/operator/toPromise';
 import { OrganizationService } from "../../../service/organization.service";
 import { ProjectService } from "../../../service/project.service"
 import { FilterService } from "../../../service/filter.service"
@@ -205,7 +206,7 @@ export class OrganizationNotificationComponent implements OnInit {
                         resolve(this.organizations);
                     },
                     err=>{
-                        this.notificationService.error('Error Occurred!', 'Failed');
+                        this.notificationService.error('Failed', 'Error Occurred!');
 
                         reject(err);
                     },
@@ -224,7 +225,7 @@ export class OrganizationNotificationComponent implements OnInit {
                         resolve(this.organizations);
                     },
                     err=>{
-                        this.notificationService.error('Error Occurred!', 'Failed');
+                        this.notificationService.error('Failed', 'Error Occurred!');
 
                         reject(err);
                     },
@@ -246,7 +247,7 @@ export class OrganizationNotificationComponent implements OnInit {
                     resolve(this.projects);
                 },
                 err=>{
-                    this.notificationService.error('Error Occurred!', 'Failed');
+                    this.notificationService.error('Failed', 'Error Occurred!');
 
                     reject(err);
                 },
@@ -309,7 +310,7 @@ export class OrganizationNotificationComponent implements OnInit {
 
     showChangePlanDialog(organizationId) {
         if (!this._global.STRIPE_PUBLISHABLE_KEY) {
-            this.notificationService.error('Billing is currently disabled.', 'Failed');
+            this.notificationService.error('Failed', 'Billing is currently disabled.');
             return;
         }
 

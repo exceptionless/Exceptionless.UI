@@ -30,54 +30,30 @@ export class BasicService {
                 full_url = full_url + '&' + key + '=' + value;
             }
 
-            if(this.authentication) {
+            if(this.changeContentType) {
                 const httpOptions = {
                     headers: new HttpHeaders({
-                        'Content-Type':  'application/json',
-                        'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+                        'Content-Type':  this.contentType,
                     })
                 };
-
-                if(this.changeContentType) {
-                    const httpOptions = {
-                        headers: new HttpHeaders({
-                            'Content-Type':  this.contentType,
-                            'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
-                        })
-                    };
-
-                    return this.http.get(full_url, httpOptions);
-                }
 
                 return this.http.get(full_url, httpOptions);
-            } else {
-                return this.http.get(full_url);
             }
 
+            return this.http.get(full_url);
+
         } else if (this.type === 'post') {
-            if(this.authentication) {
+            if(this.changeContentType) {
                 const httpOptions = {
                     headers: new HttpHeaders({
-                        'Content-Type':  'application/json',
-                        'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
+                        'Content-Type':  this.contentType,
                     })
                 };
 
-                if(this.changeContentType) {
-                    const httpOptions = {
-                        headers: new HttpHeaders({
-                            'Content-Type':  this.contentType,
-                            'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
-                        })
-                    };
-
-                    return this.http.post(full_url, this.data, httpOptions);
-                }
-
                 return this.http.post(full_url, this.data, httpOptions);
-            } else {
-                return this.http.post(full_url, this.data, { responseType: 'json' });
             }
+
+            return this.http.post(full_url, this.data, { responseType: 'json' });
         } else if (this.type === 'delete') {
             full_url = full_url + '?token=9229slsdi3d';
             for (let key in this.data) {
@@ -85,31 +61,9 @@ export class BasicService {
                 full_url = full_url + '&' + key + '=' + value;
             }
 
-            if(this.authentication) {
-                const httpOptions = {
-                    headers: new HttpHeaders({
-                        'Content-Type':  'application/json',
-                        'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
-                    })
-                };
-
-                return this.http.delete(full_url, httpOptions);
-            } else {
-                return this.http.delete(full_url, { responseType: 'json' });
-            }
+            return this.http.delete(full_url, { responseType: 'json' });
         } else if (this.type === 'patch') {
-            if(this.authentication) {
-                const httpOptions = {
-                    headers: new HttpHeaders({
-                        'Content-Type':  'application/json',
-                        'Authorization': 'Bearer OglJsb3tJxLogSF6f2hprsCYCHQAVZjQ54Oq26rr'
-                    })
-                };
-
-                return this.http.patch(full_url, this.data, httpOptions);
-            } else {
-                return this.http.patch(full_url, this.data, { responseType: 'json' });
-            }
+            return this.http.patch(full_url, this.data, { responseType: 'json' });
         }
     }
 }
