@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ObjectIdService } from './object-id.service';
-import { GlobalFunctions } from '../global-functions';
 import * as moment from 'moment';
 
 @Injectable({
@@ -13,13 +12,12 @@ export class OrganizationService {
     constructor(
         private http: HttpClient,
         private objectIdService: ObjectIdService,
-        private globalFunctions: GlobalFunctions
     ) {
     }
 
     addUser(id, email) {
         const data = {};
-        return this.http.post('organizations/' + id + '/users/' + email, data);
+        return this.http.post(`organizations/${id}/users/${email}`, data);
     }
 
     create(name) {
@@ -30,10 +28,8 @@ export class OrganizationService {
     }
 
     changePlan(id, options) {
-        const url = 'organizations/' + id + '/change-plan';
-        const full_url = this.globalFunctions.setQueryParam(url,  options);
         const data = {};
-        return this.http.post(full_url, data);
+        return this.http.post(`organizations/${id}/change-plan`, data, { params: options });
     }
 
     getOldestCreationDate(organizations) {
@@ -85,7 +81,7 @@ export class OrganizationService {
             return null;
         }
 
-        return this.http.get('organizations/' + options);
+        return this.http.get(`organizations/${options}`);
     }
 
     getById(id, useCache) {
@@ -94,11 +90,11 @@ export class OrganizationService {
             return null;
         }
 
-        return this.http.get('organizations/' + id);
+        return this.http.get(`organizations/${id}`);
     }
 
     getInvoice(id) {
-        return this.http.get('organizations/invoice/' + id);
+        return this.http.get(`organizations/invoice/${id}`);
     }
 
     getInvoices(id, options) {
@@ -106,7 +102,7 @@ export class OrganizationService {
     }
 
     getPlans(id) {
-        return this.http.get('organizations/' + id + '/plans');
+        return this.http.get(`organizations/${id}/plans`);
     }
 
     isNameAvailable(name) {
@@ -114,14 +110,14 @@ export class OrganizationService {
     }
 
     remove(id) {
-        return this.http.delete('organizations/' + id);
+        return this.http.delete(`organizations/${id}`);
     }
 
     removeUser(id, email) {
-        return this.http.delete('organizations/' + id + '/users/' + email);
+        return this.http.delete(`organizations/${id}/users` + email);
     }
 
     update(id, organization) {
-        return this.http.patch('api/v2/organizations/' + id, organization);
+        return this.http.patch(`api/v2/organizations/${id}`, organization);
     }
 }

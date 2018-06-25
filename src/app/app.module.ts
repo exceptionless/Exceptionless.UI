@@ -10,7 +10,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { LockerModule } from 'angular-safeguard';
 
 import { GlobalVariables } from './global-variables';
-import { GlobalFunctions } from './global-functions';
 
 import 'd3';
 import 'rickshaw';
@@ -137,7 +136,6 @@ export const AuthConfig = {
     ],
     providers: [
         GlobalVariables,
-        GlobalFunctions,
         AuthGuardService,
         OrganizationService,
         FilterService,

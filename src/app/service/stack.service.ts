@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { FilterService } from './filter.service';
 import { Observable } from 'rxjs/Observable';
-import { GlobalFunctions } from '../global-functions';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +12,6 @@ export class StackService {
     constructor(
         private http: HttpClient,
         private filterService: FilterService,
-        private globalFunctions: GlobalFunctions
     ) {
     }
 
@@ -27,27 +25,27 @@ export class StackService {
     }
 
     disableNotifications(id) {
-        return this.http.delete('stacks/' + id + '/notifications');
+        return this.http.delete(`stacks/${id}/notifications`);
     }
 
     enableNotifications(id) {
         const data = {};
-        return this.http.post('stacks/' + id + '/notifications',  data);
+        return this.http.post(`stacks/${id}/notifications`,  data);
     }
 
     getAll(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get('organizations/' + organization + '/stacks/' + mergedOptions);
+            return this.http.get(`organizations/${organization}/stacks/${mergedOptions}`);
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get('projects/' + project + '/stacks/' + mergedOptions);
+            return this.http.get(`projects/${project}/stacks/${mergedOptions}`);
         }
 
-        return this.http.get('stacks/' + mergedOptions);
+        return this.http.get(`stacks/${mergedOptions}`);
     }
 
     getById(id) {
@@ -58,93 +56,88 @@ export class StackService {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get('organizations/' + organization + '/stacks/frequent/' + mergedOptions, {
+            return this.http.get(`organizations/${organization}/stacks/frequent/${mergedOptions}`, {
                 observe: 'response',
             });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get('projects/' + project + '/stacks/frequent/' + mergedOptions, {
+            return this.http.get(`projects/${project}/stacks/frequent/${mergedOptions}`, {
                 observe: 'response',
             });
         }
 
         const data = mergedOptions;
-        let full_url = 'stacks/frequent';
-        full_url = this.globalFunctions.setQueryParam(full_url,  data);
-        return this.http.get(full_url, {
-            observe: 'response',
-        });
+        return this.http.get('stacks/frequent', { observe: 'response', params: data });
     }
 
     getUsers(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get('organizations/' + organization + '/stacks/users/' + mergedOptions);
+            return this.http.get(`organizations/${organization}/stacks/users/${mergedOptions}`);
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get('projects/' + project + '/stacks/users/' + mergedOptions);
+            return this.http.get(`projects/${project}/stacks/users/${mergedOptions}`);
         }
 
-        return this.http.get('stacks/users/' + mergedOptions);
+        return this.http.get(`stacks/users/${mergedOptions}`);
     }
 
     getNew(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get('organizations/' + organization + '/stacks/new/' + mergedOptions);
+            return this.http.get(`organizations/${organization}/stacks/new/${mergedOptions}`);
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get('projects/' + project + '/stacks/new/' + mergedOptions);
+            return this.http.get(`projects/${project}/stacks/new/${mergedOptions}`);
         }
 
-        return this.http.get('stacks/new/' + mergedOptions);
+        return this.http.get(`stacks/new/${mergedOptions}`);
     }
 
     markCritical(id) {
         const data = {};
-        return this.http.post('stacks/' + id + '/mark-critical', data);
+        return this.http.post(`stacks/${id}/mark-critical`, data);
     }
 
     markNotCritical(id) {
-        const url = 'stacks/' + id + '/mark-critical';
-        return this.http.delete('stacks/' + id + '/mark-critical');
+        return this.http.delete(`stacks/${id}/mark-critical`);
     }
 
     markFixed(id, version) {
         const data = {
             version: version
         };
-        return this.http.post('stacks/' + id + '/mark-fixed', data);
+        return this.http.post(`stacks/${id}/mark-fixed`, data);
     }
 
     markNotFixed(id?) {
-        return this.http.delete('stacks/' + id + '/mark-fixed');
+        return this.http.delete(`stacks/${id}/mark-fixed`);
     }
 
     markHidden(id?) {
         const data = {};
-        return this.http.post('stacks/' + id + '/mark-hidden', data);
+        return this.http.post(`stacks/${id}/mark-hidden`, data);
     }
 
     markNotHidden(id?) {
-        return this.http.delete('stacks/' + id + '/mark-hidden');
+        return this.http.delete(`stacks/${id}/mark-hidden`);
     }
 
     promote(id) {
         const data = {};
-        return this.http.post('stacks/' + id + '/promote',  data);
+        return this.http.post(`stacks/${id}/promote`,  data);
     }
 
     remove(id?) {
-        return this.http.delete('stacks/' + id);
+        return this.http.delete(`stacks/${id}`);
     }
 
     removeLink(id, url) {
@@ -153,6 +146,6 @@ export class StackService {
                 'Content-Type':  'text/plain; charset=UTF-8',
             })
         };
-        return this.http.delete('stacks/' + id + '/remove-link', httpOptions);
+        return this.http.delete(`stacks/${id}/remove-link`, httpOptions);
     }
 }

@@ -24,7 +24,7 @@ export class ProjectService {
     }
 
     demoteTab(id, name) {
-        return this.http.delete('projects/' + id + '/promotedtabs?name=' + name);
+        return this.http.delete(`projects/${id}/promotedtabs?name=${name}`);
     }
 
     getAll(options, useCache) {
@@ -42,67 +42,66 @@ export class ProjectService {
             return null;
         }
 
-        return this.http.get('organizations/' + id);
+        return this.http.get(`organizations/${id}`);
     }
 
     getByOrganizationId(id, options, useCache) {
-        return this.http.get('organizations/' + id + '/projects');
+        return this.http.get(`organizations/${id}/projects`);
     }
 
     getConfig(id) {
         // return _cachedRestangular.one('projects', id).one('config').get();
-        return this.http.get('projects/' + id + '/config');
+        return this.http.get(`projects/${id}/config`);
     }
 
     getNotificationSettings(id, userId) {
         // return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
-        return this.http.get('users/' + userId + '/projects/' + id + '/notifications');
+        return this.http.get(`users/${userId}/projects/${id}/notifications`);
     }
 
     getIntegrationNotificationSettings(id, integration) {
         // return _cachedRestangular.one('projects', id).one(integration, 'notifications').get();
-        return this.http.get('projects/' + id + '/' + integration + '/notifications');
+        return this.http.get(`projects/${id}/${integration}/notifications`);
     }
 
     isNameAvailable(organizationId, name) {
-        return this.http.get('organizations/' + organizationId + '/projects/check-name?name=' + encodeURIComponent(name));
+        return this.http.get(`organizations/${organizationId}/projects/check-name?name=${encodeURIComponent(name)}`);
     }
 
     promoteTab(id, name) {
         const data = {
             name: name
         };
-        return this.http.post('projects/' + id + '/promotedtabs',  data);
+        return this.http.post(`projects/${id}/promotedtabs`,  data);
     }
 
     remove(id) {
-        return this.http.delete('projects/' + id);
+        return this.http.delete(`projects/${id}`);
     }
 
     removeConfig(id, key) {
-        return this.http.delete('projects/' + id + '/config?key=' + key);
+        return this.http.delete(`projects/${id}/config?key=${key}`);
     }
 
     removeData(id, key) {
-        return this.http.delete('projects/' + id + '/data?key=' + key);
+        return this.http.delete(`projects/${id}/data?key=${key}`);
     }
 
     removeSlack(id) {
-        return this.http.delete('projects/' + id + '/slack');
+        return this.http.delete(`projects/${id}/slack`);
     }
 
     removeNotificationSettings(id, userId) {
-        const url = 'users/' + userId + '/projects' + id + '/notifications';
-        return this.http.delete('users/' + userId + '/projects' + id + '/notifications');
+        return this.http.delete(`users/${userId}/projects/${id}/notifications`);
     }
 
     resetData(id) {
-        return this.http.get('api/v2/projects/' + id + '/reset-data');
+        return this.http.get(`api/v2/projects/${id}/reset-data`);
     }
 
     update(id, project) {
         const data = project;
-        return this.http.patch('projects/' + id,  data);
+        return this.http.patch(`projects/${id}`,  data);
     }
 
     setConfig(id, key, value) {
@@ -114,7 +113,7 @@ export class ProjectService {
         const data = {
             key: key
         };
-        return this.http.post('projects/' + id + '/config/' + value,  data, httpOptions);
+        return this.http.post(`projects/${id}/config/${value}`,  data, httpOptions);
     }
 
     setData(id, key, value) {
@@ -126,16 +125,15 @@ export class ProjectService {
         const data = {
             key: key
         };
-        return this.http.post('projects/' + id + '/data/' + value,  data, httpOptions);
+        return this.http.post(`projects/${id}/data/${value}`,  data, httpOptions);
     }
 
     setNotificationSettings(id, userId, settings) {
-        return this.http.post('users/' + userId + '/projects/' + id + '/notifications',  settings);
+        return this.http.post(`users/${userId}/projects/${id}/notifications`,  settings);
     }
 
     setIntegrationNotificationSettings(id, integration, settings) {
         const data = settings;
-        const url = 'projects/' + id + '/' + integration + '/notifications';
-        return this.http.get('projects/' + id + '/' + integration + '/notifications');
+        return this.http.get(`projects/${id}/${integration}/notifications`);
     }
 }
