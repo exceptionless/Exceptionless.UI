@@ -18,24 +18,22 @@ export class OrganizationService {
     }
 
     addUser(id, email) {
-        const url = 'organizations/' + id + '/users/' + email;
         const data = {};
-        return this.http.post(url, data, { responseType: 'json' });
+        return this.http.post('organizations/' + id + '/users/' + email, data);
     }
 
     create(name) {
-        const url = 'organizations';
         const data = {
             'name': name
         };
-        return this.http.post(url, data, { responseType: 'json' });
+        return this.http.post('organizations', data);
     }
 
     changePlan(id, options) {
         const url = 'organizations/' + id + '/change-plan';
         const full_url = this.globalFunctions.setQueryParam(url,  options);
         const data = {};
-        return this.http.post(full_url, data, { responseType: 'json' });
+        return this.http.post(full_url, data);
     }
 
     getOldestCreationDate(organizations) {
@@ -87,8 +85,7 @@ export class OrganizationService {
             return null;
         }
 
-        const url = 'organizations/' + options;
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('organizations/' + options);
     }
 
     getById(id, useCache) {
@@ -97,42 +94,34 @@ export class OrganizationService {
             return null;
         }
 
-        const url = 'organizations/' + id;
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('organizations/' + id);
     }
 
     getInvoice(id) {
-        const url = 'organizations/invoice/' + id;
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('organizations/invoice/' + id);
     }
 
     getInvoices(id, options) {
-        const url = 'organizations/invoices';
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('organizations/invoices');
     }
 
     getPlans(id) {
-        const url = 'organizations/' + id + '/plans';
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('organizations/' + id + '/plans');
     }
 
     isNameAvailable(name) {
-        const url = 'organizations/check-name?name=' + encodeURIComponent(name);
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('organizations/check-name?name=' + encodeURIComponent(name));
     }
 
     remove(id) {
-        const url = 'organizations/' + id;
-        return this.http.delete(url, { responseType: 'json' });
+        return this.http.delete('organizations/' + id);
     }
 
     removeUser(id, email) {
-        const url = 'organizations/' + id + '/users/' + email;
-        return this.http.delete(url, { responseType: 'json' });
+        return this.http.delete('organizations/' + id + '/users/' + email);
     }
 
     update(id, organization) {
-        const url = 'api/v2/organizations/' + id;
-        return this.http.patch(url, organization, { responseType: 'json' });
+        return this.http.patch('api/v2/organizations/' + id, organization);
     }
 }

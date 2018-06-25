@@ -81,17 +81,16 @@ export class EventService {
         const organization = this.filterService.getOrganizationId();
         if (organization) {
             const organizationUrl = 'organizations/' + organization + '/events/sessions/' + mergedOptions;
-            return this.http.get(organizationUrl, { responseType: 'json' });
+            return this.http.get(organizationUrl);
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
             const organizationUrl = 'projects/' + project + '/events/sessions/' + mergedOptions;
-            return this.http.get(organizationUrl, { responseType: 'json' });
+            return this.http.get(organizationUrl);
         }
 
-        const url = 'events/sessions/' + mergedOptions;
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('events/sessions/' + mergedOptions);
     }
 
     getById(id, options, optionsCallback) {
@@ -99,7 +98,7 @@ export class EventService {
         const data = optionsCallback(this.filterService.apply(options));
         let full_url = 'events/' + id;
         full_url = this.globalFunctions.setQueryParam(full_url, data);
-        return this.http.get(full_url, { responseType: 'json' });
+        return this.http.get(full_url);
     }
 
     getByReferenceId(id, options) {
@@ -119,18 +118,15 @@ export class EventService {
     }
 
     markCritical(id) {
-        const url = 'events/' + id + '/mark-critical';
         const data = {};
-        return this.http.post(url, data, { responseType: 'json' });
+        return this.http.post('events/' + id + '/mark-critical', data);
     }
 
     markNotCritical(id) {
-        const url = 'events/' + id + '/mark-critical';
-        return this.http.delete(url, { responseType: 'json' });
+        return this.http.delete('events/' + id + '/mark-critical');
     }
 
     remove(id) {
-        const url = 'events/' + id;
-        return this.http.delete(url, { responseType: 'json' });
+        return this.http.delete('events/' + id);
     }
 }

@@ -15,18 +15,16 @@ export class ProjectService {
     addSlack(id) {}
 
     create(organizationId, name) {
-        const url = 'projects';
         const data = {
             'organization_id': organizationId,
             'name': name,
             'delete_bot_data_enabled': true
         };
-        return this.http.post(url, data, { responseType: 'json' });
+        return this.http.post('projects', data);
     }
 
     demoteTab(id, name) {
-        const url = 'projects/' + id + '/promotedtabs?name=' + name;
-        return this.http.delete(url,  { responseType: 'json' });
+        return this.http.delete('projects/' + id + '/promotedtabs?name=' + name);
     }
 
     getAll(options, useCache) {
@@ -35,8 +33,7 @@ export class ProjectService {
             return null;
         }
 
-        const url = 'projects?limit=100';
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('projects?limit=100');
     }
 
     getById(id, useCache) {
@@ -45,80 +42,67 @@ export class ProjectService {
             return null;
         }
 
-        const url = 'organizations/' + id;
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('organizations/' + id);
     }
 
     getByOrganizationId(id, options, useCache) {
-        const url = 'organizations/' + id + '/projects';
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('organizations/' + id + '/projects');
     }
 
     getConfig(id) {
         // return _cachedRestangular.one('projects', id).one('config').get();
-        const url = 'projects/' + id + '/config';
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('projects/' + id + '/config');
     }
 
     getNotificationSettings(id, userId) {
         // return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
-        const url = 'users/' + userId + '/projects/' + id + '/notifications';
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('users/' + userId + '/projects/' + id + '/notifications');
     }
 
     getIntegrationNotificationSettings(id, integration) {
         // return _cachedRestangular.one('projects', id).one(integration, 'notifications').get();
-        const url = 'projects/' + id + '/' + integration + '/notifications';
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('projects/' + id + '/' + integration + '/notifications');
     }
 
     isNameAvailable(organizationId, name) {
-        const url = 'organizations/' + organizationId + '/projects/check-name?name=' + encodeURIComponent(name);
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('organizations/' + organizationId + '/projects/check-name?name=' + encodeURIComponent(name));
     }
 
     promoteTab(id, name) {
-        const url = 'projects/' + id + '/promotedtabs';
         const data = {
             name: name
         };
-        return this.http.post(url,  data, { responseType: 'json' });
+        return this.http.post('projects/' + id + '/promotedtabs',  data);
     }
 
     remove(id) {
-        const url = 'projects/' + id;
-        return this.http.delete(url,  { responseType: 'json' });
+        return this.http.delete('projects/' + id);
     }
 
     removeConfig(id, key) {
-        const url = 'projects/' + id + '/config?key=' + key;
-        return this.http.delete(url,  { responseType: 'json' });
+        return this.http.delete('projects/' + id + '/config?key=' + key);
     }
 
     removeData(id, key) {
-        const url = 'projects/' + id + '/data?key=' + key;
-        return this.http.delete(url,  { responseType: 'json' });
+        return this.http.delete('projects/' + id + '/data?key=' + key);
     }
 
     removeSlack(id) {
-        const url = 'projects/' + id + '/slack';
-        return this.http.delete(url,  { responseType: 'json' });
+        return this.http.delete('projects/' + id + '/slack');
     }
 
     removeNotificationSettings(id, userId) {
         const url = 'users/' + userId + '/projects' + id + '/notifications';
-        return this.http.delete(url,  { responseType: 'json' });
+        return this.http.delete('users/' + userId + '/projects' + id + '/notifications');
     }
 
     resetData(id) {
-        const url = 'api/v2/projects/' + id + '/reset-data';
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('api/v2/projects/' + id + '/reset-data');
     }
 
     update(id, project) {
-        const url = 'projects/' + id;
         const data = project;
-        return this.http.patch(url,  data, { responseType: 'json' });
+        return this.http.patch('projects/' + id,  data);
     }
 
     setConfig(id, key, value) {
@@ -127,11 +111,10 @@ export class ProjectService {
                 'Content-Type':  'text/plain; charset=UTF-8',
             })
         };
-        const url = 'projects/' + id + '/config/' + value;
         const data = {
             key: key
         };
-        return this.http.post(url,  data, httpOptions);
+        return this.http.post('projects/' + id + '/config/' + value,  data, httpOptions);
     }
 
     setData(id, key, value) {
@@ -140,21 +123,19 @@ export class ProjectService {
                 'Content-Type':  'text/plain; charset=UTF-8',
             })
         };
-        const url = 'projects/' + id + '/data/' + value;
         const data = {
             key: key
         };
-        return this.http.post(url,  data, httpOptions);
+        return this.http.post('projects/' + id + '/data/' + value,  data, httpOptions);
     }
 
     setNotificationSettings(id, userId, settings) {
-        const url = 'users/' + userId + '/projects/' + id + '/notifications';
-        return this.http.post(url,  settings, { responseType: 'json' });
+        return this.http.post('users/' + userId + '/projects/' + id + '/notifications',  settings);
     }
 
     setIntegrationNotificationSettings(id, integration, settings) {
         const data = settings;
         const url = 'projects/' + id + '/' + integration + '/notifications';
-        return this.http.get(url,  { responseType: 'json' });
+        return this.http.get('projects/' + id + '/' + integration + '/notifications');
     }
 }

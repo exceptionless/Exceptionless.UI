@@ -27,9 +27,8 @@ export class SearchService {
         }
 
         const data = { query: query };
-        const url = 'search/validate';
         return new Promise((resolve, reject) => {
-            this.http.get(url, { responseType: 'json' }).subscribe(
+            this.http.get('search/validate', { responseType: 'json' }).subscribe(
                 res => {
                     resolve(JSON.parse(JSON.stringify(res)));
                 },

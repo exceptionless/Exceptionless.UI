@@ -23,58 +23,49 @@ export class StackService {
                 'Content-Type':  'text/plain; charset=UTF-8',
             })
         };
-        const link = 'stacks/add-link';
-        return this.http.post(link,  url, httpOptions);
+        return this.http.post('stacks/add-link',  url, httpOptions);
     }
 
     disableNotifications(id) {
-        const url = 'stacks/' + id + '/notifications';
-        return this.http.delete(url,   { responseType: 'json' });
+        return this.http.delete('stacks/' + id + '/notifications');
     }
 
     enableNotifications(id) {
-        const url = 'stacks/' + id + '/notifications';
         const data = {};
-        return this.http.post(url,  data, { responseType: 'json' });
+        return this.http.post('stacks/' + id + '/notifications',  data);
     }
 
     getAll(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            const orgnizationUrl = 'organizations/' + organization + '/stacks/' + mergedOptions;
-            return this.http.get(orgnizationUrl,   { responseType: 'json' });
+            return this.http.get('organizations/' + organization + '/stacks/' + mergedOptions);
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            const projectUrl = 'projects/' + project + '/stacks/' + mergedOptions;
-            return this.http.get(projectUrl,   { responseType: 'json' });
+            return this.http.get('projects/' + project + '/stacks/' + mergedOptions);
         }
 
-        const url = 'stacks/' + mergedOptions;
-        return this.http.get(url,   { responseType: 'json' });
+        return this.http.get('stacks/' + mergedOptions);
     }
 
     getById(id) {
-        const url = 'stacks/' + id;
-        return this.http.get(url,   { responseType: 'json' });
+        return this.http.get('stacks/' + id);
     }
 
     getFrequent(options?): Observable<HttpResponse<any>> {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            const organizationUrl = 'organizations/' + organization + '/stacks/frequent/' + mergedOptions;
-            return this.http.get(organizationUrl, {
+            return this.http.get('organizations/' + organization + '/stacks/frequent/' + mergedOptions, {
                 observe: 'response',
             });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            const projectUrl = 'projects/' + project + '/stacks/frequent/' + mergedOptions;
-            return this.http.get(projectUrl, {
+            return this.http.get('projects/' + project + '/stacks/frequent/' + mergedOptions, {
                 observe: 'response',
             });
         }
@@ -91,82 +82,69 @@ export class StackService {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            const organizationUrl = 'organizations/' + organization + '/stacks/users/' + mergedOptions;
-            return this.http.get(organizationUrl, { responseType: 'json' });
+            return this.http.get('organizations/' + organization + '/stacks/users/' + mergedOptions);
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            const projectUrl = 'projects/' + project + '/stacks/users/' + mergedOptions;
-            return this.http.get(projectUrl, { responseType: 'json' });
+            return this.http.get('projects/' + project + '/stacks/users/' + mergedOptions);
         }
 
-        const url = 'stacks/users/' + mergedOptions;
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('stacks/users/' + mergedOptions);
     }
 
     getNew(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            const organizationUrl = 'organizations/' + organization + '/stacks/new/' + mergedOptions;
-            return this.http.get(organizationUrl, { responseType: 'json' });
+            return this.http.get('organizations/' + organization + '/stacks/new/' + mergedOptions);
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            const projectUrl = 'projects/' + project + '/stacks/new/' + mergedOptions;
-            return this.http.get(projectUrl, { responseType: 'json' });
+            return this.http.get('projects/' + project + '/stacks/new/' + mergedOptions);
         }
 
-        const url = 'stacks/new/' + mergedOptions;
-        return this.http.get(url, { responseType: 'json' });
+        return this.http.get('stacks/new/' + mergedOptions);
     }
 
     markCritical(id) {
-        const url = 'stacks/' + id + '/mark-critical';
         const data = {};
-        return this.http.post(url, data, { responseType: 'json' });
+        return this.http.post('stacks/' + id + '/mark-critical', data);
     }
 
     markNotCritical(id) {
         const url = 'stacks/' + id + '/mark-critical';
-        return this.http.delete(url, { responseType: 'json' });
+        return this.http.delete('stacks/' + id + '/mark-critical');
     }
 
     markFixed(id, version) {
-        const url = 'stacks/' + id + '/mark-fixed';
         const data = {
             version: version
         };
-        return this.http.post(url, data, { responseType: 'json' });
+        return this.http.post('stacks/' + id + '/mark-fixed', data);
     }
 
     markNotFixed(id?) {
-        const url = 'stacks/' + id + '/mark-fixed';
-        return this.http.delete(url, { responseType: 'json' });
+        return this.http.delete('stacks/' + id + '/mark-fixed');
     }
 
     markHidden(id?) {
-        const url = 'stacks/' + id + '/mark-hidden';
         const data = {};
-        return this.http.post(url, data, { responseType: 'json' });
+        return this.http.post('stacks/' + id + '/mark-hidden', data);
     }
 
     markNotHidden(id?) {
-        const url = 'stacks/' + id + '/mark-hidden';
-        return this.http.delete(url,  { responseType: 'json' });
+        return this.http.delete('stacks/' + id + '/mark-hidden');
     }
 
     promote(id) {
-        const url = 'stacks/' + id + '/promote';
         const data = {};
-        return this.http.post(url,  data, { responseType: 'json' });
+        return this.http.post('stacks/' + id + '/promote',  data);
     }
 
     remove(id?) {
-        const url = 'stacks/' + id;
-        return this.http.delete(url,   { responseType: 'json' });
+        return this.http.delete('stacks/' + id);
     }
 
     removeLink(id, url) {
@@ -175,7 +153,6 @@ export class StackService {
                 'Content-Type':  'text/plain; charset=UTF-8',
             })
         };
-        const link = 'stacks/' + id + '/remove-link';
-        return this.http.delete(link, httpOptions);
+        return this.http.delete('stacks/' + id + '/remove-link', httpOptions);
     }
 }
