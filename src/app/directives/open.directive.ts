@@ -5,7 +5,7 @@ import { Directive, ElementRef, Output, EventEmitter, HostListener, Renderer2 } 
 })
 
 export class OpenDirective {
-    constructor(private _elementRef : ElementRef, private  renderer: Renderer2) {
+    constructor(private _elementRef: ElementRef, private  renderer: Renderer2) {
     }
 
     @Output()
@@ -19,8 +19,8 @@ export class OpenDirective {
 
             this.renderer.removeClass(this._elementRef.nativeElement, 'open');
         } else {
-            let classList = this._elementRef.nativeElement.classList.value;
-            if(classList.includes('open')) {
+            const classList = this._elementRef.nativeElement.classList.value;
+            if (classList.includes('open')) {
                 this.renderer.removeClass(this._elementRef.nativeElement, 'open');
             } else {
                 this.renderer.addClass(this._elementRef.nativeElement, 'open');
