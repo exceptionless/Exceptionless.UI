@@ -1,248 +1,160 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BasicService } from './basic.service';
-import { GlobalVariables } from "../global-variables";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class ProjectService extends  BasicService {
+export class ProjectService {
 
     constructor(
-        http: HttpClient,
-        _global: GlobalVariables,
+        private http: HttpClient,
     ) {
-        super(http, _global);
-        this.route = '';
-        this.type = '';
-        this.data = {};
-        this.authentication = false;
     }
 
-    addSlack(id){};
+    addSlack(id) {}
 
-    create(organizationId, name){
-        this.route = 'api/v2/projects';
-        this.type = 'post';
-        this.authentication = true;
-        this.data = {
+    create(organizationId, name) {
+        const url = 'projects';
+        const data = {
             'organization_id': organizationId,
             'name': name,
-            delete_bot_data_enabled: true
+            'delete_bot_data_enabled': true
         };
+        return this.http.post(url, data, { responseType: 'json' });
+    }
 
-        return this.call();
-    };
+    demoteTab(id, name) {
+        const url = 'projects/' + id + '/promotedtabs?name=' + name;
+        return this.http.delete(url,  { responseType: 'json' });
+    }
 
-    demoteTab(id, name){
-        this.route = 'api/v2/projects/' + id + '/promotedtabs';
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {
-            name: name
-        };
-
-        return this.call();
-    };
-
-    getAll(options, useCache){
-        this.route = 'api/v2/projects?limit=100';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
+    getAll(options, useCache) {
         if (useCache === undefined || useCache) {
-            //need to implement later[frank lin]
+            // need to implement later[frank lin]
             return null;
         }
 
-        return this.call();
-    };
+        const url = 'projects?limit=100';
+        return this.http.get(url,  { responseType: 'json' });
+    }
 
-    getById(id, useCache){
-        this.route = 'api/v2/organizations/' + id;
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
+    getById(id, useCache) {
         if (useCache === undefined || useCache) {
-            //need to implement later[frank lin]
+            // need to implement later[frank lin]
             return null;
         }
 
-        return this.call();
-    };
+        const url = 'organizations/' + id;
+        return this.http.get(url,  { responseType: 'json' });
+    }
 
-    getByOrganizationId(id, options, useCache){
-        this.route = 'api/v2/organizations/' + id + '/projects';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
+    getByOrganizationId(id, options, useCache) {
+        const url = 'organizations/' + id + '/projects';
+        return this.http.get(url,  { responseType: 'json' });
+    }
 
-        return this.call();
-    };
+    getConfig(id) {
+        // return _cachedRestangular.one('projects', id).one('config').get();
+        const url = 'projects/' + id + '/config';
+        return this.http.get(url,  { responseType: 'json' });
+    }
 
-    getConfig(id){
-        //return _cachedRestangular.one('projects', id).one('config').get();
-        this.route = 'api/v2/projects/' + id + '/config';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
+    getNotificationSettings(id, userId) {
+        // return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
+        const url = 'users/' + userId + '/projects/' + id + '/notifications';
+        return this.http.get(url,  { responseType: 'json' });
+    }
 
-        return this.call();
-    };
+    getIntegrationNotificationSettings(id, integration) {
+        // return _cachedRestangular.one('projects', id).one(integration, 'notifications').get();
+        const url = 'projects/' + id + '/' + integration + '/notifications';
+        return this.http.get(url,  { responseType: 'json' });
+    }
 
-    getNotificationSettings(id, userId){
-        //return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
-        this.route = 'api/v2/users/' + userId + '/projects/' + id + '/notifications';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
+    isNameAvailable(organizationId, name) {
+        const url = 'organizations/' + organizationId + '/projects/check-name?name=' + encodeURIComponent(name);
+        return this.http.get(url,  { responseType: 'json' });
+    }
 
-        return this.call();
-    };
-
-    getIntegrationNotificationSettings(id, integration){
-        //return _cachedRestangular.one('projects', id).one(integration, 'notifications').get();
-        this.route = 'api/v2/projects/' + id + '/' + integration + '/notifications';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
-
-    isNameAvailable(organizationId, name){
-        this.route = 'api/v2/organizations/' + organizationId + '/projects/check-name';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {
-            name: encodeURIComponent(name)
-        };
-
-        return this.call();
-    };
-
-    promoteTab(id, name){
-        this.route = 'api/v2/projects/' + id + '/promotedtabs';
-        this.type = 'post';
-        this.authentication = true;
-        this.data = {
+    promoteTab(id, name) {
+        const url = 'projects/' + id + '/promotedtabs';
+        const data = {
             name: name
         };
+        return this.http.post(url,  data, { responseType: 'json' });
+    }
 
-        return this.call();
-    };
+    remove(id) {
+        const url = 'projects/' + id;
+        return this.http.delete(url,  { responseType: 'json' });
+    }
 
-    remove(id){
-        this.route = 'api/v2/projects/' + id;
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {};
+    removeConfig(id, key) {
+        const url = 'projects/' + id + '/config?key=' + key;
+        return this.http.delete(url,  { responseType: 'json' });
+    }
 
-        return this.call();
-    };
+    removeData(id, key) {
+        const url = 'projects/' + id + '/data?key=' + key;
+        return this.http.delete(url,  { responseType: 'json' });
+    }
 
-    removeConfig(id, key){
-        this.route = 'api/v2/projects/' + id + '/config';
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {
+    removeSlack(id) {
+        const url = 'projects/' + id + '/slack';
+        return this.http.delete(url,  { responseType: 'json' });
+    }
+
+    removeNotificationSettings(id, userId) {
+        const url = 'users/' + userId + '/projects' + id + '/notifications';
+        return this.http.delete(url,  { responseType: 'json' });
+    }
+
+    resetData(id) {
+        const url = 'api/v2/projects/' + id + '/reset-data';
+        return this.http.get(url,  { responseType: 'json' });
+    }
+
+    update(id, project) {
+        const url = 'projects/' + id;
+        const data = project;
+        return this.http.patch(url,  data, { responseType: 'json' });
+    }
+
+    setConfig(id, key, value) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type':  'text/plain; charset=UTF-8',
+            })
+        };
+        const url = 'projects/' + id + '/config/' + value;
+        const data = {
             key: key
         };
+        return this.http.post(url,  data, httpOptions);
+    }
 
-        return this.call();
-    };
-
-    removeData(id, key){
-        this.route = 'api/v2/projects/' + id + '/data';
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {
+    setData(id, key, value) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type':  'text/plain; charset=UTF-8',
+            })
+        };
+        const url = 'projects/' + id + '/data/' + value;
+        const data = {
             key: key
         };
+        return this.http.post(url,  data, httpOptions);
+    }
 
-        return this.call();
-    };
+    setNotificationSettings(id, userId, settings) {
+        const url = 'users/' + userId + '/projects/' + id + '/notifications';
+        return this.http.post(url,  settings, { responseType: 'json' });
+    }
 
-    removeSlack(id){
-        this.route = 'api/v2/projects/' + id + '/slack';
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
-
-    removeNotificationSettings(id, userId){
-        this.route = 'api/v2/users/' + userId + '/projects' + id + '/notifications';
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
-
-    resetData(id){
-        this.route = 'api/v2/projects/' + id + '/reset-data';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
-
-    update(id, project){
-        this.route = 'api/v2/projects/' + id;
-        this.type = 'patch';
-        this.authentication = true;
-        this.data = project;
-
-        return this.call();
-    };
-
-    setConfig(id, key, value){
-        this.route = 'api/v2/projects/' + id + '/config/' + value;
-        this.type = 'post';
-        this.authentication = true;
-        this.data = {
-            key: key
-        };
-        this.changeContentType = true;
-        this.contentType = 'text/plain; charset=UTF-8';
-
-        return this.call();
-    };
-
-    setData(id, key, value){
-        this.route = 'api/v2/projects/' + id + '/data/' + value;
-        this.type = 'post';
-        this.authentication = true;
-        this.data = {
-            key: key
-        };
-        this.changeContentType = true;
-        this.contentType = 'text/plain; charset=UTF-8';
-
-        return this.call();
-    };
-
-    setNotificationSettings(id, userId, settings){
-        this.route = 'api/v2/users/' + userId + '/projects/' + id + '/notifications';
-        this.type = 'post';
-        this.authentication = true;
-        this.data = settings;
-
-        return this.call();
-    };
-
-    setIntegrationNotificationSettings(id, integration, settings){
-        this.route = 'api/v2/projects/' + id + '/' + integration + '/notifications';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = settings;
-
-        return this.call();
-    };
+    setIntegrationNotificationSettings(id, integration, settings) {
+        const data = settings;
+        const url = 'projects/' + id + '/' + integration + '/notifications';
+        return this.http.get(url,  { responseType: 'json' });
+    }
 }

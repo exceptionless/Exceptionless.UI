@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { StackService } from "../../../service/stack.service";
+import { StackService } from '../../../service/stack.service';
 
 @Component({
     selector: 'app-new',

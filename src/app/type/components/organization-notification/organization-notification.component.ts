@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import { OrganizationService } from "../../../service/organization.service";
-import { ProjectService } from "../../../service/project.service"
-import { FilterService } from "../../../service/filter.service"
-import { SearchService } from "../../../service/search.service"
-import { NotificationService } from "../../../service/notification.service"
-import { GlobalVariables } from "../../../global-variables";
+import { OrganizationService } from '../../../service/organization.service';
+import { ProjectService } from '../../../service/project.service';
+import { FilterService } from '../../../service/filter.service';
+import { SearchService } from '../../../service/search.service';
+import { NotificationService } from '../../../service/notification.service';
+import { GlobalVariables } from '../../../global-variables';
 
 @Component({
     selector: 'app-organization-notification',
@@ -16,7 +16,7 @@ import { GlobalVariables } from "../../../global-variables";
 export class OrganizationNotificationComponent implements OnInit {
     exceededRequestLimitOrganizations: any[];
     freeOrganizations: any[];
-    hasNotifications: boolean = false;
+    hasNotifications = false;
     organizations: any[];
     organizationsWithoutPremiumFeatures: any[];
     organizationsWithNoProjects: any[];
@@ -27,11 +27,11 @@ export class OrganizationNotificationComponent implements OnInit {
     suspendedForBillingOrganizations: any[];
     suspendedForAbuseOrOverageOrNotActiveOrganizations: any[];
     suspendedOrganizations: any[];
-    organizationId: string = '';
-    ignoreFree: string = '';
-    ignoreConfigureProjects: string = '';
-    requiresPremium: string = '';
-    filterUsesPremiumFeatures: boolean = false;
+    organizationId = '';
+    ignoreFree = '';
+    ignoreConfigureProjects = '';
+    requiresPremium = '';
+    filterUsesPremiumFeatures = false;
 
     constructor(
         private organizationService: OrganizationService,
@@ -47,24 +47,24 @@ export class OrganizationNotificationComponent implements OnInit {
     }
 
     get() {
-        this.getOrganizations().then(() => { this.getProjects().then( () => { this.getFilterUsesPremiumFeatures().then(() => { this.getOrganizationNotifications(); }) } ) });
-    };
+        this.getOrganizations().then(() => { this.getProjects().then( () => { this.getFilterUsesPremiumFeatures().then(() => { this.getOrganizationNotifications(); }); } ); });
+    }
 
-    getCurrentOrganizationId(){
-        let getOrganizationFromProjectFilter = () => {
+    getCurrentOrganizationId() {
+        const getOrganizationFromProjectFilter = () => {
             if (!this.projects || !this.filterService.getProjectId()) {
                 return null;
             }
 
-            var project = this.projects.filter(function(o) { return o.id === this.filterService.getProjectId(); })[0];
+            const project = this.projects.filter(function(o) { return o.id === this.filterService.getProjectId(); })[0];
             return project ? project.organization_id : null;
         };
 
         return this.organizationId || this.filterService.getOrganizationId() || getOrganizationFromProjectFilter();
-    };
+    }
 
-    getCurrentProjects(){
-        let currentOrganizationId = this.organizationId || this.filterService.getOrganizationId();
+    getCurrentProjects() {
+        const currentOrganizationId = this.organizationId || this.filterService.getOrganizationId();
 
         if (currentOrganizationId) {
             return this.projects.filter(function (p) { return p.organization_id === currentOrganizationId; });
@@ -75,9 +75,9 @@ export class OrganizationNotificationComponent implements OnInit {
         }
 
         return this.projects;
-    };
+    }
 
-    getFilterUsesPremiumFeatures(){
+    getFilterUsesPremiumFeatures() {
         this.filterUsesPremiumFeatures = false;
 
         return new Promise((resolve, reject) => {
@@ -93,7 +93,7 @@ export class OrganizationNotificationComponent implements OnInit {
                 }
             );
         });
-    };
+    }
 
     getOrganizationNotifications() {
         this.exceededRequestLimitOrganizations = [];
@@ -107,8 +107,8 @@ export class OrganizationNotificationComponent implements OnInit {
         this.suspendedForAbuseOrOverageOrNotActiveOrganizations = [];
         this.suspendedOrganizations = [];
 
-        let currentOrganizationId = this.getCurrentOrganizationId();
-        let currentProjects = this.getCurrentProjects();
+        const currentOrganizationId = this.getCurrentOrganizationId();
+        const currentProjects = this.getCurrentProjects();
 
         this.organizations.forEach(organization => {
             if (currentOrganizationId && organization.id !== currentOrganizationId) {
@@ -128,11 +128,11 @@ export class OrganizationNotificationComponent implements OnInit {
             }
 
             // Only show it if you absolutely have no data or the current project has no data or if the current org has no data.
-            let canShowConfigurationAlert = currentProjects.filter(function(p) { return p.is_configured === false; }).length === currentProjects.length;
+            const canShowConfigurationAlert = currentProjects.filter(function(p) { return p.is_configured === false; }).length === currentProjects.length;
 
             // Only show the premium features dialog when searching on a plan without premium features and your project has been configured.
-            let tryingToSearchWithoutPremiumFeatures = this.filterUsesPremiumFeatures && !organization.has_premium_features;
-            let upgradeRequiredForPremiumFeatures = this.requiresPremium && !organization.has_premium_features;
+            const tryingToSearchWithoutPremiumFeatures = this.filterUsesPremiumFeatures && !organization.has_premium_features;
+            const upgradeRequiredForPremiumFeatures = this.requiresPremium && !organization.has_premium_features;
 
             if ((tryingToSearchWithoutPremiumFeatures || upgradeRequiredForPremiumFeatures) && !canShowConfigurationAlert) {
                 this.organizationsWithoutPremiumFeatures.push(organization);
@@ -171,7 +171,7 @@ export class OrganizationNotificationComponent implements OnInit {
                         this.projectsRequiringConfiguration.push(project);
                         hasProjectsRequiringConfiguration = true;
                     }
-                })
+                });
 
                 if (hasProjectsRequiringConfiguration) {
                     return;
@@ -188,24 +188,25 @@ export class OrganizationNotificationComponent implements OnInit {
         });
 
             this.hasNotifications = true;
-    };
+    }
 
     getOrganizations() {
-        let getSelectedOrganization = () => {
-            let organizationId = this.getCurrentOrganizationId();
+        const getSelectedOrganization = () => {
+            const organizationId = this.getCurrentOrganizationId();
 
-            if (!organizationId || this.organizations.filter(function(o) { return o.id === organizationId; })[0])
+            if (!organizationId || this.organizations.filter(function(o) { return o.id === organizationId; })[0]) {
                 return;
+            }
 
             return new Promise((resolve, reject) => {
                 this.organizationService.getById(organizationId, false).subscribe(
-                    res=> {
+                    res => {
                         this.organizations.push(JSON.parse(JSON.stringify(res)));
 
-                        //getSelectedOrganization();
+                        // getSelectedOrganization();
                         resolve(this.organizations);
                     },
-                    err=>{
+                    err => {
                         this.notificationService.error('Failed', 'Error Occurred!');
 
                         reject(err);
@@ -215,16 +216,16 @@ export class OrganizationNotificationComponent implements OnInit {
             });
         };
 
-        let getAllOrganizations = () => {
+        const getAllOrganizations = () => {
             return new Promise((resolve, reject) => {
                 this.organizationService.getAll('', false).subscribe(
-                    res=> {
+                    res => {
                         this.organizations = JSON.parse(JSON.stringify(res));
 
-                        //getSelectedOrganization();
+                        // getSelectedOrganization();
                         resolve(this.organizations);
                     },
-                    err=>{
+                    err => {
                         this.notificationService.error('Failed', 'Error Occurred!');
 
                         reject(err);
@@ -235,18 +236,18 @@ export class OrganizationNotificationComponent implements OnInit {
         };
 
         return getAllOrganizations().then(() => { getSelectedOrganization(); });
-    };
+    }
 
     getProjects() {
         return new Promise((resolve, reject) => {
             this.projectService.getAll('', false).subscribe(
-                res=> {
+                res => {
                     this.projects = JSON.parse(JSON.stringify(res));
 
-                    //getSelectedOrganization();
+                    // getSelectedOrganization();
                     resolve(this.projects);
                 },
-                err=>{
+                err => {
                     this.notificationService.error('Failed', 'Error Occurred!');
 
                     reject(err);
@@ -254,59 +255,59 @@ export class OrganizationNotificationComponent implements OnInit {
                 () => console.log('Project Service called!')
             );
         });
-    };
+    }
 
     hasExceededRequestLimitOrganizations() {
         return this.exceededRequestLimitOrganizations && this.exceededRequestLimitOrganizations.length > 0;
-    };
+    }
 
     hasFreeOrganizations() {
         return this.freeOrganizations && this.freeOrganizations.length > 0;
-    };
+    }
 
     hasHourlyOverageOrganizations() {
         return this.hourlyOverageOrganizations && this.hourlyOverageOrganizations.length > 0;
-    };
+    }
 
     hasMonthlyOverageOrganizations() {
         return this.monthlyOverageOrganizations && this.monthlyOverageOrganizations.length > 0;
-    };
+    }
 
     hasProjectsRequiringConfiguration() {
         return this.projectsRequiringConfiguration && this.projectsRequiringConfiguration.length > 0;
-    };
+    }
 
     hasOrganizations() {
         return this.organizations && this.organizations.length > 0;
-    };
+    }
 
     hasOrganizationsWithoutPremiumFeatures() {
         return this.organizationsWithoutPremiumFeatures && this.organizationsWithoutPremiumFeatures.length > 0;
-    };
+    }
 
     hasOrganizationsWithNoProjects() {
         return this.organizationsWithNoProjects && this.organizationsWithNoProjects.length > 0;
-    };
+    }
 
     hasSuspendedForBillingOrganizations() {
         return this.suspendedForBillingOrganizations && this.suspendedForBillingOrganizations.length > 0;
-    };
+    }
 
     hasSuspendedForAbuseOrOverageOrNotActiveOrganizations() {
         return this.suspendedForAbuseOrOverageOrNotActiveOrganizations && this.suspendedForAbuseOrOverageOrNotActiveOrganizations.length > 0;
-    };
+    }
 
     hasSuspendedOrganizations() {
         return this.suspendedOrganizations && this.suspendedOrganizations.length > 0;
-    };
+    }
 
     isIntercomEnabled() {
         return this._global.INTERCOM_APPID;
-    };
+    }
 
     onFilterChanged() {
         return this.getFilterUsesPremiumFeatures().then( () => { this.getOrganizationNotifications(); });
-    };
+    }
 
     showChangePlanDialog(organizationId) {
         if (!this._global.STRIPE_PUBLISHABLE_KEY) {
@@ -332,10 +333,10 @@ export class OrganizationNotificationComponent implements OnInit {
             organizationId = this.freeOrganizations[0].id;
         }
 
-        //need to implement yet [frank lin]
-        //return billingService.changePlan(organizationId).catch(function(e){});
+        // need to implement yet [frank lin]
+        // return billingService.changePlan(organizationId).catch(function(e){});
         return false;
-    };
+    }
 
-    showIntercom() {};
+    showIntercom() {}
 }

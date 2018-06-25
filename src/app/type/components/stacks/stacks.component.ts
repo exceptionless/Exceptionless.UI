@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FilterService } from "../../../service/filter.service";
-import { StackService } from "../../../service/stack.service";
-import { LinkService } from "../../../service/link.service";
-import { PaginationService } from "../../../service/pagination.service";
-import { NotificationService } from "../../../service/notification.service";
-import { StacksActionsService } from "../../../service/stacks-actions.service";
+import { FilterService } from '../../../service/filter.service';
+import { StackService } from '../../../service/stack.service';
+import { LinkService } from '../../../service/link.service';
+import { PaginationService } from '../../../service/pagination.service';
+import { NotificationService } from '../../../service/notification.service';
+import { StacksActionsService } from '../../../service/stacks-actions.service';
 
 @Component({
     selector: 'app-stacks',
@@ -21,7 +21,7 @@ export class StacksComponent implements OnInit {
     selectedIds: any[] = [];
     pageSummary: string;
     currentOptions: any;
-    loading: boolean = true;
+    loading = true;
     showType: any;
 
     constructor(
@@ -50,13 +50,13 @@ export class StacksComponent implements OnInit {
         }
 
         return !data;
-    };
+    }
 
     get(options?) {
-        let onSuccess = (response, link) => {
+        const onSuccess = (response, link) => {
             this.stacks = JSON.parse(JSON.stringify(response));
 
-            if(this.selectedIds) {
+            if (this.selectedIds) {
                 this.selectedIds = this.selectedIds.filter((id) => {
                     return this.stacks.filter(function (e) {
                         return e.id === id;
@@ -64,7 +64,7 @@ export class StacksComponent implements OnInit {
                 });
             }
 
-            let links = this.linkService.getLinksQueryParameters(link);
+            const links = this.linkService.getLinksQueryParameters(link);
             this.previous = links['previous'];
             this.next = links['next'];
 
@@ -77,7 +77,7 @@ export class StacksComponent implements OnInit {
             return this.stacks;
         };
 
-        let onFailure = (response) => {
+        const onFailure = (response) => {
         };
 
         this.loading = true;
@@ -100,42 +100,45 @@ export class StacksComponent implements OnInit {
                 () => console.log('Stacks Service called!')
             );
         });
-    };
+    }
 
     nextPage() {
         return this.get(this.next);
-    };
+    }
 
     previousPage() {
         return this.get(this.previous);
-    };
+    }
 
     updateSelection() {
-        if (this.stacks && this.stacks.length === 0)
+        if (this.stacks && this.stacks.length === 0) {
             return;
+        }
 
-        if (this.selectedIds.length > 0)
+        if (this.selectedIds.length > 0) {
             this.selectedIds = [];
-        else
+        } else {
             this.selectedIds = this.stacks.map((stack) => {
                 return stack.id;
             });
-    };
+        }
+
+    }
 
     save(action) {
-        let onSuccess = ()=> {
+        const onSuccess = () => {
             this.selectedIds = [];
         };
 
         if (this.selectedIds.length === 0) {
-            this.notificationService.info('Please select one or more stacks','Success');
+            this.notificationService.info('Please select one or more stacks', 'Success');
         } else {
             /*this.action.run(this.selectedIds).then(onSuccess());*/
         }
-    };
+    }
 
     open(id, event) {
-        let openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
             /*$window.open($state.href('app.stack', { id: id }, { absolute: true }), '_blank');*/
         } else {
@@ -143,5 +146,5 @@ export class StacksComponent implements OnInit {
         }
 
         event.preventDefault();
-    };
+    }
 }

@@ -1,25 +1,17 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BasicService } from './basic.service';
-import { GlobalVariables } from "../global-variables";
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class SearchService extends BasicService {
+export class SearchService {
 
     constructor(
-        http: HttpClient,
-        _global: GlobalVariables,
+        private http: HttpClient,
         private toastr: ToastrService,
     ) {
-        super(http, _global);
-        this.route = '';
-        this.type = '';
-        this.data = {};
-        this.authentication = false;
     }
 
     validate(query) {
@@ -34,22 +26,19 @@ export class SearchService extends BasicService {
             });
         }
 
-        this.route = 'api/v2/search/validate';
-        this.type = 'get';
-        this.data = { query: query };
-        this.authentication = true;
-
+        const data = { query: query };
+        const url = 'search/validate';
         return new Promise((resolve, reject) => {
-            this.call().subscribe(
-                res=> {
+            this.http.get(url, { responseType: 'json' }).subscribe(
+                res => {
                     resolve(JSON.parse(JSON.stringify(res)));
                 },
-                err=>{
+                err => {
                     this.toastr.error('Error Occurred!', 'Failed');
                     reject(err);
                 },
                 () => console.log('Validate Service called!')
             );
         });
-    };
+    }
 }

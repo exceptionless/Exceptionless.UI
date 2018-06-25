@@ -1,200 +1,136 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { BasicService } from './basic.service';
-import { GlobalVariables } from "../global-variables";
-import { FilterService } from "./filter.service";
-import { OrganizationService } from "./organization.service";
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { FilterService } from './filter.service';
+import { OrganizationService } from './organization.service';
+import { GlobalFunctions } from '../global-functions';
 import { Observable } from 'rxjs/Observable';
-import * as moment from "moment";
+import * as moment from 'moment';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class EventService extends BasicService {
+export class EventService {
 
     constructor(
-        http: HttpClient,
-        _global: GlobalVariables,
+        private http: HttpClient,
         private filterService: FilterService,
-        private organizationService: OrganizationService
+        private organizationService: OrganizationService,
+        private globalFunctions: GlobalFunctions
     ) {
-        super(http, _global);
-        this.route = '';
-        this.type = '';
-        this.data = {};
-        this.authentication = false;
     }
 
     calculateAveragePerHour(total, organizations) {
-        let range = this.filterService.getTimeRange();
-        range.start = moment.max([range.start, moment(this.filterService.getOldestPossibleEventDate()), moment(this.organizationService.getOldestPossibleEventDate(organizations))].filter(function(d){ return !!d; }));
+        const range = this.filterService.getTimeRange();
+        range.start = moment.max([range.start, moment(this.filterService.getOldestPossibleEventDate()), moment(this.organizationService.getOldestPossibleEventDate(organizations))].filter(function(d) { return !!d; }));
         range.end = range.end || moment();
 
-        let result: number = total / range.end.diff(range.start, 'hours', true);
+        const result: number = total / range.end.diff(range.start, 'hours', true);
 
         return !isNaN(result) && isFinite(result) ? result : 0.0;
-    };
+    }
 
     count(aggregations, optionsCallback?, includeHiddenAndFixedFilter?) {
         let options = this.filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, includeHiddenAndFixedFilter);
-        options = typeof optionsCallback == 'function' ? optionsCallback(options) : options;
+        options = typeof optionsCallback === 'function' ? optionsCallback(options) : options;
 
-        let organization = this.filterService.getOrganizationId();
+        const organization = this.filterService.getOrganizationId();
         if (organization) {
-            this.route = 'api/v2/organizations/' + organization + '/events/count';
-            this.type = 'get';
-            this.data = options;
-            this.authentication = true;
-
-            return this.call();
+            let organization_full_url = 'organizations/' + organization + '/events/count';
+            organization_full_url = this.globalFunctions.setQueryParam(organization_full_url, options);
+            return this.http.get(organization_full_url, { responseType: 'json' });
         }
 
-        let project = this.filterService.getProjectId();
+        const project = this.filterService.getProjectId();
         if (project) {
-            this.route = 'api/v2/projects/' + project + '/events/count';
-            this.type = 'get';
-            this.data = options;
-            this.authentication = true;
-
-            return this.call();
+            let project_full_url = 'projects/' + project + '/events/count';
+            project_full_url = this.globalFunctions.setQueryParam(project_full_url, options);
+            return this.http.get(project_full_url, { responseType: 'json' });
         }
 
-        this.route = 'api/v2/events/count';
-        this.type = 'get';
-        this.data = options;
-        this.authentication = true;
-
-        return this.call();
-    };
+        let full_url = 'events/count';
+        full_url = this.globalFunctions.setQueryParam(full_url, options);
+        return this.http.get(full_url, { responseType: 'json' });
+    }
 
     getAll(options, optionsCallback?, includeHiddenAndFixedFilter?): Observable<HttpResponse<any>> {
-        optionsCallback = typeof optionsCallback == 'function' ? optionsCallback : function(o){ return o; };
-        let mergedOptions = optionsCallback(this.filterService.apply(options, includeHiddenAndFixedFilter));
+        optionsCallback = typeof optionsCallback === 'function' ? optionsCallback : function(o) { return o; };
+        const mergedOptions = optionsCallback(this.filterService.apply(options, includeHiddenAndFixedFilter));
 
-        let organization = this.filterService.getOrganizationId();
+        const organization = this.filterService.getOrganizationId();
         if (organization) {
-            this.route = 'api/v2/organizations/' + organization + '/events/' + mergedOptions;
-            this.type = 'get';
-            this.data = {};
-
-            return this.http.get(this.route, {
-                observe: 'response',
-            });
+            const organizationUrl = 'organizations/' + organization + '/events/' + mergedOptions;
+            return this.http.get(organizationUrl, { observe: 'response' });
         }
 
-        var project = this.filterService.getProjectId();
+        const project = this.filterService.getProjectId();
         if (project) {
-            this.route = 'api/v2/projects/' + project + '/events/' + mergedOptions;
-            this.type = 'get';
-            this.data = {};
-
-            return this.http.get(this.route, {
-                observe: 'response',
-            });
+            const projectUrl = 'projects/' + project + '/events/' + mergedOptions;
+            return this.http.get(projectUrl, { observe: 'response' });
         }
 
-        this.route = 'api/v2/events';
-        this.type = 'get';
-        this.data = mergedOptions;
-        let full_url = this._global.BASE_URL + this.route ;
-        full_url = full_url + '?token=9229slsdi3d';
-        for (let key in this.data) {
-            const value = this.data[key];
-            full_url = full_url + '&' + key + '=' + value;
-        }
-
-        return this.http.get(full_url, {
-            observe: 'response',
-        });
-    };
+        let full_url = 'events';
+        full_url = this.globalFunctions.setQueryParam(full_url, mergedOptions);
+        return this.http.get(full_url, { observe: 'response' });
+    }
 
     getAllSessions(options, optionsCallback) {
-        optionsCallback = typeof optionsCallback == 'function' ? optionsCallback : function(o){ return o; };
-        let mergedOptions = optionsCallback(this.filterService.apply(options, false));
+        optionsCallback = typeof optionsCallback === 'function' ? optionsCallback : function(o) { return o; };
+        const mergedOptions = optionsCallback(this.filterService.apply(options, false));
 
-        let organization = this.filterService.getOrganizationId();
+        const organization = this.filterService.getOrganizationId();
         if (organization) {
-            this.route = 'api/v2/organizations/' + organization + '/events/sessions/' + mergedOptions;
-            this.type = 'get';
-            this.data = {};
-
-            this.call();
+            const organizationUrl = 'organizations/' + organization + '/events/sessions/' + mergedOptions;
+            return this.http.get(organizationUrl, { responseType: 'json' });
         }
 
-        let project = this.filterService.getProjectId();
+        const project = this.filterService.getProjectId();
         if (project) {
-            this.route = 'api/v2/projects/' + project + '/events/sessions/' + mergedOptions;
-            this.type = 'get';
-            this.data = {};
-
-            this.call();
+            const organizationUrl = 'projects/' + project + '/events/sessions/' + mergedOptions;
+            return this.http.get(organizationUrl, { responseType: 'json' });
         }
 
-        this.route = 'api/v2/events/sessions/' + mergedOptions;
-        this.type = 'get';
-        this.data = {};
-
-        this.call();
-    };
+        const url = 'events/sessions/' + mergedOptions;
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     getById(id, options, optionsCallback) {
-        optionsCallback = typeof optionsCallback == 'function' ? optionsCallback : function(o){ return o; };
-
-        this.route = 'api/v2/events/' + id;
-        this.type = 'get';
-        this.data = optionsCallback(this.filterService.apply(options));
-
-        this.call();
-    };
+        optionsCallback = typeof optionsCallback === 'function' ? optionsCallback : function(o) { return o; };
+        const data = optionsCallback(this.filterService.apply(options));
+        let full_url = 'events/' + id;
+        full_url = this.globalFunctions.setQueryParam(full_url, data);
+        return this.http.get(full_url, { responseType: 'json' });
+    }
 
     getByReferenceId(id, options) {
-        this.route = 'api/v2/events/by-ref/' + id + '/' + this.filterService.apply(options, false);
-        this.type = 'get';
-        this.data = {};
-
-        this.call();
-    };
+        const url = 'events/by-ref/' + id + '/' + this.filterService.apply(options, false);
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     getBySessionId(projectId, id, options, optionsCallback) {
-        optionsCallback = typeof optionsCallback == 'function' ? optionsCallback : function(o){ return o; };
-
-        this.route = 'api/v2/projects/' + projectId + '/events/sessions/' + id + '/' + optionsCallback(this.filterService.apply(options, false));
-        this.type = 'get';
-        this.data = {};
-
-        this.call();
-    };
+        optionsCallback = typeof optionsCallback === 'function' ? optionsCallback : function(o) { return o; };
+        const url = 'projects/' + projectId + '/events/sessions/' + id + '/' + optionsCallback(this.filterService.apply(options, false));
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     getByStackId(id, options) {
-        this.route = 'api/v2/stacks/events/' + this.filterService.apply(options, false);
-        this.type = 'get';
-        this.data = {};
-
-        this.call();
-    };
+        const url = 'stacks/events/' + this.filterService.apply(options, false);
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     markCritical(id) {
-        this.route = 'api/v2/events/' + id + '/mark-critical';
-        this.type = 'post';
-        this.data = {};
-
-        this.call();
-    };
+        const url = 'events/' + id + '/mark-critical';
+        const data = {};
+        return this.http.post(url, data, { responseType: 'json' });
+    }
 
     markNotCritical(id) {
-        this.route = 'api/v2/events/' + id + '/mark-critical';
-        this.type = 'delete';
-        this.data = {};
-
-        this.call();
-    };
+        const url = 'events/' + id + '/mark-critical';
+        return this.http.delete(url, { responseType: 'json' });
+    }
 
     remove(id) {
-        this.route = 'api/v2/events/' + id;
-        this.type = 'delete';
-        this.data = {};
-
-        this.call();
-    };
+        const url = 'events/' + id;
+        return this.http.delete(url, { responseType: 'json' });
+    }
 }

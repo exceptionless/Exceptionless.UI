@@ -12,6 +12,7 @@
             "element",
             "app",
             "kebab-case"
-        ]
+        ],
+        "max-line-length": [true, 200]
     }
 }

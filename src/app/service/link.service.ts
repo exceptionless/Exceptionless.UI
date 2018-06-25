@@ -1,47 +1,37 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BasicService } from './basic.service';
-import { GlobalVariables } from "../global-variables";
-import * as li from "li";
+import * as li from 'li';
 
 @Injectable({
     providedIn: 'root'
 })
-export class LinkService extends BasicService {
+export class LinkService {
 
-    constructor(
-        http: HttpClient,
-        _global: GlobalVariables
-    ) {
-        super(http, _global);
-        this.route = '';
-        this.type = '';
-        this.data = {};
-        this.authentication = false;
+    constructor() {
     }
 
     getLinks(linkHeader) {
-        if (linkHeader == null)
+        if (linkHeader == null) {
             return {};
+        }
 
         return li.parse(linkHeader || {});
-    };
+    }
 
     getLinksQueryParameters(linkHeader) {
-        let parsedLinks = this.getLinks(linkHeader);
-        let links = {};
+        const parsedLinks = this.getLinks(linkHeader);
+        const links = {};
 
-        for (let rel in parsedLinks) {
-            let url = parsedLinks[rel];
+        for (const rel in parsedLinks) {
+            const url = parsedLinks[rel];
             links[rel] = this.parseQueryString(url.slice(url.indexOf('?')));
         }
 
         return links;
-    };
+    }
 
     parseQueryString(input) {
         // Source import from https://github.com/sindresorhus/query-string due to lack of browser support (node / requirejs).
-        let result = Object.create(null);
+        const result = Object.create(null);
         if (typeof input !== 'string') {
             return result;
         }
@@ -53,11 +43,11 @@ export class LinkService extends BasicService {
         }
 
         input.split('&').forEach(function (param) {
-            var parts = param.replace(/\+/g, ' ').split('=');
+            const parts = param.replace(/\+/g, ' ').split('=');
             // Firefox (pre 40) decodes `%3D` to `=`
             // https://github.com/sindresorhus/query-string/pull/37
-            var key = parts.shift();
-            var val = parts.length > 0 ? parts.join('=') : undefined;
+            let key = parts.shift();
+            let val = parts.length > 0 ? parts.join('=') : undefined;
 
             key = decodeURIComponent(key);
 
@@ -75,5 +65,5 @@ export class LinkService extends BasicService {
         });
 
         return result;
-    };
+    }
 }

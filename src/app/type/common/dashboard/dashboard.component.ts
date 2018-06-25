@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from "moment";
-import { FilterService } from "../../../service/filter.service"
-import { EventService } from "../../../service/event.service"
-import { StackService } from "../../../service/stack.service"
-import { OrganizationService } from "../../../service/organization.service"
-import { NotificationService } from "../../../service/notification.service"
+import * as moment from 'moment';
+import { FilterService } from '../../../service/filter.service';
+import { EventService } from '../../../service/event.service';
+import { StackService } from '../../../service/stack.service';
+import { OrganizationService } from '../../../service/organization.service';
+import { NotificationService } from '../../../service/notification.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -14,7 +14,7 @@ import { NotificationService } from "../../../service/notification.service"
 })
 
 export class DashboardComponent implements OnInit {
-    type: string = '';
+    type = '';
     seriesData: any[];
     chart: any = {
         options: {
@@ -75,18 +75,18 @@ export class DashboardComponent implements OnInit {
     }
 
     get() {
-        this.getOrganizations().then(() => {this.getStats();});
-    };
+        this.getOrganizations().then(() => {this.getStats(); });
+    }
 
     getOrganizations() {
         return new Promise((resolve, reject) => {
-            this.organizationService.getAll('',false).subscribe(
-                res=> {
+            this.organizationService.getAll('', false).subscribe(
+                res => {
                     this.organizations = JSON.parse(JSON.stringify(res));
 
                     resolve(this.organizations);
                 },
-                err=>{
+                err => {
                     this.notificationService.error('Error Occurred!', 'Failed');
 
                     reject(err);
@@ -94,23 +94,23 @@ export class DashboardComponent implements OnInit {
                 () => console.log('Organization Service called!')
             );
         });
-    };
+    }
 
     getStats() {
-        let onSuccess = (response) => {
-            let getAggregationValue = (data, name, defaultValue) => {
-                let aggs = data.aggregations;
+        const onSuccess = (response) => {
+            const getAggregationValue = (data, name, defaultValue) => {
+                const aggs = data.aggregations;
                 return aggs && aggs[name] && aggs[name].value || defaultValue;
             };
 
-            let getAggregationItems = (data, name, defaultValue) => {
-                let aggs = data.aggregations;
+            const getAggregationItems = (data, name, defaultValue) => {
+                const aggs = data.aggregations;
                 return aggs && aggs[name] && aggs[name].items || defaultValue;
             };
 
-            let results = JSON.parse(JSON.stringify(response));
-            let termsAggregation = getAggregationItems(results, 'terms_first', []);
-            let count = getAggregationValue(results, 'sum_count', 0);
+            const results = JSON.parse(JSON.stringify(response));
+            const termsAggregation = getAggregationItems(results, 'terms_first', []);
+            const count = getAggregationValue(results, 'sum_count', 0);
             this.stats = {
                 count: count.toFixed(1),
                 unique: parseInt(getAggregationValue(results, 'cardinality_stack', 0)),
@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
                 avg_per_hour: this.eventService.calculateAveragePerHour(count, this.organizations).toFixed(2)
             };
 
-            let dateAggregation = getAggregationItems(results, 'date_date', []);
+            const dateAggregation = getAggregationItems(results, 'date_date', []);
 
             this.chart.options.series1[0].data = dateAggregation.map((item) => {
                 return {x: moment(item.key).unix(), y: getAggregationValue(item, 'cardinality_stack', 0), data: item};
@@ -131,18 +131,18 @@ export class DashboardComponent implements OnInit {
             this.seriesData = this.chart.options.series1;
         };
 
-        let offset = this.filterService.getTimeOffset();
+        const offset = this.filterService.getTimeOffset();
 
         return new Promise((resolve, reject) => {
             this.eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1').subscribe(
-                res=> {
+                res => {
                     onSuccess(res);
                 },
-                err=>{
+                err => {
                     reject(err);
                 },
                 () => console.log('Event Service called!')
             );
         });
-    };
+    }
 }

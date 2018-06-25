@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import ObjectId from "bson-objectid";
+import ObjectId from 'bson-objectid';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +12,7 @@ export class ObjectIdService {
 
     create(id) {
         return new ObjectId(id);
-    };
+    }
 
     isValid(id) {
         if (!id || !(typeof id === 'number' || id instanceof Number) && id.length !== 12 && id.length !== 24) {
@@ -24,7 +24,7 @@ export class ObjectIdService {
         }
 
         return true;
-    };
+    }
 
     getDate(id) {
         if (!this.isValid(id)) {
@@ -32,5 +32,5 @@ export class ObjectIdService {
         }
 
         return this.create(id).getTimestamp();
-    };
+    }
 }

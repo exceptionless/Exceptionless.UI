@@ -1,43 +1,33 @@
-import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BasicService } from './basic.service';
-import { GlobalVariables } from "../global-variables";
-import { FilterStoreService } from "./filter-store.service"
-import { DateRangeParserService } from "./date-range-parser.service"
-import { ObjectIdService } from "./object-id.service"
-import * as moment from "moment";
+import { Injectable } from '@angular/core';
+import { FilterStoreService } from './filter-store.service';
+import { DateRangeParserService } from './date-range-parser.service';
+import { ObjectIdService } from './object-id.service';
+import * as moment from 'moment';
 
 @Injectable()
-export class FilterService extends BasicService {
-    DEFAULT_TIME_FILTER: string = 'last week';
+export class FilterService {
+    DEFAULT_TIME_FILTER = 'last week';
     _time: any;
-    _eventType: string = '';
-    _organizationId: string = '';
-    _projectId: string = '';
-    _raw: string = '';
+    _eventType = '';
+    _organizationId = '';
+    _projectId = '';
+    _raw = '';
 
     constructor(
-        http: HttpClient,
-        _global: GlobalVariables,
         private filterStoreService: FilterStoreService,
         private dateRangeParserService: DateRangeParserService,
         private objectIdService: ObjectIdService,
     ) {
-        super(http, _global);
-        this.route = '';
-        this.type = '';
-        this.data = {};
-        this.authentication = false;
         this._time = this.filterStoreService.getTimeFilter() || this.DEFAULT_TIME_FILTER;
     }
 
     apply(source, includeHiddenAndFixedFilter?) {
         return Object.assign({}, this.getDefaultOptions(includeHiddenAndFixedFilter), source);
-    };
+    }
 
     buildFilter(includeHiddenAndFixedFilter) {
         includeHiddenAndFixedFilter = (typeof includeHiddenAndFixedFilter !== 'undefined') ?  includeHiddenAndFixedFilter : true;
-        let filters: any[] = [];
+        const filters: any[] = [];
 
         if (this._organizationId) {
             filters.push('organization:' + this._organizationId);
@@ -51,16 +41,16 @@ export class FilterService extends BasicService {
             filters.push('type:' + this._eventType);
         }
 
-        let filter = this._raw || '';
-        let isWildCardFilter = filter.trim() === '*';
+        const filter = this._raw || '';
+        const isWildCardFilter = filter.trim() === '*';
 
         if (includeHiddenAndFixedFilter && !isWildCardFilter) {
-            let hasFixed = filter.search(/\bfixed:/i) !== -1;
+            const hasFixed = filter.search(/\bfixed:/i) !== -1;
             if (!hasFixed) {
                 filters.push('fixed:false');
             }
 
-            let hasHidden = filter.search(/\bhidden:/i) !== -1;
+            const hasHidden = filter.search(/\bhidden:/i) !== -1;
             if (!hasHidden) {
                 filters.push('hidden:false');
             }
@@ -71,7 +61,7 @@ export class FilterService extends BasicService {
         }
 
         return filters.join(' ').trim();
-    };
+    }
 
     clearFilter() {
         if (!this._raw) {
@@ -80,7 +70,7 @@ export class FilterService extends BasicService {
 
         this.setFilter(null, false);
         this.fireFilterChanged();
-    };
+    }
 
     clearOrganizationAndProjectFilter() {
         if (!this._organizationId && !this._projectId) {
@@ -89,27 +79,27 @@ export class FilterService extends BasicService {
 
         this._organizationId = this._projectId = null;
         this.fireFilterChanged();
-    };
+    }
 
     fireFilterChanged(includeHiddenAndFixedFilter?) {
-        let options = {
+        const options = {
             organization_id: this._organizationId,
             project_id: this._projectId,
             type: this._eventType
         };
 
-        //$rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeHiddenAndFixedFilter)));
-    };
+        // $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeHiddenAndFixedFilter)));
+    }
 
     getDefaultOptions(includeHiddenAndFixedFilter) {
-        let options = {};
+        const options = {};
 
-        let offset = this.getTimeOffset();
+        const offset = this.getTimeOffset();
         if (offset) {
             Object.assign(options, { offset: offset });
         }
 
-        let filter = this.buildFilter(includeHiddenAndFixedFilter);
+        const filter = this.buildFilter(includeHiddenAndFixedFilter);
         if (filter) {
             Object.assign(options, { filter: filter });
         }
@@ -119,35 +109,35 @@ export class FilterService extends BasicService {
         }
 
         return options;
-    };
+    }
 
     getFilter() {
         return this._raw;
-    };
+    }
 
     getProjectId() {
         return this._projectId;
-    };
+    }
 
     getOrganizationId() {
         return this._organizationId;
-    };
+    }
 
     getEventType() {
         return this._eventType;
-    };
+    }
 
     getOldestPossibleEventDate() {
-        let date = this.objectIdService.getDate(this.getOrganizationId() || this.getProjectId());
+        const date = this.objectIdService.getDate(this.getOrganizationId() || this.getProjectId());
         return date ? moment(date).subtract(3, 'days').toDate() : new Date(2012, 1, 1);
-    };
+    }
 
     getTime() {
         return this._time || this.DEFAULT_TIME_FILTER;
-    };
+    }
 
     getTimeRange() {
-        let time = this.getTime();
+        const time = this.getTime();
 
         if (time === 'all') {
             return { start: undefined, end: undefined };
@@ -169,23 +159,23 @@ export class FilterService extends BasicService {
             return { start: moment().subtract(30, 'days').startOf('day'), end: undefined };
         }
 
-        let range = this.dateRangeParserService.parse(time);
+        const range = this.dateRangeParserService.parse(time);
         if (range && range.start && range.end) {
             return { start: moment(range.start), end: moment(range.end) };
         }
 
         return { start: moment().subtract(7, 'days').startOf('day'), end: undefined };
-    };
+    }
 
     getTimeOffset() {
-        let offset = new Date().getTimezoneOffset();
+        const offset = new Date().getTimezoneOffset();
 
         return offset !== 0 ? offset * -1 + 'm' : undefined;
-    };
+    }
 
     hasFilter() {
         return this._raw || (this._time && this._time !== 'all');
-    };
+    }
 
     includedInProjectOrOrganizationFilter(data) {
         if (!data.organizationId && !data.projectId) {
@@ -198,10 +188,10 @@ export class FilterService extends BasicService {
         }
 
         return this._organizationId === data.organizationId || this._projectId === data.projectId;
-    };
+    }
 
     setEventType(eventType, suspendNotifications) {
-        if (eventType == this._eventType) {
+        if (eventType === this._eventType) {
             return;
         }
 
@@ -210,10 +200,10 @@ export class FilterService extends BasicService {
         if (!suspendNotifications) {
             this.fireFilterChanged();
         }
-    };
+    }
 
     setOrganizationId(id, suspendNotifications) {
-        if ((id == this._organizationId) || (id && !this.objectIdService.isValid(id))) {
+        if ((id === this._organizationId) || (id && !this.objectIdService.isValid(id))) {
             return;
         }
 
@@ -223,10 +213,10 @@ export class FilterService extends BasicService {
         if (!suspendNotifications) {
             this.fireFilterChanged();
         }
-    };
+    }
 
     setProjectId(id, suspendNotifications) {
-        if ((id == this._projectId) || (id && !this.objectIdService.isValid(id))) {
+        if ((id === this._projectId) || (id && !this.objectIdService.isValid(id))) {
             return;
         }
 
@@ -236,10 +226,10 @@ export class FilterService extends BasicService {
         if (!suspendNotifications) {
             this.fireFilterChanged();
         }
-    };
+    }
 
     setTime(time, suspendNotifications?) {
-        if (time == this._time) {
+        if (time === this._time) {
             return;
         }
 
@@ -249,10 +239,10 @@ export class FilterService extends BasicService {
         if (!suspendNotifications) {
             this.fireFilterChanged();
         }
-    };
+    }
 
     setFilter(raw, suspendNotifications) {
-        if (raw == this._raw) {
+        if (raw === this._raw) {
             return;
         }
 

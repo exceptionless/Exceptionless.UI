@@ -8,7 +8,7 @@ import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
 })
 
 export class ConfirmDialogComponent implements IModalDialog {
-    text: string = 'Are you sure you want to delete your account?';
+    text = 'Are you sure you want to delete your account?';
 
     constructor() {
     }
@@ -18,9 +18,9 @@ export class ConfirmDialogComponent implements IModalDialog {
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed
-    };
+    }
 
     setText(content) {
         this.text = content;
-    };
+    }
 }

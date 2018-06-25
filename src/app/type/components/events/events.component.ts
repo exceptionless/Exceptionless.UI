@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FilterService } from "../../../service/filter.service";
-import { EventsActionService } from "../../../service/events-action.service";
-import { NotificationService } from "../../../service/notification.service";
-import { LinkService } from "../../../service/link.service";
-import { PaginationService } from "../../../service/pagination.service";
-import { EventService } from "../../../service/event.service";
+import { FilterService } from '../../../service/filter.service';
+import { EventsActionService } from '../../../service/events-action.service';
+import { NotificationService } from '../../../service/notification.service';
+import { LinkService } from '../../../service/link.service';
+import { PaginationService } from '../../../service/pagination.service';
+import { EventService } from '../../../service/event.service';
 
 @Component({
     selector: 'app-events',
@@ -21,7 +21,7 @@ export class EventsComponent implements OnInit {
     selectedIds: any[] = [];
     pageSummary: string;
     currentOptions: any;
-    loading: boolean = true;
+    loading = true;
     showType: any;
     sortByDateDescending: any;
     timeHeaderText: string;
@@ -70,13 +70,13 @@ export class EventsComponent implements OnInit {
         }
 
         return !data;
-    };
+    }
 
     get(options?) {
-        let onSuccess = (response, link) => {
+        const onSuccess = (response, link) => {
             this.events = JSON.parse(JSON.stringify(response));
 
-            if(this.selectedIds) {
+            if (this.selectedIds) {
                 this.selectedIds = this.selectedIds.filter((id) => {
                     return this.events.filter(function (e) {
                         return e.id === id;
@@ -84,7 +84,7 @@ export class EventsComponent implements OnInit {
                 });
             }
 
-            let links = this.linkService.getLinksQueryParameters(link);
+            const links = this.linkService.getLinksQueryParameters(link);
             this.previous = links['previous'];
             this.next = links['next'];
 
@@ -97,7 +97,7 @@ export class EventsComponent implements OnInit {
             return this.events;
         };
 
-        let onFailure = (response) => {
+        const onFailure = (response) => {
 
         };
 
@@ -121,18 +121,18 @@ export class EventsComponent implements OnInit {
                 () => console.log('Event Service called!')
             );
         });
-    };
+    }
 
     nextPage() {
         return this.get(this.next);
-    };
+    }
 
     previousPage() {
         return this.get(this.previous);
-    };
+    }
 
     open(id, event) {
-        let openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
             /*$window.open($state.href('app.stack', { id: id }, { absolute: true }), '_blank');*/
         } else {
@@ -140,33 +140,35 @@ export class EventsComponent implements OnInit {
         }
 
         event.preventDefault();
-    };
+    }
 
     save(action) {
-        let onSuccess = ()=> {
+        const onSuccess = () => {
             this.selectedIds = [];
         };
 
         if (this.selectedIds.length === 0) {
-            this.notificationService.info('Please select one or more stacks','Success');
+            this.notificationService.info('Please select one or more stacks', 'Success');
         } else {
             /*this.action.run(this.selectedIds).then(onSuccess());*/
         }
-    };
+    }
 
     updateSelection() {
-        if (this.events && this.events.length === 0)
+        if (this.events && this.events.length === 0) {
             return;
+        }
 
-        if (this.selectedIds.length > 0)
+        if (this.selectedIds.length > 0) {
             this.selectedIds = [];
-        else
+        } else {
             this.selectedIds = this.events.map(function (event) {
                 return event.id;
             });
-    };
+        }
+    }
 
     relativeTo() {
         return this.settings['relativeTo'];
-    };
+    }
 }

@@ -1,64 +1,42 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BasicService } from './basic.service';
-import { GlobalVariables } from "../global-variables";
-import { ObjectIdService } from "./object-id.service"
-import * as moment from "moment";
+import { ObjectIdService } from './object-id.service';
+import { GlobalFunctions } from '../global-functions';
+import * as moment from 'moment';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class OrganizationService extends  BasicService {
+export class OrganizationService {
 
     constructor(
-        http: HttpClient,
-        _global: GlobalVariables,
+        private http: HttpClient,
         private objectIdService: ObjectIdService,
+        private globalFunctions: GlobalFunctions
     ) {
-        super(http, _global);
-        this.route = '';
-        this.type = '';
-        this.data = {};
-        this.authentication = false;
     }
 
     addUser(id, email) {
-        this.route = 'api/v2/organizations/' + id + '/users/' + email;
-        this.type = 'post';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
+        const url = 'organizations/' + id + '/users/' + email;
+        const data = {};
+        return this.http.post(url, data, { responseType: 'json' });
+    }
 
     create(name) {
-        this.route = 'api/v2/organizations';
-        this.type = 'post';
-        this.authentication = true;
-        this.data = {
+        const url = 'organizations';
+        const data = {
             'name': name
         };
-
-        return this.call();
-    };
+        return this.http.post(url, data, { responseType: 'json' });
+    }
 
     changePlan(id, options) {
-        let params: string = '?token=9229slsdi3d';
-
-        for (let key in options) {
-            const value = options[key];
-            params = params + '&' + key + '=' + value;
-        }
-
-        this.route = 'api/v2/organizations/' + id + '/change-plan';
-        this.type = 'post';
-        this.authentication = true;
-        this.data = {
-        };
-
-        return this.call();
-    };
+        const url = 'organizations/' + id + '/change-plan';
+        const full_url = this.globalFunctions.setQueryParam(url,  options);
+        const data = {};
+        return this.http.post(full_url, data, { responseType: 'json' });
+    }
 
     getOldestCreationDate(organizations) {
         if (organizations) {
@@ -74,7 +52,7 @@ export class OrganizationService extends  BasicService {
         }
 
         return new Date(2012, 1, 1);
-    };
+    }
 
     getOldestRetentionStartDate(organizations, maximumRetentionDays) {
         if (!maximumRetentionDays) {
@@ -94,105 +72,67 @@ export class OrganizationService extends  BasicService {
         }
 
         return retentionDays <= 0 ? new Date(2012, 1, 1) : moment().subtract(retentionDays, 'days').toDate();
-    };
+    }
 
     getOldestPossibleEventDate(organizations, maximumRetentionDays?) {
         return moment.max([
             moment(this.getOldestCreationDate(organizations)).subtract(3, 'days'),
             moment(this.getOldestRetentionStartDate(organizations, maximumRetentionDays))
         ]).toDate();
-    };
+    }
 
     getAll(options, useCache) {
-        this.route = 'api/v2/organizations/' + options;
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
         if (useCache === undefined || useCache) {
-            //need to implement later[frank lin]
+            // need to implement later[frank lin]
             return null;
         }
 
-        return this.call();
-    };
+        const url = 'organizations/' + options;
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     getById(id, useCache) {
-        this.route = 'api/v2/organizations/' + id;
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
         if (useCache === undefined || useCache) {
-            //need to implement later[frank lin]
+            // need to implement later[frank lin]
             return null;
         }
 
-        return this.call();
-    };
+        const url = 'organizations/' + id;
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     getInvoice(id) {
-        this.route = 'api/v2/organizations/invoice/' + id;
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
+        const url = 'organizations/invoice/' + id;
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     getInvoices(id, options) {
-        this.route = 'api/v2/organizations/invoices';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
+        const url = 'organizations/invoices';
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     getPlans(id) {
-        this.route = 'api/v2/organizations/' + id + '/plans';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
+        const url = 'organizations/' + id + '/plans';
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     isNameAvailable(name) {
-        this.route = 'api/v2/organizations/check-name';
-        this.type = 'get';
-        this.authentication = true;
-        this.data = {
-            name: encodeURIComponent(name)
-        };
-
-        return this.call();
-    };
+        const url = 'organizations/check-name?name=' + encodeURIComponent(name);
+        return this.http.get(url, { responseType: 'json' });
+    }
 
     remove(id) {
-        this.route = 'api/v2/organizations/' + id;
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
+        const url = 'organizations/' + id;
+        return this.http.delete(url, { responseType: 'json' });
+    }
 
     removeUser(id, email) {
-        this.route = 'api/v2/organizations/' + id + '/users/' + email;
-        this.type = 'delete';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
+        const url = 'organizations/' + id + '/users/' + email;
+        return this.http.delete(url, { responseType: 'json' });
+    }
 
     update(id, organization) {
-        this.route = 'api/v2/organizations/' + id;
-        this.type = 'patch';
-        this.authentication = true;
-        this.data = {};
-
-        return this.call();
-    };
+        const url = 'api/v2/organizations/' + id;
+        return this.http.patch(url, organization, { responseType: 'json' });
+    }
 }

@@ -1,7 +1,7 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal-dialog';
-import * as moment from "moment";
-import { FilterService } from "../../service/filter.service";
+import * as moment from 'moment';
+import { FilterService } from '../../service/filter.service';
 
 @Component({
     selector: 'app-custom-date-range-dialog',
@@ -13,15 +13,15 @@ export class CustomDateRangeDialogComponent implements OnInit {
     daterangepickerOptions = {
         startDate: null,
         endDate: null,
-        format: "MM/DD/YYYY HH:mm:ss A",
+        format: 'MM/DD/YYYY HH:mm:ss A',
         minDate: moment(new Date(2018, 1, 1)),
         maxDate: moment(),
         inactiveBeforeStart: true,
         autoApply: true,
         showRanges: true,
         singleCalendar: false,
-        displayFormat: "MM/DD/YYYY HH:mm:ss A",
-        position: "left",
+        displayFormat: 'MM/DD/YYYY HH:mm:ss A',
+        position: 'left',
         disabled: false,
         noDefaultRangeSelected: false,
         timePicker: {
@@ -40,10 +40,10 @@ export class CustomDateRangeDialogComponent implements OnInit {
     }
 
     rangeSelected(date: any) {
-        let confirmedFilterDate = date.start.format('YYYY-MM-DDTHH:mm:ss') + '-' + date.end.format('YYYY-MM-DDTHH:mm:ss');
+        const confirmedFilterDate = date.start.format('YYYY-MM-DDTHH:mm:ss') + '-' + date.end.format('YYYY-MM-DDTHH:mm:ss');
 
         this.filterService.setTime(confirmedFilterDate);
-    };
+    }
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed

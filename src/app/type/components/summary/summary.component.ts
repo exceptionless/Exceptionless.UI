@@ -19,7 +19,7 @@ export class SummaryComponent implements OnInit {
     }
 
     ngOnInit() {
-        let level =  this.source && this.source['data'] && this.source['data']['Level'] ? this.source['data']['Level'].toLowerCase() : null;
+        const level =  this.source && this.source['data'] && this.source['data']['Level'] ? this.source['data']['Level'].toLowerCase() : null;
         this.isLevelSuccess = level === 'trace' || level === 'debug';
         this.isLevelInfo = level === 'info';
         this.isLevelWarning = level === 'warn';

@@ -27,5 +27,5 @@ export class DateRangeParserService {
         }
 
         return null;
-    };
+    }
 }

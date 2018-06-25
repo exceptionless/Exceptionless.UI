@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import * as moment from "moment";
-import { FilterService } from "../../../service/filter.service";
+import * as moment from 'moment';
+import { FilterService } from '../../../service/filter.service';
 import { ModalDialogService } from 'ngx-modal-dialog';
-import { CustomDateRangeDialogComponent } from "../../custom-date-range-dialog/custom-date-range-dialog.component";
-import { DateRangeParserService } from "../../../service/date-range-parser.service"
+import { CustomDateRangeDialogComponent } from '../../custom-date-range-dialog/custom-date-range-dialog.component';
+import { DateRangeParserService } from '../../../service/date-range-parser.service';
 
 @Component({
     selector: 'app-date-filter',
@@ -12,7 +12,7 @@ import { DateRangeParserService } from "../../../service/date-range-parser.servi
 })
 
 export class DateFilterComponent implements OnInit {
-    filteredDisplayName: string = 'Last Hour';
+    filteredDisplayName = 'Last Hour';
 
     constructor(
         private viewRef: ViewContainerRef,
@@ -27,7 +27,7 @@ export class DateFilterComponent implements OnInit {
     }
 
     getFilteredDisplayName() {
-        let time = this.filterService.getTime();
+        const time = this.filterService.getTime();
 
         if (time === 'last hour') {
             return 'Last Hour';
@@ -49,7 +49,7 @@ export class DateFilterComponent implements OnInit {
             return 'All Time';
         }
 
-        let range = this.dateRangeParserService.parse(time);
+        const range = this.dateRangeParserService.parse(time);
         if (range && range.start && range.end) {
             return moment(range.start).format('MMM DD, hh:ss A') + ' - ' + moment(range.end).format('MMM DD, hh:ss A');
         }
@@ -63,7 +63,7 @@ export class DateFilterComponent implements OnInit {
         this.filterService.setTime(filter);
 
         this.updateFilterDisplayName();
-    };
+    }
 
     setCustomFilter() {
         this.modalDialogService.openDialog(this.viewRef, {
@@ -74,13 +74,13 @@ export class DateFilterComponent implements OnInit {
                 { text: 'Apply', buttonClass: 'btn btn-primary', onAction: () => this.customDateSetting() }
             ]
         });
-    };
+    }
 
     customDateSetting() {
         this.filteredDisplayName = this.getFilteredDisplayName();
 
         return true;
-    };
+    }
 
     updateFilterDisplayName() {
         this.filteredDisplayName = this.getFilteredDisplayName();

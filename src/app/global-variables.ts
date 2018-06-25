@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class GlobalVariables {
-    readonly BASE_URL: string = 'https://api.exceptionless.io/';
+    readonly BASE_URL: string = 'https://api.exceptionless.io/api/v2/';
     readonly EXCEPTIONLESS_API_KEY: string = '';
     readonly EXCEPTIONLESS_SERVER_URL: string = '';
     readonly FACEBOOK_APPID: string = '';

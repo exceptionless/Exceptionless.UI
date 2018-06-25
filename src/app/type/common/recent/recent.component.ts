@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EventService } from "../../../service/event.service";
+import { EventService } from '../../../service/event.service';
 
 @Component({
     selector: 'app-recent',

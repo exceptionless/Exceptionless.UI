@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { AuthService } from 'ng2-ui-auth';
 import { Router } from '@angular/router';
-import { NotificationService } from "../../../service/notification.service"
+import { NotificationService } from '../../../service/notification.service';
 
 @Component({
     selector: 'app-header',
@@ -23,13 +23,13 @@ export class HeaderComponent implements OnInit {
 
     toggleSideNavCollapsed() {
         this.navigationCollapseToggle.emit(null);
-    };
+    }
 
     logout() {
         this.auth.logout()
             .subscribe({
-                error: (err: any) => this.notificationService.error('Error Occurred!','Error'),
+                error: (err: any) => this.notificationService.error('Error Occurred!', 'Error'),
                 complete: () => this.router.navigate(['/login'])
             });
-    };
+    }
 }

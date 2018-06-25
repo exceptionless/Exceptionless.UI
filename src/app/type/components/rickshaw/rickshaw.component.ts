@@ -20,31 +20,31 @@ export class RickshawComponent implements OnInit {
         this.features =  {
             hover: {
                 render: function (args) {
-                    let date = moment.unix(args.domainX);
-                    let dateTimeFormat = 'DateTimeFormat';
-                    let dateFormat = 'DateFormat';
-                    let formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
+                    const date = moment.unix(args.domainX);
+                    const dateTimeFormat = 'DateTimeFormat';
+                    const dateFormat = 'DateFormat';
+                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
                     let content = '<div class="date">' + formattedDate + '</div>';
                     args.detail.sort(function (a, b) {
                         return a.order - b.order;
                     }).forEach(function (d) {
-                        let swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
+                        const swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
                         content += swatch + d.formattedYValue.toFixed(2) + ' ' + d.series.name + ' <br />';
                     }, this);
 
-                    let xLabel = document.createElement('div');
+                    const xLabel = document.createElement('div');
                     xLabel.className = 'x_label';
                     xLabel.innerHTML = content;
                     this.element.appendChild(xLabel);
 
                     // If left-alignment results in any error, try right-alignment.
-                    let leftAlignError = this._calcLayoutError([xLabel]);
+                    const leftAlignError = this._calcLayoutError([xLabel]);
                     if (leftAlignError > 0) {
                         xLabel.classList.remove('left');
                         xLabel.classList.add('right');
 
                         // If right-alignment is worse than left alignment, switch back.
-                        let rightAlignError = this._calcLayoutError([xLabel]);
+                        const rightAlignError = this._calcLayoutError([xLabel]);
                         if (rightAlignError > leftAlignError) {
                             xLabel.classList.remove('right');
                             xLabel.classList.add('left');
@@ -56,8 +56,8 @@ export class RickshawComponent implements OnInit {
             },
             range: {
                 onSelection: function (position) {
-                    let start = moment.unix(position.coordMinX).utc().local();
-                    let end = moment.unix(position.coordMaxX).utc().local();
+                    const start = moment.unix(position.coordMinX).utc().local();
+                    const end = moment.unix(position.coordMaxX).utc().local();
                     this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
 
                     return false;
@@ -72,8 +72,8 @@ export class RickshawComponent implements OnInit {
                 tickFormat: 'formatKMBT',
                 ticksTreatment: 'glow'
             }
-        }
-    };
+        };
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.graphElement) {
@@ -117,7 +117,7 @@ export class RickshawComponent implements OnInit {
             this.graph.render();*/
 
             if (this.features && this.features.xAxis) {
-                let xAxisConfig = {
+                const xAxisConfig = {
                     graph: this.graph
                 };
 
@@ -133,7 +133,7 @@ export class RickshawComponent implements OnInit {
                     xAxisConfig['pixelsPerTick'] = this.features.xAxis.pixelsPerTick;
                 }
 
-                let timeFixture = this.features.xAxis.timeFixture;
+                const timeFixture = this.features.xAxis.timeFixture;
                 if (timeFixture) {
                     if (this.features.xAxis.overrideTimeFixtureCustomFormatters) {
                         timeFixture.units[2].formatter = function(date) { return moment(date).format('MMM'); }; // month
@@ -152,7 +152,7 @@ export class RickshawComponent implements OnInit {
                 }
 
                 if (this.features.xAxis.timeUnit) {
-                    let time = new Rickshaw.Fixtures.Time();
+                    const time = new Rickshaw.Fixtures.Time();
                     xAxisConfig['timeUnit'] = time.unit(this.features.xAxis.timeUnit);
                 }
 
@@ -172,14 +172,14 @@ export class RickshawComponent implements OnInit {
                     xAxisConfig['ticksTreatment'] = this.features.xAxis.ticksTreatment;
                 }
 
-                let useStandardXAxis = xAxisConfig['orientation'] || xAxisConfig['pixelsPerTick'] || xAxisConfig['ticks'] || xAxisConfig['tickValues'] || xAxisConfig['tickSize'] || xAxisConfig['element'];
-                let xAxis = useStandardXAxis ? new Rickshaw.Graph.Axis.X(xAxisConfig) : new Rickshaw.Graph.Axis.Time(xAxisConfig);
+                const useStandardXAxis = xAxisConfig['orientation'] || xAxisConfig['pixelsPerTick'] || xAxisConfig['ticks'] || xAxisConfig['tickValues'] || xAxisConfig['tickSize'] || xAxisConfig['element'];
+                const xAxis = useStandardXAxis ? new Rickshaw.Graph.Axis.X(xAxisConfig) : new Rickshaw.Graph.Axis.Time(xAxisConfig);
 
                 xAxis.render();
             }
 
             if (this.features && this.features.yAxis) {
-                let yAxisConfig = {
+                const yAxisConfig = {
                     graph: this.graph
                 };
 
@@ -215,8 +215,7 @@ export class RickshawComponent implements OnInit {
                     yAxisConfig['tickFormat'] = Rickshaw.Fixtures.Number[this.features.yAxis.tickFormat];
                 }
 
-                console.log(yAxisConfig);
-                let yAxis = new Rickshaw.Graph.Axis.Y(yAxisConfig);
+                const yAxis = new Rickshaw.Graph.Axis.Y(yAxisConfig);
                 yAxis.render();
             }
         }

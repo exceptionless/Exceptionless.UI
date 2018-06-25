@@ -9,7 +9,8 @@ import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ToastrModule } from 'ngx-toastr';
 import { LockerModule } from 'angular-safeguard';
 
-import { GlobalVariables } from "./global-variables";
+import { GlobalVariables } from './global-variables';
+import { GlobalFunctions } from './global-functions';
 
 import 'd3';
 import 'rickshaw';
@@ -29,15 +30,14 @@ import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { SignupComponent } from './auth/signup/signup.component';
 
-import { TokenInterceptor } from "./service/token.interceptor";
-import { BasicService } from './service/basic.service';
-import { AuthGuardService } from "./service/auth-guard.service"
+import { TokenInterceptor } from './service/token.interceptor';
+import { AuthGuardService } from './service/auth-guard.service';
 import { TypeComponent } from './type/type.component';
 import { HeaderComponent } from './type/includes/header/header.component';
 import { SidebarComponent } from './type/includes/sidebar/sidebar.component';
-import { SearchFilterComponent } from "./type/components/search-filter/search-filter.component";
-import { ProjectFilterComponent } from "./type/components/project-filter/project-filter.component";
-import { DateFilterComponent } from "./type/components/date-filter/date-filter.component";
+import { SearchFilterComponent } from './type/components/search-filter/search-filter.component';
+import { ProjectFilterComponent } from './type/components/project-filter/project-filter.component';
+import { DateFilterComponent } from './type/components/date-filter/date-filter.component';
 import { ReportsComponent } from './type/reports/reports.component';
 import { AdminComponent } from './type/admin/admin.component';
 import { DocumentationComponent } from './type/documentation/documentation.component';
@@ -52,10 +52,10 @@ import { UsersComponent } from './type/common/users/users.component';
 import { NewComponent } from './type/common/new/new.component';
 import { FrequentComponent } from './type/common/frequent/frequent.component';
 import { OrganizationNotificationComponent } from './type/components/organization-notification/organization-notification.component';
-import { OrganizationService } from "./service/organization.service";
-import { FilterService } from "./service/filter.service";
-import { DialogService } from "./service/dialog.service"
-import { RickshawComponent } from "./type/components/rickshaw/rickshaw.component"
+import { OrganizationService } from './service/organization.service';
+import { FilterService } from './service/filter.service';
+import { DialogService } from './service/dialog.service';
+import { RickshawComponent } from './type/components/rickshaw/rickshaw.component';
 import { ConfirmDialogComponent } from './type/confirm-dialog/confirm-dialog.component';
 import { ProjectListComponent } from './type/admin/project/project-list/project-list.component';
 import { ProjectNewComponent } from './type/admin/project/project-new/project-new.component';
@@ -64,9 +64,9 @@ import { OrganizationListComponent } from './type/admin/organization/organizatio
 import { ProjectEditComponent } from './type/admin/project/project-edit/project-edit.component';
 import { OrganizationEditComponent } from './type/admin/organization/organization-edit/organization-edit.component';
 import { CustomDateRangeDialogComponent } from './type/custom-date-range-dialog/custom-date-range-dialog.component';
-import { SummaryComponent } from "./type/components/summary/summary.component";
-import { StacksComponent } from "./type/components/stacks/stacks.component";
-import { EventsComponent } from "./type/components/events/events.component";
+import { SummaryComponent } from './type/components/summary/summary.component';
+import { StacksComponent } from './type/components/stacks/stacks.component';
+import { EventsComponent } from './type/components/events/events.component';
 import { TimeagoComponent } from './type/components/timeago/timeago.component';
 import { RelativeTimeComponent } from './type/components/relative-time/relative-time.component';
 
@@ -77,8 +77,6 @@ export const AuthConfig = {
         facebook: { clientId: '' }
     },
     tokenName: 'token',
-    tokenPrefix: '',
-    baseUrl: 'https://api.exceptionless.io/api/v2'
 };
 
 @NgModule({
@@ -139,7 +137,7 @@ export const AuthConfig = {
     ],
     providers: [
         GlobalVariables,
-        BasicService,
+        GlobalFunctions,
         AuthGuardService,
         OrganizationService,
         FilterService,

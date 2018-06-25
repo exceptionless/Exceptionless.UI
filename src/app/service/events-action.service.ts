@@ -1,24 +1,22 @@
-import { Injectable } from '@angular/core';
-import { NotificationService } from "./notification.service";
-
+import {Injectable} from '@angular/core';
+import {NotificationService} from './notification.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class EventsActionService {
 
-  constructor(
-      private notificationService: NotificationService,
-  ) { }
+    constructor(private notificationService: NotificationService) {
+    }
 
     deleteAction: object = {
         name: 'Delete',
         run: function (ids) {
-            let onSuccess = () => {
-                this.notificationService.info('Successfully queued the events for deletion.', 'Success')
+            const onSuccess = () => {
+                this.notificationService.info('Successfully queued the events for deletion.', 'Success');
             };
 
-            let onFailure = () => {
+            const onFailure = () => {
                 this.notificationService.error('An error occurred while deleting the events.', 'Error');
             };
 

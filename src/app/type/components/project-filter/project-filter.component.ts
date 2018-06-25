@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import { NotificationService } from "../../../service/notification.service";
-import { ProjectService } from "../../../service/project.service";
-import { OrganizationService } from "../../../service/organization.service";
-import { FilterService } from "../../../service/filter.service";
+import { NotificationService } from '../../../service/notification.service';
+import { ProjectService } from '../../../service/project.service';
+import { OrganizationService } from '../../../service/organization.service';
+import { FilterService } from '../../../service/filter.service';
 
 @Component({
     selector: 'app-project-filter',
@@ -10,9 +10,9 @@ import { FilterService } from "../../../service/filter.service";
     styleUrls: ['./project-filter.component.less']
 })
 export class ProjectFilterComponent implements OnInit {
-    isLoadingOrganizations: boolean = true;
-    isLoadingProjects: boolean = true;
-    filteredDisplayName: string = 'All Projects';
+    isLoadingOrganizations = true;
+    isLoadingProjects = true;
+    filteredDisplayName = 'All Projects';
     organizations: any[];
     projects: any[];
 
@@ -24,19 +24,19 @@ export class ProjectFilterComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.getOrganizations().then(() => {this.getProjects();});
+        this.getOrganizations().then(() => {this.getProjects(); });
     }
 
     getOrganizations() {
         return new Promise((resolve, reject) => {
-            this.organizationService.getAll('',false).subscribe(
-                res=> {
+            this.organizationService.getAll('', false).subscribe(
+                res => {
                     this.organizations = JSON.parse(JSON.stringify(res));
                     this.isLoadingOrganizations = false;
 
                     resolve(this.organizations);
                 },
-                err=>{
+                err => {
                     this.notificationService.error('Error Occurred!', 'Failed');
                     this.isLoadingOrganizations = false;
 
@@ -45,18 +45,18 @@ export class ProjectFilterComponent implements OnInit {
                 () => console.log('Organization Service called!')
             );
         });
-    };
+    }
 
     getProjects() {
         return new Promise((resolve, reject) => {
             this.projectService.getAll('', false).subscribe(
-                res=> {
+                res => {
                     this.projects = JSON.parse(JSON.stringify(res));
                     this.isLoadingProjects = false;
 
                     resolve(this.projects);
                 },
-                err=>{
+                err => {
                     this.notificationService.error('Error Occurred!', 'Failed');
                     this.isLoadingProjects = false;
 
@@ -65,9 +65,9 @@ export class ProjectFilterComponent implements OnInit {
                 () => console.log('Project Service called!')
             );
         });
-    };
+    }
 
     setItem(id, name) {
         this.filteredDisplayName = name;
-    };
+    }
 }
