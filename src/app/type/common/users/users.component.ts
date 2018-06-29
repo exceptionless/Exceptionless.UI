@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FilterStoreService } from '../../../service/filter-store.service';
 import { StackService } from '../../../service/stack.service';
 
 @Component({
@@ -7,6 +9,7 @@ import { StackService } from '../../../service/stack.service';
     styleUrls: ['./users.component.less']
 })
 export class UsersComponent implements OnInit {
+    type = '';
     mostUsers: any = {
         get: this.stackService.getUsers,
         options: {
@@ -16,8 +19,11 @@ export class UsersComponent implements OnInit {
     };
 
     constructor(
+        private route: ActivatedRoute,
+        private filterStoreService: FilterStoreService,
         private stackService: StackService
     ) {
+        this.route.params.subscribe( (params) => { this.filterStoreService.setEventType(params['type']); });
     }
 
     ngOnInit() {

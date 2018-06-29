@@ -6,22 +6,19 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-    types: object;
-    actions: object;
+    types = {
+        exceptions: 'error',
+        log: 'log',
+        broken: '404',
+        feature: 'usage',
+        events: 'events'
+    };
+    actions = {
+        list: 'list',
+        edit: 'edit'
+    };
 
     constructor() {
-        this.types = {
-            exceptions: 'error',
-            log: 'log',
-            broken: '404',
-            feature: 'usage',
-            events: 'events'
-        };
-
-        this.actions = {
-            list: 'list',
-            edit: 'edit'
-        };
     }
 
     ngOnInit() {

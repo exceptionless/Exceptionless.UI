@@ -20,4 +20,12 @@ export class FilterStoreService {
     setTimeFilter(timeFilter) {
         this.locker.set(DRIVERS.LOCAL, 'time', timeFilter);
     }
+
+    getEventType() {
+        return this.locker.get(DRIVERS.LOCAL, 'type');
+    }
+
+    setEventType(type) {
+        this.locker.set(DRIVERS.LOCAL, 'type', type);
+    }
 }

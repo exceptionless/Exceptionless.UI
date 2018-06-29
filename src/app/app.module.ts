@@ -9,6 +9,11 @@ import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ToastrModule } from 'ngx-toastr';
 import { LockerModule } from 'angular-safeguard';
 
+import { HotkeyModule } from 'angular2-hotkeys';
+
+import { NgxAnalyticsModule } from 'ngx-analytics';
+import { NgxAnalyticsGoogleAnalytics } from 'ngx-analytics/ga';
+
 import { GlobalVariables } from './global-variables';
 
 import 'd3';
@@ -68,6 +73,8 @@ import { StacksComponent } from './type/components/stacks/stacks.component';
 import { EventsComponent } from './type/components/events/events.component';
 import { TimeagoComponent } from './type/components/timeago/timeago.component';
 import { RelativeTimeComponent } from './type/components/relative-time/relative-time.component';
+import { ActiveDirective } from './directives/active.directive';
+import { StackComponent } from './type/components/stack/stack.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -118,6 +125,8 @@ export const AuthConfig = {
         SummaryComponent,
         TimeagoComponent,
         RelativeTimeComponent,
+        ActiveDirective,
+        StackComponent,
     ],
     imports: [
         BrowserModule,
@@ -133,6 +142,8 @@ export const AuthConfig = {
         DaterangepickerModule,
         ChecklistModule,
         Ng2UiAuthModule.forRoot(AuthConfig),
+        HotkeyModule.forRoot(),
+        NgxAnalyticsModule.forRoot([NgxAnalyticsGoogleAnalytics]),
     ],
     providers: [
         GlobalVariables,

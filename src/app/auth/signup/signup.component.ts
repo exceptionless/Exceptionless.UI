@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Signup } from './signup.class';
-import { NotificationService } from "../../service/notification.service";
-import { AuthService } from "ng2-ui-auth";
+import { NotificationService } from '../../service/notification.service';
+import { AuthService } from 'ng2-ui-auth';
 
 @Component({
     selector: 'app-signup',

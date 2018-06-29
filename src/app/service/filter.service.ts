@@ -19,6 +19,7 @@ export class FilterService {
         private objectIdService: ObjectIdService,
     ) {
         this._time = this.filterStoreService.getTimeFilter() || this.DEFAULT_TIME_FILTER;
+        this._eventType = this.filterStoreService.getEventType() || null;
     }
 
     apply(source, includeHiddenAndFixedFilter?) {
@@ -37,8 +38,8 @@ export class FilterService {
             filters.push('project:' + this._projectId);
         }
 
-        if (this._eventType) {
-            filters.push('type:' + this._eventType);
+        if (this._eventType && this.filterStoreService.getEventType() !== 'events') {
+            filters.push('type:' + this.filterStoreService.getEventType());
         }
 
         const filter = this._raw || '';

@@ -5,7 +5,10 @@ import { Directive, ElementRef, Output, EventEmitter, HostListener, Renderer2 } 
 })
 
 export class OpenDirective {
-    constructor(private _elementRef: ElementRef, private  renderer: Renderer2) {
+    constructor(
+        private _elementRef: ElementRef,
+        private  renderer: Renderer2
+    ) {
     }
 
     @Output()

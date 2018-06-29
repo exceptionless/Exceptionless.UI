@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FilterService } from '../../../service/filter.service';
 import { EventsActionService } from '../../../service/events-action.service';
 import { NotificationService } from '../../../service/notification.service';
@@ -14,6 +14,7 @@ import { EventService } from '../../../service/event.service';
 
 export class EventsComponent implements OnInit {
     @Input() settings;
+    @Input() eventType;
     next: string;
     previous: string;
     events: any[] = [];
@@ -38,6 +39,9 @@ export class EventsComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
         this.sortByDateDescending = this.settings['sortByDateDescending'] === undefined ? true : this.sortByDateDescending;
         this.timeHeaderText = this.settings['timeHeaderText'] || 'Date';
         this.hideSessionStartTime = this.settings['hideSessionStartTime'] || false;

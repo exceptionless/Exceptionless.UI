@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { FilterService } from '../../../service/filter.service';
+import { FilterStoreService } from '../../../service/filter-store.service';
 import { EventService } from '../../../service/event.service';
 import { StackService } from '../../../service/stack.service';
 import { OrganizationService } from '../../../service/organization.service';
@@ -15,6 +16,7 @@ import { NotificationService } from '../../../service/notification.service';
 
 export class DashboardComponent implements OnInit {
     type = '';
+    eventType = '';
     seriesData: any[];
     chart: any = {
         options: {
@@ -62,20 +64,24 @@ export class DashboardComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private filterService: FilterService,
+        private filterStoreService: FilterStoreService,
         private eventService: EventService,
         private stackService: StackService,
         private organizationService: OrganizationService,
         private notificationService: NotificationService
     ) {
-        this.route.params.subscribe( (params) => { this.type = params['type']; } );
+        this.route.params.subscribe( (params) => {
+            this.type = params['type'];
+            this.filterStoreService.setEventType(this.type);
+            this.get();
+        });
     }
 
     ngOnInit() {
-        this.get();
     }
 
     get() {
-        this.getOrganizations().then(() => {this.getStats(); });
+        this.getOrganizations().then(() => { this.getStats(); });
     }
 
     getOrganizations() {
@@ -87,7 +93,7 @@ export class DashboardComponent implements OnInit {
                     resolve(this.organizations);
                 },
                 err => {
-                    this.notificationService.error('Error Occurred!', 'Failed');
+                    this.notificationService.error('Failed', 'Error Occurred!');
 
                     reject(err);
                 },
@@ -112,10 +118,10 @@ export class DashboardComponent implements OnInit {
             const termsAggregation = getAggregationItems(results, 'terms_first', []);
             const count = getAggregationValue(results, 'sum_count', 0);
             this.stats = {
-                count: count.toFixed(1),
+                count: count.toFixed(0),
                 unique: parseInt(getAggregationValue(results, 'cardinality_stack', 0)),
-                new: parseInt(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
-                avg_per_hour: this.eventService.calculateAveragePerHour(count, this.organizations).toFixed(2)
+                new: parseInt(termsAggregation.length > 0 ? termsAggregation[0].total : 0),
+                avg_per_hour: this.eventService.calculateAveragePerHour(count, this.organizations).toFixed(1)
             };
 
             const dateAggregation = getAggregationItems(results, 'date_date', []);
@@ -129,6 +135,7 @@ export class DashboardComponent implements OnInit {
             });
 
             this.seriesData = this.chart.options.series1;
+            this.eventType = this.type;
         };
 
         const offset = this.filterService.getTimeOffset();

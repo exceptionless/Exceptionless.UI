@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FilterService } from '../../../service/filter.service';
 import { StackService } from '../../../service/stack.service';
 import { LinkService } from '../../../service/link.service';
@@ -14,6 +14,7 @@ import { StacksActionsService } from '../../../service/stacks-actions.service';
 
 export class StacksComponent implements OnInit {
     @Input() settings;
+    @Input() eventType;
     next: string;
     previous: string;
     stacks: any[] = [];
@@ -35,6 +36,9 @@ export class StacksComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
         this.actions = this.stacksActionsService.getActions();
         this.showType = this.settings['summary'] ? this.settings['showType'] : !this.filterService.getEventType();
         this.get();

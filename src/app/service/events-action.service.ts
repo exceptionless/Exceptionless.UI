@@ -13,11 +13,11 @@ export class EventsActionService {
         name: 'Delete',
         run: function (ids) {
             const onSuccess = () => {
-                this.notificationService.info('Successfully queued the events for deletion.', 'Success');
+                this.notificationService.info('Success', 'Successfully queued the events for deletion.');
             };
 
             const onFailure = () => {
-                this.notificationService.error('An error occurred while deleting the events.', 'Error');
+                this.notificationService.error('Error', 'An error occurred while deleting the events.');
             };
 
             /*need to implement later*/

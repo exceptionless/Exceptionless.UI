@@ -48,8 +48,10 @@ export class StackService {
         return this.http.get(`stacks/${mergedOptions}`);
     }
 
-    getById(id) {
-        return this.http.get('stacks/' + id);
+    getById(id): Observable<HttpResponse<any>> {
+        return this.http.get('stacks/' + id, {
+            observe: 'response',
+        });
     }
 
     getFrequent(options?): Observable<HttpResponse<any>> {

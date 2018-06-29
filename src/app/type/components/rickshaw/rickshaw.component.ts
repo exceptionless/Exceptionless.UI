@@ -11,6 +11,7 @@ import * as moment from 'moment';
 export class RickshawComponent implements OnInit {
     @Input() options;
     @Input() seriesData;
+    @Input() eventType;
     graph: any;
     features: any;
 

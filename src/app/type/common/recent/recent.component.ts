@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FilterStoreService } from '../../../service/filter-store.service';
 import { EventService } from '../../../service/event.service';
 
 @Component({
@@ -17,8 +19,11 @@ export class RecentComponent implements OnInit {
     };
 
     constructor(
+        private route: ActivatedRoute,
+        private filterStoreService: FilterStoreService,
         private eventService: EventService
     ) {
+        this.route.params.subscribe( (params) => { this.filterStoreService.setEventType(params['type']); });
     }
 
     ngOnInit() {
