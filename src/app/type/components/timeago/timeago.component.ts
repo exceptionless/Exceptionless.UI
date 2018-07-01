@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
@@ -10,11 +10,14 @@ export class TimeagoComponent implements OnInit {
     @Input() date;
     text: any = '';
 
-
     constructor() {
     }
 
     ngOnInit() {
+        this.setTimeagoText();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
         this.setTimeagoText();
     }
 

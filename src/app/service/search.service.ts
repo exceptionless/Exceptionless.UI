@@ -35,8 +35,7 @@ export class SearchService {
                 err => {
                     this.toastr.error('Error Occurred!', 'Failed');
                     reject(err);
-                },
-                () => console.log('Validate Service called!')
+                }
             );
         });
     }

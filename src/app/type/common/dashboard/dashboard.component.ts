@@ -68,7 +68,7 @@ export class DashboardComponent implements OnInit {
         private eventService: EventService,
         private stackService: StackService,
         private organizationService: OrganizationService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
     ) {
         this.route.params.subscribe( (params) => {
             this.type = params['type'];
@@ -78,6 +78,10 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    customDateSetting() {
+        return true;
     }
 
     get() {
@@ -96,8 +100,7 @@ export class DashboardComponent implements OnInit {
                     this.notificationService.error('Failed', 'Error Occurred!');
 
                     reject(err);
-                },
-                () => console.log('Organization Service called!')
+                }
             );
         });
     }
@@ -147,8 +150,7 @@ export class DashboardComponent implements OnInit {
                 },
                 err => {
                     reject(err);
-                },
-                () => console.log('Event Service called!')
+                }
             );
         });
     }

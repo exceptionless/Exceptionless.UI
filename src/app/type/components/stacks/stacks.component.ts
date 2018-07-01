@@ -100,8 +100,7 @@ export class StacksComponent implements OnInit {
                     this.notificationService.error('Error Occurred!', 'Failed');
 
                     reject(err);
-                },
-                () => console.log('Stacks Service called!')
+                }
             );
         });
     }

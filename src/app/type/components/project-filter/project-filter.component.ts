@@ -41,8 +41,7 @@ export class ProjectFilterComponent implements OnInit {
                     this.isLoadingOrganizations = false;
 
                     reject(err);
-                },
-                () => console.log('Organization Service called!')
+                }
             );
         });
     }
@@ -61,8 +60,7 @@ export class ProjectFilterComponent implements OnInit {
                     this.isLoadingProjects = false;
 
                     reject(err);
-                },
-                () => console.log('Project Service called!')
+                }
             );
         });
     }

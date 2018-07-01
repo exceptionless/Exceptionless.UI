@@ -1,0 +1,15 @@
+<div class="form-group">
+    <label for="url">Reference Link</label>
+    <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Please enter a valid URL"
+           [(ngModel)]="data.url"
+           (ngModelChange)="setUrl($event)"
+           required
+           type = "url"
+           #url="ngModel"
+           autofocus />
+
+    <div class="error" ng-messages="addReferenceForm.url.$error" *ngIf="(url.invalid && (url.dirty || url.touched)) || submitted">
+        <small [hidden]="!url.errors?.required">Reference Link is required.</small>
+        <small [hidden]="!url.errors?.url">Link must be URL format.</small>
+    </div>
+</div>

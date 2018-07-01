@@ -18,6 +18,7 @@ export class ConfirmDialogComponent implements IModalDialog {
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed
+        this.text = options.data['text'];
     }
 
     setText(content) {

@@ -42,7 +42,7 @@ export class ProjectService {
             return null;
         }
 
-        return this.http.get(`organizations/${id}`);
+        return this.http.get(`projects/${id}`);
     }
 
     getByOrganizationId(id, options, useCache) {

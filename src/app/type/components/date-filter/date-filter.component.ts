@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import * as moment from 'moment';
 import { FilterService } from '../../../service/filter.service';
 import { ModalDialogService } from 'ngx-modal-dialog';
-import { CustomDateRangeDialogComponent } from '../../custom-date-range-dialog/custom-date-range-dialog.component';
+import { CustomDateRangeDialogComponent } from '../../../dialogs/custom-date-range-dialog/custom-date-range-dialog.component';
 import { DateRangeParserService } from '../../../service/date-range-parser.service';
 
 @Component({
@@ -78,7 +78,6 @@ export class DateFilterComponent implements OnInit {
 
     customDateSetting() {
         this.filteredDisplayName = this.getFilteredDisplayName();
-
         return true;
     }
 

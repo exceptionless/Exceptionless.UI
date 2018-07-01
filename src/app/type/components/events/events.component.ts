@@ -21,7 +21,7 @@ export class EventsComponent implements OnInit {
     actions: any[];
     selectedIds: any[] = [];
     pageSummary: string;
-    currentOptions: any;
+    currentOptions = {};
     loading = true;
     showType: any;
     sortByDateDescending: any;
@@ -92,18 +92,16 @@ export class EventsComponent implements OnInit {
             this.previous = links['previous'];
             this.next = links['next'];
 
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions['page'], this.currentOptions['limit']);
 
-            if (this.events.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
+            if (this.events.length === 0 && this.currentOptions['page'] && this.currentOptions['page'] > 1) {
                 return this.get();
             }
 
             return this.events;
         };
 
-        const onFailure = (response) => {
-
-        };
+        const onFailure = (response) => {};
 
         this.loading = true;
         this.events = [];
@@ -121,8 +119,7 @@ export class EventsComponent implements OnInit {
                     this.notificationService.error('Error Occurred!', 'Failed');
 
                     reject(err);
-                },
-                () => console.log('Event Service called!')
+                }
             );
         });
     }

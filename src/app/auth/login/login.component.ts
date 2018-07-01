@@ -18,7 +18,11 @@ export class LoginComponent implements OnInit {
         private auth: AuthService,
         private notificationService: NotificationService,
         private router: Router,
-    ) {}
+    ) {
+       if (this.auth.isAuthenticated()) {
+           this.router.navigate(['/type/error/dashboard']);
+       }
+    }
 
     ngOnInit() {
     }

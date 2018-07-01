@@ -21,7 +21,7 @@ export class StackService {
                 'Content-Type':  'text/plain; charset=UTF-8',
             })
         };
-        return this.http.post('stacks/add-link',  url, httpOptions);
+        return this.http.post(`stacks/${id}/add-link`,  url, httpOptions);
     }
 
     disableNotifications(id) {
@@ -113,7 +113,7 @@ export class StackService {
         return this.http.delete(`stacks/${id}/mark-critical`);
     }
 
-    markFixed(id, version) {
+    markFixed(id, version?) {
         const data = {
             version: version
         };
@@ -133,9 +133,9 @@ export class StackService {
         return this.http.delete(`stacks/${id}/mark-hidden`);
     }
 
-    promote(id) {
+    promote(id): Observable<HttpResponse<any>> {
         const data = {};
-        return this.http.post(`stacks/${id}/promote`,  data);
+        return this.http.post(`stacks/${id}/promote`,  data, { observe: 'response' });
     }
 
     remove(id?) {
@@ -146,7 +146,8 @@ export class StackService {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type':  'text/plain; charset=UTF-8',
-            })
+            }),
+            body: url
         };
         return this.http.delete(`stacks/${id}/remove-link`, httpOptions);
     }

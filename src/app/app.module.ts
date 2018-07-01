@@ -60,14 +60,14 @@ import { OrganizationService } from './service/organization.service';
 import { FilterService } from './service/filter.service';
 import { DialogService } from './service/dialog.service';
 import { RickshawComponent } from './type/components/rickshaw/rickshaw.component';
-import { ConfirmDialogComponent } from './type/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { ProjectListComponent } from './type/admin/project/project-list/project-list.component';
 import { ProjectNewComponent } from './type/admin/project/project-new/project-new.component';
 import { OrganizationNewComponent } from './type/admin/organization/organization-new/organization-new.component';
 import { OrganizationListComponent } from './type/admin/organization/organization-list/organization-list.component';
 import { ProjectEditComponent } from './type/admin/project/project-edit/project-edit.component';
 import { OrganizationEditComponent } from './type/admin/organization/organization-edit/organization-edit.component';
-import { CustomDateRangeDialogComponent } from './type/custom-date-range-dialog/custom-date-range-dialog.component';
+import { CustomDateRangeDialogComponent } from './dialogs/custom-date-range-dialog/custom-date-range-dialog.component';
 import { SummaryComponent } from './type/components/summary/summary.component';
 import { StacksComponent } from './type/components/stacks/stacks.component';
 import { EventsComponent } from './type/components/events/events.component';
@@ -75,6 +75,9 @@ import { TimeagoComponent } from './type/components/timeago/timeago.component';
 import { RelativeTimeComponent } from './type/components/relative-time/relative-time.component';
 import { ActiveDirective } from './directives/active.directive';
 import { StackComponent } from './type/components/stack/stack.component';
+import { AddReferenceDialogComponent } from './dialogs/add-reference-dialog/add-reference-dialog.component';
+import { ChangePlanDialogComponent } from './dialogs/change-plan-dialog/change-plan-dialog.component';
+import { ObjNgForPipe } from './pipes/obj-ng-for.pipe';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -127,6 +130,9 @@ export const AuthConfig = {
         RelativeTimeComponent,
         ActiveDirective,
         StackComponent,
+        AddReferenceDialogComponent,
+        ChangePlanDialogComponent,
+        ObjNgForPipe,
     ],
     imports: [
         BrowserModule,
@@ -157,7 +163,7 @@ export const AuthConfig = {
         }
     ],
     bootstrap: [AppComponent],
-    entryComponents: [ConfirmDialogComponent, CustomDateRangeDialogComponent]
+    entryComponents: [ConfirmDialogComponent, CustomDateRangeDialogComponent, AddReferenceDialogComponent]
 })
 
 export class AppModule {

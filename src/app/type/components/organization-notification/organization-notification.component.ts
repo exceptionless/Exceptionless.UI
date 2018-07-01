@@ -187,7 +187,7 @@ export class OrganizationNotificationComponent implements OnInit {
             }
         });
 
-            this.hasNotifications = true;
+        this.hasNotifications = true;
     }
 
     getOrganizations() {
@@ -210,8 +210,7 @@ export class OrganizationNotificationComponent implements OnInit {
                         this.notificationService.error('Failed', 'Error Occurred!');
 
                         reject(err);
-                    },
-                    () => console.log('Organization Service called!')
+                    }
                 );
             });
         };
@@ -229,8 +228,7 @@ export class OrganizationNotificationComponent implements OnInit {
                         this.notificationService.error('Failed', 'Error Occurred!');
 
                         reject(err);
-                    },
-                    () => console.log('Organization Service called!')
+                    }
                 );
             });
         };
@@ -251,8 +249,7 @@ export class OrganizationNotificationComponent implements OnInit {
                     this.notificationService.error('Failed', 'Error Occurred!');
 
                     reject(err);
-                },
-                () => console.log('Project Service called!')
+                }
             );
         });
     }
