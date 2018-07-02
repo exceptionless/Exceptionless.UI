@@ -27,11 +27,11 @@
       </td>
       <td ng-click="vm.open(stack.id, $event)" class="number">{{stack.total | number:0}}</td>
       <td ng-click="vm.open(stack.id, $event)" class="hidden-xs">
-        <abbr title="{{::stack.first_occurrence | date : 'medium'}}">
+        <abbr title="{{::'DateTime' | translate : {'date' : stack.first_occurrence} }}">
           <timeago date="stack.first_occurrence"></timeago>
         </abbr>
       </td>
-      <td ng-click="vm.open(stack.id, $event)" class="hidden-xs"><abbr title="{{::stack.last_occurrence | date : 'medium'}}">
+      <td ng-click="vm.open(stack.id, $event)" class="hidden-xs"><abbr title="{{::'DateTime' | translate : {'date' : stack.last_occurrence} }}">
         <timeago date="stack.last_occurrence"></timeago>
       </abbr></td>
     </tr>

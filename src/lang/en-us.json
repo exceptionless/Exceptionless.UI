@@ -131,6 +131,8 @@
   "Used to promote stacks to external systems.":"Used to promote stacks to external systems.",
   "Add a reference link to an external resource.":"Add a reference link to an external resource.",
   "Delete this stack":"Delete this stack",
+  "Fixed_With_Version":"FIXED IN {{fixed_in_version}}",
+  "Fixed" : "FIXED",
 
   "Summary":"Summary",
   "Created":"Created",
@@ -282,6 +284,7 @@
   "Custom": "Custom",
   "Select Date Range": "Select Date Range",
 
+  "DayFormat":"D",
   "DateFormat":"ddd, MMM D, YYYY",
   "DateTimeFormat":"ddd, MMM D, YYYY h:mma",
   "Filter": "Filter",

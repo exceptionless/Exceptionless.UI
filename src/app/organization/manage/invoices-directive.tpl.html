@@ -11,7 +11,7 @@
     <tbody>
     <tr ng-repeat="invoice in vm.invoices track by invoice.id">
       <td class="row-clickable" ng-click="vm.open(invoice.id)">{{invoice.id}}</td>
-      <td class="row-clickable" ng-click="vm.open(invoice.id)">{{invoice.date | date: 'medium'}}</td>
+      <td class="row-clickable" ng-click="vm.open(invoice.id)">{{'DateTime' | translate : invoice }}</td>
       <td class="row-clickable" ng-click="vm.open(invoice.id)">{{invoice.paid ? 'Paid' : 'Unpaid'}}</td>
       <td>
         <div class="btn-group">

@@ -15,7 +15,7 @@
             <summary source="event" show-type="vm.showType"></summary>
           </div>
         </td>
-        <td ng-click="vm.open(event.id, $event)"><abbr title="{{::event.date | date : 'medium'}}">
+        <td ng-click="vm.open(event.id, $event)"><abbr title="{{::'DateTime' | translate : event }}">
           <timeago date="event.date"></timeago>
         </abbr></td>
         <td ng-click="vm.open(event.id, $event)"><abbr title="{{vm.getDuration(event)}} seconds">

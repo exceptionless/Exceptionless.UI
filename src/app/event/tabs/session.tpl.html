@@ -17,7 +17,7 @@
       <th>{{::'Duration' | translate}}</th>
       <td>
         <span ng-if="!vm.event.data.sessionend" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="{{::'Online' | translate}}"></span>
-        <abbr title="{{::'Seconds' | translate:{duration : vm.getDuration()}}}"><duration value="vm.getDuration()"></duration></abbr>
+        <abbr title="{{::'Seconds' | translate:{duration : vm.getDuration()} }}"><duration value="vm.getDuration()"></duration></abbr>
         <span ng-if="vm.event.data.sessionend">
           ({{::'ended' | translate}} <timeago date="vm.event.data.sessionend"></timeago>)
         </span>
