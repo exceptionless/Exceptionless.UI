@@ -11,7 +11,7 @@
             <li>
               <p>{{::'Select your project type:' | translate}}</p>
               <select class="form-control" ng-model="vm.currentProjectType" ng-options="projectType.name group by projectType.platform for projectType in vm.projectTypes">
-                <option value="" ng-if="!vm.currentProjectType.key">{{::'Please select a project type' | translate}}</option>
+                <option value="" ng-selected="true" ng-if="!vm.currentProjectType.key">{{::'Please select a project type' | translate}}</option>
               </select>
             </li>
             <li style="margin-top: 15px;" ng-if="vm.currentProjectType.key">
@@ -77,7 +77,7 @@
               <p ng-bind-html="'Notice_Hosting_WebApi_In_AspNet' | translate"></p>
             </li>
           </ol>
-          <p ng-if="vm.currentProjectType.key"><strong>{{::'That's it!' | translate}}</strong>
+          <p ng-if="vm.currentProjectType.key"><strong>{{::"That's it!" | translate}}</strong>
             {{::'Your project should now automatically be sending all unhandled exceptions to Exceptionless!' | translate}}
             <span ng-if="vm.isDotNet()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.Net/wiki/Sending-Events', sampleCode: 'ex.ToExceptionless().Submit()'}"></span>
             <span ng-if="vm.isJavaScript()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.JavaScript/wiki/Sending-Events', sampleCode: 'client.submitException(ex);'}"></span>
