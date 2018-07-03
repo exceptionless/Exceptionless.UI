@@ -1,7 +1,7 @@
 module.exports = {
     main: {
         options: {
-            port: 9001
+            port: 5100
         }
     }
 };

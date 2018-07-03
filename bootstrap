@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BaseUrl="${BaseUrl:-http://ex-ui.localtest.me:5000}"
+BaseUrl="${BaseUrl:-http://ex-api.localtest.me:5000}"
 Html5Mode="${Html5Mode:-false}"
 EnableSsl="${EnableSsl:-false}"
 EnableAccountCreation="${EnableAccountCreation:-true}"

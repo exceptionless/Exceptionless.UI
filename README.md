@@ -29,7 +29,7 @@ Please read the [contributing document](https://github.com/exceptionless/Excepti
    ```javascript
    npx bower install
    ```
-4. Start a web server and view it on [`http://ex.localtest.me:9001`](http://ex.localtest.me:9001) by running the following grunt command.
+4. Start a web server and view it on [`http://ex-ui.localtest.me:5100`](http://ex-ui.localtest.me:5100) by running the following grunt command.
 
    ```javascript
    npx grunt serve
