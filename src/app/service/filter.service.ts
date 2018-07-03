@@ -38,7 +38,7 @@ export class FilterService {
             filters.push('project:' + this._projectId);
         }
 
-        if (this._eventType && this.filterStoreService.getEventType() !== 'events') {
+        if (this._eventType && this.filterStoreService.getEventType() !== 'events' && this.filterStoreService.getEventType() !== 'stack') {
             filters.push('type:' + this.filterStoreService.getEventType());
         }
 

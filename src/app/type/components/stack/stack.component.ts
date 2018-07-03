@@ -10,6 +10,7 @@ import { OrganizationService } from '../../../service/organization.service';
 import { ProjectService } from '../../../service/project.service';
 import { StackService } from '../../../service/stack.service';
 import { ModalDialogService } from 'ngx-modal-dialog';
+import { FilterStoreService } from '../../../service/filter-store.service';
 import { ConfirmDialogComponent } from '../../../dialogs/confirm-dialog/confirm-dialog.component';
 import { AddReferenceDialogComponent } from '../../../dialogs/add-reference-dialog/add-reference-dialog.component';
 import { ModalParameterService } from '../../../service/modal-parameter.service';
@@ -22,14 +23,17 @@ import { ModalParameterService } from '../../../service/modal-parameter.service'
 export class StackComponent implements OnInit {
     _organizations = [];
     _stackId = '';
+    eventType = 'stack';
     chart = {
         options: {
             padding: {top: 0.085},
             renderer: 'stack',
             stroke: true,
-            unstack: true
+            unstack: true,
+            series1: [],
         }
     };
+    seriesData: any[];
     chartOptions = [
         { name: 'Occurrences', field: 'sum:count~1', title: '', selected: true, render: false },
         { name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true },
@@ -75,9 +79,11 @@ export class StackComponent implements OnInit {
         private viewRef: ViewContainerRef,
         private modalDialogService: ModalDialogService,
         private modalParameterService: ModalParameterService,
+        private filterStoreService: FilterStoreService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._stackId = params['id'];
+            this.filterStoreService.setEventType('stack');
         });
 
         this.hotkeysService.add(new Hotkey('shift+h', (event: KeyboardEvent): boolean => {
@@ -331,7 +337,7 @@ export class StackComponent implements OnInit {
 
             const dateAggregation = getAggregationItems(results, 'date_date', []);
             const colors = ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'];
-            this.chart.options['series'] = this.chartOptions
+            this.chart.options['series1'] = this.chartOptions
                 .filter(function(option) { return option.selected; })
                 .reduce(function (series, option, index) {
                     series.push({
@@ -366,6 +372,7 @@ export class StackComponent implements OnInit {
                     return seri;
                 });
 
+            this.seriesData = this.chart.options['series1'];
             return response;
         };
 

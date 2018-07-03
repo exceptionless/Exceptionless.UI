@@ -39,6 +39,7 @@
         "ng2-rickshaw": "git+https://github.com/daominhsangvn/ng2-rickshaw.git",
         "ng2-ui-auth": "^9.0.0-beta.2",
         "ngx-analytics": "^4.6.3-patch1",
+        "ngx-clipboard": "^11.1.1",
         "ngx-modal-dialog": "^2.0.1",
         "ngx-toastr": "^8.7.3",
         "objectid-js": "^1.0.2-patch1",

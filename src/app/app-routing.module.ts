@@ -33,10 +33,15 @@ const routes: Routes = [
         component: TypeComponent,
         children: [
             { path: ':type/dashboard', component: DashboardComponent },
+            { path: ':project_type/:id/:type/dashboard', component: DashboardComponent },
             { path: ':type/recent', component: RecentComponent },
+            { path: ':project_type/:id/:type/recent', component: RecentComponent },
             { path: ':type/frequent', component: FrequentComponent },
+            { path: ':project_type/:id/:type/frequent', component: FrequentComponent },
             { path: ':type/users', component: UsersComponent },
+            { path: ':project_type/:id/:type/users', component: UsersComponent },
             { path: ':type/new', component: NewComponent },
+            { path: ':project_type/:id/:type/new', component: NewComponent },
             {
                 path: 'project',
                 component: ProjectComponent,

@@ -14,7 +14,7 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { NgxAnalyticsModule } from 'ngx-analytics';
 import { NgxAnalyticsGoogleAnalytics } from 'ngx-analytics/ga';
 
-import { GlobalVariables } from './global-variables';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import 'd3';
 import 'rickshaw';
@@ -28,6 +28,7 @@ import { DaterangepickerModule } from 'angular-2-daterangepicker';
 
 import { ChecklistModule } from 'angular-checklist';
 
+import { GlobalVariables } from './global-variables';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
@@ -78,6 +79,7 @@ import { StackComponent } from './type/components/stack/stack.component';
 import { AddReferenceDialogComponent } from './dialogs/add-reference-dialog/add-reference-dialog.component';
 import { ChangePlanDialogComponent } from './dialogs/change-plan-dialog/change-plan-dialog.component';
 import { ObjNgForPipe } from './pipes/obj-ng-for.pipe';
+import { EventComponent } from './type/components/event/event.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -133,6 +135,7 @@ export const AuthConfig = {
         AddReferenceDialogComponent,
         ChangePlanDialogComponent,
         ObjNgForPipe,
+        EventComponent,
     ],
     imports: [
         BrowserModule,
@@ -150,6 +153,7 @@ export const AuthConfig = {
         Ng2UiAuthModule.forRoot(AuthConfig),
         HotkeyModule.forRoot(),
         NgxAnalyticsModule.forRoot([NgxAnalyticsGoogleAnalytics]),
+        ClipboardModule
     ],
     providers: [
         GlobalVariables,

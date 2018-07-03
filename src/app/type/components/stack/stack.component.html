@@ -71,11 +71,13 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Stack
-                        <span class="labels">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Stack
+                <span class="labels">
                             <span class="label label-success" *ngIf="stack['date_fixed'] && !stack['is_regressed']">
                                 <span class="hidden-xs">FIXED<span *ngIf="stack['fixed_in_version']"> IN {{ stack['fixed_in_version'] }}</span></span>
                                 <span class="visible-xs">F</span>
@@ -90,90 +92,109 @@
                             </span>
                         </span>
 
-                        <div class="btn-toolbar pull-right hidden-print" role="toolbar" aria-label="Stack Options">
-                            <div class="btn-group btn-group-sm" role="group" *ngIf="stack['type'] === 'error' || stack['type'] === '404'">
-                                <button type="button" role="button" class="btn btn-default" title="{{ (stack['date_fixed'] && !stack['is_regressed']) ? 'Mark this stack as not fixed' : 'Mark this stack as fixed' }}">
-                                    {{ (stack['date_fixed ']&& !stack['is_regressed']) ? 'Mark Not Fixed' : 'Mark Fixed' }}
-                                </button>
-                            </div>
-
-                            <div class="btn-group btn-group-sm" role="group" open>
-                                <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <span class="visible-xs-inline"><i class="fa fa-fw fa-gear fa-size-sm"></i></span>
-                                    <span class="hidden-xs">Options</span>
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                    <li><a (click)="updateIsHidden()" title="Hide this stack from reports and mutes occurrence notifications"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"[ngClass]="{'fa-check': !!stack['is_hidden']}"></i>Hide</a></li>
-                                    <li><a (click)="updateIsCritical()" title="All future occurrences will be marked as critical"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw" [ngClass]="{'fa-check': !!stack['occurrences_are_critical']}"></i>Future Occurrences Are Critical</a></li>
-                                    <li><a (click)="updateNotifications()" title="Stop sending occurrence notifications for this stack"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw" [ngClass]="{'fa-check': !!stack['disable_notifications']}"></i>Disable Notifications</a></li>
-                                    <li class="divider"></li>
-                                    <li><a (click)="promoteToExternal()" title="Used to promote stacks to external systems."><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>Promote To External</a></li>
-                                    <li><a (click)="addReferenceLink()" title="Add a reference link to an external resource."><i *ngIf="stack.is_hidden || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>Add Reference Link</a></li>
-                                    <li class="divider"></li>
-                                    <li><a (click)="remove()" title="Delete this stack"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>Delete</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="btn-toolbar pull-right hidden-print" role="toolbar" aria-label="Stack Options">
+                    <div class="btn-group btn-group-sm" role="group" *ngIf="stack['type'] === 'error' || stack['type'] === '404'">
+                        <button type="button" role="button" class="btn btn-default" title="{{ (stack['date_fixed'] && !stack['is_regressed']) ? 'Mark this stack as not fixed' : 'Mark this stack as fixed' }}">
+                            {{ (stack['date_fixed ']&& !stack['is_regressed']) ? 'Mark Not Fixed' : 'Mark Fixed' }}
+                        </button>
                     </div>
 
-                    <div class="panel-body">
-                        <table class="table table-striped table-bordered table-fixed table-key-value b-t">
-                            <tbody>
-                                <tr>
-                                    <th>Title</th>
-                                    <td><span truncate lines="3">{{ stack['title'] }}</span></td>
-                                </tr>
-                                <tr>
-                                    <th>Project</th>
-                                    <td><a href="#">{{ project['name'] }}</a></td>
-                                </tr>
-                                <tr *ngIf="(stack['date_fixed'] && !stack['is_regressed'])">
-                                    <th>Date Fixed</th>
-                                    <td><span>{{ stack['date_fixed'] }}</span></td>
-                                </tr>
-                                <tr *ngIf="stack['description']">
-                                    <th>Description</th>
-                                    <td><span>{{ stack['description'] }}</span></td>
-                                </tr>
-                                <tr *ngIf="stack['tags']">
-                                    <th>Tags</th>
-                                    <td>
-                                        <span class="label label-info" *ngFor="let tag of stack['tags']">{{ tag }}</span>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="stack['references']">
-                                    <th>{{(stack['references'].length > 1) ? 'Reference Links' : 'Reference Link' }}</th>
-                                    <td>
-                                        <ul *ngIf="stack['references'].length > 1">
-                                            <li *ngFor="let reference of stack['references']">
-                                                <a href="{{ reference }}" target="_blank">{{ reference }}</a>
-                                                <a class="delete-link" (click)="removeReferenceLink(reference)"><i class="fa fa-fw fa-times"></i></a>
-                                            </li>
-                                        </ul>
-
-                                        <div *ngIf="stack['references'].length === 1">
-                                            <a href="#" target="_blank">{{stack['references'][0]}}</a>
-                                            <a class="delete-link" (click)="removeReferenceLink(stack['references'][0])"><i class="fa fa-fw fa-times"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <h4>Stacking Information</h4>
-                        <table class="table table-striped table-bordered table-fixed table-key-value b-t">
-                            <tbody *ngIf="stack['signature_info']">
-                                <tr *ngFor="let key of stack['signature_info'] | ObjNgFor">
-                                    <th>{{ key }}</th>
-                                    <td>{{ stack['signature_info'][key] }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
+                    <div class="btn-group btn-group-sm" role="group" open>
+                        <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="visible-xs-inline"><i class="fa fa-fw fa-gear fa-size-sm"></i></span>
+                            <span class="hidden-xs">Options</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li><a (click)="updateIsHidden()" title="Hide this stack from reports and mutes occurrence notifications"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"[ngClass]="{'fa-check': !!stack['is_hidden']}"></i>Hide</a></li>
+                            <li><a (click)="updateIsCritical()" title="All future occurrences will be marked as critical"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw" [ngClass]="{'fa-check': !!stack['occurrences_are_critical']}"></i>Future Occurrences Are Critical</a></li>
+                            <li><a (click)="updateNotifications()" title="Stop sending occurrence notifications for this stack"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw" [ngClass]="{'fa-check': !!stack['disable_notifications']}"></i>Disable Notifications</a></li>
+                            <li class="divider"></li>
+                            <li><a (click)="promoteToExternal()" title="Used to promote stacks to external systems."><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>Promote To External</a></li>
+                            <li><a (click)="addReferenceLink()" title="Add a reference link to an external resource."><i *ngIf="stack.is_hidden || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>Add Reference Link</a></li>
+                            <li class="divider"></li>
+                            <li><a (click)="remove()" title="Delete this stack"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>Delete</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
+
+            <div class="panel-body">
+                <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+                    <tbody>
+                    <tr>
+                        <th>Title</th>
+                        <td><span truncate lines="3">{{ stack['title'] }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Project</th>
+                        <td><a href="#">{{ project['name'] }}</a></td>
+                    </tr>
+                    <tr *ngIf="(stack['date_fixed'] && !stack['is_regressed'])">
+                        <th>Date Fixed</th>
+                        <td><span>{{ stack['date_fixed'] }}</span></td>
+                    </tr>
+                    <tr *ngIf="stack['description']">
+                        <th>Description</th>
+                        <td><span>{{ stack['description'] }}</span></td>
+                    </tr>
+                    <tr *ngIf="stack['tags']">
+                        <th>Tags</th>
+                        <td>
+                            <span class="label label-info" *ngFor="let tag of stack['tags']">{{ tag }}</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="stack['references'].length > 0">
+                        <th>{{(stack['references'].length > 1) ? 'Reference Links' : 'Reference Link' }}</th>
+                        <td>
+                            <ul *ngIf="stack['references'].length > 1">
+                                <li *ngFor="let reference of stack['references']">
+                                    <a href="{{ reference }}" target="_blank">{{ reference }}</a>
+                                    <a class="delete-link" (click)="removeReferenceLink(reference)"><i class="fa fa-fw fa-times"></i></a>
+                                </li>
+                            </ul>
+
+                            <div *ngIf="stack['references'].length === 1">
+                                <a href="#" target="_blank">{{stack['references'][0]}}</a>
+                                <a class="delete-link" (click)="removeReferenceLink(stack['references'][0])"><i class="fa fa-fw fa-times"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h4>Stacking Information</h4>
+                <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+                    <tbody *ngIf="stack['signature_info']">
+                    <tr *ngFor="let key of stack['signature_info'] | ObjNgFor">
+                        <th>{{ key }}</th>
+                        <td>{{ stack['signature_info'][key] }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div>
+                    <div class="btn-group btn-group-xs pull-right" role="group" open>
+                        <button type="button" role="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="visible-xs-inline"><i class="fa fa-fw fa-gear"></i></span>
+                            <span class="hidden-xs">Chart Option</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li *ngFor="let o of chartOptions">
+                                <a (click)="o.selected = !o.selected; updateStats();" title="{{o.title}}"><i class="fa fa-fw" [ngClass]="{'fa-check': !!o.selected}" *ngIf="hasSelectedChartOption()"></i>{{ 'Show '+o.name }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [eventType]="eventType"></app-rickshaw>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><i class="fa fa-fw fa-calendar"></i> Recent Occurrences</div>
+            <app-events [settings]="recentOccurrences" [eventType]="eventType"></app-events>
         </div>
     </div>
 </div>

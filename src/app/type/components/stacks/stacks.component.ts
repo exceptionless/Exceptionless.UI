@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { FilterService } from '../../../service/filter.service';
 import { StackService } from '../../../service/stack.service';
 import { LinkService } from '../../../service/link.service';
@@ -15,6 +16,7 @@ import { StacksActionsService } from '../../../service/stacks-actions.service';
 export class StacksComponent implements OnInit {
     @Input() settings;
     @Input() eventType;
+    @Input() filterTime;
     next: string;
     previous: string;
     stacks: any[] = [];
@@ -26,6 +28,7 @@ export class StacksComponent implements OnInit {
     showType: any;
 
     constructor(
+        private router: Router,
         private filterService: FilterService,
         private stackService: StackService,
         private linkService: LinkService,
@@ -143,9 +146,9 @@ export class StacksComponent implements OnInit {
     open(id, event) {
         const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
-            /*$window.open($state.href('app.stack', { id: id }, { absolute: true }), '_blank');*/
+            window.open(`/type/stack/${id}`, '_blank');
         } else {
-            /*$state.go('app.stack', { id: id });*/
+            this.router.navigate([`/type/stack/${id}`]);
         }
 
         event.preventDefault();

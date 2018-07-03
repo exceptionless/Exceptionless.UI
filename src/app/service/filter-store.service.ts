@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Locker, DRIVERS } from 'angular-safeguard';
 
 @Injectable({
@@ -6,6 +6,7 @@ import { Locker, DRIVERS } from 'angular-safeguard';
 })
 
 export class FilterStoreService {
+    timeFilterEventFire: EventEmitter<any> = new EventEmitter();
     constructor(
         private locker: Locker,
     ) {
@@ -19,6 +20,11 @@ export class FilterStoreService {
 
     setTimeFilter(timeFilter) {
         this.locker.set(DRIVERS.LOCAL, 'time', timeFilter);
+        this.timeFilterEventFire.emit(this.getTimeFilter());
+    }
+
+    getTimeFilterEmitter() {
+        return this.timeFilterEventFire;
     }
 
     getEventType() {

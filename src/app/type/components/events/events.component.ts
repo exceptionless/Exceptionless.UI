@@ -15,6 +15,7 @@ import { EventService } from '../../../service/event.service';
 export class EventsComponent implements OnInit {
     @Input() settings;
     @Input() eventType;
+    @Input() filterTime;
     next: string;
     previous: string;
     events: any[] = [];
@@ -100,15 +101,13 @@ export class EventsComponent implements OnInit {
 
             return this.events;
         };
-
         const onFailure = (response) => {};
-
         this.loading = true;
         this.events = [];
         this.currentOptions = options || this.settings.options;
 
         return new Promise((resolve, reject) => {
-            this.eventService.getAll(this.currentOptions).subscribe(
+            this.settings.get(this.currentOptions).subscribe(
                 res => {
                     onSuccess(res.body, res.headers.get('link'));
                     this.loading = false;

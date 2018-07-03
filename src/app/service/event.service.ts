@@ -96,9 +96,11 @@ export class EventService {
         return this.http.get(url);
     }
 
-    getByStackId(id, options) {
-        const url = 'stacks/events/' + this.filterService.apply(options, false);
-        return this.http.get(url);
+    getByStackId(id, options): Observable<HttpResponse<any>> {
+        console.log('options = ', options);
+        const params = this.filterService.apply(options, false);
+        console.log('params = ', params);
+        return this.http.get(`stacks/${id}/events`, { observe: 'response', params: params });
     }
 
     markCritical(id) {

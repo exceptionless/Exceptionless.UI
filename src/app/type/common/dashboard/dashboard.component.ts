@@ -15,6 +15,8 @@ import { NotificationService } from '../../../service/notification.service';
 })
 
 export class DashboardComponent implements OnInit {
+    subscription: any;
+    timeFilter = '';
     type = '';
     eventType = '';
     seriesData: any[];
@@ -54,7 +56,9 @@ export class DashboardComponent implements OnInit {
     };
     mostRecent: any = {
         header: 'Most Recent',
-        get: this.eventService.getAll,
+        get: (options) => {
+            return this.eventService.getAll(options);
+        },
         options: {
             limit: 10,
             mode: 'summary'
@@ -78,6 +82,12 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.subscription = this.filterStoreService.getTimeFilterEmitter()
+            .subscribe(item => { this.get(); });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     customDateSetting() {
@@ -85,7 +95,7 @@ export class DashboardComponent implements OnInit {
     }
 
     get() {
-        this.getOrganizations().then(() => { this.getStats(); });
+        this.getOrganizations().then(() => { this.getStats().then(() => { this.timeFilter = this.filterStoreService.getTimeFilter(); }); });
     }
 
     getOrganizations() {
@@ -93,7 +103,6 @@ export class DashboardComponent implements OnInit {
             this.organizationService.getAll('', false).subscribe(
                 res => {
                     this.organizations = JSON.parse(JSON.stringify(res));
-
                     resolve(this.organizations);
                 },
                 err => {
@@ -147,6 +156,7 @@ export class DashboardComponent implements OnInit {
             this.eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1').subscribe(
                 res => {
                     onSuccess(res);
+                    resolve(res);
                 },
                 err => {
                     reject(err);

@@ -12,6 +12,7 @@ export class RickshawComponent implements OnInit {
     @Input() options;
     @Input() seriesData;
     @Input() eventType;
+    @Input() filterTime;
     graph: any;
     features: any;
 

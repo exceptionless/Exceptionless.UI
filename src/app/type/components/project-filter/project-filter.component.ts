@@ -24,7 +24,7 @@ export class ProjectFilterComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.getOrganizations().then(() => {this.getProjects(); });
+        this.getOrganizations().then(() => { this.getProjects(); });
     }
 
     getOrganizations() {
@@ -67,5 +67,29 @@ export class ProjectFilterComponent implements OnInit {
 
     setItem(id, name) {
         this.filteredDisplayName = name;
+    }
+
+    getFilterName() {
+        const organizationId = this.filterService.getOrganizationId();
+        if (organizationId) {
+            const organization = this.organizations.filter(function(o) { return o.id === organizationId; })[0];
+            if (organization) {
+                return organization.name;
+            }
+        }
+
+        const projectId = this.filterService.getProjectId();
+        if (projectId) {
+            const project = this.projects.filter(function(p) { return p.id === projectId; })[0];
+            if (project) {
+                return project.name;
+            }
+        }
+
+        return 'All Projects';
+    }
+
+    getProjectsByOrganizationId(id) {
+        return this.projects.filter(function (project) { return project.organization_id === id; });
     }
 }

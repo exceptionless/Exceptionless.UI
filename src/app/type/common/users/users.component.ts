@@ -10,6 +10,8 @@ import { StackService } from '../../../service/stack.service';
 })
 export class UsersComponent implements OnInit {
     type = '';
+    subscription: any;
+    timeFilter = '';
     mostUsers: any = {
         get: this.stackService.getUsers,
         options: {
@@ -27,6 +29,8 @@ export class UsersComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.subscription = this.filterStoreService.getTimeFilterEmitter()
+            .subscribe(item => { this.timeFilter = item; });
     }
 
 }
