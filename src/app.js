@@ -73,11 +73,11 @@
 
     moment.locale(lang);
     $translateProvider.useSanitizeValueStrategy('escapeParameters');
-    $translateProvider.preferredLanguage(lang);
     $translateProvider.useStaticFilesLoader({
         prefix: '/lang/',
         suffix: '.json'
     });
+    $translateProvider.preferredLanguage(lang);
 
     function setRouteFilter(filterService, organizationId, projectId, type) {
       filterService.setOrganizationId(organizationId, true);
