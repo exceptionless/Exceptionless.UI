@@ -8,7 +8,7 @@ import * as moment from 'moment';
 })
 export class TimeagoComponent implements OnInit {
     @Input() date;
-    text: any = '';
+    text = '';
 
     constructor() {
     }

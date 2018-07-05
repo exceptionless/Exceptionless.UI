@@ -61,7 +61,6 @@ export class DateFilterComponent implements OnInit {
 
     setFilter(filter) {
         this.filterService.setTime(filter);
-
         this.updateFilterDisplayName();
     }
 

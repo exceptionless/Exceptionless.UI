@@ -3,29 +3,19 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
-
 import { ToastrModule } from 'ngx-toastr';
 import { LockerModule } from 'angular-safeguard';
-
 import { HotkeyModule } from 'angular2-hotkeys';
-
 import { NgxAnalyticsModule } from 'ngx-analytics';
 import { NgxAnalyticsGoogleAnalytics } from 'ngx-analytics/ga';
-
 import { ClipboardModule } from 'ngx-clipboard';
-
 import 'd3';
 import 'rickshaw';
 import { RickshawModule } from 'ng2-rickshaw';
-
 import { ModalDialogModule } from 'ngx-modal-dialog';
-
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
 import { DaterangepickerModule } from 'angular-2-daterangepicker';
-
 import { ChecklistModule } from 'angular-checklist';
 
 import { GlobalVariables } from './global-variables';
@@ -34,7 +24,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { SignupComponent } from './auth/signup/signup.component';
-
 import { TokenInterceptor } from './service/token.interceptor';
 import { AuthGuardService } from './service/auth-guard.service';
 import { TypeComponent } from './type/type.component';
@@ -80,6 +69,11 @@ import { AddReferenceDialogComponent } from './dialogs/add-reference-dialog/add-
 import { ChangePlanDialogComponent } from './dialogs/change-plan-dialog/change-plan-dialog.component';
 import { ObjNgForPipe } from './pipes/obj-ng-for.pipe';
 import { EventComponent } from './type/components/event/event.component';
+import { EventTabsComponent } from './type/components/event/tabs/event-tabs/event-tabs.component';
+import { DurationComponent } from './type/components/duration/duration.component';
+import { StackTraceComponent } from './type/components/stack-trace/stack-trace.component';
+import { SimpleStackTraceComponent } from './type/components/simple-stack-trace/simple-stack-trace.component';
+import { ExtendedDataItemComponent } from './type/components/event/extended-data-item/extended-data-item.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -136,6 +130,11 @@ export const AuthConfig = {
         ChangePlanDialogComponent,
         ObjNgForPipe,
         EventComponent,
+        EventTabsComponent,
+        DurationComponent,
+        StackTraceComponent,
+        SimpleStackTraceComponent,
+        ExtendedDataItemComponent,
     ],
     imports: [
         BrowserModule,
@@ -153,7 +152,7 @@ export const AuthConfig = {
         Ng2UiAuthModule.forRoot(AuthConfig),
         HotkeyModule.forRoot(),
         NgxAnalyticsModule.forRoot([NgxAnalyticsGoogleAnalytics]),
-        ClipboardModule
+        ClipboardModule,
     ],
     providers: [
         GlobalVariables,

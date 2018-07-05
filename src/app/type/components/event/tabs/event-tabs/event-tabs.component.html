@@ -1,0 +1,374 @@
+<ng-container *ngIf="tab == 'overview'">
+    <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+        <tr>
+            <th>Occurred On</th>
+            <td>DateTime (<app-timeago [date]="event['date']"></app-timeago>)</td>
+        </tr>
+
+        <tr *ngIf="isSessionStart">
+            <th>Duration</th>
+            <td>
+                <span *ngIf="!event['data']['sessionend']" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
+                <abbr title="Seconds"><app-duration [value]="getDuration()"></app-duration></abbr>
+                <span *ngIf="event['data']['sessionend']">(ended <app-timeago [date]="event['data']['sessionend']"></app-timeago>)</span>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Project</th>
+            <td><a href="#">{{ project['name'] }}</a></td>
+        </tr>
+
+        <tr *ngIf="event['reference_id']">
+            <th>Reference</th>
+            <td>{{ event['reference_id'] }}</td>
+        </tr>
+
+        <tr *ngFor="let reference of references">
+            <th>{{ reference['name'] }}</th>
+            <td><a href="#">{{ reference['id'] }}</a></td>
+        </tr>
+
+        <tr *ngIf="level">
+            <th>Level</th>
+            <td><span class="label label-default" [ngClass]="{ 'label-success': isLevelSuccess, 'label-info': isLevelInfo, 'label-warning': isLevelWarning, 'label-danger': isLevelError }">{{ level }}</span></td>
+        </tr>
+
+        <tr *ngIf="event['type'] !== 'error'">
+            <th>Event Type</th>
+            <td><span truncate>{{ event['type'] }}</span></td>
+        </tr>
+
+        <tr class="hidden-print" *ngIf="hasError">
+            <th>Error Type</th>
+            <td><span truncate>{{ errorType }}</span></td>
+        </tr>
+
+        <tr *ngIf="event['source']">
+            <th>Source</th>
+            <td><span truncate lines="2">{{ event['source'] }}</span></td>
+        </tr>
+
+        <tr *ngIf="!isSessionStart && event['value']">
+            <th>Value</th>
+            <td>{{ event['value'] }}</td>
+        </tr>
+
+        <tr class="hidden-print" *ngIf="event['message'] || getMessage(event)">
+            <th>Message</th>
+            <td><span truncate lines="10">{{ event['message'] || message }}</span></td>
+        </tr>
+
+        <tr *ngIf="version">
+            <th>Version</th>
+            <td>{{ version }}</td>
+        </tr>
+
+        <tr *ngIf="location">
+            <th>Geo</th>
+            <td><span truncate>{{ location }}</span></td>
+        </tr>
+
+        <tr *ngIf="event['tags']">
+            <th>Tags</th>
+            <td><span class="label label-info" *ngFor="let tag of event['tags']">{{ tag }}</span></td>
+        </tr>
+
+        <tr class="hidden-print" *ngIf="requestUrl">
+            <th>URL</th>
+            <td><a href="{{ requestUrl }}" target="_blank" truncate>{{ requestUrl }}</a></td>
+        </tr>
+    </table>
+
+    <div *ngIf="userEmail || userDescription || serIdentity || userEmail">
+        <h4>User Info</h4>
+        <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+            <tr *ngIf="userEmail">
+                <th>User Email/th>
+                <td><a href="#" truncate>{{ userEmail }}</a>
+                </td>
+            </tr>
+            <tr *ngIf="userIdentity">
+                <th>User Identity</th>
+                <td><span truncate>{{ userIdentity }}</span></td>
+            </tr>
+            <tr *ngIf="userName">
+                <th>User Name</th>
+                <td><span truncate>{{ userName }}</span></td>
+            </tr>
+            <tr *ngIf="userDescription">
+                <th>User Description</th>
+                <td><span truncate lines="2">{{ userDescription }}</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="hidden-print" *ngIf="hasError">
+        <div class="pull-right">
+            <a ngxClipboard [cbContent]="textStackTrace" [hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+        </div>
+        <h4>Stack Trace</h4>
+        <!--<app-stack-trace class="stack-trace-mini" [exception]="event['data']['@error']" *ngIf="event['data']['@error']"></app-stack-trace>-->
+        <!--<app-simple-stack-trace class="stack-trace-mini" [exception]="event['data']['@simple_error']" *ngIf="event['data']['@simple_error']"></app-simple-stack-trace>-->
+    </div>
+</ng-container>
+
+<ng-container *ngIf="tab == 'environment'">
+    <h3 class="visible-print">Environment</h3>
+
+    <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+        <tr>
+            <th>Occurred On</th>
+            <td>DateTime (<app-timeago [date]="event['date']"></app-timeago>)</td>
+        </tr>
+        <tr *ngIf="environment['machine_name']">
+            <th>Machine Name</th>
+            <td><span truncate>{{ environment['machine_name'] }}</span></td>
+        </tr>
+        <tr *ngIf="environment['ip_address']">
+            <th>IP Address</th>
+            <td>{{ environment['ip_address'] }}</td>
+        </tr>
+        <tr *ngIf="environment['processor_count']">
+            <th>Processor Count</th>
+            <td>{{ environment['processor_count'] }}</td>
+        </tr>
+        <tr *ngIf="environment['total_physical_memory']">
+            <th>Total Memory</th>
+            <td>{{ environment['total_physical_memory'] }}</td>
+        </tr>
+        <tr *ngIf="environment['available_physical_memory']">
+            <th>Available Memory</th>
+            <td>{{ environment['available_physical_memory'] }}</td>
+        </tr>
+        <tr *ngIf="environment['process_memory_size']">
+            <th>Process Memory</th>
+            <td>{{ environment['process_memory_size'] }}</td>
+        </tr>
+        <tr *ngIf="vm.environment.o_s_name">
+            <th>OS Name</th>
+            <td><span truncate>{{ vm.environment['o_s_name'] }}</span></td>
+        </tr>
+        <tr *ngIf="environment['o_s_version']">
+            <th>OS Version</th>
+            <td>{{ environment['o_s_version'] }}</td>
+        </tr>
+        <tr *ngIf="environment['architecture']">
+            <th>Architecture</th>
+            <td>{{ environment['architecture'] }}</td>
+        </tr>
+        <tr *ngIf="vm.environment.runtime_version">
+            <th>Runtime Version</th>
+            <td>{{ environment['runtime_version'] }}</td>
+        </tr>
+        <tr *ngIf="environment['process_id']">
+            <th>Process ID</th>
+            <td>{{ environment['process_id'] }}</td>
+        </tr>
+        <tr *ngIf="environment['process_name']">
+            <th>Process Name</th>
+            <td><span truncate>{{ environment['process_name'] }}</span></td>
+        </tr>
+        <tr *ngIf="environment['command_line']">
+            <th>Command Line</th>
+            <td><span truncate lines="2">{{ environment['command_line'] }}</span></td>
+        </tr>
+    </table>
+
+    <!--<app-extended-data-item [can-promote]="false" title="'Additional Data'" [data]="environment['data']"></app-extended-data-item>-->
+</ng-container>
+
+<ng-container *ngIf="tab == 'error'">
+    <h3 class="visible-print">Exception</h3>
+
+    <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+        <tr>
+            <th>Occurred On</th>
+            <td>DateTime (<app-timeago [date]="event['date']"></app-timeago>)</td>
+        </tr>
+        <tr>
+            <th>Error Type</th>
+            <td><span truncate>{{ errorType }}</span></td>
+        </tr>
+        <tr>
+            <th>Message</th>
+            <td><span truncate lines="10">{{ message }}</span></td>
+        </tr>
+        <tr *ngIf="event['data']['@error']['code']">
+            <th>Code</th>
+            <td><span truncate>{{ event['data']['@error']['code'] }}</span></td>
+        </tr>
+        <tr *ngIf="event['data']['@submission_method']">
+            <th>Submission Method</th>
+            <td><span truncate>{{ event['data']['@submission_method'] }}</span></td>
+        </tr>
+    </table>
+
+    <div class="pull-right m-t-xs hidden-print">
+        <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()"[hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+    </div>
+
+    <h3>Stack Trace</h3>
+
+    <!--<app-stack-trace [exception]="event['data']['@error']" [text-stack-trace]="textStackTrace"></app-stack-trace>-->
+
+    <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="event['data']['@error']['data']['@ext']"></app-extended-data-item>-->
+
+    <div *ngIf="event['data']['@error']['modules']">
+        <h4>Loaded Modules</h4>
+        <table class="table table-striped table-bordered table-fixed b-t">
+            <thead>
+                <tr>
+                    <th>Module Name</th>
+                    <th class="version">Version</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let module of event['data']['@error']['modules']">
+                    <td><span truncate>{{ module['name'] }}</span></td>
+                    <td>{{ module['version'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="tab == 'request'">
+    <h3 class="visible-print">Request</h3>
+    <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+        <tr>
+            <th>Occurred On</th>
+            <td>DateTime (<app-timeago [date]="event['date']"></app-timeago>)</td>
+        </tr>
+
+        <tr *ngIf="request['http_method']">
+            <th>HTTP Method</th>
+            <td>{{ request['http_method'] }}</td>
+        </tr>
+
+        <tr *ngIf="requestUrl">
+            <th>URL</th>
+            <td><a href="#" target="_blank" truncate>{{ requestUrl }}</a></td>
+        </tr>
+
+        <tr>
+            <th>Referrer</th>
+            <td>
+            <span *ngIf="vm.request.referrer">
+                <a href="#" target="_blank" truncate>{{ request['referrer'] }}</a>
+            </span>
+                <em *ngIf="!request['referrer']">None</em>
+            </td>
+        </tr>
+
+        <tr *ngIf="request['client_ip_address']">
+            <th>Client IP</th>
+            <td>{{ request['client_ip_address'] }}</td>
+        </tr>
+
+        <tr *ngIf="request['user_agent']">
+            <th>User Agent</th>
+            <td><span truncate lines="2">{{ request['user_agent'] }}</span></td>
+        </tr>
+
+        <tr class="hidden-print" *ngIf="request['data']['@device']">
+            <th>Device</th>
+            <td>{{ request['data']['@device'] }}</td>
+        </tr>
+
+        <tr class="hidden-print" *ngIf=" request['data']['@browser']">
+            <th>Browser</th>
+            <td>{{ request['data']['@browser' ]}} <abbr *ngIf="request['data']['@browser_major_version']" title="{{ request['data']['@browser_version']}}">{{ request['data']['@browser_major_version'] }}</abbr></td>
+        </tr>
+
+        <tr class="hidden-print" *ngIf="request['data']['@os']">
+            <th>Browser OS</th>
+            <td>{{ request['data']['@os'] }} <abbr *ngIf="request['data']['@os_major_version']" title="{{ request['data']['@os_version'] }}">{{ request['data']['@os_major_version'] }}</abbr></td>
+        </tr>
+    </table>
+
+    <!--<extended-data-item [can-promote]="false" [title]="'Post Data'" [data]="request['post_data']"></extended-data-item>-->
+
+    <div *ngIf="hasCookies">
+        <h4>Cookie Values</h4>
+
+        <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let key of request['cookies'] | ObjNgFor">
+                    <td>{{ key }}</td>
+                    <td><span truncate lines="3">{{ request['cookies'][key] }}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="request['data']" [excluded-keys]="excludedAdditionalData"></app-extended-data-item>-->
+</ng-container>
+
+<ng-container *ngIf="tab == 'session'">
+    <div class="hidden-print">
+        <div *ngIf="!project['has_premium_features']">
+            <div class="alert alert-danger alert-banner m-b-none">
+                <h4><a ng-click="appVm.changePlan(vm.project.organization_id)">{{ project['organization_name'] }}</a> is attempting to use a premium feature.</h4>
+
+                <p><a ng-click="appVm.changePlan(vm.project.organization_id)">Upgrade now</a> to enable sessions and other premium features!</p>
+            </div>
+            <br />
+        </div>
+
+        <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+            <tr>
+                <th>Occurred On</th>
+                <td>DateTime (<app-timeago [date]="event['date']"></app-timeago>)</td>
+            </tr>
+            <tr *ngIf="isSessionStart">
+                <th>Duration</th>
+                <td>
+                    <span *ngIf="!event['data']['sessionend']" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
+                    <abbr title="Seconds"><app-duration [value]="getDuration(event)"></app-duration></abbr>
+                    <span *ngIf="event['data']['sessionend']">(ended <app-timeago [date]="event['data']['sessionend']"></app-timeago>)</span>
+                </td>
+            </tr>
+        </table>
+
+        <h3>Session Events</h3>
+        <app-events [settings]="sessionEvents"></app-events>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="tab == 'simple-error'">
+    <h3 class="visible-print">Exception</h3>
+
+    <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+        <tr>
+            <th>Occurred On</th>
+            <td>DateTime (<app-timeago [date]="event['date']"></app-timeago>)</td>
+        </tr>
+        <tr>
+            <th>Error Type</th>
+            <td><span truncate>{{ errorType }}</span></td>
+        </tr>
+        <tr>
+            <th>Message</th>
+            <td><span truncate lines="4">{{ message }}</span></td>
+        </tr>
+        <tr *ngIf="event['data']['@submission_method']">
+            <th>Submission Method</th>
+            <td><span truncate>{{ event['data']['@submission_method'] }}</span></td>
+        </tr>
+    </table>
+
+    <div class="pull-right m-t-xs hidden-print">
+        <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()" [hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+    </div>
+    <h3>Stack Trace</h3>
+    <!--<app-simple-stack-trace [exception]="event['data']['@simple_error']" [text-stack-trace]="textStackTrace"></app-simple-stack-trace>-->
+
+    <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="event['data']['@error']['data']"></app-extended-data-item>-->
+</ng-container>

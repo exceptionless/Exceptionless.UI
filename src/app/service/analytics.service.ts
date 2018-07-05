@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {NgxAnalytics} from 'ngx-analytics';
-import {Locker, DRIVERS} from 'angular-safeguard';
+import { Injectable } from '@angular/core';
+import { NgxAnalytics } from 'ngx-analytics';
+import { Locker, DRIVERS } from 'angular-safeguard';
 
 @Injectable({
     providedIn: 'root'

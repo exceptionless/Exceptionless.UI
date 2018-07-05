@@ -79,10 +79,10 @@ export class EventService {
         return this.http.get(`events/sessions/${mergedOptions}`);
     }
 
-    getById(id, options, optionsCallback) {
+    getById(id, options, optionsCallback): Observable<HttpResponse<any>> {
         optionsCallback = typeof optionsCallback === 'function' ? optionsCallback : function(o) { return o; };
         const data = optionsCallback(this.filterService.apply(options));
-        return this.http.get(`events/${id}`, { params: data });
+        return this.http.get(`events/${id}`, { observe: 'response', params: data });
     }
 
     getByReferenceId(id, options) {
@@ -97,9 +97,7 @@ export class EventService {
     }
 
     getByStackId(id, options): Observable<HttpResponse<any>> {
-        console.log('options = ', options);
         const params = this.filterService.apply(options, false);
-        console.log('params = ', params);
         return this.http.get(`stacks/${id}/events`, { observe: 'response', params: params });
     }
 

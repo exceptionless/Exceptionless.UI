@@ -23,6 +23,7 @@ import { FrequentComponent } from './type/common/frequent/frequent.component';
 import { UsersComponent } from './type/common/users/users.component';
 import { NewComponent } from './type/common/new/new.component';
 import { StackComponent } from './type/components/stack/stack.component';
+import {EventComponent} from "./type/components/event/event.component";
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -61,6 +62,7 @@ const routes: Routes = [
             },
             { path: 'account/manage', component: AccountManageComponent },
             { path: 'stack/:id', component: StackComponent },
+            { path: 'event/:id', component: EventComponent }
         ],
         canActivate: [AuthGuard],
     },
