@@ -74,10 +74,10 @@
     moment.locale(lang);
     $translateProvider.useSanitizeValueStrategy('escapeParameters');
     $translateProvider.useStaticFilesLoader({
-        prefix: '/lang/',
-        suffix: '.json'
+      prefix: '/lang/',
+      suffix: '.json'
     });
-    $translateProvider.preferredLanguage(lang);
+    $translateProvider.preferredLanguage(lang).fallbackLanguage('en-us');
 
     function setRouteFilter(filterService, organizationId, projectId, type) {
       filterService.setOrganizationId(organizationId, true);
@@ -126,6 +126,11 @@
       controllerAs: 'appVm',
       data: {
         requireAuthentication: true
+      },
+      resolve: {
+        translateReady: function($translate) {
+          return $translate.onReady();
+        }
       }
     });
 
