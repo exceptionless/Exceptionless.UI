@@ -238,7 +238,7 @@
       }
 
       function removeProject() {
-        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this project?'), translateService.T('Delete Project')).then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete the "' + vm.project.name + '" project?'), translateService.T('Delete Project')).then(function () {
           function onSuccess() {
             notificationService.info(translateService.T('Successfully queued the project for deletion.'));
             $state.go('app.project.list');

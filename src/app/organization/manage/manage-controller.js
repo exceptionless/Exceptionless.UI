@@ -140,7 +140,7 @@
       }
 
       function removeOrganization() {
-        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete this organization?'), translateService.T('Delete Organization')).then(function () {
+        return dialogService.confirmDanger(translateService.T('Are you sure you want to delete the "' + vm.organization.name + '" organization?'), translateService.T('Delete Organization')).then(function () {
           function onSuccess() {
             notificationService.info(translateService.T('Successfully queued the organization for deletion.'));
             $state.go('app.organization.list');
