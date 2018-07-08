@@ -68,6 +68,7 @@ export class EventComponent implements OnInit {
         hideSessionStartTime: true
     };
     tabs = [];
+    tab = '';
     previous = '';
     next = '';
     clipboardSupported = this.clipboardService.isSupported;
@@ -88,9 +89,16 @@ export class EventComponent implements OnInit {
         this.activatedRoute.params.subscribe( (params) => {
             this._eventId = params['id'];
         });
+
+        this.tab = this.activatedRoute.snapshot.queryParams['tab'];
     }
 
     ngOnInit() {
+        this.get();
+    }
+
+    get() {
+        this.getEvent().then(() => { this.getProject().then(() => { this.buildTabs(this.tab); } ); });
     }
 
     addHotKeys() {
@@ -152,9 +160,10 @@ export class EventComponent implements OnInit {
         this.references = [];
 
         const referencePrefix = '@ref:';
-        this.event['data'].forEach((data, key) => {
+
+        Object.keys(this.event['data']).map((key) => {
             if (key.startsWith(referencePrefix)) {
-                this.references.push({ id: data, name: toSpacedWords(key.slice(5)) });
+                this.references.push({ id: this.event['data'][key], name: toSpacedWords(key.slice(5)) });
             }
         });
     }
@@ -184,7 +193,7 @@ export class EventComponent implements OnInit {
 
         const extendedDataItems = [];
 
-        this.event['data'].forEach((data, key) => {
+        Object.keys(this.event['data']).map((key) => {
             if (key === '@trace') {
                 key = 'Trace Log';
             }
@@ -194,11 +203,11 @@ export class EventComponent implements OnInit {
             }
 
             if (this.isPromoted(key)) {
-                tabs.push({index: ++tabIndex, title: key, template_key: 'promoted', data: data});
+                this.tabs.push({index: ++tabIndex, title: key, template_key: 'promoted', data: this.event['data'][key]});
             } else if (this._knownDataKeys.indexOf(key) < 0) {
-                extendedDataItems.push({title: key, data: data});
+                extendedDataItems.push({title: key, data: this.event['data'][key]});
             }
-        }, tabs);
+        });
 
         if (extendedDataItems.length > 0) {
             tabs.push({index: ++tabIndex, title: 'Extended Data', template_key: 'extended-data', data: extendedDataItems});
@@ -237,11 +246,11 @@ export class EventComponent implements OnInit {
         const onSuccess = () => {
             this.project['promoted_tabs'].splice(indexOf, 1);
             this.buildTabs('Extended Data');
-        }
+        };
 
-        function onFailure(response) {
+        const onFailure = (response) => {
             this.notificationService.error('Failed!', 'An error occurred promoting tab.');
-        }
+        };
 
         const indexOf = this.project['promoted_tabs'].indexOf(tabName);
         if (indexOf < 0) {
@@ -259,8 +268,12 @@ export class EventComponent implements OnInit {
     }
 
     getCurrentTab() {
-        const tab = this.tabs.filter(function(t) { return t.index === this.activeTabIndex; })[0];
-        return tab && tab['index'] > 0 ? tab['title'] : 'Overview';
+        if (this.tabs.length === 0) {
+            const tab = this.tabs.filter(function(t) { return t['index'] === this.activeTabIndex; })[0];
+            return tab && tab['index'] > 0 ? tab['title'] : 'Overview';
+        } else {
+            return 'Overview';
+        }
     }
 
     getDuration() {
@@ -303,7 +316,7 @@ export class EventComponent implements OnInit {
             return options;
         }
 
-        const onSuccess = (response) => {
+        const onSuccess = (response, link) => {
             const getErrorType = (event) => {
                 const error = event['data'] && event['data']['@error'];
                 if (error) {
@@ -343,7 +356,7 @@ export class EventComponent implements OnInit {
             this.userDescription = this.userDescription && this.userDescription['description'];
             this.version = this.event['data'] && this.event['data']['@version'];
 
-            const links = this.linkService.getLinks(response.headers('link'));
+            const links = this.linkService.getLinks(link);
             this.previous = links['previous'] ? links['previous'].split('/').pop() : null;
             this.next = links['next'] ? links['next'].split('/').pop() : null;
 
@@ -374,7 +387,7 @@ export class EventComponent implements OnInit {
         return new Promise((resolve, reject) => {
             this.eventService.getById(this._eventId, {}, optionsCallback).subscribe(
                 res => {
-                    onSuccess(res);
+                    onSuccess(res, res.headers.get('link'));
                     resolve(res);
                 },
                 err => {

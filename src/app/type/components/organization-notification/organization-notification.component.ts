@@ -330,7 +330,7 @@ export class OrganizationNotificationComponent implements OnInit {
             organizationId = this.freeOrganizations[0].id;
         }
 
-        // need to implement yet [frank lin]
+        // need to implement yet [Exceptionless]
         // return billingService.changePlan(organizationId).catch(function(e){});
         return false;
     }

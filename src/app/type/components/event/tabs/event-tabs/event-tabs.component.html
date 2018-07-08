@@ -145,9 +145,9 @@
             <th>Process Memory</th>
             <td>{{ environment['process_memory_size'] }}</td>
         </tr>
-        <tr *ngIf="vm.environment.o_s_name">
+        <tr *ngIf="environment['o_s_name']">
             <th>OS Name</th>
-            <td><span truncate>{{ vm.environment['o_s_name'] }}</span></td>
+            <td><span truncate>{{ environment['o_s_name'] }}</span></td>
         </tr>
         <tr *ngIf="environment['o_s_version']">
             <th>OS Version</th>
@@ -157,7 +157,7 @@
             <th>Architecture</th>
             <td>{{ environment['architecture'] }}</td>
         </tr>
-        <tr *ngIf="vm.environment.runtime_version">
+        <tr *ngIf="environment['runtime_version']">
             <th>Runtime Version</th>
             <td>{{ environment['runtime_version'] }}</td>
         </tr>
@@ -194,11 +194,11 @@
             <th>Message</th>
             <td><span truncate lines="10">{{ message }}</span></td>
         </tr>
-        <tr *ngIf="event['data']['@error']['code']">
+        <tr *ngIf="event['data'] != null && event['data']['@error'] != null && event['data']['@error']['code'] != null">
             <th>Code</th>
             <td><span truncate>{{ event['data']['@error']['code'] }}</span></td>
         </tr>
-        <tr *ngIf="event['data']['@submission_method']">
+        <tr *ngIf="event['data'] != null && event['data']['@submission_method'] != null">
             <th>Submission Method</th>
             <td><span truncate>{{ event['data']['@submission_method'] }}</span></td>
         </tr>
@@ -214,7 +214,7 @@
 
     <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="event['data']['@error']['data']['@ext']"></app-extended-data-item>-->
 
-    <div *ngIf="event['data']['@error']['modules']">
+    <div *ngIf="event['data'] != null && event['data']['@error'] != null && event['data']['@error']['modules'] != null">
         <h4>Loaded Modules</h4>
         <table class="table table-striped table-bordered table-fixed b-t">
             <thead>
@@ -254,7 +254,7 @@
         <tr>
             <th>Referrer</th>
             <td>
-            <span *ngIf="vm.request.referrer">
+            <span *ngIf="request['referrer']">
                 <a href="#" target="_blank" truncate>{{ request['referrer'] }}</a>
             </span>
                 <em *ngIf="!request['referrer']">None</em>
@@ -271,17 +271,17 @@
             <td><span truncate lines="2">{{ request['user_agent'] }}</span></td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="request['data']['@device']">
+        <tr class="hidden-print" *ngIf="request['data'] != null && request['data']['@device'] != null">
             <th>Device</th>
             <td>{{ request['data']['@device'] }}</td>
         </tr>
 
-        <tr class="hidden-print" *ngIf=" request['data']['@browser']">
+        <tr class="hidden-print" *ngIf="request['data'] != null && request['data']['@browser'] != null">
             <th>Browser</th>
             <td>{{ request['data']['@browser' ]}} <abbr *ngIf="request['data']['@browser_major_version']" title="{{ request['data']['@browser_version']}}">{{ request['data']['@browser_major_version'] }}</abbr></td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="request['data']['@os']">
+        <tr class="hidden-print" *ngIf="request['data'] != null && request['data']['@os'] != null">
             <th>Browser OS</th>
             <td>{{ request['data']['@os'] }} <abbr *ngIf="request['data']['@os_major_version']" title="{{ request['data']['@os_version'] }}">{{ request['data']['@os_major_version'] }}</abbr></td>
         </tr>
@@ -343,8 +343,6 @@
 </ng-container>
 
 <ng-container *ngIf="tab == 'simple-error'">
-    <h3 class="visible-print">Exception</h3>
-
     <table class="table table-striped table-bordered table-fixed table-key-value b-t">
         <tr>
             <th>Occurred On</th>
@@ -371,4 +369,15 @@
     <!--<app-simple-stack-trace [exception]="event['data']['@simple_error']" [text-stack-trace]="textStackTrace"></app-simple-stack-trace>-->
 
     <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="event['data']['@error']['data']"></app-extended-data-item>-->
+</ng-container>
+
+<ng-container *ngIf="tab == 'extended-data'">
+    <table class="table table-striped table-bordered table-fixed table-key-value b-t">
+        <tr>
+            <th>Occurred On</th>
+            <td>DateTime (<app-timeago [date]="event['date']"></app-timeago>)</td>
+        </tr>
+    </table>
+
+    <!--<app-extended-data-item [title]="item['title']" [data]="item['data']" [promote-tab]="promoteTab(tabName)" [demote-tab]="demoteTab(tabName)" ng-repeat="item in tab.data | orderBy: 'title'"></app-extended-data-item>-->
 </ng-container>

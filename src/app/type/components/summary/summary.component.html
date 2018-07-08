@@ -80,7 +80,7 @@
         </strong>
     </span>
 
-        <a ui-sref="app.event({ id: source.id })" truncate lines="2">{{ source.data.Message }}</a>
+        <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
     </div>
 
     <div class="hidden-xs error-path" *ngIf="source.data.Path">
@@ -90,7 +90,7 @@
 
 <ng-container *ngIf="source.template_key == 'event-feature-summary'">
     <span *ngIf="showType"><strong>Feature</strong>:&nbsp;</span>
-    <a ui-sref="app.event({ id: source.id })" truncate lines="2">{{ source.data.Source }}</a>
+    <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'event-log-summary'">
@@ -110,7 +110,7 @@
 
 <ng-container *ngIf="source.template_key == 'event-notfound-summary'">
     <span *ngIf="showType"><strong>404</strong>:&nbsp;</span>
-    <a ui-sref="app.event({ id: source.id })" truncate lines="2">{{ source.data.Source }}</a>
+    <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'event-session-summary'">
@@ -134,7 +134,7 @@
             <abbr title="{{ source.data.TypeFullName }}">{{ source.data.Type }}</abbr>:
         </strong>
 
-        <a ui-sref="app.event({ id: source.id })" truncate lines="2">{{ source.data.Message }}</a>
+        <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
     </div>
 
     <div class="hidden-xs error-path" *ngIf="source.data.Path">
@@ -147,6 +147,6 @@
     <span *ngIf="showType && source.data.Source">&nbsp;in&nbsp;</span>
     <strong *ngIf="source.data.Source">{{ source.data.Source }}</strong>
     <span *ngIf="showType || source.data.Source">:&nbsp;</span>
-    <a ui-sref="app.event({ id: source.id })" truncate lines="2">{{ source.data.Message }}</a>
+    <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
 </ng-container>
 

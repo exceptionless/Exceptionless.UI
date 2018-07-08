@@ -78,19 +78,19 @@
             <div class="panel-heading">
                 Stack
                 <span class="labels">
-                            <span class="label label-success" *ngIf="stack['date_fixed'] && !stack['is_regressed']">
-                                <span class="hidden-xs">FIXED<span *ngIf="stack['fixed_in_version']"> IN {{ stack['fixed_in_version'] }}</span></span>
-                                <span class="visible-xs">F</span>
-                            </span>
-                            <span class="label label-success" *ngIf="stack['is_regressed']">
-                                <span class="hidden-xs">REGRESSED</span>
-                                <span class="visible-xs">R</span>
-                            </span>
-                            <span class="label label-success" *ngIf="stack['is_hidden']">
-                                <span class="hidden-xs">HIDDEN</span>
-                                <span class="visible-xs">H</span>
-                            </span>
-                        </span>
+                    <span class="label label-success" *ngIf="stack['date_fixed'] && !stack['is_regressed']">
+                        <span class="hidden-xs">FIXED<span *ngIf="stack['fixed_in_version']"> IN {{ stack['fixed_in_version'] }}</span></span>
+                        <span class="visible-xs">F</span>
+                    </span>
+                    <span class="label label-success" *ngIf="stack['is_regressed']">
+                        <span class="hidden-xs">REGRESSED</span>
+                        <span class="visible-xs">R</span>
+                    </span>
+                    <span class="label label-success" *ngIf="stack['is_hidden']">
+                        <span class="hidden-xs">HIDDEN</span>
+                        <span class="visible-xs">H</span>
+                    </span>
+                </span>
 
                 <div class="btn-toolbar pull-right hidden-print" role="toolbar" aria-label="Stack Options">
                     <div class="btn-group btn-group-sm" role="group" *ngIf="stack['type'] === 'error' || stack['type'] === '404'">

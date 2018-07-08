@@ -77,7 +77,7 @@ export class OrganizationService {
 
     getAll(options, useCache) {
         if (useCache === undefined || useCache) {
-            // need to implement later[frank lin]
+            // need to implement later[Exceptionless]
             return null;
         }
 
@@ -86,7 +86,7 @@ export class OrganizationService {
 
     getById(id, useCache) {
         if (useCache === undefined || useCache) {
-            // need to implement later[frank lin]
+            // need to implement later[Exceptionless]
             return null;
         }
 

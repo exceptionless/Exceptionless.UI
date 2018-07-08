@@ -16,9 +16,9 @@
 
             <div class="panel-body">
                 <ngb-tabset class="tab-container">
-                    <ngb-tab title="Overview">
+                    <ngb-tab *ngFor="let tab of tabs" title="{{ tab['title'] }}">
                         <ng-template ngbTabContent>
-                            <app-event-tabs [tab]="'overview'"></app-event-tabs>
+                            <app-event-tabs [tab]="tab['template_key']"></app-event-tabs>
                         </ng-template>
                     </ngb-tab>
                 </ngb-tabset>

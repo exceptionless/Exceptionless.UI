@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { FilterService } from '../../../service/filter.service';
 import { EventsActionService } from '../../../service/events-action.service';
 import { NotificationService } from '../../../service/notification.service';
@@ -30,6 +31,7 @@ export class EventsComponent implements OnInit {
     hideSessionStartTime: boolean;
 
     constructor(
+        private router: Router,
         private filterService: FilterService,
         private eventService: EventService,
         private eventsActionService: EventsActionService,
@@ -134,9 +136,9 @@ export class EventsComponent implements OnInit {
     open(id, event) {
         const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
-            /*$window.open($state.href('app.stack', { id: id }, { absolute: true }), '_blank');*/
+            window.open(`/type/event/${id}`, '_blank');
         } else {
-            /*$state.go('app.stack', { id: id });*/
+            this.router.navigate([`/type/event/${id}`]);
         }
 
         event.preventDefault();
