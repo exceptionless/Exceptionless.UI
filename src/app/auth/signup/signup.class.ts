@@ -8,6 +8,5 @@ export class Signup {
 
 
 /*
-Copyright 2018 NOVA Inc. All Rights Reserved.
-Frank Lin
+Copyright 2018 Exceptionless. All Rights Reserved.
 */
