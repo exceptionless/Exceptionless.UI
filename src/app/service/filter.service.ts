@@ -116,12 +116,32 @@ export class FilterService {
         return this._raw;
     }
 
-    getProjectId() {
-        return this._projectId;
+    getProjectType() {
+        return this.filterStoreService.getProjectType();
+    }
+
+    getProjectTypeId() {
+        return this.filterStoreService.getProjectId();
     }
 
     getOrganizationId() {
-        return this._organizationId;
+        if (this.getProjectType() === 'organization') {
+            return this.filterStoreService.getProjectId();
+        } else {
+            return null;
+        }
+    }
+
+    getProjectId() {
+        if (this.getProjectType() === 'project') {
+            return this.filterStoreService.getProjectId();
+        } else {
+            return null;
+        }
+    }
+
+    getProjectName() {
+        return this.filterStoreService.getProjectName();
     }
 
     getEventType() {
@@ -252,5 +272,11 @@ export class FilterService {
         if (!suspendNotifications) {
             this.fireFilterChanged();
         }
+    }
+
+    setProjectFilter(type, id, name) {
+        this.filterStoreService.setProjectId(id);
+        this.filterStoreService.setProjectName(name);
+        this.filterStoreService.setProjectType(type);
     }
 }

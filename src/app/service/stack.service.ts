@@ -37,15 +37,15 @@ export class StackService {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/${mergedOptions}`);
+            return this.http.get(`organizations/${organization}/stacks`, { params: mergedOptions });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks/${mergedOptions}`);
+            return this.http.get(`projects/${project}/stacks`, { params: mergedOptions });
         }
 
-        return this.http.get(`stacks/${mergedOptions}`);
+        return this.http.get(`stacks`, { params: mergedOptions });
     }
 
     getById(id): Observable<HttpResponse<any>> {
@@ -58,15 +58,17 @@ export class StackService {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/frequent/${mergedOptions}`, {
+            return this.http.get(`organizations/${organization}/stacks/frequent`, {
                 observe: 'response',
+                params: mergedOptions
             });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks/frequent/${mergedOptions}`, {
+            return this.http.get(`projects/${project}/stacks/frequent`, {
                 observe: 'response',
+                params: mergedOptions
             });
         }
 
@@ -78,30 +80,30 @@ export class StackService {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/users/${mergedOptions}`);
+            return this.http.get(`organizations/${organization}/stacks/users`, { params: mergedOptions });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks/users/${mergedOptions}`);
+            return this.http.get(`projects/${project}/stacks/users`, { params: mergedOptions });
         }
 
-        return this.http.get(`stacks/users/${mergedOptions}`);
+        return this.http.get(`stacks/users`, { params: mergedOptions });
     }
 
     getNew(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/new/${mergedOptions}`);
+            return this.http.get(`organizations/${organization}/stacks/new`, { params: mergedOptions });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks/new/${mergedOptions}`);
+            return this.http.get(`projects/${project}/stacks/new`, { params: mergedOptions });
         }
 
-        return this.http.get(`stacks/new/${mergedOptions}`);
+        return this.http.get(`stacks/new`, { params: mergedOptions });
     }
 
     markCritical(id) {

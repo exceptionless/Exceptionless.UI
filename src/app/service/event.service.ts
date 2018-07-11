@@ -51,12 +51,12 @@ export class EventService {
 
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/events/${mergedOptions}`, { observe: 'response' });
+            return this.http.get(`organizations/${organization}/events`, { observe: 'response', params: mergedOptions });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/events/${mergedOptions}`, { observe: 'response' });
+            return this.http.get(`projects/${project}/events`, { observe: 'response', params: mergedOptions });
         }
 
         return this.http.get('events', { observe: 'response', params: mergedOptions });
@@ -68,15 +68,15 @@ export class EventService {
 
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/events/sessions/${mergedOptions}`);
+            return this.http.get(`organizations/${organization}/events/sessions`, { params: mergedOptions });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/events/sessions/${mergedOptions}`);
+            return this.http.get(`projects/${project}/events/sessions`, { params: mergedOptions });
         }
 
-        return this.http.get(`events/sessions/${mergedOptions}`);
+        return this.http.get(`events/sessions`, { params: mergedOptions });
     }
 
     getById(id, options, optionsCallback): Observable<HttpResponse<any>> {

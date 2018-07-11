@@ -25,6 +25,7 @@ export class ProjectFilterComponent implements OnInit {
 
     ngOnInit() {
         this.getOrganizations().then(() => { this.getProjects(); });
+        this.filteredDisplayName = this.filterService.getProjectName();
     }
 
     getOrganizations() {
@@ -65,8 +66,9 @@ export class ProjectFilterComponent implements OnInit {
         });
     }
 
-    setItem(id, name) {
+    setItem(id, name, type) {
         this.filteredDisplayName = name;
+        this.filterService.setProjectFilter(type, id, name);
     }
 
     getFilterName() {

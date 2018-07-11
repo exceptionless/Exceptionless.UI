@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import 'rxjs/add/operator/toPromise';
 import { OrganizationService } from '../../../service/organization.service';
 import { ProjectService } from '../../../service/project.service';
 import { FilterService } from '../../../service/filter.service';
@@ -55,8 +54,8 @@ export class OrganizationNotificationComponent implements OnInit {
             if (!this.projects || !this.filterService.getProjectId()) {
                 return null;
             }
-
-            const project = this.projects.filter(function(o) { return o.id === this.filterService.getProjectId(); })[0];
+            const projectId =  this.filterService.getProjectId();
+            const project = this.projects.filter(function(o) { return o.id === projectId; })[0];
             return project ? project.organization_id : null;
         };
 
@@ -71,7 +70,8 @@ export class OrganizationNotificationComponent implements OnInit {
         }
 
         if (this.filterService.getProjectId()) {
-            return this.projects.filter(function (p) { return p.id === this.filterService.getProjectId(); });
+            const projectId =  this.filterService.getProjectId();
+            return this.projects.filter(function (p) { return p.id === projectId; });
         }
 
         return this.projects;
