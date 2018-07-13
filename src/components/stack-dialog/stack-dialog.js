@@ -7,6 +7,7 @@
     'dialogs.main',
 
     'exceptionless.autofocus',
+    'exceptionless.semver',
     'exceptionless.validators'
   ]);
 }());

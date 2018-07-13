@@ -19,6 +19,7 @@
     <div class="form-group">
       <input id="version" name="version" type="text" class="form-control input-lg" placeholder="{{::'Optional Version (Example: 1.2.3)' | translate}}"
              ng-model="vm.data.version"
+             semver
              semantic-version-validator
              autofocus />
 
