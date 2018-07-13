@@ -17,6 +17,7 @@ import { NotificationService } from '../../../service/notification.service';
 export class DashboardComponent implements OnInit {
     subscription: any;
     timeFilter = '';
+    projectFilter = '';
     type = '';
     eventType = '';
     seriesData: any[];
@@ -84,6 +85,10 @@ export class DashboardComponent implements OnInit {
     ngOnInit() {
         this.subscription = this.filterStoreService.getTimeFilterEmitter()
             .subscribe(item => { this.get(); });
+
+        this.filterStoreService.getProjectFilterEmitter().subscribe(item => {
+            this.get();
+        });
     }
 
     ngOnDestroy() {
@@ -95,12 +100,12 @@ export class DashboardComponent implements OnInit {
     }
 
     get() {
-        this.getOrganizations().then(() => { this.getStats().then(() => { this.timeFilter = this.filterStoreService.getTimeFilter(); }); });
+        this.getOrganizations().then(() => { this.getStats().then(() => { this.timeFilter = this.filterStoreService.getTimeFilter(); this.projectFilter = this.filterService.getProjectTypeId(); }); });
     }
 
     getOrganizations() {
         return new Promise((resolve, reject) => {
-            this.organizationService.getAll('', false).subscribe(
+            this.organizationService.getAll('').subscribe(
                 res => {
                     this.organizations = JSON.parse(JSON.stringify(res));
                     resolve(this.organizations);

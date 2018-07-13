@@ -199,7 +199,7 @@ export class OrganizationNotificationComponent implements OnInit {
             }
 
             return new Promise((resolve, reject) => {
-                this.organizationService.getById(organizationId, false).subscribe(
+                this.organizationService.getById(organizationId).subscribe(
                     res => {
                         this.organizations.push(JSON.parse(JSON.stringify(res)));
 
@@ -217,7 +217,7 @@ export class OrganizationNotificationComponent implements OnInit {
 
         const getAllOrganizations = () => {
             return new Promise((resolve, reject) => {
-                this.organizationService.getAll('', false).subscribe(
+                this.organizationService.getAll('').subscribe(
                     res => {
                         this.organizations = JSON.parse(JSON.stringify(res));
 
@@ -238,7 +238,7 @@ export class OrganizationNotificationComponent implements OnInit {
 
     getProjects() {
         return new Promise((resolve, reject) => {
-            this.projectService.getAll('', false).subscribe(
+            this.projectService.getAll('').subscribe(
                 res => {
                     this.projects = JSON.parse(JSON.stringify(res));
 

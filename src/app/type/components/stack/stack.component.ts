@@ -220,7 +220,7 @@ export class StackComponent implements OnInit {
 
     getOrganizations() {
         return new Promise((resolve, reject) => {
-            this.organizationService.getAll('', false).subscribe(
+            this.organizationService.getAll('').subscribe(
                 res => {
                     this._organizations = JSON.parse(JSON.stringify(res));
 
@@ -236,7 +236,7 @@ export class StackComponent implements OnInit {
 
     getProject() {
         return new Promise((resolve, reject) => {
-            this.projectService.getById(this.stack['project_id'], false).subscribe(
+            this.projectService.getById(this.stack['project_id']).subscribe(
                 res => {
                     this.project = JSON.parse(JSON.stringify(res));
 

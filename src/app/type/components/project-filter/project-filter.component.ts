@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { NotificationService } from '../../../service/notification.service';
 import { ProjectService } from '../../../service/project.service';
 import { OrganizationService } from '../../../service/organization.service';
@@ -17,6 +18,7 @@ export class ProjectFilterComponent implements OnInit {
     projects: any[];
 
     constructor(
+        private router: Router,
         private notificationService: NotificationService,
         private projectService: ProjectService,
         private organizationService: OrganizationService,
@@ -30,7 +32,7 @@ export class ProjectFilterComponent implements OnInit {
 
     getOrganizations() {
         return new Promise((resolve, reject) => {
-            this.organizationService.getAll('', false).subscribe(
+            this.organizationService.getAll('').subscribe(
                 res => {
                     this.organizations = JSON.parse(JSON.stringify(res));
                     this.isLoadingOrganizations = false;
@@ -49,7 +51,7 @@ export class ProjectFilterComponent implements OnInit {
 
     getProjects() {
         return new Promise((resolve, reject) => {
-            this.projectService.getAll('', false).subscribe(
+            this.projectService.getAll('').subscribe(
                 res => {
                     this.projects = JSON.parse(JSON.stringify(res));
                     this.isLoadingProjects = false;
@@ -69,6 +71,14 @@ export class ProjectFilterComponent implements OnInit {
     setItem(id, name, type) {
         this.filteredDisplayName = name;
         this.filterService.setProjectFilter(type, id, name);
+        const basicURl =  this.getStateName();
+        if (basicURl) {
+            if (type === 'All Projects') {
+                setTimeout(() => { this.router.navigateByUrl(`type/${basicURl}`, { skipLocationChange: false }); }, 100);
+            } else {
+                setTimeout(() => { this.router.navigateByUrl(`type/${type}/${id}/${basicURl}`, { skipLocationChange: false }); }, 100);
+            }
+        }
     }
 
     getFilterName() {
@@ -93,5 +103,32 @@ export class ProjectFilterComponent implements OnInit {
 
     getProjectsByOrganizationId(id) {
         return this.projects.filter(function (project) { return project.organization_id === id; });
+    }
+
+    getStateName() {
+        const url = this.router.url;
+        const urlTypeArray = url.split('/');
+        const type = urlTypeArray[urlTypeArray.length - 2];
+        if (url.endsWith('frequent')) {
+            return `${type}/frequent`;
+        }
+
+        if (url.endsWith('new')) {
+            return `${type}/new`;
+        }
+
+        if (url.endsWith('recent')) {
+            return `${type}/recent`;
+        }
+
+        if (url.endsWith('users')) {
+            return `${type}/users`;
+        }
+
+        if (url.endsWith('dashboard')) {
+            return `${type}/dashboard`;
+        }
+
+        return null;
     }
 }

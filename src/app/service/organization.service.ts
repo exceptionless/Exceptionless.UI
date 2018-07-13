@@ -75,21 +75,11 @@ export class OrganizationService {
         ]).toDate();
     }
 
-    getAll(options, useCache) {
-        if (useCache === undefined || useCache) {
-            // need to implement later[Exceptionless]
-            return null;
-        }
-
+    getAll(options) {
         return this.http.get(`organizations/${options}`);
     }
 
-    getById(id, useCache) {
-        if (useCache === undefined || useCache) {
-            // need to implement later[Exceptionless]
-            return null;
-        }
-
+    getById(id) {
         return this.http.get(`organizations/${id}`);
     }
 

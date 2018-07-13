@@ -7,8 +7,8 @@
 
             <nav class="navi">
                 <ul class="nav">
-                    <li routerLinkActive="active">
-                        <a routerLink="/type/{{ types.exceptions }}/dashboard" class="auto">
+                    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                        <a routerLink="/type/{{ filterUrlPattern }}{{ types.exceptions }}/dashboard" class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>

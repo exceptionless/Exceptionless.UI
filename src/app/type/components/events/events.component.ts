@@ -17,6 +17,7 @@ export class EventsComponent implements OnInit {
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;
+    @Input() projectFilter;
     next: string;
     previous: string;
     events: any[] = [];

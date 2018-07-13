@@ -415,7 +415,7 @@ export class EventComponent implements OnInit {
         }
 
         return new Promise((resolve, reject) => {
-            this.projectService.getById(this.event['project_id'], false).subscribe(
+            this.projectService.getById(this.event['project_id']).subscribe(
                 res => {
                     onSuccess(res);
                     resolve(res);

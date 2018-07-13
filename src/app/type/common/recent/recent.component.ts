@@ -10,8 +10,8 @@ import { EventService } from '../../../service/event.service';
 })
 
 export class RecentComponent implements OnInit {
-    subscription: any;
     timeFilter = '';
+    projectFilter = '';
     mostRecent: any = {
         get: (options) => {
             return this.eventService.getAll(options);
@@ -31,8 +31,8 @@ export class RecentComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.subscription = this.filterStoreService.getTimeFilterEmitter()
-            .subscribe(item => { this.timeFilter = item; });
+        this.filterStoreService.getTimeFilterEmitter().subscribe(item => { this.timeFilter = item; });
+        this.filterStoreService.getProjectFilterEmitter().subscribe(item => { this.projectFilter = item['id']; });
     }
 
 }

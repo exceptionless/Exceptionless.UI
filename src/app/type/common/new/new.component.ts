@@ -9,8 +9,8 @@ import { FilterStoreService } from '../../../service/filter-store.service';
     styleUrls: ['./new.component.less']
 })
 export class NewComponent implements OnInit {
-    subscription: any;
     timeFilter = '';
+    projectFilter = '';
     newest: any = {
         get: this.stackService.getNew,
         options: {
@@ -28,7 +28,7 @@ export class NewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.subscription = this.filterStoreService.getTimeFilterEmitter()
-            .subscribe(item => { this.timeFilter = item; });
+        this.filterStoreService.getTimeFilterEmitter().subscribe(item => { this.timeFilter = item; });
+        this.filterStoreService.getProjectFilterEmitter().subscribe(item => { this.projectFilter = item['id']; });
     }
 }

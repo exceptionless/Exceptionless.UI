@@ -63,18 +63,18 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-bar-chart-o"></i>History</div>
                 <div class="panel-body">
-                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [eventType]="eventType" [filterTime]="timeFilter"></app-rickshaw>
+                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-rickshaw>
                 </div>
             </div>
 
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-signal"></i>Most Frequent</div>
-                <app-stacks [settings]="mostFrequent" [eventType]="eventType" [filterTime]="timeFilter"></app-stacks>
+                <app-stacks [settings]="mostFrequent" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-stacks>
             </div>
 
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-calendar"></i>Most Recent</div>
-                <app-events [settings]="mostRecent" [eventType]="eventType" [filterTime]="timeFilter"></app-events>
+                <app-events [settings]="mostRecent" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-events>
             </div>
         </div>
     </div>

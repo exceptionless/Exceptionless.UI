@@ -27,40 +27,27 @@ export class ProjectService {
         return this.http.delete(`projects/${id}/promotedtabs?name=${name}`);
     }
 
-    getAll(options, useCache) {
-        if (useCache === undefined || useCache) {
-            // need to implement later[Exceptionless]
-            return null;
-        }
-
+    getAll(options) {
         return this.http.get('projects?limit=100');
     }
 
-    getById(id, useCache) {
-        if (useCache === undefined || useCache) {
-            // need to implement later[Exceptionless]
-            return null;
-        }
-
+    getById(id) {
         return this.http.get(`projects/${id}`);
     }
 
-    getByOrganizationId(id, options, useCache) {
+    getByOrganizationId(id, options) {
         return this.http.get(`organizations/${id}/projects`);
     }
 
     getConfig(id) {
-        // return _cachedRestangular.one('projects', id).one('config').get();
         return this.http.get(`projects/${id}/config`);
     }
 
     getNotificationSettings(id, userId) {
-        // return _cachedRestangular.one('users', userId).one('projects', id).one('notifications').get();
         return this.http.get(`users/${userId}/projects/${id}/notifications`);
     }
 
     getIntegrationNotificationSettings(id, integration) {
-        // return _cachedRestangular.one('projects', id).one(integration, 'notifications').get();
         return this.http.get(`projects/${id}/${integration}/notifications`);
     }
 

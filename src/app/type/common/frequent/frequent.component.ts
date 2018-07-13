@@ -9,8 +9,8 @@ import { FilterStoreService } from '../../../service/filter-store.service';
     styleUrls: ['./frequent.component.less']
 })
 export class FrequentComponent implements OnInit {
-    subscription: any;
     timeFilter = '';
+    projectFilter = '';
     mostFrequent: any = {
         get: this.stackService.getFrequent,
         options: {
@@ -28,8 +28,8 @@ export class FrequentComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.subscription = this.filterStoreService.getTimeFilterEmitter()
-            .subscribe(item => { this.timeFilter = item; });
+        this.filterStoreService.getTimeFilterEmitter().subscribe(item => { this.timeFilter = item; });
+        this.filterStoreService.getProjectFilterEmitter().subscribe(item => { this.projectFilter = item['id']; });
     }
 
 }
