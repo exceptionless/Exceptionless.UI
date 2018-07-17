@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
         return new Promise((resolve, reject) => {
             this.organizationService.getAll('').subscribe(
                 res => {
-                    this.organizations = JSON.parse(JSON.stringify(res));
+                    this.organizations = JSON.parse(JSON.stringify(res.body));
                     resolve(this.organizations);
                 },
                 err => {

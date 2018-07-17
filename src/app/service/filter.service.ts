@@ -3,6 +3,7 @@ import { FilterStoreService } from './filter-store.service';
 import { DateRangeParserService } from './date-range-parser.service';
 import { ObjectIdService } from './object-id.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Injectable()
 export class FilterService {
@@ -38,7 +39,7 @@ export class FilterService {
             filters.push('project:' + this._projectId);
         }
 
-        if (this._eventType && this.filterStoreService.getEventType() !== 'events' && this.filterStoreService.getEventType() !== 'stack') {
+        if (this._eventType && !_.isEmpty(this.filterStoreService.getEventType)) {
             filters.push('type:' + this.filterStoreService.getEventType());
         }
 

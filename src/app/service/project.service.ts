@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable({
     providedIn: 'root'
@@ -27,8 +28,9 @@ export class ProjectService {
         return this.http.delete(`projects/${id}/promotedtabs?name=${name}`);
     }
 
-    getAll(options) {
-        return this.http.get('projects?limit=100');
+    getAll(options?): Observable<HttpResponse<any>> {
+        const mergedOptions = Object.assign({ limit: 100 }, options);
+        return this.http.get('projects', { observe: 'response', params: mergedOptions });
     }
 
     getById(id) {

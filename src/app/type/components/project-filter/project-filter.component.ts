@@ -34,7 +34,7 @@ export class ProjectFilterComponent implements OnInit {
         return new Promise((resolve, reject) => {
             this.organizationService.getAll('').subscribe(
                 res => {
-                    this.organizations = JSON.parse(JSON.stringify(res));
+                    this.organizations = JSON.parse(JSON.stringify(res.body));
                     this.isLoadingOrganizations = false;
 
                     resolve(this.organizations);
@@ -53,7 +53,7 @@ export class ProjectFilterComponent implements OnInit {
         return new Promise((resolve, reject) => {
             this.projectService.getAll('').subscribe(
                 res => {
-                    this.projects = JSON.parse(JSON.stringify(res));
+                    this.projects = JSON.parse(JSON.stringify(res.body));
                     this.isLoadingProjects = false;
 
                     resolve(this.projects);

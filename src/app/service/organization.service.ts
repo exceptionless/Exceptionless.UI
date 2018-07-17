@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ObjectIdService } from './object-id.service';
 import * as moment from 'moment';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable({
     providedIn: 'root'
@@ -75,8 +76,9 @@ export class OrganizationService {
         ]).toDate();
     }
 
-    getAll(options) {
-        return this.http.get(`organizations/${options}`);
+    getAll(options?): Observable<HttpResponse<any>> {
+        const mergedOptions = Object.assign({ limit: 100 }, options);
+        return this.http.get('organizations', { observe: 'response', params: mergedOptions });
     }
 
     getById(id) {

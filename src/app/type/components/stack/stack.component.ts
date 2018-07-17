@@ -222,7 +222,7 @@ export class StackComponent implements OnInit {
         return new Promise((resolve, reject) => {
             this.organizationService.getAll('').subscribe(
                 res => {
-                    this._organizations = JSON.parse(JSON.stringify(res));
+                    this._organizations = JSON.parse(JSON.stringify(res.body));
 
                     resolve(this._organizations);
                 },

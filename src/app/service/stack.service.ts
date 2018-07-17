@@ -12,8 +12,7 @@ export class StackService {
     constructor(
         private http: HttpClient,
         private filterService: FilterService,
-    ) {
-    }
+    ) {}
 
     addLink(id, url) {
         const httpOptions = {

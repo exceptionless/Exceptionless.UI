@@ -75,6 +75,7 @@ import { StackTraceComponent } from './type/components/stack-trace/stack-trace.c
 import { SimpleStackTraceComponent } from './type/components/simple-stack-trace/simple-stack-trace.component';
 import { ExtendedDataItemComponent } from './type/components/event/extended-data-item/extended-data-item.component';
 import { HasPropPipe } from './pipes/has-prop.pipe';
+import { ProjectsComponent } from './type/components/projects/projects.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -137,6 +138,7 @@ export const AuthConfig = {
         SimpleStackTraceComponent,
         ExtendedDataItemComponent,
         HasPropPipe,
+        ProjectsComponent,
     ],
     imports: [
         BrowserModule,
