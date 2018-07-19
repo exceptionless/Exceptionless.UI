@@ -1,5 +1,5 @@
 <div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="col" refresh-on="UserChanged ProjectChanged" refresh-action="vm.get(data)" refresh-debounce="1000">
+    <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-user"></i> My Account</div>
@@ -10,7 +10,7 @@
                             <ng-template ngbTabContent>
                                 <form name="fullNameForm" role="form" class="form-validation" autocomplete="on">
                                     <div class="form-group">
-                                        <img src="//www.gravatar.com/avatar/2c356e305447c597ed0d3c3c16db5bf3?default=mm&size=100" gravatar-size="100" alt="avatar" class="img-thumbnail">
+                                        <img src="//www.gravatar.com/avatar/2c356e305447c597ed0d3c3c16db5bf3?default=mm&size=100" alt="{{ user['full_name'] }}" gravatar-size="100" alt="avatar" class="img-thumbnail">
                                         <div>
                                             <small [innerHTML]="'NOTICE_GRAVATAR'"></small>
                                         </div>
@@ -20,43 +20,39 @@
                                         <label for="name">Full Name</label>
                                         <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                                                placeholder="Your first and last name"
-                                               ng-model="vm.user.full_name"
-                                               ng-model-options="{ debounce: 500 }"
+                                               [(ngModel)]="user['full_name']"
                                                ng-change="vm.saveUser(fullNameForm.$valid)"
-                                               ng-required="true" />
+                                               required
+                                               #name="ngModel"/>
 
-                                        <div class="error" ng-messages="fullNameForm.name.$error" ng-if="fullNameForm.$submitted || fullNameForm.name.$touched">
-                                            <small ng-message="required">Full Name is required.</small>
+                                        <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || submitted">
+                                            <small [hidden]="!name.errors?.required">Full Name is required.</small>
                                         </div>
                                     </div>
                                 </form>
 
-                                <form name="vm.emailAddressForm" role="form" class="form-validation" autocomplete="on">
+                                <form name="emailAddressForm" role="form" class="form-validation" autocomplete="on" #emailAddressForm="ngForm">
                                     <div class="form-group">
                                         <label for="email">Email Address</label>
-                                        <div ng-class="{'input-group': !!vm.emailAddressForm.$pending }">
+                                        <div [ngClass]="{'input-group': !!emailAddressForm.pending }">
                                             <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                                                    placeholder="Email Address"
-                                                   ng-model="vm.user.email_address"
-                                                   ng-model-options="{ debounce: 1000 }"
+                                                   [(ngModel)]="user['email_address']"
                                                    ng-change="vm.saveEmailAddress()"
-                                                   email-address-available-validator
-                                                   required/>
+                                                   required
+                                                   #email="ngModel"/>
 
-                                            <span class="input-group-addon" ng-if="vm.emailAddressForm.$pending">
+                                            <span class="input-group-addon" *ngIf="emailAddressForm.pending">
                                                 <i class="fa fa-fw fa-spinner fa-spin"></i>
                                             </span>
                                         </div>
 
-                                        <div class="error" ng-messages="vm.emailAddressForm.email.$error" ng-if="vm.emailAddressForm.$submitted || vm.emailAddressForm.email.$touched">
-                                            <!--<small ng-message="required">Email Address is required.</small>
-                                            <small ng-message="email">Email Address is required.</small>
-                                            <small ng-message="unique">A user already exists with this email address.</small>-->
+                                        <div class="error" *ngIf="(email.invalid && (email.dirty || email.touched)) || submitted">
+                                            <small [hidden]="!email.errors?.required">Email Address is required.</small>
+                                            <small [hidden]="!email.errors?.email" *ngIf="!email.errors?.required">It muse be email address.</small>
                                         </div>
 
-                                        <p ng-if="!vm.user.is_email_address_verified" class="help-block">
-                                            Email not verified. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.
-                                        </p>
+                                        <p *ngIf="!user['is_email_address_verified']" class="help-block">Email not verified. <a (click)="resendVerificationEmail()">Resend</a> verification email.</p>
                                     </div>
                                 </form>
                             </ng-template>
@@ -64,41 +60,45 @@
 
                         <ngb-tab title="Notifications">
                             <ng-template ngbTabContent>
-                                <form role="form" class="form-validation">
-                                    <div class="alert in fade alert-danger" ng-if="!vm.user.is_email_address_verified || !vm.user.email_notifications_enabled">
-                                        Email notifications are currently disabled. <span ng-if="!vm.user.is_email_address_verified">To enable email notifications you must first verify your email address. <a ng-click="vm.resendVerificationEmail()">Resend</a> verification email.</span>
+                                <form role="form" class="form-validation" #notificationForm="ngForm">
+                                    <div class="alert in fade alert-danger" *ngIf="!user['is_email_address_verified'] || !user['email_notifications_enabled']">
+                                        Email notifications are currently disabled. <span *ngIf="!user['is_email_address_verified']">To enable email notifications you must first verify your email address. <a (click)="resendVerificationEmail()">Resend</a> verification email.</span>
                                     </div>
                                     <div class="checkbox">
                                         <label class="checks">
-                                            <input type="checkbox" ng-model="vm.user.email_notifications_enabled" ng-model-options="{ debounce: 500 }" ng-change="vm.saveEnableEmailNotification()">
+                                            <input name="email-notifications-enabled" type="checkbox" [(ngModel)]="user['email_notifications_enabled']" ng-change="vm.saveEnableEmailNotification()">
                                             <i></i>
                                             Enable email notifications
                                         </label>
                                     </div>
 
-                                    <div ng-if="vm.projects.length > 0">
+                                    <div *ngIf="projects.length > 0">
                                         <hr/>
 
                                         <p>Choose how often you want to receive notifications for event occurrences in this project.</p>
 
-                                        <select class="form-control" ng-model="vm.currentProject" ng-change="vm.getEmailNotificationSettings()" ng-disabled="!(vm.user.email_notifications_enabled && vm.emailNotificationSettings)" ng-options="project.name group by project.organization_name for project in vm.projects | orderBy: 'name' track by project.id"></select>
+                                        <select class="form-control" name="current-project" [(ngModel)]="currentProject['id']" ng-change="vm.getEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings != {})">
+                                            <optgroup *ngFor="let project of projects" label="{{ project['organization_name'] }}">
+                                                <option *ngFor="let loopItem of filterProject(project['organization_name'])" [ngValue]="loopItem['id']">{{ loopItem['name'] }}</option>
+                                            </optgroup>
+                                        </select>
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" ng-model="vm.emailNotificationSettings.send_daily_summary" ng-model-options="{ debounce: 500 }" ng-change="vm.saveEmailNotificationSettings()" ng-disabled="!(vm.user.email_notifications_enabled && vm.emailNotificationSettings)">
+                                                <input type="checkbox" name="send_daily_summary" [(ngModel)]="emailNotificationSettings['send_daily_summary']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings)">
                                                 <i></i>
                                                 Send daily project summary
                                             </label>
                                         </div>
 
-                                        <hr ng-if="!vm.hasPremiumFeatures"/>
-                                        <div class="alert in fade alert-success" ng-if="!vm.hasPremiumFeatures">
-                                            <a ng-click="vm.showChangePlanDialog()">Upgrade now</a> to enable occurrence level notifications!
+                                        <hr *ngIf="!hasPremiumFeatures"/>
+                                        <div class="alert in fade alert-success" *ngIf="!hasPremiumFeatures">
+                                            <a (click)="showChangePlanDialog()">Upgrade now</a> to enable occurrence level notifications!
                                         </div>
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" ng-model="vm.emailNotificationSettings.report_new_errors" ng-model-options="{ debounce: 500 }" ng-change="vm.saveEmailNotificationSettings()" ng-disabled="!vm.hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_errors" [(ngModel)]="emailNotificationSettings['report_new_errors']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on new errors
                                             </label>
@@ -106,7 +106,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" ng-model="vm.emailNotificationSettings.report_critical_errors" ng-model-options="{ debounce: 500 }" ng-change="vm.saveEmailNotificationSettings()" ng-disabled="!vm.hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_errors" [(ngModel)]="emailNotificationSettings['report_critical_errors']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on critical errors
                                             </label>
@@ -114,7 +114,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" ng-model="vm.emailNotificationSettings.report_event_regressions" ng-model-options="{ debounce: 500 }" ng-change="vm.saveEmailNotificationSettings()" ng-disabled="!vm.hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_event_regressions" [(ngModel)]="emailNotificationSettings['report_event_regressions']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on error regressions
                                             </label>
@@ -122,7 +122,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" ng-model="vm.emailNotificationSettings.report_new_events" ng-model-options="{ debounce: 500 }" ng-change="vm.saveEmailNotificationSettings()" ng-disabled="!vm.hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_events" [(ngModel)]="emailNotificationSettings['report_new_events']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on new events
                                             </label>
@@ -130,7 +130,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" ng-model="vm.emailNotificationSettings.report_critical_events" ng-model-options="{ debounce: 500 }" ng-change="vm.saveEmailNotificationSettings()" ng-disabled="!vm.hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_events" [(ngModel)]="emailNotificationSettings['report_critical_events']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on critical events
                                             </label>

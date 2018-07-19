@@ -34,7 +34,6 @@ import { ProjectFilterComponent } from './type/components/project-filter/project
 import { DateFilterComponent } from './type/components/date-filter/date-filter.component';
 import { ReportsComponent } from './type/reports/reports.component';
 import { AdminComponent } from './type/admin/admin.component';
-import { DocumentationComponent } from './type/documentation/documentation.component';
 import { SupportComponent } from './type/support/support.component';
 import { ProjectComponent } from './type/admin/project/project.component';
 import { OrganizationComponent } from './type/admin/organization/organization.component';
@@ -48,10 +47,9 @@ import { FrequentComponent } from './type/common/frequent/frequent.component';
 import { OrganizationNotificationComponent } from './type/components/organization-notification/organization-notification.component';
 import { OrganizationService } from './service/organization.service';
 import { FilterService } from './service/filter.service';
-import { DialogService } from './service/dialog.service';
 import { RickshawComponent } from './type/components/rickshaw/rickshaw.component';
-import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { ProjectListComponent } from './type/admin/project/project-list/project-list.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { ProjectNewComponent } from './type/admin/project/project-new/project-new.component';
 import { OrganizationNewComponent } from './type/admin/organization/organization-new/organization-new.component';
 import { OrganizationListComponent } from './type/admin/organization/organization-list/organization-list.component';
@@ -100,7 +98,6 @@ export const AuthConfig = {
         DateFilterComponent,
         ReportsComponent,
         AdminComponent,
-        DocumentationComponent,
         SupportComponent,
         ProjectComponent,
         OrganizationComponent,

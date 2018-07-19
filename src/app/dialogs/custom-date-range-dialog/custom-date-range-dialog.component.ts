@@ -1,5 +1,5 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
-import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal-dialog';
+import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
 import * as moment from 'moment';
 import { FilterService } from '../../service/filter.service';
 

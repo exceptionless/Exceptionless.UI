@@ -97,12 +97,10 @@ export class StacksComponent implements OnInit {
                 res => {
                     onSuccess(res.body, res.headers.get('link'));
                     this.loading = false;
-
                     resolve(this.stacks);
                 },
                 err => {
                     this.notificationService.error('Error Occurred!', 'Failed');
-
                     reject(err);
                 }
             );

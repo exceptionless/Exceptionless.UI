@@ -15,7 +15,6 @@ import { OrganizationComponent } from './type/admin/organization/organization.co
 import { OrganizationListComponent } from './type/admin/organization/organization-list/organization-list.component';
 import { OrganizationEditComponent } from './type/admin/organization/organization-edit/organization-edit.component';
 import { AccountManageComponent } from './type/admin/account-manage/account-manage.component';
-import { DocumentationComponent } from './type/documentation/documentation.component';
 import { SupportComponent } from './type/support/support.component';
 import { DashboardComponent } from './type/common/dashboard/dashboard.component';
 import { RecentComponent } from './type/common/recent/recent.component';

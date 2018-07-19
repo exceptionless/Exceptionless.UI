@@ -48,27 +48,19 @@ export class StackService {
     }
 
     getById(id): Observable<HttpResponse<any>> {
-        return this.http.get('stacks/' + id, {
-            observe: 'response',
-        });
+        return this.http.get('stacks/' + id, { observe: 'response' });
     }
 
     getFrequent(options?): Observable<HttpResponse<any>> {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/frequent`, {
-                observe: 'response',
-                params: mergedOptions
-            });
+            return this.http.get(`organizations/${organization}/stacks/frequent`, { observe: 'response', params: mergedOptions });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks/frequent`, {
-                observe: 'response',
-                params: mergedOptions
-            });
+            return this.http.get(`projects/${project}/stacks/frequent`, { observe: 'response', params: mergedOptions });
         }
 
         const data = mergedOptions;
