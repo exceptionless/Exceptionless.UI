@@ -52,7 +52,7 @@
                                             <small [hidden]="!email.errors?.email">It muse be email address.</small>
                                             <small [hidden]="emailUnique">A user already exists with this email address.</small>
                                         </div>
-                                        
+
                                         <p *ngIf="!user['is_email_address_verified']" class="help-block">Email not verified. <a (click)="resendVerificationEmail()">Resend</a> verification email.</p>
                                     </div>
                                 </form>
@@ -78,7 +78,7 @@
 
                                         <p>Choose how often you want to receive notifications for event occurrences in this project.</p>
 
-                                        <select class="form-control" name="current-project" [(ngModel)]="currentProject['id']" ng-change="vm.getEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings != {})">
+                                        <select class="form-control" name="current-project" [(ngModel)]="currentProject['id']" (change)="getEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings != {})">
                                             <optgroup *ngFor="let project of projects" label="{{ project['organization_name'] }}">
                                                 <option *ngFor="let loopItem of filterProject(project['organization_name'])" [ngValue]="loopItem['id']">{{ loopItem['name'] }}</option>
                                             </optgroup>
