@@ -5,10 +5,10 @@
                 <div class="panel-heading"><i class="fa fa-user"></i> My Account</div>
 
                 <div class="panel-body m-b-n">
-                    <ngb-tabset class="tab-container">
-                        <ngb-tab title="General">
+                    <ngb-tabset class="tab-container" [activeId]="activeTab">
+                        <ngb-tab title="General" id="general">
                             <ng-template ngbTabContent>
-                                <form name="fullNameForm" role="form" class="form-validation" autocomplete="on">
+                                <form name="fullNameForm" role="form" class="form-validation" autocomplete="on" #fullNameForm="ngForm">
                                     <div class="form-group">
                                         <img src="//www.gravatar.com/avatar/2c356e305447c597ed0d3c3c16db5bf3?default=mm&size=100" alt="{{ user['full_name'] }}" gravatar-size="100" alt="avatar" class="img-thumbnail">
                                         <div>
@@ -21,7 +21,7 @@
                                         <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                                                placeholder="Your first and last name"
                                                [(ngModel)]="user['full_name']"
-                                               ng-change="vm.saveUser(fullNameForm.$valid)"
+                                               (input)="saveUser(fullNameForm.valid)"
                                                required
                                                #name="ngModel"/>
 
@@ -38,7 +38,7 @@
                                             <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                                                    placeholder="Email Address"
                                                    [(ngModel)]="user['email_address']"
-                                                   ng-change="vm.saveEmailAddress()"
+                                                   (input)="saveEmailAddress()"
                                                    required
                                                    #email="ngModel"/>
 
@@ -47,18 +47,19 @@
                                             </span>
                                         </div>
 
-                                        <div class="error" *ngIf="(email.invalid && (email.dirty || email.touched)) || submitted">
+                                        <div class="error" *ngIf="(email.invalid && (email.dirty || email.touched)) || submitted || !emailUnique">
                                             <small [hidden]="!email.errors?.required">Email Address is required.</small>
-                                            <small [hidden]="!email.errors?.email" *ngIf="!email.errors?.required">It muse be email address.</small>
+                                            <small [hidden]="!email.errors?.email">It muse be email address.</small>
+                                            <small [hidden]="emailUnique">A user already exists with this email address.</small>
                                         </div>
-
+                                        
                                         <p *ngIf="!user['is_email_address_verified']" class="help-block">Email not verified. <a (click)="resendVerificationEmail()">Resend</a> verification email.</p>
                                     </div>
                                 </form>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="Notifications">
+                        <ngb-tab title="Notifications" id="notifications">
                             <ng-template ngbTabContent>
                                 <form role="form" class="form-validation" #notificationForm="ngForm">
                                     <div class="alert in fade alert-danger" *ngIf="!user['is_email_address_verified'] || !user['email_notifications_enabled']">
@@ -85,7 +86,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="send_daily_summary" [(ngModel)]="emailNotificationSettings['send_daily_summary']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings)">
+                                                <input type="checkbox" name="send_daily_summary" [(ngModel)]="emailNotificationSettings['send_daily_summary']" (change)="saveEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings)">
                                                 <i></i>
                                                 Send daily project summary
                                             </label>
@@ -98,7 +99,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_new_errors" [(ngModel)]="emailNotificationSettings['report_new_errors']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_errors" [(ngModel)]="emailNotificationSettings['report_new_errors']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on new errors
                                             </label>
@@ -106,7 +107,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_critical_errors" [(ngModel)]="emailNotificationSettings['report_critical_errors']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_errors" [(ngModel)]="emailNotificationSettings['report_critical_errors']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on critical errors
                                             </label>
@@ -114,7 +115,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_event_regressions" [(ngModel)]="emailNotificationSettings['report_event_regressions']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_event_regressions" [(ngModel)]="emailNotificationSettings['report_event_regressions']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on error regressions
                                             </label>
@@ -122,7 +123,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_new_events" [(ngModel)]="emailNotificationSettings['report_new_events']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_events" [(ngModel)]="emailNotificationSettings['report_new_events']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on new events
                                             </label>
@@ -130,7 +131,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_critical_events" [(ngModel)]="emailNotificationSettings['report_critical_events']" ng-change="vm.saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_events" [(ngModel)]="emailNotificationSettings['report_critical_events']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 Notify me on critical events
                                             </label>
@@ -140,38 +141,38 @@
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="Password">
+                        <ngb-tab title="Password" id="password">
                             <ng-template ngbTabContent>
-                                <form name="vm.passwordForm" role="form" class="form-validation">
-                                    <div class="form-group" ng-if="vm.hasLocalAccount">
+                                <form name="vm.passwordForm" role="form" class="form-validation" #passwordForm="ngForm">
+                                    <div class="form-group" *ngIf="hasLocalAccount">
                                         <label for="current">Current Password</label>
-                                        <input id="current" name="current" type="password" class="form-control" ng-model="vm.password.current_password" required />
+                                        <input id="current" name="current" type="password" class="form-control" [(ngModel)]="password['current_password']" required #current="ngModel"/>
 
-                                        <div class="error" ng-messages="vm.passwordForm.current.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.current.$touched">
-                                            <!--<small ng-message="required">Current Password is required.</small>-->
+                                        <div class="error" *ngIf="(current.invalid && (current.dirty || current.touched)) || submitted">
+                                            <small [hidden]="!current.errors?.required">Current Password is required.</small>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="newPassword">New Password</label>
-                                        <input id="newPassword" name="newPassword" type="password" class="form-control" ng-model="vm.password.password" ng-minlength="6" ng-maxlength="100" required />
+                                        <input id="newPassword" name="newPassword" type="password" class="form-control" [(ngModel)]="password['password']" required minlength="6" maxlength="101" required #newPassword="ngModel"/>
 
-                                        <div class="error" ng-messages="vm.passwordForm.newPassword.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.newPassword.$touched">
-                                            <!--<small ng-message="required">{{::'New Password is required.' | translate}}</small>
-                                            <small ng-message="minlength">{{::'New Password must be at least 6 characters long.' | translate}}</small>
-                                            <small ng-message="maxlength">{{::'New Password must be less than 101 characters long.' | translate}}</small>-->
+                                        <div class="error" *ngIf="(newPassword.invalid && (newPassword.dirty || newPassword.touched)) || submitted">
+                                            <small [hidden]="!newPassword.errors?.required">Password is required</small>
+                                            <small [hidden]="!newPassword.errors?.minlength">Password must be at least 6 characters long</small>
+                                            <small [hidden]="!newPassword.errors?.maxlength">Password must be less than 101 characters long</small>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="confirmPassword">Confirm password</label>
-                                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" ng-model="vm.password.confirm_password" match="vm.password.password" ng-minlength="6" ng-maxlength="100" ng-required="true" />
+                                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" [(ngModel)]="password['confirm_password']" required minlength="6" maxlength="101"  #confirmPassword="ngModel" />
 
-                                        <div class="error" ng-messages="vm.passwordForm.confirmPassword.$error" ng-if="vm.passwordForm.$submitted || vm.passwordForm.confirmPassword.$touched">
-                                            <!--<small ng-message="match">{{::'New Password and Confirmation Password fields do not match.' | translate}}</small>
-                                            <small ng-message="required">{{::'Confirm Password is required.' | translate}}</small>
-                                            <small ng-message="minlength">{{::'Confirm Password must be at least 6 characters long.' | translate}}</small>
-                                            <small ng-message="maxlength">{{::'Confirm Password must be less than 101 characters long.' | translate}}</small>-->
+                                        <div class="error" *ngIf="((confirmPassword.invalid || (password['password'] != password['confirm_password'])) && (confirmPassword.dirty || confirmPassword.touched))|| submitted">
+                                            <small [hidden]="!confirmPassword.errors?.required">Password is required</small>
+                                            <small [hidden]="!confirmPassword.errors?.minlength">Password must be at least 6 characters long</small>
+                                            <small [hidden]="!confirmPassword.errors?.maxlength">Password must be less than 101 characters long</small>
+                                            <small [hidden]="password['password'] == password['confirm_password']">Password must be match</small>
                                         </div>
                                     </div>
 
@@ -180,15 +181,15 @@
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="External Logins">
+                        <ngb-tab title="External Logins" id="external" *ngIf="isExternalLoginEnabled()">
                             <ng-template ngbTabContent>
                                 <h4>Add an external login</h4>
 
                                 <div>
-                                    <button type="button" role="button" ng-click="vm.authenticate('live')" ng-if="vm.isExternalLoginEnabled('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
-                                    <button type="button" role="button" ng-click="vm.authenticate('google')" ng-if="vm.isExternalLoginEnabled('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
-                                    <button type="button" role="button" ng-click="vm.authenticate('facebook')" ng-if="vm.isExternalLoginEnabled('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
-                                    <button type="button" role="button" ng-click="vm.authenticate('github')" ng-if="vm.isExternalLoginEnabled('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
+                                    <button type="button" role="button" (click)="authenticate('live')" *ngIf="isExternalLoginEnabled('live')" class="btn btn-large image-button icon-login-microsoft" title="Log in using your Microsoft account"></button>
+                                    <button type="button" role="button" (click)="authenticate('google')" *ngIf="isExternalLoginEnabled('google')" class="btn btn-large image-button icon-login-google" title="Log in using your Google account"></button>
+                                    <button type="button" role="button" (click)="authenticate('facebook')" *ngIf="isExternalLoginEnabled('facebook')" class="btn btn-large image-button icon-login-facebook" title="Log in using your Facebook account"></button>
+                                    <button type="button" role="button" (click)="authenticate('github')" *ngIf="isExternalLoginEnabled('github')" class="btn btn-large image-button icon-login-github" title="Log in using your GitHub account"></button>
                                 </div>
 
                                 <h4>Existing external logins</h4>
@@ -201,15 +202,15 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="account in vm.user.o_auth_accounts" ng-if="vm.user.o_auth_accounts.length > 0">
+                                        <tr ng-repeat="account in vm.user.o_auth_accounts" *ngIf="user['o_auth_accounts'].length > 0">
                                             <td>   </td>
                                             <td>
-                                                <button type="button" role="button" class="btn btn-sm" title="Remove" ng-disabled="!(vm.hasLocalAccount || vm.user.o_auth_accounts.length > 1)" ng-click="vm.unlink(account)">
+                                                <button type="button" role="button" class="btn btn-sm" title="Remove" [disabled]="!(hasLocalAccount || user['o_auth_accounts'].length > 1)" (click)="unlink(account)">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <tr ng-if="vm.user.o_auth_accounts.length === 0">
+                                        <tr *ngIf="user['o_auth_accounts.length'] === 0">
                                             <td colspan="2">
                                                 <strong>No external logins were found.</strong>
                                             </td>
@@ -224,15 +225,16 @@
 
                 <footer class="panel-footer">
                     <div class="pull-right">
-                        <div ng-if="!vm.currentProject.id">
+                        <div *ngIf="!currentProject['id']">
                             <a ui-sref="app.dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
                         </div>
-                        <!--<div ng-if="vm.currentProject.id">
-                            <a ui-sref="app.project-dashboard({ projectId: vm.currentProject.id })" class="btn btn-default" role="button">Go To Dashboard</a>
-                        </div>-->
+
+                        <div *ngIf="currentProject['id']">
+                            <a routerLink="/project/{{ currentProject['id'] }}/dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
+                        </div>
                     </div>
                     <div>
-                        <a ng-click="vm.deleteAccount()" class="btn btn-danger" role="button">DELETE ACCOUNT</a>
+                        <a (click)="deleteAccount()" class="btn btn-danger" role="button">DELETE ACCOUNT</a>
                     </div>
                     <div class="clearfix"></div>
                 </footer>

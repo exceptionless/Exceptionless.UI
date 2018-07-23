@@ -39,7 +39,7 @@ export class FilterService {
             filters.push('project:' + this._projectId);
         }
 
-        if (this._eventType && !_.isEmpty(this.filterStoreService.getEventType)) {
+        if (this._eventType && !_.isEmpty(this.filterStoreService.getEventType())) {
             filters.push('type:' + this.filterStoreService.getEventType());
         }
 

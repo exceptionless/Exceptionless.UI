@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'ng2-ui-auth';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { NotificationService } from './notification.service';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable({
     providedIn: 'root'
@@ -53,8 +54,8 @@ export class AuthAccountService {
         return this.authService.isAuthenticated();
     }
 
-    isEmailAddressAvailable(email) {
-        return this.http.get(`auth/check-email-address/${email}`);
+    isEmailAddressAvailable(email): Observable<HttpResponse<any>> {
+        return this.http.get(`auth/check-email-address/${email}`, { observe: 'response' });
     }
 
     logout(withRedirect?, params?) {

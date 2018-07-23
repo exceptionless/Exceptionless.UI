@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'ng2-ui-auth';
 import { NotificationService } from '../../../service/notification.service';
@@ -9,6 +11,7 @@ import { UserService } from '../../../service/user.service';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { ConfirmDialogComponent } from '../../../dialogs/confirm-dialog/confirm-dialog.component';
 import { GlobalVariables } from '../../../global-variables';
+import { EmailUniqueValidator } from '../../../validators/email-unique.validator';
 
 @Component({
     selector: 'app-account-manage',
@@ -16,8 +19,14 @@ import { GlobalVariables } from '../../../global-variables';
     styleUrls: ['./account-manage.component.less']
 })
 export class AccountManageComponent implements OnInit {
-    activeTabIndex = 0;
-    password = {};
+    @ViewChild('frm') public emailAddressForm: NgForm;
+    _canSaveEmailAddress = true;
+    activeTab = 'general';
+    password = {
+        current_password: '',
+        password: '',
+        confirm_password: ''
+    };
     emailNotificationSettings = {};
     currentProject = {};
     user = {};
@@ -25,6 +34,7 @@ export class AccountManageComponent implements OnInit {
     projectId = '';
     hasPremiumFeatures = false;
     hasLocalAccount = false;
+    emailUnique = true;
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -40,6 +50,10 @@ export class AccountManageComponent implements OnInit {
         this.activatedRoute.params.subscribe( (params) => {
             this.projectId = params['id'];
         });
+
+        this.activatedRoute.queryParams.subscribe(params => {
+            this.activeTab = params['tab'] || 'general';
+        });
     }
 
     ngOnInit() {
@@ -48,23 +62,6 @@ export class AccountManageComponent implements OnInit {
 
     filterProject(organizationName) {
         return this.projects.filter(function(p) { return p.organization_name === organizationName; });
-    }
-
-    activateTab(tabName) {
-        switch (tabName) {
-            case 'notifications':
-                this.activeTabIndex = 1;
-                break;
-            case 'password':
-                this.activeTabIndex = 2;
-                break;
-            case 'external':
-                this.activeTabIndex = 3;
-                break;
-            default:
-                this.activeTabIndex = 0;
-                break;
-        }
     }
 
     authenticate(provider) {
@@ -87,7 +84,11 @@ export class AccountManageComponent implements OnInit {
 
         const onSuccess = () => {
             this.notificationService.success('Success', 'You have successfully changed your password.');
-            this.password = {};
+            this.password = {
+                current_password: '',
+                password: '',
+                confirm_password: ''
+            };
             /*vm.passwordForm.$setUntouched(true);
             vm.passwordForm.$setPristine(true);*/
         };
@@ -242,7 +243,7 @@ export class AccountManageComponent implements OnInit {
         return this.user['email_notifications_enabled'] && this.emailNotificationSettings && this.hasPremiumFeatures;
     }
 
-    isExternalLoginEnabled(provider) {
+    isExternalLoginEnabled(provider?) {
         if (!provider) {
             return !!this._globalVariables.FACEBOOK_APPID || !!this._globalVariables.GITHUB_APPID || !!this._globalVariables.GOOGLE_APPID || !!this._globalVariables.LIVE_APPID;
         }
@@ -259,5 +260,167 @@ export class AccountManageComponent implements OnInit {
             default:
                 return false;
         }
+    }
+
+    resendVerificationEmail() {
+        const onFailure = (response) => {
+            let message = 'An error occurred while sending your verification email.';
+            if (response.data && response.data.message) {
+                message += ' ' + 'Message:' + ' ' + response.data.message;
+            }
+
+            this.notificationService.error('Failed!', message);
+        }
+
+        return this.userService.resendVerificationEmail(this.user['id']).subscribe(
+            res => {},
+            err => {
+                onFailure(err);
+            }
+        );
+    }
+
+    saveEmailAddress(isRetrying?) {
+        this.authAccountService.isEmailAddressAvailable(this.user['email_address']).subscribe(
+            res => {
+                if (res['status'] === 201) {
+                    this.emailUnique = false;
+                } else {
+                    this.emailUnique = true;
+                }
+            }
+        );
+
+        const resetCanSaveEmailAddress = () => {
+            this._canSaveEmailAddress = true;
+        };
+
+        const retry = (delay?) => {
+            setTimeout(() => { this.saveEmailAddress(true); }, delay || 100);
+        };
+
+        if (!this.emailAddressForm || this.emailAddressForm.valid) {
+            resetCanSaveEmailAddress();
+            return !isRetrying && retry(1000);
+        }
+
+        if (!this.user['email_address'] || this.emailAddressForm.pending) {
+            return retry();
+        }
+
+        if (this._canSaveEmailAddress) {
+            this._canSaveEmailAddress = false;
+        } else {
+            return;
+        }
+
+        const onSuccess = (response) => {
+            this.user['is_email_address_verified'] = response.data['is_verified'];
+        };
+
+        const onFailure = (response) => {
+            let message = 'An error occurred while saving your email address.';
+            if (response.data && response.data.message) {
+                message += ' ' + 'Message:' + ' ' + response.data.message;
+            }
+
+            this.notificationService.error('Failed!', message);
+        };
+
+        return this.userService.updateEmailAddress(this.user['id'], this.user['email_address']).subscribe(
+            res => {
+                onSuccess(res);
+                resetCanSaveEmailAddress();
+            },
+            err => {
+                onFailure(err);
+            }
+        );
+    }
+
+    saveEmailNotificationSettings() {
+        const onFailure = (response) => {
+            let message = 'An error occurred while saving your notification settings.';
+            if (response.data && response.data.message) {
+                message += ' ' + 'Message:' + ' ' + response.data.message;
+            }
+
+            this.notificationService.error('Failed!', message);
+        };
+
+        return this.projectService.setNotificationSettings(this.currentProject['id'], this.user['id'], this.emailNotificationSettings).subscribe(
+            res => {},
+            err => {
+                onFailure(err);
+            }
+        );
+    }
+
+    saveEnableEmailNotification() {
+        const onFailure = (response) => {
+            let message = 'An error occurred while saving your email notification preferences.';
+            if (response.data && response.data.message) {
+                message += ' ' + 'Message:' + ' ' + response.data.message;
+            }
+
+            this.notificationService.error('Failed!', message);
+        };
+
+        return this.userService.update(this.user['id'], { email_notifications_enabled: this.user['email_notifications_enabled'] }).subscribe(
+            res => {},
+            err => {
+                onFailure(err);
+            }
+        );
+    }
+
+    saveUser(isValid) {
+        if (!isValid) {
+            return;
+        }
+
+        const onFailure = (response) => {
+            let message = 'An error occurred while saving your full name.';
+            if (response.data && response.data.message) {
+                message += ' ' + 'Message:' + ' ' + response.data.message;
+            }
+
+            this.notificationService.error('Failed!', message);
+        }
+
+        return this.userService.update(this.user['id'], this.user).subscribe(
+            res => {},
+            err => {
+                onFailure(err);
+            }
+        );
+    }
+
+    showChangePlanDialog() {
+        // need to implement later
+    }
+
+    unlink(account) {
+        const onSuccess = () => {
+            this.user['o_auth_accounts'].splice(this.user['o_auth_accounts'].indexOf(account), 1);
+        };
+
+        const onFailure = (response) => {
+            let message = 'An error occurred while removing the external login.';
+            if (response.data && response.data.message) {
+                message += ' ' + 'Message:' + ' ' + response.data.message;
+            }
+
+            this.notificationService.error('Failed!', message);
+        };
+
+        return this.authService.unlink(account['provider'], account['provider_user_id']).subscribe(
+            res => {
+                onSuccess();
+            },
+            err => {
+                onFailure(err);
+            }
+        );
     }
 }
