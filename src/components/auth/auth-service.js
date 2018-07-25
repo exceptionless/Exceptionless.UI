@@ -100,7 +100,7 @@
         return response;
       }
 
-      return Restangular.one('auth', 'unlink').one(providerName).customPOST(providerUserId).then(onSuccess);
+      return Restangular.one('auth', 'unlink').one(providerName).customPOST({ value: providerUserId }).then(onSuccess);
     }
 
     var service = {
