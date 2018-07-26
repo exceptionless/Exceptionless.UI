@@ -1,3 +1,319 @@
-<p>
-  project-edit works!
-</p>
+<app-organization-notification></app-organization-notification>
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="col">
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading"><i class="fa fa-th-list"></i> Manage Project {{ project['name'] ? ' "' + project['name'] + '"' : ''}}</div>
+
+                <div class="panel-body m-b-n">
+                    <ngb-tabset class="tab-container">
+                        <ngb-tab title="General" id="general">
+                            <form name="projectForm" role="form" class="form-validation" #projectForm="ngForm">
+                                <div class="form-group">
+                                    <label for="name">Project Name</label>
+                                    <div [ngClass]="{'input-group': !!projectForm.pending }">
+                                        <input id="name" name="name" type="text" class="form-control" placeholder="Project Name"
+                                               [(ngModel)]="project['name']"
+                                               (input)="save(projectForm.valid)"
+                                               project-name-available-validator
+                                               #name="ngModel"
+                                               required
+                                               autofocus />
+
+                                        <span class="input-group-addon" *ngIf="projectForm.pending">
+                                            <i class="fa fa-fw fa-spinner fa-spin"></i>
+                                        </span>
+                                    </div>
+
+                                    <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || submitted">
+                                        <small [hidden]="!name.errors?.required">Full Name is required.</small>
+                                        <small [hidden]="nameUnique">A project with this name already exists.</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group m-b-none">
+                                    <label>Organization Name</label>
+                                    <input type="text" class="form-control" placeholder="Organization Name" [(ngModel)]="project['organization_name']" readonly />
+                                </div>
+
+                                <div ng-show="vm.hasMonthlyUsage">
+                                    <h4 style="margin-top: 20px;">Monthly Usage</h4>
+                                    <p>
+                                        You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
+                                        <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
+                                        <a *ngIf="canChangePlan" (click)="changePlan()">Click here to change your plan or billing information.</a>
+                                    </p>
+                                    <app-rickshaw [options]="chart['options']"></app-rickshaw>
+                                    <br class="clearfix" />
+                                    <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
+                                </div>
+                            </form>
+                        </ngb-tab>
+
+                        <ngb-tab title="API Keys" id="api-keys">
+                            <table class="table table-striped table-bordered table-fixed b-t">
+                                <thead>
+                                    <tr>
+                                        <th>API Key</th>
+                                        <th class="hidden-xs">Notes</th>
+                                        <th class="action-lg visible-xs">Actions</th>
+                                        <th class="hidden-xs action-xl">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let token of tokens">
+                                        <td><div class="control-group">{{ token['id'] }}</div></td>
+                                        <td class="hidden-xs" *ngClass="{'row-clickable': !rowform.visible}" (click)="rowform.show()">
+                                            <div editable-text="token.notes" e-name="notes" e-form="rowform"
+                                                 onbeforesave="vm.validateApiKeyNote(token.notes, $data)"
+                                                 onaftersave="vm.saveApiKeyNote(token)">{{token.notes}}</div>
+                                        </td>
+                                        <td>
+                                            <form name="rowform" editable-form ng-show="rowform.$visible" class="form-buttons form-inline" #rowform="ngForm">
+                                                <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary">Save</button>
+                                                <button type="button" role="button" [disabled]="rowform.waiting" (click)="rowform.cancel()" class="btn btn-sm btn-default">Cancel</button>
+                                            </form>
+                                            <div class="buttons" [hidden]="rowform.visible">
+                                                <button type="button" role="button" class="btn btn-sm btn-primary" title="Copy to Clipboard" clipboard text="token.id" on-copied="vm.copied()" supported="vm.clipboardSupported" [hidden]="!clipboardSupported"><i class="fa fa-copy"></i></button>
+                                                <button type="button" role="button" class="btn btn-sm btn-default hidden-xs" (click)="rowform.show()">Edit</button>
+                                                <button type="button" role="button" (click)="removeToken(token)" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <tr ng-if="vm.tokens.length === 0">
+                                    <td colspan="2" class="text-warning visible-xs">This project does not have an API Key.</td>
+                                    <td colspan="3" class="text-warning hidden-xs">This project does not have an API Key.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <button type="button" role="button" (click)="addToken()" class="btn btn-primary">New API Key</button>
+                        </ngb-tab>
+
+                        <ngb-tab title="Settings" id="settings">
+                            <h4>Data Exclusions</h4>
+                            <p [innerHtml]="'Notice_Data_Exclusions'"></p>
+                            <input type="text" class="form-control" placeholder="Example: *Password*, CreditCard*, SSN"
+                                   [(ngModel)]="data_exclusions"
+                                   (input)="saveDataExclusion()"/>
+
+                            <h4>Error Stacking</h4>
+                            <h5>User Namespaces</h5>
+                            <p [innerHtml]="'Notice_Error_Stacking'"></p>
+                            <input type="text" class="form-control" placeholder="Example: Contoso"
+                                   [(ngModel)]="user_namespaces"
+                                   (input)="saveUserNamespaces()"/>
+
+                            <h5>Common Methods</h5>
+                            <p [innerHtml]="'Notice_Common_Methods'"></p>
+                            <input type="text" class="form-control" placeholder="Example: Assert, Writeline"
+                                   [(ngModel)]="common_methods"
+                                   (input)="saveCommonMethods()"/>
+
+                            <h4>Spam Detection</h4>
+                            <p [innerHtml]="'Notice_Spam_Detection'"></p>
+                            <input type="text" class="form-control" placeholder="Example: SpamBot"
+                                   [(ngModel)]="user_agents"
+                                   (input)="saveUserAgents()"/>
+
+                            <div class="checkbox">
+                                <label class="checks">
+                                    <input type="checkbox"
+                                           [(ngModel)]="project['delete_bot_data_enabled']"
+                                           (change)="saveDeleteBotDataEnabled()">
+                                    <i></i>
+                                    Reduce noise by automatically hiding high volumes of events coming from a single client IP address.
+                                </label>
+                            </div>
+                        </ngb-tab>
+
+                        <ngb-tab title="Client Configuration" id="client-configuration">
+                            <p ng-bind-html="'NOTICE_CONFIGURATION'"></p>
+
+                            <!-- TODO: The add new dropdown should be populated with default settings we know about. -->
+                            <table class="table table-striped table-bordered table-fixed b-t">
+                                <thead>
+                                    <tr>
+                                        <th>Key</th>
+                                        <th>Value</th>
+                                        <th class="action-lg">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let conf of config">
+                                        <td>
+                                            <div class="control-group">{{ conf['key'] }}</div>
+                                        </td>
+                                        <td *ngClass="{'row-clickable': !rowform.visible}" (click)="rowform.show()">
+                                            <div editable-text="conf.value" e-name="value" e-form="rowform" e-required
+                                                 onbeforesave="vm.validateClientConfiguration(conf.value, $data)"
+                                                 onaftersave="vm.saveClientConfiguration(conf)">{{ conf['value'] }}</div>
+                                        </td>
+                                        <td>
+                                            <form name="rowform" editable-form ng-show="rowform.$visible" class="form-buttons form-inline">
+                                                <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary">Save</button>
+                                                <button type="button" role="button" [disabled]="rowform.waiting" (click)="rowform.cancel()" class="btn btn-sm btn-default">Cancel</button>
+                                            </form>
+                                            <div class="buttons" [hidden]="rowform.visible">
+                                                <button type="button" role="button" class="btn btn-sm btn-default" (click)="rowform.show()">Edit</button>
+                                                <button type="button" role="button" class="btn btn-sm btn-danger" title="Delete" (click)="removeConfig(conf)"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr *ngIf="config.length === 0">
+                                        <td colspan="3">This project does not contain any custom configuration settings.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <button (click)="addConfiguration()" class="btn btn-primary">New Client Configuration</button>
+                        </ngb-tab>
+
+                        <ngb-tab title="Integrations" id="integrations">
+                            <div class="alert in fade alert-success" *ngIf="!hasPremiumFeatures">
+                                <a (click)="showChangePlanDialog()">Upgrade now</a> to enable integrations!
+                            </div>
+
+                            <div ng-if="appVm.isSlackEnabled">
+                                <h4>Slack</h4>
+
+                                <div *ngIf="project['has_slack_integration']">
+                                    <p>Choose how often you want to receive slack notifications for event occurrences in this project.</p>
+
+                                    <div class="checkbox">
+                                        <label class="checks">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="slackNotificationSettings['send_daily_summary']"
+                                                   (input)="saveSlackNotificationSettings()">
+                                            <i></i>
+                                            Send daily project summary <strong>(Coming soon!)</strong>
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label class="checks">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="slackNotificationSettings['report_new_errors']"
+                                                   (input)="saveSlackNotificationSettings()">
+                                            <i></i>
+                                            Notify me on new errors
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label class="checks">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="slackNotificationSettings['report_critical_errors']"
+                                                   (input)="vm.saveSlackNotificationSettings()">
+                                            <i></i>
+                                            Notify me on critical errors
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label class="checks">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="slackNotificationSettings['report_event_regressions']"
+                                                   (input)="saveSlackNotificationSettings()">
+                                            <i></i>
+                                            Notify me on error regressions
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label class="checks">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="slackNotificationSettings['report_new_events']"
+                                                   (input)="saveSlackNotificationSettings()">
+                                            <i></i>
+                                            Notify me on new events
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label class="checks">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="vslackNotificationSettings['report_critical_events']"
+                                                   (input)="saveSlackNotificationSettings()">
+                                            <i></i>
+                                            Notify me on critical events
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <p>
+                                    <a *ngIf="!project['has_slack_integration']" (click)="addSlack()" class="btn btn-primary" role="button" title="Add to Slack">
+                                        <i class="fa fa-fw fa-slack"></i> Add Slack Notifications
+                                    </a>
+                                    <a *ngIf="project['has_slack_integration']" (click)="removeSlack()" class="btn btn-danger" role="button" title="Remove Slack">
+                                        <i class="fa fa-fw fa-slack"></i> Remove Slack
+                                    </a>
+                                </p>
+                            </div>
+
+                            <h4>Web hooks</h4>
+                            <p [innerHtml]="'Notice_Web_hooks'"></p>
+
+                            <table class="table table-striped table-bordered table-fixed b-t">
+                                <thead>
+                                    <tr>
+                                        <th>Url</th>
+                                        <th>Event Types</th>
+                                        <th class="action">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let hook of webHooks">
+                                        <td>{{ hook['url'] }}</td>
+                                        <td>
+                                            <span class="label label-success" *ngFor="let type of hook['event_types']">{{ type }}</span>
+                                        </td>
+                                        <td>
+                                            <button type="button" role="button" class="btn btn-sm" title="Delete" (click)="removeWebHook(hook)"><i class="fa fa-times"></i></button>
+                                        </td>
+                                    </tr>
+
+                                    <tr *ngIf="webHooks.length === 0">
+                                        <td colspan="3">This project does not contain any integrations.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <button type="button" role="button" (click)="addWebHook()" class="btn btn-primary">Add Web Hook</button>
+                        </ngb-tab>
+                    </ngb-tabset>
+                </div>
+
+                <footer class="panel-footer">
+                    <div class="pull-right">
+                        <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">
+                            <span class="visible-xs" title="Go To Dashboard"><i class="fa fa-fw fa-dashboard"></i></span>
+                            <span class="hidden-xs">Go To Dashboard</span>
+                        </a>
+                    </div>
+
+                    <a ui-sref="app.organization.manage({ id: vm.project.organization_id })" class="btn btn-primary" role="button" title="Manage Organization">
+                        <i class="fa fa-fw fa-group"></i>
+                    </a>
+                    <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="Manage Notification Settings">
+                        <i class="fa fa-fw fa-envelope"></i>
+                    </a>
+                    <a ui-sref="app.project.configure({ id: vm.project.id })" class="btn btn-primary" role="button" title="Download & Configure Client">
+                        <i class="fa fa-fw fa-cloud-download"></i>
+                    </a>
+                    <div class="btn-group">
+                        <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a (click)="resetData()" role="button">Reset Project Data</a></li>
+                            <li><a (click)="removeProject()" role="button">Delete Project</a></li>
+                        </ul>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

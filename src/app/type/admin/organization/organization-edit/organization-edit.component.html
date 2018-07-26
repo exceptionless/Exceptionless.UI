@@ -1,3 +1,81 @@
-<p>
-  organization-edit works!
-</p>
+<app-organization-notification></app-organization-notification>
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="col">
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading"><i class="fa fa-th-list"></i> Manage Organization {{ organization['name'] ? ' "' + organization['name'] + '"' : ''}}</div>
+                <div class="panel-body m-b-n">
+                    <ngb-tabset class="tab-container" [activeId]="activeTab">
+                        <ngb-tab title="General" id="general">
+                            <form name="vm.organizationForm" role="form" class="form-validation" #organizationForm="ngForm">
+                                <div class="form-group m-b-none">
+                                    <label for="name">Organization Name</label>
+                                    <div *ngClass="{'input-group': !!organizationForm.pending }">
+                                        <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
+                                               [(ngModel)]="organization.name"
+                                               (input)="save(organizationForm.valid)"
+                                               organization-name-available-validator
+                                               required
+                                               #name="ngModel"
+                                               autofocus />
+                                        <span class="input-group-addon" *ngIf="organizationForm.pending">
+                                            <i class="fa fa-fw fa-spinner fa-spin"></i>
+                                        </span>
+                                    </div>
+
+                                    <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || organizationForm.submitted">
+                                        <small [hidden]="!name.errors?.required">Organization Name is required.</small>
+                                        <small [hidden]="organizationUnique">A organizations with this name already exists.</small>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div [hidden]="!hasMonthlyUsage">
+                                <h4 style="margin-top: 20px;">Monthly Usage</h4>
+                                <p>
+                                    You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
+                                    <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
+                                    <a *ngIf="canChangePlan" (click)="changePlan()">Click here to change your plan or billing information.</a>
+                                </p>
+                                <app-rickshaw [options]="chart['options']"></app-rickshaw>
+                                <br class="clearfix" />
+                                <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
+                            </div>
+                        </ngb-tab>
+
+                        <ngb-tab title="Projects" id="projects">
+                            <app-projects [settings]="projects"></app-projects>
+                            <a ui-sref="app.project.add" class="btn btn-primary" role="button">Add New Project</a>
+                        </ngb-tab>
+
+                        <ngb-tab title="UserManager" id="user-manager">
+                            <app-user [settings]="users"></app-user>
+                            <button type="button" role="button" (click)="addUser()" class="btn btn-primary">Invite User</button>
+                        </ngb-tab>
+
+                        <ngb-tab title="Billing" id="billing">
+                            <p><span [innerHtml]="'Organization_Billing_Plan'"></span> <a *ngIf="canChangePlan" (click)="changePlan()">Change your plan or billing information.</a></p>
+                            <app-invoices [settings]="invoices"></app-invoices>
+                        </ngb-tab>
+                    </ngb-tabset>
+                </div>
+
+                <footer class="panel-footer">
+                    <div class="pull-right">
+                        <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a (click)="leaveOrganization(user)" role="button">Leave Organization</a></li>
+                            <li><a (click)="removeOrganization()" role="button">Delete Organization</a></li>
+                        </ul>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,7 +13,7 @@ export class StacksActionsService {
     markFixedAction: object = {
         name: 'Mark Fixed',
         run: (ids) => {
-            /*implement later Frank Lin*/
+            /*implement later Exceptionless*/
 
             const onSuccess = () => {
                 this.notificationService.info('Success', 'Successfully queued the stacks to be marked as fixed.');
@@ -114,8 +114,7 @@ export class StacksActionsService {
         private searchService: SearchService,
         private notificationService: NotificationService,
         private stackService: StackService,
-    ) {
-    }
+    ) {}
 
     executeAction(ids, action, onSuccess, onFailure) {
         return new Promise((resolve, reject) => {

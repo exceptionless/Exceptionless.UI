@@ -15,8 +15,7 @@ export class EventService {
         private http: HttpClient,
         private filterService: FilterService,
         private organizationService: OrganizationService,
-    ) {
-    }
+    ) {}
 
     calculateAveragePerHour(total, organizations) {
         const range = this.filterService.getTimeRange();

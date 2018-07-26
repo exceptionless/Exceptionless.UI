@@ -13,7 +13,10 @@ export class ProjectService {
     ) {
     }
 
-    addSlack(id) {}
+    addSlack(id) {
+        // need to implement later Exceptionless
+        return this.http.post(`projects/${id}/slack`, { code: '' });
+    }
 
     create(organizationId, name) {
         const data = {

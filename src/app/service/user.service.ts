@@ -24,8 +24,8 @@ export class UserService {
         return this.http.get(`users/${id}`);
     }
 
-    getByOrganizationId(id, options) {
-        return this.http.get(`organizations/${id}/users`, { params: options });
+    getByOrganizationId(id, options): Observable<HttpResponse<any>> {
+        return this.http.get(`organizations/${id}/users`, { observe: 'response', params: options });
     }
 
     hasAdminRole(user) {

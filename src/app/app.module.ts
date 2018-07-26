@@ -74,6 +74,10 @@ import { SimpleStackTraceComponent } from './type/components/simple-stack-trace/
 import { ExtendedDataItemComponent } from './type/components/event/extended-data-item/extended-data-item.component';
 import { HasPropPipe } from './pipes/has-prop.pipe';
 import { ProjectsComponent } from './type/components/projects/projects.component';
+import { InvoicesComponent } from './type/components/invoices/invoices.component';
+import { UserComponent } from './type/components/user/user.component';
+import { AddConfigurationDialogComponent } from './dialogs/add-configuration-dialog/add-configuration-dialog.component';
+import { AddWebHookDialogComponent } from './dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -136,6 +140,10 @@ export const AuthConfig = {
         ExtendedDataItemComponent,
         HasPropPipe,
         ProjectsComponent,
+        InvoicesComponent,
+        UserComponent,
+        AddConfigurationDialogComponent,
+        AddWebHookDialogComponent,
     ],
     imports: [
         BrowserModule,

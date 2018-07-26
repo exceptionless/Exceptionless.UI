@@ -39,7 +39,6 @@ export class ProjectsComponent implements OnInit {
     get(options?) {
         const onSuccess = (response, link) => {
             this.projects = JSON.parse(JSON.stringify(response));
-
             const links = this.linkService.getLinksQueryParameters(link);
             this.previous = links['previous'];
             this.next = links['next'];

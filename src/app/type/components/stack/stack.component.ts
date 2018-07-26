@@ -83,7 +83,7 @@ export class StackComponent implements OnInit {
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._stackId = params['id'];
-            this.filterStoreService.setEventType('stack');
+            this.filterStoreService.setEventType(params['type']);
         });
 
         this.hotkeysService.add(new Hotkey('shift+h', (event: KeyboardEvent): boolean => {

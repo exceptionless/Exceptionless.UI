@@ -30,5 +30,4 @@ export class BillingService {
         /*return dialogService.confirm(message, 'Upgrade Plan').then(onSuccess, onFailure);*/
     }
 
-
 }
