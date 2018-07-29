@@ -112,7 +112,6 @@ export class DashboardComponent implements OnInit {
                 },
                 err => {
                     this.notificationService.error('Failed', 'Error Occurred!');
-
                     reject(err);
                 }
             );

@@ -122,9 +122,9 @@ export class ProjectsComponent implements OnInit {
     open(id, event) {
         const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
-            window.open(`/project/${id}/manage`, '_blank');
+            window.open(`/type/project/${id}/manage`, '_blank');
         } else {
-            this.router.navigate([`/project/${id}/manage`]);
+            this.router.navigate([`/type/project/${id}/manage`]);
         }
 
         event.preventDefault();

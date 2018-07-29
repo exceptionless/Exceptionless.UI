@@ -22,12 +22,12 @@ export class WebHookService {
         return this.http.get(`webhooks/${id}`);
     }
 
-    getByOrganizationId(id, options) {
-        return this.http.get(`organizations/${id}/webhooks}`, { params: options || {} });
+    getByOrganizationId(id, options?) {
+        return this.http.get(`organizations/${id}/webhooks`, { params: options || {} });
     }
 
-    getByProjectId(id, options) {
-        return this.http.get(`projects/${id}/webhooks}`, { params: options || {} });
+    getByProjectId(id, options?) {
+        return this.http.get(`projects/${id}/webhooks`, { params: options || {} });
     }
 
     remove(id) {

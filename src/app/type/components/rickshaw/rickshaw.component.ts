@@ -14,6 +14,7 @@ export class RickshawComponent implements OnInit {
     @Input() eventType;
     @Input() filterTime;
     @Input() projectFilter;
+    @Input() inputFeatures;
     graph: any;
     features: any;
 
@@ -85,7 +86,7 @@ export class RickshawComponent implements OnInit {
                 element: this.graphElement.nativeElement,
                 series: this.options.series1,
                 options: this.options,
-                features: this.features
+                features: this.inputFeatures || this.features
             });
 
             this.graph.render();
