@@ -1,0 +1,17 @@
+<form name="addUserForm" role="form" class="form-validation" #addUserForm="ngForm">
+    <div class="form-group">
+        <label for="url">Email Address</label>
+        <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Email Address"
+               [(ngModel)]="data.email"
+               (ngModelChange)="setEmail($event)"
+               required
+               type = "email"
+               #email="ngModel"
+               autofocus />
+
+        <div class="error" *ngIf="(email.invalid && (email.dirty || email.touched)) || submitted">
+            <small [hidden]="!email.errors?.required">Email Address is required.</small>
+            <small [hidden]="!email.errors?.email">It must be email address.</small>
+        </div>
+    </div>
+</form>

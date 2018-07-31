@@ -90,7 +90,7 @@ export class OrganizationService {
     }
 
     getInvoices(id, options) {
-        return this.http.get('organizations/invoices');
+        return this.http.get(`organizations/${id}/invoices`, { params: options || {} });
     }
 
     getPlans(id) {

@@ -8,55 +8,63 @@
                 <div class="panel-body m-b-n">
                     <ngb-tabset class="tab-container" [activeId]="activeTab">
                         <ngb-tab title="General" id="general">
-                            <form name="vm.organizationForm" role="form" class="form-validation" #organizationForm="ngForm">
-                                <div class="form-group m-b-none">
-                                    <label for="name">Organization Name</label>
-                                    <div *ngClass="{'input-group': !!organizationForm.pending }">
-                                        <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
-                                               [(ngModel)]="organization.name"
-                                               (input)="save(organizationForm.valid)"
-                                               organization-name-available-validator
-                                               required
-                                               #name="ngModel"
-                                               autofocus />
-                                        <span class="input-group-addon" *ngIf="organizationForm.pending">
-                                            <i class="fa fa-fw fa-spinner fa-spin"></i>
-                                        </span>
-                                    </div>
+                            <ng-template ngbTabContent>
+                                <form name="vm.organizationForm" role="form" class="form-validation" #organizationForm="ngForm">
+                                    <div class="form-group m-b-none">
+                                        <label for="name">Organization Name</label>
+                                        <div *ngClass="{'input-group': !!organizationForm.pending }">
+                                            <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
+                                                   [(ngModel)]="organization.name"
+                                                   (input)="save(organizationForm.valid)"
+                                                   organization-name-available-validator
+                                                   required
+                                                   #name="ngModel"
+                                                   autofocus />
+                                            <span class="input-group-addon" *ngIf="organizationForm.pending">
+                                                <i class="fa fa-fw fa-spinner fa-spin"></i>
+                                            </span>
+                                        </div>
 
-                                    <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || organizationForm.submitted">
-                                        <small [hidden]="!name.errors?.required">Organization Name is required.</small>
-                                        <small [hidden]="organizationUnique">A organizations with this name already exists.</small>
+                                        <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || organizationForm.submitted">
+                                            <small [hidden]="!name.errors?.required">Organization Name is required.</small>
+                                            <small [hidden]="organizationUnique">A organizations with this name already exists.</small>
+                                        </div>
                                     </div>
+                                </form>
+
+                                <div [hidden]="!hasMonthlyUsage">
+                                    <h4 style="margin-top: 20px;">Monthly Usage</h4>
+                                    <p>
+                                        You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
+                                        <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
+                                        <a *ngIf="canChangePlan" (click)="changePlan()">Click here to change your plan or billing information.</a>
+                                    </p>
+                                    <app-rickshaw [options]="chart['options']"></app-rickshaw>
+                                    <br class="clearfix" />
+                                    <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
                                 </div>
-                            </form>
-
-                            <div [hidden]="!hasMonthlyUsage">
-                                <h4 style="margin-top: 20px;">Monthly Usage</h4>
-                                <p>
-                                    You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
-                                    <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
-                                    <a *ngIf="canChangePlan" (click)="changePlan()">Click here to change your plan or billing information.</a>
-                                </p>
-                                <app-rickshaw [options]="chart['options']"></app-rickshaw>
-                                <br class="clearfix" />
-                                <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
-                            </div>
+                            </ng-template>
                         </ngb-tab>
 
                         <ngb-tab title="Projects" id="projects">
-                            <app-projects [settings]="projects"></app-projects>
-                            <a ui-sref="app.project.add" class="btn btn-primary" role="button">Add New Project</a>
+                            <ng-template ngbTabContent>
+                                <app-projects [settings]="projects"></app-projects>
+                                <a ui-sref="app.project.add" class="btn btn-primary" role="button">Add New Project</a>
+                            </ng-template>
                         </ngb-tab>
 
                         <ngb-tab title="UserManager" id="user-manager">
-                            <app-user [settings]="users"></app-user>
-                            <button type="button" role="button" (click)="addUser()" class="btn btn-primary">Invite User</button>
+                            <ng-template ngbTabContent>
+                                <app-user [settings]="users"></app-user>
+                                <button type="button" role="button" (click)="addUser()" class="btn btn-primary">Invite User</button>
+                            </ng-template>
                         </ngb-tab>
 
                         <ngb-tab title="Billing" id="billing">
-                            <p><span [innerHtml]="'Organization_Billing_Plan'"></span> <a *ngIf="canChangePlan" (click)="changePlan()">Change your plan or billing information.</a></p>
-                            <app-invoices [settings]="invoices"></app-invoices>
+                            <ng-template ngbTabContent>
+                                <p><span [innerHtml]="'Organization_Billing_Plan'"></span> <a *ngIf="canChangePlan" (click)="changePlan()">Change your plan or billing information.</a></p>
+                                <app-invoices [settings]="invoices"></app-invoices>
+                            </ng-template>
                         </ngb-tab>
                     </ngb-tabset>
                 </div>

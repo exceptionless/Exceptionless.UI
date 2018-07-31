@@ -3,17 +3,15 @@ import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
 import { ModalParameterService } from '../../service/modal-parameter.service';
 
 @Component({
-    selector: 'app-add-reference-dialog',
-    templateUrl: './add-reference-dialog.component.html',
-    styleUrls: ['./add-reference-dialog.component.less']
+    selector: 'app-add-user-dialog',
+    templateUrl: './add-user-dialog.component.html',
+    styleUrls: ['./add-user-dialog.component.less']
 })
-
-export class AddReferenceDialogComponent implements OnInit {
+export class AddUserDialogComponent implements OnInit {
     data = {
-        url: ''
+        email: ''
     };
     dataKey = '';
-
     constructor(
         private modalParameterService: ModalParameterService
     ) {}
@@ -26,7 +24,7 @@ export class AddReferenceDialogComponent implements OnInit {
         this.dataKey = options.data['key'];
     }
 
-    setUrl($event) {
-        this.modalParameterService.setModalParameter(this.dataKey, this.data.url);
+    setEmail($event) {
+        this.modalParameterService.setModalParameter(this.dataKey, this.data.email);
     }
 }

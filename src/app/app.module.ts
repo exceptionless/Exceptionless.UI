@@ -78,6 +78,8 @@ import { InvoicesComponent } from './type/components/invoices/invoices.component
 import { UserComponent } from './type/components/user/user.component';
 import { AddConfigurationDialogComponent } from './dialogs/add-configuration-dialog/add-configuration-dialog.component';
 import { AddWebHookDialogComponent } from './dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
+import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialog.component';
+import { AddOrganizationDialogComponent } from './dialogs/add-organization-dialog/add-organization-dialog.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -144,6 +146,8 @@ export const AuthConfig = {
         UserComponent,
         AddConfigurationDialogComponent,
         AddWebHookDialogComponent,
+        AddUserDialogComponent,
+        AddOrganizationDialogComponent,
     ],
     imports: [
         BrowserModule,

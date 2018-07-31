@@ -41,7 +41,7 @@ export class ProjectService {
     }
 
     getByOrganizationId(id, options) {
-        return this.http.get(`organizations/${id}/projects`);
+        return this.http.get(`organizations/${id}/projects`, { params: options || {} });
     }
 
     getConfig(id) {

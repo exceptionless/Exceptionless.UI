@@ -8,7 +8,7 @@
            #url="ngModel"
            autofocus />
 
-    <div class="error" ng-messages="addReferenceForm.url.$error" *ngIf="(url.invalid && (url.dirty || url.touched)) || submitted">
+    <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched)) || submitted">
         <small [hidden]="!url.errors?.required">Reference Link is required.</small>
         <small [hidden]="!url.errors?.url">Link must be URL format.</small>
     </div>
