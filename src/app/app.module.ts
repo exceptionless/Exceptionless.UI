@@ -80,6 +80,7 @@ import { AddConfigurationDialogComponent } from './dialogs/add-configuration-dia
 import { AddWebHookDialogComponent } from './dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
 import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialog.component';
 import { AddOrganizationDialogComponent } from './dialogs/add-organization-dialog/add-organization-dialog.component';
+import { PaymentComponent } from './type/components/payment/payment.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -148,6 +149,7 @@ export const AuthConfig = {
         AddWebHookDialogComponent,
         AddUserDialogComponent,
         AddOrganizationDialogComponent,
+        PaymentComponent,
     ],
     imports: [
         BrowserModule,

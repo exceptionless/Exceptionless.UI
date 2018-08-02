@@ -25,6 +25,7 @@ export class InvoicesComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.get();
     }
 
     get(options?) {

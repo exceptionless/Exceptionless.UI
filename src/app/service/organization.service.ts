@@ -89,8 +89,8 @@ export class OrganizationService {
         return this.http.get(`organizations/invoice/${id}`);
     }
 
-    getInvoices(id, options) {
-        return this.http.get(`organizations/${id}/invoices`, { params: options || {} });
+    getInvoices(id, options): Observable<HttpResponse<any>> {
+        return this.http.get(`organizations/${id}/invoices`, {  observe: 'response', params: options || {} });
     }
 
     getPlans(id) {

@@ -1,3 +1,69 @@
-<p>
-  project-new works!
-</p>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="col">
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading"><i class="fa fa-asterisk"></i> Project Information</div>
+                <div class="panel-body">
+                    <form name="vm.addForm" role="form" class="form-validation">
+                        <div class="form-group" *ngIf="hasOrganizations()">
+                            <label for="organization">Organization Name</label>
+                            <select id="organization" class="form-control"
+                                    ng-model="currentOrganization"
+                                    ng-options="organization.name for organization in organizations track by organization.id"></select>
+                        </div>
+
+                        <div class="form-group" *ngIf="canCreateOrganization()">
+                            <div [ngClass]="{'input-group': !!addForm.$pending }">
+                                <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
+                                       ng-model="organization_name"
+                                       ng-model-options="{ debounce: 500 }"
+                                       organization-name-available-validator
+                                       ng-required="canCreateOrganization()"
+                                       autofocus />
+
+                                <span class="input-group-addon" *ngIf="addForm.$pending">
+                                    <i class="fa fa-fw fa-spinner fa-spin"></i>
+                                </span>
+                            </div>
+
+                            <div class="error" ng-messages="addForm.organization_name.$error" *ngIf="addForm.$submitted || addForm.organization_name.$touched">
+                                <small ng-message="required">Organization Name is required.</small>
+                                <small ng-message="unique">A organizations with this name already exists.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="project_name">Project Name</label>
+                            <div [ngClass]="{'input-group': !!addForm.$pending }">
+                                <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name"
+                                       ng-model="project_name"
+                                       ng-model-options="{ debounce: 500 }"
+                                       project-name-available-validator
+                                       organization-id="currentOrganization.id"
+                                       required
+                                       autofocus />
+
+                                <span class="input-group-addon" *ngIf="addForm.$pending">
+                                    <i class="fa fa-fw fa-spinner fa-spin"></i>
+                                </span>
+                            </div>
+
+                            <div class="error" ng-messages="addForm.project_name.$error" *ngIf="addForm.$submitted || addForm.project_name.$touched">
+                                <small ng-message="required">Project Name is required.</small>
+                                <small ng-message="unique">A project with this name already exists.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <footer class="panel-footer">
+                    <div class="pull-right">
+                        <a ui-sref="app.dashboard" *ngIf="hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
+                    </div>
+                    <div class="clearfix">
+                        <input (click)="add()" type="submit" role="button" class="btn btn-primary" value="Add Project" />
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

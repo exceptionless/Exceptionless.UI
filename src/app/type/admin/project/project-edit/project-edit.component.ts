@@ -287,7 +287,6 @@ export class ProjectEditComponent implements OnInit {
             });
 
             this.seriesData = this.chart.options.series1;
-
             return this.organization;
         };
         return new Promise((resolve, reject) => {
@@ -459,7 +458,7 @@ export class ProjectEditComponent implements OnInit {
                 this.projectService.remove(this._projectId).subscribe(
                     res => {
                         this.notificationService.success('Success!', 'Successfully queued the project for deletion.');
-                        this.router.navigate(['/type/project/list'])
+                        this.router.navigate(['/type/project/list']);
                         resolve(res);
                     },
                     err => {
@@ -779,7 +778,7 @@ export class ProjectEditComponent implements OnInit {
             }*/
 
             this.notificationService.error('Failed!', 'An error occurred while saving your slack notification settings.');
-        }
+        };
 
         return this.projectService.setIntegrationNotificationSettings(this._projectId, 'slack', this.slackNotificationSettings).subscribe(
             res => {

@@ -20,6 +20,7 @@ export class OrganizationEditComponent implements OnInit {
     _organizationId = '';
     _ignoreRefresh = false;
     canChangePlan = false;
+    seriesData: any[];
     chart = {
         options: {
             padding: {top: 0.085},
@@ -27,19 +28,23 @@ export class OrganizationEditComponent implements OnInit {
             series1: [{
                 name: 'Allowed',
                 color: '#a4d56f',
-                renderer: 'stack'
+                renderer: 'stack',
+                data: []
             }, {
                 name: 'Blocked',
                 color: '#e2e2e2',
-                renderer: 'stack'
+                renderer: 'stack',
+                data: []
             }, {
                 name: 'Too Big',
                 color: '#ccc',
-                renderer: 'stack'
+                renderer: 'stack',
+                data: []
             }, {
                 name: 'Limit',
                 color: '#a94442',
-                renderer: 'dotted_line'
+                renderer: 'dotted_line',
+                data: []
             }]
         },
         features: {
@@ -244,6 +249,7 @@ export class OrganizationEditComponent implements OnInit {
                 return {x: moment.utc(item.date).unix(), y: item.limit, data: item};
             });
 
+            this.seriesData = this.chart.options.series1;
             return this.organization;
         };
 

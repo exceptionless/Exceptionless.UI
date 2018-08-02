@@ -122,9 +122,9 @@ export class OrganizationListComponent implements OnInit {
     open(id, event) {
         const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
-            window.open(`/organization/${id}/manage`, '_blank');
+            window.open(`/type/organization/${id}/manage`, '_blank');
         } else {
-            this.router.navigate([`/organization/${id}/manage`]);
+            this.router.navigate([`/type/organization/${id}/manage`]);
         }
 
         event.preventDefault();
