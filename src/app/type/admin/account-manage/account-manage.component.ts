@@ -19,7 +19,7 @@ import { EmailUniqueValidator } from '../../../validators/email-unique.validator
     styleUrls: ['./account-manage.component.less']
 })
 export class AccountManageComponent implements OnInit {
-    @ViewChild('frm') public emailAddressForm: NgForm;
+    @ViewChild('emailAddressForm') public emailAddressForm: NgForm;
     _canSaveEmailAddress = true;
     activeTab = 'general';
     password = {

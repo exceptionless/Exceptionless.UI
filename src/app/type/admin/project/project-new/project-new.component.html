@@ -4,7 +4,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-asterisk"></i> Project Information</div>
                 <div class="panel-body">
-                    <form name="vm.addForm" role="form" class="form-validation">
+                    <form name="addForm" role="form" class="form-validation" #addForm="ngForm">
                         <div class="form-group" *ngIf="hasOrganizations()">
                             <label for="organization">Organization Name</label>
                             <select id="organization" class="form-control"
