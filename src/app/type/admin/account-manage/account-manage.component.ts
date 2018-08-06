@@ -270,7 +270,7 @@ export class AccountManageComponent implements OnInit {
             }
 
             this.notificationService.error('Failed!', message);
-        }
+        };
 
         return this.userService.resendVerificationEmail(this.user['id']).subscribe(
             res => {},
@@ -386,7 +386,7 @@ export class AccountManageComponent implements OnInit {
             }
 
             this.notificationService.error('Failed!', message);
-        }
+        };
 
         return this.userService.update(this.user['id'], this.user).subscribe(
             res => {},

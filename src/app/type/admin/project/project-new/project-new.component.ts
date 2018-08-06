@@ -24,12 +24,14 @@ export class ProjectNewComponent implements OnInit {
         private notificationService: NotificationService,
         private organizationService: OrganizationService,
         private projectService: ProjectService,
-    ) {}
-
-    ngOnInit() {
+    ) {
         this.activatedRoute.params.subscribe( (params) => {
             this.organizationId = params['id'];
         });
+    }
+
+    ngOnInit() {
+        this.getOrganizations();
     }
 
     add(isRetrying) {
@@ -151,7 +153,7 @@ export class ProjectNewComponent implements OnInit {
         };
         return this.organizationService.getAll().subscribe(
             res => {
-                onSuccess(res);
+                onSuccess(res.body);
             },
             err => {
                 if (!this.notificationService) {
@@ -162,7 +164,7 @@ export class ProjectNewComponent implements OnInit {
     }
 
     hasOrganizations() {
-        return this.organizations.filter(function (o) {
+        return this.organizations.filter((o) => {
             return o.id !== this._newOrganizationId;
         }).length > 0;
     }
