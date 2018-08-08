@@ -6,11 +6,9 @@ import { AnalyticsService } from './analytics.service';
 })
 
 export class BillingService {
-
     constructor(
         private analyticsService: AnalyticsService
-    ) {
-    }
+    ) {}
 
     changePlan(organizationId) {
         this.analyticsService.initiateCheckout();

@@ -8,8 +8,7 @@ export class OpenDirective {
     constructor(
         private _elementRef: ElementRef,
         private  renderer: Renderer2
-    ) {
-    }
+    ) {}
 
     @Output()
     public clickOutside = new EventEmitter();

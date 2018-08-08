@@ -5,8 +5,8 @@ import { Locker, DRIVERS } from 'angular-safeguard';
 @Injectable({
     providedIn: 'root'
 })
-export class AnalyticsService {
 
+export class AnalyticsService {
     constructor(
         private locker: Locker,
         private ngxAnalytics: NgxAnalytics

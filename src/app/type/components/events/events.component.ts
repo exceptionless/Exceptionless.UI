@@ -1,19 +1,17 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../../service/filter.service';
 import { EventsActionService } from '../../../service/events-action.service';
 import { NotificationService } from '../../../service/notification.service';
 import { LinkService } from '../../../service/link.service';
 import { PaginationService } from '../../../service/pagination.service';
-import { EventService } from '../../../service/event.service';
 
 @Component({
     selector: 'app-events',
-    templateUrl: './events.component.html',
-    styleUrls: ['./events.component.less']
+    templateUrl: './events.component.html'
 })
 
-export class EventsComponent implements OnInit {
+export class EventsComponent implements OnInit, OnChanges {
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;
@@ -30,17 +28,14 @@ export class EventsComponent implements OnInit {
     sortByDateDescending: any;
     timeHeaderText: string;
     hideSessionStartTime: boolean;
-
     constructor(
         private router: Router,
         private filterService: FilterService,
-        private eventService: EventService,
         private eventsActionService: EventsActionService,
         private notificationService: NotificationService,
         private linkService: LinkService,
         private paginationService: PaginationService,
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
     }

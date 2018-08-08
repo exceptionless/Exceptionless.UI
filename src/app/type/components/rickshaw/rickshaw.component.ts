@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, ViewChild, Input, ElementRef, SimpleChanges } from '@angular/core';
 import * as Rickshaw from 'rickshaw';
 import * as moment from 'moment';
 
 @Component({
     selector: 'app-rickshaw',
-    templateUrl: './rickshaw.component.html',
-    styleUrls: ['./rickshaw.component.less']
+    templateUrl: './rickshaw.component.html'
 })
 
-export class RickshawComponent implements OnInit {
+export class RickshawComponent implements OnChanges {
     @Input() options;
     @Input() seriesData;
     @Input() eventType;
@@ -223,8 +222,5 @@ export class RickshawComponent implements OnInit {
                 yAxis.render();
             }
         }
-    }
-
-    ngOnInit() {
     }
 }

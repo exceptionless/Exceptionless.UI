@@ -1,12 +1,11 @@
-import {Component, OnInit, Input, SimpleChanges} from '@angular/core';
+import {Component, OnInit, OnChanges, Input, SimpleChanges} from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
     selector: 'app-duration',
-    templateUrl: './duration.component.html',
-    styleUrls: ['./duration.component.less']
+    templateUrl: './duration.component.html'
 })
-export class DurationComponent implements OnInit {
+export class DurationComponent implements OnInit, OnChanges {
     @Input() value;
     @Input() period;
     text = '';

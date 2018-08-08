@@ -3,10 +3,9 @@ import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
-export class ErrorService {
 
-    constructor() {
-    }
+export class ErrorService {
+    constructor() {}
 
     getExceptions(exception) {
         const exceptions = [];

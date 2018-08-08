@@ -7,11 +7,9 @@ import { Observable } from 'rxjs/Observable';
 })
 
 export class ProjectService {
-
     constructor(
         private http: HttpClient,
-    ) {
-    }
+    ) {}
 
     addSlack(id) {
         // need to implement later Exceptionless

@@ -5,8 +5,9 @@ import { FilterStoreService } from '../../../service/filter-store.service';
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.css']
+    styleUrls: ['./sidebar.component.less']
 })
+
 export class SidebarComponent implements OnInit {
     types = {
         exceptions: 'error',
@@ -26,8 +27,7 @@ export class SidebarComponent implements OnInit {
     constructor(
         private filterStoreService: FilterStoreService,
         private filterService: FilterService
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
         this.filterStoreService.getProjectFilterEmitter().subscribe(item => {

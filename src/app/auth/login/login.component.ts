@@ -2,18 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Login } from './login.class';
 import { AuthService } from 'ng2-ui-auth';
-import { NotificationService } from "../../service/notification.service";
+import { NotificationService } from '../../service/notification.service';
 
 @Component({
     selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.less']
+    templateUrl: './login.component.html'
 })
 
 export class LoginComponent implements OnInit {
     model = new Login();
     submitted = false;
-
     constructor(
         private auth: AuthService,
         private notificationService: NotificationService,

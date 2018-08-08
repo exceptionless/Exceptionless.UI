@@ -4,10 +4,10 @@ import { ModalParameterService } from '../../service/modal-parameter.service';
 
 @Component({
     selector: 'app-add-user-dialog',
-    templateUrl: './add-user-dialog.component.html',
-    styleUrls: ['./add-user-dialog.component.less']
+    templateUrl: './add-user-dialog.component.html'
 })
-export class AddUserDialogComponent implements OnInit {
+
+export class AddUserDialogComponent implements IModalDialog {
     data = {
         email: ''
     };
@@ -15,9 +15,6 @@ export class AddUserDialogComponent implements OnInit {
     constructor(
         private modalParameterService: ModalParameterService
     ) {}
-
-    ngOnInit() {
-    }
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed

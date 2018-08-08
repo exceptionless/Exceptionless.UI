@@ -8,6 +8,7 @@ import { NotificationService } from '../../../service/notification.service';
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.less']
 })
+
 export class HeaderComponent implements OnInit {
     @Output() navigationCollapseToggle: EventEmitter<any> = new EventEmitter();
 

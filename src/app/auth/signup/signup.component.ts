@@ -6,9 +6,9 @@ import { AuthService } from 'ng2-ui-auth';
 
 @Component({
     selector: 'app-signup',
-    templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.less']
+    templateUrl: './signup.component.html'
 })
+
 export class SignupComponent implements OnInit {
     model = new Signup();
     submitted = false;
@@ -17,8 +17,7 @@ export class SignupComponent implements OnInit {
         private router: Router,
         private auth: AuthService,
         private notificationService: NotificationService
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
     }

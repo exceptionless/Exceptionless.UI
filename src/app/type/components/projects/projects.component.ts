@@ -9,9 +9,9 @@ import { ConfirmDialogComponent } from '../../../dialogs/confirm-dialog/confirm-
 
 @Component({
     selector: 'app-projects',
-    templateUrl: './projects.component.html',
-    styleUrls: ['./projects.component.less']
+    templateUrl: './projects.component.html'
 })
+
 export class ProjectsComponent implements OnInit {
     @Input() settings;
     next: string;

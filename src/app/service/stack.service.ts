@@ -8,7 +8,6 @@ import { Observable } from 'rxjs/Observable';
 })
 
 export class StackService {
-
     constructor(
         private http: HttpClient,
         private filterService: FilterService,

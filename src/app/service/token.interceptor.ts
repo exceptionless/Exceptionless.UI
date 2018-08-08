@@ -10,8 +10,7 @@ export class TokenInterceptor implements HttpInterceptor {
     constructor(
         private auth: AuthService,
         private globalVariables: GlobalVariables
-    ) {
-    }
+    ) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         request = request.clone({

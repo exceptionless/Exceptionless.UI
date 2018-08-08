@@ -6,11 +6,9 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class NotificationService {
-
     constructor(
         private toastr: ToastrService,
-    ) {
-    }
+    ) {}
 
     error(title, text) {
         this.toastr.error(text, title);

@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
     providedIn: 'root'
 })
-export class WebHookService {
 
+export class WebHookService {
     constructor(
         private http: HttpClient
     ) {}

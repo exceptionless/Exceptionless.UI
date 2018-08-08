@@ -3,18 +3,18 @@ import {Injectable} from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
+
 export class DateRangeParserService {
     _rangeRegex: any = /(\d{4}-\d{2}-\d{2}(?:T(?:\d{2}:\d{2}:\d{2}|\d{2}:\d{2}|\d{2}))?)/g;
-
-    constructor() {
-    }
+    constructor() {}
 
     parse(input) {
         if (!input) {
             return null;
         }
 
-        let matches = [], found;
+        const matches = [];
+        let found;
         while (found = this._rangeRegex.exec(input)) {
             matches.push(found[0]);
         }

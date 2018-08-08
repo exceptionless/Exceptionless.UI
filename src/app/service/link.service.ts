@@ -4,10 +4,9 @@ import * as li from 'li';
 @Injectable({
     providedIn: 'root'
 })
-export class LinkService {
 
-    constructor() {
-    }
+export class LinkService {
+    constructor() {}
 
     getLinks(linkHeader) {
         if (linkHeader == null) {
@@ -20,11 +19,10 @@ export class LinkService {
     getLinksQueryParameters(linkHeader) {
         const parsedLinks = this.getLinks(linkHeader);
         const links = {};
-
-        for (const rel in parsedLinks) {
+        Object.keys(parsedLinks).forEach(rel => {
             const url = parsedLinks[rel];
             links[rel] = this.parseQueryString(url.slice(url.indexOf('?')));
-        }
+        });
 
         return links;
     }
@@ -42,7 +40,7 @@ export class LinkService {
             return result;
         }
 
-        input.split('&').forEach(function (param) {
+        input.split('&').forEach((param) => {
             const parts = param.replace(/\+/g, ' ').split('=');
             // Firefox (pre 40) decodes `%3D` to `=`
             // https://github.com/sindresorhus/query-string/pull/37

@@ -1,7 +1,5 @@
 import {Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 
-import { HeaderComponent } from './includes/header/header.component';
-
 @Component({
     selector: 'app-type',
     templateUrl: './type.component.html',
@@ -9,7 +7,7 @@ import { HeaderComponent } from './includes/header/header.component';
 })
 
 export class TypeComponent implements OnInit {
-    isSideNavCollapsed: boolean = false;
+    isSideNavCollapsed = false;
 
     constructor() {
     }

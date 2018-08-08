@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentRef } from '@angular/core';
+import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
 
 @Component({
     selector: 'app-add-web-hook-dialog',
-    templateUrl: './add-web-hook-dialog.component.html',
-    styleUrls: ['./add-web-hook-dialog.component.less']
+    templateUrl: './add-web-hook-dialog.component.html'
 })
-export class AddWebHookDialogComponent implements OnInit {
 
-    constructor() {
+export class AddWebHookDialogComponent implements IModalDialog {
+    constructor() {}
+
+    dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+        // no processing needed
     }
-
-    ngOnInit() {
-    }
-
 }

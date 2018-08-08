@@ -7,12 +7,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class SearchService {
-
     constructor(
         private http: HttpClient,
         private toastr: ToastrService,
-    ) {
-    }
+    ) {}
 
     validate(query) {
         if (!query || (query.trim && query.trim() === '*')) {

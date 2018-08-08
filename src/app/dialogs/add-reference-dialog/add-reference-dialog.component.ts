@@ -1,25 +1,20 @@
-import { Component, OnInit, ComponentRef } from '@angular/core';
+import { Component, ComponentRef } from '@angular/core';
 import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
 import { ModalParameterService } from '../../service/modal-parameter.service';
 
 @Component({
     selector: 'app-add-reference-dialog',
-    templateUrl: './add-reference-dialog.component.html',
-    styleUrls: ['./add-reference-dialog.component.less']
+    templateUrl: './add-reference-dialog.component.html'
 })
 
-export class AddReferenceDialogComponent implements OnInit {
+export class AddReferenceDialogComponent implements IModalDialog {
     data = {
         url: ''
     };
     dataKey = '';
-
     constructor(
         private modalParameterService: ModalParameterService
     ) {}
-
-    ngOnInit() {
-    }
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed

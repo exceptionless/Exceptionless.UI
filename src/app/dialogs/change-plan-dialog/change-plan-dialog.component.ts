@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentRef } from '@angular/core';
+import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
 
 @Component({
-  selector: 'app-change-plan-dialog',
-  templateUrl: './change-plan-dialog.component.html',
-  styleUrls: ['./change-plan-dialog.component.less']
+    selector: 'app-change-plan-dialog',
+    templateUrl: './change-plan-dialog.component.html'
 })
-export class ChangePlanDialogComponent implements OnInit {
 
-  constructor() { }
+export class ChangePlanDialogComponent implements IModalDialog {
+    constructor() {
+    }
 
-  ngOnInit() {
-  }
+    dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+        // no processing needed
+    }
 
 }

@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.less']
 })
+
 export class ReportsComponent implements OnInit {
 
   constructor() { }

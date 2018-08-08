@@ -8,8 +8,7 @@ import { GlobalVariables } from '../../../global-variables';
 
 @Component({
     selector: 'app-organization-notification',
-    templateUrl: './organization-notification.component.html',
-    styleUrls: ['./organization-notification.component.less']
+    templateUrl: './organization-notification.component.html'
 })
 
 export class OrganizationNotificationComponent implements OnInit {

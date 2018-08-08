@@ -6,9 +6,9 @@ import { UserService } from '../../../service/user.service';
 
 @Component({
     selector: 'app-invoices',
-    templateUrl: './invoices.component.html',
-    styleUrls: ['./invoices.component.less']
+    templateUrl: './invoices.component.html'
 })
+
 export class InvoicesComponent implements OnInit {
     @Input() settings;
     invoices = [];

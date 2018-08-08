@@ -3,9 +3,9 @@ import * as moment from 'moment';
 
 @Component({
     selector: 'app-relative-time',
-    templateUrl: './relative-time.component.html',
-    styleUrls: ['./relative-time.component.less']
+    templateUrl: './relative-time.component.html'
 })
+
 export class RelativeTimeComponent implements OnInit {
     @Input() date;
     @Input() to;

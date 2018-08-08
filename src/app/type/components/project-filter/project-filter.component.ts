@@ -10,6 +10,7 @@ import { FilterService } from '../../../service/filter.service';
     templateUrl: './project-filter.component.html',
     styleUrls: ['./project-filter.component.less']
 })
+
 export class ProjectFilterComponent implements OnInit {
     isLoadingOrganizations = true;
     isLoadingProjects = true;

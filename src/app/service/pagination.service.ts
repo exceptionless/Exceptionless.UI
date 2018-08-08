@@ -5,12 +5,11 @@ import {Injectable} from '@angular/core';
 })
 
 export class PaginationService {
-    constructor() {
-    }
+    constructor() {}
 
     getCurrentPageSummary(data, page, limit) {
-        page = page ? parseInt(page) : 1;
-        limit = limit ? parseInt(limit) : 100;
+        page = page ? parseInt(page, 10) : 1;
+        limit = limit ? parseInt(limit, 10) : 100;
 
         const from = ((page - 1) * limit) + 1;
         const to = data && data.length > 0 ? from + data.length - 1 : from;

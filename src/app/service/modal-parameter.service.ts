@@ -3,10 +3,10 @@ import {Injectable} from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
+
 export class ModalParameterService {
     modalParameter = {};
-    constructor() {
-    }
+    constructor() {}
 
     setModalParameter(key, value) {
         this.modalParameter = {};

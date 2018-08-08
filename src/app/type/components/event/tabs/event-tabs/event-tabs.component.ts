@@ -13,13 +13,11 @@ import { EventComponent } from '../../event.component';
 
 @Component({
     selector: 'app-event-tabs',
-    templateUrl: './event-tabs.component.html',
-    styleUrls: ['./event-tabs.component.less']
+    templateUrl: './event-tabs.component.html'
 })
 
 export class EventTabsComponent extends EventComponent {
     @Input() tab;
-
     constructor(
         router: Router,
         activatedRoute: ActivatedRoute,

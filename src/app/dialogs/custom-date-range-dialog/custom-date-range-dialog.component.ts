@@ -5,11 +5,10 @@ import { FilterService } from '../../service/filter.service';
 
 @Component({
     selector: 'app-custom-date-range-dialog',
-    templateUrl: './custom-date-range-dialog.component.html',
-    styleUrls: ['./custom-date-range-dialog.component.less']
+    templateUrl: './custom-date-range-dialog.component.html'
 })
 
-export class CustomDateRangeDialogComponent implements OnInit {
+export class CustomDateRangeDialogComponent implements IModalDialog {
     daterangepickerOptions = {
         startDate: null,
         endDate: null,
@@ -30,14 +29,9 @@ export class CustomDateRangeDialogComponent implements OnInit {
         preDefinedRanges: [],
         disableBeforeStart: true
     };
-
     constructor(
         private filterService: FilterService
-    ) {
-    }
-
-    ngOnInit() {
-    }
+    ) {}
 
     rangeSelected(date: any) {
         const confirmedFilterDate = date.start.format('YYYY-MM-DDTHH:mm:ss') + '-' + date.end.format('YYYY-MM-DDTHH:mm:ss');

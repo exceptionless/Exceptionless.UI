@@ -9,23 +9,21 @@ import { Observable } from 'rxjs/Observable';
 })
 
 export class OrganizationService {
-
     constructor(
         private http: HttpClient,
         private objectIdService: ObjectIdService,
-    ) {
-    }
+    ) {}
 
     addUser(id, email) {
         const data = {};
         return this.http.post(`organizations/${id}/users/${email}`, data);
     }
 
-    create(name) {
+    create(name): Observable<HttpResponse<any>> {
         const data = {
             'name': name
         };
-        return this.http.post('organizations', data);
+        return this.http.post('organizations', data, { observe: 'response' });
     }
 
     changePlan(id, options) {

@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
     selector: 'app-timeago',
-    templateUrl: './timeago.component.html',
-    styleUrls: ['./timeago.component.less']
+    templateUrl: './timeago.component.html'
 })
-export class TimeagoComponent implements OnInit {
+
+export class TimeagoComponent implements OnInit, OnChanges {
     @Input() date;
     text = '';
 

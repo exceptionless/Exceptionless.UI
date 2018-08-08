@@ -33,28 +33,25 @@ import { SearchFilterComponent } from './type/components/search-filter/search-fi
 import { ProjectFilterComponent } from './type/components/project-filter/project-filter.component';
 import { DateFilterComponent } from './type/components/date-filter/date-filter.component';
 import { ReportsComponent } from './type/reports/reports.component';
-import { AdminComponent } from './type/admin/admin.component';
-import { SupportComponent } from './type/support/support.component';
-import { ProjectComponent } from './type/admin/project/project.component';
-import { OrganizationComponent } from './type/admin/organization/organization.component';
-import { AccountManageComponent } from './type/admin/account-manage/account-manage.component';
+import { ProjectComponent } from './type/components/project/project.component';
+import { OrganizationComponent } from './type/components/organization/organization.component';
+import { AccountManageComponent } from './type/components/account-manage/account-manage.component';
 import { OpenDirective } from './directives/open.directive';
-import { DashboardComponent } from './type/common/dashboard/dashboard.component';
-import { RecentComponent } from './type/common/recent/recent.component';
-import { UsersComponent } from './type/common/users/users.component';
-import { NewComponent } from './type/common/new/new.component';
-import { FrequentComponent } from './type/common/frequent/frequent.component';
+import { DashboardComponent } from './type/components/dashboard/dashboard.component';
+import { RecentComponent } from './type/components/recent/recent.component';
+import { UsersComponent } from './type/components/users/users.component';
+import { NewComponent } from './type/components/new/new.component';
+import { FrequentComponent } from './type/components/frequent/frequent.component';
 import { OrganizationNotificationComponent } from './type/components/organization-notification/organization-notification.component';
 import { OrganizationService } from './service/organization.service';
 import { FilterService } from './service/filter.service';
 import { RickshawComponent } from './type/components/rickshaw/rickshaw.component';
-import { ProjectListComponent } from './type/admin/project/project-list/project-list.component';
+import { ProjectListComponent } from './type/components/project/project-list/project-list.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
-import { ProjectNewComponent } from './type/admin/project/project-new/project-new.component';
-import { OrganizationNewComponent } from './type/admin/organization/organization-new/organization-new.component';
-import { OrganizationListComponent } from './type/admin/organization/organization-list/organization-list.component';
-import { ProjectEditComponent } from './type/admin/project/project-edit/project-edit.component';
-import { OrganizationEditComponent } from './type/admin/organization/organization-edit/organization-edit.component';
+import { ProjectNewComponent } from './type/components/project/project-new/project-new.component';
+import { OrganizationListComponent } from './type/components/organization/organization-list/organization-list.component';
+import { ProjectEditComponent } from './type/components/project/project-edit/project-edit.component';
+import { OrganizationEditComponent } from './type/components/organization/organization-edit/organization-edit.component';
 import { CustomDateRangeDialogComponent } from './dialogs/custom-date-range-dialog/custom-date-range-dialog.component';
 import { SummaryComponent } from './type/components/summary/summary.component';
 import { StacksComponent } from './type/components/stacks/stacks.component';
@@ -104,8 +101,6 @@ export const AuthConfig = {
         ProjectFilterComponent,
         DateFilterComponent,
         ReportsComponent,
-        AdminComponent,
-        SupportComponent,
         ProjectComponent,
         OrganizationComponent,
         AccountManageComponent,
@@ -122,7 +117,6 @@ export const AuthConfig = {
         ConfirmDialogComponent,
         ProjectListComponent,
         ProjectNewComponent,
-        OrganizationNewComponent,
         OrganizationListComponent,
         ProjectEditComponent,
         OrganizationEditComponent,
@@ -181,7 +175,7 @@ export const AuthConfig = {
         }
     ],
     bootstrap: [AppComponent],
-    entryComponents: [ConfirmDialogComponent, CustomDateRangeDialogComponent, AddReferenceDialogComponent]
+    entryComponents: [ConfirmDialogComponent, CustomDateRangeDialogComponent, AddReferenceDialogComponent, AddOrganizationDialogComponent]
 })
 
 export class AppModule {

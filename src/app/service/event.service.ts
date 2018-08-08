@@ -10,7 +10,6 @@ import * as moment from 'moment';
 })
 
 export class EventService {
-
     constructor(
         private http: HttpClient,
         private filterService: FilterService,

@@ -17,9 +17,9 @@ import { ModalParameterService } from '../../../service/modal-parameter.service'
 
 @Component({
     selector: 'app-stack',
-    templateUrl: './stack.component.html',
-    styleUrls: ['./stack.component.less']
+    templateUrl: './stack.component.html'
 })
+
 export class StackComponent implements OnInit {
     _organizations = [];
     _stackId = '';
@@ -167,7 +167,7 @@ export class StackComponent implements OnInit {
     }
 
     buildUserStatTitle(users, totalUsers) {
-        return parseInt(users) + ' of ' + parseInt(totalUsers, 0) +  ' users';
+        return parseInt(users, 10) + ' of ' + parseInt(totalUsers, 10) +  ' users';
     }
 
     executeAction() {
@@ -344,16 +344,15 @@ export class StackComponent implements OnInit {
                         name: option['name'],
                         stroke: 'rgba(0, 0, 0, 0.15)',
                         data: dateAggregation.map(function (item) {
-                            const getYValue = (item, index) => {
+                            const getYValue = (itemValue, key) => {
                                 let field = option.field.replace(':', '_');
                                 const proximity = field.indexOf('~');
                                 if (proximity !== -1) {
                                     field = field.substring(0, proximity);
                                 }
 
-                                return getAggregationValue(item, field, 0);
+                                return getAggregationValue(itemValue, field, 0);
                             };
-
                             return { x: moment(item.key).unix(), y: getYValue(item, index), data: item };
                         })
                     });

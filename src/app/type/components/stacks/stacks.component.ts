@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../../service/filter.service';
 import { StackService } from '../../../service/stack.service';
@@ -9,11 +9,10 @@ import { StacksActionsService } from '../../../service/stacks-actions.service';
 
 @Component({
     selector: 'app-stacks',
-    templateUrl: './stacks.component.html',
-    styleUrls: ['./stacks.component.less'],
+    templateUrl: './stacks.component.html'
 })
 
-export class StacksComponent implements OnInit {
+export class StacksComponent implements OnChanges {
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;
@@ -36,11 +35,7 @@ export class StacksComponent implements OnInit {
         private paginationService: PaginationService,
         private notificationService: NotificationService,
         private stacksActionsService: StacksActionsService,
-    ) {
-    }
-
-    ngOnInit() {
-    }
+    ) {}
 
     ngOnChanges(changes: SimpleChanges) {
         this.actions = this.stacksActionsService.getActions();

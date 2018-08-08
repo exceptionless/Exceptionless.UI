@@ -5,6 +5,7 @@ import {Component, OnInit} from '@angular/core';
     templateUrl: './stack-trace.component.html',
     styleUrls: ['./stack-trace.component.less']
 })
+
 export class StackTraceComponent implements OnInit {
     stackTrace: any;
     constructor() {

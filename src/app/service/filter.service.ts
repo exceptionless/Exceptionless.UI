@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 
 @Injectable()
+
 export class FilterService {
     DEFAULT_TIME_FILTER = 'last week';
     _time: any;
@@ -13,7 +14,6 @@ export class FilterService {
     _organizationId = '';
     _projectId = '';
     _raw = '';
-
     constructor(
         private filterStoreService: FilterStoreService,
         private dateRangeParserService: DateRangeParserService,

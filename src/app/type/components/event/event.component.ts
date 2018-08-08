@@ -13,9 +13,9 @@ import { ProjectService } from '../../../service/project.service';
 
 @Component({
     selector: 'app-event',
-    templateUrl: './event.component.html',
-    styleUrls: ['./event.component.less']
+    templateUrl: './event.component.html'
 })
+
 export class EventComponent implements OnInit {
     _eventId = [];
     _knownDataKeys = ['error', '@error', '@simple_error', '@request', '@trace', '@environment', '@user', '@user_description', '@version', '@level', '@location', '@submission_method', '@submission_client', 'session_id', 'sessionend', 'haserror', '@stack'];
@@ -48,13 +48,13 @@ export class EventComponent implements OnInit {
     references = [];
     sessionEvents = {
         get: (options) => {
-            const optionsCallback = (options) => {
-                options.filter = '-type:heartbeat';
+            const optionsCallback = (option) => {
+                option.filter = '-type:heartbeat';
 
                 const start = moment.utc(this.event['date']).local();
                 const end = (this.event['data'] && this.event['data']['sessionend']) ? moment.utc(this.event['data']['sessionend']).add(1, 'seconds').local().format('YYYY-MM-DDTHH:mm:ss') : 'now';
-                options.time = start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end;
-                return options;
+                option.time = start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end;
+                return option;
             };
 
             return this.eventService.getBySessionId(this.event['project_id'], this.event['reference_id'], options, optionsCallback(options));
@@ -314,7 +314,7 @@ export class EventComponent implements OnInit {
             }
 
             return options;
-        }
+        };
 
         const onSuccess = (response, link) => {
             const getErrorType = (event) => {
@@ -364,7 +364,7 @@ export class EventComponent implements OnInit {
             this.buildReferences();
 
             return this.event;
-        }
+        };
 
         const onFailure = (response?) => {
             if (response && response.status === 426) {
@@ -378,7 +378,7 @@ export class EventComponent implements OnInit {
 
             this.router.navigate(['/type/events/dashboard']);
             this.notificationService.error('Failed!', 'Cannot_Find_Event');
-        }
+        };
 
         if (!this._eventId) {
             onFailure();
@@ -404,11 +404,11 @@ export class EventComponent implements OnInit {
             this.project['promoted_tabs'] = this.project['promoted_tabs'] || [];
 
             return this.project;
-        }
+        };
 
-        function onFailure() {
+        const onFailure = () => {
             this.router.navigate(['/type/events/dashboard']);
-        }
+        };
 
         if (!this.event || !this.event['project_id']) {
             onFailure();

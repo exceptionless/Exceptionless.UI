@@ -4,15 +4,14 @@ import { FilterStoreService } from '../service/filter-store.service';
 @Directive({
   selector: '[active]'
 })
+
 export class ActiveDirective {
     @Input('active') activeClass: string;
-
     constructor(
         private filterStoreService: FilterStoreService,
         private _elementRef: ElementRef,
         private  renderer: Renderer2
-    ) {
-    }
+    ) {}
 
     @Output()
     public clickOutside = new EventEmitter();

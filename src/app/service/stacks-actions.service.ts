@@ -24,7 +24,7 @@ export class StacksActionsService {
             };
 
             const runFunction = () => {
-                this.executeAction(ids, (ids) => this.stackService.markFixed(ids, ''), onSuccess(), onFailure());
+                this.executeAction(ids, (idArr) => this.stackService.markFixed(idArr, ''), onSuccess(), onFailure());
             };
 
             /*this.modalDialogService.openDialog(this.viewRef, {

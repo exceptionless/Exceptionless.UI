@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './search-filter.component.html',
   styleUrls: ['./search-filter.component.less']
 })
+
 export class SearchFilterComponent implements OnInit {
 
   constructor() { }

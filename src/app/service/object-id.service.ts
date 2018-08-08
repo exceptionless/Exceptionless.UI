@@ -6,9 +6,7 @@ import * as  ObjectId from 'objectid-js';
 })
 
 export class ObjectIdService {
-
-    constructor() {
-    }
+    constructor() {}
 
     create(id) {
         return new ObjectId(id);

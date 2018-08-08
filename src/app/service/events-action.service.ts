@@ -4,10 +4,11 @@ import {NotificationService} from './notification.service';
 @Injectable({
     providedIn: 'root'
 })
-export class EventsActionService {
 
-    constructor(private notificationService: NotificationService) {
-    }
+export class EventsActionService {
+    constructor(
+        private notificationService: NotificationService
+    ) {}
 
     deleteAction: object = {
         name: 'Delete',
