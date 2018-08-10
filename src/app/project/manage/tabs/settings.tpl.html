@@ -12,7 +12,7 @@
            ng-model-options="{ debounce: 500 }"
            ng-change="vm.saveIncludePrivateInformation()">
     <i></i>
-    <span style="margin-left: 0" ng-bind-html="'Notice_Include_Private_Information' | translate"></span>
+    {{::'Notice_Include_Private_Information' | translate}}
   </label>
 </div>
 
