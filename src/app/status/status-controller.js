@@ -9,7 +9,7 @@
         var underMaintenance = translateService.T("We're sorry but the website is currently undergoing maintenance.");
 
         if (vm._redirect) {
-          return underMaintenance + ' ' + translateService.T('You’ll be automatically redirected when the the maintenance is completed.') + ' ' + contactSupport;
+          return underMaintenance + ' ' + translateService.T('You’ll be automatically redirected when the maintenance is completed.') + ' ' + contactSupport;
         }
 
         if (!!vm._message) {

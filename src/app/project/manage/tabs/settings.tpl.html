@@ -1,10 +1,20 @@
 <h4>{{::'Data Exclusions' | translate}}</h4>
-<p ng-bind-html="'Notice_Data_Exclusions' | translate">
-</p>
+<p ng-bind-html="'Notice_Data_Exclusions' | translate"></p>
 <input type="text" class="form-control" placeholder="{{::'Example:' | translate}} *Password*, CreditCard*, SSN"
        ng-model="vm.data_exclusions"
        ng-model-options="{ debounce: 500 }"
        ng-change="vm.saveDataExclusion()"/>
+
+<div class="checkbox">
+  <label class="checks">
+    <input type="checkbox"
+           ng-model="vm.exclude_private_information"
+           ng-model-options="{ debounce: 500 }"
+           ng-change="vm.saveIncludePrivateInformation()">
+    <i></i>
+    <span style="margin-left: 0" ng-bind-html="'Notice_Include_Private_Information' | translate"></span>
+  </label>
+</div>
 
 <h4>{{::'Error Stacking' | translate}}</h4>
 <h5>{{::'User Namespaces' | translate}}</h5>

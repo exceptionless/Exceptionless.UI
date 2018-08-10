@@ -178,11 +178,14 @@
         function onSuccess(response) {
           vm.config = [];
           vm.data_exclusions = null;
+          vm.exclude_private_information = false;
           vm.user_agents = null;
 
           angular.forEach(response.data.settings, function (value, key) {
             if (key === '@@DataExclusions') {
               vm.data_exclusions = value;
+            } else if (key === '@@IncludePrivateInformation') {
+              vm.exclude_private_information = value === "false";
             } else if (key === '@@UserAgentBotPatterns') {
               vm.user_agents = value;
             } else {
@@ -336,7 +339,7 @@
 
       function saveDataExclusion() {
         function onFailure() {
-          notificationService.error(translateService.T('An error occurred while saving the the data exclusion.'));
+          notificationService.error(translateService.T('An error occurred while saving the data exclusion.'));
         }
 
         if (vm.data_exclusions) {
@@ -352,6 +355,18 @@
         }
 
         return projectService.update(vm._projectId, {'delete_bot_data_enabled': vm.project.delete_bot_data_enabled}).catch(onFailure);
+      }
+
+      function saveIncludePrivateInformation() {
+        function onFailure() {
+          notificationService.error(translateService.T('An error occurred while saving the include private information setting.'));
+        }
+
+        if (vm.exclude_private_information === true) {
+          return projectService.setConfig(vm._projectId, '@@IncludePrivateInformation', false).catch(onFailure);
+        } else {
+          return projectService.removeConfig(vm._projectId, '@@IncludePrivateInformation').catch(onFailure);
+        }
       }
 
       function saveUserAgents() {
@@ -526,6 +541,7 @@
         vm.getSlackNotificationSettings = getSlackNotificationSettings;
         vm.hasMonthlyUsage = true;
         vm.hasPremiumFeatures = false;
+        vm.exclude_private_information = false;
         vm.next_billing_date = moment().startOf('month').add(1, 'months').toDate();
         vm.organization = {};
         vm.project = {};
@@ -543,6 +559,7 @@
         vm.saveCommonMethods = saveCommonMethods;
         vm.saveDataExclusion = saveDataExclusion;
         vm.saveDeleteBotDataEnabled = saveDeleteBotDataEnabled;
+        vm.saveIncludePrivateInformation = saveIncludePrivateInformation;
         vm.saveSlackNotificationSettings = saveSlackNotificationSettings;
         vm.saveUserAgents = saveUserAgents;
         vm.saveUserNamespaces = saveUserNamespaces;

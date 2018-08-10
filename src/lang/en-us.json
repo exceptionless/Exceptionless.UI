@@ -67,7 +67,7 @@
 
   "Service Status":"Service Status",
   "We're sorry but the website is currently undergoing maintenance.":"We're sorry but the website is currently undergoing maintenance.",
-  "You’ll be automatically redirected when the the maintenance is completed.":"You’ll be automatically redirected when the the maintenance is completed.",
+  "You’ll be automatically redirected when the maintenance is completed.":"You’ll be automatically redirected when the maintenance is completed.",
 
   "Please enter a Reference Link":"Please enter a Reference Link",
   "Reference Link":"Reference Link",
@@ -336,7 +336,8 @@
   "NOTICE_CONFIGURATION":"The <a href=\"https://github.com/exceptionless/Exceptionless/wiki/Project-Settings#client-configuration-values\" target=\"_blank\">configuration values</a> on this page will be sent to the Exceptionless clients in real time. This allows you to change how your app works without redeploying your app.",
   "No projects were found with the current filter.":"No projects were found with the current filter.",
   "No projects were found.":"No projects were found.",
-  "Notice_Data_Exclusions":"A comma delimited list of field names that should be removed from any error report data(e.g., extended data properties, form fields, cookies and query parameters). You can also specify a <a href=\"https://github.com/exceptionless/Exceptionless/wiki/Security\" target=\"_blank\" title=\"Data Exclusions documentation\">field name with wildcards (<strong>*</strong>)</a> to specify starts with, ends with, or contains just to be extra safe.",
+  "Notice_Data_Exclusions":"A comma delimited list of field names that should be removed from any error report data (e.g., extended data properties, form fields, cookies and query parameters). You can also specify a <a href=\"https://github.com/exceptionless/Exceptionless/wiki/Security\" target=\"_blank\" title=\"Data Exclusions documentation\">field name with wildcards (<strong>*</strong>)</a> to specify starts with, ends with, or contains just to be extra safe.",
+  "Notice_Include_Private_Information":"Automatically remove user identifiable information from events (e.g., Machine Name, User Information, IP Addresses and more...).",
   "Notice_Error_Stacking":"A comma delimited list of the namespace names that your applications code belongs to. If this value is set, only methods inside of these namespaces will be considered as stacking targets.",
   "Notice_Common_Methods":"A comma delimited list of common method names that should not be used as stacking targets. This is useful when your code contains shared utility methods that throw a lot of errors.",
   "Notice_Spam_Detection":"A comma delimited list of user agents that should be ignored.",
@@ -418,7 +419,8 @@
   "An error occurred while saving the project.":"An error occurred while saving the project.",
   "An error occurred while saving the API key note.":"An error occurred while saving the API key note.",
   "An error occurred while saving the common methods.":"An error occurred while saving the common methods.",
-  "An error occurred while saving the the data exclusion.":"An error occurred while saving the the data exclusion.",
+  "An error occurred while saving the data exclusion.":"An error occurred while saving the data exclusion.",
+  "An error occurred while saving the include private information setting.":"An error occurred while saving the include private information setting.",
   "An error occurred while saving the user agents.":"An error occurred while saving the user agents.",
   "An error occurred while saving the user namespaces.":"An error occurred while saving the user namespaces.",
   "An error occurred while saving your slack notification settings.":"An error occurred while saving your slack notification settings.",
