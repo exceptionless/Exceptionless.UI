@@ -337,7 +337,7 @@
   "No projects were found with the current filter.":"No projects were found with the current filter.",
   "No projects were found.":"No projects were found.",
   "Notice_Data_Exclusions":"A comma delimited list of field names that should be removed from any error report data (e.g., extended data properties, form fields, cookies and query parameters). You can also specify a <a href=\"https://github.com/exceptionless/Exceptionless/wiki/Security\" target=\"_blank\" title=\"Data Exclusions documentation\">field name with wildcards (<strong>*</strong>)</a> to specify starts with, ends with, or contains just to be extra safe.",
-  "Notice_Include_Private_Information":"Automatically remove user identifiable information from events (e.g., Machine Name, User Information, IP Addresses and more...).",
+  "Automatically remove user identifiable information from events (e.g., Machine Name, User Information, IP Addresses and more...).":"Automatically remove user identifiable information from events (e.g., Machine Name, User Information, IP Addresses and more...).",
   "Notice_Error_Stacking":"A comma delimited list of the namespace names that your applications code belongs to. If this value is set, only methods inside of these namespaces will be considered as stacking targets.",
   "Notice_Common_Methods":"A comma delimited list of common method names that should not be used as stacking targets. This is useful when your code contains shared utility methods that throw a lot of errors.",
   "Notice_Spam_Detection":"A comma delimited list of user agents that should be ignored.",

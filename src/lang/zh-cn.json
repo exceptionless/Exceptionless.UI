@@ -339,7 +339,7 @@
     "No projects were found with the current filter.":"未找到满足当前筛选条件的项目。",
     "No projects were found.":"尚未发现任何项目。",
     "Notice_Data_Exclusions":"使用逗号分隔的字段名称列表用于移除任何错误报告中的相关数据（例如扩展数据属性、表单字段、Cookie 和查询参数）。 您也可以设置一个<a href=\"https://github.com/exceptionless/Exceptionless/wiki/Security\" target=\"_blank\" title=\"数据排除说明文档\">带通配符(<strong>*</strong>)的字段名称</a>匹配前缀、后缀或者包含，以提高安全性。",
-    "Notice_Include_Private_Information":"自动从事件中删除用户可识别信息（例如，机器名称，用户信息，IP地址等等",
+    "Automatically remove user identifiable information from events (e.g., Machine Name, User Information, IP Addresses and more...).":"自动从事件中删除用户可识别信息（例如，机器名称，用户信息，IP地址等等",
     "Notice_Error_Stacking":"使用逗号分隔的命名空间列表，这些命名空间应该是您的应用程序代码中所定义的。在此值填写之后，只有在列表命名空间中的方法调用才会被包含在错误堆栈中。",
     "Notice_Common_Methods":"使用逗号分隔的常用方法名称，这些方法不应该被包含在错误堆栈中。如果在您的代码包含一些公用方法，此功能在这些方法抛出大量异常的情况下非常有价值。",
     "Notice_Spam_Detection":"使用逗号分隔的 HTTP 请求的 User Agent 列表，任何匹配列表中 User Agent 的请求都将会被忽略。",
