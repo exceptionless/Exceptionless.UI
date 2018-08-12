@@ -307,12 +307,15 @@
                     <a ui-sref="app.organization.manage({ id: project.organization_id })" class="btn btn-primary" role="button" title="Manage Organization">
                         <i class="fa fa-fw fa-group"></i>
                     </a>
+
                     <a ui-sref="app.account.manage({ tab: 'notifications', projectId: project.id })" class="btn btn-primary" role="button" title="Manage Notification Settings">
                         <i class="fa fa-fw fa-envelope"></i>
                     </a>
+
                     <a ui-sref="app.project.configure({ id: project.id })" class="btn btn-primary" role="button" title="Download & Configure Client">
                         <i class="fa fa-fw fa-cloud-download"></i>
                     </a>
+
                     <div class="btn-group">
                         <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>

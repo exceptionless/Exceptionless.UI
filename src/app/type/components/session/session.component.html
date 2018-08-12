@@ -1,0 +1,83 @@
+<app-organization-notification></app-organization-notification>
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="col">
+        <div class="wrapper-md">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row row-sm text-center">
+                        <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="dashboard-block">
+                                <div class="rotate">
+                                    <i class="fa fa-area-chart fa-4x"></i>
+                                </div>
+                                <div class="details">
+                                    <span class="title">Sessions</span>
+                                    <span class="sub">{{ stats['total'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="dashboard-block">
+                                <div class="rotate">
+                                    <i class="fa fa-line-chart fa-4x"></i>
+                                </div>
+                                <div class="details">
+                                    <span class="title">Per Hour</span>
+                                    <span class="sub">{{ stats['avg_per_hour'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="dashboard-block">
+                                <div class="rotate">
+                                    <i class="fa fa-users fa-4x"></i>
+                                </div>
+                                <div class="details">
+                                    <span class="title">Users</span>
+                                    <span class="sub">{{ stats['users'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="dashboard-block">
+                                <div class="rotate">
+                                    <i class="fa fa-clock-o fa-4x"></i>
+                                </div>
+                                <div class="details">
+                                    <span class="title">Average Duration</span>
+                                    <span class="sub"><app-duration [value]="stats['avg_duration']"></app-duration></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o"></i> Sessions and Users
+                    <div class="pull-right">
+                        <label class="switch bg-success">
+                            <input type="checkbox" [(ngModel)]="includeLiveFilter" (click)="vm.updateLiveFilter(includeLiveFilter)">
+                            <i></i>
+                        </label>
+                        <div class="switch-text" [ngClass]="{'text-success': vincludeLiveFilter}" (click)="updateLiveFilter(!includeLiveFilter)">View Active</div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [inputFeatures]="chart['features']" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-rickshaw>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><i class="fa fa-area-chart"></i>Recent Sessions</div>
+                <app-sessions [settings]="recentSessions" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-sessions>
+            </div>
+        </div>
+    </div>
+</div>

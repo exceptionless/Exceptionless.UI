@@ -359,10 +359,10 @@ export class StackComponent implements OnInit {
 
                     return series;
                 }, [])
-                .sort(function(a, b) {
-                    function calculateSum(previous, current) {
+                .sort((a, b) => {
+                    const calculateSum = (previous, current) => {
                         return previous + current.y;
-                    }
+                    };
 
                     return b.data.reduce(calculateSum, 0) - a.data.reduce(calculateSum, 0);
                 })

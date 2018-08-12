@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../../service/filter.service';
 import { EventsActionService } from '../../../service/events-action.service';
@@ -11,7 +11,7 @@ import { PaginationService } from '../../../service/pagination.service';
     templateUrl: './events.component.html'
 })
 
-export class EventsComponent implements OnInit, OnChanges {
+export class EventsComponent implements OnChanges {
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;
@@ -36,9 +36,6 @@ export class EventsComponent implements OnInit, OnChanges {
         private linkService: LinkService,
         private paginationService: PaginationService,
     ) {}
-
-    ngOnInit() {
-    }
 
     ngOnChanges(changes: SimpleChanges) {
         this.sortByDateDescending = this.settings['sortByDateDescending'] === undefined ? true : this.sortByDateDescending;
@@ -99,7 +96,6 @@ export class EventsComponent implements OnInit, OnChanges {
 
             return this.events;
         };
-        const onFailure = (response) => {};
         this.loading = true;
         this.events = [];
         this.currentOptions = options || this.settings.options;
@@ -109,12 +105,10 @@ export class EventsComponent implements OnInit, OnChanges {
                 res => {
                     onSuccess(res.body, res.headers.get('link'));
                     this.loading = false;
-
                     resolve(this.events);
                 },
                 err => {
                     this.notificationService.error('Error Occurred!', 'Failed');
-
                     reject(err);
                 }
             );

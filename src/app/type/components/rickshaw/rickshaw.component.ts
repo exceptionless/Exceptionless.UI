@@ -16,7 +16,6 @@ export class RickshawComponent implements OnChanges {
     @Input() inputFeatures;
     graph: any;
     features: any;
-
     @ViewChild('widgetrickshaw') graphElement: ElementRef;
 
     constructor() {

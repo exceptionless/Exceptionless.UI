@@ -21,6 +21,7 @@ import { UsersComponent } from './type/components/users/users.component';
 import { NewComponent } from './type/components/new/new.component';
 import { StackComponent } from './type/components/stack/stack.component';
 import { EventComponent } from './type/components/event/event.component';
+import { SessionComponent } from './type/components/session/session.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -30,6 +31,7 @@ const routes: Routes = [
         path: 'type',
         component: TypeComponent,
         children: [
+            { path: 'session/dashboard',    component: SessionComponent },
             { path: ':type/dashboard', component: DashboardComponent },
             { path: 'dashboard', component: DashboardComponent },
             { path: ':project_type/:id/:type/dashboard', component: DashboardComponent },
@@ -73,7 +75,6 @@ const routes: Routes = [
         ],
         canActivate: [AuthGuard],
     },
-    { path: 'session/dashboard',    component: ReportsComponent, canActivate: [AuthGuard]},
     { path: '',   redirectTo: '/login', pathMatch: 'full' },
 ];
 

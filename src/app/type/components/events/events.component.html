@@ -1,6 +1,6 @@
-<div class="table-responsive" refresh-on="filterChanged" refresh-action="get()">
-    <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable" refresh-on="StackChanged PlanChanged" refresh-if="canRefresh(data)" refresh-action="get(vm.currentOptions)" refresh-throttle="10000">
-        <thead refresh-on="PersistentEventChanged" refresh-if="vm.canRefresh(data)" refresh-action="get(currentOptions)" refresh-throttle="10000">
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable">
+        <thead refresh-on="PersistentEventChanged">
             <tr>
                 <th class="selection hidden-xs" *ngIf="actions.length > 0">
                     <label class="checks m-b-none">
