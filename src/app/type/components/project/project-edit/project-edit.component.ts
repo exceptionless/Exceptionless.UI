@@ -148,11 +148,11 @@ export class ProjectEditComponent implements OnInit {
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._projectId = params['id'];
+            this.get();
         });
     }
 
     ngOnInit() {
-        this.get();
     }
 
     addConfiguration() {

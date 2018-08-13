@@ -19,8 +19,7 @@ export class DateFilterComponent implements OnInit {
         private filterService: FilterService,
         private modalDialogService: ModalDialogService,
         private dateRangeParserService: DateRangeParserService
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
         this.updateFilterDisplayName();

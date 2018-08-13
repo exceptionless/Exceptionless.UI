@@ -15,8 +15,8 @@ export class ProjectFilterComponent implements OnInit {
     isLoadingOrganizations = true;
     isLoadingProjects = true;
     filteredDisplayName = 'All Projects';
-    organizations: any[];
-    projects: any[];
+    organizations = [];
+    projects = [];
 
     constructor(
         private router: Router,

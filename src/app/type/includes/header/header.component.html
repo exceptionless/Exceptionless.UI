@@ -30,9 +30,9 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a><i class="fa fa-user fa-fw"></i> My Account</a></li>
+                        <li><a routerLink="/type/account/manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
                         <li><a><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
-                        <li><a><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
+                        <li><a routerLink="/type/account/manage" [queryParams]="{tab: 'password'}"><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
                         <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> Documentation</a></li>
                         <li><a><i class="fa fa-comment fa-fw"></i> Support</a></li>
                         <li><a (click)="logout();"><i class="fa fa-power-off fa-fw"></i> Logout</a></li>
@@ -43,12 +43,12 @@
             <app-search-filter></app-search-filter>
 
             <ul class="nav navbar-nav visible-xs hidden-sm" auto-active>
-                <li><a><i class="fa fa-user fa-fw"></i> My Account</a></li>
+                <li><a routerLink="/type/account/manage"><i class="fa fa-user fa-fw"></i> My Account</a></li>
                 <li><a><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
-                <li><a><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
+                <li><a routerLink="/type/account/manage" [queryParams]="{tab: 'password'}"><i class="fa fa-lock fa-fw"></i> Change Password</a></li>
                 <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> Documentation</a></li>
                 <li><a><i class="fa fa-comment fa-fw"></i> Support</a></li>
-                <li><a><i class="fa fa-power-off fa-fw"></i> Logout</a></li>
+                <li><a (click)="logout();"><i class="fa fa-power-off fa-fw"></i> Logout</a></li>
             </ul>
         </div>
     </div>

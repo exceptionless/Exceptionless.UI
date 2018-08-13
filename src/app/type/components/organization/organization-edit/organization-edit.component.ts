@@ -156,11 +156,11 @@ export class OrganizationEditComponent implements OnInit {
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._organizationId = params['id'];
+            this.get();
         });
     }
 
     ngOnInit() {
-        this.get();
     }
 
     addUser() {
