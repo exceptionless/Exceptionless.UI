@@ -4,8 +4,7 @@ import { FilterStoreService } from '../../../service/filter-store.service';
 
 @Component({
     selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.less']
+    templateUrl: './sidebar.component.html'
 })
 
 export class SidebarComponent implements OnInit {

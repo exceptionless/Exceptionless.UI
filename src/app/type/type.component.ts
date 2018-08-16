@@ -2,8 +2,7 @@ import {Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-type',
-    templateUrl: './type.component.html',
-    styleUrls: ['./type.component.css']
+    templateUrl: './type.component.html'
 })
 
 export class TypeComponent implements OnInit {

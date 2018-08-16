@@ -32,7 +32,6 @@ import { SidebarComponent } from './type/includes/sidebar/sidebar.component';
 import { SearchFilterComponent } from './type/components/search-filter/search-filter.component';
 import { ProjectFilterComponent } from './type/components/project-filter/project-filter.component';
 import { DateFilterComponent } from './type/components/date-filter/date-filter.component';
-import { ReportsComponent } from './type/reports/reports.component';
 import { ProjectComponent } from './type/components/project/project.component';
 import { OrganizationComponent } from './type/components/organization/organization.component';
 import { AccountManageComponent } from './type/components/account-manage/account-manage.component';
@@ -80,6 +79,8 @@ import { AddOrganizationDialogComponent } from './dialogs/add-organization-dialo
 import { PaymentComponent } from './type/components/payment/payment.component';
 import { SessionsComponent } from './type/components/sessions/sessions.component';
 import { SessionComponent } from './type/components/session/session.component';
+import { RateLimitComponent } from './type/components/rate-limit/rate-limit.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -102,7 +103,6 @@ export const AuthConfig = {
         SearchFilterComponent,
         ProjectFilterComponent,
         DateFilterComponent,
-        ReportsComponent,
         ProjectComponent,
         OrganizationComponent,
         AccountManageComponent,
@@ -148,6 +148,8 @@ export const AuthConfig = {
         PaymentComponent,
         SessionsComponent,
         SessionComponent,
+        RateLimitComponent,
+        ResetPasswordComponent,
     ],
     imports: [
         BrowserModule,

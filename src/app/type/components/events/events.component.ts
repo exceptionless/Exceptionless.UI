@@ -140,7 +140,7 @@ export class EventsComponent implements OnChanges {
         };
 
         if (this.selectedIds.length === 0) {
-            this.notificationService.info('Please select one or more stacks', 'Success');
+            this.notificationService.info('Success!', 'Please select one or more stacks');
         } else {
             /*this.action.run(this.selectedIds).then(onSuccess());*/
         }

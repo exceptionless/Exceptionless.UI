@@ -5,8 +5,7 @@ import { NotificationService } from '../../../service/notification.service';
 
 @Component({
     selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.less']
+    templateUrl: './header.component.html'
 })
 
 export class HeaderComponent implements OnInit {

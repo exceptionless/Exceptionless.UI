@@ -39,7 +39,7 @@
                                     </div>
 
                                     <div ng-show="hasMonthlyUsage">
-                                        <h4 style="margin-top: 20px;">Monthly Usage</h4>
+                                        <h4 class="m-t-md">Monthly Usage</h4>
                                         <p>
                                             You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
                                             <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).

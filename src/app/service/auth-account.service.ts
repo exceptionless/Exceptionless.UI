@@ -35,7 +35,7 @@ export class AuthAccountService {
                     resolve(res);
                 },
                 err => {
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('Failed!', 'Error Occurred');
                     reject(err);
                 }
             );
@@ -62,7 +62,7 @@ export class AuthAccountService {
         const logoutLocally = () => {
             this.authService.logout()
                 .subscribe({
-                    error: (err: any) => this.notificationService.error('Error Occurred!', 'Error'),
+                    error: (err: any) => this.notificationService.error('Error!', 'Error Occurred'),
                     complete: () => {
                         if (withRedirect) {
                             this.router.navigate([withRedirect], params);
@@ -78,7 +78,7 @@ export class AuthAccountService {
                 logoutLocally();
             },
             err => {
-                this.notificationService.error('Failed', 'Error Occurred!');
+                this.notificationService.error('Failed!', 'Error Occurred');
             }
         );
     }
@@ -98,7 +98,7 @@ export class AuthAccountService {
                 onSuccess(res);
             },
             err => {
-                this.notificationService.error('Failed', 'Error Occurred!');
+                this.notificationService.error('Failed!', 'Error Occurred');
             }
         );
     }
