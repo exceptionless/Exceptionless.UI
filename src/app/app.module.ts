@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,66 +22,65 @@ import { ChecklistModule } from 'angular-checklist';
 import { GlobalVariables } from './global-variables';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginComponent } from './auth/login/login.component';
-import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
-import { SignupComponent } from './auth/signup/signup.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { SignupComponent } from './components/auth/signup/signup.component';
 import { TokenInterceptor } from './service/token.interceptor';
 import { AuthGuardService } from './service/auth-guard.service';
-import { TypeComponent } from './type/type.component';
-import { HeaderComponent } from './type/includes/header/header.component';
-import { SidebarComponent } from './type/includes/sidebar/sidebar.component';
-import { SearchFilterComponent } from './type/components/search-filter/search-filter.component';
-import { ProjectFilterComponent } from './type/components/project-filter/project-filter.component';
-import { DateFilterComponent } from './type/components/date-filter/date-filter.component';
-import { ProjectComponent } from './type/components/project/project.component';
-import { OrganizationComponent } from './type/components/organization/organization.component';
-import { AccountManageComponent } from './type/components/account-manage/account-manage.component';
+import { HeaderComponent } from './components/includes/header/header.component';
+import { SidebarComponent } from './components/includes/sidebar/sidebar.component';
+import { SearchFilterComponent } from './components/search-filter/search-filter.component';
+import { ProjectFilterComponent } from './components/project-filter/project-filter.component';
+import { DateFilterComponent } from './components/date-filter/date-filter.component';
+import { ProjectComponent } from './components/project/project.component';
+import { OrganizationComponent } from './components/organization/organization.component';
+import { AccountManageComponent } from './components/account-manage/account-manage.component';
 import { OpenDirective } from './directives/open.directive';
-import { DashboardComponent } from './type/components/dashboard/dashboard.component';
-import { RecentComponent } from './type/components/recent/recent.component';
-import { UsersComponent } from './type/components/users/users.component';
-import { NewComponent } from './type/components/new/new.component';
-import { FrequentComponent } from './type/components/frequent/frequent.component';
-import { OrganizationNotificationComponent } from './type/components/organization-notification/organization-notification.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RecentComponent } from './components/recent/recent.component';
+import { UsersComponent } from './components/users/users.component';
+import { NewComponent } from './components/new/new.component';
+import { FrequentComponent } from './components/frequent/frequent.component';
+import { OrganizationNotificationComponent } from './components/organization-notification/organization-notification.component';
 import { OrganizationService } from './service/organization.service';
 import { FilterService } from './service/filter.service';
-import { RickshawComponent } from './type/components/rickshaw/rickshaw.component';
-import { ProjectListComponent } from './type/components/project/project-list/project-list.component';
+import { RickshawComponent } from './components/rickshaw/rickshaw.component';
+import { ProjectListComponent } from './components/project/project-list/project-list.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
-import { ProjectNewComponent } from './type/components/project/project-new/project-new.component';
-import { OrganizationListComponent } from './type/components/organization/organization-list/organization-list.component';
-import { ProjectEditComponent } from './type/components/project/project-edit/project-edit.component';
-import { OrganizationEditComponent } from './type/components/organization/organization-edit/organization-edit.component';
+import { ProjectNewComponent } from './components/project/project-new/project-new.component';
+import { OrganizationListComponent } from './components/organization/organization-list/organization-list.component';
+import { ProjectEditComponent } from './components/project/project-edit/project-edit.component';
+import { OrganizationEditComponent } from './components/organization/organization-edit/organization-edit.component';
 import { CustomDateRangeDialogComponent } from './dialogs/custom-date-range-dialog/custom-date-range-dialog.component';
-import { SummaryComponent } from './type/components/summary/summary.component';
-import { StacksComponent } from './type/components/stacks/stacks.component';
-import { EventsComponent } from './type/components/events/events.component';
-import { TimeagoComponent } from './type/components/timeago/timeago.component';
-import { RelativeTimeComponent } from './type/components/relative-time/relative-time.component';
+import { SummaryComponent } from './components/summary/summary.component';
+import { StacksComponent } from './components/stacks/stacks.component';
+import { EventsComponent } from './components/events/events.component';
+import { TimeagoComponent } from './components/timeago/timeago.component';
+import { RelativeTimeComponent } from './components/relative-time/relative-time.component';
 import { ActiveDirective } from './directives/active.directive';
-import { StackComponent } from './type/components/stack/stack.component';
+import { StackComponent } from './components/stack/stack.component';
 import { AddReferenceDialogComponent } from './dialogs/add-reference-dialog/add-reference-dialog.component';
 import { ChangePlanDialogComponent } from './dialogs/change-plan-dialog/change-plan-dialog.component';
 import { ObjNgForPipe } from './pipes/obj-ng-for.pipe';
-import { EventComponent } from './type/components/event/event.component';
-import { EventTabsComponent } from './type/components/event/tabs/event-tabs/event-tabs.component';
-import { DurationComponent } from './type/components/duration/duration.component';
-import { StackTraceComponent } from './type/components/stack-trace/stack-trace.component';
-import { SimpleStackTraceComponent } from './type/components/simple-stack-trace/simple-stack-trace.component';
-import { ExtendedDataItemComponent } from './type/components/event/extended-data-item/extended-data-item.component';
+import { EventComponent } from './components/event/event.component';
+import { EventTabsComponent } from './components/event/tabs/event-tabs/event-tabs.component';
+import { DurationComponent } from './components/duration/duration.component';
+import { StackTraceComponent } from './components/stack-trace/stack-trace.component';
+import { SimpleStackTraceComponent } from './components/simple-stack-trace/simple-stack-trace.component';
+import { ExtendedDataItemComponent } from './components/event/extended-data-item/extended-data-item.component';
 import { HasPropPipe } from './pipes/has-prop.pipe';
-import { ProjectsComponent } from './type/components/projects/projects.component';
-import { InvoicesComponent } from './type/components/invoices/invoices.component';
-import { UserComponent } from './type/components/user/user.component';
+import { ProjectsComponent } from './components/projects/projects.component';
+import { InvoicesComponent } from './components/invoices/invoices.component';
+import { UserComponent } from './components/user/user.component';
 import { AddConfigurationDialogComponent } from './dialogs/add-configuration-dialog/add-configuration-dialog.component';
 import { AddWebHookDialogComponent } from './dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
 import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialog.component';
 import { AddOrganizationDialogComponent } from './dialogs/add-organization-dialog/add-organization-dialog.component';
-import { PaymentComponent } from './type/components/payment/payment.component';
-import { SessionsComponent } from './type/components/sessions/sessions.component';
-import { SessionComponent } from './type/components/session/session.component';
-import { RateLimitComponent } from './type/components/rate-limit/rate-limit.component';
-import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { SessionsComponent } from './components/sessions/sessions.component';
+import { SessionComponent } from './components/session/session.component';
+import { RateLimitComponent } from './components/rate-limit/rate-limit.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -97,7 +97,6 @@ export const AuthConfig = {
         LoginComponent,
         ForgotPasswordComponent,
         SignupComponent,
-        TypeComponent,
         HeaderComponent,
         SidebarComponent,
         SearchFilterComponent,
@@ -152,6 +151,7 @@ export const AuthConfig = {
         ResetPasswordComponent,
     ],
     imports: [
+        RouterModule,
         BrowserModule,
         FormsModule,
         AppRoutingModule,

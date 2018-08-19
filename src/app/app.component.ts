@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'ng2-ui-auth';
 
 @Component({
     selector: 'app-root',
@@ -6,5 +7,16 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-    constructor() {}
+    isSideNavCollapsed = false;
+    constructor(
+        private auth: AuthService
+    ) {}
+
+    isLogged() {
+        return this.auth.isAuthenticated();
+    }
+
+    onToggleSideNavCollapsed(): void {
+        this.isSideNavCollapsed = !this.isSideNavCollapsed;
+    }
 }
