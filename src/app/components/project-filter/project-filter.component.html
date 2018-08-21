@@ -10,14 +10,14 @@
                 <li class="hover-parent">
                     <a (click)="setItem(organization.id, organization.name, 'organization');">
                         {{ organization.name }}
-                        <span class="icon-right hover-child" routerLink="/type/organization/{{ organization.id }}/manage"><i class="fa fa-gear fa-fw"></i></span>
+                        <span class="icon-right hover-child" routerLink="/organization/{{ organization.id }}/manage"><i class="fa fa-gear fa-fw"></i></span>
                     </a>
                 </li>
                 <li *ngIf="isLoadingProjects" class="child-menu" disabled><a href="#">Loading Projects...</a></li>
                 <li *ngFor="let project of getProjectsByOrganizationId(organization['id'])" class="child-menu hover-parent">
                     <a (click)="setItem(project.id, project.name, 'project');">
                         {{ project.name }}
-                        <span class="icon-right hover-child" routerLink="/type/project/{{ project.id }}/manage"><i class="fa fa-gear fa-fw"></i></span>
+                        <span class="icon-right hover-child" routerLink="/project/{{ project.id }}/manage"><i class="fa fa-gear fa-fw"></i></span>
                     </a>
                 </li>
                 <li role="separator" class="divider"></li>

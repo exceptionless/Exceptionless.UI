@@ -17,6 +17,7 @@ export class ProjectFilterComponent implements OnInit {
     filteredDisplayName = 'All Projects';
     organizations = [];
     projects = [];
+    types = ['error', 'log', '404', 'usage', 'events', 'session'];
 
     constructor(
         private router: Router,
@@ -73,9 +74,20 @@ export class ProjectFilterComponent implements OnInit {
         this.filteredDisplayName = name;
         this.filterService.setProjectFilter(type, id, name);
         const basicURl =  this.getStateName();
+        const url = this.router.url;
+        const urlTypeArray = url.split('/');
+        const urlType = urlTypeArray[urlTypeArray.length - 2];
         if (basicURl) {
             if (type === 'All Projects') {
-                setTimeout(() => { this.router.navigateByUrl(`/type/${basicURl}`, { skipLocationChange: false }); }, 100);
+                if (this.hasType()) {
+                    if (urlType === 'session') {
+                        setTimeout(() => { this.router.navigateByUrl(`/${basicURl}`, { skipLocationChange: false }); }, 100);
+                    } else {
+                        setTimeout(() => { this.router.navigateByUrl(`/type/${basicURl}`, { skipLocationChange: false }); }, 100);
+                    }
+                } else {
+                    setTimeout(() => { this.router.navigateByUrl(`/${basicURl}`, { skipLocationChange: false }); }, 100);
+                }
             } else {
                 setTimeout(() => { this.router.navigateByUrl(`/${type}/${id}/${basicURl}`, { skipLocationChange: false }); }, 100);
             }
@@ -109,27 +121,56 @@ export class ProjectFilterComponent implements OnInit {
     getStateName() {
         const url = this.router.url;
         const urlTypeArray = url.split('/');
-        const type = urlTypeArray[urlTypeArray.length - 2];
+        const urlType = urlTypeArray[urlTypeArray.length - 2];
         if (url.endsWith('frequent')) {
-            return `${type}/frequent`;
+            if (this.hasType()) {
+                return `${urlType}/frequent`;
+            } else {
+                return 'frequent';
+            }
         }
 
         if (url.endsWith('new')) {
-            return `${type}/new`;
+            if (this.hasType()) {
+                return `${urlType}/new`;
+            } else {
+                return 'new';
+            }
         }
 
         if (url.endsWith('recent')) {
-            return `${type}/recent`;
+            if (this.hasType()) {
+                return `${urlType}/recent`;
+            } else {
+                return 'recent';
+            }
         }
 
         if (url.endsWith('users')) {
-            return `${type}/users`;
+            if (this.hasType()) {
+                return `${urlType}/users`;
+            } else {
+                return 'users';
+            }
         }
 
         if (url.endsWith('dashboard')) {
-            return `${type}/dashboard`;
+            if (this.hasType()) {
+                return `${urlType}/dashboard`;
+            } else {
+                return 'dashboard';
+            }
         }
 
         return null;
+    }
+
+    hasType() {
+        const url = this.router.url;
+        const urlTypeArray = url.split('/');
+        const urlType = urlTypeArray[urlTypeArray.length - 2];
+        const hasType = this.types.some(e => e === urlType);
+
+        return hasType;
     }
 }

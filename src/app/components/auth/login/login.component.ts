@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/type/error/dashboard']);
                 },
                 err => {
-                    this.notificationService.error('Failed', 'Login failed!');
+                    this.notificationService.error('', 'Loggin_Failed_Message');
                 }
             );
         }

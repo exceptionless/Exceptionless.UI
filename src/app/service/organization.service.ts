@@ -36,7 +36,7 @@ export class OrganizationService {
             if (organizations.length > 1) {
                 return new Date(organizations.reduce((o1, o2)  => {
                     return Math.min(this.objectIdService.create(o1.id).getDate(), this.objectIdService.create(o2.id).getDate());
-                }) * 1000);
+                }));
             }
 
             if (organizations.length === 1) {

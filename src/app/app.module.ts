@@ -32,25 +32,25 @@ import { SidebarComponent } from './components/includes/sidebar/sidebar.componen
 import { SearchFilterComponent } from './components/search-filter/search-filter.component';
 import { ProjectFilterComponent } from './components/project-filter/project-filter.component';
 import { DateFilterComponent } from './components/date-filter/date-filter.component';
-import { ProjectComponent } from './components/project/project.component';
-import { OrganizationComponent } from './components/organization/organization.component';
+import { ProjectComponent } from './components/layout/project/project.component';
+import { OrganizationComponent } from './components/layout/organization/organization.component';
 import { AccountManageComponent } from './components/account-manage/account-manage.component';
 import { OpenDirective } from './directives/open.directive';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { RecentComponent } from './components/recent/recent.component';
-import { UsersComponent } from './components/users/users.component';
-import { NewComponent } from './components/new/new.component';
-import { FrequentComponent } from './components/frequent/frequent.component';
+import { DashboardComponent } from './components/layout/dashboard/dashboard.component';
+import { RecentComponent } from './components/layout/recent/recent.component';
+import { UsersComponent } from './components/layout/users/users.component';
+import { NewComponent } from './components/layout/new/new.component';
+import { FrequentComponent } from './components/layout/frequent/frequent.component';
 import { OrganizationNotificationComponent } from './components/organization-notification/organization-notification.component';
 import { OrganizationService } from './service/organization.service';
 import { FilterService } from './service/filter.service';
 import { RickshawComponent } from './components/rickshaw/rickshaw.component';
-import { ProjectListComponent } from './components/project/project-list/project-list.component';
+import { ProjectListComponent } from './components/layout/project/project-list/project-list.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
-import { ProjectNewComponent } from './components/project/project-new/project-new.component';
-import { OrganizationListComponent } from './components/organization/organization-list/organization-list.component';
-import { ProjectEditComponent } from './components/project/project-edit/project-edit.component';
-import { OrganizationEditComponent } from './components/organization/organization-edit/organization-edit.component';
+import { ProjectNewComponent } from './components/layout/project/project-new/project-new.component';
+import { OrganizationListComponent } from './components/layout/organization/organization-list/organization-list.component';
+import { ProjectEditComponent } from './components/layout/project/project-edit/project-edit.component';
+import { OrganizationEditComponent } from './components/layout/organization/organization-edit/organization-edit.component';
 import { CustomDateRangeDialogComponent } from './dialogs/custom-date-range-dialog/custom-date-range-dialog.component';
 import { SummaryComponent } from './components/summary/summary.component';
 import { StacksComponent } from './components/stacks/stacks.component';
@@ -58,16 +58,16 @@ import { EventsComponent } from './components/events/events.component';
 import { TimeagoComponent } from './components/timeago/timeago.component';
 import { RelativeTimeComponent } from './components/relative-time/relative-time.component';
 import { ActiveDirective } from './directives/active.directive';
-import { StackComponent } from './components/stack/stack.component';
+import { StackComponent } from './components/layout/stack/stack.component';
 import { AddReferenceDialogComponent } from './dialogs/add-reference-dialog/add-reference-dialog.component';
 import { ChangePlanDialogComponent } from './dialogs/change-plan-dialog/change-plan-dialog.component';
 import { ObjNgForPipe } from './pipes/obj-ng-for.pipe';
-import { EventComponent } from './components/event/event.component';
-import { EventTabsComponent } from './components/event/tabs/event-tabs/event-tabs.component';
+import { EventComponent } from './components/layout/event/event.component';
+import { EventTabsComponent } from './components/layout/event/tabs/event-tabs/event-tabs.component';
 import { DurationComponent } from './components/duration/duration.component';
 import { StackTraceComponent } from './components/stack-trace/stack-trace.component';
 import { SimpleStackTraceComponent } from './components/simple-stack-trace/simple-stack-trace.component';
-import { ExtendedDataItemComponent } from './components/event/extended-data-item/extended-data-item.component';
+import { ExtendedDataItemComponent } from './components/layout/event/extended-data-item/extended-data-item.component';
 import { HasPropPipe } from './pipes/has-prop.pipe';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { InvoicesComponent } from './components/invoices/invoices.component';
@@ -78,9 +78,10 @@ import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialo
 import { AddOrganizationDialogComponent } from './dialogs/add-organization-dialog/add-organization-dialog.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { SessionsComponent } from './components/sessions/sessions.component';
-import { SessionComponent } from './components/session/session.component';
+import { SessionComponent } from './components/layout/session/session.component';
 import { RateLimitComponent } from './components/rate-limit/rate-limit.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -149,6 +150,7 @@ export const AuthConfig = {
         SessionComponent,
         RateLimitComponent,
         ResetPasswordComponent,
+        LayoutComponent,
     ],
     imports: [
         RouterModule,
@@ -157,7 +159,9 @@ export const AuthConfig = {
         AppRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule, // required animations module
-        ToastrModule.forRoot(), // ToastrModule added
+        ToastrModule.forRoot({
+            positionClass: 'toast-bottom-right'
+        }), // ToastrModule added
         LockerModule,
         RickshawModule,
         ModalDialogModule.forRoot(),

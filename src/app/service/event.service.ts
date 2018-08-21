@@ -22,7 +22,6 @@ export class EventService {
         range.end = range.end || moment();
 
         const result: number = total / range.end.diff(range.start, 'hours', true);
-
         return !isNaN(result) && isFinite(result) ? result : 0.0;
     }
 

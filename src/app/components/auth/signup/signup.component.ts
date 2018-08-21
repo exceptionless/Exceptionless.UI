@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Signup } from './signup.class';
 import { NotificationService } from '../../../service/notification.service';
 import { AuthService } from 'ng2-ui-auth';
+import { ProjectService } from '../../../service/project.service';
 
 @Component({
     selector: 'app-signup',
@@ -16,7 +17,8 @@ export class SignupComponent implements OnInit {
     constructor(
         private router: Router,
         private auth: AuthService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private projectService: ProjectService
     ) {}
 
     ngOnInit() {
@@ -35,7 +37,7 @@ export class SignupComponent implements OnInit {
             this.auth.signup(data).subscribe({
                 next: (response) => { this.auth.setToken(response.token); },
                 error: (err: any) => this.notificationService.error('Signup failed!', 'Failed'),
-                complete: () => { this.router.navigateByUrl('/type/error/dashboard'); }
+                complete: () => { this.redirectOnSignup(); }
             });
         }
     }
@@ -49,5 +51,28 @@ export class SignupComponent implements OnInit {
                 console.log(err.status);
             }
         );*/
+    }
+
+    redirectOnSignup() {
+        const onSuccess = (response) => {
+            if (response.data && response.data.length > 0) {
+                this.router.navigateByUrl('/type/error/dashboard');
+            }
+
+            this.router.navigateByUrl('/project/add');
+        };
+
+        const onFailure = () => {
+            this.router.navigateByUrl('/project/add');
+        };
+
+        return this.projectService.getAll().subscribe(
+            res => {
+                onSuccess(JSON.parse(JSON.stringify(res.body)));
+            },
+            err => {
+                onFailure();
+            }
+        );
     }
 }
