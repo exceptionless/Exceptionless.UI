@@ -31,11 +31,12 @@
                                 <div class="form-group">
                                     <label for="email" class="col-sm-2 control-label">Email</label>
                                     <div class="col-sm-10">
-                                        <input id="email" name="email" type="email" email="true" class="form-control" [(ngModel)]="model.email" placeholder="Email Address (no spam)" x-autocompletetype="email" autocorrect="off" autofocus required #email="ngModel" (blur)="checkEmailValidation()"/>
+                                        <input id="email" name="email" type="email" email="true" class="form-control" [(ngModel)]="model.email" placeholder="Email Address (no spam)" x-autocompletetype="email" autocorrect="off" autofocus required #email="ngModel" uniqueEmail/>
 
                                         <div class="error" *ngIf="(email.invalid && (email.dirty || email.touched)) || submitted">
                                             <small [hidden]="!email.errors?.required">Email Address is required.</small>
                                             <small [hidden]="!email.errors?.email" *ngIf="!email.errors?.required">It muse be email address.</small>
+                                            <small [hidden]="!email.errors?.uniqueEmail">Email already exist.</small>
                                         </div>
                                     </div>
                                 </div>

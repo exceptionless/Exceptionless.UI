@@ -27,7 +27,7 @@
             <ul class="nav navbar-nav navbar-right hidden-xs" auto-active>
                 <li class="dropdown" open>
                     <a class="dropdown-toggle profile-image" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img class="img-thumbnail" src="//www.gravatar.com/avatar/2c356e305447c597ed0d3c3c16db5bf3?default=mm&size=35"/>
+                        <img class="img-thumbnail" ngxGravatar [email]="user['email_address']" size="35"/>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">

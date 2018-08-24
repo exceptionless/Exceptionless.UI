@@ -17,6 +17,7 @@ import { GlobalVariables } from '../../global-variables';
 
 export class AccountManageComponent implements OnInit {
     @ViewChild('emailAddressForm') public emailAddressForm: NgForm;
+    @ViewChild('passwordForm') public passwordForm: NgForm;
     _canSaveEmailAddress = true;
     activeTab = 'general';
     password = {
@@ -26,8 +27,11 @@ export class AccountManageComponent implements OnInit {
     };
     emailNotificationSettings = {};
     currentProject = {};
-    user = {};
+    user = {
+        email_address: ''
+    };
     projects = [];
+    organizations = [];
     projectId = '';
     hasPremiumFeatures = false;
     hasLocalAccount = false;
@@ -64,8 +68,8 @@ export class AccountManageComponent implements OnInit {
     authenticate(provider) {
         const onFailure = (response) => {
             let message = 'An error occurred while adding external login.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed', message);
@@ -86,14 +90,13 @@ export class AccountManageComponent implements OnInit {
                 password: '',
                 confirm_password: ''
             };
-            /*vm.passwordForm.$setUntouched(true);
-            vm.passwordForm.$setPristine(true);*/
+            this.passwordForm.form.reset(true);
         };
 
         const onFailure = (response) => {
             let message = 'An error occurred while trying to change your password.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed', message);
@@ -146,7 +149,11 @@ export class AccountManageComponent implements OnInit {
     getProjects() {
         const onSuccess = (response) => {
             this.projects = JSON.parse(JSON.stringify(response));
-
+            this.projects.forEach((project) => {
+                if (this.organizations.findIndex(k => k === project['organization_name']) === -1) {
+                    this.organizations.push(project['organization_name']);
+                }
+            });
             const currentProjectId = this.currentProject['id'] ? this.currentProject['id'] : this.projectId;
             this.currentProject = this.projects.filter(function(p) { return p.id === currentProjectId; })[0];
             if (!this.currentProject) {
@@ -185,8 +192,8 @@ export class AccountManageComponent implements OnInit {
 
         const onFailure = (response) => {
             let message = 'An error occurred while loading your user profile.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed', message);
@@ -262,8 +269,8 @@ export class AccountManageComponent implements OnInit {
     resendVerificationEmail() {
         const onFailure = (response) => {
             let message = 'An error occurred while sending your verification email.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);
@@ -278,16 +285,6 @@ export class AccountManageComponent implements OnInit {
     }
 
     saveEmailAddress(isRetrying?) {
-        this.authAccountService.isEmailAddressAvailable(this.user['email_address']).subscribe(
-            res => {
-                if (res['status'] === 201) {
-                    this.emailUnique = false;
-                } else {
-                    this.emailUnique = true;
-                }
-            }
-        );
-
         const resetCanSaveEmailAddress = () => {
             this._canSaveEmailAddress = true;
         };
@@ -296,9 +293,9 @@ export class AccountManageComponent implements OnInit {
             setTimeout(() => { this.saveEmailAddress(true); }, delay || 100);
         };
 
-        if (!this.emailAddressForm || this.emailAddressForm.valid) {
+        if (!this.emailAddressForm || this.emailAddressForm.form.valid) {
             resetCanSaveEmailAddress();
-            return !isRetrying && retry(1000);
+            /*return !isRetrying && retry(1000);*/
         }
 
         if (!this.user['email_address'] || this.emailAddressForm.pending) {
@@ -312,13 +309,13 @@ export class AccountManageComponent implements OnInit {
         }
 
         const onSuccess = (response) => {
-            this.user['is_email_address_verified'] = response.data['is_verified'];
+            this.user['is_email_address_verified'] = response['is_verified'];
         };
 
         const onFailure = (response) => {
             let message = 'An error occurred while saving your email address.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);
@@ -338,8 +335,8 @@ export class AccountManageComponent implements OnInit {
     saveEmailNotificationSettings() {
         const onFailure = (response) => {
             let message = 'An error occurred while saving your notification settings.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);
@@ -356,8 +353,8 @@ export class AccountManageComponent implements OnInit {
     saveEnableEmailNotification() {
         const onFailure = (response) => {
             let message = 'An error occurred while saving your email notification preferences.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);
@@ -378,8 +375,8 @@ export class AccountManageComponent implements OnInit {
 
         const onFailure = (response) => {
             let message = 'An error occurred while saving your full name.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);
@@ -404,8 +401,8 @@ export class AccountManageComponent implements OnInit {
 
         const onFailure = (response) => {
             let message = 'An error occurred while removing the external login.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);

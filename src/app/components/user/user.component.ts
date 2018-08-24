@@ -41,7 +41,7 @@ export class UserComponent implements OnInit {
             this.previous = links['previous'];
             this.next = links['next'];
 
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response.data, this.currentOptions['page'], this.currentOptions['limit']);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions['page'], this.currentOptions['limit']);
 
             if (this.users.length === 0 && this.currentOptions['page'] && this.currentOptions['page'] > 1) {
                 return this.get();

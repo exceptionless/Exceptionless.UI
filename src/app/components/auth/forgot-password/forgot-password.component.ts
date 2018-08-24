@@ -32,8 +32,8 @@ export class ForgotPasswordComponent implements OnInit {
 
         const onFailure = (response) => {
             let message = 'ResetPassword_Failed_Message';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);

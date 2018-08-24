@@ -10,7 +10,7 @@
                             <ng-template ngbTabContent>
                                 <form name="fullNameForm" role="form" class="form-validation" autocomplete="on" #fullNameForm="ngForm">
                                     <div class="form-group">
-                                        <img src="//www.gravatar.com/avatar/2c356e305447c597ed0d3c3c16db5bf3?default=mm&size=100" alt="{{ user['full_name'] }}" gravatar-size="100" alt="avatar" class="img-thumbnail">
+                                        <img ngxGravatar [email]="user['email_address']" size="100" alt="{{ user['full_name'] }}" alt="avatar" class="img-thumbnail">
                                         <div>
                                             <small [innerHTML]="'NOTICE_GRAVATAR'"></small>
                                         </div>
@@ -40,6 +40,7 @@
                                                    [(ngModel)]="user['email_address']"
                                                    (input)="saveEmailAddress()"
                                                    required
+                                                   uniqueEmail
                                                    #email="ngModel"/>
 
                                             <span class="input-group-addon" *ngIf="emailAddressForm.pending">
@@ -50,7 +51,7 @@
                                         <div class="error" *ngIf="(email.invalid && (email.dirty || email.touched)) || submitted || !emailUnique">
                                             <small [hidden]="!email.errors?.required">Email Address is required.</small>
                                             <small [hidden]="!email.errors?.email">It muse be email address.</small>
-                                            <small [hidden]="emailUnique">A user already exists with this email address.</small>
+                                            <small [hidden]="!email.errors?.uniqueEmail">A user already exists with this email address.</small>
                                         </div>
 
                                         <p *ngIf="!user['is_email_address_verified']" class="help-block">Email not verified. <a (click)="resendVerificationEmail()">Resend</a> verification email.</p>
@@ -78,9 +79,9 @@
 
                                         <p>Choose how often you want to receive notifications for event occurrences in this project.</p>
 
-                                        <select class="form-control" name="current-project" [(ngModel)]="currentProject['id']" (change)="getEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings != {})">
-                                            <optgroup *ngFor="let project of projects" label="{{ project['organization_name'] }}">
-                                                <option *ngFor="let loopItem of filterProject(project['organization_name'])" [ngValue]="loopItem['id']">{{ loopItem['name'] }}</option>
+                                        <select class="form-control" name="current-project" [(ngModel)]="currentProject" (change)="getEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings != {})">
+                                            <optgroup *ngFor="let organization of organizations" label="{{ organization }}">
+                                                <option *ngFor="let project of filterProject(organization)" [ngValue]="project">{{ project['name'] }}</option>
                                             </optgroup>
                                         </select>
 
@@ -176,7 +177,7 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" role="button" class="btn btn-primary" promise-button="vm.changePassword(vm.passwordForm.$valid)" promise-button-busy-text="Changing Password">Change Password</button>
+                                    <button type="submit" role="button" class="btn btn-primary" (click)="changePassword(passwordForm.valid)" promise-button-busy-text="Changing Password">Change Password</button>
                                 </form>
                             </ng-template>
                         </ngb-tab>

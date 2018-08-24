@@ -73,7 +73,7 @@ export class ProjectNewComponent implements OnInit {
         const onSuccess = (response) => {
             this.organizations.push(JSON.parse(JSON.stringify(response)));
             this.currentOrganization = JSON.parse(JSON.stringify(response));
-            return response.data;
+            return response;
         };
 
         const onFailure = (response) => {
@@ -82,8 +82,8 @@ export class ProjectNewComponent implements OnInit {
             }
 
             let message = 'An error occurred while creating the organization.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);
@@ -119,8 +119,8 @@ export class ProjectNewComponent implements OnInit {
             }
 
             let message = 'An error occurred while creating the project.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);

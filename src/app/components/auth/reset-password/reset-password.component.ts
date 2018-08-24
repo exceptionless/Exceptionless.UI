@@ -45,8 +45,8 @@ export class ResetPasswordComponent implements OnInit {
 
         const onFailure = (response) => {
             let message = 'An error occurred while trying to change your password.';
-            if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+            if (response && response.error) {
+                message += ' ' + 'Message:' + ' ' + response.error;
             }
 
             this.notificationService.error('Failed!', message);

@@ -8,11 +8,10 @@ import {Component, OnInit} from '@angular/core';
 
 export class StackTraceComponent implements OnInit {
     stackTrace: any;
-    constructor() {
-    }
 
-    ngOnInit() {
-    }
+    constructor() {}
+
+    ngOnInit() {}
 
     buildParameter(parameter) {
         let result = '';

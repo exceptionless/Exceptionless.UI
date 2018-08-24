@@ -18,6 +18,7 @@ import { ModalDialogModule } from 'ngx-modal-dialog';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DaterangepickerModule } from 'angular-2-daterangepicker';
 import { ChecklistModule } from 'angular-checklist';
+import { GravatarModule } from 'ngx-gravatar';
 
 import { GlobalVariables } from './global-variables';
 import { AppComponent } from './app.component';
@@ -82,6 +83,7 @@ import { SessionComponent } from './components/layout/session/session.component'
 import { RateLimitComponent } from './components/rate-limit/rate-limit.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { LayoutComponent } from './components/layout/layout.component';
+import { EmailUniqueValidatorDirective } from './validators/email-unique.validator';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -151,6 +153,7 @@ export const AuthConfig = {
         RateLimitComponent,
         ResetPasswordComponent,
         LayoutComponent,
+        EmailUniqueValidatorDirective
     ],
     imports: [
         RouterModule,
@@ -172,6 +175,7 @@ export const AuthConfig = {
         HotkeyModule.forRoot(),
         NgxAnalyticsModule.forRoot([NgxAnalyticsGoogleAnalytics]),
         ClipboardModule,
+        GravatarModule,
     ],
     providers: [
         GlobalVariables,
