@@ -95,8 +95,8 @@ export class OrganizationService {
         return this.http.get(`organizations/${id}/plans`);
     }
 
-    isNameAvailable(name) {
-        return this.http.get('organizations/check-name?name=' + encodeURIComponent(name));
+    isNameAvailable(name): Observable<HttpResponse<any>> {
+        return this.http.get(`organizations/check-name?name=${encodeURIComponent(name)}`,  { observe: 'response' });
     }
 
     remove(id) {

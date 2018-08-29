@@ -17,7 +17,7 @@
                             <div [ngClass]="{'input-group': !!addForm.pending }">
                                 <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
                                        [(ngModel)]="organization_name"
-                                       organization-name-available-validator
+                                       uniqueOrganization
                                        ng-required="canCreateOrganization()"
                                        #organizationName="ngModel"
                                        required
@@ -30,7 +30,7 @@
 
                             <div class="error" *ngIf="(organizationName.invalid && (organizationName.dirty || organizationName.touched)) || addForm.submitted">
                                 <small [hidden]="!organizationName.errors?.required">Organization Name is required.</small>
-                                <small [hidden]="!organization_name_unique">A organizations with this name already exists.</small>
+                                <small [hidden]="!organizationName.errors?.uniqueOrganization">A organization with this name already exists.</small>
                             </div>
                         </div>
 
@@ -39,7 +39,7 @@
                             <div [ngClass]="{'input-group': !!addForm.pending }">
                                 <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name"
                                        [(ngModel)]="project_name"
-                                       project-name-available-validator
+                                       [uniqueProject]="currentOrganization['id']"
                                        organization-id="currentOrganization.id"
                                        required
                                        #projectName="ngModel"
@@ -52,7 +52,7 @@
 
                             <div class="error" *ngIf="(projectName.invalid && (projectName.dirty || projectName.touched)) || addForm.submitted">
                                 <small [hidden]="!projectName.errors?.required">Project Name is required.</small>
-                                <small [hidden]="!project_name_unique">A project with this name already exists.</small>
+                                <small [hidden]="!projectName.errors?.uniqueProject">A project with this name already exists.</small>
                             </div>
                         </div>
                     </form>

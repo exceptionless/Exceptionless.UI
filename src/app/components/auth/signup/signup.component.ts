@@ -21,8 +21,7 @@ export class SignupComponent implements OnInit {
         private projectService: ProjectService
     ) {}
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     onSubmit(isValid) {
         this.submitted = true;

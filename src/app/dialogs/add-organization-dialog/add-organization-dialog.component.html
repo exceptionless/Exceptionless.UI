@@ -5,10 +5,12 @@
            (ngModelChange)="setOrganization($event)"
            required
            type = "text"
+           uniqueOrganization
            #organization="ngModel"
            autofocus />
 
     <div class="error" *ngIf="(organization.invalid && (organization.dirty || organization.touched)) || submitted">
         <small [hidden]="!organization.errors?.required">Organization Name is required.</small>
+        <small [hidden]="!organization.errors?.uniqueOrganization">A organizations with this name already exists.</small>
     </div>
 </div>

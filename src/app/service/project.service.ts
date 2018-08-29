@@ -54,8 +54,8 @@ export class ProjectService {
         return this.http.get(`projects/${id}/${integration}/notifications`);
     }
 
-    isNameAvailable(organizationId, name) {
-        return this.http.get(`organizations/${organizationId}/projects/check-name?name=${encodeURIComponent(name)}`);
+    isNameAvailable(organizationId, name): Observable<HttpResponse<any>> {
+        return this.http.get(`organizations/${organizationId}/projects/check-name?name=${encodeURIComponent(name)}`, { observe: 'response' });
     }
 
     promoteTab(id, name) {

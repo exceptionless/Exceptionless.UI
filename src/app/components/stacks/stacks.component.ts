@@ -9,7 +9,8 @@ import { StacksActionsService } from '../../service/stacks-actions.service';
 
 @Component({
     selector: 'app-stacks',
-    templateUrl: './stacks.component.html'
+    templateUrl: './stacks.component.html',
+    host: { 'class': 'app-component' }
 })
 
 export class StacksComponent implements OnChanges {

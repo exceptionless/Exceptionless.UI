@@ -8,7 +8,8 @@ import { PaginationService } from '../../service/pagination.service';
 
 @Component({
     selector: 'app-events',
-    templateUrl: './events.component.html'
+    templateUrl: './events.component.html',
+    host: {'class': 'app-component'}
 })
 
 export class EventsComponent implements OnChanges {

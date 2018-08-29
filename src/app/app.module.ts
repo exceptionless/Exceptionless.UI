@@ -84,6 +84,8 @@ import { RateLimitComponent } from './components/rate-limit/rate-limit.component
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { EmailUniqueValidatorDirective } from './validators/email-unique.validator';
+import { OrganizationUniqueValidatorDirective } from './validators/organization-unique.validator';
+import { ProjectUniqueValidatorDirective } from './validators/project-unique.validator';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -153,7 +155,9 @@ export const AuthConfig = {
         RateLimitComponent,
         ResetPasswordComponent,
         LayoutComponent,
-        EmailUniqueValidatorDirective
+        EmailUniqueValidatorDirective,
+        OrganizationUniqueValidatorDirective,
+        ProjectUniqueValidatorDirective
     ],
     imports: [
         RouterModule,

@@ -6,7 +6,8 @@ import { UserService } from '../../service/user.service';
 
 @Component({
     selector: 'app-invoices',
-    templateUrl: './invoices.component.html'
+    templateUrl: './invoices.component.html',
+    host: {'class': 'app-component'}
 })
 
 export class InvoicesComponent implements OnInit {
@@ -35,11 +36,9 @@ export class InvoicesComponent implements OnInit {
             this.previous = links['previous'];
             this.next = links['next'];
             this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions['page'], this.currentOptions['limit']);
-
             if (this.invoices.length === 0 && this.currentOptions['page'] && this.currentOptions['page'] > 1) {
                 return this.get();
             }
-
             return this.invoices;
         };
 

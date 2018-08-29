@@ -9,7 +9,8 @@ import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dia
 
 @Component({
     selector: 'app-projects',
-    templateUrl: './projects.component.html'
+    templateUrl: './projects.component.html',
+    host: {'class': 'app-component'}
 })
 
 export class ProjectsComponent implements OnInit {

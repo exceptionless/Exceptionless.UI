@@ -9,7 +9,8 @@ import * as moment from 'moment';
 
 @Component({
     selector: 'app-sessions',
-    templateUrl: './sessions.component.html'
+    templateUrl: './sessions.component.html',
+    host: {'class': 'app-component'}
 })
 
 export class SessionsComponent implements OnChanges {

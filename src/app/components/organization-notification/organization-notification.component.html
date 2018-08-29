@@ -1,6 +1,6 @@
 <div>
-    <div *ngIf="hasNotifications" refresh-on="filterChanged" refresh-action="onFilterChanged()">
-        <div refresh-on="OrganizationChanged ProjectChanged PersistentEventChanged PlanChanged PlanOverage" refresh-action="vm.get()" refresh-throttle="10000"></div>
+    <div *ngIf="hasNotifications">
+        <div refresh-action="vm.get()" refresh-throttle="10000"></div>
 
         <div class="alert alert-success alert-banner m-b-none" *ngIf="!hasOrganizations()">
             <h4>Setup your first project</h4>
@@ -13,7 +13,7 @@
             <h4>Setup your first project</h4>
             <p>
                 <strong *ngFor="let organization of organizationsWithNoProjects; let first = first;">
-                    <span *ngIf="!first">, </span><a>{{ organization.name }}</a>
+                    <span *ngIf="!first">, </span><a routerLink="/project/add" [queryParams]="{ organizationId: organization.id }">{{ organization.name }}</a>
                 </strong>
                 currently has no projects. <a>Add a new project</a> and start becoming exceptionless in less than 60 seconds!
             </p>
@@ -24,7 +24,7 @@
             <p>
                 Please configure your clients for
                 <strong *ngFor="let project of projectsRequiringConfiguration; let first = first;">
-                    <span *ngIf="!first">, </span><a title="Configure_Project_Title">{{ project.name }}</a>
+                    <span *ngIf="!first">, </span><a title="Configure_Project_Title" routerLink="/project/{{ project.id }}/manage">{{ project.name }}</a>
                 </strong>
                 projects and start becoming exceptionless in less than 60 seconds!
             </p>

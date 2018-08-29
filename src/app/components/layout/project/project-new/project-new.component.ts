@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { NotificationService } from '../../../../service/notification.service';
 import { OrganizationService } from '../../../../service/organization.service';
@@ -20,6 +20,7 @@ export class ProjectNewComponent implements OnInit {
     project_name = '';
     organizationId = '';
     constructor(
+        private router: Router,
         private activatedRoute: ActivatedRoute,
         private notificationService: NotificationService,
         private organizationService: OrganizationService,
@@ -34,7 +35,7 @@ export class ProjectNewComponent implements OnInit {
         this.getOrganizations();
     }
 
-    add(isRetrying) {
+    add(isRetrying?) {
         const resetCanAdd = () => {
             this._canAdd = true;
         };
@@ -45,7 +46,7 @@ export class ProjectNewComponent implements OnInit {
 
         if (!this.addForm || this.addForm.invalid) {
             resetCanAdd();
-            return !isRetrying && retry(1000);
+            /*return !isRetrying && retry(1000);*/
         }
 
         if ((this.canCreateOrganization() && !this.organization_name) || !this.project_name || this.addForm.pending) {
@@ -110,7 +111,7 @@ export class ProjectNewComponent implements OnInit {
         }
 
         const onSuccess = (response) => {
-            // $state.go('app.project.configure', { id: response.data.id, redirect: true });
+            this.router.navigate([`/project/${response['id']}/manage`]);
         };
 
         const onFailure = (response) => {
@@ -120,7 +121,7 @@ export class ProjectNewComponent implements OnInit {
 
             let message = 'An error occurred while creating the project.';
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + 'Message:' + ' ' + response.error.message;
             }
 
             this.notificationService.error('Failed!', message);
