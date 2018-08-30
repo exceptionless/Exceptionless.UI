@@ -89,7 +89,6 @@ export class EventComponent implements OnInit {
         this.activatedRoute.params.subscribe( (params) => {
             this._eventId = params['id'];
         });
-
         this.tab = this.activatedRoute.snapshot.queryParams['tab'];
     }
 

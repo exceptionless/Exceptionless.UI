@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterService } from '../../../service/filter.service';
 import { FilterStoreService } from '../../../service/filter-store.service';
+import { GlobalVariables } from '../../../global-variables';
 
 @Component({
     selector: 'app-sidebar',
@@ -26,7 +27,8 @@ export class SidebarComponent implements OnInit {
 
     constructor(
         private filterStoreService: FilterStoreService,
-        private filterService: FilterService
+        private filterService: FilterService,
+        private _globalVariables: GlobalVariables,
     ) {}
 
     ngOnInit() {
@@ -46,5 +48,9 @@ export class SidebarComponent implements OnInit {
             this.projectType = this.filterService.getProjectType();
             this.filterUrlPattern = `${this.projectType}/${this.projectId}/`;
         }
+    }
+
+    isIntercomEnabled() {
+        return !!this._globalVariables.INTERCOM_APPID;
     }
 }

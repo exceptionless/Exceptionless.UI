@@ -6,9 +6,9 @@
             </div>
 
             <nav class="navi">
-                <ul class="nav">
-                    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                        <a routerLink="/{{ type }}{{ filterUrlPattern }}{{ types.exceptions }}/dashboard" class="auto">
+                <ul class="nav left-menu">
+                    <li [active]="types.exceptions">
+                        <a>
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -50,8 +50,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/{{ type }}{{ filterUrlPattern }}{{ types.log }}/dashboard">
+                    <li [active]="types.log">
+                        <a>
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -93,8 +93,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/{{ type }}{{ filterUrlPattern }}{{ types.broken }}/dashboard">
+                    <li [active]="types.broken">
+                        <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -136,8 +136,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/{{ type }}{{ filterUrlPattern }}{{ types.feature }}/dashboard">
+                    <li [active]="types.feature">
+                        <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -179,8 +179,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/{{ filterUrlPattern }}dashboard">
+                    <li [active]="'events'">
+                        <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -222,8 +222,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/{{ filterUrlPattern }}session/dashboard">
+                    <li [active]="'session'">
+                        <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -241,8 +241,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li routerLinkActive="active">
-                        <a href class="auto" routerLink="/project/list">
+                    <li [active]="'admin'">
+                        <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
                                 <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -278,7 +278,7 @@
                             <span>Documentation</span>
                         </a>
                     </li>
-                    <li routerLinkActive="active">
+                    <li routerLinkActive="active" *ngIf="isIntercomEnabled()">
                         <a title="Support" routerLink="/type/support">
                             <i class="fa fa-comment fa-fw"></i>
                             <span>Support</span>
