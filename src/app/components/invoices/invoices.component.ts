@@ -51,6 +51,7 @@ export class InvoicesComponent implements OnInit {
                     resolve(this.invoices);
                 },
                 err => {
+                    this.loading = false;
                     this.notificationService.error('Failed', 'Error Occurred!');
                     reject(err);
                 }

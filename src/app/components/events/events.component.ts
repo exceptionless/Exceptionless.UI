@@ -109,6 +109,7 @@ export class EventsComponent implements OnChanges {
                     resolve(this.events);
                 },
                 err => {
+                    this.loading = false;
                     this.notificationService.error('Error Occurred!', 'Failed');
                     reject(err);
                 }

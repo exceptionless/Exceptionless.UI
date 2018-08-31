@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ToastrModule } from 'ngx-toastr';
@@ -19,6 +19,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DaterangepickerModule } from 'angular-2-daterangepicker';
 import { ChecklistModule } from 'angular-checklist';
 import { GravatarModule } from 'ngx-gravatar';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { GlobalVariables } from './global-variables';
 import { AppComponent } from './app.component';
@@ -95,6 +97,10 @@ export const AuthConfig = {
     },
     tokenName: 'token',
 };
+
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
     declarations: [
@@ -180,6 +186,13 @@ export const AuthConfig = {
         NgxAnalyticsModule.forRoot([NgxAnalyticsGoogleAnalytics]),
         ClipboardModule,
         GravatarModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     providers: [
         GlobalVariables,

@@ -64,6 +64,7 @@ export class ProjectsComponent implements OnInit {
                     resolve(this.projects);
                 },
                 err => {
+                    this.loading = false;
                     this.notificationService.error('Failed', 'Error Occurred!');
                     reject(err);
                 }

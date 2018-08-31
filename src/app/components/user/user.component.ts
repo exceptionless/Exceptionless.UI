@@ -61,6 +61,7 @@ export class UserComponent implements OnInit {
                     resolve(this.users);
                 },
                 err => {
+                    this.loading = false;
                     this.notificationService.error('Failed', 'Error Occurred!');
                     reject(err);
                 }

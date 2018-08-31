@@ -132,6 +132,7 @@ export class OrganizationListComponent implements OnInit {
                     resolve(this.organizations);
                 },
                 err => {
+                    this.loading = false;
                     this.notificationService.error('Failed', 'Error Occurred!');
                     reject(err);
                 }

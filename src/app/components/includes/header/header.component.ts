@@ -3,6 +3,7 @@ import { AuthService } from 'ng2-ui-auth';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../service/notification.service';
 import { UserService } from '../../../service/user.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-header',
@@ -19,11 +20,15 @@ export class HeaderComponent implements OnInit {
         private auth: AuthService,
         private router: Router,
         private notificationService: NotificationService,
-        private userService: UserService
+        private userService: UserService,
+        private translateService: TranslateService,
     ) {}
 
     ngOnInit() {
         this.getUser();
+       /* this.translateService.get('HELLO').subscribe((res: string) => {
+            console.log(res);
+        });*/
     }
 
     toggleSideNavCollapsed() {

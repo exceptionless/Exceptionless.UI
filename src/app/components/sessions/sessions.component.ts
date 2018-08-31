@@ -90,12 +90,11 @@ export class SessionsComponent implements OnChanges {
                 res => {
                     onSuccess(res.body, res.headers.get('link'));
                     this.loading = false;
-
                     resolve(this.events);
                 },
                 err => {
+                    this.loading = false;
                     this.notificationService.error('Error Occurred!', 'Failed');
-
                     reject(err);
                 }
             );

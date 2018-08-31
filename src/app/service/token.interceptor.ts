@@ -34,12 +34,17 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        request = request.clone({
-            setHeaders: {
-                Authorization: `Bearer ${this.auth.getToken()}`
-            },
-            url: this.globalVariables.BASE_URL + request.url
-        });
-        return next.handle(request).catch(x => this.handleAuthError(x));
+        const isTranslate = request.url.includes('i18n');
+        if (isTranslate) {
+            return next.handle(request);
+        } else {
+            request = request.clone({
+                setHeaders: {
+                    Authorization: `Bearer ${this.auth.getToken()}`
+                },
+                url: this.globalVariables.BASE_URL + request.url
+            });
+            return next.handle(request).catch(x => this.handleAuthError(x));
+        }
     }
 }

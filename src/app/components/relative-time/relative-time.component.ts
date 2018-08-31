@@ -11,8 +11,7 @@ export class RelativeTimeComponent implements OnInit {
     @Input() to;
     text: any = '';
 
-    constructor() {
-    }
+    constructor() {}
 
     ngOnInit() {
         this.setRelativeTimeText();
@@ -21,9 +20,7 @@ export class RelativeTimeComponent implements OnInit {
     setRelativeTimeText() {
         const to = moment(this.to);
         const date = moment(this.date);
-
         const isValid = !!this.to && to.isValid() && to.year() > 1 && !!this.date && date.isValid() && date.year() > 1;
-
         this.text = isValid ? date.to(to, true) : 'never';
     }
 }

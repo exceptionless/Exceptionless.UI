@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-root',
@@ -10,11 +11,17 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
     constructor(
         private hotkeysService: HotkeysService,
-        private router: Router
+        private router: Router,
+        public translateService: TranslateService
     ) {}
 
     ngOnInit() {
         this.addHotKeys();
+        this.translateService.addLangs(['en-us', 'zh-cn']);
+        this.translateService.setDefaultLang('en-us');
+
+        const browserLang = this.translateService.getBrowserLang();
+        this.translateService.use(browserLang.match(/en-us|zh-cn/) ? browserLang : 'en-us');
     }
 
     addHotKeys() {

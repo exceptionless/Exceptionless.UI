@@ -93,6 +93,7 @@ export class StacksComponent implements OnChanges {
                     resolve(this.stacks);
                 },
                 err => {
+                    this.loading = false;
                     this.notificationService.error('Error Occurred!', 'Failed');
                     reject(err);
                 }
