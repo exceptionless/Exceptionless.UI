@@ -9,6 +9,7 @@ import { UserService } from '../../service/user.service';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dialog.component';
 import { GlobalVariables } from '../../global-variables';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-account-manage',
@@ -46,7 +47,8 @@ export class AccountManageComponent implements OnInit {
         private userService: UserService,
         private modalDialogService: ModalDialogService,
         private viewRef: ViewContainerRef,
-        private _globalVariables: GlobalVariables
+        private _globalVariables: GlobalVariables,
+        private wordTranslateService: WordTranslateService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this.projectId = params['id'];
@@ -66,13 +68,13 @@ export class AccountManageComponent implements OnInit {
     }
 
     authenticate(provider) {
-        const onFailure = (response) => {
-            let message = 'An error occurred while adding external login.';
+        const onFailure = async (response) => {
+            let message =  await this.wordTranslateService.translate('An error occurred while adding external login.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed', message);
+            this.notificationService.error('', message);
         };
 
         return this.authService.authenticate(provider).subscribe(onFailure);
@@ -83,8 +85,8 @@ export class AccountManageComponent implements OnInit {
             return;
         }
 
-        const onSuccess = () => {
-            this.notificationService.success('Success', 'You have successfully changed your password.');
+        const onSuccess = async () => {
+            this.notificationService.success('', await this.wordTranslateService.translate('You have successfully changed your password.'));
             this.password = {
                 current_password: '',
                 password: '',
@@ -93,13 +95,13 @@ export class AccountManageComponent implements OnInit {
             this.passwordForm.form.reset(true);
         };
 
-        const onFailure = (response) => {
-            let message = 'An error occurred while trying to change your password.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while trying to change your password.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed', message);
+            this.notificationService.error('', message);
         };
 
         return this.authAccountService.changePassword(this.password).then(
@@ -112,9 +114,9 @@ export class AccountManageComponent implements OnInit {
         );
     }
 
-    get(data?) {
+    async get(data?) {
         if (data && data.type === 'User' && data['deleted'] && data['id'] === this.user['id']) {
-            this.notificationService.error('Failed', 'Your user account was deleted. Please create a new account.');
+            this.notificationService.error('', await this.wordTranslateService.translate('Your user account was deleted. Please create a new account.'));
             return this.authService.logout();
         }
 
@@ -127,8 +129,8 @@ export class AccountManageComponent implements OnInit {
             return this.emailNotificationSettings;
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed', 'An error occurred while loading the notification settings.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the notification settings.'));
         };
 
         this.emailNotificationSettings = {};
@@ -164,8 +166,8 @@ export class AccountManageComponent implements OnInit {
             return this.projects;
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed', 'An error occurred while loading the projects.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the projects.'));
         };
 
         return new Promise((resolve, reject) => {
@@ -190,13 +192,13 @@ export class AccountManageComponent implements OnInit {
             return this.user;
         };
 
-        const onFailure = (response) => {
-            let message = 'An error occurred while loading your user profile.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while loading your user profile.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed', message);
+            this.notificationService.error('', message);
         };
 
         return new Promise((resolve, reject) => {
@@ -213,17 +215,17 @@ export class AccountManageComponent implements OnInit {
         });
     }
 
-    deleteAccount() {
+    async deleteAccount() {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.userService.removeCurrentUser().subscribe(
-                    res => {
-                        this.notificationService.success('Success!', 'Successfully removed your user account.');
+                    async res => {
+                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully removed your user account.'));
                         this.authAccountService.logout();
                         resolve(res);
                     },
                     err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying remove your user account.');
+                        this.notificationService.error('', 'An error occurred while trying remove your user account.');
                         reject(err);
                     }
                 );
@@ -238,7 +240,7 @@ export class AccountManageComponent implements OnInit {
                 { text: 'DELETE ACCOUNT', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete your account?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete your account?')
             }
         });
     }
@@ -267,13 +269,13 @@ export class AccountManageComponent implements OnInit {
     }
 
     resendVerificationEmail() {
-        const onFailure = (response) => {
-            let message = 'An error occurred while sending your verification email.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while sending your verification email.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return this.userService.resendVerificationEmail(this.user['id']).subscribe(
@@ -312,13 +314,13 @@ export class AccountManageComponent implements OnInit {
             this.user['is_email_address_verified'] = response['is_verified'];
         };
 
-        const onFailure = (response) => {
-            let message = 'An error occurred while saving your email address.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while saving your email address.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return this.userService.updateEmailAddress(this.user['id'], this.user['email_address']).subscribe(
@@ -333,13 +335,13 @@ export class AccountManageComponent implements OnInit {
     }
 
     saveEmailNotificationSettings() {
-        const onFailure = (response) => {
-            let message = 'An error occurred while saving your notification settings.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while saving your notification settings.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return this.projectService.setNotificationSettings(this.currentProject['id'], this.user['id'], this.emailNotificationSettings).subscribe(
@@ -351,13 +353,13 @@ export class AccountManageComponent implements OnInit {
     }
 
     saveEnableEmailNotification() {
-        const onFailure = (response) => {
-            let message = 'An error occurred while saving your email notification preferences.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while saving your email notification preferences.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return this.userService.update(this.user['id'], { email_notifications_enabled: this.user['email_notifications_enabled'] }).subscribe(
@@ -373,13 +375,13 @@ export class AccountManageComponent implements OnInit {
             return;
         }
 
-        const onFailure = (response) => {
-            let message = 'An error occurred while saving your full name.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while saving your full name.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return this.userService.update(this.user['id'], this.user).subscribe(
@@ -399,13 +401,13 @@ export class AccountManageComponent implements OnInit {
             this.user['o_auth_accounts'].splice(this.user['o_auth_accounts'].indexOf(account), 1);
         };
 
-        const onFailure = (response) => {
-            let message = 'An error occurred while removing the external login.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while removing the external login.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return this.authService.unlink(account['provider'], account['provider_user_id']).subscribe(

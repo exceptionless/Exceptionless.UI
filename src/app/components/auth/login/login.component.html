@@ -12,46 +12,46 @@
                         <div class="panel-body">
                             <form name="loginForm" role="form" class="form-horizontal form-validation" autocomplete="on" (ngSubmit)="onSubmit(loginForm.valid)" #loginForm="ngForm">
                                 <div class="form-horizontal col-sm-offset-2">
-                                    <h4>Log in</h4>
+                                    <h4>{{ 'Log in' | translate }}</h4>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="email" class="col-sm-2 control-label">Email</label>
+                                    <label for="email" class="col-sm-2 control-label">{{ 'Email' | translate }}</label>
                                     <div class="col-sm-10">
                                         <input id="email" name="email" type="email" email="true" class="form-control" [(ngModel)]="model.email" placeholder="Email Address" x-autocompletetype="email" autocorrect="off" autofocus required #email="ngModel"/>
 
                                         <div class="error" *ngIf="(email.invalid && (email.dirty || email.touched)) || submitted">
-                                            <small [hidden]="!email.errors?.required">Email Address is required.</small>
-                                            <small [hidden]="!email.errors?.email" *ngIf="!email.errors?.required">It muse be email address.</small>
+                                            <small [hidden]="!email.errors?.required">{{ 'Email Address is required.' | translate }}</small>
+                                            <small [hidden]="!email.errors?.email" *ngIf="!email.errors?.required">{{ 'Email Address is required.' | translate }}</small>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="password" class="col-sm-2 control-label">Password</label>
+                                    <label for="password" class="col-sm-2 control-label">{{ 'Password' | translate }}</label>
                                     <div class="col-sm-10">
                                         <input id="password" name="password" type="password" class="form-control" [(ngModel)]="model.password" placeholder="Password" required minlength="6" maxlength="101" #password="ngModel" />
 
                                         <div class="error" *ngIf="(password.invalid && (password.dirty || password.touched)) || submitted">
-                                            <small [hidden]="!password.errors?.required">Password is required</small>
-                                            <small [hidden]="!password.errors?.minlength">Password must be at least 6 characters long</small>
-                                            <small [hidden]="!password.errors?.maxlength">Password must be less than 101 characters long</small>
+                                            <small [hidden]="!password.errors?.required">{{ 'Password is required' | translate }}</small>
+                                            <small [hidden]="!password.errors?.minlength">{{ 'Password must be at least 6 characters long' | translate }}</small>
+                                            <small [hidden]="!password.errors?.maxlength">{{ 'Password must be less than 101 characters long' | translate }}</small>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <input type="submit" role="button" id="login" class="btn btn-primary lgn-btn m-r-xs" value="Log In" />
-                                        <a class="btn btn-default" [routerLink]="['/signup']">Signup</a>
-                                        <p><a routerLink="/forgot-password">Forgot password?</a></p>
+                                        <input type="submit" role="button" id="login" class="btn btn-primary lgn-btn m-r-xs" value="{{ 'Log In' | translate }}" />
+                                        <a class="btn btn-default" [routerLink]="['/signup']">{{ 'Signup' | translate }}</a>
+                                        <p><a routerLink="/forgot-password">{{ 'Forgot password?' | translate }}</a></p>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
 
-                    <div class="text-center" [innerHTML]="'NOTICE_SIGNINGUP'"></div>
+                    <div class="text-center" [innerHTML]="'NOTICE_SIGNINGUP' | translate"></div>
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Login } from './login.class';
 import { AuthService } from 'ng2-ui-auth';
 import { NotificationService } from '../../../service/notification.service';
+import { WordTranslateService } from '../../../service/word-translate.service';
 
 @Component({
     selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
         private auth: AuthService,
         private notificationService: NotificationService,
         private router: Router,
+        private wordTranslateService: WordTranslateService
     ) {
        if (this.auth.isAuthenticated()) {
            this.router.navigate(['/type/error/dashboard']);
@@ -38,8 +40,8 @@ export class LoginComponent implements OnInit {
                 res => {
                     this.router.navigate(['/type/error/dashboard']);
                 },
-                err => {
-                    this.notificationService.error('', 'Loggin_Failed_Message');
+                async err => {
+                    this.notificationService.error('', await this.wordTranslateService.translate('Loggin_Failed_Message'));
                 }
             );
         }

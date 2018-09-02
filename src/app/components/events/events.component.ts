@@ -5,6 +5,7 @@ import { EventsActionService } from '../../service/events-action.service';
 import { NotificationService } from '../../service/notification.service';
 import { LinkService } from '../../service/link.service';
 import { PaginationService } from '../../service/pagination.service';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-events',
@@ -36,6 +37,7 @@ export class EventsComponent implements OnChanges {
         private notificationService: NotificationService,
         private linkService: LinkService,
         private paginationService: PaginationService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
@@ -136,13 +138,13 @@ export class EventsComponent implements OnChanges {
         event.preventDefault();
     }
 
-    save(action) {
+    async save(action) {
         const onSuccess = () => {
             this.selectedIds = [];
         };
 
         if (this.selectedIds.length === 0) {
-            this.notificationService.info('Success!', 'Please select one or more stacks');
+            this.notificationService.info('', await this.wordTranslateService.translate('Please select one or more stacks'));
         } else {
             /*this.action.run(this.selectedIds).then(onSuccess());*/
         }
