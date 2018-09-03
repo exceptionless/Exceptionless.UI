@@ -206,7 +206,7 @@ export class OrganizationNotificationComponent implements OnInit {
                         resolve(this.organizations);
                     },
                     err => {
-                        this.notificationService.error('Failed', 'Error Occurred!');
+                        this.notificationService.error('', 'Error Occurred!');
 
                         reject(err);
                     }
@@ -224,7 +224,7 @@ export class OrganizationNotificationComponent implements OnInit {
                         resolve(this.organizations);
                     },
                     err => {
-                        this.notificationService.error('Failed', 'Error Occurred!');
+                        this.notificationService.error('', 'Error Occurred!');
 
                         reject(err);
                     }
@@ -245,7 +245,7 @@ export class OrganizationNotificationComponent implements OnInit {
                     resolve(this.projects);
                 },
                 err => {
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('', 'Error Occurred!');
 
                     reject(err);
                 }

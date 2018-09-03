@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
     logout() {
         this.auth.logout()
             .subscribe({
-                error: (err: any) => this.notificationService.error('Error Occurred!', 'Error'),
+                error: (err: any) => this.notificationService.error('', 'Error Occurred!'),
                 complete: () => this.router.navigate(['/login'])
             });
     }
@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit {
                 this.user = JSON.parse(JSON.stringify(res));
             },
             err => {
-                this.notificationService.error('Failed!', 'An error occurred');
+                this.notificationService.error('', 'Error Occurred!');
             }
         );
     }

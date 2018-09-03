@@ -42,7 +42,7 @@ export class ProjectFilterComponent implements OnInit {
                     resolve(this.organizations);
                 },
                 err => {
-                    this.notificationService.error('Error Occurred!', 'Failed');
+                    this.notificationService.error('', 'Error Occurred!');
                     this.isLoadingOrganizations = false;
 
                     reject(err);
@@ -61,7 +61,7 @@ export class ProjectFilterComponent implements OnInit {
                     resolve(this.projects);
                 },
                 err => {
-                    this.notificationService.error('Error Occurred!', 'Failed');
+                    this.notificationService.error('', 'Error Occurred!');
                     this.isLoadingProjects = false;
 
                     reject(err);

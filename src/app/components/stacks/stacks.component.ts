@@ -6,6 +6,7 @@ import { LinkService } from '../../service/link.service';
 import { PaginationService } from '../../service/pagination.service';
 import { NotificationService } from '../../service/notification.service';
 import { StacksActionsService } from '../../service/stacks-actions.service';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-stacks',
@@ -36,6 +37,7 @@ export class StacksComponent implements OnChanges {
         private paginationService: PaginationService,
         private notificationService: NotificationService,
         private stacksActionsService: StacksActionsService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
@@ -94,7 +96,7 @@ export class StacksComponent implements OnChanges {
                 },
                 err => {
                     this.loading = false;
-                    this.notificationService.error('Error Occurred!', 'Failed');
+                    this.notificationService.error('', 'Error Occurred!');
                     reject(err);
                 }
             );
@@ -124,13 +126,13 @@ export class StacksComponent implements OnChanges {
 
     }
 
-    save(action) {
+    async save(action) {
         const onSuccess = () => {
             this.selectedIds = [];
         };
 
         if (this.selectedIds.length === 0) {
-            this.notificationService.info('Success', 'Please select one or more stacks');
+            this.notificationService.info('', await this.wordTranslateService.translate('Please select one or more stacks'));
         } else {
             /*this.action.run(this.selectedIds).then(onSuccess());*/
         }

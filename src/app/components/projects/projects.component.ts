@@ -6,6 +6,7 @@ import { PaginationService } from '../../service/pagination.service';
 import { NotificationService } from '../../service/notification.service';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dialog.component';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-projects',
@@ -30,6 +31,7 @@ export class ProjectsComponent implements OnInit {
         private notificationService: NotificationService,
         private viewRef: ViewContainerRef,
         private modalDialogService: ModalDialogService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnInit() {
@@ -65,7 +67,7 @@ export class ProjectsComponent implements OnInit {
                 },
                 err => {
                     this.loading = false;
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('', 'Error Occurred!');
                     reject(err);
                 }
             );
@@ -140,17 +142,17 @@ export class ProjectsComponent implements OnInit {
         return this.get(this.previous);
     }
 
-    remove(project) {
+    async remove(project) {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.projectService.remove(project['id']).subscribe(
-                    res => {
+                    async res => {
                         this.projects.splice(this.projects.indexOf(project), 1);
-                        this.notificationService.success('Success!', 'Successfully queued the project for deletion.');
+                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the project for deletion.'));
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to remove the project.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the project.'));
                         reject(err);
                     }
                 );
@@ -165,7 +167,7 @@ export class ProjectsComponent implements OnInit {
                 { text: 'Delete Project', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this project?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this project?')
             }
         });
     }

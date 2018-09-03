@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthAccountService } from '../../../service/auth-account.service';
 import { NotificationService } from '../../../service/notification.service';
+import { WordTranslateService } from '../../../service/word-translate.service';
 
 @Component({
     selector: 'app-reset-password',
@@ -19,7 +20,8 @@ export class ResetPasswordComponent implements OnInit {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private authAccountService: AuthAccountService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private wordTranslateService: WordTranslateService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this.data.password_reset_token = params['tokenId'];
@@ -38,18 +40,18 @@ export class ResetPasswordComponent implements OnInit {
             return;
         }
 
-        const onSuccess = () => {
-            this.notificationService.info('Success!', 'You have successfully changed your password.');
+        const onSuccess = async () => {
+            this.notificationService.info('', await this.wordTranslateService.translate('You have successfully changed your password.'));
             return this.router.navigate(['/login']);
         };
 
-        const onFailure = (response) => {
-            let message = 'An error occurred while trying to change your password.';
+        const onFailure = async (response) => {
+            let message = await this.wordTranslateService.translate('An error occurred while trying to change your password.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return this.authAccountService.resetPassword(this.data).subscribe(

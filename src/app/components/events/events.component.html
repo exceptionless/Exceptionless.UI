@@ -7,11 +7,11 @@
                         <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds.length > 0" [disabled]="events.length === 0"><i></i>
                     </label>
                 </th>
-                <th>Summary</th>
+                <th>{{ 'Summary' | translate }}</th>
                 <th class="action-xl hidden-xs">User</th>
                 <th class="clickable" [ngClass]="{ 'relative-date': relativeTo(), 'date': !relativeTo(), 'dropup': !sortByDateDescending }" ng-click="vm.toggleDateSort()">
-                    <abbr title="{{ sortByDateDescending ? 'Sort Descending' : 'Sort Ascending' }}">
-                        {{ timeHeaderText }} <span class="caret"></span>
+                    <abbr title="{{ sortByDateDescending ? 'Sort Descending' : 'Sort Ascending' | translate }}">
+                        {{ timeHeaderText | translate }} <span class="caret"></span>
                     </abbr>
                 </th>
             </tr>
@@ -40,8 +40,8 @@
             <tr *ngIf="events.length === 0 || loading">
                 <td class="hidden-xs" *ngIf="actions.length > 0"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
                 <td colspan="3">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">No events were found with the current filter.</strong>
+                    <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
+                    <strong *ngIf="!loading">{{ 'No events were found with the current filter.' | translate }}</strong>
                 </td>
             </tr>
         </tbody>
@@ -52,11 +52,11 @@
             <div class="col-sm-4 hidden-xs">
                 <div class="dropdown" *ngIf="actions.length > 0" open>
                     <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        Bulk Action
+                        {{ 'Bulk Action' | translate }}
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" *ngFor="let action of actions" (click)="save(action)">{{ action.name }}</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" *ngFor="let action of actions" (click)="save(action)">{{ action.name |  translate }}</a></li>
                     </ul>
                 </div>
             </div>

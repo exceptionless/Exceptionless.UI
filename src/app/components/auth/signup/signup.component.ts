@@ -4,6 +4,7 @@ import { Signup } from './signup.class';
 import { NotificationService } from '../../../service/notification.service';
 import { AuthService } from 'ng2-ui-auth';
 import { ProjectService } from '../../../service/project.service';
+import { WordTranslateService } from '../../../service/word-translate.service';
 
 @Component({
     selector: 'app-signup',
@@ -18,7 +19,8 @@ export class SignupComponent implements OnInit {
         private router: Router,
         private auth: AuthService,
         private notificationService: NotificationService,
-        private projectService: ProjectService
+        private projectService: ProjectService,
+        private wordTranslateService: WordTranslateService,
     ) {}
 
     ngOnInit() {}
@@ -35,7 +37,7 @@ export class SignupComponent implements OnInit {
 
             this.auth.signup(data).subscribe({
                 next: (response) => { this.auth.setToken(response.token); },
-                error: (err: any) => this.notificationService.error('Signup failed!', 'Failed'),
+                error: async (err: any) => this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while signing up.  Please contact support for more information.')),
                 complete: () => { this.redirectOnSignup(); }
             });
         }

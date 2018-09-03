@@ -2,9 +2,9 @@
     <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable">
         <thead>
             <tr>
-                <th>Summary</th>
-                <th class="date">Created</th>
-                <th class="date">Duration</th>
+                <th>{{ 'Summary' | translate }}</th>
+                <th class="date">{{ 'Created' | translate }}</th>
+                <th class="date">{{ 'Duration' | translate }}</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +26,7 @@
             <tr *ngIf="events.length === 0 || loading">
                 <td colspan="3">
                     <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">{{ hasFilter() ? 'No sessions were found with the current filter.': 'No sessions were found.' }}</strong>
+                    <strong *ngIf="!loading">{{ hasFilter() ? 'No sessions were found with the current filter.': 'No sessions were found.' | translate }}</strong>
                 </td>
             </tr>
         </tbody>

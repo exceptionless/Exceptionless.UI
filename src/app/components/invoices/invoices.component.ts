@@ -52,7 +52,7 @@ export class InvoicesComponent implements OnInit {
                 },
                 err => {
                     this.loading = false;
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('', 'Error Occurred!');
                     reject(err);
                 }
             );

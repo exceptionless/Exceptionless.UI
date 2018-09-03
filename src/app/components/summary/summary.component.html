@@ -1,6 +1,6 @@
 <ng-container *ngIf="source.template_key == 'stack-log-summary'">
     <span *ngIf="showType">
-        <strong>Log source</strong>:&nbsp;
+        <strong>{{ 'Log source' | translate }}</strong>:&nbsp;
     </span>
 
     <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">
@@ -89,7 +89,7 @@
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'event-feature-summary'">
-    <span *ngIf="showType"><strong>Feature</strong>:&nbsp;</span>
+    <span *ngIf="showType"><strong>{{ 'Feature' | translate }}</strong>:&nbsp;</span>
     <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
 </ng-container>
 
@@ -116,9 +116,9 @@
 <ng-container *ngIf="source.template_key == 'event-session-summary'">
     <span *ngIf="showType">
         <strong>
-            <span *ngIf="source.data.Type === 'sessionend'">Session End</span>
-            <span *ngIf="source.data.Type === 'heartbeat'">Session Heartbeat</span>
-            <span *ngIf="source.data.Type !== 'sessionend' && source.data.Type !== 'heartbeat'">Session</span>
+            <span *ngIf="source.data.Type === 'sessionend'">{{ 'Session End' | translate }}</span>
+            <span *ngIf="source.data.Type === 'heartbeat'">{{ 'Session Heartbeat' | translate }}</span>
+            <span *ngIf="source.data.Type !== 'sessionend' && source.data.Type !== 'heartbeat'">{{ 'Session' | translate }}</span>
         </strong>:&nbsp;
     </span>
 

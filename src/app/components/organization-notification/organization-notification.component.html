@@ -3,14 +3,14 @@
         <div refresh-action="vm.get()" refresh-throttle="10000"></div>
 
         <div class="alert alert-success alert-banner m-b-none" *ngIf="!hasOrganizations()">
-            <h4>Setup your first project</h4>
+            <h4>{{ 'Setup your first project' | translate }}</h4>
             <p>
                 Please <a routerLink="/project/add">add a new project</a> and start becoming exceptionless in less than 60 seconds!
             </p>
         </div>
 
         <div class="alert alert-success alert-banner m-b-none" *ngIf="hasOrganizationsWithNoProjects()">
-            <h4>Setup your first project</h4>
+            <h4>{{ 'Setup your first project' | translate }}</h4>
             <p>
                 <strong *ngFor="let organization of organizationsWithNoProjects; let first = first;">
                     <span *ngIf="!first">, </span><a routerLink="/project/add" [queryParams]="{ organizationId: organization.id }">{{ organization.name }}</a>
@@ -20,11 +20,11 @@
         </div>
 
         <div class="alert alert-success alert-banner m-b-none" *ngIf="hasProjectsRequiringConfiguration()">
-            <h4>We haven't received any data!</h4>
+            <h4>{{ 'We haven\'t received any data!' | translate }}</h4>
             <p>
                 Please configure your clients for
                 <strong *ngFor="let project of projectsRequiringConfiguration; let first = first;">
-                    <span *ngIf="!first">, </span><a title="Configure_Project_Title" routerLink="/project/{{ project.id }}/manage">{{ project.name }}</a>
+                    <span *ngIf="!first">, </span><a title="{{ 'Configure_Project_Title' | translate }}" routerLink="/project/{{ project.id }}/manage">{{ project.name }}</a>
                 </strong>
                 projects and start becoming exceptionless in less than 60 seconds!
             </p>
@@ -36,7 +36,7 @@
                     <span *ngIf="!first">, </span><a (click)="showChangePlanDialog(organization.id)">{{ organization.name }}</a>
                 </span> has been suspended.
             </h4>
-            <p><em>Please note that while your account is suspended all new client events will be discarded.</em></p>
+            <p><em>{{ 'Please note that while your account is suspended all new client events will be discarded.' | translate }}</em></p>
 
             <p *ngIf="hasSuspendedForBillingOrganizations()">
                 To unsuspend
@@ -62,7 +62,7 @@
 
         <div class="alert alert-danger alert-banner m-b-none" *ngIf="hasExceededRequestLimitOrganizations()">
             <h4>
-                API requests are currently being throttled for
+                {{ 'API requests are currently being throttled for' | translate }}
                 <span *ngFor="let organization of exceededRequestLimitOrganizations; let first = first;">
                     <span *ngIf="!first">, </span>{{ organization.name }}
                 </span>
@@ -75,13 +75,13 @@
 
         <div class="alert alert-danger alert-banner m-b-none" *ngIf="hasHourlyOverageOrganizations()">
             <h4>
-                Events are currently being throttled for
+                {{ 'Events are currently being throttled for' | translate }}
                 <span *ngFor="let organization of hourlyOverageOrganizations; let first = first;">
                     <span *ngIf="!first">, </span><a (click)="showChangePlanDialog(organization.id)">{{ organization.name }}</a>
                 </span>
             </h4>
 
-            <p>Events are currently being throttled to prevent using up your plan limit in a small window of time. <a ng-click="vm.showChangePlanDialog(vm.hourlyOverageOrganizations[0].id)">Upgrade now</a> to increase your limits.</p>
+            <p>{{ 'Events are currently being throttled to prevent using up your plan limit in a small window of time.' | translate }} <a ng-click="vm.showChangePlanDialog(vm.hourlyOverageOrganizations[0].id)">{{ 'Upgrade now' | translate }}</a> {{ 'to increase your limits.' | translate }}</p>
         </div>
 
         <div class="alert alert-danger alert-banner m-b-none" *ngIf="hasMonthlyOverageOrganizations()">
@@ -89,10 +89,10 @@
                 <span *ngFor="let organization of monthlyOverageOrganizations; let first = first;">
                   <span *ngIf="!first">, </span><a (click)="vm.showChangePlanDialog(organization.id)">{{ organization.name }}</a>
                 </span>
-                has reached its monthly plan limit.
+                {{ 'has reached its monthly plan limit.' | translate }}
             </h4>
 
-            <p><a (click)="showChangePlanDialog(monthlyOverageOrganizations[0].id)">Upgrade now</a> to continue receiving events.</p>
+            <p><a (click)="showChangePlanDialog(monthlyOverageOrganizations[0].id)">{{ 'Upgrade now' | translate }}</a> {{ 'to continue receiving events.' | translate }}</p>
         </div>
 
         <div class="alert alert-danger alert-banner m-b-none" *ngIf="hasOrganizationsWithoutPremiumFeatures()">
@@ -100,20 +100,20 @@
                 <span *ngFor="let organization of organizationsWithoutPremiumFeatures; let first = first;">
                   <span *ngIf="!first">, </span><a (click)="showChangePlanDialog(organization.id)">{{ organization.name }}</a>
                 </span>
-                is attempting to use a premium feature.
+                {{ 'is attempting to use a premium feature.' | translate }}
             </h4>
 
-            <p><a (click)="showChangePlanDialog(organizationsWithoutPremiumFeatures[0].id)">Upgrade now</a> to enable search and other premium features!</p>
+            <p><a (click)="showChangePlanDialog(organizationsWithoutPremiumFeatures[0].id)">{{ 'Upgrade now' | translate }}</a> {{ 'to enable search and other premium features!' | translate }}</p>
         </div>
 
         <div class="alert alert-success alert-banner m-b-none" *ngIf="hasFreeOrganizations()">
             <h4>
                 <span *ngFor="let organization of freeOrganizations; let first = first;">
                     <span *ngIf="!first">, </span><a (click)="showChangePlanDialog(organization.id)">{{ organization.name }}</a>
-                </span> is currently on a free plan.
+                </span> {{ 'is currently on a free plan.' | translate }}
             </h4>
 
-            <p><a (click)="showChangePlanDialog(freeOrganizations[0].id)">Upgrade now</a> to enable premium features and extra storage!</p>
+            <p><a (click)="showChangePlanDialog(freeOrganizations[0].id)">{{ 'Upgrade now' | translate }}</a> {{ 'to enable premium features and extra storage!' | translate }}</p>
         </div>
     </div>
 </div>

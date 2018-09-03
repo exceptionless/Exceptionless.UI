@@ -6,6 +6,7 @@ import { OrganizationService } from '../../service/organization.service';
 import { PaginationService } from '../../service/pagination.service';
 import { UserService } from '../../service/user.service';
 import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dialog.component';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-user',
@@ -28,7 +29,8 @@ export class UserComponent implements OnInit {
         private notificationService: NotificationService,
         private organizationService: OrganizationService,
         private paginationService: PaginationService,
-        private userService: UserService
+        private userService: UserService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnInit() {
@@ -62,7 +64,7 @@ export class UserComponent implements OnInit {
                 },
                 err => {
                     this.loading = false;
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('', 'Error Occurred!');
                     reject(err);
                 }
             );
@@ -85,17 +87,16 @@ export class UserComponent implements OnInit {
         return this.get(this.previous);
     }
 
-    remove(user) {
+    async remove(user) {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.organizationService.removeUser(this.settings['organizationId'], user['email_address']).subscribe(
                     res => {
                         this.users.splice(this.users.indexOf(user), 1);
-                        this.notificationService.success('Success!', 'Successfully queued the user for deletion.');
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to remove the user.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the user.'));
                         reject(err);
                     }
                 );
@@ -110,7 +111,7 @@ export class UserComponent implements OnInit {
                 { text: 'Remove User', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to remove this user from your organization?'
+                text: await this.wordTranslateService.translate('Are you sure you want to remove this user from your organization?')
             }
         });
     }
@@ -118,27 +119,26 @@ export class UserComponent implements OnInit {
     resendNotification(user) {
         return this.organizationService.addUser(this.settings['organizationId'], user['email_address']).subscribe(
             res => {
-                this.notificationService.success('Success', 'Successfully queued!');
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while trying to resend the notification.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to resend the notification.'));
             }
         );
     }
 
-    updateAdminRole(user) {
+    async updateAdminRole(user) {
         const message = !this.userService.hasAdminRole(user) ? 'Are you sure you want to add the admin role for this user?' : 'Are you sure you want to remove the admin role from this user?';
-        const btnTxt = !this.userService.hasAdminRole(user) ? 'Add' : 'Remove';
+        const btnTxt = await this.wordTranslateService.translate(!this.userService.hasAdminRole(user) ? 'Add' : 'Remove');
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 if (!this.userService.hasAdminRole(user)) {
                     return this.userService.addAdminRole(user['id']).subscribe(
                         res => {
-                            this.notificationService.success('Success!', 'Successfully queued the user for change role.');
+                            this.notificationService.success('', 'Successfully queued the user for change role.');
                             resolve(res);
                         },
                         err => {
-                            this.notificationService.error('Failed!', 'An error occurred while trying to chage user role.');
+                            this.notificationService.error('', 'An error occurred while trying to chage user role.');
                             reject(err);
                         }
                     );
@@ -146,11 +146,10 @@ export class UserComponent implements OnInit {
 
                 this.userService.removeAdminRole(user['id']).subscribe(
                     res => {
-                        this.notificationService.success('Success!', 'Successfully queued the user for change role.');
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to remove the user.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the user.'));
                         reject(err);
                     }
                 );
@@ -165,7 +164,7 @@ export class UserComponent implements OnInit {
                 { text: btnTxt, buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: message
+                text: await this.wordTranslateService.translate(message)
             }
         });
     }

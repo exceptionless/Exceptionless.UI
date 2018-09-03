@@ -7,11 +7,11 @@
                         <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds.length > 0" [disabled]="stacks.length === 0"><i></i>
                     </label>
                 </th>
-                <th>Summary</th>
-                <th class="percentage">UserRatio</th>
-                <th class="number">Count</th>
-                <th class="date hidden-xs">First</th>
-                <th class="date hidden-xs">Last</th>
+                <th>{{ 'Summary' | translate }}</th>
+                <th class="percentage">{{ 'UserRatio' | translate }}</th>
+                <th class="number">{{ 'Count' | translate }}</th>
+                <th class="date hidden-xs">{{ 'First' | translate }}</th>
+                <th class="date hidden-xs">{{ 'Last' | translate }}</th>
             </tr>
         </thead>
         <tbody>
@@ -40,12 +40,12 @@
             <tr *ngIf="stacks.length === 0 || loading">
                 <td class="hidden-xs"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
                 <td colspan="5" class="hidden-xs">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">No stacks were found with the current filter.</strong>
+                    <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
+                    <strong *ngIf="!loading">{{ 'No stacks were found with the current filter.' | translate }}</strong>
                 </td>
                 <td colspan="3" class="visible-xs">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">No stacks were found with the current filter.</strong>
+                    <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
+                    <strong *ngIf="!loading">{{ 'No stacks were found with the current filter.' | translate }}</strong>
                 </td>
             </tr>
         </tbody>
@@ -56,7 +56,7 @@
             <div class="col-sm-4 hidden-xs">
                 <div class="dropdown" open>
                     <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        Bulk Action
+                        {{ 'Bulk Action' | translate }}
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="bulkActions">
