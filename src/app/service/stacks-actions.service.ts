@@ -16,11 +16,10 @@ export class StacksActionsService {
             /*implement later Exceptionless*/
 
             const onSuccess = () => {
-                this.notificationService.info('Success', 'Successfully queued the stacks to be marked as fixed.');
+                this.notificationService.info('', 'Successfully queued the stacks to be marked as fixed.');
             };
 
             const onFailure = () => {
-                this.notificationService.error('Failed', 'An error occurred while marking stacks as fixed.');
             };
 
             const runFunction = () => {
@@ -42,11 +41,11 @@ export class StacksActionsService {
         name: 'Mark Not Fixed',
         run: (ids) => {
             const onSuccess = () => {
-                this.notificationService.info('Success', 'Successfully queued the stacks to be marked as not hidden.');
+                this.notificationService.info('', 'Successfully queued the stacks to be marked as not hidden.');
             };
 
             const onFailure = () => {
-                this.notificationService.error('Failed', 'An error occurred while marking stacks as not hidden.');
+                this.notificationService.error('', 'An error occurred while marking stacks as not hidden.');
             };
 
             return this.executeAction(ids, this.stackService.markNotFixed(), onSuccess(), onFailure());
@@ -57,11 +56,11 @@ export class StacksActionsService {
         name: 'Mark Hidden',
         run: (ids) => {
             const onSuccess = () => {
-                this.notificationService.info('Success', 'Successfully queued the stacks to be marked as not hidden.');
+                this.notificationService.info('', 'Successfully queued the stacks to be marked as not hidden.');
             };
 
             const onFailure = () => {
-                this.notificationService.error('Failed', 'An error occurred while marking stacks as not hidden.');
+                this.notificationService.error('', 'An error occurred while marking stacks as not hidden.');
             };
 
             return this.executeAction(ids, this.stackService.markHidden(), onSuccess(), onFailure());
@@ -72,11 +71,11 @@ export class StacksActionsService {
         name: 'Mark Not Hidden',
         run: (ids) => {
             const onSuccess = () => {
-                this.notificationService.info('Success', 'Successfully queued the stacks to be marked as not hidden.');
+                this.notificationService.info('', 'Successfully queued the stacks to be marked as not hidden.');
             };
 
             const onFailure = () => {
-                this.notificationService.error('Failed', 'An error occurred while marking stacks as not hidden.');
+                this.notificationService.error('', 'An error occurred while marking stacks as not hidden.');
             };
 
             return this.executeAction(ids, this.stackService.markNotHidden(), onSuccess(), onFailure());
@@ -87,11 +86,11 @@ export class StacksActionsService {
         name: 'Delete',
         run: (ids) => {
             const onSuccess = () => {
-                this.notificationService.info('Success', 'Successfully queued the stacks for deletion.');
+                this.notificationService.info('', 'Successfully queued the stacks for deletion.');
             };
 
             const onFailure = () => {
-                this.notificationService.error('Failed', 'An error occurred while deleting the stacks.');
+                this.notificationService.error('', 'An error occurred while deleting the stacks.');
             };
 
             const runFunction = () => {

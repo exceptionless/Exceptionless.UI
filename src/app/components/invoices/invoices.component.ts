@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { LinkService } from '../../service/link.service';
 import { PaginationService } from '../../service/pagination.service';
 import { NotificationService } from '../../service/notification.service';
@@ -6,11 +6,11 @@ import { UserService } from '../../service/user.service';
 
 @Component({
     selector: 'app-invoices',
-    templateUrl: './invoices.component.html',
-    host: {'class': 'app-component'}
+    templateUrl: './invoices.component.html'
 })
 
 export class InvoicesComponent implements OnInit {
+    @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     invoices = [];
     next: string;

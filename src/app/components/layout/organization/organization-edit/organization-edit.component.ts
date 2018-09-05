@@ -10,6 +10,7 @@ import { ConfirmDialogComponent } from '../../../../dialogs/confirm-dialog/confi
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
 import { GlobalVariables } from '../../../../global-variables';
+import { WordTranslateService } from '../../../../service/word-translate.service';
 
 @Component({
     selector: 'app-organization-edit',
@@ -152,6 +153,7 @@ export class OrganizationEditComponent implements OnInit {
         private notificationService: NotificationService,
         private userService: UserService,
         private _globalVariables: GlobalVariables,
+        private wordTranslateService: WordTranslateService,
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._organizationId = params['id'];
@@ -171,24 +173,23 @@ export class OrganizationEditComponent implements OnInit {
     }
 
     createUser(emailAddress) {
-        const onFailure = (response) => {
+        const onFailure = async (response) => {
             if (response.status === 426) {
                 /*return billingService.confirmUpgradePlan(response.data.message, vm._organizationId).then(function() {
                     return createUser(emailAddress);
                 }).catch(function(e){});*/
             }
 
-            let message = 'An error occurred while inviting the user.';
+            let message = await this.wordTranslateService.translate('An error occurred while inviting the user.');
             if (response.data && response.data.message) {
-                message += ' ' + 'Message:' + ' ' + response.data.message;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.data.message;
             }
 
-           this.notificationService.error('Failed!', message);
+           this.notificationService.error('', message);
         };
 
         return this.organizationService.addUser(this._organizationId, emailAddress).subscribe(
             res => {
-                this.notificationService.success('Success!', 'Successfully invited new user!');
             },
             err => {
                 onFailure(err);
@@ -272,23 +273,22 @@ export class OrganizationEditComponent implements OnInit {
         return this.userService.hasAdminRole(user);
     }
 
-    leaveOrganization(currentUser) {
+    async leaveOrganization(currentUser) {
         const modalCallBackFunction = () => {
             this._ignoreRefresh = true;
             return new Promise((resolve, reject) => {
                 this.organizationService.removeUser(this._organizationId, currentUser['email_address']).subscribe(
                     res => {
-                        this.notificationService.success('Success!', 'Successfully queued the organization for leave.');
                         this.router.navigate(['/type/organization/list']);
                         resolve(res);
                     },
-                    err => {
-                        let message = 'An error occurred while trying to leave the organization.';
+                    async err => {
+                        let message = await this.wordTranslateService.translate('An error occurred while trying to leave the organization.');
                         if (err.status === 400) {
-                            message += ' ' + 'Message:' + ' ' + err.data.message;
+                            message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
                         }
 
-                        this.notificationService.error('Failed!', message);
+                        this.notificationService.error('', message);
                         this._ignoreRefresh = false;
                         reject(err);
                     }
@@ -304,28 +304,28 @@ export class OrganizationEditComponent implements OnInit {
                 { text: 'Leave Organization', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to leave this organization?'
+                text: await this.wordTranslateService.translate('Are you sure you want to leave this organization?')
             }
         });
     }
 
-    removeOrganization() {
+    async removeOrganization() {
         const modalCallBackFunction = () => {
             this._ignoreRefresh = true;
             return new Promise((resolve, reject) => {
                 this.organizationService.remove(this._organizationId).subscribe(
-                    res => {
-                        this.notificationService.success('Success!', 'Successfully queued the organization for deletion.');
+                    async res => {
+                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
                         this.router.navigate(['/type/organization/list']);
                         resolve(res);
                     },
-                    err => {
-                        let message = 'An error occurred while trying to delete the organization.';
+                    async err => {
+                        let message = await this.wordTranslateService.translate('An error occurred while trying to delete the organization.');
                         if (err.status === 400) {
-                            message += ' ' + 'Message:' + ' ' + err.data.message;
+                            message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
                         }
 
-                        this.notificationService.error('Failed!', message);
+                        this.notificationService.error('', message);
                         this._ignoreRefresh = false;
                         reject(err);
                     }
@@ -341,7 +341,7 @@ export class OrganizationEditComponent implements OnInit {
                 { text: 'Delete Organization', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this organization?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this organization?')
             }
         });
     }
@@ -352,10 +352,9 @@ export class OrganizationEditComponent implements OnInit {
         }
         return this.organizationService.update(this._organizationId, this.organization).subscribe(
             res => {
-                this.notificationService.success('Success!', 'Successfully queued for update');
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while saving the organization.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the organization.'));
             }
         );
     }

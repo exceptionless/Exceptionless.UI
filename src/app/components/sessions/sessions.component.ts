@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import { LinkService } from '../../service/link.service';
 import { FilterService } from '../../service/filter.service';
@@ -9,11 +9,11 @@ import * as moment from 'moment';
 
 @Component({
     selector: 'app-sessions',
-    templateUrl: './sessions.component.html',
-    host: {'class': 'app-component'}
+    templateUrl: './sessions.component.html'
 })
 
 export class SessionsComponent implements OnChanges {
+    @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;

@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../../../dialogs/confirm-dialog/confi
 import { AddOrganizationDialogComponent } from '../../../../dialogs/add-organization-dialog/add-organization-dialog.component';
 import { OrganizationService } from '../../../../service/organization.service';
 import { ModalParameterService } from '../../../../service/modal-parameter.service';
+import { WordTranslateService } from '../../../../service/word-translate.service';
 
 @Component({
     selector: 'app-organization-list',
@@ -34,6 +35,7 @@ export class OrganizationListComponent implements OnInit {
         private modalDialogService: ModalDialogService,
         private organizationService: OrganizationService,
         private modalParameterService: ModalParameterService,
+        private wordTranslateService: WordTranslateService,
     ) {}
 
     ngOnInit() {
@@ -60,9 +62,9 @@ export class OrganizationListComponent implements OnInit {
         });
     }
 
-    changePlan(organizationId) {
+    async changePlan(organizationId) {
         if (!this._global.STRIPE_PUBLISHABLE_KEY) {
-            this.notificationService.error('Failed!', 'Billing is currently disabled.');
+            this.notificationService.error('', await this.wordTranslateService.translate('Billing is currently disabled.'));
             return;
         }
 
@@ -75,18 +77,17 @@ export class OrganizationListComponent implements OnInit {
             this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
         };
 
-        const onFailure = (response) => {
+        const onFailure = async (response) => {
             if (response.status === 426) {
                 // need to implement later(billing service)
-                console.log(response.error.message);
             }
 
-            let message = 'An error occurred while creating the organization.';
+            let message = await this.wordTranslateService.translate('An error occurred while creating the organization.');
             if (response && response.error.message) {
-                message += ' ' + 'Message:' + ' ' + response.error.message;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error.message;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return new Promise((resolve, reject) => {
@@ -133,7 +134,7 @@ export class OrganizationListComponent implements OnInit {
                 },
                 err => {
                     this.loading = false;
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('', 'Error Occurred!');
                     reject(err);
                 }
             );
@@ -162,18 +163,18 @@ export class OrganizationListComponent implements OnInit {
         return this.get(this.previous);
     }
 
-    remove(organization) {
+    async remove(organization) {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.organizationService.remove(organization['id']).subscribe(
-                    res => {
+                    async res => {
                         this.organizations.splice(this.organizations.indexOf(organization), 1);
                         this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-                        this.notificationService.success('Success!', 'Successfully queued the organization for deletion.');
+                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to delete the organization.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the organization.'));
                         reject(err);
                     }
                 );
@@ -188,7 +189,7 @@ export class OrganizationListComponent implements OnInit {
                 { text: 'Delete Project', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this organization?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this organization?')
             }
         });
     }

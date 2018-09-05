@@ -4,7 +4,7 @@
     <div class="wrapper-md">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-calendar"></i> Event Occurrence
+                <i class="fa fa-calendar"></i> {{ 'Event Occurrence' | translate }}
 
                 <div class="pull-right hidden-print">
                     <a ngxClipboard [cbContent]="event_json" (cbOnSuccess)="copied()" [hidden]="!event['stack_id'] || !clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Event JSON to Clipboard"></a>

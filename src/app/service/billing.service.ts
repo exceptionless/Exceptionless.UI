@@ -1,4 +1,4 @@
-import { Injectable, ViewContainerRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AnalyticsService } from './analytics.service';
 import { ChangePlanDialogComponent } from '../dialogs/change-plan-dialog/change-plan-dialog.component';
 import { ModalDialogService } from 'ngx-modal-dialog';
@@ -11,7 +11,6 @@ export class BillingService {
     constructor(
         private analyticsService: AnalyticsService,
         private modalDialogService: ModalDialogService,
-        private viewRef: ViewContainerRef,
     ) {}
 
     changePlan(organizationId?) {
@@ -19,10 +18,9 @@ export class BillingService {
 
         /*return dialogs.create('components/billing/change-plan-dialog.tpl.html', 'ChangePlanDialog as vm', organizationId).result;*/
         const modalCallBackFunction = () => {
-            console.log('I am here');
         };
 
-        return this.modalDialogService.openDialog(this.viewRef, {
+        /*return this.modalDialogService.openDialog(this.viewRef, {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ChangePlanDialogComponent,
             actionButtons: [
@@ -32,7 +30,7 @@ export class BillingService {
             data: {
                 text: 'Are you sure you want to delete your account?'
             }
-        });
+        });*/
     }
 
     confirmUpgradePlan(message, organizationId) {

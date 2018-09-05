@@ -1,5 +1,6 @@
 import { Component, ComponentRef } from '@angular/core';
 import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-confirm-dialog',
@@ -7,10 +8,13 @@ import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
 })
 
 export class ConfirmDialogComponent implements IModalDialog {
-    text = 'Are you sure you want to delete your account?';
-    constructor() {}
+    text = '';
+    constructor(
+        private wordTranslateService: WordTranslateService
+    ) {}
 
-    dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+    async dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+        this.text = await this.wordTranslateService.translate('Are you sure you want to delete your account?');
         // no processing needed
         this.text = options.data['text'];
     }

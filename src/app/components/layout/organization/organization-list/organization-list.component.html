@@ -2,16 +2,16 @@
     <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-group"></i> My Organizations</div>
+                <div class="panel-heading"><i class="fa fa-group"></i> {{ 'My Organizations' | translate }}</div>
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered table-fixed b-t">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Plan</th>
-                                <th class="number hidden-xs"><abbr title="Total number of projects">Projects</abbr></th>
-                                <th class="number hidden-xs"><abbr title="Total number of stacks">Stacks</abbr></th>
-                                <th class="number hidden-xs"><abbr title="Total number of events within the retention period">Events</abbr></th>
+                                <th>{{ 'Name' | translate }}</th>
+                                <th>{{ 'Plan' | translate }}</th>
+                                <th class="number hidden-xs"><abbr title="Total number of projects">{{ 'Projects' | translate }}</abbr></th>
+                                <th class="number hidden-xs"><abbr title="Total number of stacks">{{ 'Stacks' | translate }}</abbr></th>
+                                <th class="number hidden-xs"><abbr title="Total number of events within the retention period">{{ 'Events' | translate }}</abbr></th>
                                 <th class="action">Actions</th>
                             </tr>
                         </thead>
@@ -28,11 +28,11 @@
                                             <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                            <li><a ui-sref="app.organization.manage({ id: organization.id })"><i class="fa fa-fw fa-edit"></i> Edit</a></li>
-                                            <li *ngIf="canChangePlan"><a (click)="changePlan(organization.id)"><i class="fa fa-credit-card fa-fw"></i> Change Plan</a></li>
+                                            <li><a ui-sref="app.organization.manage({ id: organization.id })"><i class="fa fa-fw fa-edit"></i> {{ 'Edit' | translate }}</a></li>
+                                            <li *ngIf="canChangePlan"><a (click)="changePlan(organization.id)"><i class="fa fa-credit-card fa-fw"></i> {{ 'Change Plan' | translate }}</a></li>
                                             <li><a ui-sref="app.organization.manage({ id: organization.id, tab: 'billing' })"><i class="fa fa-fw fa-file"></i> View Invoices</a></li>
-                                            <li><a (click)="leave(organization, appVm.user)"><i class="fa fa-fw fa-sign-out"></i> Leave Organization</a></li>
-                                            <li><a (click)="remove(organization)"><i class="fa fa-fw fa-times"></i> Delete</a></li>
+                                            <li><a (click)="leave(organization, appVm.user)"><i class="fa fa-fw fa-sign-out"></i> {{ 'Leave Organization' | translate }}</a></li>
+                                            <li><a (click)="remove(organization)"><i class="fa fa-fw fa-times"></i> {{ 'Delete' | translate }}</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -40,8 +40,8 @@
 
                             <tr *ngIf="organizations.length === 0 || loading">
                                 <td colspan="6">
-                                    <strong *ngIf="loading">Loading...</strong>
-                                    <strong *ngIf="!loading">{{ hasFilter ? 'No organizations were found with the current filter.': 'No organizations were found.' }}</strong>
+                                    <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
+                                    <strong *ngIf="!loading">{{ hasFilter ? 'No organizations were found with the current filter.': 'No organizations were found.' | translate }}</strong>
                                 </td>
                             </tr>
                         </tbody>

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../service/filter.service';
 import { EventsActionService } from '../../service/events-action.service';
@@ -9,11 +9,11 @@ import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-events',
-    templateUrl: './events.component.html',
-    host: {'class': 'app-component'}
+    templateUrl: './events.component.html'
 })
 
 export class EventsComponent implements OnChanges {
+    @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;

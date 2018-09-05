@@ -4,7 +4,7 @@
     <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-calendar"></i> Most Recent</div>
+                <div class="panel-heading"><i class="fa fa-calendar"></i> {{ 'Most Recent' | translate }}</div>
                 <app-events [settings]="mostRecent" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-events>
             </div>
         </div>

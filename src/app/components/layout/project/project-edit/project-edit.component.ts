@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '../../../../dialogs/confirm-dialog/confi
 import { GlobalVariables } from '../../../../global-variables';
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
+import { WordTranslateService } from '../../../../service/word-translate.service';
 
 @Component({
     selector: 'app-project-edit',
@@ -144,7 +145,8 @@ export class ProjectEditComponent implements OnInit {
         private tokenService: TokenService,
         private webHookService: WebHookService,
         private notificationService: NotificationService,
-        private _globalVariables: GlobalVariables
+        private _globalVariables: GlobalVariables,
+        private wordTranslateService: WordTranslateService,
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._projectId = params['id'];
@@ -186,10 +188,9 @@ export class ProjectEditComponent implements OnInit {
         return this.tokenService.create(options).subscribe(
             res => {
                 this.tokens.push(JSON.parse(JSON.stringify(res)));
-                this.notificationService.success('Success!', 'Successfully created new API');
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while creating a new API key for your project.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while creating a new API key for your project.'));
             }
         );
     }
@@ -203,17 +204,16 @@ export class ProjectEditComponent implements OnInit {
     }
 
     createWebHook(data) {
-        const onFailure = (response) => {
+        const onFailure = async (response) => {
             if (response.status === 426) {
                 // implement later Exceptionless
             }
 
-            this.notificationService.error('Failed!', 'An error occurred while saving the configuration setting.');
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
         };
 
         return this.webHookService.create(data).subscribe(
             res => {
-                this.notificationService.success('Success!', 'Sucessfully Created');
             },
             err => {
                 onFailure(err);
@@ -221,18 +221,18 @@ export class ProjectEditComponent implements OnInit {
         );
     }
 
-    copied() {
-        this.notificationService.success('Success!', 'Copied');
+    async copied() {
+        this.notificationService.success('', await this.wordTranslateService.translate('Copied'));
     }
 
-    get(data?) {
+    async get(data?) {
         if (this._ignoreRefresh) {
             return;
         }
 
         if (data && data['type'] === 'Project' && data['deleted'] && data['id'] === this._projectId) {
             this.router.navigate(['/type/project/list']);
-            this.notificationService.error('Failed!', 'Project_Deleted');
+            this.notificationService.error('', await this.wordTranslateService.translate('Project_Deleted'));
             return;
         }
 
@@ -295,8 +295,8 @@ export class ProjectEditComponent implements OnInit {
                     onSuccess(res);
                     resolve(this.organization);
                 },
-                err => {
-                    this.notificationService.error('Failed!', 'Cannot_Find_Organization');
+                async err => {
+                    this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization'));
                     reject(err);
                 }
             );
@@ -324,9 +324,9 @@ export class ProjectEditComponent implements OnInit {
                     onSuccess(res);
                     resolve(this.project);
                 },
-                err => {
+                async err => {
                     // $state.go('app.project.list');
-                    this.notificationService.error('Failed!', 'Cannot_Find_Project');
+                    this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project'));
                     reject(err);
                 }
             );
@@ -348,8 +348,8 @@ export class ProjectEditComponent implements OnInit {
                     onSuccess(res);
                     resolve(this.tokens);
                 },
-                err => {
-                    this.notificationService.error('Failed!', 'An error occurred loading the api keys.');
+                async err => {
+                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the api keys.'));
                     reject(err);
                 }
             );
@@ -380,9 +380,9 @@ export class ProjectEditComponent implements OnInit {
                     onSuccess(res);
                     resolve(this.project);
                 },
-                err => {
+                async err => {
                     // $state.go('app.project.list');
-                    this.notificationService.error('Failed!', 'An error occurred loading the notification settings.');
+                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
                     reject(err);
                 }
             );
@@ -397,9 +397,9 @@ export class ProjectEditComponent implements OnInit {
                     this.slackNotificationSettings = JSON.parse(JSON.stringify(res));
                     resolve(this.slackNotificationSettings);
                 },
-                err => {
+                async err => {
                     // $state.go('app.project.list');
-                    this.notificationService.error('Failed!', 'An error occurred while loading the slack notification settings.');
+                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the slack notification settings.'));
                     reject(err);
                 }
             );
@@ -413,25 +413,24 @@ export class ProjectEditComponent implements OnInit {
                     this.webHooks = JSON.parse(JSON.stringify(res));
                     resolve(this.webHooks);
                 },
-                err => {
+                async err => {
                     // $state.go('app.project.list');
-                    this.notificationService.error('Failed!', 'An error occurred loading the notification settings.');
+                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
                     reject(err);
                 }
             );
         });
     }
 
-    removeConfig(config) {
+    async removeConfig(config) {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.projectService.removeConfig(this._projectId, config['key']).subscribe(
                     res => {
-                        this.notificationService.success('Success!', 'Successfully queued the configuration setting for deletion.');
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to delete the configuration setting.');
+                    async err => {
+                        this.notificationService.error('Failed!', await this.wordTranslateService.translate('An error occurred while trying to delete the configuration setting.'));
                         reject(err);
                     }
                 );
@@ -442,27 +441,26 @@ export class ProjectEditComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'DELETE CONFIGURATION SETTING', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('DELETE CONFIGURATION SETTING'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this configuration setting?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this configuration setting?')
             }
         });
     }
 
-    removeProject() {
+    async removeProject() {
         const modalCallBackFunction = () => {
             this._ignoreRefresh = true;
             return new Promise((resolve, reject) => {
                 this.projectService.remove(this._projectId).subscribe(
                     res => {
-                        this.notificationService.success('Success!', 'Successfully queued the project for deletion.');
                         this.router.navigate(['/type/project/list']);
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to delete the project.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the project.'));
                         this._ignoreRefresh = false;
                         reject(err);
                     }
@@ -474,25 +472,24 @@ export class ProjectEditComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Delete Project', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('Delete Project'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this project?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this project?')
             }
         });
     }
 
-    removeSlack() {
+    async removeSlack() {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.projectService.removeSlack(this._projectId).subscribe(
                     res => {
-                        this.notificationService.success('Success!', 'Successfully queued the slack for deletion.');
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to remove slack.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove slack.'));
                         reject(err);
                     }
                 );
@@ -503,26 +500,25 @@ export class ProjectEditComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Remove Slack', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('Remove Slack'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to remove slack support?'
+                text: await this.wordTranslateService.translate('Are you sure you want to remove slack support?')
             }
         });
     }
 
-    removeToken(token) {
+    async removeToken(token) {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.tokenService.remove(token['id']).subscribe(
                     res => {
                         this.tokens.splice(this.tokens.indexOf(token), 1);
-                        this.notificationService.success('Success!', 'Successfully queued the API Key for deletion.');
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to delete the API Key.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the API Key.'));
                         reject(err);
                     }
                 );
@@ -533,25 +529,24 @@ export class ProjectEditComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'DELETE API KEY', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('DELETE API KEY'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this API key?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this API key?')
             }
         });
     }
 
-    removeWebHook(hook) {
+    async removeWebHook(hook) {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.webHookService.remove(hook['id']).subscribe(
                     res => {
-                        this.notificationService.success('Success!', 'Successfully queued the web hook for deletion.');
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while trying to delete the web hook.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the web hook.'));
                         reject(err);
                     }
                 );
@@ -562,25 +557,24 @@ export class ProjectEditComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'DELETE WEB HOOK', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('DELETE WEB HOOK'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this web hook?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this web hook?')
             }
         });
     }
 
-    resetData() {
+    async resetData() {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.projectService.resetData(this._projectId).subscribe(
                     res => {
-                        this.notificationService.success('Success!', 'Successfully queued the project for reset.');
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while resetting project data.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while resetting project data.'));
                         reject(err);
                     }
                 );
@@ -591,11 +585,11 @@ export class ProjectEditComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'RESET PROJECT DATA', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('RESET PROJECT DATA'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to reset the data for this project?'
+                text: await this.wordTranslateService.translate('Are you sure you want to reset the data for this project?')
             }
         });
     }
@@ -606,10 +600,9 @@ export class ProjectEditComponent implements OnInit {
         }
         return this.projectService.update(this._projectId, this.project).subscribe(
             res => {
-                this.notificationService.success('Success!', 'Successfully queued the project for save.');
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while saving the project.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
             }
         );
     }
@@ -617,10 +610,9 @@ export class ProjectEditComponent implements OnInit {
     saveApiKeyNote(data) {
         return this.tokenService.update(data['id'], { notes: data.notes }).subscribe(
             res => {
-                this.notificationService.success('Success!', 'Successfully queued the API key note for saving.');
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while saving the API key note.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the API key note.'));
             }
         );
     }
@@ -628,21 +620,19 @@ export class ProjectEditComponent implements OnInit {
     saveClientConfiguration(data) {
         return this.projectService.setConfig(this._projectId, data['key'], data['value']).subscribe(
             res => {
-                this.notificationService.success('Success!', 'Successfully queued the configuration setting for saving.');
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while saving the configuration setting.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
             }
         );
     }
 
     saveCommonMethods() {
         const onSuccess = () => {
-            this.notificationService.success('Success!', 'Successfully queued the common methods for saving.');
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed!', 'An error occurred while saving the common methods.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the common methods.'));
         };
 
         if (this.common_methods) {
@@ -668,11 +658,10 @@ export class ProjectEditComponent implements OnInit {
 
     saveDataExclusion() {
         const onSuccess = () => {
-            this.notificationService.success('Success!', 'Successfully queued the data exclusion for saving.');
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed!', 'An error occurred while saving the the data exclusion.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the data exclusion.'));
         };
 
         if (this.data_exclusions) {
@@ -699,21 +688,19 @@ export class ProjectEditComponent implements OnInit {
     saveDeleteBotDataEnabled() {
         return this.projectService.update(this._projectId, {'delete_bot_data_enabled': this.project['delete_bot_data_enabled']}).subscribe(
             res => {
-                this.notificationService.error('Success!', 'Successfully queued the bot data enabled for delete.');
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while saving the project.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
             }
         );
     }
 
     saveUserAgents() {
         const onSuccess = () => {
-            this.notificationService.success('Success!', 'Successfully queued the user agents for saving.');
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed!', 'An error occurred while saving the user agents.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the user agents.'));
         };
 
         if (this.user_agents) {
@@ -739,11 +726,10 @@ export class ProjectEditComponent implements OnInit {
 
     saveUserNamespaces() {
         const onSuccess = () => {
-            this.notificationService.success('Success!', 'Successfully queued the namespaces for saving.');
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed!', 'An error occurred while saving the user namespaces.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the user namespaces.'));
         };
 
         if (this.user_namespaces) {
@@ -768,7 +754,7 @@ export class ProjectEditComponent implements OnInit {
     }
 
     saveSlackNotificationSettings() {
-        const onFailure = (response) => {
+        const onFailure = async (response) => {
             /*if (response.status === 426) {
                 return billingService.confirmUpgradePlan(response.data.message, vm.project.organization_id).then(function () {
                     return saveSlackNotificationSettings();
@@ -777,12 +763,11 @@ export class ProjectEditComponent implements OnInit {
                 });
             }*/
 
-            this.notificationService.error('Failed!', 'An error occurred while saving your slack notification settings.');
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving your slack notification settings.'));
         };
 
         return this.projectService.setIntegrationNotificationSettings(this._projectId, 'slack', this.slackNotificationSettings).subscribe(
             res => {
-                this.notificationService.success('Failed!', 'Successfully queued the slack notification for settings.');
             },
             err => {
                 onFailure(err);
@@ -802,11 +787,11 @@ export class ProjectEditComponent implements OnInit {
         return null;
     }
 
-    validateClientConfiguration(original, data) {
+    async validateClientConfiguration(original, data) {
         if (original === data) {
             return false;
         }
 
-        return !data ? 'Please enter a valid value.' : null;
+        return !data ? await this.wordTranslateService.translate('Please enter a valid value.') : null;
     }
 }

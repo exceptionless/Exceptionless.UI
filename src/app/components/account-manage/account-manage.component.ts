@@ -37,6 +37,10 @@ export class AccountManageComponent implements OnInit {
     hasPremiumFeatures = false;
     hasLocalAccount = false;
     emailUnique = true;
+    gravatarStyle = {
+        'border-style': 'solid',
+        'border-color': '#ddd'
+    };
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,

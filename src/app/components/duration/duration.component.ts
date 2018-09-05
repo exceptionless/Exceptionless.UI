@@ -1,12 +1,12 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
     selector: 'app-duration',
-    templateUrl: './duration.component.html',
-    host: {'class': 'app-component'}
+    templateUrl: './duration.component.html'
 })
 export class DurationComponent implements OnInit, OnChanges {
+    @HostBinding('class.app-component') appComponent = true;
     @Input() value;
     @Input() period;
     text = '';

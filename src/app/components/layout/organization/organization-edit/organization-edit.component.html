@@ -4,14 +4,14 @@
     <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-th-list"></i> Manage Organization {{ organization['name'] ? ' "' + organization['name'] + '"' : ''}}</div>
+                <div class="panel-heading"><i class="fa fa-th-list"></i> {{ 'Manage Organization' | translate }} {{ organization['name'] ? ' "' + organization['name'] + '"' : ''}}</div>
                 <div class="panel-body m-b-n">
                     <ngb-tabset class="tab-container" [activeId]="activeTab">
-                        <ngb-tab title="General" id="general">
+                        <ngb-tab title="{{ 'General' | translate }}" id="general">
                             <ng-template ngbTabContent>
                                 <form name="vm.organizationForm" role="form" class="form-validation" #organizationForm="ngForm">
                                     <div class="form-group m-b-none">
-                                        <label for="name">Organization Name</label>
+                                        <label for="name">{{ 'Organization Name' | translate }}</label>
                                         <div [ngClass]="{'input-group': !!organizationForm.pending }">
                                             <input id="name" name="name" type="text" class="form-control" placeholder="Organization Name"
                                                    [(ngModel)]="organization.name"
@@ -26,43 +26,43 @@
                                         </div>
 
                                         <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || organizationForm.submitted">
-                                            <small [hidden]="!name.errors?.required">Organization Name is required.</small>
-                                            <small [hidden]="organizationUnique">A organizations with this name already exists.</small>
+                                            <small [hidden]="!name.errors?.required">{{ 'Organization Name is required.' | translate }}</small>
+                                            <small [hidden]="organizationUnique">{{ 'A organizations with this name already exists.' | translate }}</small>
                                         </div>
                                     </div>
                                 </form>
 
                                 <div [hidden]="!hasMonthlyUsage">
-                                    <h4 style="margin-top: 20px;">Monthly Usage</h4>
+                                    <h4 style="margin-top: 20px;">{{ 'Monthly Usage' | translate }}</h4>
                                     <p>
                                         You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
                                         <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
-                                        <a *ngIf="canChangePlan" (click)="changePlan()">Click here to change your plan or billing information.</a>
+                                        <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Click here to change your plan or billing information.' | translate }}</a>
                                     </p>
                                     <app-rickshaw [options]="chart['options']" [seriesData]="seriesData"></app-rickshaw>
                                     <br class="clearfix" />
-                                    <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
+                                    <h6><em>{{ 'The usage data above is refreshed periodically and may not reflect current totals.' | translate }}</em></h6>
                                 </div>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="Projects" id="projects">
+                        <ngb-tab title="{{ 'Projects' | translate }}" id="projects">
                             <ng-template ngbTabContent>
                                 <app-projects [settings]="projects"></app-projects>
-                                <a ui-sref="app.project.add" class="btn btn-primary m-t" role="button">Add New Project</a>
+                                <a ui-sref="app.project.add" class="btn btn-primary m-t" role="button">{{ 'Add New Project' | translate }}</a>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="UserManager" id="user-manager">
+                        <ngb-tab title="{{ 'UserManager' | translate }}" id="user-manager">
                             <ng-template ngbTabContent>
                                 <app-user [settings]="users"></app-user>
-                                <button type="button" role="button" (click)="addUser()" class="btn btn-primary m-t">Invite User</button>
+                                <button type="button" role="button" (click)="addUser()" class="btn btn-primary m-t">{{ 'Invite User' | translate }}</button>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="Billing" id="billing">
+                        <ngb-tab title="{{ 'Billing' | translate }}" id="billing">
                             <ng-template ngbTabContent>
-                                <p><span [innerHtml]="'Organization_Billing_Plan'"></span> <a *ngIf="canChangePlan" (click)="changePlan()">Change your plan or billing information.</a></p>
+                                <p><span [innerHtml]="'Organization_Billing_Plan'"></span> <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Change your plan or billing information.' | translate }}</a></p>
                                 <app-invoices [settings]="invoices"></app-invoices>
                             </ng-template>
                         </ngb-tab>
@@ -71,15 +71,15 @@
 
                 <footer class="panel-footer">
                     <div class="pull-right">
-                        <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">Go To Dashboard</a>
+                        <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
                     </div>
                     <div class="btn-group">
                         <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a (click)="leaveOrganization(user)" role="button">Leave Organization</a></li>
-                            <li><a (click)="removeOrganization()" role="button">Delete Organization</a></li>
+                            <li><a (click)="leaveOrganization(user)" role="button">{{ 'Leave Organization' | translate }}</a></li>
+                            <li><a (click)="removeOrganization()" role="button">{{ 'Delete Organization' | translate }}</a></li>
                         </ul>
                     </div>
                 </footer>

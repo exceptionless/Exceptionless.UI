@@ -10,6 +10,7 @@ import { LinkService } from '../../../../../service/link.service';
 import { NotificationService } from '../../../../../service/notification.service';
 import { ProjectService } from '../../../../../service/project.service';
 import { EventComponent } from '../../event.component';
+import { WordTranslateService } from '../../../../../service/word-translate.service';
 
 @Component({
     selector: 'app-event-tabs',
@@ -30,7 +31,8 @@ export class EventTabsComponent extends EventComponent {
         linkService: LinkService,
         notificationService: NotificationService,
         projectService: ProjectService,
+        wordTranslateService: WordTranslateService,
     ) {
-        super(router, activatedRoute, hotkeysService, clipboardService, billingService, errorService, eventService, filterService, linkService, notificationService, projectService);
+        super(router, activatedRoute, hotkeysService, clipboardService, billingService, errorService, eventService, filterService, linkService, notificationService, projectService, wordTranslateService);
     }
 }

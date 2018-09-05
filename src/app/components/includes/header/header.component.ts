@@ -15,7 +15,12 @@ export class HeaderComponent implements OnInit {
     user = {
         email_address: ''
     };
-
+    gravatarStyle = {
+        'border-style': 'solid',
+        'border-color': '#ddd',
+        'border-radius': '4px',
+        'border-width': '0px'
+    };
     constructor(
         private auth: AuthService,
         private router: Router,
@@ -26,9 +31,6 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() {
         this.getUser();
-       /* this.translateService.get('HELLO').subscribe((res: string) => {
-            console.log(res);
-        });*/
     }
 
     toggleSideNavCollapsed() {

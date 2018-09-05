@@ -198,7 +198,7 @@ export class SessionComponent implements OnInit, OnDestroy {
                 onSuccess(res);
             },
             err => {
-                this.notificationService.error('Failed!', 'Error occurred while trying to get event service');
+                this.notificationService.error('', 'Error occurred while trying to get event service');
             }
         );
     }

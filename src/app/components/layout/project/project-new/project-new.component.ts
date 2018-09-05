@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { NotificationService } from '../../../../service/notification.service';
 import { OrganizationService } from '../../../../service/organization.service';
 import { ProjectService } from '../../../../service/project.service';
+import { WordTranslateService } from '../../../../service/word-translate.service';
 
 @Component({
     selector: 'app-project-new',
@@ -25,6 +26,7 @@ export class ProjectNewComponent implements OnInit {
         private notificationService: NotificationService,
         private organizationService: OrganizationService,
         private projectService: ProjectService,
+        private wordTranslateService: WordTranslateService,
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this.organizationId = params['id'];
@@ -77,17 +79,17 @@ export class ProjectNewComponent implements OnInit {
             return response;
         };
 
-        const onFailure = (response) => {
+        const onFailure = async (response) => {
             if (response.status === 426) {
                 // need to implement later Exceptionless
             }
 
-            let message = 'An error occurred while creating the organization.';
+            let message = await this.wordTranslateService.translate('An error occurred while creating the organization.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return new Promise((resolve, reject) => {
@@ -114,17 +116,17 @@ export class ProjectNewComponent implements OnInit {
             this.router.navigate([`/project/${response['id']}/manage`]);
         };
 
-        const onFailure = (response) => {
+        const onFailure = async (response) => {
             if (response.status === 426) {
                 // need to implement later Exceptionless
             }
 
-            let message = 'An error occurred while creating the project.';
+            let message = await this.wordTranslateService.translate('An error occurred while creating the project.');
             if (response && response.error) {
-                message += ' ' + 'Message:' + ' ' + response.error.message;
+                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error.message;
             }
 
-            this.notificationService.error('Failed!', message);
+            this.notificationService.error('', message);
         };
 
         return new Promise((resolve, reject) => {
@@ -158,7 +160,7 @@ export class ProjectNewComponent implements OnInit {
             },
             err => {
                 if (!this.notificationService) {
-                    this.notificationService.error('Failed!', 'Error occurred while get organizations');
+                    this.notificationService.error('', 'Error occurred while get organizations');
                 }
             }
         );

@@ -10,7 +10,7 @@
                             <ng-template ngbTabContent>
                                 <form name="fullNameForm" role="form" class="form-validation" autocomplete="on" #fullNameForm="ngForm">
                                     <div class="form-group">
-                                        <img ngxGravatar [email]="user['email_address']" size="100" alt="{{ user['full_name'] }}" alt="avatar" class="img-thumbnail">
+                                        <img ngxGravatar [email]="user['email_address']" [round]="false" [size]="110" alt="{{ user['full_name'] }}" alt="avatar" class="img-thumbnail" [style]="gravatarStyle">
                                         <div>
                                             <small [innerHTML]="'NOTICE_GRAVATAR' | translate"></small>
                                         </div>

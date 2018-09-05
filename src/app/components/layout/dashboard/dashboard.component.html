@@ -12,7 +12,7 @@
                                     <i class="fa fa-calendar fa-4x"></i>
                                 </div>
                                 <div class="details">
-                                    <span class="title">Count</span>
+                                    <span class="title">{{ 'Count' | translate }}</span>
                                     <span class="sub">{{ stats.count }}</span>
                                 </div>
                                 <i class="fa fa-chevron-right fa-2x more"></i>
@@ -25,7 +25,7 @@
                                     <i class="fa fa-key fa-4x"></i>
                                 </div>
                                 <div class="details">
-                                    <span class="title">Unique</span>
+                                    <span class="title">{{ 'Unique' | translate }}</span>
                                     <span class="sub">{{ stats.unique }}</span>
                                 </div>
                                 <i class="fa fa-chevron-right fa-2x more"></i>
@@ -38,7 +38,7 @@
                                     <i class="fa fa-asterisk fa-4x"></i>
                                 </div>
                                 <div class="details">
-                                    <span class="title">New</span>
+                                    <span class="title">{{ 'New' | translate }}</span>
                                     <span class="sub">{{ stats.new }}</span>
                                 </div>
                                 <i class="fa fa-chevron-right fa-2x more"></i>
@@ -51,7 +51,7 @@
                                     <i class="fa fa-line-chart fa-4x"></i>
                                 </div>
                                 <div class="details">
-                                    <span class="title">Per Hour</span>
+                                    <span class="title">{{ 'Per Hour' | translate }}</span>
                                     <span class="sub">{{ stats.avg_per_hour }}</span>
                                 </div>
                             </div>
@@ -61,19 +61,19 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-bar-chart-o"></i>History</div>
+                <div class="panel-heading"><i class="fa fa-bar-chart-o"></i>{{ 'History' | translate }}</div>
                 <div class="panel-body">
                     <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-rickshaw>
                 </div>
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-signal"></i>Most Frequent</div>
+                <div class="panel-heading"><i class="fa fa-signal"></i>{{ 'Most Frequent' | translate }}</div>
                 <app-stacks [settings]="mostFrequent" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-stacks>
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-calendar"></i>Most Recent</div>
+                <div class="panel-heading"><i class="fa fa-calendar"></i>{{ 'Most Recent' | translate }}</div>
                 <app-events [settings]="mostRecent" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-events>
             </div>
         </div>

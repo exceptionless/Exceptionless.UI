@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../service/filter.service';
 import { StackService } from '../../service/stack.service';
@@ -10,11 +10,11 @@ import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-stacks',
-    templateUrl: './stacks.component.html',
-    host: { 'class': 'app-component' }
+    templateUrl: './stacks.component.html'
 })
 
 export class StacksComponent implements OnChanges {
+    @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;

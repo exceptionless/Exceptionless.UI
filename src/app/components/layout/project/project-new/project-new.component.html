@@ -2,11 +2,11 @@
     <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-asterisk"></i> Project Information</div>
+                <div class="panel-heading"><i class="fa fa-asterisk"></i> {{ 'Project Information' | translate }}</div>
                 <div class="panel-body">
                     <form name="addForm" role="form" class="form-validation" #addForm="ngForm">
                         <div class="form-group" *ngIf="hasOrganizations()">
-                            <label for="organization">Organization Name</label>
+                            <label for="organization">{{ 'Organization Name' | translate }}</label>
 
                             <select class="form-control" name="organization" id="organization" [(ngModel)]="currentOrganization">
                                 <option *ngFor="let organization of organizations" [ngValue]="organization">{{ organization['name'] }}</option>
@@ -15,7 +15,7 @@
 
                         <div class="form-group" *ngIf="canCreateOrganization()">
                             <div [ngClass]="{'input-group': !!addForm.pending }">
-                                <input name="organization_name" type="text" class="form-control" placeholder="New Organization Name"
+                                <input name="organization_name" type="text" class="form-control" placeholder="{{ 'New Organization Name' | translate }}"
                                        [(ngModel)]="organization_name"
                                        uniqueOrganization
                                        ng-required="canCreateOrganization()"
@@ -29,8 +29,8 @@
                             </div>
 
                             <div class="error" *ngIf="(organizationName.invalid && (organizationName.dirty || organizationName.touched)) || addForm.submitted">
-                                <small [hidden]="!organizationName.errors?.required">Organization Name is required.</small>
-                                <small [hidden]="!organizationName.errors?.uniqueOrganization">A organization with this name already exists.</small>
+                                <small [hidden]="!organizationName.errors?.required">{{ 'Organization Name is required.' | translate }}</small>
+                                <small [hidden]="!organizationName.errors?.uniqueOrganization">{{ 'A organizations with this name already exists.' | translate }}</small>
                             </div>
                         </div>
 
@@ -51,18 +51,18 @@
                             </div>
 
                             <div class="error" *ngIf="(projectName.invalid && (projectName.dirty || projectName.touched)) || addForm.submitted">
-                                <small [hidden]="!projectName.errors?.required">Project Name is required.</small>
-                                <small [hidden]="!projectName.errors?.uniqueProject">A project with this name already exists.</small>
+                                <small [hidden]="!projectName.errors?.required">{{ 'Project Name is required.' | translate }}</small>
+                                <small [hidden]="!projectName.errors?.uniqueProject">{{ 'A project with this name already exists.' | translate }}</small>
                             </div>
                         </div>
                     </form>
                 </div>
                 <footer class="panel-footer">
                     <div class="pull-right">
-                        <a ui-sref="app.dashboard" *ngIf="hasOrganizations()" class="btn btn-default" role="button">Go To Dashboard</a>
+                        <a ui-sref="app.dashboard" *ngIf="hasOrganizations()" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
                     </div>
                     <div class="clearfix">
-                        <input (click)="add()" type="submit" role="button" class="btn btn-primary" value="Add Project" />
+                        <input (click)="add()" type="submit" role="button" class="btn btn-primary" value="{{ 'Add Project' | translate }}" />
                     </div>
                 </footer>
             </div>

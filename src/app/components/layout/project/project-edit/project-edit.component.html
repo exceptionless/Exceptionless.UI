@@ -4,15 +4,15 @@
     <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-th-list"></i> Manage Project {{ project['name'] ? ' "' + project['name'] + '"' : ''}}</div>
+                <div class="panel-heading"><i class="fa fa-th-list"></i> {{ 'Manage Project' | translate }} {{ project['name'] ? ' "' + project['name'] + '"' : ''}}</div>
 
                 <div class="panel-body m-b-n">
                     <ngb-tabset class="tab-container">
-                        <ngb-tab title="General" id="general">
+                        <ngb-tab title="{{ 'General' | translate }}" id="general">
                             <ng-template ngbTabContent>
                                 <form name="projectForm" role="form" class="form-validation" #projectForm="ngForm">
                                     <div class="form-group">
-                                        <label for="project-name">Project Name</label>
+                                        <label for="project-name">{{ 'Project Name' | translate }}</label>
                                         <div [ngClass]="{'input-group': !!projectForm.pending }">
                                             <input id="project-name" name="project-name" type="text" class="form-control" placeholder="Project Name"
                                                    [(ngModel)]="project['name']"
@@ -28,8 +28,8 @@
                                         </div>
 
                                         <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || submitted">
-                                            <small [hidden]="!name.errors?.required">Full Name is required.</small>
-                                            <small [hidden]="nameUnique">A project with this name already exists.</small>
+                                            <small [hidden]="!name.errors?.required">{{ 'Full Name is required.' | translate }}</small>
+                                            <small [hidden]="nameUnique">{{ 'A project with this name already exists.' | translate }}</small>
                                         </div>
                                     </div>
 
@@ -39,29 +39,29 @@
                                     </div>
 
                                     <div ng-show="hasMonthlyUsage">
-                                        <h4 class="m-t-md">Monthly Usage</h4>
+                                        <h4 class="m-t-md">{{ 'Monthly Usage' | translate }}</h4>
                                         <p>
                                             You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
                                             <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
-                                            <a *ngIf="canChangePlan" (click)="changePlan()">Click here to change your plan or billing information.</a>
+                                            <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Click here to change your plan or billing information.' | translate }}</a>
                                         </p>
                                         <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [inputFeatures]="chart['features']"></app-rickshaw>
                                         <br class="clearfix" />
-                                        <h6><em>The usage data above is refreshed periodically and may not reflect current totals.</em></h6>
+                                        <h6><em>{{ 'The usage data above is refreshed periodically and may not reflect current totals.' | translate }}</em></h6>
                                     </div>
                                 </form>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="API Keys" id="api-keys">
+                        <ngb-tab title="{{ 'API Keys' | translate }}" id="api-keys">
                             <ng-template ngbTabContent>
                                 <table class="table table-striped table-bordered table-fixed b-t">
                                     <thead>
                                         <tr>
-                                            <th>API Key</th>
-                                            <th class="hidden-xs">Notes</th>
-                                            <th class="action-lg visible-xs">Actions</th>
-                                            <th class="hidden-xs action-xl">Actions</th>
+                                            <th>{{ 'API Key' | translate }}</th>
+                                            <th class="hidden-xs">{{ 'Notes' | translate }}</th>
+                                            <th class="action-lg visible-xs">{{ 'Actions' | translate }}</th>
+                                            <th class="hidden-xs action-xl">{{ 'Actions' | translate }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,51 +73,51 @@
                                             </td>
                                             <td>
                                                 <form name="rowform" editable-form [hidden]="!editable[i]" class="form-buttons form-inline" #rowform="ngForm">
-                                                    <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary" (click)="saveApiKeyNote(token); editable[i] = false;">Save</button>
-                                                    <button type="button" role="button" [disabled]="rowform.waiting" (click)="editable[i] = false" class="btn btn-sm btn-default">Cancel</button>
+                                                    <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary" (click)="saveApiKeyNote(token); editable[i] = false;">{{ 'Save' | translate }}</button>
+                                                    <button type="button" role="button" [disabled]="rowform.waiting" (click)="editable[i] = false" class="btn btn-sm btn-default">{{ 'Cancel' | translate }}</button>
                                                 </form>
                                                 <div class="buttons" [hidden]="editable[i]">
-                                                    <button type="button" role="button" class="btn btn-sm btn-primary" title="Copy to Clipboard" clipboard text="token.id" on-copied="copied()" supported="clipboardSupported" [hidden]="!clipboardSupported"><i class="fa fa-copy"></i></button>
-                                                    <button type="button" role="button" class="btn btn-sm btn-default hidden-xs" (click)="editable[i] = true">Edit</button>
-                                                    <button type="button" role="button" (click)="removeToken(token)" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-times"></i></button>
+                                                    <button type="button" role="button" class="btn btn-sm btn-primary" title="{{ 'Copy to Clipboard' | translate }}" clipboard text="token.id" on-copied="copied()" supported="clipboardSupported" [hidden]="!clipboardSupported"><i class="fa fa-copy"></i></button>
+                                                    <button type="button" role="button" class="btn btn-sm btn-default hidden-xs" (click)="editable[i] = true">{{ 'Edit' | translate }}</button>
+                                                    <button type="button" role="button" (click)="removeToken(token)" class="btn btn-sm btn-danger" title="{{ 'Delete' | translate }}"><i class="fa fa-times"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
 
                                         <tr *ngIf="tokens.length === 0">
-                                            <td colspan="2" class="text-warning visible-xs">This project does not have an API Key.</td>
-                                            <td colspan="3" class="text-warning hidden-xs">This project does not have an API Key.</td>
+                                            <td colspan="2" class="text-warning visible-xs">{{ 'This project does not have an API Key.' | translate }}</td>
+                                            <td colspan="3" class="text-warning hidden-xs">{{ 'This project does not have an API Key.' | translate }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
 
-                                <button type="button" role="button" (click)="addToken()" class="btn btn-primary">New API Key</button>
+                                <button type="button" role="button" (click)="addToken()" class="btn btn-primary">{{ 'New API Key' | translate }}</button>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="Settings" id="settings">
+                        <ngb-tab title="{{ 'Settings' | translate }}" id="settings">
                             <ng-template ngbTabContent>
-                                <h4>Data Exclusions</h4>
-                                <p [innerHtml]="'Notice_Data_Exclusions'"></p>
+                                <h4>{{ 'Data Exclusions' | translate }}</h4>
+                                <p [innerHtml]="'Notice_Data_Exclusions' | translate"></p>
                                 <input type="text" class="form-control" placeholder="Example: *Password*, CreditCard*, SSN"
                                        [(ngModel)]="data_exclusions"
                                        (input)="saveDataExclusion()"/>
 
-                                <h4>Error Stacking</h4>
-                                <h5>User Namespaces</h5>
-                                <p [innerHtml]="'Notice_Error_Stacking'"></p>
+                                <h4>{{ 'Error Stacking' | translate }}</h4>
+                                <h5>{{ 'User Namespaces' | translate }}</h5>
+                                <p [innerHtml]="'Notice_Error_Stacking' | translate"></p>
                                 <input type="text" class="form-control" placeholder="Example: Contoso"
                                        [(ngModel)]="user_namespaces"
                                        (input)="saveUserNamespaces()"/>
 
-                                <h5>Common Methods</h5>
-                                <p [innerHtml]="'Notice_Common_Methods'"></p>
+                                <h5>{{ 'Common Methods' | translate }}</h5>
+                                <p [innerHtml]="'Notice_Common_Methods' | translate"></p>
                                 <input type="text" class="form-control" placeholder="Example: Assert, Writeline"
                                        [(ngModel)]="common_methods"
                                        (input)="saveCommonMethods()"/>
 
-                                <h4>Spam Detection</h4>
-                                <p [innerHtml]="'Notice_Spam_Detection'"></p>
+                                <h4>{{ 'Spam Detection' | translate }}</h4>
+                                <p [innerHtml]="'Notice_Spam_Detection' | translate"></p>
                                 <input type="text" class="form-control" placeholder="Example: SpamBot"
                                        [(ngModel)]="user_agents"
                                        (input)="saveUserAgents()"/>
@@ -128,23 +128,23 @@
                                                [(ngModel)]="project['delete_bot_data_enabled']"
                                                (change)="saveDeleteBotDataEnabled()">
                                         <i></i>
-                                        Reduce noise by automatically hiding high volumes of events coming from a single client IP address.
+                                        {{ 'Reduce noise by automatically hiding high volumes of events coming from a single client IP address.' | translate }}
                                     </label>
                                 </div>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="Client Configuration" id="client-configuration">
+                        <ngb-tab title="{{ 'Client Configuration' | translate }}" id="client-configuration">
                             <ng-template ngbTabContent>
-                                <p ng-bind-html="'NOTICE_CONFIGURATION'"></p>
+                                <p [innerHtml]="'NOTICE_CONFIGURATION' | translate"></p>
 
                                 <!-- TODO: The add new dropdown should be populated with default settings we know about. -->
                                 <table class="table table-striped table-bordered table-fixed b-t">
                                     <thead>
                                         <tr>
-                                            <th>Key</th>
-                                            <th>Value</th>
-                                            <th class="action-lg">Actions</th>
+                                            <th>{{ 'Key' | translate }}</th>
+                                            <th>{{ 'Value' | translate }}</th>
+                                            <th class="action-lg">{{ 'Actions' | translate }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -159,37 +159,37 @@
                                             </td>
                                             <td>
                                                 <form name="rowform" editable-form ng-show="rowform.$visible" class="form-buttons form-inline">
-                                                    <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary">Save</button>
-                                                    <button type="button" role="button" [disabled]="rowform.waiting" (click)="rowform.cancel()" class="btn btn-sm btn-default">Cancel</button>
+                                                    <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary">{{ 'Save' | translate }}</button>
+                                                    <button type="button" role="button" [disabled]="rowform.waiting" (click)="rowform.cancel()" class="btn btn-sm btn-default">{{ 'Cancel' | translate }}</button>
                                                 </form>
                                                 <div class="buttons" [hidden]="rowform.visible">
-                                                    <button type="button" role="button" class="btn btn-sm btn-default" (click)="rowform.show()">Edit</button>
-                                                    <button type="button" role="button" class="btn btn-sm btn-danger" title="Delete" (click)="removeConfig(conf)"><i class="fa fa-times"></i></button>
+                                                    <button type="button" role="button" class="btn btn-sm btn-default" (click)="rowform.show()">{{ 'Edit' | translate }}</button>
+                                                    <button type="button" role="button" class="btn btn-sm btn-danger" title="{{ 'Delete' | translate }}" (click)="removeConfig(conf)"><i class="fa fa-times"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
 
                                         <tr *ngIf="config.length === 0">
-                                            <td colspan="3">This project does not contain any custom configuration settings.</td>
+                                            <td colspan="3">{{ 'This project does not contain any custom configuration settings.' | translate }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
 
-                                <button (click)="addConfiguration()" class="btn btn-primary">New Client Configuration</button>
+                                <button (click)="addConfiguration()" class="btn btn-primary">{{ 'New Client Configuration' | translate }}</button>
                             </ng-template>
                         </ngb-tab>
 
-                        <ngb-tab title="Integrations" id="integrations">
+                        <ngb-tab title="{{ 'Integrations' | translate }}" id="integrations">
                             <ng-template ngbTabContent>
                                 <div class="alert in fade alert-success" *ngIf="!hasPremiumFeatures">
-                                    <a (click)="showChangePlanDialog()">Upgrade now</a> to enable integrations!
+                                    <a (click)="showChangePlanDialog()">{{ 'Upgrade now' | translate }}</a> {{ 'to enable integrations!' | translate }}
                                 </div>
 
                                 <div *ngIf="isSlackEnabled">
-                                    <h4>Slack</h4>
+                                    <h4>{{ 'Slack' | translate }}</h4>
 
                                     <div *ngIf="project['has_slack_integration']">
-                                        <p>Choose how often you want to receive slack notifications for event occurrences in this project.</p>
+                                        <p>{{ 'Choose how often you want to receive slack notifications for event occurrences in this project.' | translate }}</p>
 
                                         <div class="checkbox">
                                             <label class="checks">
@@ -197,7 +197,7 @@
                                                        [(ngModel)]="slackNotificationSettings['send_daily_summary']"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
-                                                Send daily project summary <strong>(Coming soon!)</strong>
+                                                {{ 'Send daily project summary' | translate }} <strong>{{ '(Coming soon!)' | translate }}</strong>
                                             </label>
                                         </div>
 
@@ -207,7 +207,7 @@
                                                        [(ngModel)]="slackNotificationSettings['report_new_errors']"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
-                                                Notify me on new errors
+                                                {{ 'Notify me on new errors' | translate }}
                                             </label>
                                         </div>
 
@@ -217,7 +217,7 @@
                                                        [(ngModel)]="slackNotificationSettings['report_critical_errors']"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
-                                                Notify me on critical errors
+                                                {{ 'Notify me on critical errors' | translate }}
                                             </label>
                                         </div>
 
@@ -227,7 +227,7 @@
                                                        [(ngModel)]="slackNotificationSettings['report_event_regressions']"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
-                                                Notify me on error regressions
+                                                {{ 'Notify me on error regressions' | translate }}
                                             </label>
                                         </div>
 
@@ -237,7 +237,7 @@
                                                        [(ngModel)]="slackNotificationSettings['report_new_events']"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
-                                                Notify me on new events
+                                                {{ 'Notify me on new events' | translate }}
                                             </label>
                                         </div>
 
@@ -247,30 +247,30 @@
                                                        [(ngModel)]="vslackNotificationSettings['report_critical_events']"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
-                                                Notify me on critical events
+                                                {{ 'Notify me on critical events' | translate }}
                                             </label>
                                         </div>
                                     </div>
 
                                     <p>
-                                        <a *ngIf="!project['has_slack_integration']" (click)="addSlack()" class="btn btn-primary" role="button" title="Add to Slack">
-                                            <i class="fa fa-fw fa-slack"></i> Add Slack Notifications
+                                        <a *ngIf="!project['has_slack_integration']" (click)="addSlack()" class="btn btn-primary" role="button" title="{{ 'Add to Slack' | translate }}">
+                                            <i class="fa fa-fw fa-slack"></i> {{ 'Add Slack Notifications' | translate }}
                                         </a>
-                                        <a *ngIf="project['has_slack_integration']" (click)="removeSlack()" class="btn btn-danger" role="button" title="Remove Slack">
-                                            <i class="fa fa-fw fa-slack"></i> Remove Slack
+                                        <a *ngIf="project['has_slack_integration']" (click)="removeSlack()" class="btn btn-danger" role="button" title="{{ 'Remove Slack' | translate }}">
+                                            <i class="fa fa-fw fa-slack"></i> {{ 'Remove Slack' | translate }}
                                         </a>
                                     </p>
                                 </div>
 
-                                <h4>Web hooks</h4>
-                                <p [innerHtml]="'Notice_Web_hooks'"></p>
+                                <h4>{{ 'Web hooks' | translate }}</h4>
+                                <p [innerHtml]="'Notice_Web_hooks' | translate"></p>
 
                                 <table class="table table-striped table-bordered table-fixed b-t">
                                     <thead>
                                         <tr>
-                                            <th>Url</th>
-                                            <th>Event Types</th>
-                                            <th class="action">Actions</th>
+                                            <th>{{ 'Url' | translate }}</th>
+                                            <th>{{ 'Event Types' | translate }}</th>
+                                            <th class="action">{{ 'Actions' | translate }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -280,17 +280,17 @@
                                                 <span class="label label-success" *ngFor="let type of hook['event_types']">{{ type }}</span>
                                             </td>
                                             <td>
-                                                <button type="button" role="button" class="btn btn-sm" title="Delete" (click)="removeWebHook(hook)"><i class="fa fa-times"></i></button>
+                                                <button type="button" role="button" class="btn btn-sm" title="{{ 'Delete' | translate }}" (click)="removeWebHook(hook)"><i class="fa fa-times"></i></button>
                                             </td>
                                         </tr>
 
                                         <tr *ngIf="webHooks.length === 0">
-                                            <td colspan="3">This project does not contain any integrations.</td>
+                                            <td colspan="3">{{ 'This project does not contain any integrations.' | translate }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
 
-                                <button type="button" role="button" (click)="addWebHook()" class="btn btn-primary">Add Web Hook</button>
+                                <button type="button" role="button" (click)="addWebHook()" class="btn btn-primary">{{ 'Add Web Hook' | translate }}</button>
                             </ng-template>
                         </ngb-tab>
                     </ngb-tabset>
@@ -299,20 +299,20 @@
                 <footer class="panel-footer">
                     <div class="pull-right">
                         <a ui-sref="app.project-dashboard({ projectId: project.id })" class="btn btn-default" role="button">
-                            <span class="visible-xs" title="Go To Dashboard"><i class="fa fa-fw fa-dashboard"></i></span>
-                            <span class="hidden-xs">Go To Dashboard</span>
+                            <span class="visible-xs" title="{{ 'Go To Dashboard' | translate }}"><i class="fa fa-fw fa-dashboard"></i></span>
+                            <span class="hidden-xs">{{ 'Go To Dashboard' | translate }}</span>
                         </a>
                     </div>
 
-                    <a ui-sref="app.organization.manage({ id: project.organization_id })" class="btn btn-primary" role="button" title="Manage Organization">
+                    <a ui-sref="app.organization.manage({ id: project.organization_id })" class="btn btn-primary" role="button" title="{{ 'Manage Organization' | translate }}">
                         <i class="fa fa-fw fa-group"></i>
                     </a>
 
-                    <a ui-sref="app.account.manage({ tab: 'notifications', projectId: project.id })" class="btn btn-primary" role="button" title="Manage Notification Settings">
+                    <a ui-sref="app.account.manage({ tab: 'notifications', projectId: project.id })" class="btn btn-primary" role="button" title="{{ 'Manage Notification Settings' | translate }}">
                         <i class="fa fa-fw fa-envelope"></i>
                     </a>
 
-                    <a ui-sref="app.project.configure({ id: project.id })" class="btn btn-primary" role="button" title="Download & Configure Client">
+                    <a ui-sref="app.project.configure({ id: project.id })" class="btn btn-primary" role="button" title="{{ 'Download & Configure Client' | translate }}">
                         <i class="fa fa-fw fa-cloud-download"></i>
                     </a>
 
@@ -321,8 +321,8 @@
                             <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a (click)="resetData()" role="button">Reset Project Data</a></li>
-                            <li><a (click)="removeProject()" role="button">Delete Project</a></li>
+                            <li><a (click)="resetData()" role="button">{{ 'Reset Project Data' | translate }}</a></li>
+                            <li><a (click)="removeProject()" role="button">{{ 'Delete Project' | translate }}</a></li>
                         </ul>
                     </div>
                 </footer>

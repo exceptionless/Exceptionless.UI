@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Input, ViewContainerRef, HostBinding } from '@angular/core';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { LinkService } from '../../service/link.service';
 import { NotificationService } from '../../service/notification.service';
@@ -10,11 +10,11 @@ import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-user',
-    templateUrl: './user.component.html',
-    host: { 'class': 'app-component' }
+    templateUrl: './user.component.html'
 })
 
 export class UserComponent implements OnInit {
+    @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     users = [];
     next: string;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Input, ViewContainerRef, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from '../../service/project.service';
 import { LinkService } from '../../service/link.service';
@@ -11,10 +11,10 @@ import { WordTranslateService } from '../../service/word-translate.service';
 @Component({
     selector: 'app-projects',
     templateUrl: './projects.component.html',
-    host: {'class': 'app-component'}
 })
 
 export class ProjectsComponent implements OnInit {
+    @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     next: string;
     previous: string;

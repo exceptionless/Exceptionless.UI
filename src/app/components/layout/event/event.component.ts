@@ -10,6 +10,7 @@ import { FilterService } from '../../../service/filter.service';
 import { LinkService } from '../../../service/link.service';
 import { NotificationService } from '../../../service/notification.service';
 import { ProjectService } from '../../../service/project.service';
+import { WordTranslateService } from '../../../service/word-translate.service';
 
 @Component({
     selector: 'app-event',
@@ -85,6 +86,7 @@ export class EventComponent implements OnInit {
         private linkService: LinkService,
         private notificationService: NotificationService,
         private projectService: ProjectService,
+        private wordTranslateService: WordTranslateService,
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._eventId = params['id'];
@@ -238,7 +240,7 @@ export class EventComponent implements OnInit {
     }
 
     copied() {
-        this.notificationService.success('Success!', 'Successfully Copied');
+        this.notificationService.success('', 'Successfully Copied');
     }
 
     demoteTab(tabName) {
@@ -247,8 +249,8 @@ export class EventComponent implements OnInit {
             this.buildTabs('Extended Data');
         };
 
-        const onFailure = (response) => {
-            this.notificationService.error('Failed!', 'An error occurred promoting tab.');
+        const onFailure = async (response) => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred promoting tab.'));
         };
 
         const indexOf = this.project['promoted_tabs'].indexOf(tabName);
@@ -441,8 +443,8 @@ export class EventComponent implements OnInit {
                 this.project['promoted_tabs'].push(tabName);
                 this.buildTabs(tabName);
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred promoting tab.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred promoting tab.'));
             }
         );
     }

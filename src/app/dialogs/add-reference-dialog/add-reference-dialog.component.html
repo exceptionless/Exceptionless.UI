@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label for="url">Reference Link</label>
+    <label for="url">{{ 'Reference Link' | translate }}</label>
     <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Please enter a valid URL"
            [(ngModel)]="data.url"
            (ngModelChange)="setUrl($event)"
@@ -9,7 +9,7 @@
            autofocus />
 
     <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched)) || submitted">
-        <small [hidden]="!url.errors?.required">Reference Link is required.</small>
-        <small [hidden]="!url.errors?.url">Link must be URL format.</small>
+        <small [hidden]="!url.errors?.required">{{ 'Reference Link is required.' | translate }}</small>
+        <small [hidden]="!url.errors?.url">{{ 'Reference Link is required.' | translate }}</small>
     </div>
 </div>

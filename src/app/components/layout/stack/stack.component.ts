@@ -14,6 +14,7 @@ import { FilterStoreService } from '../../../service/filter-store.service';
 import { ConfirmDialogComponent } from '../../../dialogs/confirm-dialog/confirm-dialog.component';
 import { AddReferenceDialogComponent } from '../../../dialogs/add-reference-dialog/add-reference-dialog.component';
 import { ModalParameterService } from '../../../service/modal-parameter.service';
+import { WordTranslateService } from '../../../service/word-translate.service';
 
 @Component({
     selector: 'app-stack',
@@ -79,7 +80,8 @@ export class StackComponent implements OnInit {
         private viewRef: ViewContainerRef,
         private modalDialogService: ModalDialogService,
         private modalParameterService: ModalParameterService,
-        private filterStoreService: FilterStoreService
+        private filterStoreService: FilterStoreService,
+        private wordTranslateService: WordTranslateService,
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._stackId = params['id'];
@@ -123,7 +125,7 @@ export class StackComponent implements OnInit {
         this.get().then(() => { this.executeAction(); });
     }
 
-    addReferenceLink() {
+    async addReferenceLink() {
         const modalCallBackFunction = () => {
             const url = this.modalParameterService.getModalParameter('referenceLink');
             if (this.stack['references'].indexOf(url) < 0) {
@@ -135,8 +137,8 @@ export class StackComponent implements OnInit {
                             this.stack['references'].push(url);
                             resolve(res);
                         },
-                        err => {
-                            this.notificationService.error('Failed', 'An error occurred while adding the reference link.');
+                        async err => {
+                            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding the reference link.'));
                             reject(err);
                         }
                     );
@@ -148,8 +150,8 @@ export class StackComponent implements OnInit {
             title: 'Select Date Range',
             childComponent: AddReferenceDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Save Reference Link', buttonClass: 'btn btn-primary', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('Save Reference Link'), buttonClass: 'btn btn-primary', onAction: () => modalCallBackFunction() }
             ],
             data: {
                 key: 'referenceLink'
@@ -204,9 +206,9 @@ export class StackComponent implements OnInit {
         return false;
     }
 
-    get(data?) {
+    async get(data?) {
         if (data && data.type === 'Stack' && data.deleted) {
-            this.notificationService.error('Failed', 'Stack_Deleted');
+            this.notificationService.error('', await this.wordTranslateService.translate('Stack_Deleted'));
             this.router.navigate(['/type/events/dashboard']);
             return;
         }
@@ -227,7 +229,7 @@ export class StackComponent implements OnInit {
                     resolve(this._organizations);
                 },
                 err => {
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('', 'Error Occurred!');
                     reject(err);
                 }
             );
@@ -243,7 +245,7 @@ export class StackComponent implements OnInit {
                     resolve(this.project);
                 },
                 err => {
-                    this.notificationService.error('Failed', 'Error Occurred!');
+                    this.notificationService.error('', 'Error Occurred!');
                     reject(err);
                 }
             );
@@ -258,11 +260,11 @@ export class StackComponent implements OnInit {
                     this.stack['references'] = this.stack['references'] || [];
                     resolve(this.stack);
                 },
-                err => {
+                async err => {
                     if (err.status === 404) {
-                        this.notificationService.error('Failed', 'Cannot_Find_Stack');
+                        this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Stack'));
                     } else {
-                        this.notificationService.error('Failed', 'Error_Load_Stack');
+                        this.notificationService.error('', await this.wordTranslateService.translate('Error_Load_Stack'));
                     }
 
                     this.router.navigate(['/type/events/dashboard']);
@@ -420,11 +422,11 @@ export class StackComponent implements OnInit {
             });*/
         }
 
-        const onSuccess = () => {
-            this.notificationService.success('Success!', 'Successfully promoted stack!');
+        const onSuccess = async () => {
+            this.notificationService.success('', await this.wordTranslateService.translate('Successfully promoted stack!'));
         };
 
-        const onFailure = (response) => {
+        const onFailure = async (response) => {
             if (response.status === 426) {
                 /*return billingService.confirmUpgradePlan(response.data.message, vm.stack.organization_id).then(function () {
                     return promoteToExternal();
@@ -437,7 +439,7 @@ export class StackComponent implements OnInit {
                 }).catch(function(e){});*/
             }
 
-            this.notificationService.error('Failed!', 'An error occurred while promoting this stack.');
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while promoting this stack.'));
         };
 
         return new Promise((resolve, reject) => {
@@ -454,7 +456,7 @@ export class StackComponent implements OnInit {
         });
     }
 
-    removeReferenceLink(reference) {
+    async removeReferenceLink(reference) {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.stackService.removeLink(this._stackId, reference).subscribe(
@@ -462,8 +464,8 @@ export class StackComponent implements OnInit {
                         this.stack['references'] = this.stack['references'].filter(item => item !== reference);
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed', 'An error occurred while deleting the external reference link.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while deleting the external reference link.'));
                         reject(err);
                     }
                 );
@@ -474,26 +476,26 @@ export class StackComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'DELETE REFERENCE LINK', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('DELETE REFERENCE LINK'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this reference link?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this reference link?')
             }
         });
     }
 
-    remove() {
+    async remove() {
         const modalCallBackFunction = () => {
             return new Promise((resolve, reject) => {
                 this.stackService.remove(this._stackId).subscribe(
-                    res => {
-                        this.notificationService.error('Success!', 'Successfully queued the stack for deletion.');
+                    async res => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('Successfully queued the stack for deletion.'));
                         /*$state.go('app.project-dashboard', { projectId: vm.stack.project_id });*/
                         resolve(res);
                     },
-                    err => {
-                        this.notificationService.error('Failed!', 'An error occurred while deleting this stack.');
+                    async err => {
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while deleting this stack.'));
                         reject(err);
                     }
                 );
@@ -504,11 +506,11 @@ export class StackComponent implements OnInit {
             title: 'DIALOGS_CONFIRMATION',
             childComponent: ConfirmDialogComponent,
             actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'DELETE STACK', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('DELETE STACK'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
             ],
             data: {
-                text: 'Are you sure you want to delete this stack (includes all stack events)?'
+                text: await this.wordTranslateService.translate('Are you sure you want to delete this stack (includes all stack events)?')
             }
         });
     }
@@ -518,8 +520,8 @@ export class StackComponent implements OnInit {
             this.stackService.markNotCritical(this._stackId).subscribe(
                 res => {
                 },
-                err => {
-                    this.notificationService.error('Failed!', this.stack['occurrences_are_critical'] ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.');
+                async err => {
+                    this.notificationService.error('', await this.wordTranslateService.translate(this.stack['occurrences_are_critical'] ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.'));
                 }
             );
         }
@@ -527,23 +529,23 @@ export class StackComponent implements OnInit {
         this.stackService.markCritical(this._stackId).subscribe(
             res => {
             },
-            err => {
-                this.notificationService.error('Failed!', this.stack['occurrences_are_critical'] ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate(this.stack['occurrences_are_critical'] ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.'));
             }
         );
     }
 
     updateIsFixed(showSuccessNotification) {
-        const onSuccess = () => {
+        const onSuccess = async () => {
             if (!showSuccessNotification) {
                 return;
             }
 
-            this.notificationService.info('Success!', (this.stack['date_fixed'] && !this.stack['is_regressed']) ? 'Successfully queued the stack to be marked as not fixed.' : 'Successfully queued the stack to be marked as fixed.');
+            this.notificationService.info('', await this.wordTranslateService.translate((this.stack['date_fixed'] && !this.stack['is_regressed']) ? 'Successfully queued the stack to be marked as not fixed.' : 'Successfully queued the stack to be marked as fixed.'));
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed!', (this['stack.date_fixed'] && !this.stack['is_regressed']) ? 'An error occurred while marking this stack as not fixed.' : 'An error occurred while marking this stack as fixed.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate((this['stack.date_fixed'] && !this.stack['is_regressed']) ? 'An error occurred while marking this stack as not fixed.' : 'An error occurred while marking this stack as fixed.'));
         };
 
         if (this['stack.date_fixed'] && !this.stack['is_regressed']) {
@@ -583,35 +585,35 @@ export class StackComponent implements OnInit {
     }
 
     updateIsHidden() {
-        const onSuccess = () => {
-            this.notificationService.info('Success!', this.stack['is_hidden'] ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.');
+        const onSuccess = async () => {
+            this.notificationService.info('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.'));
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed!', this.stack['is_hidden'] ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.'));
         };
 
         this.stackService.markHidden(this._stackId).subscribe(
-            res => {
-                this.notificationService.info('Success!', this.stack['is_hidden'] ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.');
+            async res => {
+                this.notificationService.info('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.'));
             },
-            err => {
-                this.notificationService.error('Failed!', this.stack['is_hidden'] ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.');
+            async err => {
+                this.notificationService.error('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.'));
             }
         );
     }
 
     updateNotifications(showSuccessNotification?) {
-        const onSuccess = () => {
+        const onSuccess = async () => {
             if (!showSuccessNotification) {
                 return;
             }
 
-            this.notificationService.info('Success!', this.stack['disable_notifications'] ? 'Successfully enabled stack notifications.' : 'Successfully disabled stack notifications.');
+            this.notificationService.info('', await this.wordTranslateService.translate(this.stack['disable_notifications'] ? 'Successfully enabled stack notifications.' : 'Successfully disabled stack notifications.'));
         };
 
-        const onFailure = () => {
-            this.notificationService.error('Failed!', this.stack['disable_notifications'] ? 'An error occurred while enabling stack notifications.' : 'An error occurred while disabling stack notifications.');
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate(this.stack['disable_notifications'] ? 'An error occurred while enabling stack notifications.' : 'An error occurred while disabling stack notifications.'));
         };
 
         if (this.stack['disable_notifications']) {
