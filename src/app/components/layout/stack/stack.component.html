@@ -25,7 +25,7 @@
                             <div class="details">
                                 <span class="title">{{ 'UserRatio' | translate }}</span>
                                 <span class="sub">
-                                    <abbr title="{{ stats.usersTitle }}">{{ stats.users }}</abbr>
+                                    <abbr title="{{ stats.usersTitle }}">{{ stats.users / 100 || 0 | percent }}</abbr>
                                 </span>
                             </div>
                         </div>

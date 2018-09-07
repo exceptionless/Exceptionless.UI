@@ -29,11 +29,11 @@
                 <td (click)="open(event.id, $event)">
                     <span *ngIf="hideSessionStartTime && event.data.Type === 'session'">--</span>
                     <span *ngIf="!hideSessionStartTime || event.data.Type !== 'session'">
-                <abbr title="{{ event.date | date : 'medium'}}">
-                    <span *ngIf="relativeTo()">after <app-relative-time [to]="relativeTo()" [date]="event.date"></app-relative-time></span>
-                    <span *ngIf="!relativeTo()"><app-timeago [date]="event.date"></app-timeago></span>
-                </abbr>
-              </span>
+                        <abbr title="{{ event.date | date : 'medium'}}">
+                            <span *ngIf="relativeTo()">after <app-relative-time [to]="relativeTo()" [date]="event.date"></app-relative-time></span>
+                            <span *ngIf="!relativeTo()"><app-timeago [date]="event.date"></app-timeago></span>
+                        </abbr>
+                    </span>
                 </td>
             </tr>
 

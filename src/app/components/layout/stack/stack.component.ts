@@ -473,7 +473,7 @@ export class StackComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
@@ -503,7 +503,7 @@ export class StackComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },

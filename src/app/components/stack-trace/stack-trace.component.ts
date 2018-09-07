@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { ErrorService } from '../../service/error.service';
 
 @Component({
     selector: 'app-stack-trace',
@@ -6,12 +7,22 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./stack-trace.component.less']
 })
 
-export class StackTraceComponent implements OnInit {
+export class StackTraceComponent implements OnInit, OnChanges {
+    @Input() exception;
+    @Input() textStackTrace;
     stackTrace: any;
 
-    constructor() {}
+    constructor(
+        private errorService: ErrorService
+    ) {}
 
     ngOnInit() {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        const errors = this.errorService.getExceptions(this.exception);
+        this.stackTrace = this.buildStackTrace(errors, true);
+        this.textStackTrace = this.buildStackTrace(errors, true);
+    }
 
     buildParameter(parameter) {
         let result = '';
@@ -182,6 +193,6 @@ export class StackTraceComponent implements OnInit {
             return input;
         }
 
-        /*need to implement later Exceptionless*/
+        return input.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 }

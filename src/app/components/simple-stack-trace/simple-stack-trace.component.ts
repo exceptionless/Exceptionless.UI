@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { SimpleErrorService } from '../../service/simple-error.service';
 
 @Component({
@@ -7,15 +7,20 @@ import { SimpleErrorService } from '../../service/simple-error.service';
     styleUrls: ['./simple-stack-trace.component.less']
 })
 
-export class SimpleStackTraceComponent implements OnInit {
+export class SimpleStackTraceComponent implements OnInit, OnChanges {
+    @Input() exception;
+    @Input() textStackTrace;
     stackTrace: any;
-    textStackTrace = '';
     constructor(
         private simpleErrorService: SimpleErrorService
-    ) {
-    }
+    ) {}
 
-    ngOnInit() {
+    ngOnInit() {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        const errors = this.simpleErrorService.getExceptions(this.exception);
+        this.stackTrace = this.buildStackTrace(errors, true);
+        this.textStackTrace = this.buildStackTrace(errors, true);
     }
 
     buildStackFrames(exceptions, includeHTML) {
@@ -48,7 +53,8 @@ export class SimpleStackTraceComponent implements OnInit {
         if (!input || !input.replace) {
             return input;
         }
-        /*need to implement later Exceptionless*/
+
+        return input.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
     buildStackTraceHeader(exceptions, includeHTML) {

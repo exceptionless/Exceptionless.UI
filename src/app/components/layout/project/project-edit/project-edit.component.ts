@@ -430,7 +430,7 @@ export class ProjectEditComponent implements OnInit {
                         resolve(res);
                     },
                     async err => {
-                        this.notificationService.error('Failed!', await this.wordTranslateService.translate('An error occurred while trying to delete the configuration setting.'));
+                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the configuration setting.'));
                         reject(err);
                     }
                 );
@@ -438,7 +438,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
@@ -469,7 +469,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
@@ -497,7 +497,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
@@ -526,7 +526,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
@@ -554,7 +554,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
@@ -582,7 +582,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },

@@ -237,7 +237,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },

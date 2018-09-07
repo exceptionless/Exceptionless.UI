@@ -23,7 +23,7 @@
                     <app-summary [source]="stack" [showType]="showType"></app-summary>
                 </td>
                 <td (click)="open(stack.id, $event)" class="number">
-                    <abbr title="{{ stack.users | number:0 }} of {{ stack.total_users | number:0 }} users">{{ (stack.total_users > 0 ? stack.users / stack.total_users * 100.0 : 0) }}</abbr>
+                    <abbr title="{{ stack.users | number:0 }} of {{ stack.total_users | number:0 }} users">{{ (stack.total_users > 0 ? stack.users / stack.total_users * 100.0 : 0) / 100 | percent }}</abbr>
                 </td>
                 <td (click)="open(stack.id, $event)" class="number">{{stack.total | number:0}}</td>
                 <td (click)="open(stack.id, $event)" class="hidden-xs">

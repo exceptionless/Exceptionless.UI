@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../../../service/notification.service';
 import { UserService } from '../../../service/user.service';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalVariables } from '../../../global-variables';
 
 @Component({
     selector: 'app-header',
@@ -27,6 +28,7 @@ export class HeaderComponent implements OnInit {
         private notificationService: NotificationService,
         private userService: UserService,
         private translateService: TranslateService,
+        private _globalVariables: GlobalVariables,
     ) {}
 
     ngOnInit() {
@@ -54,5 +56,13 @@ export class HeaderComponent implements OnInit {
                 this.notificationService.error('', 'Error Occurred!');
             }
         );
+    }
+
+    canChangePlan() {
+        return !!this._globalVariables.STRIPE_PUBLISHABLE_KEY;
+    }
+
+    isIntercomEnabled() {
+        return !!this._globalVariables.INTERCOM_APPID;
     }
 }

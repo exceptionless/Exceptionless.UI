@@ -5,6 +5,7 @@ import { FilterService } from '../../service/filter.service';
 import { SearchService } from '../../service/search.service';
 import { NotificationService } from '../../service/notification.service';
 import { GlobalVariables } from '../../global-variables';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-organization-notification',
@@ -38,6 +39,7 @@ export class OrganizationNotificationComponent implements OnInit {
         private searchService: SearchService,
         private notificationService: NotificationService,
         private _global: GlobalVariables,
+        private wordTranslateService: WordTranslateService,
     ) {}
 
     ngOnInit() {
@@ -305,9 +307,9 @@ export class OrganizationNotificationComponent implements OnInit {
         return this.getFilterUsesPremiumFeatures().then( () => { this.getOrganizationNotifications(); });
     }
 
-    showChangePlanDialog(organizationId) {
+    async showChangePlanDialog(organizationId) {
         if (!this._global.STRIPE_PUBLISHABLE_KEY) {
-            this.notificationService.error('Failed', 'Billing is currently disabled.');
+            this.notificationService.error('', await this.wordTranslateService.translate('Billing is currently disabled.'));
             return;
         }
 

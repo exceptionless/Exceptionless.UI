@@ -161,8 +161,7 @@ export class OrganizationEditComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     addUser() {
         // return dialogs.create('app/organization/manage/add-user-dialog.tpl.html', 'AddUserDialog as vm').result.then(createUser);
@@ -254,9 +253,9 @@ export class OrganizationEditComponent implements OnInit {
             return this.organization;
         };
 
-        const onFailure = () => {
+        const onFailure = async () => {
             this.router.navigate(['/type/organization/list']);
-            this.notificationService.error('Failed!', 'Cannot_Find_Organization');
+            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization'));
         };
 
         return this.organizationService.getById(this._organizationId).subscribe(
@@ -297,7 +296,7 @@ export class OrganizationEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
@@ -334,7 +333,7 @@ export class OrganizationEditComponent implements OnInit {
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
-            title: 'DIALOGS_CONFIRMATION',
+            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },

@@ -2,7 +2,7 @@
     <table class="table table-striped table-bordered table-fixed table-key-value b-t">
         <tr>
             <th>{{ 'Occurred On' | translate }}</th>
-            <td>{{ 'DateTime' | translate }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
+            <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
 
         <tr *ngIf="isSessionStart">
@@ -105,11 +105,14 @@
 
     <div class="hidden-print" *ngIf="hasError">
         <div class="pull-right">
-            <a ngxClipboard [cbContent]="textStackTrace" [hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+            <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()" [hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Stack Trace to Clipboard' | translate }}"></a>
         </div>
+
         <h4>{{ 'Stack Trace' | translate }}</h4>
-        <!--<app-stack-trace class="stack-trace-mini" [exception]="event['data']['@error']" *ngIf="event['data']['@error']"></app-stack-trace>-->
-        <!--<app-simple-stack-trace class="stack-trace-mini" [exception]="event['data']['@simple_error']" *ngIf="event['data']['@simple_error']"></app-simple-stack-trace>-->
+
+        <app-stack-trace class="stack-trace-mini" [exception]="event['data']['@error']" *ngIf="event['data']['@error']"></app-stack-trace>
+
+        <app-simple-stack-trace class="stack-trace-mini" [exception]="event['data']['@simple_error']" *ngIf="event['data']['@simple_error']"></app-simple-stack-trace>
     </div>
 </ng-container>
 
@@ -119,56 +122,69 @@
     <table class="table table-striped table-bordered table-fixed table-key-value b-t">
         <tr>
             <th>{{ 'Occurred On' | translate }}</th>
-            <td>{{ 'DateTime' | translate }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
+            <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
+
         <tr *ngIf="environment['machine_name']">
             <th>{{ 'Machine Name' | translate }}</th>
             <td><span truncate>{{ environment['machine_name'] }}</span></td>
         </tr>
+
         <tr *ngIf="environment['ip_address']">
             <th>{{ 'IP Address' | translate }}</th>
             <td>{{ environment['ip_address'] }}</td>
         </tr>
+
         <tr *ngIf="environment['processor_count']">
             <th>{{ 'Processor Count' | translate }}</th>
             <td>{{ environment['processor_count'] }}</td>
         </tr>
+
         <tr *ngIf="environment['total_physical_memory']">
             <th>{{ 'Total Memory' | translate }}</th>
             <td>{{ environment['total_physical_memory'] }}</td>
         </tr>
+
         <tr *ngIf="environment['available_physical_memory']">
             <th>{{ 'Available Memory' | translate }}</th>
             <td>{{ environment['available_physical_memory'] }}</td>
         </tr>
+
         <tr *ngIf="environment['process_memory_size']">
             <th>{{ 'Process Memory' | translate }}</th>
             <td>{{ environment['process_memory_size'] }}</td>
         </tr>
+
         <tr *ngIf="environment['o_s_name']">
             <th>{{ 'OS Name' | translate }}</th>
             <td><span truncate>{{ environment['o_s_name'] }}</span></td>
         </tr>
+
         <tr *ngIf="environment['o_s_version']">
             <th>{{ 'OS Version' | translate }}</th>
             <td>{{ environment['o_s_version'] }}</td>
         </tr>
+
         <tr *ngIf="environment['architecture']">
             <th>{{ 'Architecture' | translate }}</th>
             <td>{{ environment['architecture'] }}</td>
         </tr>
+
         <tr *ngIf="environment['runtime_version']">
             <th>{{ 'Runtime Version' | translate }}</th>
             <td>{{ environment['runtime_version'] }}</td>
         </tr>
+
         <tr *ngIf="environment['process_id']">
             <th>{{ 'Process ID' | translate }}</th>
             <td>{{ environment['process_id'] }}</td>
         </tr>
+
         <tr *ngIf="environment['process_name']">
             <th>{{ 'Process Name' | translate }}</th>
             <td><span truncate>{{ environment['process_name'] }}</span></td>
         </tr>
+
         <tr *ngIf="environment['command_line']">
             <th>{{ 'Command Line' | translate }}</th>
             <td><span truncate lines="2">{{ environment['command_line'] }}</span></td>
@@ -184,20 +200,24 @@
     <table class="table table-striped table-bordered table-fixed table-key-value b-t">
         <tr>
             <th>{{ 'Occurred On' | translate }}</th>
-            <td>{{ 'DateTime' | translate }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
+            <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
+
         <tr>
             <th>{{ 'Error Type' | translate }}</th>
             <td><span truncate>{{ errorType }}</span></td>
         </tr>
+
         <tr>
             <th>{{ 'Message' | translate }}</th>
             <td><span truncate lines="10">{{ message }}</span></td>
         </tr>
+
         <tr *ngIf="event['data'] != null && event['data']['@error'] != null && event['data']['@error']['code'] != null">
             <th>{{ 'Code' | translate }}</th>
             <td><span truncate>{{ event['data']['@error']['code'] }}</span></td>
         </tr>
+
         <tr *ngIf="event['data'] != null && event['data']['@submission_method'] != null">
             <th>{{ 'Submission Method' | translate }}</th>
             <td><span truncate>{{ event['data']['@submission_method'] }}</span></td>
@@ -205,12 +225,12 @@
     </table>
 
     <div class="pull-right m-t-xs hidden-print">
-        <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()"[hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+        <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()"[hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Stack Trace to Clipboard' | translate }}"></a>
     </div>
 
     <h3>{{ 'Stack Trace' | translate }}</h3>
 
-    <!--<app-stack-trace [exception]="event['data']['@error']" [text-stack-trace]="textStackTrace"></app-stack-trace>-->
+    <app-stack-trace [exception]="event['data']['@error']" [textStackTrace]="textStackTrace"></app-stack-trace>
 
     <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="event['data']['@error']['data']['@ext']"></app-extended-data-item>-->
 
@@ -238,7 +258,7 @@
     <table class="table table-striped table-bordered table-fixed table-key-value b-t">
         <tr>
             <th>{{ 'Occurred On' | translate }}</th>
-            <td>{{ 'DateTime' | translate }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
+            <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
 
         <tr *ngIf="request['http_method']">
@@ -325,7 +345,7 @@
         <table class="table table-striped table-bordered table-fixed table-key-value b-t">
             <tr>
                 <th>{{ 'Occurred On' | translate }}</th>
-                <td>{{ 'DateTime' | translate }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
+                <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
             </tr>
             <tr *ngIf="isSessionStart">
                 <th>{{ 'Duration' | translate }}</th>
@@ -346,7 +366,7 @@
     <table class="table table-striped table-bordered table-fixed table-key-value b-t">
         <tr>
             <th>{{ 'Occurred On' | translate }}</th>
-            <td>{{ 'DateTime' | translate }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
+            <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
         <tr>
             <th>{{ 'Error Type' | translate }}</th>
@@ -363,10 +383,12 @@
     </table>
 
     <div class="pull-right m-t-xs hidden-print">
-        <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()" [hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Stack Trace to Clipboard"></a>
+        <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()" [hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Stack Trace to Clipboard' | translate }}"></a>
     </div>
+
     <h3>{{ 'Stack Trace' | translate }}</h3>
-    <!--<app-simple-stack-trace [exception]="event['data']['@simple_error']" [text-stack-trace]="textStackTrace"></app-simple-stack-trace>-->
+
+    <app-simple-stack-trace [exception]="event['data']['@simple_error']" [textStackTrace]="textStackTrace"></app-simple-stack-trace>
 
     <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="event['data']['@error']['data']"></app-extended-data-item>-->
 </ng-container>
@@ -375,7 +397,7 @@
     <table class="table table-striped table-bordered table-fixed table-key-value b-t">
         <tr>
             <th>{{ 'Occurred On' | translate }}</th>
-            <td>{{ 'DateTime' | translate }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
+            <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
     </table>
 

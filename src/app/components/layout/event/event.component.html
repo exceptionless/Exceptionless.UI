@@ -7,22 +7,30 @@
                 <i class="fa fa-calendar"></i> {{ 'Event Occurrence' | translate }}
 
                 <div class="pull-right hidden-print">
-                    <a ngxClipboard [cbContent]="event_json" (cbOnSuccess)="copied()" [hidden]="!event['stack_id'] || !clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="Copy Event JSON to Clipboard"></a>
-                    <a routerLink="/type/event/{{ event['stack_id'] }}" [ngClass]="{'disabled': !event['stack_id']}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="Go To Stack"></a>
-                    <a routerLink="/type/event/{{ previous }}" [queryParams]="{ tab: getCurrentTab() }" [ngClass]="{'disabled': !previous}" class="btn btn-default btn-xs fa fa-fw fa-caret-left" role="button" title="Previous Occurrence"></a>
-                    <a routerLink="/type/event/{{ next }}" [queryParams]="{ tab: getCurrentTab() }" [ngClass]="{'disabled': !next}" class="btn btn-default btn-xs fa fa-fw fa-caret-right" role="button" title="Next Occurrence"></a>
+                    <a ngxClipboard [cbContent]="event_json" (cbOnSuccess)="copied()" [hidden]="!event['stack_id'] || !clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Event JSON to Clipboard' | translate }}"></a>
+                    <a routerLink="/stack/{{ event['stack_id'] }}" [ngClass]="{'disabled': !event['stack_id']}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="{{ 'Go To Stack' | translate }}"></a>
+                    <a routerLink="/event/{{ previous }}" [queryParams]="{ tab: getCurrentTab() }" [ngClass]="{'disabled': !previous}" class="btn btn-default btn-xs fa fa-fw fa-caret-left" role="button" title="{{ 'Previous Occurrence' | translate }}"></a>
+                    <a routerLink="/event/{{ next }}" [queryParams]="{ tab: getCurrentTab() }" [ngClass]="{'disabled': !next}" class="btn btn-default btn-xs fa fa-fw fa-caret-right" role="button" title="{{ 'Next Occurrence' | translate }}"></a>
                 </div>
             </div>
 
             <div class="panel-body">
-                <ngb-tabset class="tab-container">
-                    <ngb-tab *ngFor="let tab of tabs" title="{{ tab['title'] }}">
+                <ngb-tabset class="tab-container" [activeId]="activedTab" #tabsChild>
+                    <ngb-tab *ngFor="let tab of tabs" title="{{ tab['title'] | translate }}" id="{{ tab['template_key'] }}">
                         <ng-template ngbTabContent>
                             <app-event-tabs [tab]="tab['template_key']"></app-event-tabs>
                         </ng-template>
                     </ngb-tab>
                 </ngb-tabset>
             </div>
+
+            <footer class="panel-footer hidden-xs">
+                <div class="pull-right">
+                    <a routerLink="/stack/{{ event['stack_id'] }}" [ngClass]="{'disabled': !event['stack_id']}" class="btn btn-default" role="button">{{ 'Go To Stack' | translate }}</a>
+                </div>
+                <a routerLink="/event/{{ previous }}" [queryParams]="{tab: getCurrentTab()}" [ngClass]="{'disabled': !previous}" class="btn btn-primary" role="button">{{ 'Previous Occurrence' | translate }}</a>
+                <a routerLink="/event/{{ next }}" [queryParams]="{tab: getCurrentTab()}" [ngClass]="{'disabled': !next}" class="btn btn-primary" role="button">{{ 'Next Occurrence' | translate }}</a>
+            </footer>
         </div>
     </div>
 </div>

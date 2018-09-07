@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { ClipboardService } from 'ngx-clipboard';
@@ -11,6 +11,7 @@ import { LinkService } from '../../../service/link.service';
 import { NotificationService } from '../../../service/notification.service';
 import { ProjectService } from '../../../service/project.service';
 import { WordTranslateService } from '../../../service/word-translate.service';
+import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-event',
@@ -21,7 +22,11 @@ export class EventComponent implements OnInit {
     _eventId = [];
     _knownDataKeys = ['error', '@error', '@simple_error', '@request', '@trace', '@environment', '@user', '@user_description', '@version', '@level', '@location', '@submission_method', '@submission_client', 'session_id', 'sessionend', 'haserror', '@stack'];
     activeTabIndex = -1;
-    event = {};
+    event = {
+        data: {
+            '@error': ''
+        }
+    };
     event_json = '';
     textStackTrace = '';
     excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
@@ -69,11 +74,12 @@ export class EventComponent implements OnInit {
         hideSessionStartTime: true
     };
     tabs = [];
-    tab = '';
+    activedTab = 'overview';
     previous = '';
     next = '';
     clipboardSupported = this.clipboardService.isSupported;
     template: any;
+    @ViewChild('tabsChild') tabsChild: NgbTabset;
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -90,16 +96,18 @@ export class EventComponent implements OnInit {
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._eventId = params['id'];
+            this.get();
         });
-        this.tab = this.activatedRoute.snapshot.queryParams['tab'];
+
+        this.activatedRoute.queryParams.subscribe(params => {
+            /*this.activedTab = params['tab'];*/
+        });
     }
 
-    ngOnInit() {
-        this.get();
-    }
+    ngOnInit() {}
 
     get() {
-        this.getEvent().then(() => { this.getProject().then(() => { this.buildTabs(this.tab); } ); });
+        this.getEvent().then(() => { this.getProject().then(() => { this.buildTabs(this.activedTab); } ); });
     }
 
     addHotKeys() {
@@ -239,8 +247,8 @@ export class EventComponent implements OnInit {
         return !data;
     }
 
-    copied() {
-        this.notificationService.success('', 'Successfully Copied');
+    async copied() {
+        this.notificationService.success('', await  this.wordTranslateService.translate('Copied!'));
     }
 
     demoteTab(tabName) {
@@ -269,11 +277,10 @@ export class EventComponent implements OnInit {
     }
 
     getCurrentTab() {
-        if (this.tabs.length === 0) {
-            const tab = this.tabs.filter(function(t) { return t['index'] === this.activeTabIndex; })[0];
-            return tab && tab['index'] > 0 ? tab['title'] : 'Overview';
+        if (this.tabsChild && this.tabsChild.activeId) {
+            return this.tabsChild.activeId;
         } else {
-            return 'Overview';
+            return 'overview';
         }
     }
 
