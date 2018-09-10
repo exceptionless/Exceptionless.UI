@@ -88,6 +88,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { EmailUniqueValidatorDirective } from './validators/email-unique.validator';
 import { OrganizationUniqueValidatorDirective } from './validators/organization-unique.validator';
 import { ProjectUniqueValidatorDirective } from './validators/project-unique.validator';
+import { ObjectDumpComponent } from './components/object-dump/object-dump.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -163,7 +164,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         LayoutComponent,
         EmailUniqueValidatorDirective,
         OrganizationUniqueValidatorDirective,
-        ProjectUniqueValidatorDirective
+        ProjectUniqueValidatorDirective,
+        ObjectDumpComponent
     ],
     imports: [
         RouterModule,

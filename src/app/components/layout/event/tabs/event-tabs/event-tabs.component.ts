@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ClipboardService } from 'ngx-clipboard';
@@ -17,7 +17,7 @@ import { WordTranslateService } from '../../../../../service/word-translate.serv
     templateUrl: './event-tabs.component.html'
 })
 
-export class EventTabsComponent extends EventComponent {
+export class EventTabsComponent extends EventComponent implements OnChanges {
     @Input() tab;
     constructor(
         router: Router,
@@ -34,5 +34,10 @@ export class EventTabsComponent extends EventComponent {
         wordTranslateService: WordTranslateService,
     ) {
         super(router, activatedRoute, hotkeysService, clipboardService, billingService, errorService, eventService, filterService, linkService, notificationService, projectService, wordTranslateService);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        const tabContent = this.tab;
+        console.log('tab = ', tabContent['data']);
     }
 }

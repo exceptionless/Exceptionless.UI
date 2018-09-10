@@ -1,3 +1,22 @@
-<p>
-  extended-data-item works!
-</p>
+<div *ngIf="hasData">
+    <div class="pull-right hidden-print">
+        <button type="button" role="button" class="btn btn-dark btn-xs" title="{{ 'Copy to Clipboard' | translate }}" clipboard text="vm.data_json" on-copied="vm.copied()" supported="vm.clipboardSupported" [hidden]="!clipboardSupported">
+            <i class="fa fa-copy"></i>
+        </button>
+        <div class="btn-group btn-group-xs">
+            <button type="button" role="button" class="btn btn-dark btn-xs" (click)="showRaw = !showRaw">{{ 'Toggle View' | translate }}</button>
+            <button type="button" role="button" class="btn btn-dark btn-xs dropdown-toggle" data-toggle="dropdown" *ngIf="canPromote">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right"  ng-if="vm.canPromote">
+                <li *ngIf="!isPromoted"><a (click)="promoteTab()">{{ 'Promote to Tab' | translate }}</a></li>
+                <li *ngIf="isPromoted"><a (click)="demoteTab()">{{ 'Demote Tab' | translate }}</a></li>
+            </ul>
+        </div>
+    </div>
+    <h3>{{ title | translate}}</h3>
+    <div *ngIf="!showRaw">
+        <!--<object-dump content="vm.data"></object-dump>-->
+    </div>
+    <pre *ngIf="showRaw">{{ data }}</pre>
+</div>
