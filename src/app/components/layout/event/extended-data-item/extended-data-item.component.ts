@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { NotificationService } from '../../../../service/notification.service';
 import { WordTranslateService } from '../../../../service/word-translate.service';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
     selector: 'app-extended-data-item',
@@ -10,22 +11,31 @@ import { WordTranslateService } from '../../../../service/word-translate.service
 export class ExtendedDataItemComponent implements OnInit {
     @Input() title;
     @Input() data;
-    @Input() promoteTabParam;
-    @Input() demoteTabParam;
+    @Input() isPromoted;
+    @Output() promoteTabParam = new EventEmitter<any>();
+    @Output() demoteTabParam = new EventEmitter<any>();
+    showRaw = false;
+    clipboardSupported = this.clipboardService.isSupported;
+
     constructor(
         private notificationService: NotificationService,
         private wordTranslateService: WordTranslateService,
+        private clipboardService: ClipboardService,
     ) {}
 
     ngOnInit() {
     }
 
-    copied() {
-        this.notificationService.success('', this.wordTranslateService.translate('Copied!'));
+    async copied() {
+        this.notificationService.success('', await this.wordTranslateService.translate('Copied!'));
     }
 
     demoteTab() {
-        // return $scope.demoteTab({ tabName: vm.title });
+        this.demoteTabParam.emit(this.title);
+    }
+
+    hasData() {
+        return typeof this.data !== 'undefined' && Object.keys(this.data).length !== 0;
     }
 
     getData(data, exclusions) {
@@ -51,7 +61,11 @@ export class ExtendedDataItemComponent implements OnInit {
             }, {});
     }
 
+    getType() {
+        return typeof this.data;
+    }
+
     promoteTab() {
-        // return $scope.promoteTab({ tabName: vm.title });
+        this.promoteTabParam.emit(this.title);
     }
 }

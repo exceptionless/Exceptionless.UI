@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ClipboardService } from 'ngx-clipboard';
@@ -19,6 +19,9 @@ import { WordTranslateService } from '../../../../../service/word-translate.serv
 
 export class EventTabsComponent extends EventComponent implements OnChanges {
     @Input() tab;
+    @Output() promoteTabParam = new EventEmitter<any>();
+    @Output() demoteTabParam = new EventEmitter<any>();
+
     constructor(
         router: Router,
         activatedRoute: ActivatedRoute,
@@ -39,5 +42,17 @@ export class EventTabsComponent extends EventComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         const tabContent = this.tab;
         console.log('tab = ', tabContent['data']);
+    }
+
+    tabPromote(tabName) {
+        this.promoteTabParam.emit(tabName);
+    }
+
+    tabDemote(tabName) {
+        this.demoteTabParam.emit(tabName);
+    }
+
+    isPromotedTab() {
+        return this.tab.template_key.indexOf('promoted') >= 0;
     }
 }

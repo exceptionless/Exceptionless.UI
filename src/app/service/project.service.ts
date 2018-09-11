@@ -60,9 +60,9 @@ export class ProjectService {
 
     promoteTab(id, name) {
         const data = {
-            name: name
+            id: id
         };
-        return this.http.post(`projects/${id}/promotedtabs`,  data);
+        return this.http.post(`projects/${id}/promotedtabs?name=${name}`,  data);
     }
 
     remove(id) {

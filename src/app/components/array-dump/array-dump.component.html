@@ -1,0 +1,5 @@
+<ul *ngIf="content.length > 0" class="array-dump">
+    <li *ngFor="let item of content">
+        <app-value-dump [content]="item"></app-value-dump>
+    </li>
+</ul>

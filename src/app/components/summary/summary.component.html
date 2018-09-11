@@ -3,7 +3,7 @@
         <strong>{{ 'Log source' | translate }}</strong>:&nbsp;
     </span>
 
-    <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">
+    <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">
         <abbr *ngIf="source.data" title="{{ source.data.Source }}">{{ source.data.SourceShortName }}</abbr>
         <span *ngIf="!source.data">{{ source.title }}</span>
     </a>
@@ -11,7 +11,7 @@
 
 <ng-container *ngIf="source.template_key == 'stack-notfound-summary'">
     <span *ngIf="showType"><strong>404</strong>:&nbsp;</span>
-    <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
+    <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'stack-error-summary'">
@@ -27,7 +27,7 @@
         </strong>
     </span>
 
-        <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
+        <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
     </div>
 
     <div class="hidden-xs error-path" *ngIf="source.data.Path">
@@ -37,12 +37,12 @@
 
 <ng-container *ngIf="source.template_key == 'stack-feature-summary'">
     <span *ngIf="showType"><strong>Feature</strong>:&nbsp;</span>
-    <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
+    <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'stack-session-summary'">
     <span *ngIf="showType"><strong>Session</strong>:&nbsp;</span>
-    <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
+    <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'stack-simple-summary'">
@@ -51,7 +51,7 @@
             <abbr title="{{ source.data.TypeFullName }}">{{ source.data.Type }}</abbr>:
         </strong>
 
-        <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
+        <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
     </div>
 
     <div class="hidden-xs error-path" *ngIf="source.data.Path">
@@ -64,7 +64,7 @@
     <span *ngIf="showType && source.data.Source">&nbsp;in&nbsp;</span>
     <strong *ngIf="source.data.Source">{{ source.data.Source }}</strong>
     <span *ngIf="showType || source.data.Source">:&nbsp;</span>
-    <a routerLink="/type/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
+    <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'event-error-summary'">
@@ -80,7 +80,7 @@
         </strong>
     </span>
 
-        <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
+        <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
     </div>
 
     <div class="hidden-xs error-path" *ngIf="source.data.Path">
@@ -90,7 +90,7 @@
 
 <ng-container *ngIf="source.template_key == 'event-feature-summary'">
     <span *ngIf="showType"><strong>{{ 'Feature' | translate }}</strong>:&nbsp;</span>
-    <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
+    <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'event-log-summary'">
@@ -110,7 +110,7 @@
 
 <ng-container *ngIf="source.template_key == 'event-notfound-summary'">
     <span *ngIf="showType"><strong>404</strong>:&nbsp;</span>
-    <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
+    <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
 </ng-container>
 
 <ng-container *ngIf="source.template_key == 'event-session-summary'">
@@ -134,7 +134,7 @@
             <abbr title="{{ source.data.TypeFullName }}">{{ source.data.Type }}</abbr>:
         </strong>
 
-        <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
+        <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
     </div>
 
     <div class="hidden-xs error-path" *ngIf="source.data.Path">
@@ -147,6 +147,6 @@
     <span *ngIf="showType && source.data.Source">&nbsp;in&nbsp;</span>
     <strong *ngIf="source.data.Source">{{ source.data.Source }}</strong>
     <span *ngIf="showType || source.data.Source">:&nbsp;</span>
-    <a routerLink="/type/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
+    <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
 </ng-container>
 

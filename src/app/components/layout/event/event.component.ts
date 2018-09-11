@@ -179,6 +179,7 @@ export class EventComponent implements OnInit {
 
     buildTabs(tabNameToActivate) {
         let tabIndex = 0;
+        let promotedIndex = 0;
         let tabs: Array<{index: number, title: string, template_key: string, data?: any}> = [];
         tabs = [{index: tabIndex, title: 'Overview', template_key: 'overview'}];
 
@@ -212,7 +213,8 @@ export class EventComponent implements OnInit {
             }
 
             if (this.isPromoted(key)) {
-                this.tabs.push({index: ++tabIndex, title: key, template_key: 'promoted', data: this.event['data'][key]});
+                tabs.push({index: ++tabIndex, title: key, template_key: 'promoted-' + promotedIndex, data: this.event['data'][key]});
+                promotedIndex ++;
             } else if (this._knownDataKeys.indexOf(key) < 0) {
                 extendedDataItems.push({title: key, data: this.event['data'][key]});
             }
@@ -222,8 +224,14 @@ export class EventComponent implements OnInit {
             tabs.push({index: ++tabIndex, title: 'Extended Data', template_key: 'extended-data', data: extendedDataItems});
         }
 
+
         this.tabs = tabs;
-        /*$timeout(function() { activateTab(tabNameToActivate); }, 1);*/
+
+        if (tabNameToActivate) {
+            setTimeout(() => {
+                this.activateTab(tabNameToActivate);
+            }, 100);
+        }
     }
 
     canRefresh(data) {
@@ -445,7 +453,7 @@ export class EventComponent implements OnInit {
     }
 
     promoteTab(tabName) {
-        return this.projectService.promoteTab(this.project['id'], tabName).subscribe(
+        this.projectService.promoteTab(this.project['id'], tabName).subscribe(
             res => {
                 this.project['promoted_tabs'].push(tabName);
                 this.buildTabs(tabName);

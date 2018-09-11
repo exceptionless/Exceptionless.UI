@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
     selector: 'app-object-dump',
@@ -8,10 +8,13 @@ import {Component, OnInit} from '@angular/core';
 
 export class ObjectDumpComponent implements OnInit {
 
+    @Input() content;
+    keys: any[];
+
     constructor() {
     }
 
     ngOnInit() {
+        this.keys = Object.keys(this.content);
     }
-
 }

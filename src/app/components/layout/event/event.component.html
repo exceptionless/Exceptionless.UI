@@ -18,7 +18,7 @@
                 <ngb-tabset class="tab-container" [activeId]="activedTab" #tabsChild>
                     <ngb-tab *ngFor="let tab of tabs" title="{{ tab['title'] | translate }}" id="{{ tab['template_key'] }}">
                         <ng-template ngbTabContent>
-                            <app-event-tabs [tab]="tab"></app-event-tabs>
+                            <app-event-tabs [tab]="tab" (demoteTabParam)="demoteTab($event)" (promoteTabParam)="promoteTab($event)"></app-event-tabs>
                         </ng-template>
                     </ngb-tab>
                 </ngb-tabset>

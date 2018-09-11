@@ -1,14 +1,14 @@
 <div *ngIf="hasData">
     <div class="pull-right hidden-print">
-        <button type="button" role="button" class="btn btn-dark btn-xs" title="{{ 'Copy to Clipboard' | translate }}" clipboard text="vm.data_json" on-copied="vm.copied()" supported="vm.clipboardSupported" [hidden]="!clipboardSupported">
+        <button type="button" role="button" class="btn btn-dark btn-xs" title="{{ 'Copy to Clipboard' | translate }}" ngxClipboard [cbContent]="data | json" (cbOnSuccess)="copied()" [hidden]="!clipboardSupported">
             <i class="fa fa-copy"></i>
         </button>
-        <div class="btn-group btn-group-xs">
+        <div class="btn-group btn-group-xs" open>
             <button type="button" role="button" class="btn btn-dark btn-xs" (click)="showRaw = !showRaw">{{ 'Toggle View' | translate }}</button>
-            <button type="button" role="button" class="btn btn-dark btn-xs dropdown-toggle" data-toggle="dropdown" *ngIf="canPromote">
+            <button type="button" role="button" class="btn btn-dark btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu pull-right"  ng-if="vm.canPromote">
+            <ul class="dropdown-menu pull-right" role="menu">
                 <li *ngIf="!isPromoted"><a (click)="promoteTab()">{{ 'Promote to Tab' | translate }}</a></li>
                 <li *ngIf="isPromoted"><a (click)="demoteTab()">{{ 'Demote Tab' | translate }}</a></li>
             </ul>
@@ -16,7 +16,7 @@
     </div>
     <h3>{{ title | translate}}</h3>
     <div *ngIf="!showRaw">
-        <!--<object-dump content="vm.data"></object-dump>-->
+        <app-value-dump [content]="data" [isRoot]="true"></app-value-dump>
     </div>
-    <pre *ngIf="showRaw">{{ data }}</pre>
+    <pre *ngIf="showRaw">{{ data | json }}</pre>
 </div>
