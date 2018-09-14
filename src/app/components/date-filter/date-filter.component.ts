@@ -5,6 +5,7 @@ import { ModalDialogService } from 'ngx-modal-dialog';
 import { CustomDateRangeDialogComponent } from '../../dialogs/custom-date-range-dialog/custom-date-range-dialog.component';
 import { DateRangeParserService } from '../../service/date-range-parser.service';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { FilterStoreService } from '../../service/filter-store.service';
 
 @Component({
     selector: 'app-date-filter',
@@ -19,12 +20,15 @@ export class DateFilterComponent implements OnInit {
         private viewRef: ViewContainerRef,
         private filterService: FilterService,
         private modalDialogService: ModalDialogService,
+        private filterStoreService: FilterStoreService,
         private dateRangeParserService: DateRangeParserService,
         private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnInit() {
         this.updateFilterDisplayName();
+        this.filterStoreService.getTimeFilterEmitter()
+            .subscribe(item => { this.updateFilterDisplayName(); });
     }
 
     getFilteredDisplayName() {

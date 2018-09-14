@@ -15,6 +15,7 @@ import { ConfirmDialogComponent } from '../../../dialogs/confirm-dialog/confirm-
 import { AddReferenceDialogComponent } from '../../../dialogs/add-reference-dialog/add-reference-dialog.component';
 import { ModalParameterService } from '../../../service/modal-parameter.service';
 import { WordTranslateService } from '../../../service/word-translate.service';
+import * as Rickshaw from 'rickshaw';
 
 @Component({
     selector: 'app-stack',
@@ -66,6 +67,61 @@ export class StackComponent implements OnInit {
     users = 0;
     total_users = 0;
     action = '';
+    features: any = {
+        hover: {
+            render: function (args) {
+                const date = moment.unix(args.domainX);
+                const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
+                let content = '<div class="date">' + formattedDate + '</div>';
+                args.detail.sort(function (a, b) {
+                    return a.order - b.order;
+                }).forEach(function (d) {
+                    const swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
+                    content += swatch + (d.formattedYValue * 1.0).toFixed(2) + ' ' + d.series.name + '<br />';
+                }, this);
+
+                const xLabel = document.createElement('div');
+                xLabel.className = 'x_label';
+                xLabel.innerHTML = content;
+                this.element.appendChild(xLabel);
+
+                // If left-alignment results in any error, try right-alignment.
+                const leftAlignError = this._calcLayoutError([xLabel]);
+                if (leftAlignError > 0) {
+                    xLabel.classList.remove('left');
+                    xLabel.classList.add('right');
+
+                    // If right-alignment is worse than left alignment, switch back.
+                    const rightAlignError = this._calcLayoutError([xLabel]);
+                    if (rightAlignError > leftAlignError) {
+                        xLabel.classList.remove('right');
+                        xLabel.classList.add('left');
+                    }
+                }
+
+                this.show();
+            }
+        },
+        range: {
+            onSelection: position => {
+                const start = moment.unix(position.coordMinX).utc().local();
+                const end = moment.unix(position.coordMaxX).utc().local();
+                this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+
+                return false;
+            }
+        },
+        xAxis: {
+            timeFixture: new Rickshaw.Fixtures.Time.Local(),
+            overrideTimeFixtureCustomFormatters: true
+        },
+        yAxis: {
+            ticks: 5,
+            tickFormat: 'formatKMBT',
+            ticksTreatment: 'glow'
+        }
+    };
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,

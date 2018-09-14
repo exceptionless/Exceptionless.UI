@@ -1,6 +1,8 @@
 import { Component, OnChanges, ViewChild, Input, ElementRef, SimpleChanges } from '@angular/core';
 import * as Rickshaw from 'rickshaw';
+import * as d3 from 'd3';
 import * as moment from 'moment';
+import {FilterService} from '../../service/filter.service';
 
 @Component({
     selector: 'app-rickshaw',
@@ -14,74 +16,145 @@ export class RickshawComponent implements OnChanges {
     @Input() filterTime;
     @Input() projectFilter;
     @Input() inputFeatures;
+    @Input() features;
     graph: any;
-    features: any;
     @ViewChild('widgetrickshaw') graphElement: ElementRef;
 
-    constructor() {
-        this.features =  {
-            hover: {
-                render: function (args) {
-                    const date = moment.unix(args.domainX);
-                    const dateTimeFormat = 'DateTimeFormat';
-                    const dateFormat = 'DateFormat';
-                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
-                    let content = '<div class="date">' + formattedDate + '</div>';
-                    args.detail.sort(function (a, b) {
-                        return a.order - b.order;
-                    }).forEach(function (d) {
-                        const swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                        content += swatch + d.formattedYValue.toFixed(2) + ' ' + d.series.name + ' <br />';
-                    }, this);
+    constructor(private filterService: FilterService) {
+        Rickshaw.namespace('Rickshaw.Graph.RangeSelector');
+        Rickshaw.Graph.RangeSelector = Rickshaw.Class.create({
+            initialize: function (args) {
+                const element = this.element = args.element;
+                const graph = this.graph = args.graph;
+                graph._selectionCallback = args.selectionCallback;
+                const position = this.position = {};
+                const startPointerX = 0;
+                const selectorDiv = document.createElement('div');
+                selectorDiv.className = 'rickshaw_range_selector';
+                const selectionBox = this.selectionBox = selectorDiv;
+                const loaderDiv = document.createElement('div');
+                loaderDiv.className = 'rickshaw_range_selector_loader';
+                const loader = loaderDiv;
+                graph.element.insertBefore(selectionBox, graph.element.firstChild);
+                graph.element.insertBefore(loader, graph.element.firstChild);
+                this._addListeners();
+                graph.onUpdate(function () {
+                    this.update();
+                }.bind(this));
+            },
+            _addListeners: function () {
+                const graph = this.graph;
+                const position = this.position;
+                let _startPointerX = this.startPointerX;
+                const selectionBox = this.selectionBox;
+                let selectionControl = false;
+                const selectionDraw = function (startPointX) {
+                    graph.element.addEventListener('mousemove', function (event) {
+                        if (selectionControl) {
+                            event.stopPropagation();
+                            let deltaX;
+                            position.x = event.layerX;
+                            deltaX = Math.max(position.x, startPointX) - Math.min(position.x, startPointX);
+                            position.minX = Math.min(position.x, startPointX);
+                            position.maxX = position.minX + deltaX;
 
-                    const xLabel = document.createElement('div');
-                    xLabel.className = 'x_label';
-                    xLabel.innerHTML = content;
-                    this.element.appendChild(xLabel);
-
-                    // If left-alignment results in any error, try right-alignment.
-                    const leftAlignError = this._calcLayoutError([xLabel]);
-                    if (leftAlignError > 0) {
-                        xLabel.classList.remove('left');
-                        xLabel.classList.add('right');
-
-                        // If right-alignment is worse than left alignment, switch back.
-                        const rightAlignError = this._calcLayoutError([xLabel]);
-                        if (rightAlignError > leftAlignError) {
-                            xLabel.classList.remove('right');
-                            xLabel.classList.add('left');
+                            // style of selectionBox
+                            selectionBox.style.transition = 'none';
+                            selectionBox.style.opacity = 1;
+                            selectionBox.style.width = deltaX + 'px';
+                            selectionBox.style.height = '100%';
+                            selectionBox.style.left = position.minX + 'px';
+                            selectionBox.style.top = 0;
+                        } else {
+                            return false;
                         }
+                    }, false);
+                };
+                graph.element.addEventListener('mousedown', function (event) {
+                    event.stopPropagation();
+                    const startPointX = this.startPointX = event.layerX;
+
+                    // style of selectionBox
+                    selectionBox.style.left = event.layerX + 'px';
+                    selectionBox.style.height = '100%';
+                    selectionBox.style.width = 0;
+
+                    selectionControl = true;
+                    selectionDraw(startPointX);
+                }, true);
+                document.body.addEventListener('keyup', function (event) {
+                    if (!selectionControl) {
+                        return;
+                    }
+                    event.stopPropagation();
+                    if (event.keyCode !== 27) {
+                        return;
+                    }
+                    selectionControl = false;
+
+                    // style of selectionBox
+                    selectionBox.style.transition = 'opacity 0.2s ease-out';
+                    selectionBox.style.opacity = 0;
+                    selectionBox.style.width = 0;
+                    selectionBox.style.height = 0;
+                }, true);
+                document.body.addEventListener('mouseup', function (event) {
+                    if (!selectionControl) {
+                        return;
+                    }
+                    selectionControl = false;
+                    position.coordMinX = Math.round(graph.x.invert(position.minX));
+                    position.coordMaxX = Math.round(graph.x.invert(position.maxX));
+
+                    // style of selectionBox
+                    selectionBox.style.transition = 'opacity 0.2s ease-out';
+                    selectionBox.style.width = 0;
+                    selectionBox.style.height = 0;
+                    selectionBox.style.opacity = 0;
+
+                    if (graph._selectionCallback && !isNaN(position.coordMinX) && !isNaN(position.coordMaxX) &&
+                        _startPointerX !== event.layerX && // Ensure that there was an actual selection.
+                        position.coordMinX !== position.coordMaxX && // Ensure that there was an actual selection.
+                        event.button === 0) { // Only accept left mouse button up..
+                        graph._selectionCallback(position);
                     }
 
-                    this.show();
-                }
+                    _startPointerX = 0;
+                }, false);
             },
-            range: {
-                onSelection: function (position) {
-                    const start = moment.unix(position.coordMinX).utc().local();
-                    const end = moment.unix(position.coordMaxX).utc().local();
-                    this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+            update: function () {
+                const graph = this.graph;
+                const position = this.position;
 
-                    return false;
+                if (graph.window.xMin === null) {
+                    position.coordMinX = graph.dataDomain()[0];
                 }
-            },
-            xAxis: {
-                timeFixture: new Rickshaw.Fixtures.Time.Local(),
-                overrideTimeFixtureCustomFormatters: true
-            },
-            yAxis: {
-                ticks: 5,
-                tickFormat: 'formatKMBT',
-                ticksTreatment: 'glow'
+
+                if (graph.window.xMax === null) {
+                    position.coordMaxX = graph.dataDomain()[1];
+                }
             }
-        };
+        });
+
+        Rickshaw.namespace('Rickshaw.Graph.Renderer.DottedLine');
+        Rickshaw.Graph.Renderer.DottedLine = Rickshaw.Class.create(Rickshaw.Graph.Renderer.Line, {
+            name: 'dotted_line',
+            _styleSeries: function(series) {
+                const result = Rickshaw.Graph.Renderer.Line.prototype._styleSeries.call(this, series);
+                d3.select(series.path).style('stroke-dasharray', '3, 2');
+                return result;
+            }
+        });
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.graphElement) {
+            this.graphElement.nativeElement.firstChild.innerHTML = '';
+            const newElement = this.graphElement.nativeElement.firstChild.cloneNode();
             this.graphElement.nativeElement.innerHTML = '';
+            this.graphElement.nativeElement.append(newElement);
             this.graph = new Rickshaw.Graph({
-                element: this.graphElement.nativeElement,
+                element: this.graphElement.nativeElement.firstChild,
                 series: this.options.series1,
                 options: this.options,
                 features: this.inputFeatures || this.features
@@ -89,8 +162,8 @@ export class RickshawComponent implements OnChanges {
 
             this.graph.render();
 
-            /*if (this.features && this.features.hover) {
-                let config = {
+            if (this.features && this.features.hover) {
+                const config = {
                     graph: this.graph,
                     xFormatter: this.features.hover.xFormatter,
                     yFormatter: this.features.hover.yFormatter,
@@ -98,25 +171,25 @@ export class RickshawComponent implements OnChanges {
                     onRender: this.features.hover.onRender
                 };
 
-                let Hover = this.features.hover.render ? Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {render: this.features.hover.render}) : Rickshaw.Graph.HoverDetail;
-                let hoverDetail = new Hover(config);
+                const Hover = this.features.hover.render ? Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {render: this.features.hover.render}) : Rickshaw.Graph.HoverDetail;
+                const hoverDetail = new Hover(config);
             }
 
             if (this.features && this.features.palette) {
-                let palette = new Rickshaw.Color.Palette({scheme: this.features.palette});
+                const palette = new Rickshaw.Color.Palette({scheme: this.features.palette});
                 for (let i = 0; i < this.options.series1.length; i++) {
                     this.options.series1[i].color = palette.color();
                 }
             }
 
             if (this.features && this.features.range) {
-                let rangeSelector = new Rickshaw.Graph.RangeSelector({
+                const rangeSelector = new Rickshaw.Graph.RangeSelector({
                     graph: this.graph,
                     selectionCallback: this.features.range.onSelection
                 });
             }
 
-            this.graph.render();*/
+            this.graph.render();
 
             if (this.features && this.features.xAxis) {
                 const xAxisConfig = {

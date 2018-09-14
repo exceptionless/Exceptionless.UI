@@ -75,6 +75,7 @@ export class EventComponent implements OnInit {
     };
     tabs = [];
     activedTab = 'overview';
+    tabHistory = [];
     previous = '';
     next = '';
     clipboardSupported = this.clipboardService.isSupported;
@@ -150,12 +151,14 @@ export class EventComponent implements OnInit {
 
             tab.active = true;
             this.activeTabIndex = tab.index;
+            this.activedTab = tab.template_key;
             break;
         }
 
         if (this.activeTabIndex < 0 || this.activeTabIndex >= this.tabs.length) {
             this.tabs[0].active = true;
             this.activeTabIndex = 0;
+            this.activedTab = this.tabs[0].template_key;
         }
     }
 
@@ -230,7 +233,7 @@ export class EventComponent implements OnInit {
         if (tabNameToActivate) {
             setTimeout(() => {
                 this.activateTab(tabNameToActivate);
-            }, 100);
+            }, 500);
         }
     }
 
@@ -284,12 +287,42 @@ export class EventComponent implements OnInit {
         );
     }
 
+    getPreviousTab() {
+        const currentTab = this.getCurrentTab();
+        const tabIndex = this.tabHistory.lastIndexOf(currentTab);
+        if (tabIndex >= 1) {
+            const tabId = this.tabHistory[tabIndex - 1];
+            for (let i = 0; i < this.tabs.length; i ++) {
+                if (tabId === this.tabs[i].template_key) {
+                    return tabId;
+                }
+            }
+            return 'overview';
+        } else {
+            return 'overview';
+        }
+    }
+
+    getNextTab() {
+        const currentTab = this.getCurrentTab();
+        const tabIndex = this.tabHistory.lastIndexOf(currentTab);
+        if (tabIndex < this.tabHistory.length - 1) {
+            return this.tabHistory[tabIndex + 1];
+        } else {
+            return 'overview';
+        }
+    }
+
     getCurrentTab() {
         if (this.tabsChild && this.tabsChild.activeId) {
             return this.tabsChild.activeId;
         } else {
             return 'overview';
         }
+    }
+
+    updateHistory() {
+        this.tabHistory.push(this.getCurrentTab());
     }
 
     getDuration() {
