@@ -8,7 +8,7 @@ export class GlobalVariables {
     readonly FACEBOOK_APPID: string = '';
     readonly GITHUB_APPID: string = '';
     readonly GOOGLE_APPID: string = '';
-    readonly INTERCOM_APPID: string = '';
+    readonly INTERCOM_APPID: string = 'ssjo62bn';
     readonly LIVE_APPID: string = '';
     readonly SLACK_APPID: string = '';
     readonly STRIPE_PUBLISHABLE_KEY: string = '';

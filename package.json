@@ -38,6 +38,7 @@
         "li": "^1.3.0",
         "lodash": "^4.17.10",
         "moment": "^2.22.2",
+        "ng-intercom": "^6.0.0-beta.3",
         "ng2-rickshaw": "git+https://github.com/daominhsangvn/ng2-rickshaw.git",
         "ng2-ui-auth": "^9.0.0-beta.2",
         "ngx-analytics": "^4.6.3-patch1",

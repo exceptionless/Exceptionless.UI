@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FilterService } from '../../../service/filter.service';
 import { FilterStoreService } from '../../../service/filter-store.service';
 import { GlobalVariables } from '../../../global-variables';
+import { Intercom } from 'ng-intercom';
 
 @Component({
     selector: 'app-sidebar',
@@ -29,6 +30,7 @@ export class SidebarComponent implements OnInit {
         private filterStoreService: FilterStoreService,
         private filterService: FilterService,
         private _globalVariables: GlobalVariables,
+        private intercom: Intercom
     ) {}
 
     ngOnInit() {
@@ -36,6 +38,11 @@ export class SidebarComponent implements OnInit {
             this.setFilterUrlPattern();
         });
         this.setFilterUrlPattern();
+        if (this.isIntercomEnabled()) {
+            this.intercom.boot({
+                app_id: this._globalVariables.INTERCOM_APPID
+            });
+        }
     }
 
     setFilterUrlPattern() {
@@ -52,5 +59,9 @@ export class SidebarComponent implements OnInit {
 
     isIntercomEnabled() {
         return !!this._globalVariables.INTERCOM_APPID;
+    }
+
+    showIntercom() {
+        this.intercom.showNewMessage();
     }
 }

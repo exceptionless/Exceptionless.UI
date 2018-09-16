@@ -21,6 +21,7 @@ import { ChecklistModule } from 'angular-checklist';
 import { GravatarModule } from 'ngx-gravatar';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { IntercomModule } from 'ng-intercom';
 
 import { GlobalVariables } from './global-variables';
 import { AppComponent } from './app.component';
@@ -198,6 +199,10 @@ export function HttpLoaderFactory(http: HttpClient) {
                 useFactory: HttpLoaderFactory,
                 deps: [HttpClient]
             }
+        }),
+        IntercomModule.forRoot({
+            appId: new GlobalVariables().INTERCOM_APPID,
+            updateOnRouterChange: true
         })
     ],
     providers: [

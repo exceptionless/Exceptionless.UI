@@ -279,7 +279,7 @@
                         </a>
                     </li>
                     <li routerLinkActive="active" *ngIf="isIntercomEnabled()">
-                        <a title="{{ 'Support' | translate }}" routerLink="/type/support">
+                        <a title="{{ 'Support' | translate }}" (click)="showIntercom()">
                             <i class="fa fa-comment fa-fw"></i>
                             <span>{{ 'Support' | translate }}</span>
                         </a>
