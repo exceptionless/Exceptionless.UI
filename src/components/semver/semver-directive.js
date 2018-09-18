@@ -28,7 +28,8 @@
                 else {
                   var z4 = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
                   if (z4.test(inputValue))
-                    result = inputValue.replace(z4, '$1.$2.$3-$4');                
+                    result = inputValue.replace(z4, '$1.$2.$3-$4');    
+                }
               }
                 
               if (result !== '')
