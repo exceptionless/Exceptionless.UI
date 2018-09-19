@@ -111,7 +111,7 @@
                             <li><a (click)="updateNotifications()" title="{{ 'Stop sending occurrence notifications for this stack' | translate }}"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw" [ngClass]="{'fa-check': !!stack['disable_notifications']}"></i>{{ 'Disable Notifications' | translate }}</a></li>
                             <li class="divider"></li>
                             <li><a (click)="promoteToExternal()" title="{{ 'Used to promote stacks to external systems.' | translate }}"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>{{ 'Promote To External' | translate }}</a></li>
-                            <li><a (click)="addReferenceLink()" title="{{ 'Add a reference link to an external resource.' | translate }}"><i *ngIf="stack.is_hidden || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>{{ 'Add Reference Link' | translate }}</a></li>
+                            <li><a (click)="addReferenceLink()" title="{{ 'Add a reference link to an external resource.' | translate }}"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>{{ 'Add Reference Link' | translate }}</a></li>
                             <li class="divider"></li>
                             <li><a (click)="remove()" title="{{ 'Delete this stack' | translate }}"><i *ngIf="stack['is_hidden'] || stack['occurrences_are_critical'] || stack['disable_notifications']" class="fa fa-fw"></i>{{ 'Delete' | translate }}</a></li>
                         </ul>
@@ -182,7 +182,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
                             <li *ngFor="let o of chartOptions">
-                                <a (click)="o.selected = !o.selected; updateStats();" title="{{o.title}}"><i class="fa fa-fw" [ngClass]="{'fa-check': !!o.selected}" *ngIf="hasSelectedChartOption()"></i>{{ 'Show '+o.name }}</a>
+                                <a (click)="o.selected = !o.selected; updateStats();" title="{{o.title}}" *ngIf="o.render"><i class="fa fa-fw" [ngClass]="{'fa-check': !!o.selected}" *ngIf="hasSelectedChartOption()"></i>{{ 'Show '+o.name }}</a>
                             </li>
                         </ul>
                     </div>

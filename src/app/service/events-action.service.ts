@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NotificationService } from './notification.service';
+import { DialogService } from './dialog.service';
+import { EventService } from './event.service';
 
 @Injectable({
     providedIn: 'root'
@@ -7,23 +9,46 @@ import { NotificationService } from './notification.service';
 
 export class EventsActionService {
     constructor(
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private dialogService: DialogService,
+        private eventService: EventService,
     ) {}
 
     deleteAction: object = {
         name: 'Delete',
-        run: function (ids) {
+        run: (ids, viewRef, callback) => {
             const onSuccess = () => {
                 this.notificationService.info('Success', 'Successfully queued the events for deletion.');
+                callback();
             };
 
             const onFailure = () => {
                 this.notificationService.error('Error', 'An error occurred while deleting the events.');
             };
 
-            /*need to implement later*/
+            this.dialogService.confirmDanger(viewRef, 'Are you sure you want to delete these events?', 'DELETE EVENTS', () => {
+                this.removeEvent(ids, 0).then(onSuccess).catch(onFailure);
+                return true;
+            });
         }
     };
+
+    removeEvent(ids, i): Promise<any> {
+        if (i < ids.length) {
+            const temparray = ids.slice(i, i + 10);
+            return new Promise((resolve, reject) => {
+                this.eventService.remove(temparray.join(',')).subscribe(res => {
+                    resolve(this.removeEvent(ids, i + 10));
+                }, err => {
+                    reject(false);
+                });
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                resolve(true);
+            });
+        }
+    }
 
     getActions() {
         return [this.deleteAction];

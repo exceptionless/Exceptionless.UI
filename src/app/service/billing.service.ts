@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AnalyticsService } from './analytics.service';
 import { ChangePlanDialogComponent } from '../dialogs/change-plan-dialog/change-plan-dialog.component';
 import { ModalDialogService } from 'ngx-modal-dialog';
+import { DialogService } from './dialog.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +12,7 @@ export class BillingService {
     constructor(
         private analyticsService: AnalyticsService,
         private modalDialogService: ModalDialogService,
+        private dialogService: DialogService
     ) {}
 
     changePlan(organizationId?) {
@@ -31,18 +33,16 @@ export class BillingService {
                 text: 'Are you sure you want to delete your account?'
             }
         });*/
+
+        return true;
     }
 
-    confirmUpgradePlan(message, organizationId) {
-        const onSuccess = () => {
-            return this.changePlan(organizationId);
-        };
-
-        const onFailure = () => {
-            return null;
-        };
-
-        /*return dialogService.confirm(message, 'Upgrade Plan').then(onSuccess, onFailure);*/
+    confirmUpgradePlan(viewRef, message, organizationId) {
+        return new Promise((resolve, reject) => {
+            this.dialogService.confirm(viewRef, message, 'Upgrade Plan', () => {
+                resolve(this.changePlan(organizationId));
+            });
+        });
     }
 
 }

@@ -11,10 +11,9 @@ import { ProjectService } from '../../../service/project.service';
 import { StackService } from '../../../service/stack.service';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { FilterStoreService } from '../../../service/filter-store.service';
-import { ConfirmDialogComponent } from '../../../dialogs/confirm-dialog/confirm-dialog.component';
-import { AddReferenceDialogComponent } from '../../../dialogs/add-reference-dialog/add-reference-dialog.component';
 import { ModalParameterService } from '../../../service/modal-parameter.service';
 import { WordTranslateService } from '../../../service/word-translate.service';
+import { DialogService } from '../../../service/dialog.service';
 import * as Rickshaw from 'rickshaw';
 
 @Component({
@@ -38,8 +37,8 @@ export class StackComponent implements OnInit {
     seriesData: any[];
     chartOptions = [
         { name: 'Occurrences', field: 'sum:count~1', title: '', selected: true, render: false },
-        { name: 'Average Value', field: 'avg:value', title: 'The average of all event values', render: true },
-        { name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', render: true }
+        { name: 'Average Value', field: 'avg:value', title: 'The average of all event values', selected: false, render: true },
+        { name: 'Value Sum', field: 'sum:value', title: 'The sum of all event values', selected: false, render: true }
     ];
     project = {};
     recentOccurrences = {
@@ -135,6 +134,7 @@ export class StackComponent implements OnInit {
         private stackService: StackService,
         private viewRef: ViewContainerRef,
         private modalDialogService: ModalDialogService,
+        private dialogService: DialogService,
         private modalParameterService: ModalParameterService,
         private filterStoreService: FilterStoreService,
         private wordTranslateService: WordTranslateService,
@@ -202,17 +202,7 @@ export class StackComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: 'Select Date Range',
-            childComponent: AddReferenceDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('Save Reference Link'), buttonClass: 'btn btn-primary', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                key: 'referenceLink'
-            }
-        });
+        return this.dialogService.addReference(this.viewRef, modalCallBackFunction);
     }
 
     buildUserStat(users, totalUsers) {
@@ -458,24 +448,13 @@ export class StackComponent implements OnInit {
         return !!date && d.isValid() && d.year() > 1;
     }
 
-    promoteToExternal() {
-        if (this.project && !this['project.has_premium_features']) {
-            const message = 'Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.';
-            /*return this.billingService.confirmUpgradePlan(message, this.stack['organization_id']).then(function () {
-                return promoteToExternal();
-            }).catch(function(e){});*/
+    async promoteToExternal() {
 
-            /*return new Promise((resolve, reject) => {
-                this.billingService.confirmUpgradePlan(message,  this.stack['organization_id']).subscribe(
-                    res => {
-                        this.promoteToExternal();
-                    },
-                    err => {
-                        reject(err);
-                    },
-                    () => console.log('Event Service called!')
-                );
-            });*/
+        if (this.project && !this.project['has_premium_features']) {
+            const message = await this.wordTranslateService.translate('Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.');
+            this.billingService.confirmUpgradePlan(this.viewRef, message, this.stack['organization_id']).then(() => {
+                return this.promoteToExternal();
+            });
         }
 
         const onSuccess = async () => {
@@ -484,32 +463,21 @@ export class StackComponent implements OnInit {
 
         const onFailure = async (response) => {
             if (response.status === 426) {
-                /*return billingService.confirmUpgradePlan(response.data.message, vm.stack.organization_id).then(function () {
-                    return promoteToExternal();
-                }).catch(function(e){});*/
+                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.stack['organization_id']).then(() => {
+                    return this.promoteToExternal();
+                });
             }
 
             if (response.status === 501) {
-                /*return dialogService.confirm(response.data.message, translateService.T('Manage Integrations')).then(function () {
-                    $state.go('app.project.manage', { id: vm.stack.project_id });
-                }).catch(function(e){});*/
+                return this.dialogService.confirm(this.viewRef, response.error.message, 'Manage Integrations', () => {
+                    this.router.navigate([`/project/${this.stack['project_id']}/manage`]);
+                });
             }
 
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while promoting this stack.'));
         };
 
-        return new Promise((resolve, reject) => {
-            this.stackService.promote(this._stackId).subscribe(
-                res => {
-                    onSuccess();
-                    resolve(res);
-                },
-                err => {
-                    onFailure(err);
-                    reject(err);
-                }
-            );
-        });
+        return this.stackService.promote(this._stackId).subscribe(onSuccess, onFailure);
     }
 
     async removeReferenceLink(reference) {
@@ -528,17 +496,7 @@ export class StackComponent implements OnInit {
             });
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('DELETE REFERENCE LINK'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this reference link?')
-            }
-        });
+        this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK', modalCallBackFunction);
     }
 
     async remove() {
@@ -558,37 +516,23 @@ export class StackComponent implements OnInit {
             });
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('DELETE STACK'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this stack (includes all stack events)?')
-            }
-        });
+        this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this stack (includes all stack events)?', 'DELETE STACK', modalCallBackFunction);
     }
 
     updateIsCritical() {
-        if (this.stack['occurrences_are_critical']) {
-            this.stackService.markNotCritical(this._stackId).subscribe(
-                res => {
-                },
-                async err => {
-                    this.notificationService.error('', await this.wordTranslateService.translate(this.stack['occurrences_are_critical'] ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.'));
-                }
-            );
-        }
+        const onSuccess = async () => {
+            this.stack['occurrences_are_critical'] = !this.stack['occurrences_are_critical'];
+        };
 
-        this.stackService.markCritical(this._stackId).subscribe(
-            res => {
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate(this.stack['occurrences_are_critical'] ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.'));
-            }
-        );
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate(this.stack['occurrences_are_critical'] ? 'An error occurred while marking future occurrences as not critical.' : 'An error occurred while marking future occurrences as critical.'));
+        };
+
+        if (this.stack['occurrences_are_critical']) {
+            this.stackService.markNotCritical(this._stackId).subscribe(onSuccess, onFailure);
+        } else {
+            this.stackService.markCritical(this._stackId).subscribe(onSuccess, onFailure);
+        }
     }
 
     updateIsFixed(showSuccessNotification) {
@@ -605,62 +549,33 @@ export class StackComponent implements OnInit {
         };
 
         if (this['stack.date_fixed'] && !this.stack['is_regressed']) {
-            return new Promise((resolve, reject) => {
-                this.stackService.markNotFixed(this._stackId).subscribe(
-                    res => {
-                        onSuccess();
-                        resolve(res);
-                    },
-                    err => {
-                        onFailure();
-                        reject(err);
-                    }
-                );
-            });
+            this.stackService.markNotFixed(this._stackId).subscribe(onSuccess, onFailure);
+        } else {
+            this.stackService.markFixed(this._stackId).subscribe(onSuccess, onFailure);
         }
-
-        return new Promise((resolve, reject) => {
-            this.stackService.markFixed(this._stackId).subscribe(
-                version => {
-                    this.stackService.markFixed(this._stackId, JSON.parse(JSON.stringify(version))).subscribe(
-                        res => {
-                            onSuccess();
-                            resolve(res);
-                        },
-                        err => {
-                            onFailure();
-                            reject(err);
-                        }
-                    );
-                },
-                err => {
-                    onFailure();
-                }
-            );
-        });
     }
 
     updateIsHidden() {
         const onSuccess = async () => {
             this.notificationService.info('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.'));
+            this.stack['is_hidden'] = !this.stack['is_hidden'];
         };
 
         const onFailure = async () => {
             this.notificationService.error('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.'));
         };
 
-        this.stackService.markHidden(this._stackId).subscribe(
-            async res => {
-                this.notificationService.info('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.'));
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.'));
-            }
-        );
+        if (!this.stack['is_hidden']) {
+            this.stackService.markHidden(this._stackId).subscribe(onSuccess, onFailure);
+        } else {
+            this.stackService.markNotHidden(this._stackId).subscribe(onSuccess, onFailure);
+        }
     }
 
     updateNotifications(showSuccessNotification?) {
         const onSuccess = async () => {
+            this.stack['disable_notifications'] = !this.stack['disable_notifications'];
+
             if (!showSuccessNotification) {
                 return;
             }
@@ -673,31 +588,9 @@ export class StackComponent implements OnInit {
         };
 
         if (this.stack['disable_notifications']) {
-            return new Promise((resolve, reject) => {
-                this.stackService.enableNotifications(this._stackId).subscribe(
-                    res => {
-                        onSuccess();
-                        resolve(res);
-                    },
-                    err => {
-                        onFailure();
-                        reject(err);
-                    }
-                );
-            });
+            this.stackService.enableNotifications(this._stackId).subscribe(onSuccess, onFailure);
+        } else {
+            this.stackService.disableNotifications(this._stackId).subscribe(onSuccess, onFailure);
         }
-
-        return new Promise((resolve, reject) => {
-            this.stackService.disableNotifications(this._stackId).subscribe(
-                res => {
-                    onSuccess();
-                    resolve(res);
-                },
-                err => {
-                    onFailure();
-                    reject(err);
-                }
-            );
-        });
     }
 }

@@ -201,8 +201,7 @@ export function HttpLoaderFactory(http: HttpClient) {
             }
         }),
         IntercomModule.forRoot({
-            appId: new GlobalVariables().INTERCOM_APPID,
-            updateOnRouterChange: true
+            appId: new GlobalVariables().INTERCOM_APPID
         })
     ],
     providers: [
