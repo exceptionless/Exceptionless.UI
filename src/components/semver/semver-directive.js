@@ -9,37 +9,25 @@
         require: '?ngModel',
         link: function (scope, element, attrs, modelCtrl) {
           modelCtrl.$parsers.push(function (inputValue) {
-            if (!inputValue) {
+            var isVersionRegex = /^(\d+)\.(\d+)\.?(\d+)?\.?(\d)?$/;
+            if (!inputValue || !isVersionRegex.test(inputValue)) {
               return inputValue;
             }
-            
-            var z = /^(\d+)\.(\d+)\.?(\d+)?\.?(\d)?$/;
-            var result = '';
-            if (z.test(inputValue))
-            {
-              var z2 = /^(\d+)\.(\d+)$/;
-              if (z2.test(inputValue))
-                  result = inputValue.replace(z2, '$1.$2.0-0');
-              else 
-              {
-                var z3 = /^(\d+)\.(\d+)\.(\d+)$/;
-                if (z3.test(inputValue))
-                    result = inputValue.replace(z3, '$1.$2.$3-0');
-                else {
-                  var z4 = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
-                  if (z4.test(inputValue))
-                    result = inputValue.replace(z4, '$1.$2.$3-$4');    
-                }
-              }
-                
-              if (result !== '')
-              {
-                 modelCtrl.$setViewValue(result);
-                 modelCtrl.$render();
-                 return result;
-              }              
+
+            var transformedInput = '';
+            var isTwoPartVersion = /^(\d+)\.(\d+)$/;
+            var isFourPartVersion = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
+            if (isTwoPartVersion.test(inputValue)) {
+              transformedInput = inputValue.replace(isTwoPartVersion, '$1.$2.0');
+            } else if (isFourPartVersion.test(inputValue)) {
+              transformedInput = inputValue.replace(isFourPartVersion, '$1.$2.$3-$4');
             }
-              
+
+            if (transformedInput !== '') {
+              modelCtrl.$setViewValue(transformedInput);
+              modelCtrl.$render();
+            }
+
             return inputValue;
           });
         }
