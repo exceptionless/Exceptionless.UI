@@ -45,6 +45,7 @@
         "ngx-clipboard": "^11.1.1",
         "ngx-gravatar": "^3.0.4",
         "ngx-modal-dialog": "^2.0.1",
+        "ngx-stripe": "^6.0.0-rc.0",
         "ngx-toastr": "^8.7.3",
         "objectid-js": "^1.0.2-patch1",
         "rickshaw": "^1.6.6",

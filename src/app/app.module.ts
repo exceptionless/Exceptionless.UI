@@ -22,6 +22,7 @@ import { GravatarModule } from 'ngx-gravatar';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IntercomModule } from 'ng-intercom';
+import { NgxStripeModule } from 'ngx-stripe';
 
 import { GlobalVariables } from './global-variables';
 import { AppComponent } from './app.component';
@@ -89,9 +90,12 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { EmailUniqueValidatorDirective } from './validators/email-unique.validator';
 import { OrganizationUniqueValidatorDirective } from './validators/organization-unique.validator';
 import { ProjectUniqueValidatorDirective } from './validators/project-unique.validator';
+import { SemanticVersionValidatorDirective } from './validators/semantic-version.validator';
 import { ObjectDumpComponent } from './components/object-dump/object-dump.component';
 import { ValueDumpComponent } from './components/value-dump/value-dump.component';
 import { ArrayDumpComponent } from './components/array-dump/array-dump.component';
+import { MarkFixedDialogComponent } from './dialogs/mark-fixed-dialog/mark-fixed-dialog.component';
+import { SemverDirective } from './directives/semver.directive';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -168,9 +172,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         EmailUniqueValidatorDirective,
         OrganizationUniqueValidatorDirective,
         ProjectUniqueValidatorDirective,
+        SemanticVersionValidatorDirective,
         ObjectDumpComponent,
         ValueDumpComponent,
-        ArrayDumpComponent
+        ArrayDumpComponent,
+        MarkFixedDialogComponent,
+        SemverDirective
     ],
     imports: [
         RouterModule,
@@ -202,7 +209,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         }),
         IntercomModule.forRoot({
             appId: new GlobalVariables().INTERCOM_APPID
-        })
+        }),
+        NgxStripeModule.forRoot(new GlobalVariables().STRIPE_PUBLISHABLE_KEY),
     ],
     providers: [
         GlobalVariables,
@@ -216,7 +224,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         }
     ],
     bootstrap: [AppComponent],
-    entryComponents: [ConfirmDialogComponent, CustomDateRangeDialogComponent, AddReferenceDialogComponent, AddOrganizationDialogComponent]
+    entryComponents: [
+        ConfirmDialogComponent,
+        CustomDateRangeDialogComponent,
+        AddReferenceDialogComponent,
+        AddOrganizationDialogComponent,
+        MarkFixedDialogComponent
+    ]
 })
 
 export class AppModule {

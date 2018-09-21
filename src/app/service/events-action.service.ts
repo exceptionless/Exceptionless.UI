@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NotificationService } from './notification.service';
 import { DialogService } from './dialog.service';
 import { EventService } from './event.service';
+import * as _ from 'lodash';
 
 @Injectable({
     providedIn: 'root'
@@ -33,20 +34,17 @@ export class EventsActionService {
         }
     };
 
-    removeEvent(ids, i): Promise<any> {
+    async removeEvent(ids, i) {
         if (i < ids.length) {
             const temparray = ids.slice(i, i + 10);
-            return new Promise((resolve, reject) => {
-                this.eventService.remove(temparray.join(',')).subscribe(res => {
-                    resolve(this.removeEvent(ids, i + 10));
-                }, err => {
-                    reject(false);
-                });
-            });
+            try {
+                const response = await this.eventService.remove(temparray.join(',')).toPromise();
+                return this.removeEvent(ids, i + 10);
+            } catch (e) {
+                return false;
+            }
         } else {
-            return new Promise((resolve, reject) => {
-                resolve(true);
-            });
+            return true;
         }
     }
 

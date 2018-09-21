@@ -1,0 +1,22 @@
+<form name="markFixedForm" role="form" class="form-validation">
+    <p>{{'Marks the stack as fixed. This will also prevent error occurrences from being displayed in the dashboard.' | translate}}</p>
+    <p>
+        <b>{{'Optional:' | translate}}</b> {{'Please enter the version in which the stack has been fixed. Any submitted occurrences with a lower version will not cause a regression.' | translate}}
+        <a href="https://github.com/exceptionless/Exceptionless/wiki/Versioning" target="_blank" title="{{'Versioning Documentation' | translate}}" aria-label="Versioning Documentation">
+            <i class="fa fa-fw fa-question-circle"></i>
+        </a>
+    </p>
+    <div class="form-group">
+        <input id="version" name="version" type="text" class="form-control input-lg" placeholder="{{'Optional Version (Example: 1.2.3)' | translate}}"
+               [(ngModel)]="versionNo"
+               (ngModelChange)="updateModalParameter(versionNo)"
+               appSemver
+               semanticVersion
+               #versionNumber="ngModel"
+               autofocus />
+
+        <div class="error" *ngIf="(versionNumber.invalid && (versionNumber.dirty || versionNumber.touched)) || submitted">
+            <small [hidden]="!versionNumber.errors?.semanticVersion">{{ 'Invalid version.' | translate }}</small>
+        </div>
+    </div>
+</form>

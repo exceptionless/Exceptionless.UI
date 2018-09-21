@@ -60,4 +60,8 @@ export class UserService {
     verifyEmailAddress(token) {
         return this.http.get(`users/verify-email-address/${token}`);
     }
+
+    adminChangePlan(data) {
+        return this.http.post('admin/change-plan', data);
+    }
 }

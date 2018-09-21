@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, SimpleChanges, HostBinding } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges, HostBinding, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../service/filter.service';
 import { StackService } from '../../service/stack.service';
@@ -37,7 +37,8 @@ export class StacksComponent implements OnChanges {
         private paginationService: PaginationService,
         private notificationService: NotificationService,
         private stacksActionsService: StacksActionsService,
-        private wordTranslateService: WordTranslateService
+        private wordTranslateService: WordTranslateService,
+        private viewRef: ViewContainerRef
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
@@ -135,6 +136,7 @@ export class StacksComponent implements OnChanges {
             this.notificationService.info('', await this.wordTranslateService.translate('Please select one or more stacks'));
         } else {
             /*this.action.run(this.selectedIds).then(onSuccess());*/
+            action.run(this.selectedIds, this.viewRef, onSuccess);
         }
     }
 

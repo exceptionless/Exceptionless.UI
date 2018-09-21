@@ -3,6 +3,7 @@ import { FilterService } from './filter.service';
 import { SearchService } from './search.service';
 import { StackService } from './stack.service';
 import { NotificationService } from './notification.service';
+import { DialogService } from './dialog.service';
 import * as _ from 'lodash';
 
 @Injectable({
@@ -12,81 +13,77 @@ import * as _ from 'lodash';
 export class StacksActionsService {
     markFixedAction: object = {
         name: 'Mark Fixed',
-        run: (ids) => {
-            /*implement later Exceptionless*/
-
+        run: (ids, viewRef, callback) => {
             const onSuccess = () => {
                 this.notificationService.info('', 'Successfully queued the stacks to be marked as fixed.');
+                callback();
             };
 
             const onFailure = () => {
             };
 
-            const runFunction = () => {
-                this.executeAction(ids, (idArr) => this.stackService.markFixed(idArr, ''), onSuccess(), onFailure());
+            const runFunction = (versionNo) => {
+                return this.executeAction(ids, (idArr) => this.stackService.markFixed(idArr, versionNo), onSuccess, onFailure);
             };
 
-            /*this.modalDialogService.openDialog(this.viewRef, {
-                title: 'Delete',
-                childComponent: ConfirmDialogComponent,
-                actionButtons: [
-                    { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                    { text: 'DELETE STACKS', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => runFunction() }
-                ]
-            });*/
+            return this.dialogService.markFixed(viewRef, runFunction);
         }
     };
 
     markNotFixedAction: object = {
         name: 'Mark Not Fixed',
-        run: (ids) => {
+        run: (ids, viewRef, callback) => {
             const onSuccess = () => {
                 this.notificationService.info('', 'Successfully queued the stacks to be marked as not hidden.');
+                callback();
             };
 
             const onFailure = () => {
                 this.notificationService.error('', 'An error occurred while marking stacks as not hidden.');
             };
 
-            return this.executeAction(ids, this.stackService.markNotFixed(), onSuccess(), onFailure());
+            return this.executeAction(ids, (idArr) => this.stackService.markNotFixed(idArr), onSuccess, onFailure);
         }
     };
 
     markHiddenAction: object = {
         name: 'Mark Hidden',
-        run: (ids) => {
+        run: (ids, viewRef, callback) => {
             const onSuccess = () => {
                 this.notificationService.info('', 'Successfully queued the stacks to be marked as not hidden.');
+                callback();
             };
 
             const onFailure = () => {
                 this.notificationService.error('', 'An error occurred while marking stacks as not hidden.');
             };
 
-            return this.executeAction(ids, this.stackService.markHidden(), onSuccess(), onFailure());
+            return this.executeAction(ids, (idArr) => this.stackService.markHidden(idArr), onSuccess, onFailure);
         }
     };
 
     markNotHiddenAction: object = {
         name: 'Mark Not Hidden',
-        run: (ids) => {
+        run: (ids, viewRef, callback) => {
             const onSuccess = () => {
                 this.notificationService.info('', 'Successfully queued the stacks to be marked as not hidden.');
+                callback();
             };
 
             const onFailure = () => {
                 this.notificationService.error('', 'An error occurred while marking stacks as not hidden.');
             };
 
-            return this.executeAction(ids, this.stackService.markNotHidden(), onSuccess(), onFailure());
+            return this.executeAction(ids, (idArr) => this.stackService.markNotHidden(idArr), onSuccess, onFailure);
         }
     };
 
     deleteAction: object = {
         name: 'Delete',
-        run: (ids) => {
+        run: (ids, viewRef, callback) => {
             const onSuccess = () => {
                 this.notificationService.info('', 'Successfully queued the stacks for deletion.');
+                callback();
             };
 
             const onFailure = () => {
@@ -94,17 +91,10 @@ export class StacksActionsService {
             };
 
             const runFunction = () => {
-                this.executeAction(ids, this.stackService.remove(), onSuccess(), onFailure());
+                this.executeAction(ids, (idArr) => this.stackService.remove(idArr), onSuccess, onFailure);
             };
 
-            /*this.modalDialogService.openDialog(this.viewRef, {
-                title: 'Delete',
-                childComponent: ConfirmDialogComponent,
-                actionButtons: [
-                    { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                    { text: 'DELETE STACKS', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => runFunction() }
-                ]
-            });*/
+            return this.dialogService.confirmDanger(viewRef, 'Are you sure you want to delete these stacks (includes all stack events)?', 'DELETE STACKS', runFunction);
         }
     };
 
@@ -113,27 +103,16 @@ export class StacksActionsService {
         private searchService: SearchService,
         private notificationService: NotificationService,
         private stackService: StackService,
+        private dialogService: DialogService
     ) {}
 
-    executeAction(ids, action, onSuccess, onFailure) {
-        return new Promise((resolve, reject) => {
-            this.searchService.validate(this.filterService.getFilter()).then(
-                (res) => {
-                    onSuccess();
+    async executeAction(ids, action, onSuccess, onFailure) {
+        const promise = _.chunk(ids, 10).reduce(async (previous, item) => {
+            const response = await previous();
+            return action(item.join(',')).toPromise();
+        }, async () => true ).then(onSuccess, onFailure);
 
-                    resolve(
-                        _.chunk(ids, 10).reduce(function (previous, item) {
-                            return previous.then(action(item.join(',')));
-                        }, )
-                    );
-                },
-                (err) => {
-                    onFailure();
-
-                    reject(err);
-                }
-            );
-        });
+        return promise;
     }
 
     getActions() {
