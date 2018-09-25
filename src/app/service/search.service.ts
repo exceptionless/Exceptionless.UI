@@ -12,7 +12,7 @@ export class SearchService {
         private toastr: ToastrService,
     ) {}
 
-    validate(query) {
+    async validate(query) {
         if (!query || (query.trim && query.trim() === '*')) {
             return new Promise((resolve, reject) => {
                 resolve({
@@ -25,16 +25,13 @@ export class SearchService {
         }
 
         const data = { query: query };
-        return new Promise((resolve, reject) => {
-            this.http.get('search/validate', { responseType: 'json' }).subscribe(
-                res => {
-                    resolve(JSON.parse(JSON.stringify(res)));
-                },
-                err => {
-                    this.toastr.error('Error Occurred!', 'Failed');
-                    reject(err);
-                }
-            );
-        });
+
+        try {
+            const res = await this.http.get('search/validate', { responseType: 'json' }).toPromise();
+            return JSON.parse(JSON.stringify(res));
+        } catch (err) {
+            this.toastr.error('Error Occurred!', 'Failed');
+            return err;
+        }
     }
 }

@@ -96,6 +96,7 @@ import { ValueDumpComponent } from './components/value-dump/value-dump.component
 import { ArrayDumpComponent } from './components/array-dump/array-dump.component';
 import { MarkFixedDialogComponent } from './dialogs/mark-fixed-dialog/mark-fixed-dialog.component';
 import { SemverDirective } from './directives/semver.directive';
+import { RefreshOnDirective } from './directives/refresh-on.directive';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -177,7 +178,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         ValueDumpComponent,
         ArrayDumpComponent,
         MarkFixedDialogComponent,
-        SemverDirective
+        SemverDirective,
+        RefreshOnDirective
     ],
     imports: [
         RouterModule,

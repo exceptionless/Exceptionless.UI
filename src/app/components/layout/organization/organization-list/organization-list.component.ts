@@ -71,7 +71,7 @@ export class OrganizationListComponent implements OnInit {
         // need to implement later(billing service)
     }
 
-    createOrganization(name) {
+    async createOrganization(name) {
         const onSuccess = (response) => {
             this.organizations.push(JSON.parse(JSON.stringify(response)));
             this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
@@ -90,21 +90,17 @@ export class OrganizationListComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return new Promise((resolve, reject) => {
-            this.organizationService.create(name).subscribe(
-                res => {
-                    onSuccess(res.body);
-                    resolve(res);
-                },
-                err => {
-                    onFailure(err);
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.organizationService.create(name).toPromise();
+            onSuccess(res);
+            return res;
+        } catch (err) {
+            onFailure(err);
+            return err;
+        }
     }
 
-    get(options?) {
+    async get(options?) {
         const onSuccess = (response, link) => {
             this.organizations = JSON.parse(JSON.stringify(response));
             this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
@@ -125,20 +121,16 @@ export class OrganizationListComponent implements OnInit {
         this.loading = this.organizations.length === 0;
         this.currentOptions = options || this._settings;
 
-        return new Promise((resolve, reject) => {
-            this.organizationService.getAll(this.currentOptions).subscribe(
-                res => {
-                    onSuccess(res.body, res.headers.get('link'));
-                    this.loading = false;
-                    resolve(this.organizations);
-                },
-                err => {
-                    this.loading = false;
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.organizationService.getAll(this.currentOptions).toPromise();
+            onSuccess(res['body'], res['headers'].get('link'));
+            this.loading = false;
+            return this.organizations;
+        } catch (err) {
+            this.loading = false;
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
     leave(organization, user) {
@@ -164,21 +156,17 @@ export class OrganizationListComponent implements OnInit {
     }
 
     async remove(organization) {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.organizationService.remove(organization['id']).subscribe(
-                    async res => {
-                        this.organizations.splice(this.organizations.indexOf(organization), 1);
-                        this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the organization.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.organizationService.remove(organization['id']).toPromise();
+                this.organizations.splice(this.organizations.indexOf(organization), 1);
+                this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+                this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the organization.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {

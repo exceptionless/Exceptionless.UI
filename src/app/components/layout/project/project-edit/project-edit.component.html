@@ -1,6 +1,6 @@
 <app-organization-notification></app-organization-notification>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm">
+<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'ProjectChanged'" (refreshAction)="get($event)">
     <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">

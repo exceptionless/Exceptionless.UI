@@ -4,6 +4,7 @@ import { NotificationService } from '../../service/notification.service';
 import { ProjectService } from '../../service/project.service';
 import { OrganizationService } from '../../service/organization.service';
 import { FilterService } from '../../service/filter.service';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-project-filter',
@@ -25,6 +26,7 @@ export class ProjectFilterComponent implements OnInit {
         private projectService: ProjectService,
         private organizationService: OrganizationService,
         private filterService: FilterService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnInit() {
@@ -32,42 +34,33 @@ export class ProjectFilterComponent implements OnInit {
         this.filteredDisplayName = this.filterService.getProjectName();
     }
 
-    getOrganizations() {
-        return new Promise((resolve, reject) => {
-            this.organizationService.getAll('').subscribe(
-                res => {
-                    this.organizations = JSON.parse(JSON.stringify(res.body));
-                    this.isLoadingOrganizations = false;
-
-                    resolve(this.organizations);
-                },
-                err => {
-                    this.notificationService.error('', 'Error Occurred!');
-                    this.isLoadingOrganizations = false;
-
-                    reject(err);
-                }
-            );
-        });
+    async getOrganizations() {
+        try {
+            const res = await this.organizationService.getAll('').toPromise();
+            this.organizations = JSON.parse(JSON.stringify(res.body));
+            this.isLoadingOrganizations = false;
+            return this.organizations;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            this.isLoadingOrganizations = false;
+        }
     }
 
-    getProjects() {
-        return new Promise((resolve, reject) => {
-            this.projectService.getAll('').subscribe(
-                res => {
-                    this.projects = JSON.parse(JSON.stringify(res.body));
-                    this.isLoadingProjects = false;
+    get() {
+        return this.getOrganizations().then(this.getProjects.bind(this));
+    }
 
-                    resolve(this.projects);
-                },
-                err => {
-                    this.notificationService.error('', 'Error Occurred!');
-                    this.isLoadingProjects = false;
-
-                    reject(err);
-                }
-            );
-        });
+    async getProjects() {
+        try {
+            const res = await this.projectService.getAll('').toPromise();
+            this.projects = JSON.parse(JSON.stringify(res.body));
+            this.isLoadingProjects = false;
+            return res;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            this.isLoadingProjects = false;
+            return err;
+        }
     }
 
     setItem(id, name, type) {

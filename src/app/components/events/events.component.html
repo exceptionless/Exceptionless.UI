@@ -1,6 +1,6 @@
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable">
-        <thead refresh-on="PersistentEventChanged">
+        <thead appRefreshOn [refreshOn]="'PersistentEventChanged'" (refreshAction)="get(currentOptions, $event)">
             <tr>
                 <th class="selection hidden-xs" *ngIf="actions.length > 0">
                     <label class="checks m-b-none">

@@ -149,26 +149,40 @@ export class DashboardComponent implements OnInit {
         return true;
     }
 
-    get() {
-        this.getOrganizations().then(() => { this.getStats().then(() => { this.timeFilter = this.filterStoreService.getTimeFilter(); this.projectFilter = this.filterService.getProjectTypeId(); }); });
-    }
-
-    getOrganizations() {
-        return new Promise((resolve, reject) => {
-            this.organizationService.getAll('').subscribe(
-                res => {
-                    this.organizations = JSON.parse(JSON.stringify(res.body));
-                    resolve(this.organizations);
-                },
-                err => {
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
+    get(isRefresh?) {
+        if (isRefresh && !this.canRefresh(isRefresh)) {
+            return;
+        }
+        this.getOrganizations().then(this.getStats.bind(this)).then(() => {
+            this.timeFilter = this.filterStoreService.getTimeFilter();
+            this.projectFilter = this.filterService.getProjectTypeId();
         });
     }
 
-    getStats() {
+    canRefresh(data) {
+        if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
+            return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+        }
+
+        if (!!data && data.type === 'Organization' || data.type === 'Project') {
+            return this.filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        }
+
+        return !data;
+    }
+
+    async getOrganizations() {
+        try {
+            const response = await this.organizationService.getAll('').toPromise();
+            this.organizations = JSON.parse(JSON.stringify(response.body));
+            return this.organizations;
+        } catch (err) {
+            this.notificationService.error('', 'Error Occurred!');
+            return err;
+        }
+    }
+
+    async getStats() {
         const onSuccess = (response) => {
             const getAggregationValue = (data, name, defaultValue) => {
                 const aggs = data.aggregations;
@@ -205,16 +219,8 @@ export class DashboardComponent implements OnInit {
 
         const offset = this.filterService.getTimeOffset();
 
-        return new Promise((resolve, reject) => {
-            this.eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1').subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(res);
-                },
-                err => {
-                    reject(err);
-                }
-            );
-        });
+        const res = await this.eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1').toPromise();
+        onSuccess(res);
+        return res;
     }
 }

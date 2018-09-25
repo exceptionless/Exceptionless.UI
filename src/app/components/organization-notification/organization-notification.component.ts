@@ -78,22 +78,17 @@ export class OrganizationNotificationComponent implements OnInit {
         return this.projects;
     }
 
-    getFilterUsesPremiumFeatures() {
+    async getFilterUsesPremiumFeatures() {
         this.filterUsesPremiumFeatures = false;
 
-        return new Promise((resolve, reject) => {
-            this.searchService.validate(this.filterService.getFilter()).then(
-                (res) => {
-                    this.filterUsesPremiumFeatures = res['data'].uses_premium_features === true;
-                    resolve( this.filterUsesPremiumFeatures);
-                },
-                (err) => {
-                    this.notificationService.error('Error Occurred!', 'Failed');
-
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.searchService.validate(this.filterService.getFilter());
+            this.filterUsesPremiumFeatures = res['data'].uses_premium_features === true;
+            return this.filterUsesPremiumFeatures;
+        } catch (err) {
+            this.notificationService.error('Error Occurred!', 'Failed');
+            return err;
+        }
     }
 
     getOrganizationNotifications() {
@@ -192,67 +187,46 @@ export class OrganizationNotificationComponent implements OnInit {
     }
 
     getOrganizations() {
-        const getSelectedOrganization = () => {
+        const getSelectedOrganization = async () => {
             const organizationId = this.getCurrentOrganizationId();
 
             if (!organizationId || this.organizations.filter(function(o) { return o.id === organizationId; })[0]) {
                 return;
             }
 
-            return new Promise((resolve, reject) => {
-                this.organizationService.getById(organizationId).subscribe(
-                    res => {
-                        this.organizations.push(JSON.parse(JSON.stringify(res)));
-
-                        // getSelectedOrganization();
-                        resolve(this.organizations);
-                    },
-                    err => {
-                        this.notificationService.error('', 'Error Occurred!');
-
-                        reject(err);
-                    }
-                );
-            });
+            try {
+                const res = await this.organizationService.getById(organizationId).toPromise();
+                this.organizations.push(JSON.parse(JSON.stringify(res)));
+                return this.organizations;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+                return err;
+            }
         };
 
-        const getAllOrganizations = () => {
-            return new Promise((resolve, reject) => {
-                this.organizationService.getAll('').subscribe(
-                    res => {
-                        this.organizations = JSON.parse(JSON.stringify(res.body));
-
-                        // getSelectedOrganization();
-                        resolve(this.organizations);
-                    },
-                    err => {
-                        this.notificationService.error('', 'Error Occurred!');
-
-                        reject(err);
-                    }
-                );
-            });
+        const getAllOrganizations = async () => {
+            try {
+                const res = await this.organizationService.getAll('').toPromise();
+                this.organizations = JSON.parse(JSON.stringify(res.body));
+                return this.organizations;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+                return err;
+            }
         };
 
         return getAllOrganizations().then(() => { getSelectedOrganization(); });
     }
 
-    getProjects() {
-        return new Promise((resolve, reject) => {
-            this.projectService.getAll('').subscribe(
-                res => {
-                    this.projects = JSON.parse(JSON.stringify(res.body));
-
-                    // getSelectedOrganization();
-                    resolve(this.projects);
-                },
-                err => {
-                    this.notificationService.error('', 'Error Occurred!');
-
-                    reject(err);
-                }
-            );
-        });
+    async getProjects() {
+        try {
+            const res = await this.projectService.getAll('').toPromise();
+            this.projects = JSON.parse(JSON.stringify(res.body));
+            return this.projects;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
     hasExceededRequestLimitOrganizations() {

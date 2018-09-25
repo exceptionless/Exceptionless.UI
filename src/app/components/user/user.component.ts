@@ -37,7 +37,7 @@ export class UserComponent implements OnInit {
         this.get();
     }
 
-    get(options?) {
+    async get(options?) {
         const onSuccess = (response, link) => {
             this.users = JSON.parse(JSON.stringify(response));
             const links = this.linkService.getLinksQueryParameters(link);
@@ -55,20 +55,16 @@ export class UserComponent implements OnInit {
 
         this.currentOptions = options || this.settings.options;
 
-        return new Promise((resolve, reject) => {
-            this.settings.get(this.currentOptions).subscribe(
-                res => {
-                    onSuccess(res.body, res.headers.get('link'));
-                    this.loading = false;
-                    resolve(this.users);
-                },
-                err => {
-                    this.loading = false;
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.settings.get(this.currentOptions).toPromise();
+            onSuccess(res.body, res.headers.get('link'));
+            this.loading = false;
+            return this.users;
+        } catch (err) {
+            this.loading = false;
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
     hasAdminRole(user) {
@@ -88,19 +84,15 @@ export class UserComponent implements OnInit {
     }
 
     async remove(user) {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.organizationService.removeUser(this.settings['organizationId'], user['email_address']).subscribe(
-                    res => {
-                        this.users.splice(this.users.indexOf(user), 1);
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the user.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.organizationService.removeUser(this.settings['organizationId'], user['email_address']).toPromise();
+                this.users.splice(this.users.indexOf(user), 1);
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the user.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
@@ -129,31 +121,25 @@ export class UserComponent implements OnInit {
     async updateAdminRole(user) {
         const message = !this.userService.hasAdminRole(user) ? 'Are you sure you want to add the admin role for this user?' : 'Are you sure you want to remove the admin role from this user?';
         const btnTxt = await this.wordTranslateService.translate(!this.userService.hasAdminRole(user) ? 'Add' : 'Remove');
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                if (!this.userService.hasAdminRole(user)) {
-                    return this.userService.addAdminRole(user['id']).subscribe(
-                        res => {
-                            this.notificationService.success('', 'Successfully queued the user for change role.');
-                            resolve(res);
-                        },
-                        err => {
-                            this.notificationService.error('', 'An error occurred while trying to chage user role.');
-                            reject(err);
-                        }
-                    );
+        const modalCallBackFunction = async () => {
+            if (!this.userService.hasAdminRole(user)) {
+                try {
+                    const res = await this.userService.addAdminRole(user['id']).toPromise();
+                    this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the user for change role.'));
+                    return res;
+                } catch (err) {
+                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to chage user role.'));
+                    return err;
                 }
+            }
 
-                this.userService.removeAdminRole(user['id']).subscribe(
-                    res => {
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the user.'));
-                        reject(err);
-                    }
-                );
-            });
+            try {
+                const res = await this.userService.removeAdminRole(user['id']).toPromise();
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the user.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {

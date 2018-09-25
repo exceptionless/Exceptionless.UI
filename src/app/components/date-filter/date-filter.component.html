@@ -1,4 +1,4 @@
-<ul class="nav navbar-nav navbar-left">
+<ul class="nav navbar-nav navbar-left" appRefreshOn [refreshOn]="'filterChanged'" (refreshAction)="updateFilterDisplayName()">
     <li class="dropdown" open>
         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ filteredDisplayName | translate }}<span class="caret"></span></a>
 

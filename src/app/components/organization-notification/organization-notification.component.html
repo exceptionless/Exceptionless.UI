@@ -1,5 +1,5 @@
 <div>
-    <div *ngIf="hasNotifications">
+    <div *ngIf="hasNotifications" appRefreshOn [refreshOn]="'filterChanged'" (refreshAction)="onFilterChanged()">
         <div refresh-action="vm.get()" refresh-throttle="10000"></div>
 
         <div class="alert alert-success alert-banner m-b-none" *ngIf="!hasOrganizations()">

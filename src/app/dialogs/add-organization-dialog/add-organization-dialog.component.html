@@ -1,16 +1,18 @@
-<div class="form-group">
-    <label for="url">{{ 'Organization Name' | translate }}</label>
-    <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Organization Name"
-           [(ngModel)]="data.name"
-           (ngModelChange)="setOrganization($event)"
-           required
-           type = "text"
-           uniqueOrganization
-           #organization="ngModel"
-           autofocus />
+<form name="addOrganizationForm" role="form" class="form-validation">
+    <div class="form-group">
+        <label for="url">{{ 'Organization Name' | translate }}</label>
+        <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Organization Name"
+               [(ngModel)]="data.name"
+               (ngModelChange)="setOrganization($event)"
+               required
+               type = "text"
+               uniqueOrganization
+               #organization="ngModel"
+               autofocus />
 
-    <div class="error" *ngIf="(organization.invalid && (organization.dirty || organization.touched)) || submitted">
-        <small [hidden]="!organization.errors?.required">{{ 'Organization Name is required.' | translate }}</small>
-        <small [hidden]="!organization.errors?.uniqueOrganization">{{ 'A organizations with this name already exists.' | translate }}</small>
+        <div class="error" *ngIf="(organization.invalid && (organization.dirty || organization.touched)) || submitted">
+            <small [hidden]="!organization.errors?.required">{{ 'Organization Name is required.' | translate }}</small>
+            <small [hidden]="!organization.errors?.uniqueOrganization">{{ 'A organizations with this name already exists.' | translate }}</small>
+        </div>
     </div>
-</div>
+</form>

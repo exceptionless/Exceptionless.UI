@@ -39,7 +39,10 @@ export class ProjectsComponent implements OnInit {
         this.get();
     }
 
-    get(options?) {
+    get(options?, isRefresh?) {
+        if (isRefresh && !this.canRefresh(isRefresh)) {
+            return;
+        }
         const onSuccess = (response, link) => {
             this.projects = JSON.parse(JSON.stringify(response));
             const links = this.linkService.getLinksQueryParameters(link);
@@ -89,7 +92,7 @@ export class ProjectsComponent implements OnInit {
                 return true;
             }
 
-            return this.projects.filter(function (e) { return data.id === e.organization_id; }).length > 0;
+            return this.projects.filter(function (e) { return data.id === e.organization_id; }).length === 0;
         }
 
         if (data['type'] === 'Project') {
@@ -103,7 +106,7 @@ export class ProjectsComponent implements OnInit {
                 } else {
                     return data['organization_id'] = e.organization_id;
                 }
-            }).length > 0;
+            }).length === 0;
         }
 
         if ((data['type'] === 'PersistentEvent' && !data['updated'])) {
@@ -117,7 +120,7 @@ export class ProjectsComponent implements OnInit {
                 } else {
                     return data['organization_id'] = e.organization_id;
                 }
-            }).length > 0;
+            }).length === 0;
         }
 
         return false;

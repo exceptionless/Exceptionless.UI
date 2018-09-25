@@ -152,7 +152,7 @@ export class AccountManageComponent implements OnInit {
         );
     }
 
-    getProjects() {
+    async getProjects() {
         const onSuccess = (response) => {
             this.projects = JSON.parse(JSON.stringify(response));
             this.projects.forEach((project) => {
@@ -174,21 +174,17 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the projects.'));
         };
 
-        return new Promise((resolve, reject) => {
-            this.projectService.getAll().subscribe(
-                res => {
-                    onSuccess(res.body);
-                    resolve(res);
-                },
-                err => {
-                    onFailure();
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.projectService.getAll().toPromise();
+            onSuccess(res.body);
+            return res;
+        } catch (err) {
+            onFailure();
+            return err;
+        }
     }
 
-    getUser() {
+    async getUser() {
         const onSuccess = (response) => {
             this.user = JSON.parse(JSON.stringify(response));
             this.user['o_auth_accounts'] = this.user['o_auth_accounts'] || [];
@@ -205,35 +201,27 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return new Promise((resolve, reject) => {
-            this.userService.getCurrentUser().subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(res);
-                },
-                err => {
-                    onFailure(err);
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.userService.getCurrentUser().toPromise();
+            onSuccess(res);
+            return res;
+        } catch (err) {
+            onFailure(err);
+            return err;
+        }
     }
 
     async deleteAccount() {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.userService.removeCurrentUser().subscribe(
-                    async res => {
-                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully removed your user account.'));
-                        this.authAccountService.logout();
-                        resolve(res);
-                    },
-                    err => {
-                        this.notificationService.error('', 'An error occurred while trying remove your user account.');
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.userService.removeCurrentUser().toPromise();
+                this.notificationService.success('', await this.wordTranslateService.translate('Successfully removed your user account.'));
+                this.authAccountService.logout();
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying remove your user account.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {

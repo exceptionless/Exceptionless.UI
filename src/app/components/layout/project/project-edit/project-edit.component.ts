@@ -239,7 +239,7 @@ export class ProjectEditComponent implements OnInit {
         return this.getProject().then(() => { this.getOrganization().then(() => { this.getConfiguration().then(() => { this.getTokens().then(() => { this.getSlackNotificationSettings().then(() => { this.getWebHooks(); }); }); } ); }); });
     }
 
-    getOrganization() {
+    async getOrganization() {
         const onSuccess = (response) => {
             const getRemainingEventLimit = (organization) => {
                 if (!organization['max_events_per_month']) {
@@ -289,21 +289,18 @@ export class ProjectEditComponent implements OnInit {
             this.seriesData = this.chart.options.series1;
             return this.organization;
         };
-        return new Promise((resolve, reject) => {
-            this.organizationService.getById(this.project['organization_id']).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(this.organization);
-                },
-                async err => {
-                    this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization'));
-                    reject(err);
-                }
-            );
-        });
+
+        try {
+            const res = await this.organizationService.getById(this.project['organization_id']).toPromise();
+            onSuccess(res);
+            return this.organization;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization'));
+            return err;
+        }
     }
 
-    getProject() {
+    async getProject() {
         const onSuccess = (response) => {
             this.common_methods = null;
             this.user_namespaces = null;
@@ -318,22 +315,17 @@ export class ProjectEditComponent implements OnInit {
             this.project['usage'] = this.project['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: 3000, too_big: 0 }];
             return this.project;
         };
-        return new Promise((resolve, reject) => {
-            this.projectService.getById(this._projectId).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(this.project);
-                },
-                async err => {
-                    // $state.go('app.project.list');
-                    this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project'));
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.projectService.getById(this._projectId).toPromise();
+            onSuccess(res);
+            return this.project;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project'));
+            return err;
+        }
     }
 
-    getTokens() {
+    async getTokens() {
         const onSuccess = (response) => {
             const responseTokens = JSON.parse(JSON.stringify(response));
             responseTokens.forEach((item, key) => {
@@ -342,21 +334,17 @@ export class ProjectEditComponent implements OnInit {
             this.tokens = responseTokens;
             return this.tokens;
         };
-        return new Promise((resolve, reject) => {
-            return this.tokenService.getByProjectId(this._projectId).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(this.tokens);
-                },
-                async err => {
-                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the api keys.'));
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.tokenService.getByProjectId(this._projectId).toPromise();
+            onSuccess(res);
+            return res;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the api keys.'));
+            return err;
+        }
     }
 
-    getConfiguration() {
+    async getConfiguration() {
         const onSuccess = (response) => {
             this.config = [];
             this.data_exclusions = null;
@@ -374,67 +362,48 @@ export class ProjectEditComponent implements OnInit {
 
             return this.config;
         };
-        return new Promise((resolve, reject) => {
-            this.projectService.getConfig(this._projectId).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(this.project);
-                },
-                async err => {
-                    // $state.go('app.project.list');
-                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.projectService.getConfig(this._projectId).toPromise();
+            onSuccess(res);
+            return this.project;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
+            return err;
+        }
     }
 
-    getSlackNotificationSettings() {
+    async getSlackNotificationSettings() {
         this.slackNotificationSettings = null;
-        return new Promise((resolve, reject) => {
-            this.projectService.getIntegrationNotificationSettings(this._projectId, 'slack').subscribe(
-                res => {
-                    this.slackNotificationSettings = JSON.parse(JSON.stringify(res));
-                    resolve(this.slackNotificationSettings);
-                },
-                async err => {
-                    // $state.go('app.project.list');
-                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the slack notification settings.'));
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.projectService.getIntegrationNotificationSettings(this._projectId, 'slack').toPromise();
+            this.slackNotificationSettings = JSON.parse(JSON.stringify(res));
+            return this.slackNotificationSettings;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the slack notification settings.'));
+            return err;
+        }
     }
 
-    getWebHooks() {
-        return new Promise((resolve, reject) => {
-            this.webHookService.getByProjectId(this._projectId).subscribe(
-                res => {
-                    this.webHooks = JSON.parse(JSON.stringify(res));
-                    resolve(this.webHooks);
-                },
-                async err => {
-                    // $state.go('app.project.list');
-                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
-                    reject(err);
-                }
-            );
-        });
+    async getWebHooks() {
+        try {
+            const res = await this.webHookService.getByProjectId(this._projectId).toPromise();
+            this.webHooks = JSON.parse(JSON.stringify(res));
+            return this.webHooks;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
+            return err;
+        }
     }
 
     async removeConfig(config) {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.projectService.removeConfig(this._projectId, config['key']).subscribe(
-                    res => {
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the configuration setting.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.projectService.removeConfig(this._projectId, config['key']).toPromise();
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the configuration setting.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
@@ -451,21 +420,17 @@ export class ProjectEditComponent implements OnInit {
     }
 
     async removeProject() {
-        const modalCallBackFunction = () => {
+        const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
-            return new Promise((resolve, reject) => {
-                this.projectService.remove(this._projectId).subscribe(
-                    res => {
-                        this.router.navigate(['/type/project/list']);
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the project.'));
-                        this._ignoreRefresh = false;
-                        reject(err);
-                    }
-                );
-            });
+            try {
+                const res = await this.projectService.remove(this._projectId).toPromise();
+                this.router.navigate(['/type/project/list']);
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the project.'));
+                this._ignoreRefresh = false;
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
@@ -482,18 +447,14 @@ export class ProjectEditComponent implements OnInit {
     }
 
     async removeSlack() {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.projectService.removeSlack(this._projectId).subscribe(
-                    res => {
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove slack.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.projectService.removeSlack(this._projectId).toPromise();
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove slack.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
@@ -510,19 +471,14 @@ export class ProjectEditComponent implements OnInit {
     }
 
     async removeToken(token) {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.tokenService.remove(token['id']).subscribe(
-                    res => {
-                        this.tokens.splice(this.tokens.indexOf(token), 1);
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the API Key.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.tokenService.remove(token['id']).toPromise();
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the API Key.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
@@ -539,18 +495,14 @@ export class ProjectEditComponent implements OnInit {
     }
 
     async removeWebHook(hook) {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.webHookService.remove(hook['id']).subscribe(
-                    res => {
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the web hook.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.webHookService.remove(hook['id']).toPromise();
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the web hook.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
@@ -567,18 +519,14 @@ export class ProjectEditComponent implements OnInit {
     }
 
     async resetData() {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.projectService.resetData(this._projectId).subscribe(
-                    res => {
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while resetting project data.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.projectService.resetData(this._projectId).toPromise();
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while resetting project data.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {

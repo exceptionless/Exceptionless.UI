@@ -273,26 +273,22 @@ export class OrganizationEditComponent implements OnInit {
     }
 
     async leaveOrganization(currentUser) {
-        const modalCallBackFunction = () => {
+        const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
-            return new Promise((resolve, reject) => {
-                this.organizationService.removeUser(this._organizationId, currentUser['email_address']).subscribe(
-                    res => {
-                        this.router.navigate(['/type/organization/list']);
-                        resolve(res);
-                    },
-                    async err => {
-                        let message = await this.wordTranslateService.translate('An error occurred while trying to leave the organization.');
-                        if (err.status === 400) {
-                            message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
-                        }
+            try {
+                const res = await this.organizationService.removeUser(this._organizationId, currentUser['email_address']).toPromise();
+                this.router.navigate(['/type/organization/list']);
+                return res;
+            } catch (err) {
+                let message = await this.wordTranslateService.translate('An error occurred while trying to leave the organization.');
+                if (err.status === 400) {
+                    message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
+                }
 
-                        this.notificationService.error('', message);
-                        this._ignoreRefresh = false;
-                        reject(err);
-                    }
-                );
-            });
+                this.notificationService.error('', message);
+                this._ignoreRefresh = false;
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {
@@ -309,27 +305,24 @@ export class OrganizationEditComponent implements OnInit {
     }
 
     async removeOrganization() {
-        const modalCallBackFunction = () => {
+        const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
-            return new Promise((resolve, reject) => {
-                this.organizationService.remove(this._organizationId).subscribe(
-                    async res => {
-                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
-                        this.router.navigate(['/type/organization/list']);
-                        resolve(res);
-                    },
-                    async err => {
-                        let message = await this.wordTranslateService.translate('An error occurred while trying to delete the organization.');
-                        if (err.status === 400) {
-                            message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
-                        }
 
-                        this.notificationService.error('', message);
-                        this._ignoreRefresh = false;
-                        reject(err);
-                    }
-                );
-            });
+            try {
+                const res = await this.organizationService.remove(this._organizationId).toPromise();
+                this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
+                this.router.navigate(['/type/organization/list']);
+                return res;
+            } catch (err) {
+                let message = await this.wordTranslateService.translate('An error occurred while trying to delete the organization.');
+                if (err.status === 400) {
+                    message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
+                }
+
+                this.notificationService.error('', message);
+                this._ignoreRefresh = false;
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {

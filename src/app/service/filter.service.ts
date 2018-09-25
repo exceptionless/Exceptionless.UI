@@ -263,7 +263,7 @@ export class FilterService {
         }
     }
 
-    setFilter(raw, suspendNotifications) {
+    setFilter(raw, suspendNotifications?) {
         if (raw === this._raw) {
             return;
         }

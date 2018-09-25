@@ -59,7 +59,10 @@ export class StacksComponent implements OnChanges {
         return !data;
     }
 
-    get(options?) {
+    async get(options?, isRefresh?) {
+        if (isRefresh && !this.canRefresh(isRefresh)) {
+            return;
+        }
         const onSuccess = (response, link) => {
             this.stacks = JSON.parse(JSON.stringify(response));
 
@@ -88,20 +91,16 @@ export class StacksComponent implements OnChanges {
         this.stacks = [];
         this.currentOptions = options || this.settings.options;
 
-        return new Promise((resolve, reject) => {
-            this.stackService.getFrequent(this.currentOptions).subscribe(
-                res => {
-                    onSuccess(res.body, res.headers.get('link'));
-                    this.loading = false;
-                    resolve(this.stacks);
-                },
-                err => {
-                    this.loading = false;
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.stackService.getFrequent(this.currentOptions).toPromise();
+            onSuccess(res.body, res.headers.get('link'));
+            this.loading = false;
+            return this.stacks;
+        } catch (err) {
+            this.loading = false;
+            this.notificationService.error('', 'Error Occurred!');
+            return err;
+        }
     }
 
     nextPage() {

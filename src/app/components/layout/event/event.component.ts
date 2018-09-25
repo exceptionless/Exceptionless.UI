@@ -354,7 +354,7 @@ export class EventComponent implements OnInit {
             }, '');
     }
 
-    getEvent() {
+    async getEvent() {
         const optionsCallback = (options) => {
             if (options['filter']) {
                 options['filter'] += ' stack:current';
@@ -433,21 +433,17 @@ export class EventComponent implements OnInit {
             onFailure();
         }
 
-        return new Promise((resolve, reject) => {
-            this.eventService.getById(this._eventId, {}, optionsCallback).subscribe(
-                res => {
-                    onSuccess(res, res.headers.get('link'));
-                    resolve(res);
-                },
-                err => {
-                    onFailure(err);
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.eventService.getById(this._eventId, {}, optionsCallback).toPromise();
+            onSuccess(res, res.headers.get('link'));
+            return res;
+        } catch (err) {
+            onFailure(err);
+            return err;
+        }
     }
 
-    getProject() {
+    async getProject() {
         const onSuccess = (response) => {
             this.project = JSON.parse(JSON.stringify(response));
             this.project['promoted_tabs'] = this.project['promoted_tabs'] || [];
@@ -463,18 +459,14 @@ export class EventComponent implements OnInit {
             onFailure();
         }
 
-        return new Promise((resolve, reject) => {
-            this.projectService.getById(this.event['project_id']).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(res);
-                },
-                err => {
-                    onFailure();
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.projectService.getById(this.event['project_id']).toPromise();
+            onSuccess(res);
+            return res;
+        } catch (err) {
+            onFailure();
+            return err;
+        }
     }
 
     isPromoted(tabName) {

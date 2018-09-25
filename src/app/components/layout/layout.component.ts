@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {WebsocketService} from '../../service/websocket.service';
 
 @Component({
     selector: 'app-layout',
@@ -7,10 +8,11 @@ import {Component, OnInit} from '@angular/core';
 
 export class LayoutComponent implements OnInit {
     isSideNavCollapsed = false;
-    constructor() {
+    constructor(private websocketService: WebsocketService) {
     }
 
     ngOnInit() {
+        this.websocketService.startDelayed(1000);
     }
 
     onToggleSideNavCollapsed(): void {
