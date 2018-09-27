@@ -182,23 +182,19 @@ export class StackComponent implements OnInit {
     }
 
     async addReferenceLink() {
-        const modalCallBackFunction = () => {
+        const modalCallBackFunction = async () => {
             const url = this.modalParameterService.getModalParameter('referenceLink');
             if (this.stack['references'].indexOf(url) < 0) {
                 this.stackService.addLink(this._stackId, url);
 
-                return new Promise((resolve, reject) => {
-                    this.stackService.addLink(this._stackId, url).subscribe(
-                        res => {
-                            this.stack['references'].push(url);
-                            resolve(res);
-                        },
-                        async err => {
-                            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding the reference link.'));
-                            reject(err);
-                        }
-                    );
-                });
+                try {
+                    const res = await this.stackService.addLink(this._stackId, url).toPromise();
+                    this.stack['references'].push(url);
+                    return res;
+                } catch (err) {
+                    this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding the reference link.'));
+                    return err;
+                }
             }
         };
 
@@ -253,6 +249,9 @@ export class StackComponent implements OnInit {
     }
 
     async get(data?) {
+        if (data && !this.canRefresh(data)) {
+            return;
+        }
         if (data && data.type === 'Stack' && data.deleted) {
             this.notificationService.error('', await this.wordTranslateService.translate('Stack_Deleted'));
             this.router.navigate(['/type/events/dashboard']);
@@ -266,91 +265,73 @@ export class StackComponent implements OnInit {
         return this.getStack().then(() => { this.updateStats().then(() => { this.getProject(); }); });
     }
 
-    getOrganizations() {
-        return new Promise((resolve, reject) => {
-            this.organizationService.getAll('').subscribe(
-                res => {
-                    this._organizations = JSON.parse(JSON.stringify(res.body));
-
-                    resolve(this._organizations);
-                },
-                err => {
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
-        });
+    async getOrganizations() {
+        try {
+            const res = await this.organizationService.getAll('').toPromise();
+            this._organizations = JSON.parse(JSON.stringify(res.body));
+            return this._organizations;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
-    getProject() {
-        return new Promise((resolve, reject) => {
-            this.projectService.getById(this.stack['project_id']).subscribe(
-                res => {
-                    this.project = JSON.parse(JSON.stringify(res));
-
-                    resolve(this.project);
-                },
-                err => {
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
-        });
+    async getProject() {
+        try {
+            const res = await this.projectService.getById(this.stack['project_id']).toPromise();
+            this.project = JSON.parse(JSON.stringify(res));
+            return this.project;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
-    getStack() {
-        return new Promise((resolve, reject) => {
-            this.stackService.getById(this._stackId).subscribe(
-                res => {
-                    this.stack = JSON.parse(JSON.stringify(res.body));
-                    this.stack['references'] = this.stack['references'] || [];
-                    resolve(this.stack);
-                },
-                async err => {
-                    if (err.status === 404) {
-                        this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Stack'));
-                    } else {
-                        this.notificationService.error('', await this.wordTranslateService.translate('Error_Load_Stack'));
-                    }
+    async getStack() {
+        try {
+            const res = await this.stackService.getById(this._stackId).toPromise();
+            this.stack = JSON.parse(JSON.stringify(res.body));
+            this.stack['references'] = this.stack['references'] || [];
+            return this.stack;
+        } catch (err) {
+            if (err.status === 404) {
+                this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Stack'));
+            } else {
+                this.notificationService.error('', await this.wordTranslateService.translate('Error_Load_Stack'));
+            }
 
-                    this.router.navigate(['/type/events/dashboard']);
-                    reject(err);
-                }
-            );
-        });
+            this.router.navigate(['/type/events/dashboard']);
+            return err;
+        }
     }
 
-    getProjectUserStats() {
+    async getProjectUserStats() {
         const optionsCallback = (options) => {
             options.filter = 'project:' + this.stack['project_id'];
             return options;
         };
 
-        return new Promise((resolve, reject) => {
-            this.eventService.count('cardinality:user', optionsCallback).subscribe(
-                res => {
-                    const getAggregationValue = (data, name, defaultValue) => {
-                        const aggs = data['aggregations'];
-                        return aggs && aggs[name] && aggs[name].value || defaultValue;
-                    };
+        try {
+            const res = await this.eventService.count('cardinality:user', optionsCallback).toPromise();
+            const getAggregationValue = (data, name, defaultValue) => {
+                const aggs = data['aggregations'];
+                return aggs && aggs[name] && aggs[name].value || defaultValue;
+            };
 
-                    this.total_users = getAggregationValue(JSON.parse(JSON.stringify(res)), 'cardinality_user', 0);
-                    this.stats['users'] = this.buildUserStat(this.users, this.total_users);
-                    this.stats['usersTitle'] = this.buildUserStatTitle(this.users, this.total_users);
-                    resolve(res);
-                },
-                err => {
-                    reject(err);
-                }
-            );
-        });
+            this.total_users = getAggregationValue(JSON.parse(JSON.stringify(res)), 'cardinality_user', 0);
+            this.stats['users'] = this.buildUserStat(this.users, this.total_users);
+            this.stats['usersTitle'] = this.buildUserStatTitle(this.users, this.total_users);
+            return res;
+        } catch (err) {
+            return err;
+        }
     }
 
     updateStats() {
         return this.getOrganizations().then(() => { this.getStats(); });
     }
 
-    getStats() {
+    async getStats() {
         const buildFields = (options) => {
             return ' cardinality:user ' + options.filter(function(option) { return option.selected; })
                 .reduce(function(fields, option) { fields.push(option.field); return fields; }, [])
@@ -425,18 +406,14 @@ export class StackComponent implements OnInit {
 
         const offset = this.filterService.getTimeOffset();
 
-        return new Promise((resolve, reject) => {
-            this.eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(this.chartOptions) + ') min:date max:date cardinality:user sum:count~1', optionsCallback, false).subscribe(
-                res => {
-                    onSuccess(res);
-                    this.getProjectUserStats();
-                    resolve(res);
-                },
-                err => {
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(this.chartOptions) + ') min:date max:date cardinality:user sum:count~1', optionsCallback, false).toPromise();
+            onSuccess(res);
+            this.getProjectUserStats();
+            return res;
+        } catch (err) {
+            return err;
+        }
     }
 
     hasSelectedChartOption() {
@@ -481,39 +458,30 @@ export class StackComponent implements OnInit {
     }
 
     async removeReferenceLink(reference) {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.stackService.removeLink(this._stackId, reference).subscribe(
-                    res => {
-                        this.stack['references'] = this.stack['references'].filter(item => item !== reference);
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while deleting the external reference link.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.stackService.removeLink(this._stackId, reference).toPromise();
+                this.stack['references'] = this.stack['references'].filter(item => item !== reference);
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while deleting the external reference link.'));
+                return err;
+            }
         };
 
         this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK', modalCallBackFunction);
     }
 
     async remove() {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.stackService.remove(this._stackId).subscribe(
-                    async res => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('Successfully queued the stack for deletion.'));
-                        /*$state.go('app.project-dashboard', { projectId: vm.stack.project_id });*/
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while deleting this stack.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.stackService.remove(this._stackId).toPromise();
+                this.notificationService.error('', await this.wordTranslateService.translate('Successfully queued the stack for deletion.'));
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while deleting this stack.'));
+                return err;
+            }
         };
 
         this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this stack (includes all stack events)?', 'DELETE STACK', modalCallBackFunction);

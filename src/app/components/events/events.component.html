@@ -1,6 +1,7 @@
-<div class="table-responsive">
-    <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable">
-        <thead appRefreshOn [refreshOn]="'PersistentEventChanged'" (refreshAction)="get(currentOptions, $event)">
+<div class="table-responsive" appRefreshOn [refreshOn]="'filterChanged'" (refreshAction)="get()">
+    <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable"
+           appRefreshOn [refreshOn]="'StackChanged PlanChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
+        <thead appRefreshOn [refreshOn]="'PersistentEventChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
             <tr>
                 <th class="selection hidden-xs" *ngIf="actions.length > 0">
                     <label class="checks m-b-none">

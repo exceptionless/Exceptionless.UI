@@ -1,5 +1,5 @@
-<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'OrganizationChanged ProjectChanged'" (refreshAction)="get(currentOptions)">
-    <div class="col">
+<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'OrganizationChanged ProjectChanged'" (refreshAction)="get(currentOptions)" [refreshThrottle]="10000">
+    <div class="col" appRefreshOn [refreshOn]="'PlanChanged PersistentEventChanged'" (refreshAction)="get(currentOptions)" [refreshThrottle]="10000">
         <div class="wrapper-md">
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-group"></i> {{ 'My Organizations' | translate }}</div>

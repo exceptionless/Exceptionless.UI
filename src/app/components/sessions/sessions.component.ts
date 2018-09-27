@@ -5,6 +5,7 @@ import { FilterService } from '../../service/filter.service';
 import { PaginationService } from '../../service/pagination.service';
 import { NotificationService } from '../../service/notification.service';
 import { FilterStoreService } from '../../service/filter-store.service';
+import { WordTranslateService } from '../../service/word-translate.service';
 import * as moment from 'moment';
 
 @Component({
@@ -32,6 +33,7 @@ export class SessionsComponent implements OnChanges {
         private paginationService: PaginationService,
         private notificationService: NotificationService,
         private filterStoreService: FilterStoreService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
@@ -65,7 +67,10 @@ export class SessionsComponent implements OnChanges {
         return !data;
     }
 
-    get(options?) {
+    async get(options?, isRefresh?) {
+        if (isRefresh && !this.canRefresh(isRefresh)) {
+            return;
+        }
         const onSuccess = (response, link) => {
             this.events = JSON.parse(JSON.stringify(response));
             const links = this.linkService.getLinksQueryParameters(link);
@@ -85,20 +90,16 @@ export class SessionsComponent implements OnChanges {
         this.events = [];
         this.currentOptions = options || this.settings.options;
 
-        return new Promise((resolve, reject) => {
-            this.settings.get(this.currentOptions).subscribe(
-                res => {
-                    onSuccess(res.body, res.headers.get('link'));
-                    this.loading = false;
-                    resolve(this.events);
-                },
-                err => {
-                    this.loading = false;
-                    this.notificationService.error('Error Occurred!', 'Failed');
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = this.settings.get(this.currentOptions).toPromise();
+            onSuccess(res.body, res.headers.get('link'));
+            this.loading = false;
+            return this.events;
+        } catch (err) {
+            this.loading = false;
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
     getDuration(ev) {

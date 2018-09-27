@@ -111,6 +111,10 @@ export class ProjectFilterComponent implements OnInit {
         return this.projects.filter(function (project) { return project.organization_id === id; });
     }
 
+    update() {
+        this.filteredDisplayName = this.getFilterName();
+    }
+
     getStateName() {
         const url = this.router.url;
         const urlTypeArray = url.split('/');

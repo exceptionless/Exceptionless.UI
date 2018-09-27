@@ -1,9 +1,9 @@
 <app-organization-notification></app-organization-notification>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'ProjectChanged'" (refreshAction)="get($event)">
-    <div class="col">
-        <div class="wrapper-md">
-            <div class="panel panel-default">
+<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'ProjectChanged'" (refreshAction)="get($event)" [refreshThrottle]="10000">
+    <div class="col" appRefreshOn [refreshOn]="'TokenChanged'" (refreshAction)="getTokens()" [refreshThrottle]="10000">
+        <div class="wrapper-md" appRefreshOn [refreshOn]="'WebHookChanged'" (refreshAction)="getWebHooks()" [refreshThrottle]="10000">
+            <div class="panel panel-default" appRefreshOn [refreshOn]="'OrganizationChanged'" (refreshAction)="getOrganization()" [refreshDebounce]="10000">
                 <div class="panel-heading"><i class="fa fa-th-list"></i> {{ 'Manage Project' | translate }} {{ project['name'] ? ' "' + project['name'] + '"' : ''}}</div>
 
                 <div class="panel-body m-b-n">

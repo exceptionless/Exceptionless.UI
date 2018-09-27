@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-fixed b-t" appRefreshOn [refreshOn]="'OrganizationChanged UserChanged'" (refreshAction)="get(currentOptions)">
+    <table class="table table-striped table-bordered table-fixed b-t" appRefreshOn [refreshOn]="'OrganizationChanged UserChanged'" (refreshAction)="get(currentOptions)" [refreshThrottle]="10000">
         <thead>
             <tr>
                 <th>{{ 'Email Address' | translate }}</th>

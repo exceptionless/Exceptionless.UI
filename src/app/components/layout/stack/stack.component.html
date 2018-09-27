@@ -1,8 +1,8 @@
 <app-organization-notification></app-organization-notification>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="wrapper-md">
-        <div class="row">
+<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'StackChanged PersistentEventChanged'" (refreshAction)="get($event)" [refreshDebounce]="1000">
+    <div class="wrapper-md"  appRefreshOn [refreshOn]="'filterChanged'" (refreshAction)="get()">
+        <div class="row" appRefreshOn [refreshOn]="'PlanChanged'" (refreshAction)="get($event)">
             <div class="col-sm-12">
                 <div class="row row-sm text-center">
                     <div class="col-md-3 col-sm-6 col-xs-6">

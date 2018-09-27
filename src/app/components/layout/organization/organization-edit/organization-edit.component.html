@@ -1,6 +1,6 @@
 <app-organization-notification></app-organization-notification>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'OrganizationChanged'" (refreshAction)="get()">
+<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'OrganizationChanged'" (refreshAction)="get()" [refreshDebounce]="5000">
     <div class="col">
         <div class="wrapper-md">
             <div class="panel panel-default">
