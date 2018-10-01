@@ -91,7 +91,7 @@ export class SessionsComponent implements OnChanges {
         this.currentOptions = options || this.settings.options;
 
         try {
-            const res = this.settings.get(this.currentOptions).toPromise();
+            const res = await this.settings.get(this.currentOptions).toPromise();
             onSuccess(res.body, res.headers.get('link'));
             this.loading = false;
             return this.events;

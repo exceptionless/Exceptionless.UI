@@ -4,6 +4,7 @@ import { AuthService } from 'ng2-ui-auth';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { NotificationService } from './notification.service';
 import { Observable } from 'rxjs/Observable';
+import { WordTranslateService } from './word-translate.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthAccountService {
         private router: Router,
         private authService: AuthService,
         private http: HttpClient,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        public wordTranslateService: WordTranslateService
     ) {}
 
     cancelResetPassword(resetToken) {
@@ -22,24 +24,20 @@ export class AuthAccountService {
         return this.http.post(`auth/cancel-reset-password/${resetToken}`,  data);
     }
 
-    changePassword(changePasswordModel) {
+    async changePassword(changePasswordModel) {
         const onSuccess = (response) => {
             this.authService.setToken(JSON.parse(JSON.stringify(response)));
             return response;
         };
 
-        return new Promise((resolve, reject) => {
-            this.http.post(`auth/change-password`,  changePasswordModel).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(res);
-                },
-                err => {
-                    this.notificationService.error('Failed!', 'Error Occurred');
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.http.post(`auth/change-password`,  changePasswordModel).toPromise();
+            onSuccess(res);
+            return res;
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred'));
+            return err;
+        }
     }
 
     forgotPassword(email) {

@@ -72,7 +72,7 @@ export class ProjectNewComponent implements OnInit {
         return this.currentOrganization['id'] === this._newOrganizationId || !this.hasOrganizations();
     }
 
-    createOrganization(name) {
+    async createOrganization(name) {
         const onSuccess = (response) => {
             this.organizations.push(JSON.parse(JSON.stringify(response)));
             this.currentOrganization = JSON.parse(JSON.stringify(response));
@@ -92,21 +92,17 @@ export class ProjectNewComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return new Promise((resolve, reject) => {
-            this.organizationService.create(name).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(res);
-                },
-                err => {
-                    onFailure(err);
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.organizationService.create(name).toPromise();
+            onSuccess(res);
+            return res;
+        } catch (err) {
+            onFailure(err);
+            return err;
+        }
     }
 
-    createProject(organization?) {
+    async createProject(organization?) {
         if (!organization) {
             this._canAdd = true;
             return;
@@ -129,18 +125,14 @@ export class ProjectNewComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return new Promise((resolve, reject) => {
-            this.projectService.create(organization.id, this.project_name).subscribe(
-                res => {
-                    onSuccess(res);
-                    resolve(res);
-                },
-                err => {
-                    onFailure(err);
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.projectService.create(organization.id, this.project_name).toPromise();
+            onSuccess(res);
+            return res;
+        } catch (err) {
+            onFailure(err);
+            return err;
+        }
     }
 
     getOrganizations() {

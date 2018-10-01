@@ -35,11 +35,11 @@ export class ProjectsComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.includeOrganizationName = this.settings['organization'];
+        this.includeOrganizationName = !this.settings['organization'];
         this.get();
     }
 
-    get(options?, isRefresh?) {
+    async get(options?, isRefresh?) {
         if (isRefresh && !this.canRefresh(isRefresh)) {
             return;
         }
@@ -61,20 +61,16 @@ export class ProjectsComponent implements OnInit {
         this.loading = this.projects.length === 0;
         this.currentOptions = options || this.settings.options;
 
-        return new Promise((resolve, reject) => {
-            this.settings.get(this.currentOptions).subscribe(
-                res => {
-                    onSuccess(res.body, res.headers.get('link'));
-                    this.loading = false;
-                    resolve(this.projects);
-                },
-                err => {
-                    this.loading = false;
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
-        });
+        try {
+            const res = await this.settings.get(this.currentOptions).toPromise();
+            onSuccess(res.body, res.headers.get('link'));
+            this.loading = false;
+            return this.projects;
+        } catch (err) {
+            this.loading = false;
+            this.notificationService.error('', this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
     hasProjects() {
@@ -146,20 +142,16 @@ export class ProjectsComponent implements OnInit {
     }
 
     async remove(project) {
-        const modalCallBackFunction = () => {
-            return new Promise((resolve, reject) => {
-                this.projectService.remove(project['id']).subscribe(
-                    async res => {
-                        this.projects.splice(this.projects.indexOf(project), 1);
-                        this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the project for deletion.'));
-                        resolve(res);
-                    },
-                    async err => {
-                        this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the project.'));
-                        reject(err);
-                    }
-                );
-            });
+        const modalCallBackFunction = async () => {
+            try {
+                const res = await this.projectService.remove(project['id']).toPromise();
+                this.projects.splice(this.projects.indexOf(project), 1);
+                this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the project for deletion.'));
+                return res;
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the project.'));
+                return err;
+            }
         };
 
         this.modalDialogService.openDialog(this.viewRef, {

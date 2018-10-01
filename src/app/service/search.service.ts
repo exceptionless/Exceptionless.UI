@@ -14,14 +14,12 @@ export class SearchService {
 
     async validate(query) {
         if (!query || (query.trim && query.trim() === '*')) {
-            return new Promise((resolve, reject) => {
-                resolve({
-                    data: {
-                        is_valid: true,
-                        uses_premium_features: false
-                    }
-                });
-            });
+            return {
+                data: {
+                    is_valid: true,
+                    uses_premium_features: false
+                }
+            };
         }
 
         const data = { query: query };

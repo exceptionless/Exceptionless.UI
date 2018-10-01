@@ -3,6 +3,7 @@ import { LinkService } from '../../service/link.service';
 import { PaginationService } from '../../service/pagination.service';
 import { NotificationService } from '../../service/notification.service';
 import { UserService } from '../../service/user.service';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-invoices',
@@ -22,14 +23,15 @@ export class InvoicesComponent implements OnInit {
         private linkService: LinkService,
         private notificationService: NotificationService,
         private paginationService: PaginationService,
-        private userService: UserService
+        private userService: UserService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnInit() {
         this.get();
     }
 
-    get(options?) {
+    async get(options?) {
         const onSuccess = (response, link) => {
             this.invoices = JSON.parse(JSON.stringify(response));
             const links = this.linkService.getLinksQueryParameters(link);
@@ -43,20 +45,17 @@ export class InvoicesComponent implements OnInit {
         };
 
         this.currentOptions = options || this.settings.options;
-        return new Promise((resolve, reject) => {
-            this.settings.get(this.currentOptions).subscribe(
-                res => {
-                    onSuccess(res.body, res.headers.get('link'));
-                    this.loading = false;
-                    resolve(this.invoices);
-                },
-                err => {
-                    this.loading = false;
-                    this.notificationService.error('', 'Error Occurred!');
-                    reject(err);
-                }
-            );
-        });
+
+        try {
+            const res = await this.settings.get(this.currentOptions).toPromise();
+            onSuccess(res.body, res.headers.get('link'));
+            this.loading = false;
+            return this.invoices;
+        } catch (err) {
+            this.loading = false;
+            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
+            return err;
+        }
     }
 
     hasAdminRole(user) {
