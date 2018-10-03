@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { NotificationService } from '../../../../service/notification.service';
 import { OrganizationService } from '../../../../service/organization.service';
 import { ProjectService } from '../../../../service/project.service';
 import { WordTranslateService } from '../../../../service/word-translate.service';
+import { BillingService } from '../../../../service/billing.service';
 
 @Component({
     selector: 'app-project-new',
@@ -27,6 +28,8 @@ export class ProjectNewComponent implements OnInit {
         private organizationService: OrganizationService,
         private projectService: ProjectService,
         private wordTranslateService: WordTranslateService,
+        private billingService: BillingService,
+        private viewRef: ViewContainerRef
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this.organizationId = params['id'];
@@ -109,12 +112,14 @@ export class ProjectNewComponent implements OnInit {
         }
 
         const onSuccess = (response) => {
-            this.router.navigate([`/project/${response['id']}/manage`]);
+            this.router.navigate([`/project/${response['id']}/configure`], { queryParams: { redirect: true } });
         };
 
         const onFailure = async (response) => {
             if (response.status === 426) {
-                // need to implement later Exceptionless
+                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, organization.id, () => {
+                    return this.createProject(organization);
+                });
             }
 
             let message = await this.wordTranslateService.translate('An error occurred while creating the project.');

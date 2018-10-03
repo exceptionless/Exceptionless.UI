@@ -1,0 +1,105 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'PersistentEventChanged'" (refreshAction)="navigateToDashboard($event)">
+    <div class="col">
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-cloud-download"></i><span [innerHTML]="'Download_Configure_Project' | translate:{projectName: projectName}"></span>
+                </div>
+                <div class="panel-body m-b-n">
+                    <p>{{ 'The Exceptionless client can be integrated into your project in just a few easy steps.' | translate }}</p>
+                    <ol>
+                        <li>
+                            <p>{{ 'Select your project type:' | translate }}</p>
+                            <select class="form-control" [(ngModel)]="currentProjectTypeKey" (ngModelChange)="updateCurrentProjectType()">
+                                <option value="">{{ 'Please select a project type' | translate }}</option>
+                                <option *ngFor="let item of projectTypes" value="{{item.key}}">{{item.name}}</option>
+                            </select>
+                        </li>
+                        <li style="margin-top: 15px;" *ngIf="currentProjectType.key">
+                            <div *ngIf="isDotNet()">
+                                <p [innerHTML]="'Notice_Install_Nuget_Package' | translate"></p>
+                                <pre><a href="http://nuget.org/packages/{{currentProjectType.key}}" target="_blank">Install-Package {{currentProjectType.key}}</a></pre>
+                                <p><em [innerHTML]="'Notice_Strong_Named_Package' | translate:{key: currentProjectType.key}"></em></p>
+                            </div>
+                            <div *ngIf="isJavaScript()">
+                                <div *ngIf="!isNode()">
+                                    <span [innerHTML]="'Notice_Install_Bower_Package' | translate"></span>
+                                    <pre><a href="http://bower.io/search/?q=exceptionless" target="_blank">bower install exceptionless</a></pre>
+                                    <span [innerHTML]="'Notice_Install_Manually' | translate"></span>
+                                </div>
+                                <div *ngIf="isNode()">
+                                    <p><span [innerHTML]="'Notice_Install_Node_Package' | translate"></span></p>
+                                    <pre><a href="https://www.npmjs.com/package/exceptionless" target="_blank">npm install exceptionless --save</a></pre>
+                                </div>
+                            </div>
+                        </li>
+                        <li *ngIf="isJavaScript() && !isNode()" style="margin-top: 15px;">
+                            <p>{{'Add the script to your HTML page:' | translate}}
+                            <pre>&ltscript src="bower_components/exceptionless/dist/exceptionless.min.js"&gt&lt/script&gt</pre>
+                        </li>
+                        <li *ngIf="isJavaScript()" style="margin-top: 15px;">
+                            <div *ngIf="!isNode()">
+                                <p>{{'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}</p>
+                                <pre>var client = exceptionless.ExceptionlessClient.default;<br />client.config.apiKey = '{{apiKey}}';</pre>
+                            </div>
+                            <div *ngIf="isNode()">
+                                <p>{{'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}</p>
+                                <pre>var client = require('exceptionless').ExceptionlessClient.default;<br />client.config.apiKey = '{{apiKey}}';</pre>
+                            </div>
+                        </li>
+                        <li *ngIf="isDotNet()" style="margin-top: 15px;" >
+                            <div *ngIf="currentProjectType.key !== 'Exceptionless' && currentProjectType.key !== 'Exceptionless.AspNetCore'">
+                                <p [innerHTML]="'Notice_Update_ApiKey' | translate:{config: currentProjectType.config}"></p>
+
+                                <div class="input-group">
+                                    <input class="form-control api-key" type="text" [(ngModel)]="apiKey" autofocus />
+                                    <a ngxClipboard [cbContent]="apiKey" (cbOnSuccess)="copied()" class="input-group-addon" title="{{ 'Copy to Clipboard' | translate }}"><i class="fa fa-copy"></i></a>
+                                </div>
+                            </div>
+
+                            <div *ngIf="currentProjectType.key === 'Exceptionless'">
+                                <p [innerHTML]="'Notice_Application_Startup_NetFx' | translate:{apiKey: apiKey}"></p>
+                                <p [innerHTML]="'Notice_Unhandled_Exception' | translate"></p>
+                            </div>
+                            <div *ngIf="currentProjectType.key === 'Exceptionless.AspNetCore'">
+                                <p [innerHTML]="'Notice_Application_Startup_NetCore' | translate:{apiKey: apiKey}"></p>
+                            </div>
+                        </li>
+                        <li style="margin-top: 15px;" *ngIf="currentProjectType.key === 'Exceptionless.Nancy'">
+                            <p *ngIf="'Notice_Application_Startup_Nancy' | translate"></p>
+                        </li>
+                        <li style="margin-top: 15px;" *ngIf="currentProjectType.key === 'Exceptionless.Windows' || currentProjectType.key === 'Exceptionless.Wpf'">
+                            <p [innerHTML]="'Notice_Application_Startup_Windows' | translate"></p>
+                        </li>
+                        <li style="margin-top: 15px;" *ngIf="currentProjectType.key === 'Exceptionless.WebApi'">
+                            <p [innerHTML]="'Notice_Application_Startup_WebApi' | translate"></p>
+                            <p [innerHTML]="'Notice_Hosting_WebApi_In_AspNet' | translate"></p>
+                        </li>
+                    </ol>
+                    <p *ngIf="currentProjectType.key">
+                        <strong>{{"That's it!" | translate}}</strong>
+                        {{'Your project should now automatically be sending all unhandled exceptions to Exceptionless!' | translate}}
+                        <span *ngIf="isDotNet()" [innerHTML]="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.Net/wiki/Sending-Events', sampleCode: 'ex.ToExceptionless().Submit()'}"></span>
+                        <span *ngIf="isJavaScript()" [innerHTML]="'Notice_Submit_Exception' | translate:{docUrl: 'https://github.com/exceptionless/Exceptionless.JavaScript/wiki/Sending-Events', sampleCode: 'client.submitException(ex);'}"></span>
+                    </p>
+
+                    <div class="alert alert-success" *ngIf="currentProjectType.key">
+                        <span *ngIf="isDotNet()" [innerHTML]="'Notice_DotNet_Application' | translate"></span>
+                        <span *ngIf="isJavaScript()" [innerHTML]="'Notice_JavaScript_Application' | translate"></span>
+                    </div>
+                </div>
+                <footer class="panel-footer">
+                    <div class="pull-right">
+                        <a class="btn btn-default" role="button" (click)="navigateToDashboard()">{{'Go To Dashboard' | translate}}</a>
+                    </div>
+                    <a class="btn btn-primary" role="button" (click)="goToAccountManage()">
+                        <i class="fa fa-envelope"></i>&nbsp; <span class="hidden-xs"> {{ 'Manage Notification Settings' | translate}}</span>
+                    </a>
+                    <a class="btn btn-primary" role="button" (click)="goToProjectManage()">
+                        <i class="fa fa-gear"></i>&nbsp; <span class="hidden-xs"> {{ 'Manage Project' | translate}}</span>
+                    </a>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,7 +7,7 @@
 
             <nav class="navi">
                 <ul class="nav left-menu">
-                    <li [active]="types.exceptions">
+                    <li [active]="types.exceptions" appAutoActive>
                         <a>
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
@@ -50,7 +50,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li [active]="types.log">
+                    <li [active]="types.log" appAutoActive>
                         <a>
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
@@ -59,7 +59,7 @@
                             <i class="fa fa-file-text-o fa-fw"></i>
                             <span>{{ 'Log Messages' | translate }}</span>
                         </a>
-                        <ul class="nav nav-sub dk" auto-active>
+                        <ul class="nav nav-sub dk">
                             <li class="nav-sub-header">{{ 'Log Messages' | translate }}</li>
                             <li routerLinkActive="active">
                                 <a routerLink="/{{ type }}{{ filterUrlPattern }}{{ types.log }}/dashboard">
@@ -93,7 +93,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li [active]="types.broken">
+                    <li [active]="types.broken" appAutoActive>
                         <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
@@ -102,7 +102,7 @@
                             <i class="fa fa-unlink fa-fw"></i>
                             <span>{{ 'Broken Links' | translate }}</span>
                         </a>
-                        <ul class="nav nav-sub dk" auto-active>
+                        <ul class="nav nav-sub dk">
                             <li class="nav-sub-header">{{ 'Broken Links' | translate }}</li>
                             <li routerLinkActive="active">
                                 <a routerLink="/{{ type }}{{ filterUrlPattern }}{{ types.broken }}/dashboard">
@@ -136,7 +136,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li [active]="types.feature">
+                    <li [active]="types.feature" appAutoActive>
                         <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
@@ -145,7 +145,7 @@
                             <i class="fa fa-check-square-o fa-fw"></i>
                             <span>{{ 'Feature Usages' | translate }}</span>
                         </a>
-                        <ul class="nav nav-sub dk" auto-active>
+                        <ul class="nav nav-sub dk">
                             <li class="nav-sub-header">{{ 'Feature Usages' | translate }}</li>
                             <li routerLinkActive="active">
                                 <a routerLink="/{{ type }}{{ filterUrlPattern }}{{ types.feature }}/dashboard">
@@ -179,7 +179,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li [active]="'events'">
+                    <li [active]="'events'" appAutoActive>
                         <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
@@ -188,7 +188,7 @@
                             <i class="fa fa-calendar fa-fw"></i>
                             <span>{{ 'All Events' | translate }}</span>
                         </a>
-                        <ul class="nav nav-sub dk" auto-active>
+                        <ul class="nav nav-sub dk">
                             <li class="nav-sub-header">{{ 'All Events' | translate }}</li>
                             <li routerLinkActive="active">
                                 <a routerLink="/{{ filterUrlPattern }}dashboard">
@@ -222,7 +222,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li [active]="'session'">
+                    <li [active]="'session'" appAutoActive>
                         <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
@@ -231,7 +231,7 @@
                             <i class="fa fa-book fa-fw"></i>
                             <span>{{ 'Reports' | translate }}</span>
                         </a>
-                        <ul class="nav nav-sub dk" auto-active>
+                        <ul class="nav nav-sub dk">
                             <li class="nav-sub-header">Reports</li>
                             <li routerLinkActive="active">
                                 <a routerLink="/{{ filterUrlPattern }}session/dashboard">
@@ -241,7 +241,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li [active]="'admin'">
+                    <li [active]="'admin'" appAutoActive>
                         <a class="auto">
                             <span class="pull-right text-muted">
                                 <i class="fa fa-fw fa-angle-right text"></i>
@@ -250,7 +250,7 @@
                             <i class="fa fa-cog fa-fw"></i>
                             <span>{{ 'Admin' | translate }}</span>
                         </a>
-                        <ul class="nav nav-sub dk" auto-active>
+                        <ul class="nav nav-sub dk">
                             <li class="nav-sub-header">{{ 'Admin' | translate }}</li>
                             <li routerLinkActive="active">
                                 <a routerLink="/project/list">

@@ -86,7 +86,7 @@ export class ProjectService {
     }
 
     resetData(id) {
-        return this.http.get(`api/v2/projects/${id}/reset-data`);
+        return this.http.get(`projects/${id}/reset-data`);
     }
 
     update(id, project) {

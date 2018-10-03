@@ -1,13 +1,13 @@
-<form name="changePlanForm" role="form" class="form-validation">
+<div>
     <div class="alert alert-danger" role="alert" *ngIf="paymentMessage">
-        <i class="fas fa-exclamation"></i>
+        <i class="fa fa-exclamation-circle"></i>
         {{paymentMessage}}
     </div>
 
     <div class="form-group" *ngIf="organizations.length > 1">
         <label for="organization">{{'Organization to change' | translate}}</label>
-        <select id="organization" class="form-control" [(ngModel)]="currentOrganization" (ngModelChange)="changeOrganization()" [disabled]="!isBillingEnabled()">
-            <option *ngFor="let item of organizations">{{item.name}}</option>
+        <select id="organization" class="form-control" [(ngModel)]="currentOrganizationId" (ngModelChange)="changeOrganization(currentOrganizationId)" [disabled]="!isBillingEnabled()">
+            <option *ngFor="let item of organizations" value="{{item.id}}">{{item.name}}</option>
         </select>
     </div>
 
@@ -16,8 +16,8 @@
     <div class="form-group">
         <label for="plan" [innerHTML]="'Payment_Select_New_Plan' | translate"></label>
 
-        <select id="plan" class="form-control" [(ngModel)]="currentPlan" [disabled]="!isBillingEnabled()">
-            <option *ngFor="let item of plans">{{item.description}}</option>
+        <select id="plan" class="form-control" [(ngModel)]="currentPlanId" [disabled]="!isBillingEnabled()" (ngModelChange)="changePlanObject(currentPlanId)">
+            <option *ngFor="let item of plans" value="{{item.id}}">{{item.description}}</option>
         </select>
     </div>
 
@@ -57,7 +57,7 @@
                                    payments-type-model="card.type"
                                    [disabled]="!isBillingEnabled()"
                                    required />
-                            <span class="input-group-addon"><img src="/img/cards/{{ card.type ? card.type : 'placeholder' }}.png" alt="Card Type" /></span>
+                            <span class="input-group-addon"><img src="./assets/img/cards/{{ card.type ? card.type : 'placeholder' }}.png" alt="Card Type" /></span>
                         </div>
                     </div>
 
@@ -112,4 +112,4 @@
             so we can serve you better in the future.
         </p>
     </div>
-</form>
+</div>

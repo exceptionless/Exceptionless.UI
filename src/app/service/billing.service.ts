@@ -12,16 +12,16 @@ export class BillingService {
         private dialogService: DialogService
     ) {}
 
-    async changePlan(viewRef, organizationId?) {
+    async changePlan(viewRef, callback, organizationId?) {
         this.analyticsService.initiateCheckout();
         return this.dialogService.changePlan(viewRef, organizationId, () => {
-            return true;
+            return callback;
         });
     }
 
-    async confirmUpgradePlan(viewRef, message, organizationId) {
+    async confirmUpgradePlan(viewRef, message, organizationId, callback) {
         return this.dialogService.confirm(viewRef, message, 'Upgrade Plan', () => {
-            return this.changePlan(viewRef, organizationId);
+            return this.changePlan(viewRef, callback, organizationId);
         });
     }
 

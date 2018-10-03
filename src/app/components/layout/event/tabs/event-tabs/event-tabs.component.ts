@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, EventEmitter, Output, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ClipboardService } from 'ngx-clipboard';
@@ -35,8 +35,9 @@ export class EventTabsComponent extends EventComponent implements OnChanges {
         notificationService: NotificationService,
         projectService: ProjectService,
         wordTranslateService: WordTranslateService,
+        viewRef: ViewContainerRef
     ) {
-        super(router, activatedRoute, hotkeysService, clipboardService, billingService, errorService, eventService, filterService, linkService, notificationService, projectService, wordTranslateService);
+        super(router, activatedRoute, hotkeysService, clipboardService, billingService, errorService, eventService, filterService, linkService, notificationService, projectService, wordTranslateService, viewRef);
     }
 
     ngOnChanges(changes: SimpleChanges) {

@@ -30,6 +30,8 @@ export class ChangePlanDialogComponent implements IModalDialog {
     saveEvent: any;
     closeEvent: any;
     elements: Elements;
+    currentOrganizationId = '';
+    currentPlanId = '';
 
     constructor(
         private organizationService: OrganizationService,
@@ -48,7 +50,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
         this.organizationId = options.data['organizationId'];
         this.saveEvent = options.data['saveEvent'];
         this.closeEvent = options.data['closeEvent'];
-        this.saveEvent.subscribe(this.save);
+        this.saveEvent.subscribe(this.save.bind(this));
         this.init();
     }
 
@@ -62,7 +64,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
             });
         }
 
-        this.getOrganizations().then(this.getPlans).then(this.getUser);
+        this.getOrganizations().then(this.getPlans.bind(this)).then(this.getUser.bind(this));
     }
 
     async save(isValid) {
@@ -182,18 +184,23 @@ export class ChangePlanDialogComponent implements IModalDialog {
         return !!this.currentOrganization.card_last4;
     }
 
-    changeOrganization() {
+    changeOrganization(newId) {
         this.card.mode = this.hasExistingCard() ? 'existing' : 'new';
+        this.currentOrganization = this.organizations.filter((o) => o.id === newId )[0];
         return this.getPlans();
+    }
+
+    changePlanObject(newId) {
+        this.currentPlan = this.plans.filter((p) => p.id === newId)[0] || this.plans[0];
     }
 
     showIntercom() {
         this.intercom.showNewMessage();
     }
 
-    getUser() {
+    async getUser() {
         const onSuccess = (response) => {
-            this.user = response.data.plain();
+            this.user = response;
 
             if (!this.card.name) {
                 this.card.name = this.user.full_name;
@@ -207,18 +214,23 @@ export class ChangePlanDialogComponent implements IModalDialog {
             this.cancel();
         };
 
-        return this.userService.getCurrentUser().toPromise().then(onSuccess, onFailure);
+        try {
+            const res = await this.userService.getCurrentUser().toPromise();
+            return onSuccess(res);
+        } catch (err) {
+            return onFailure(err);
+        }
     }
 
     async getPlans() {
         const onSuccess = (response) => {
-            this.plans = response.data.plain();
+            this.plans = response;
 
             // Upsell to the next plan.
             const currentPlan = this.plans.filter((p) => p.id === this.currentOrganization.plan_id)[0] || this.plans[0];
             const currentPlanIndex = this.plans.indexOf(currentPlan);
             this.currentPlan = this.plans.length > currentPlanIndex + 1 ? this.plans[currentPlanIndex + 1] : currentPlan;
-
+            this.currentPlanId = this.currentPlan.id;
             return this.plans;
         };
 
@@ -227,13 +239,18 @@ export class ChangePlanDialogComponent implements IModalDialog {
             this.cancel();
         };
 
-        return this.organizationService.getPlans(this.currentOrganization.id).toPromise().then(onSuccess, onFailure);
+        try {
+            const res = await this.organizationService.getPlans(this.currentOrganization.id).toPromise();
+            return onSuccess(res);
+        } catch (err) {
+            return onFailure(err);
+        }
     }
 
     async getOrganizations() {
         const getSelectedOrganization = async () => {
             const onSucceed = resp => {
-                this.organizations.push(resp.data.plain());
+                this.organizations.push(resp);
                 return this.organizations;
             };
 
@@ -241,18 +258,20 @@ export class ChangePlanDialogComponent implements IModalDialog {
                 return;
             }
 
-            return this.organizationService.getById(this.organizationId).toPromise().then(onSucceed);
+            const response = await this.organizationService.getById(this.organizationId).toPromise();
+            return onSucceed(response['body']);
         };
 
         const getAllOrganizations = async () => {
             const onSucceed = resp => {
-                resp.data.plain().forEach((value, key) => {
+                resp.forEach((value, key) => {
                     this.organizations.push(value);
                 });
                 return this.organizations;
             };
 
-            return this.organizationService.getAll({}).toPromise().then(onSucceed);
+            const response = await this.organizationService.getAll({}).toPromise();
+            return onSucceed(response['body']);
         };
 
         const onSuccess = () => {
@@ -260,7 +279,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
             if (!this.currentOrganization) {
                 this.currentOrganization = this.organizations.length > 0 ? this.organizations[0] : {};
             }
-
+            this.currentOrganizationId = this.currentOrganization.id;
             this.card.mode = this.hasExistingCard() ? 'existing' : 'new';
         };
 

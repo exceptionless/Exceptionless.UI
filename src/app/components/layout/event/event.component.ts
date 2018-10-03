@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { ClipboardService } from 'ngx-clipboard';
@@ -94,6 +94,7 @@ export class EventComponent implements OnInit {
         private notificationService: NotificationService,
         private projectService: ProjectService,
         private wordTranslateService: WordTranslateService,
+        private viewRef: ViewContainerRef
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._eventId = params['id'];
@@ -423,6 +424,14 @@ export class EventComponent implements OnInit {
                         $state.go('app.dashboard');
                     }
                 );*/
+
+                try {
+                    return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project['organization_id'], () => {
+                        return this.getEvent();
+                    });
+                } catch (err) {
+                    this.router.navigate(['/type/events/dashboard']);
+                }
             }
 
             this.router.navigate(['/type/events/dashboard']);

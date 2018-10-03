@@ -54,12 +54,9 @@ export class AccountManageComponent implements OnInit {
         private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService
     ) {
-        this.activatedRoute.params.subscribe( (params) => {
-            this.projectId = params['id'];
-        });
-
         this.activatedRoute.queryParams.subscribe(params => {
             this.activeTab = params['tab'] || 'general';
+            this.projectId = params['projectId'];
         });
     }
 

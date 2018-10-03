@@ -12,6 +12,7 @@ import { GlobalVariables } from '../../../../global-variables';
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
 import { WordTranslateService } from '../../../../service/word-translate.service';
+import { BillingService } from '../../../../service/billing.service';
 
 @Component({
     selector: 'app-project-edit',
@@ -125,7 +126,7 @@ export class ProjectEditComponent implements OnInit {
     isSlackEnabled = !!this._globalVariables.SLACK_APPID;
     next_billing_date = moment().startOf('month').add(1, 'months').toDate();
     organization = {};
-    project = {};
+    project: any = {};
     projectForm = {};
     remainingEventLimit = 3000;
     slackNotificationSettings = null;
@@ -147,6 +148,7 @@ export class ProjectEditComponent implements OnInit {
         private notificationService: NotificationService,
         private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
+        private billingService: BillingService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._projectId = params['id'];
@@ -424,7 +426,7 @@ export class ProjectEditComponent implements OnInit {
             this._ignoreRefresh = true;
             try {
                 const res = await this.projectService.remove(this._projectId).toPromise();
-                this.router.navigate(['/type/project/list']);
+                this.router.navigate(['/project/list']);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the project.'));
@@ -703,13 +705,22 @@ export class ProjectEditComponent implements OnInit {
 
     saveSlackNotificationSettings() {
         const onFailure = async (response) => {
-            /*if (response.status === 426) {
-                return billingService.confirmUpgradePlan(response.data.message, vm.project.organization_id).then(function () {
-                    return saveSlackNotificationSettings();
-                }).catch(function(e){
-                    return getSlackNotificationSettings();
-                });
-            }*/
+            // if (response.status === 426) {
+            //     return billingService.confirmUpgradePlan(response.data.message, vm.project.organization_id).then(function () {
+            //         return saveSlackNotificationSettings();
+            //     }).catch(function(e){
+            //         return getSlackNotificationSettings();
+            //     });
+            // }
+            if (response.status === 426) {
+                try {
+                    return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project['organization_id'], () => {
+                        return this.saveSlackNotificationSettings();
+                    });
+                } catch (err) {
+                    return this.getSlackNotificationSettings();
+                }
+            }
 
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving your slack notification settings.'));
         };

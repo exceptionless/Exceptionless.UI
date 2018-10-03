@@ -96,6 +96,10 @@ export class ProjectsComponent implements OnInit {
                 return true;
             }
 
+            if (data['deleted']) {
+                return true;
+            }
+
             return this.projects.filter(function (e) {
                 if (data['id']) {
                     return data['id'] === e.id;

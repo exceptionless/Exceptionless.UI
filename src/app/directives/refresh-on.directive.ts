@@ -19,12 +19,12 @@ export class RefreshOnDirective implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        let action = () => { this.refreshAction.emit(); };
-        if (this.refreshDebounce) {
-            action = debounce(action, this.refreshDebounce || 1000, {isImmediate: true});
-        } else if (this.refreshThrottle) {
-            action = _.throttle(action, this.refreshThrottle || 1000);
-        }
+        // let action = () => { this.refreshAction.emit(); };
+        // if (this.refreshDebounce) {
+        //     action = debounce(action, this.refreshDebounce || 1000, {isImmediate: true});
+        // } else if (this.refreshThrottle) {
+        //     action = _.throttle(action, this.refreshThrottle || 1000);
+        // }
 
         if (this.refreshOn) {
             this.refreshOn.split(' ').forEach(key => {

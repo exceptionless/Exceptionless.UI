@@ -97,6 +97,8 @@ import { ArrayDumpComponent } from './components/array-dump/array-dump.component
 import { MarkFixedDialogComponent } from './dialogs/mark-fixed-dialog/mark-fixed-dialog.component';
 import { SemverDirective } from './directives/semver.directive';
 import { RefreshOnDirective } from './directives/refresh-on.directive';
+import { ProjectConfigureComponent } from './components/layout/project/project-configure/project-configure.component';
+import { AutoActiveDirective } from './directives/auto-active.directive';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -179,7 +181,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         ArrayDumpComponent,
         MarkFixedDialogComponent,
         SemverDirective,
-        RefreshOnDirective
+        RefreshOnDirective,
+        ProjectConfigureComponent,
+        AutoActiveDirective
     ],
     imports: [
         RouterModule,
@@ -231,7 +235,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         CustomDateRangeDialogComponent,
         AddReferenceDialogComponent,
         AddOrganizationDialogComponent,
-        MarkFixedDialogComponent
+        MarkFixedDialogComponent,
+        ChangePlanDialogComponent
     ]
 })
 

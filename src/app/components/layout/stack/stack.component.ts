@@ -429,7 +429,7 @@ export class StackComponent implements OnInit {
 
         if (this.project && !this.project['has_premium_features']) {
             const message = await this.wordTranslateService.translate('Promote to External is a premium feature used to promote an error stack to an external system. Please upgrade your plan to enable this feature.');
-            this.billingService.confirmUpgradePlan(this.viewRef, message, this.stack['organization_id']).then(() => {
+            this.billingService.confirmUpgradePlan(this.viewRef, message, this.stack['organization_id'],() => {
                 return this.promoteToExternal();
             });
         }
@@ -440,7 +440,7 @@ export class StackComponent implements OnInit {
 
         const onFailure = async (response) => {
             if (response.status === 426) {
-                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.stack['organization_id']).then(() => {
+                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.stack['organization_id'],() => {
                     return this.promoteToExternal();
                 });
             }

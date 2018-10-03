@@ -24,7 +24,10 @@ export class DialogService {
             childComponent: ConfirmDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate(confirmButtonText), buttonClass: 'btn btn-primary', onAction: onConfirm }
+                { text: await this.wordTranslateService.translate(confirmButtonText), buttonClass: 'btn btn-primary', onAction: () => {
+                    onConfirm();
+                    return true;
+                }}
             ],
             data: {
                 text: await this.wordTranslateService.translate(message)
@@ -86,7 +89,7 @@ export class DialogService {
         const saveEventFire: EventEmitter<any> = new EventEmitter();
         const closeEventFire: EventEmitter<any> = new EventEmitter();
 
-        this.modalDialogService.openDialog(viewRef, {
+        return this.modalDialogService.openDialog(viewRef, {
             title: await this.wordTranslateService.translate('Exceptionless Plan'),
             childComponent: ChangePlanDialogComponent,
             actionButtons: [

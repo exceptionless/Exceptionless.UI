@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
 import { GlobalVariables } from '../../../../global-variables';
 import { WordTranslateService } from '../../../../service/word-translate.service';
+import { BillingService } from '../../../../service/billing.service';
 
 @Component({
     selector: 'app-organization-edit',
@@ -154,6 +155,7 @@ export class OrganizationEditComponent implements OnInit {
         private userService: UserService,
         private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
+        private billingService: BillingService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._organizationId = params['id'];
@@ -174,9 +176,9 @@ export class OrganizationEditComponent implements OnInit {
     createUser(emailAddress) {
         const onFailure = async (response) => {
             if (response.status === 426) {
-                /*return billingService.confirmUpgradePlan(response.data.message, vm._organizationId).then(function() {
-                    return createUser(emailAddress);
-                }).catch(function(e){});*/
+                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this._organizationId, () => {
+                    return this.createUser(emailAddress);
+                });
             }
 
             let message = await this.wordTranslateService.translate('An error occurred while inviting the user.');
@@ -311,7 +313,7 @@ export class OrganizationEditComponent implements OnInit {
             try {
                 const res = await this.organizationService.remove(this._organizationId).toPromise();
                 this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
-                this.router.navigate(['/type/organization/list']);
+                this.router.navigate(['/organization/list']);
                 return res;
             } catch (err) {
                 let message = await this.wordTranslateService.translate('An error occurred while trying to delete the organization.');

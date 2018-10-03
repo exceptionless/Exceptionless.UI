@@ -22,6 +22,7 @@ import { StackComponent } from './components/layout/stack/stack.component';
 import { EventComponent } from './components/layout/event/event.component';
 import { SessionComponent } from './components/layout/session/session.component';
 import { LayoutComponent } from './components/layout/layout.component';
+import { ProjectConfigureComponent } from './components/layout/project/project-configure/project-configure.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -59,6 +60,7 @@ const routes: Routes = [
                     { path: 'list', component: ProjectListComponent },
                     { path: 'add', component: ProjectNewComponent },
                     { path: ':id/manage', component: ProjectEditComponent },
+                    { path: ':id/configure', component: ProjectConfigureComponent },
                 ]
             },
             {

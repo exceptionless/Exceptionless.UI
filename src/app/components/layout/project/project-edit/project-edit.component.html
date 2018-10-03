@@ -38,7 +38,7 @@
                                         <input type="text" class="form-control" id="organization-name" name="organization-name" placeholder="Organization Name" [(ngModel)]="project['organization_name']" readonly />
                                     </div>
 
-                                    <div ng-show="hasMonthlyUsage">
+                                    <div *ngIf="hasMonthlyUsage">
                                         <h4 class="m-t-md">{{ 'Monthly Usage' | translate }}</h4>
                                         <p>
                                             You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
@@ -298,25 +298,25 @@
 
                 <footer class="panel-footer">
                     <div class="pull-right">
-                        <a ui-sref="app.project-dashboard({ projectId: project.id })" class="btn btn-default" role="button">
+                        <a routerLink="/dashboard" class="btn btn-default" role="button">
                             <span class="visible-xs" title="{{ 'Go To Dashboard' | translate }}"><i class="fa fa-fw fa-dashboard"></i></span>
                             <span class="hidden-xs">{{ 'Go To Dashboard' | translate }}</span>
                         </a>
                     </div>
 
-                    <a ui-sref="app.organization.manage({ id: project.organization_id })" class="btn btn-primary" role="button" title="{{ 'Manage Organization' | translate }}">
+                    <a routerLink="/organization/{{project.organization_id}}/manage" class="btn btn-primary" role="button" title="{{ 'Manage Organization' | translate }}">
                         <i class="fa fa-fw fa-group"></i>
                     </a>
 
-                    <a ui-sref="app.account.manage({ tab: 'notifications', projectId: project.id })" class="btn btn-primary" role="button" title="{{ 'Manage Notification Settings' | translate }}">
+                    <a routerLink="/account/manage" [queryParams]="{tab: 'notifications', projectId: project.id}" class="btn btn-primary" role="button" title="{{ 'Manage Notification Settings' | translate }}">
                         <i class="fa fa-fw fa-envelope"></i>
                     </a>
 
-                    <a ui-sref="app.project.configure({ id: project.id })" class="btn btn-primary" role="button" title="{{ 'Download & Configure Client' | translate }}">
+                    <a routerLink="/project/{{project.id}}/configure" class="btn btn-primary" role="button" title="{{ 'Download & Configure Client' | translate }}">
                         <i class="fa fa-fw fa-cloud-download"></i>
                     </a>
 
-                    <div class="btn-group">
+                    <div class="btn-group" open>
                         <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
                         </button>

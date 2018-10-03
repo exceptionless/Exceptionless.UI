@@ -59,7 +59,7 @@
                 </div>
                 <footer class="panel-footer">
                     <div class="pull-right">
-                        <a ui-sref="app.dashboard" *ngIf="hasOrganizations()" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
+                        <a routerLink="/dashboard" *ngIf="hasOrganizations()" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
                     </div>
                     <div class="clearfix">
                         <input (click)="add()" type="submit" role="button" class="btn btn-primary" value="{{ 'Add Project' | translate }}" />
