@@ -6,6 +6,8 @@ import { AddReferenceDialogComponent } from '../dialogs/add-reference-dialog/add
 import { MarkFixedDialogComponent } from '../dialogs/mark-fixed-dialog/mark-fixed-dialog.component';
 import { ModalParameterService } from './modal-parameter.service';
 import { ChangePlanDialogComponent } from '../dialogs/change-plan-dialog/change-plan-dialog.component';
+import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
+import { AddConfigurationDialogComponent } from '../dialogs/add-configuration-dialog/add-configuration-dialog.component';
 
 @Injectable({
     providedIn: 'root'
@@ -62,6 +64,23 @@ export class DialogService {
             ],
             data: {
                 key: 'referenceLink'
+            }
+        });
+    }
+
+    async addUser(viewRef, onConfirm) {
+        this.modalDialogService.openDialog(viewRef, {
+            title: await this.wordTranslateService.translate('Invite User'),
+            childComponent: AddUserDialogComponent,
+            actionButtons: [
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('Invite User'), buttonClass: 'btn btn-primary', onAction: () => {
+                    onConfirm(this.modalParameterService.getModalParameter('user_email'));
+                    return true;
+                }}
+            ],
+            data: {
+                key: 'user_email'
             }
         });
     }

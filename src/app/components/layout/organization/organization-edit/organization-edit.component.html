@@ -39,7 +39,7 @@
                                         <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
                                         <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Click here to change your plan or billing information.' | translate }}</a>
                                     </p>
-                                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData"></app-rickshaw>
+                                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [features]="chart['features']"></app-rickshaw>
                                     <br class="clearfix" />
                                     <h6><em>{{ 'The usage data above is refreshed periodically and may not reflect current totals.' | translate }}</em></h6>
                                 </div>
@@ -49,7 +49,7 @@
                         <ngb-tab title="{{ 'Projects' | translate }}" id="projects">
                             <ng-template ngbTabContent>
                                 <app-projects [settings]="projects"></app-projects>
-                                <a ui-sref="app.project.add" class="btn btn-primary m-t" role="button">{{ 'Add New Project' | translate }}</a>
+                                <a routerLink="/project/add" class="btn btn-primary m-t" role="button">{{ 'Add New Project' | translate }}</a>
                             </ng-template>
                         </ngb-tab>
 
@@ -71,14 +71,14 @@
 
                 <footer class="panel-footer">
                     <div class="pull-right">
-                        <a ui-sref="app.organization-dashboard({ organizationId: vm.organization.id })" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
+                        <a routerLink="/dashboard" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
                     </div>
                     <div class="btn-group" open>
                         <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a (click)="leaveOrganization(user)" role="button">{{ 'Leave Organization' | translate }}</a></li>
+                            <li><a (click)="leaveOrganization(authUser)" role="button">{{ 'Leave Organization' | translate }}</a></li>
                             <li><a (click)="removeOrganization()" role="button">{{ 'Delete Organization' | translate }}</a></li>
                         </ul>
                     </div>

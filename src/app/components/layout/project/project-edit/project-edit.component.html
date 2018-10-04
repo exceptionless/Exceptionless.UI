@@ -45,7 +45,7 @@
                                             <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
                                             <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Click here to change your plan or billing information.' | translate }}</a>
                                         </p>
-                                        <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [inputFeatures]="chart['features']"></app-rickshaw>
+                                        <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [features]="chart['features']"></app-rickshaw>
                                         <br class="clearfix" />
                                         <h6><em>{{ 'The usage data above is refreshed periodically and may not reflect current totals.' | translate }}</em></h6>
                                     </div>

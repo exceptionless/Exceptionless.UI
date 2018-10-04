@@ -157,7 +157,8 @@ export class RickshawComponent implements OnChanges {
                 element: this.graphElement.nativeElement.firstChild,
                 series: this.options.series1,
                 options: this.options,
-                features: this.inputFeatures || this.features
+                features: this.inputFeatures || this.features,
+                unstack: true
             });
 
             this.graph.render();

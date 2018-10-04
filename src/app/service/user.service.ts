@@ -7,9 +7,16 @@ import { Observable } from 'rxjs/Observable';
 })
 
 export class UserService {
+
+    authUser: any = {};
+
     constructor(
         private http: HttpClient
     ) {}
+
+    setAuthUser(userData) {
+        this.authUser = userData;
+    }
 
     addAdminRole(id) {
         const data = {};

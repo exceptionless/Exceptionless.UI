@@ -1,5 +1,6 @@
 import { Component, ComponentRef } from '@angular/core';
 import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
+import { ModalParameterService } from '../../service/modal-parameter.service';
 
 @Component({
     selector: 'app-add-configuration-dialog',
@@ -12,7 +13,9 @@ export class AddConfigurationDialogComponent implements IModalDialog {
         key: '',
         value: ''
     };
-    constructor() {}
+    constructor(
+        private modalParameterService: ModalParameterService
+    ) {}
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed

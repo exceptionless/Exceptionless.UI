@@ -10,6 +10,9 @@ import { AddOrganizationDialogComponent } from '../../../../dialogs/add-organiza
 import { OrganizationService } from '../../../../service/organization.service';
 import { ModalParameterService } from '../../../../service/modal-parameter.service';
 import { WordTranslateService } from '../../../../service/word-translate.service';
+import { UserService } from '../../../../service/user.service';
+import { DialogService } from '../../../../service/dialog.service';
+import { AppEventService } from '../../../../service/app-event.service';
 
 @Component({
     selector: 'app-organization-list',
@@ -25,6 +28,8 @@ export class OrganizationListComponent implements OnInit {
     currentOptions = {};
     organizations = [];
     pageSummary: string;
+    authUser: any = {};
+
     constructor(
         private _global: GlobalVariables,
         private router: Router,
@@ -36,9 +41,20 @@ export class OrganizationListComponent implements OnInit {
         private organizationService: OrganizationService,
         private modalParameterService: ModalParameterService,
         private wordTranslateService: WordTranslateService,
+        private userService: UserService,
+        private dialogService: DialogService,
+        private appEvent: AppEventService
     ) {}
 
     ngOnInit() {
+        this.authUser = this.userService.authUser;
+        this.appEvent.subscribe({
+            next: (event: any) => {
+                if (event.type === 'UPDATE_USER') {
+                    this.authUser = this.userService.authUser;
+                }
+            }
+        });
         this.get();
     }
 
@@ -134,6 +150,25 @@ export class OrganizationListComponent implements OnInit {
     }
 
     leave(organization, user) {
+        const modalCallBackFunction = async () => {
+            const onSuccess = () => {
+                this.organizations.splice(this.organizations.indexOf(organization), 1);
+                this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+            };
+
+            const onFailure = (response) => {
+                let message: any = this.wordTranslateService.translate('An error occurred while trying to leave the organization.');
+                if (response.status === 400) {
+                    message += ' ' + this.wordTranslateService.translate('Message:') + ' ' + response.error.message;
+                }
+
+                this.notificationService.error('', message);
+            };
+
+            return this.organizationService.removeUser(organization.id, user.email_address).toPromise().then(onSuccess.bind(this), onFailure.bind(this));
+        };
+
+        this.dialogService.confirm(this.viewRef, 'Are you sure you want to leave this organization?', 'Leave Organization', modalCallBackFunction);
     }
 
     open(id, event) {

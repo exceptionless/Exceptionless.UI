@@ -236,7 +236,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         AddReferenceDialogComponent,
         AddOrganizationDialogComponent,
         MarkFixedDialogComponent,
-        ChangePlanDialogComponent
+        ChangePlanDialogComponent,
+        AddUserDialogComponent,
+        AddConfigurationDialogComponent
     ]
 })
 

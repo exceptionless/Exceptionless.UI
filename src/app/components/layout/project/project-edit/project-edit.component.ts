@@ -62,14 +62,13 @@ export class ProjectEditComponent implements OnInit {
                 render: function (args) {
                     const date = moment.utc(args.domainX, 'X');
                     const dateTimeFormat = 'DateTimeFormat';
-                    const dateFormat = 'DateFormat';
-                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
+                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
                     let content = '<div class="date">' + formattedDate + '</div>';
                     args.detail.sort(function (a, b) {
                         return a.order - b.order;
                     }).forEach(function (d) {
                         const swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                        content += swatch + d.formattedYValue.toFixed(2) + ' ' + d.series.name + '<br />';
+                        content += swatch + (d.formattedYValue * 1.0).toFixed(2) + ' ' + d.series.name + '<br />';
                     }, this);
 
                     content += '<span class="detail-swatch"></span>' + parseFloat(args.detail[1].value.data.total) + ' Total<br />';
@@ -289,6 +288,7 @@ export class ProjectEditComponent implements OnInit {
             });
 
             this.seriesData = this.chart.options.series1;
+            console.log(this.seriesData);
             return this.organization;
         };
 
