@@ -238,7 +238,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         MarkFixedDialogComponent,
         ChangePlanDialogComponent,
         AddUserDialogComponent,
-        AddConfigurationDialogComponent
+        AddConfigurationDialogComponent,
+        AddWebHookDialogComponent
     ]
 })
 

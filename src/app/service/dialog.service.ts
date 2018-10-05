@@ -8,6 +8,7 @@ import { ModalParameterService } from './modal-parameter.service';
 import { ChangePlanDialogComponent } from '../dialogs/change-plan-dialog/change-plan-dialog.component';
 import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
 import { AddConfigurationDialogComponent } from '../dialogs/add-configuration-dialog/add-configuration-dialog.component';
+import { AddWebHookDialogComponent } from '../dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
 
 @Injectable({
     providedIn: 'root'
@@ -64,6 +65,44 @@ export class DialogService {
             ],
             data: {
                 key: 'referenceLink'
+            }
+        });
+    }
+
+    async addConfiguration(viewRef, onConfirm) {
+        this.modalDialogService.openDialog(viewRef, {
+            title: await this.wordTranslateService.translate('Please enter a configuration setting'),
+            childComponent: AddConfigurationDialogComponent,
+            actionButtons: [
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('Save'), buttonClass: 'btn btn-primary', onAction: () => {
+                    const data = this.modalParameterService.getModalParameter('configuration_data');
+                    onConfirm(data);
+                    return true;
+                }}
+            ],
+            data: {
+                key: 'configuration_data'
+            }
+        });
+    }
+
+    async addWebHook(viewRef, onConfirm) {
+        this.modalDialogService.openDialog(viewRef, {
+            title: await this.wordTranslateService.translate('Create New Web Hook'),
+            childComponent: AddWebHookDialogComponent,
+            actionButtons: [
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('Create Web Hook'), buttonClass: 'btn btn-primary', onAction: () => {
+                    const data = this.modalParameterService.getModalParameter('webhook_data');
+                    if (data && data.url && data.event_types.length > 0) {
+                        onConfirm(data);
+                        return true;
+                    }
+                }}
+            ],
+            data: {
+                key: 'webhook_data'
             }
         });
     }

@@ -152,18 +152,20 @@
                                             <td>
                                                 <div class="control-group">{{ conf['key'] }}</div>
                                             </td>
-                                            <td *ngClass="{'row-clickable': !rowform.visible}" (click)="rowform.show()">
-                                                <div editable-text="conf.value" e-name="value" e-form="rowform" e-required
-                                                     onbeforesave="validateClientConfiguration(conf.value, $data)"
-                                                     onaftersave="saveClientConfiguration(conf)">{{ conf['value'] }}</div>
+                                            <td>
+                                                <div class="control-group" *ngIf="!conf.is_editable" (click)="conf.is_editable = true;">{{ conf['value'] }}</div>
+                                                <input class="form-control" [(ngModel)]="conf['value']" type="text" *ngIf="conf.is_editable"/>
+                                                <div class="error" *ngIf="conf.is_editable && !conf['value']">
+                                                    <small>{{ 'Please enter a valid value.' | translate }}</small>
+                                                </div>
                                             </td>
                                             <td>
-                                                <form name="rowform" editable-form ng-show="rowform.$visible" class="form-buttons form-inline">
-                                                    <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary">{{ 'Save' | translate }}</button>
-                                                    <button type="button" role="button" [disabled]="rowform.waiting" (click)="rowform.cancel()" class="btn btn-sm btn-default">{{ 'Cancel' | translate }}</button>
-                                                </form>
-                                                <div class="buttons" [hidden]="rowform.visible">
-                                                    <button type="button" role="button" class="btn btn-sm btn-default" (click)="rowform.show()">{{ 'Edit' | translate }}</button>
+                                                <div class="buttons" *ngIf="conf.is_editable">
+                                                    <button type="button" role="button" class="btn btn-sm btn-primary" (click)="saveClientConfiguration(conf)">{{ 'Save' | translate }}</button>
+                                                    <button type="button" role="button" class="btn btn-sm btn-danger" title="{{ 'Cancel' | translate }}" (click)="conf.is_editable = false;"><i class="fa fa-times"></i></button>
+                                                </div>
+                                                <div class="buttons" *ngIf="!conf.is_editable">
+                                                    <button type="button" role="button" class="btn btn-sm btn-default" (click)="conf.is_editable = true;">{{ 'Edit' | translate }}</button>
                                                     <button type="button" role="button" class="btn btn-sm btn-danger" title="{{ 'Delete' | translate }}" (click)="removeConfig(conf)"><i class="fa fa-times"></i></button>
                                                 </div>
                                             </td>

@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
 import { WordTranslateService } from '../../../../service/word-translate.service';
 import { BillingService } from '../../../../service/billing.service';
+import { DialogService } from '../../../../service/dialog.service';
 
 @Component({
     selector: 'app-project-edit',
@@ -147,7 +148,8 @@ export class ProjectEditComponent implements OnInit {
         private notificationService: NotificationService,
         private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
-        private billingService: BillingService
+        private billingService: BillingService,
+        private dialogService: DialogService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._projectId = params['id'];
@@ -159,12 +161,26 @@ export class ProjectEditComponent implements OnInit {
     }
 
     addConfiguration() {
-        // implement later Exceptionless
+        this.dialogService.addConfiguration(this.viewRef, this.saveClientConfiguration.bind(this));
+    }
+
+    saveClientConfiguration(data) {
+        if (!data.value) {
+            return;
+        }
+
+        const onFailure = async () => {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
+        };
+
+        return this.projectService.setConfig(this._projectId, data.key, data.value).toPromise().catch(onFailure.bind(this));
     }
 
     addSlack() {
         if (!this.hasPremiumFeatures) {
-            // implement later Exceptionless
+            return this.billingService.confirmUpgradePlan(this.viewRef, 'Please upgrade your plan to enable slack integration.', this.project.organization_id,() => {
+                return this.addSlackIntegration();
+            });
         }
 
         return this.addSlackIntegration();
@@ -172,11 +188,11 @@ export class ProjectEditComponent implements OnInit {
 
     addSlackIntegration() {
         return this.projectService.addSlack(this._projectId).subscribe(
-            res => {
-                this.notificationService.success('Success!', 'Successfully added');
+            async (res) => {
+                this.notificationService.success('', await this.wordTranslateService.translate('Successfully added'));
             },
-            err => {
-                this.notificationService.error('Failed!', 'An error occurred while adding Slack to your project.');
+            async (err) => {
+                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding Slack to your project.'));
             }
         );
     }
@@ -197,29 +213,24 @@ export class ProjectEditComponent implements OnInit {
     }
 
     addWebHook() {
-        // implement later Exceptionless
+        this.dialogService.addWebHook(this.viewRef, this.createWebHook.bind(this));
     }
 
     changePlan() {
-        // implement later Exceoptionless
+        this.billingService.changePlan(this.viewRef, () => {}, this.project.organization.id);
     }
 
     createWebHook(data) {
         const onFailure = async (response) => {
             if (response.status === 426) {
-                // implement later Exceptionless
+                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project.organization_id, () => {
+                    return this.createWebHook(data);
+                });
             }
-
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
         };
 
-        return this.webHookService.create(data).subscribe(
-            res => {
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        return this.webHookService.create(data).toPromise().catch(onFailure.bind(this));
     }
 
     async copied() {
@@ -358,7 +369,7 @@ export class ProjectEditComponent implements OnInit {
                 } else if (key === '@@UserAgentBotPatterns') {
                     this.user_agents = response['settings'][key];
                 } else {
-                    this.config.push({key: key, value: response['settings'][key]});
+                    this.config.push({key: key, value: response['settings'][key], is_editable: false});
                 }
             });
 
@@ -563,16 +574,6 @@ export class ProjectEditComponent implements OnInit {
             },
             async err => {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the API key note.'));
-            }
-        );
-    }
-
-    saveClientConfiguration(data) {
-        return this.projectService.setConfig(this._projectId, data['key'], data['value']).subscribe(
-            res => {
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
             }
         );
     }

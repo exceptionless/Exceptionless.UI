@@ -21,4 +21,8 @@ export class AddConfigurationDialogComponent implements IModalDialog {
         // no processing needed
         this.configuration = options.data['key'];
     }
+
+    updateValue() {
+        this.modalParameterService.setModalParameter(this.configuration, this.data);
+    }
 }

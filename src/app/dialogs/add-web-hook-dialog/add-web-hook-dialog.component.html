@@ -1,3 +1,26 @@
-<p>
-  add-web-hook-dialog works!
-</p>
+<form name="addWebhookForm" role="form" class="form-validation">
+    <div class="form-group">
+        <label for="url">{{ 'URL' | translate }}</label>
+        <input id="url" name="url" type="text" class="form-control" placeholder="{{'Enter the URL to call' | translate}}"
+               [(ngModel)]="data['url']" requried autofocus #url="ngModel" (ngModelChange)="updateValue()"/>
+        <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched)) || submitted">
+            <small [hidden]="!url.errors?.required">{{ 'Please enter a valid key.' | translate }}</small>
+        </div>
+    </div>
+    <p>{{'Control when the web hook is called by choosing the event types below.' | translate}}</p>
+    <div class="form-group">
+        <div class="checkbox checkbox-inline" *ngFor="let type of eventTypes">
+            <label class="checks">
+                <input name="types" type="checkbox"
+                       [(ngModel)]="type.checked"
+                       (ngModelChange)="updateValue()"
+                       [required]="!hasEventTypeSelection()" />
+                <i></i>
+                <abbr title="{{type.description}}">{{type.name}}</abbr>
+            </label>
+        </div>
+        <div class="error" *ngIf="!hasEventTypeSelection()">
+            <small>{{'Please choose one or more event types.' | translate}}</small>
+        </div>
+    </div>
+</form>

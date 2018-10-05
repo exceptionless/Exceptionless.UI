@@ -101,9 +101,9 @@ export class ProjectService {
             })
         };
         const data = {
-            key: key
+            value: value
         };
-        return this.http.post(`projects/${id}/config/${value}`,  data, httpOptions);
+        return this.http.post(`projects/${id}/config?key=${key}`,  data, httpOptions);
     }
 
     setData(id, key, value) {
