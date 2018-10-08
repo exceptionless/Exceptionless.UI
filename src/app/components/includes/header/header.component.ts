@@ -15,6 +15,8 @@ import { AppEventService } from '../../../service/app-event.service';
 
 export class HeaderComponent implements OnInit {
     @Output() navigationCollapseToggle: EventEmitter<any> = new EventEmitter();
+    @Output() showResponsiveSideToggle: EventEmitter<any> = new EventEmitter();
+    @Output() showResponsiveNavToggle: EventEmitter<any> = new EventEmitter();
     user = {
         email_address: ''
     };
@@ -41,6 +43,13 @@ export class HeaderComponent implements OnInit {
 
     toggleSideNavCollapsed() {
         this.navigationCollapseToggle.emit(null);
+    }
+    toggleResponsiveSide() {
+        this.showResponsiveSideToggle.emit(null);
+    }
+
+    toggleResponsiveNav() {
+        this.showResponsiveNavToggle.emit(null);
     }
 
     logout() {

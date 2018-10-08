@@ -1,9 +1,10 @@
-<div class="app-header-fixed app-aside-fixed" [ngClass]="{'app-aside-folded': isSideNavCollapsed}">
-    <app-header (navigationCollapseToggle)="onToggleSideNavCollapsed($event)"></app-header>
+<div class="app-header-fixed app-aside-fixed" [ngClass]="{'app-aside-folded': isSideNavCollapsed, 'app-res-nav': isShowResponsiveNav, 'app-res-side': isShowResponsiveSide}">
+    <app-header (navigationCollapseToggle)="onToggleSideNavCollapsed($event)" (showResponsiveSideToggle)="onShowResponsiveSide($event)" (showResponsiveNavToggle)="onShowResponsiveNav($event)"></app-header>
 
-    <app-sidebar></app-sidebar>
+    <app-sidebar class="off-screen"></app-sidebar>
 
     <div class="app-content">
+        <button type="button" role="button" class="off-screen-toggle hide active" ui-toggle-class="off-screen" data-target=".app-aside" (click)="hideSideBar()"></button>
         <div class="app-content-body fade-in" autoscroll="true">
             <router-outlet></router-outlet>
         </div>

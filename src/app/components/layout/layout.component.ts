@@ -8,6 +8,8 @@ import {WebsocketService} from '../../service/websocket.service';
 
 export class LayoutComponent implements OnInit {
     isSideNavCollapsed = false;
+    isShowResponsiveSide = false;
+    isShowResponsiveNav = false;
     constructor(private websocketService: WebsocketService) {
     }
 
@@ -17,5 +19,17 @@ export class LayoutComponent implements OnInit {
 
     onToggleSideNavCollapsed(): void {
         this.isSideNavCollapsed = !this.isSideNavCollapsed;
+    }
+
+    onShowResponsiveSide(): void {
+        this.isShowResponsiveSide = !this.isShowResponsiveSide;
+    }
+
+    onShowResponsiveNav(): void {
+        this.isShowResponsiveNav = !this.isShowResponsiveNav;
+    }
+
+    hideSideBar() {
+        this.isShowResponsiveSide = !this.isShowResponsiveSide;
     }
 }
