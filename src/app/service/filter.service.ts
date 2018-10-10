@@ -4,6 +4,7 @@ import { DateRangeParserService } from './date-range-parser.service';
 import { ObjectIdService } from './object-id.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { AppEventService } from "./app-event.service";
 
 @Injectable()
 
@@ -18,6 +19,7 @@ export class FilterService {
         private filterStoreService: FilterStoreService,
         private dateRangeParserService: DateRangeParserService,
         private objectIdService: ObjectIdService,
+        private appEvent: AppEventService
     ) {
         this._time = this.filterStoreService.getTimeFilter() || this.DEFAULT_TIME_FILTER;
         this._eventType = this.filterStoreService.getEventType() || null;
@@ -90,7 +92,12 @@ export class FilterService {
             type: this._eventType
         };
 
-        // $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeHiddenAndFixedFilter)));
+        Object.assign(options, this.getDefaultOptions(includeHiddenAndFixedFilter));
+
+        this.appEvent.fireEvent({
+            type: 'filterChanged',
+            value: options
+        });
     }
 
     getDefaultOptions(includeHiddenAndFixedFilter) {

@@ -15,6 +15,6 @@ export class ObjectDumpComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.keys = Object.keys(this.content);
+        this.keys = this.content ? Object.keys(this.content) : [];
     }
 }

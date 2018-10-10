@@ -87,10 +87,9 @@ export class EventService {
         return this.http.get(url);
     }
 
-    getBySessionId(projectId, id, options, optionsCallback) {
-        optionsCallback = typeof optionsCallback === 'function' ? optionsCallback : function(o) { return o; };
-        const url = 'projects/' + projectId + '/events/sessions/' + id + '/' + optionsCallback(this.filterService.apply(options, false));
-        return this.http.get(url);
+    getBySessionId(projectId, id, optionsCallback) {
+        const url = 'projects/' + projectId + '/events/sessions/' + id + '?' + optionsCallback;
+        return this.http.get(url, {observe: 'response'});
     }
 
     getByStackId(id, options): Observable<HttpResponse<any>> {

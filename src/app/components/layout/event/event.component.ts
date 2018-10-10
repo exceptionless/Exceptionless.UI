@@ -53,17 +53,34 @@ export class EventComponent implements OnInit {
     project = {};
     references = [];
     sessionEvents = {
-        get: (options) => {
+        get: (options, event?) => {
+            let curEvent = event;
+            if (!curEvent) {
+                curEvent = this.event;
+            }
             const optionsCallback = (option) => {
                 option.filter = '-type:heartbeat';
 
-                const start = moment.utc(this.event['date']).local();
-                const end = (this.event['data'] && this.event['data']['sessionend']) ? moment.utc(this.event['data']['sessionend']).add(1, 'seconds').local().format('YYYY-MM-DDTHH:mm:ss') : 'now';
+                const start = moment.utc(curEvent['date']).local();
+                const end = (curEvent['data'] && curEvent['data']['sessionend']) ? moment.utc(curEvent['data']['sessionend']).add(1, 'seconds').local().format('YYYY-MM-DDTHH:mm:ss') : 'now';
                 option.time = start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end;
                 return option;
             };
 
-            return this.eventService.getBySessionId(this.event['project_id'], this.event['reference_id'], options, optionsCallback(options));
+            const serialize = (obj) => {
+                const str = [];
+                for (const p in obj) {
+                    if (obj.hasOwnProperty(p)) {
+                        str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+                    }
+                }
+                return str.join('&');
+            };
+
+            let requestOptions: any = this.filterService.getDefaultOptions(false);
+            Object.assign(requestOptions, optionsCallback(options));
+            requestOptions = serialize(requestOptions);
+            return this.eventService.getBySessionId(curEvent['project_id'], curEvent['reference_id'], requestOptions);
         },
         options: {
             limit: 10,
@@ -230,6 +247,8 @@ export class EventComponent implements OnInit {
 
 
         this.tabs = tabs;
+
+        console.log(this.tabs);
 
         if (tabNameToActivate) {
             setTimeout(() => {

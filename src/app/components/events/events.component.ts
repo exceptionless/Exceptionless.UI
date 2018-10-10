@@ -16,6 +16,7 @@ export class EventsComponent implements OnChanges {
     @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     @Input() eventType;
+    @Input() currentEvent;
     @Input() filterTime;
     @Input() projectFilter;
     next: string;
@@ -107,15 +108,17 @@ export class EventsComponent implements OnChanges {
         this.events = [];
         this.currentOptions = options || this.settings.options;
 
-        try {
-            const res = await this.settings.get(this.currentOptions).toPromise();
-            onSuccess(res.body, res.headers.get('link'));
-            this.loading = false;
-            return this.events;
-        } catch (err) {
-            this.loading = false;
-            this.notificationService.error('', 'Error Occurred!');
-            return err;
+        if (!this.currentEvent || (this.currentEvent && this.currentEvent.project_id)) {
+            try {
+                const res: Response = await this.settings.get(this.currentOptions, this.currentEvent).toPromise();
+                onSuccess(res.body, res.headers.get('link'));
+                this.loading = false;
+                return this.events;
+            } catch (err) {
+                this.loading = false;
+                this.notificationService.error('', 'Error Occurred!');
+                return err;
+            }
         }
     }
 

@@ -31,7 +31,7 @@
                     <span *ngIf="hideSessionStartTime && event.data.Type === 'session'">--</span>
                     <span *ngIf="!hideSessionStartTime || event.data.Type !== 'session'">
                         <abbr title="{{ event.date | date : 'medium'}}">
-                            <span *ngIf="relativeTo()">after <app-relative-time [to]="relativeTo()" [date]="event.date"></app-relative-time></span>
+                            <span *ngIf="relativeTo()">after &nbsp;<app-relative-time [to]="relativeTo()" [date]="event.date"></app-relative-time></span>
                             <span *ngIf="!relativeTo()"><app-timeago [date]="event.date"></app-timeago></span>
                         </abbr>
                     </span>

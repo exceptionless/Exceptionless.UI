@@ -73,6 +73,9 @@ export class SessionsComponent implements OnChanges {
         }
         const onSuccess = (response, link) => {
             this.events = JSON.parse(JSON.stringify(response));
+            for (let i = 0; i < this.events.length; i ++) {
+                this.events[i].duration = this.getDuration(this.events[i]);
+            }
             const links = this.linkService.getLinksQueryParameters(link);
             this.previous = links['previous'];
             this.next = links['next'];
@@ -114,9 +117,9 @@ export class SessionsComponent implements OnChanges {
     open(id, event) {
         const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
-            window.open(`/type/event/${id}`, '_blank');
+            window.open(`/event/${id}`, '_blank');
         } else {
-            this.router.navigate([`/type/event/${id}`]);
+            this.router.navigate([`/event/${id}`]);
         }
 
         event.preventDefault();

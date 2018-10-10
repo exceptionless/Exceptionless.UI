@@ -42,9 +42,7 @@ export class SessionComponent implements OnInit, OnDestroy {
             hover: {
                 render: function (args) {
                     const date = moment.unix(args.domainX);
-                    const dateTimeFormat = 'DateTimeFormat';
-                    const dateFormat = 'DateFormat';
-                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format(dateFormat || 'ddd, MMM D, YYYY') : date.format(dateTimeFormat || 'ddd, MMM D, YYYY h:mma');
+                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
                     let content = '<div class="date">' + formattedDate + '</div>';
                     args.detail.sort(function (a, b) {
                         return a.order - b.order;
