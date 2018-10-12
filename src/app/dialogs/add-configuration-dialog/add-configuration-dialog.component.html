@@ -1,14 +1,14 @@
 <form name="addConfigurationForm" role="form" class="form-validation">
     <div class="form-group">
         <label for="key">{{ 'Key' | translate }}</label>
-        <input id="key" name="key" type="text" class="form-control" placeholder="Configuration Key" [(ngModel)]="data['key']" requried autofocus #key="ngModel" (ngModelChange)="updateValue()"/>
+        <input id="key" name="key" type="text" class="form-control" placeholder="Configuration Key" [(ngModel)]="data['key']" [required]="true" autofocus #key="ngModel" (ngModelChange)="updateValue()"/>
         <div class="error" *ngIf="(key.invalid && (key.dirty || key.touched)) || submitted">
             <small [hidden]="!key.errors?.required">{{ 'Please enter a valid key.' | translate }}</small>
         </div>
     </div>
     <div class="form-group">
         <label for="value">{{ 'Value' | translate }}</label>
-        <input id="value" name="value" type="text" class="form-control" placeholder="Configuration Value" [(ngModel)]="data['value']" required #value="ngModel"  (ngModelChange)="updateValue()"/>
+        <input id="value" name="value" type="text" class="form-control" placeholder="Configuration Value" [(ngModel)]="data['value']" [required]="true" #value="ngModel"  (ngModelChange)="updateValue()"/>
         <div class="error" *ngIf="(value.invalid && (value.dirty || value.touched)) || submitted">
             <small [hidden]="!value.errors?.required">{{ 'Please enter a valid value.' | translate }}</small>
         </div>

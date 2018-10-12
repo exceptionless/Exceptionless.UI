@@ -4,7 +4,7 @@
         <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Email Address"
                [(ngModel)]="data.email"
                (ngModelChange)="setEmail($event)"
-               required
+               [required]="true"
                type = "email"
                #email="ngModel"
                autofocus />

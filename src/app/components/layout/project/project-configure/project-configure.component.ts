@@ -115,7 +115,7 @@ export class ProjectConfigureComponent implements OnInit {
         if (isRefresh && !this.canRedirect(isRefresh)) {
             return;
         }
-        this.router.navigate(['/project/list']);
+        this.router.navigate([`/project/${this.project.id}/dashboard`]);
     }
 
     goToAccountManage() {

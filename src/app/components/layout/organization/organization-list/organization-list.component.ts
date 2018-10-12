@@ -4,11 +4,7 @@ import { GlobalVariables } from '../../../../global-variables';
 import { LinkService } from '../../../../service/link.service';
 import { PaginationService } from '../../../../service/pagination.service';
 import { NotificationService } from '../../../../service/notification.service';
-import { ModalDialogService } from 'ngx-modal-dialog';
-import { ConfirmDialogComponent } from '../../../../dialogs/confirm-dialog/confirm-dialog.component';
-import { AddOrganizationDialogComponent } from '../../../../dialogs/add-organization-dialog/add-organization-dialog.component';
 import { OrganizationService } from '../../../../service/organization.service';
-import { ModalParameterService } from '../../../../service/modal-parameter.service';
 import { WordTranslateService } from '../../../../service/word-translate.service';
 import { UserService } from '../../../../service/user.service';
 import { DialogService } from '../../../../service/dialog.service';
@@ -37,9 +33,7 @@ export class OrganizationListComponent implements OnInit {
         private paginationService: PaginationService,
         private notificationService: NotificationService,
         private viewRef: ViewContainerRef,
-        private modalDialogService: ModalDialogService,
         private organizationService: OrganizationService,
-        private modalParameterService: ModalParameterService,
         private wordTranslateService: WordTranslateService,
         private userService: UserService,
         private dialogService: DialogService,
@@ -59,23 +53,12 @@ export class OrganizationListComponent implements OnInit {
     }
 
     add() {
-        const modalCallBackFunction = () => {
-            const name = this.modalParameterService.getModalParameter('organizationName');
+        const modalCallBackFunction = (name) => {
             this.createOrganization(name);
             return true;
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: 'New Organization',
-            childComponent: AddOrganizationDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Save', buttonClass: 'btn btn-primary', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                key: 'organizationName'
-            }
-        });
+        this.dialogService.addOrganization(this.viewRef, modalCallBackFunction.bind(this));
     }
 
     async changePlan(organizationId) {
@@ -168,7 +151,7 @@ export class OrganizationListComponent implements OnInit {
             return this.organizationService.removeUser(organization.id, user.email_address).toPromise().then(onSuccess.bind(this), onFailure.bind(this));
         };
 
-        this.dialogService.confirm(this.viewRef, 'Are you sure you want to leave this organization?', 'Leave Organization', modalCallBackFunction);
+        this.dialogService.confirm(this.viewRef, 'Are you sure you want to leave this organization?', 'Leave Organization', modalCallBackFunction.bind(this));
     }
 
     open(id, event) {
@@ -204,16 +187,6 @@ export class OrganizationListComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Delete Project', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this organization?')
-            }
-        });
+        this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this organization?', 'Delete Project', modalCallBackFunction.bind(this));
     }
 }

@@ -3,7 +3,7 @@
     <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Please enter a valid URL"
            [(ngModel)]="data.url"
            (ngModelChange)="setUrl($event)"
-           required
+           [required]="true"
            type = "url"
            #url="ngModel"
            autofocus />

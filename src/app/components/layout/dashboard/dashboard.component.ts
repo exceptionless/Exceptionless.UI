@@ -132,6 +132,15 @@ export class DashboardComponent implements OnInit {
         this.route.params.subscribe( (params) => {
             this.type = params['type'];
             this.filterStoreService.setEventType(this.type);
+
+            const projectType = params['project_type'];
+            const queryId = params['id'];
+            if (projectType === 'project') {
+                this.filterService.setProjectId(queryId, true);
+            } else if (projectType === 'organization') {
+                this.filterService.setOrganizationId(queryId, true);
+            }
+
             this.get();
         });
     }

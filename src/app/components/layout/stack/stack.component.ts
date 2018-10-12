@@ -182,8 +182,7 @@ export class StackComponent implements OnInit {
     }
 
     async addReferenceLink() {
-        const modalCallBackFunction = async () => {
-            const url = this.modalParameterService.getModalParameter('referenceLink');
+        const modalCallBackFunction = async (url) => {
             if (this.stack['references'].indexOf(url) < 0) {
                 this.stackService.addLink(this._stackId, url);
 

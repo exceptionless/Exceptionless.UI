@@ -4,7 +4,7 @@
         <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Organization Name"
                [(ngModel)]="data.name"
                (ngModelChange)="setOrganization($event)"
-               required
+               [required]="true"
                type = "text"
                uniqueOrganization
                #organization="ngModel"

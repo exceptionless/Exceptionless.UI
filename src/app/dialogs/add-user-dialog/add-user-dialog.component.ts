@@ -1,6 +1,7 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
 import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
 import { ModalParameterService } from '../../service/modal-parameter.service';
+import { AppEventService } from '../../service/app-event.service';
 
 @Component({
     selector: 'app-add-user-dialog',
@@ -12,9 +13,20 @@ export class AddUserDialogComponent implements IModalDialog {
         email: ''
     };
     dataKey = '';
+    submitted = false;
+
     constructor(
-        private modalParameterService: ModalParameterService
-    ) {}
+        private modalParameterService: ModalParameterService,
+        private appEvent: AppEventService
+    ) {
+        this.appEvent.subscribe({
+            next: (event: any) => {
+                if (event.type === 'form_submitted') {
+                    this.submitted = true;
+                }
+            }
+        });
+    }
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed

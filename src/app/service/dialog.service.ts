@@ -9,6 +9,8 @@ import { ChangePlanDialogComponent } from '../dialogs/change-plan-dialog/change-
 import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
 import { AddConfigurationDialogComponent } from '../dialogs/add-configuration-dialog/add-configuration-dialog.component';
 import { AddWebHookDialogComponent } from '../dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
+import { AddOrganizationDialogComponent } from '../dialogs/add-organization-dialog/add-organization-dialog.component';
+import { AppEventService } from './app-event.service';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,8 @@ export class DialogService {
     constructor(
         private modalDialogService: ModalDialogService,
         private wordTranslateService: WordTranslateService,
-        private modalParameterService: ModalParameterService) {
+        private modalParameterService: ModalParameterService,
+        private appEvent: AppEventService) {
     }
 
     async confirm(viewRef, message, confirmButtonText, onConfirm) {
@@ -57,11 +60,19 @@ export class DialogService {
 
     async addReference(viewRef, onConfirm) {
         this.modalDialogService.openDialog(viewRef, {
-            title: await this.wordTranslateService.translate('Select Date Range'),
+            title: await this.wordTranslateService.translate('Please enter a Reference Link'),
             childComponent: AddReferenceDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('Save Reference Link'), buttonClass: 'btn btn-primary', onAction: onConfirm }
+                { text: await this.wordTranslateService.translate('Save Reference Link'), buttonClass: 'btn btn-primary', onAction: () => {
+                    const url = this.modalParameterService.getModalParameter('referenceLink');
+                    if (url) {
+                        onConfirm(url);
+                        return;
+                    } else {
+                        this.appEvent.fireEvent({type: 'form_submitted'});
+                    }
+                }}
             ],
             data: {
                 key: 'referenceLink'
@@ -77,12 +88,38 @@ export class DialogService {
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
                 { text: await this.wordTranslateService.translate('Save'), buttonClass: 'btn btn-primary', onAction: () => {
                     const data = this.modalParameterService.getModalParameter('configuration_data');
-                    onConfirm(data);
-                    return true;
+                    if (data && data.key && data.value) {
+                        onConfirm(data);
+                        return true;
+                    } else {
+                        this.appEvent.fireEvent({type: 'form_submitted'});
+                    }
                 }}
             ],
             data: {
                 key: 'configuration_data'
+            }
+        });
+    }
+
+    async addOrganization(viewRef, onConfirm) {
+        this.modalDialogService.openDialog(viewRef, {
+            title: 'New Organization',
+            childComponent: AddOrganizationDialogComponent,
+            actionButtons: [
+                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
+                { text: 'Save', buttonClass: 'btn btn-primary', onAction: () => {
+                    const data = this.modalParameterService.getModalParameter('organizationName');
+                    if (data) {
+                        onConfirm(data);
+                        return true;
+                    } else {
+                        this.appEvent.fireEvent({type: 'form_submitted'});
+                    }
+                }}
+            ],
+            data: {
+                key: 'organizationName'
             }
         });
     }
@@ -98,6 +135,8 @@ export class DialogService {
                     if (data && data.url && data.event_types.length > 0) {
                         onConfirm(data);
                         return true;
+                    } else {
+                        this.appEvent.fireEvent({type: 'form_submitted'});
                     }
                 }}
             ],
@@ -114,8 +153,13 @@ export class DialogService {
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
                 { text: await this.wordTranslateService.translate('Invite User'), buttonClass: 'btn btn-primary', onAction: () => {
-                    onConfirm(this.modalParameterService.getModalParameter('user_email'));
-                    return true;
+                    const userEmail = this.modalParameterService.getModalParameter('user_email');
+                    if (userEmail) {
+                        onConfirm(userEmail);
+                        return true;
+                    } else {
+                        this.appEvent.fireEvent({type: 'form_submitted'});
+                    }
                 }}
             ],
             data: {
@@ -132,9 +176,13 @@ export class DialogService {
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
                 { text: await this.wordTranslateService.translate('Mark Fixed'), buttonClass: 'btn btn-primary', onAction: () => {
                     const versionNo = this.modalParameterService.getModalParameter('version');
-                    const r = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
-                    onConfirm(versionNo.replace(r, '$1.$2.$3-$4'));
-                    return true;
+                    if (versionNo) {
+                        const r = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
+                        onConfirm(versionNo.replace(r, '$1.$2.$3-$4'));
+                        return true;
+                    } else {
+                        this.appEvent.fireEvent({type: 'form_submitted'});
+                    }
                 }}
             ],
             data: {
