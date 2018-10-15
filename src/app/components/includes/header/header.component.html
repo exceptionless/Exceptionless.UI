@@ -35,7 +35,7 @@
                         <li><a *ngIf="canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> {{ 'Change Plan' | translate }}</a></li>
                         <li><a routerLink="/account/manage" [queryParams]="{tab: 'password'}"><i class="fa fa-lock fa-fw"></i> {{ 'Change Password' | translate }}</a></li>
                         <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> {{ 'Documentation' | translate }}</a></li>
-                        <li><a *ngIf="isIntercomEnabled()"><i class="fa fa-comment fa-fw"></i> {{ 'Support' | translate }}</a></li>
+                        <li><a *ngIf="isIntercomEnabled()" (click)="showIntercom()"><i class="fa fa-comment fa-fw"></i> {{ 'Support' | translate }}</a></li>
                         <li><a (click)="logout();"><i class="fa fa-power-off fa-fw"></i> {{ 'Logout' | translate }}</a></li>
                     </ul>
                 </li>
@@ -48,7 +48,7 @@
                 <li><a *ngIf="canChangePlan()"><i class="fa fa-credit-card fa-fw"></i> {{ 'Change Plan' | translate }}</a></li>
                 <li><a routerLink="/account/manage" [queryParams]="{tab: 'password'}"><i class="fa fa-lock fa-fw"></i> {{ 'Change Password' | translate }}</a></li>
                 <li><a href="https://github.com/exceptionless/Exceptionless/wiki" target="_blank"><i class="fa fa-book fa-fw"></i> {{ 'Documentation' | translate }}</a></li>
-                <li><a *ngIf="isIntercomEnabled()"><i class="fa fa-comment fa-fw"></i> {{ 'Support' | translate }}</a></li>
+                <li><a *ngIf="isIntercomEnabled()" (click)="showIntercom()"><i class="fa fa-comment fa-fw"></i> {{ 'Support' | translate }}</a></li>
                 <li><a (click)="logout();"><i class="fa fa-power-off fa-fw"></i> {{ 'Logout' | translate }}</a></li>
             </ul>
         </div>

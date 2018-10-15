@@ -437,13 +437,6 @@ export class EventComponent implements OnInit {
 
         const onFailure = (response?) => {
             if (response && response.status === 426) {
-                /*return billingService.confirmUpgradePlan(response.data.message).then(function () {
-                        return getEvent();
-                    }, function () {
-                        $state.go('app.dashboard');
-                    }
-                );*/
-
                 try {
                     return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project['organization_id'], () => {
                         return this.getEvent();

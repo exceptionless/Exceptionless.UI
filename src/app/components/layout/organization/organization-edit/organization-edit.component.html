@@ -62,7 +62,7 @@
 
                         <ngb-tab title="{{ 'Billing' | translate }}" id="billing">
                             <ng-template ngbTabContent>
-                                <p><span [innerHtml]="'Organization_Billing_Plan'"></span> <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Change your plan or billing information.' | translate }}</a></p>
+                                <p><span [innerHtml]="'Organization_Billing_Plan' | translate:{planName: organization.plan_name}"></span> <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Change your plan or billing information.' | translate }}</a></p>
                                 <app-invoices [settings]="invoices"></app-invoices>
                             </ng-template>
                         </ngb-tab>

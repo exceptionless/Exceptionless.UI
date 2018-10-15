@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { OrganizationService } from '../../service/organization.service';
 import { ProjectService } from '../../service/project.service';
 import { FilterService } from '../../service/filter.service';
@@ -6,6 +6,7 @@ import { SearchService } from '../../service/search.service';
 import { NotificationService } from '../../service/notification.service';
 import { GlobalVariables } from '../../global-variables';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { BillingService } from '../../service/billing.service';
 
 @Component({
     selector: 'app-organization-notification',
@@ -40,6 +41,8 @@ export class OrganizationNotificationComponent implements OnInit {
         private notificationService: NotificationService,
         private _global: GlobalVariables,
         private wordTranslateService: WordTranslateService,
+        private viewRef: ViewContainerRef,
+        private billingService: BillingService
     ) {}
 
     ngOnInit() {
@@ -305,9 +308,7 @@ export class OrganizationNotificationComponent implements OnInit {
             organizationId = this.freeOrganizations[0].id;
         }
 
-        // need to implement yet [Exceptionless]
-        // return billingService.changePlan(organizationId).catch(function(e){});
-        return false;
+        return this.billingService.changePlan(this.viewRef, () => {}, organizationId);
     }
 
     showIntercom() {}

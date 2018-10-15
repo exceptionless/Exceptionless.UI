@@ -134,7 +134,6 @@ export class StacksComponent implements OnChanges {
         if (this.selectedIds.length === 0) {
             this.notificationService.info('', await this.wordTranslateService.translate('Please select one or more stacks'));
         } else {
-            /*this.action.run(this.selectedIds).then(onSuccess());*/
             action.run(this.selectedIds, this.viewRef, onSuccess);
         }
     }

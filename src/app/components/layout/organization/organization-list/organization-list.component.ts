@@ -9,6 +9,7 @@ import { WordTranslateService } from '../../../../service/word-translate.service
 import { UserService } from '../../../../service/user.service';
 import { DialogService } from '../../../../service/dialog.service';
 import { AppEventService } from '../../../../service/app-event.service';
+import { BillingService } from '../../../../service/billing.service';
 
 @Component({
     selector: 'app-organization-list',
@@ -37,7 +38,8 @@ export class OrganizationListComponent implements OnInit {
         private wordTranslateService: WordTranslateService,
         private userService: UserService,
         private dialogService: DialogService,
-        private appEvent: AppEventService
+        private appEvent: AppEventService,
+        private billingService: BillingService
     ) {}
 
     ngOnInit() {
@@ -67,7 +69,7 @@ export class OrganizationListComponent implements OnInit {
             return;
         }
 
-        // need to implement later(billing service)
+        return this.billingService.changePlan(this.viewRef, () => {}, organizationId);
     }
 
     async createOrganization(name) {

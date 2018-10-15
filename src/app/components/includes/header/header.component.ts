@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GlobalVariables } from '../../../global-variables';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { AppEventService } from '../../../service/app-event.service';
+import { Intercom } from 'ng-intercom';
 
 @Component({
     selector: 'app-header',
@@ -34,7 +35,8 @@ export class HeaderComponent implements OnInit {
         private translateService: TranslateService,
         private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
-        private appEvent: AppEventService
+        private appEvent: AppEventService,
+        private intercom: Intercom
     ) {}
 
     ngOnInit() {
@@ -77,5 +79,9 @@ export class HeaderComponent implements OnInit {
 
     isIntercomEnabled() {
         return !!this._globalVariables.INTERCOM_APPID;
+    }
+
+    showIntercom() {
+        this.intercom.showNewMessage();
     }
 }

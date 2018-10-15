@@ -104,7 +104,7 @@ export class OrganizationService {
     }
 
     removeUser(id, email) {
-        return this.http.delete(`organizations/${id}/users` + email);
+        return this.http.delete(`organizations/${id}/users/` + email);
     }
 
     update(id, organization) {

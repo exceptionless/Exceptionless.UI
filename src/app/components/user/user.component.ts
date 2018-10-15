@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, ViewContainerRef, HostBinding } from '@angular/core';
-import { ModalDialogService } from 'ngx-modal-dialog';
 import { LinkService } from '../../service/link.service';
 import { NotificationService } from '../../service/notification.service';
 import { OrganizationService } from '../../service/organization.service';
 import { PaginationService } from '../../service/pagination.service';
 import { UserService } from '../../service/user.service';
-import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dialog.component';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { DialogService } from '../../service/dialog.service';
 
 @Component({
     selector: 'app-user',
@@ -24,13 +23,13 @@ export class UserComponent implements OnInit {
     loading = true;
     constructor(
         private viewRef: ViewContainerRef,
-        private modalDialogService: ModalDialogService,
         private linkService: LinkService,
         private notificationService: NotificationService,
         private organizationService: OrganizationService,
         private paginationService: PaginationService,
         private userService: UserService,
-        private wordTranslateService: WordTranslateService
+        private wordTranslateService: WordTranslateService,
+        private dialogService: DialogService
     ) {}
 
     ngOnInit() {
@@ -95,17 +94,7 @@ export class UserComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Remove User', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to remove this user from your organization?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to remove this user from your organization?', 'Remove User', modalCallBackFunction);
     }
 
     resendNotification(user) {
@@ -141,17 +130,6 @@ export class UserComponent implements OnInit {
                 return err;
             }
         };
-
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: btnTxt, buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate(message)
-            }
-        });
+        this.dialogService.confirm(this.viewRef, message, btnTxt, modalCallBackFunction);
     }
 }

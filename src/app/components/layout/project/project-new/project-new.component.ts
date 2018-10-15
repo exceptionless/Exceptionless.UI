@@ -84,7 +84,9 @@ export class ProjectNewComponent implements OnInit {
 
         const onFailure = async (response) => {
             if (response.status === 426) {
-                // need to implement later Exceptionless
+                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, null, () => {
+                    this.createOrganization(name);
+                });
             }
 
             let message = await this.wordTranslateService.translate('An error occurred while creating the organization.');

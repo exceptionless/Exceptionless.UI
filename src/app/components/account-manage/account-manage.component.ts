@@ -10,6 +10,7 @@ import { ModalDialogService } from 'ngx-modal-dialog';
 import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dialog.component';
 import { GlobalVariables } from '../../global-variables';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { BillingService } from '../../service/billing.service';
 
 @Component({
     selector: 'app-account-manage',
@@ -27,7 +28,7 @@ export class AccountManageComponent implements OnInit {
         confirm_password: ''
     };
     emailNotificationSettings = {};
-    currentProject = {};
+    currentProject: any = {};
     user = {
         email_address: ''
     };
@@ -52,7 +53,8 @@ export class AccountManageComponent implements OnInit {
         private modalDialogService: ModalDialogService,
         private viewRef: ViewContainerRef,
         private _globalVariables: GlobalVariables,
-        private wordTranslateService: WordTranslateService
+        private wordTranslateService: WordTranslateService,
+        private billingService: BillingService,
     ) {
         this.activatedRoute.queryParams.subscribe(params => {
             this.activeTab = params['tab'] || 'general';
@@ -382,7 +384,7 @@ export class AccountManageComponent implements OnInit {
     }
 
     showChangePlanDialog() {
-        // need to implement later
+        this.billingService.changePlan(this.viewRef, () => {}, this.currentProject ? this.currentProject.organization_id : null);
     }
 
     unlink(account) {
