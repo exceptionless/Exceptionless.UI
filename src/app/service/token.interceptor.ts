@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from 'ng2-ui-auth';
-import { GlobalVariables } from '../global-variables';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
@@ -16,8 +16,7 @@ export class TokenInterceptor implements HttpInterceptor {
     constructor(
         private auth: AuthService,
         private router: Router,
-        private notificationService: NotificationService,
-        private globalVariables: GlobalVariables
+        private notificationService: NotificationService
     ) {}
 
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
@@ -42,7 +41,7 @@ export class TokenInterceptor implements HttpInterceptor {
                 setHeaders: {
                     Authorization: `Bearer ${this.auth.getToken()}`
                 },
-                url: this.globalVariables.BASE_URL + request.url
+                url: environment.BASE_URL + request.url
             });
             return next.handle(request).catch(x => this.handleAuthError(x));
         }

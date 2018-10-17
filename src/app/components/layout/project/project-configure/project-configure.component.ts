@@ -30,7 +30,11 @@ export class ProjectConfigureComponent implements OnInit {
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._projectId = params['id'];
-            this._canRedirect = params['redirect'];
+        });
+
+        this.activatedRoute.queryParams.subscribe(params => {
+            this._canRedirect = params['redirect'] ? (params['redirect'] === 'true' ? true : false) : false;
+            console.log(this._canRedirect);
         });
     }
 
@@ -112,6 +116,7 @@ export class ProjectConfigureComponent implements OnInit {
     }
 
     navigateToDashboard(isRefresh?) {
+        console.log(isRefresh);
         if (isRefresh && !this.canRedirect(isRefresh)) {
             return;
         }

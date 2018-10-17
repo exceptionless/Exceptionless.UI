@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../../../service/notification.service';
 import { UserService } from '../../../service/user.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GlobalVariables } from '../../../global-variables';
+import { environment } from '../../../../environments/environment';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { AppEventService } from '../../../service/app-event.service';
 import { Intercom } from 'ng-intercom';
@@ -33,7 +33,6 @@ export class HeaderComponent implements OnInit {
         private notificationService: NotificationService,
         private userService: UserService,
         private translateService: TranslateService,
-        private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
         private appEvent: AppEventService,
         private intercom: Intercom
@@ -74,11 +73,11 @@ export class HeaderComponent implements OnInit {
     }
 
     canChangePlan() {
-        return !!this._globalVariables.STRIPE_PUBLISHABLE_KEY;
+        return !!environment.STRIPE_PUBLISHABLE_KEY;
     }
 
     isIntercomEnabled() {
-        return !!this._globalVariables.INTERCOM_APPID;
+        return !!environment.INTERCOM_APPID;
     }
 
     showIntercom() {

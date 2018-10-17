@@ -6,9 +6,7 @@ import { ProjectService } from '../../../../service/project.service';
 import { TokenService } from '../../../../service/token.service';
 import { WebHookService } from '../../../../service/web-hook.service';
 import { NotificationService } from '../../../../service/notification.service';
-import { ModalDialogService } from 'ngx-modal-dialog';
-import { ConfirmDialogComponent } from '../../../../dialogs/confirm-dialog/confirm-dialog.component';
-import { GlobalVariables } from '../../../../global-variables';
+import { environment } from '../../../../../environments/environment';
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
 import { WordTranslateService } from '../../../../service/word-translate.service';
@@ -123,7 +121,7 @@ export class ProjectEditComponent implements OnInit {
     data_exclusions = null;
     hasMonthlyUsage = true;
     hasPremiumFeatures = false;
-    isSlackEnabled = !!this._globalVariables.SLACK_APPID;
+    isSlackEnabled = !!environment.SLACK_APPID;
     next_billing_date = moment().startOf('month').add(1, 'months').toDate();
     organization = {};
     project: any = {};
@@ -139,14 +137,12 @@ export class ProjectEditComponent implements OnInit {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private viewRef: ViewContainerRef,
-        private modalDialogService: ModalDialogService,
         private filterService: FilterService,
         private organizationService: OrganizationService,
         private projectService: ProjectService,
         private tokenService: TokenService,
         private webHookService: WebHookService,
         private notificationService: NotificationService,
-        private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
         private dialogService: DialogService
@@ -271,7 +267,7 @@ export class ProjectEditComponent implements OnInit {
             this.organization = JSON.parse(JSON.stringify(response));
             this.hasMonthlyUsage = this.organization['max_events_per_month'] > 0;
             this.remainingEventLimit = getRemainingEventLimit(this.organization);
-            this.canChangePlan = !!this._globalVariables.STRIPE_PUBLISHABLE_KEY && !!this.organization;
+            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && !!this.organization;
 
             this.organization['usage'] = (this.organization['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: this.organization['max_events_per_month'], too_big: 0 }]).filter((usage) => {
                 return this.project['usage'].some(function(u) { return moment(u.date).isSame(usage.date); });
@@ -419,17 +415,7 @@ export class ProjectEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('DELETE CONFIGURATION SETTING'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this configuration setting?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this configuration setting?', 'DELETE CONFIGURATION SETTING', modalCallBackFunction);
     }
 
     async removeProject() {
@@ -446,17 +432,7 @@ export class ProjectEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('Delete Project'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this project?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this project?', 'Delete Project', modalCallBackFunction);
     }
 
     async removeSlack() {
@@ -470,17 +446,7 @@ export class ProjectEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('Remove Slack'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to remove slack support?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to remove slack support?', 'Remove Slack', modalCallBackFunction);
     }
 
     async removeToken(token) {
@@ -494,17 +460,7 @@ export class ProjectEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('DELETE API KEY'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this API key?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this API key?', 'DELETE API KEY', modalCallBackFunction);
     }
 
     async removeWebHook(hook) {
@@ -518,17 +474,7 @@ export class ProjectEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('DELETE WEB HOOK'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this web hook?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this web hook?', 'DELETE WEB HOOK', modalCallBackFunction);
     }
 
     async resetData() {
@@ -542,17 +488,7 @@ export class ProjectEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
-                { text: await this.wordTranslateService.translate('RESET PROJECT DATA'), buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to reset the data for this project?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to reset the data for this project?', 'RESET PROJECT DATA', modalCallBackFunction);
     }
 
     save(isValid) {

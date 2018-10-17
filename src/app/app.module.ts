@@ -24,7 +24,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IntercomModule } from 'ng-intercom';
 import { NgxStripeModule } from 'ngx-stripe';
 
-import { GlobalVariables } from './global-variables';
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './components/auth/login/login.component';
@@ -214,12 +214,11 @@ export function HttpLoaderFactory(http: HttpClient) {
             }
         }),
         IntercomModule.forRoot({
-            appId: new GlobalVariables().INTERCOM_APPID
+            appId: environment.INTERCOM_APPID
         }),
-        NgxStripeModule.forRoot(new GlobalVariables().STRIPE_PUBLISHABLE_KEY),
+        NgxStripeModule.forRoot(environment.STRIPE_PUBLISHABLE_KEY),
     ],
     providers: [
-        GlobalVariables,
         AuthGuardService,
         OrganizationService,
         FilterService,

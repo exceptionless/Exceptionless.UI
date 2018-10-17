@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GlobalVariables } from '../global-variables';
+import { environment } from '../../environments/environment';
 import { AuthService } from 'ng2-ui-auth';
 import { AppEventService } from './app-event.service';
 
@@ -99,15 +99,14 @@ export class WebsocketService {
 
 
     constructor(
-        private _globalVariables: GlobalVariables,
         private appEvent: AppEventService,
         private authService: AuthService) {
     }
 
     getPushUrl() {
-        const pushUrl = this._globalVariables.BASE_URL + 'push?access_token=' + this.authService.getToken();
+        const pushUrl = environment.BASE_URL + 'push?access_token=' + this.authService.getToken();
         const protoMatch = /^(https?):\/\//;
-        if (this._globalVariables.BASE_URL.startsWith('https:')) {
+        if (environment.BASE_URL.startsWith('https:')) {
             return pushUrl.replace(protoMatch, 'wss://');
         }
 

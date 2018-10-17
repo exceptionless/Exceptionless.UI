@@ -5,11 +5,9 @@ import { OrganizationService } from '../../../../service/organization.service';
 import { ProjectService } from '../../../../service/project.service';
 import { UserService } from '../../../../service/user.service';
 import { NotificationService } from '../../../../service/notification.service';
-import { ModalDialogService } from 'ngx-modal-dialog';
-import { ConfirmDialogComponent } from '../../../../dialogs/confirm-dialog/confirm-dialog.component';
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
-import { GlobalVariables } from '../../../../global-variables';
+import { environment } from '../../../../../environments/environment';
 import { WordTranslateService } from '../../../../service/word-translate.service';
 import { BillingService } from '../../../../service/billing.service';
 import { AppEventService } from '../../../../service/app-event.service';
@@ -151,13 +149,11 @@ export class OrganizationEditComponent implements OnInit {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private viewRef: ViewContainerRef,
-        private modalDialogService: ModalDialogService,
         private filterService: FilterService,
         private organizationService: OrganizationService,
         private projectService: ProjectService,
         private notificationService: NotificationService,
         private userService: UserService,
-        private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
         private appEvent: AppEventService,
@@ -253,7 +249,7 @@ export class OrganizationEditComponent implements OnInit {
             this.organization['usage'] = this.organization['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: this.organization['max_events_per_month'], too_big: 0 }];
             this.hasMonthlyUsage = this.organization['max_events_per_month'] > 0;
             this.remainingEventLimit = getRemainingEventLimit(this.organization);
-            this.canChangePlan = !!this._globalVariables.STRIPE_PUBLISHABLE_KEY && !!this.organization;
+            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && !!this.organization;
 
             this.chart.options.series1[0]['data'] = this.organization['usage'].map(function (item) {
                 return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
@@ -313,17 +309,7 @@ export class OrganizationEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Leave Organization', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to leave this organization?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to leave this organization?', 'Leave Organization', modalCallBackFunction);
     }
 
     async removeOrganization() {
@@ -347,17 +333,7 @@ export class OrganizationEditComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Delete Organization', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this organization?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this organization?', 'Delete Organization', modalCallBackFunction);
     }
 
     save(isValid) {

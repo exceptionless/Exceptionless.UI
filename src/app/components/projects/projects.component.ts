@@ -4,9 +4,8 @@ import { ProjectService } from '../../service/project.service';
 import { LinkService } from '../../service/link.service';
 import { PaginationService } from '../../service/pagination.service';
 import { NotificationService } from '../../service/notification.service';
-import { ModalDialogService } from 'ngx-modal-dialog';
-import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dialog.component';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { DialogService } from '../../service/dialog.service';
 
 @Component({
     selector: 'app-projects',
@@ -30,8 +29,8 @@ export class ProjectsComponent implements OnInit {
         private paginationService: PaginationService,
         private notificationService: NotificationService,
         private viewRef: ViewContainerRef,
-        private modalDialogService: ModalDialogService,
-        private wordTranslateService: WordTranslateService
+        private wordTranslateService: WordTranslateService,
+        private dialogService: DialogService
     ) {}
 
     ngOnInit() {
@@ -158,16 +157,6 @@ export class ProjectsComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'Delete Project', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete this project?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this project?', 'Delete Project', modalCallBackFunction);
     }
 }

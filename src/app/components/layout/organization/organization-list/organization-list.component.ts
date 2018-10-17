@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalVariables } from '../../../../global-variables';
+import { environment } from '../../../../../environments/environment';
 import { LinkService } from '../../../../service/link.service';
 import { PaginationService } from '../../../../service/pagination.service';
 import { NotificationService } from '../../../../service/notification.service';
@@ -28,7 +28,6 @@ export class OrganizationListComponent implements OnInit {
     authUser: any = {};
 
     constructor(
-        private _global: GlobalVariables,
         private router: Router,
         private linkService: LinkService,
         private paginationService: PaginationService,
@@ -64,7 +63,7 @@ export class OrganizationListComponent implements OnInit {
     }
 
     async changePlan(organizationId) {
-        if (!this._global.STRIPE_PUBLISHABLE_KEY) {
+        if (!environment.STRIPE_PUBLISHABLE_KEY) {
             this.notificationService.error('', await this.wordTranslateService.translate('Billing is currently disabled.'));
             return;
         }
@@ -75,7 +74,7 @@ export class OrganizationListComponent implements OnInit {
     async createOrganization(name) {
         const onSuccess = (response) => {
             this.organizations.push(JSON.parse(JSON.stringify(response)));
-            this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
         };
 
         const onFailure = async (response) => {
@@ -104,7 +103,7 @@ export class OrganizationListComponent implements OnInit {
     async get(options?) {
         const onSuccess = (response, link) => {
             this.organizations = JSON.parse(JSON.stringify(response));
-            this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
 
             const links = this.linkService.getLinksQueryParameters(link);
             this.previous = links['previous'];
@@ -138,7 +137,7 @@ export class OrganizationListComponent implements OnInit {
         const modalCallBackFunction = async () => {
             const onSuccess = () => {
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
-                this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+                this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
             };
 
             const onFailure = (response) => {
@@ -180,7 +179,7 @@ export class OrganizationListComponent implements OnInit {
             try {
                 const res = await this.organizationService.remove(organization['id']).toPromise();
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
-                this.canChangePlan = !!this._global.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+                this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
                 this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
                 return res;
             } catch (err) {

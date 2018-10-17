@@ -6,11 +6,10 @@ import { NotificationService } from '../../service/notification.service';
 import { AuthAccountService } from '../../service/auth-account.service';
 import { ProjectService } from '../../service/project.service';
 import { UserService } from '../../service/user.service';
-import { ModalDialogService } from 'ngx-modal-dialog';
-import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dialog.component';
-import { GlobalVariables } from '../../global-variables';
+import { environment } from '../../../environments/environment';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
+import { DialogService } from '../../service/dialog.service';
 
 @Component({
     selector: 'app-account-manage',
@@ -50,11 +49,10 @@ export class AccountManageComponent implements OnInit {
         private notificationService: NotificationService,
         private projectService: ProjectService,
         private userService: UserService,
-        private modalDialogService: ModalDialogService,
         private viewRef: ViewContainerRef,
-        private _globalVariables: GlobalVariables,
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
+        private dialogService: DialogService
     ) {
         this.activatedRoute.queryParams.subscribe(params => {
             this.activeTab = params['tab'] || 'general';
@@ -223,17 +221,7 @@ export class AccountManageComponent implements OnInit {
             }
         };
 
-        this.modalDialogService.openDialog(this.viewRef, {
-            title: await this.wordTranslateService.translate('DIALOGS_CONFIRMATION'),
-            childComponent: ConfirmDialogComponent,
-            actionButtons: [
-                { text: 'Cancel', buttonClass: 'btn btn-default', onAction: () => true },
-                { text: 'DELETE ACCOUNT', buttonClass: 'btn btn-primary btn-dialog-confirm btn-danger', onAction: () => modalCallBackFunction() }
-            ],
-            data: {
-                text: await this.wordTranslateService.translate('Are you sure you want to delete your account?')
-            }
-        });
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete your account?', 'DELETE ACCOUNT', modalCallBackFunction);
     }
 
     hasPremiumEmailNotifications() {
@@ -242,18 +230,18 @@ export class AccountManageComponent implements OnInit {
 
     isExternalLoginEnabled(provider?) {
         if (!provider) {
-            return !!this._globalVariables.FACEBOOK_APPID || !!this._globalVariables.GITHUB_APPID || !!this._globalVariables.GOOGLE_APPID || !!this._globalVariables.LIVE_APPID;
+            return !!environment.FACEBOOK_APPID || !!environment.GITHUB_APPID || !!environment.GOOGLE_APPID || !!environment.LIVE_APPID;
         }
 
         switch (provider) {
             case 'facebook':
-                return !!this._globalVariables.FACEBOOK_APPID;
+                return !!environment.FACEBOOK_APPID;
             case 'github':
-                return !!this._globalVariables.GITHUB_APPID;
+                return !!environment.GITHUB_APPID;
             case 'google':
-                return !!this._globalVariables.GOOGLE_APPID;
+                return !!environment.GOOGLE_APPID;
             case 'live':
-                return !!this._globalVariables.LIVE_APPID;
+                return !!environment.LIVE_APPID;
             default:
                 return false;
         }

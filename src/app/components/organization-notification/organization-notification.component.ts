@@ -4,7 +4,7 @@ import { ProjectService } from '../../service/project.service';
 import { FilterService } from '../../service/filter.service';
 import { SearchService } from '../../service/search.service';
 import { NotificationService } from '../../service/notification.service';
-import { GlobalVariables } from '../../global-variables';
+import { environment } from '../../../environments/environment';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
 
@@ -39,7 +39,6 @@ export class OrganizationNotificationComponent implements OnInit {
         private filterService: FilterService,
         private searchService: SearchService,
         private notificationService: NotificationService,
-        private _global: GlobalVariables,
         private wordTranslateService: WordTranslateService,
         private viewRef: ViewContainerRef,
         private billingService: BillingService
@@ -277,7 +276,7 @@ export class OrganizationNotificationComponent implements OnInit {
     }
 
     isIntercomEnabled() {
-        return this._global.INTERCOM_APPID;
+        return environment.INTERCOM_APPID;
     }
 
     onFilterChanged() {
@@ -285,7 +284,7 @@ export class OrganizationNotificationComponent implements OnInit {
     }
 
     async showChangePlanDialog(organizationId) {
-        if (!this._global.STRIPE_PUBLISHABLE_KEY) {
+        if (!environment.STRIPE_PUBLISHABLE_KEY) {
             this.notificationService.error('', await this.wordTranslateService.translate('Billing is currently disabled.'));
             return;
         }

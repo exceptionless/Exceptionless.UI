@@ -137,8 +137,10 @@ export class DashboardComponent implements OnInit {
             const queryId = params['id'];
             if (projectType === 'project') {
                 this.filterService.setProjectId(queryId, true);
+                this.filterService.setEventType('project', true);
             } else if (projectType === 'organization') {
                 this.filterService.setOrganizationId(queryId, true);
+                this.filterService.setEventType('organization', true);
             }
 
             this.get();

@@ -133,19 +133,11 @@ export class FilterService {
     }
 
     getOrganizationId() {
-        if (this.getProjectType() === 'organization') {
-            return this.filterStoreService.getProjectId();
-        } else {
-            return null;
-        }
+        return this._organizationId;
     }
 
     getProjectId() {
-        if (this.getProjectType() === 'project') {
-            return this.filterStoreService.getProjectId();
-        } else {
-            return null;
-        }
+        return this._projectId;
     }
 
     getProjectName() {
