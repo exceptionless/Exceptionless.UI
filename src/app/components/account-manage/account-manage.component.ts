@@ -6,7 +6,7 @@ import { NotificationService } from '../../service/notification.service';
 import { AuthAccountService } from '../../service/auth-account.service';
 import { ProjectService } from '../../service/project.service';
 import { UserService } from '../../service/user.service';
-import { environment } from '../../../environments/environment';
+import { AppConfigService } from '../../service/app-config.service';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
 import { DialogService } from '../../service/dialog.service';
@@ -52,7 +52,8 @@ export class AccountManageComponent implements OnInit {
         private viewRef: ViewContainerRef,
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
-        private dialogService: DialogService
+        private dialogService: DialogService,
+        private environment: AppConfigService
     ) {
         this.activatedRoute.queryParams.subscribe(params => {
             this.activeTab = params['tab'] || 'general';
@@ -230,18 +231,18 @@ export class AccountManageComponent implements OnInit {
 
     isExternalLoginEnabled(provider?) {
         if (!provider) {
-            return !!environment.FACEBOOK_APPID || !!environment.GITHUB_APPID || !!environment.GOOGLE_APPID || !!environment.LIVE_APPID;
+            return !!this.environment.config.FACEBOOK_APPID || !!this.environment.config.GITHUB_APPID || !!this.environment.config.GOOGLE_APPID || !!this.environment.config.LIVE_APPID;
         }
 
         switch (provider) {
             case 'facebook':
-                return !!environment.FACEBOOK_APPID;
+                return !!this.environment.config.FACEBOOK_APPID;
             case 'github':
-                return !!environment.GITHUB_APPID;
+                return !!this.environment.config.GITHUB_APPID;
             case 'google':
-                return !!environment.GOOGLE_APPID;
+                return !!this.environment.config.GOOGLE_APPID;
             case 'live':
-                return !!environment.LIVE_APPID;
+                return !!this.environment.config.LIVE_APPID;
             default:
                 return false;
         }

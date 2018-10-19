@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from 'ng2-ui-auth';
-import { environment } from '../../environments/environment';
+import { AppConfigService } from './app-config.service';
 import { Router } from '@angular/router';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
@@ -16,7 +16,8 @@ export class TokenInterceptor implements HttpInterceptor {
     constructor(
         private auth: AuthService,
         private router: Router,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private environment: AppConfigService
     ) {}
 
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
@@ -34,14 +35,15 @@ export class TokenInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const isTranslate = request.url.includes('i18n');
-        if (isTranslate) {
+        const isConfig = request.url.includes('app-config.json');
+        if (isTranslate || isConfig) {
             return next.handle(request);
         } else {
             request = request.clone({
                 setHeaders: {
                     Authorization: `Bearer ${this.auth.getToken()}`
                 },
-                url: environment.BASE_URL + request.url
+                url: this.environment.config.BASE_URL + request.url
             });
             return next.handle(request).catch(x => this.handleAuthError(x));
         }

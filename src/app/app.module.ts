@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
@@ -99,6 +99,7 @@ import { SemverDirective } from './directives/semver.directive';
 import { RefreshOnDirective } from './directives/refresh-on.directive';
 import { ProjectConfigureComponent } from './components/layout/project/project-configure/project-configure.component';
 import { AutoActiveDirective } from './directives/auto-active.directive';
+import { AppConfigService } from './service/app-config.service';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -112,6 +113,13 @@ export const AuthConfig = {
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+const appInitializerFn = (appConfig: AppConfigService) => {
+    return () => {
+        return appConfig.loadAppConfig();
+    };
+};
+
 
 @NgModule({
     declarations: [
@@ -226,6 +234,13 @@ export function HttpLoaderFactory(http: HttpClient) {
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptor,
             multi: true
+        },
+        AppConfigService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: appInitializerFn,
+            multi: true,
+            deps: [AppConfigService]
         }
     ],
     bootstrap: [AppComponent],

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterService } from '../../../service/filter.service';
 import { FilterStoreService } from '../../../service/filter-store.service';
-import { environment } from '../../../../environments/environment';
+import { AppConfigService } from '../../../service/app-config.service';
 import { Intercom } from 'ng-intercom';
 
 @Component({
@@ -29,7 +29,8 @@ export class SidebarComponent implements OnInit {
     constructor(
         private filterStoreService: FilterStoreService,
         private filterService: FilterService,
-        private intercom: Intercom
+        private intercom: Intercom,
+        private environment: AppConfigService
     ) {}
 
     ngOnInit() {
@@ -39,7 +40,7 @@ export class SidebarComponent implements OnInit {
         this.setFilterUrlPattern();
         if (this.isIntercomEnabled()) {
             this.intercom.boot({
-                app_id: environment.INTERCOM_APPID
+                app_id: this.environment.config.INTERCOM_APPID
             });
         }
     }
@@ -57,7 +58,7 @@ export class SidebarComponent implements OnInit {
     }
 
     isIntercomEnabled() {
-        return !!environment.INTERCOM_APPID;
+        return !!this.environment.config.INTERCOM_APPID;
     }
 
     showIntercom() {

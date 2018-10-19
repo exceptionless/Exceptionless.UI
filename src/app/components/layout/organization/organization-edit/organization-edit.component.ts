@@ -7,7 +7,7 @@ import { UserService } from '../../../../service/user.service';
 import { NotificationService } from '../../../../service/notification.service';
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
-import { environment } from '../../../../../environments/environment';
+import { AppConfigService } from '../../../../service/app-config.service';
 import { WordTranslateService } from '../../../../service/word-translate.service';
 import { BillingService } from '../../../../service/billing.service';
 import { AppEventService } from '../../../../service/app-event.service';
@@ -157,7 +157,8 @@ export class OrganizationEditComponent implements OnInit {
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
         private appEvent: AppEventService,
-        private dialogService: DialogService
+        private dialogService: DialogService,
+        private environment: AppConfigService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._organizationId = params['id'];
@@ -249,7 +250,7 @@ export class OrganizationEditComponent implements OnInit {
             this.organization['usage'] = this.organization['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: this.organization['max_events_per_month'], too_big: 0 }];
             this.hasMonthlyUsage = this.organization['max_events_per_month'] > 0;
             this.remainingEventLimit = getRemainingEventLimit(this.organization);
-            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && !!this.organization;
+            this.canChangePlan = !!this.environment.config.STRIPE_PUBLISHABLE_KEY && !!this.organization;
 
             this.chart.options.series1[0]['data'] = this.organization['usage'].map(function (item) {
                 return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
