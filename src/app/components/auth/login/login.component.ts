@@ -48,8 +48,14 @@ export class LoginComponent implements OnInit {
                     } else {
                         this.projectId = this.filterService.getProjectTypeId();
                         this.projectType = this.filterService.getProjectType();
-                        this.filterUrlPattern = `${this.projectType}/${this.projectId}/`;
-                        this.router.navigate([`${this.filterUrlPattern}/error/dashboard`]);
+                        if (!this.projectType) {
+                            this.filterService.setProjectFilter('All Projects', '', 'All Projects');
+                            this.filterService.setTime('all');
+                            this.router.navigate(['/type/error/dashboard']);
+                        } else {
+                            this.filterUrlPattern = `${this.projectType}/${this.projectId}/`;
+                            this.router.navigate([`${this.filterUrlPattern}/error/dashboard`]);
+                        }
                     }
                 },
                 async err => {

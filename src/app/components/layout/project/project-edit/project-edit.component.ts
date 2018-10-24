@@ -227,7 +227,7 @@ export class ProjectEditComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
         };
 
-        return this.webHookService.create(data).toPromise().catch(onFailure.bind(this));
+        return this.webHookService.create(Object.assign(data, {project_id: this._projectId})).toPromise().catch(onFailure.bind(this));
     }
 
     async copied() {
