@@ -40,7 +40,7 @@ export class SidebarComponent implements OnInit {
         this.setFilterUrlPattern();
         if (this.isIntercomEnabled()) {
             this.intercom.boot({
-                app_id: this.environment.config.INTERCOM_APPID
+                appId: this.environment.config.INTERCOM_APPID
             });
         }
     }

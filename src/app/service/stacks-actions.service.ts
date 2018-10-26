@@ -107,12 +107,17 @@ export class StacksActionsService {
     ) {}
 
     async executeAction(ids, action, onSuccess, onFailure) {
-        const promise = _.chunk(ids, 10).reduce(async (previous, item) => {
-            const response = await previous();
-            return action(item.join(',')).toPromise();
-        }, async () => true ).then(onSuccess, onFailure);
-
-        return promise;
+        try {
+            const res = await _.chunk(ids, 10).reduce(async (previous, item) => {
+                const response = await previous();
+                return action(item.join(',')).toPromise();
+            }, async () => true );
+            onSuccess();
+            return res;
+        } catch (err) {
+            onFailure();
+            return err;
+        }
     }
 
     getActions() {

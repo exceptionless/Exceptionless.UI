@@ -177,8 +177,15 @@ export class StackComponent implements OnInit {
         }));
     }
 
-    ngOnInit() {
-        this.get().then(() => { this.executeAction(); });
+    async ngOnInit() {
+        this.initData();
+    }
+
+    async initData() {
+        try {
+            await this.get();
+            await this.executeAction();
+        } catch (err) {}
     }
 
     async addReferenceLink() {
@@ -261,7 +268,11 @@ export class StackComponent implements OnInit {
             return this.updateStats();
         }
 
-        return this.getStack().then(() => { this.updateStats().then(() => { this.getProject(); }); });
+        try {
+            await this.getStack();
+            await this.updateStats();
+            await this.getProject();
+        } catch (err) {}
     }
 
     async getOrganizations() {
@@ -326,8 +337,11 @@ export class StackComponent implements OnInit {
         }
     }
 
-    updateStats() {
-        return this.getOrganizations().then(() => { this.getStats(); });
+    async updateStats() {
+        try {
+            await this.getOrganizations();
+            await this.getStats();
+        } catch (err) {}
     }
 
     async getStats() {
@@ -453,7 +467,12 @@ export class StackComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while promoting this stack.'));
         };
 
-        return this.stackService.promote(this._stackId).subscribe(onSuccess, onFailure);
+        try {
+            const res = await this.stackService.promote(this._stackId).toPromise();
+            onSuccess();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
     async removeReferenceLink(reference) {
@@ -486,7 +505,7 @@ export class StackComponent implements OnInit {
         this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this stack (includes all stack events)?', 'DELETE STACK', modalCallBackFunction);
     }
 
-    updateIsCritical() {
+    async updateIsCritical() {
         const onSuccess = async () => {
             this.stack['occurrences_are_critical'] = !this.stack['occurrences_are_critical'];
         };
@@ -496,13 +515,23 @@ export class StackComponent implements OnInit {
         };
 
         if (this.stack['occurrences_are_critical']) {
-            this.stackService.markNotCritical(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.markNotCritical(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            this.stackService.markCritical(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.markCritical(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 
-    updateIsFixed(showSuccessNotification) {
+    async updateIsFixed(showSuccessNotification) {
         const onSuccess = async () => {
             if (!showSuccessNotification) {
                 return;
@@ -516,13 +545,23 @@ export class StackComponent implements OnInit {
         };
 
         if (this['stack.date_fixed'] && !this.stack['is_regressed']) {
-            this.stackService.markNotFixed(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.markNotFixed(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            this.stackService.markFixed(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.markFixed(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 
-    updateIsHidden() {
+    async updateIsHidden() {
         const onSuccess = async () => {
             this.notificationService.info('', await this.wordTranslateService.translate(this.stack['is_hidden'] ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.'));
             this.stack['is_hidden'] = !this.stack['is_hidden'];
@@ -533,13 +572,23 @@ export class StackComponent implements OnInit {
         };
 
         if (!this.stack['is_hidden']) {
-            this.stackService.markHidden(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.markHidden(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            this.stackService.markNotHidden(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.markNotHidden(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 
-    updateNotifications(showSuccessNotification?) {
+    async updateNotifications(showSuccessNotification?) {
         const onSuccess = async () => {
             this.stack['disable_notifications'] = !this.stack['disable_notifications'];
 
@@ -555,9 +604,19 @@ export class StackComponent implements OnInit {
         };
 
         if (this.stack['disable_notifications']) {
-            this.stackService.enableNotifications(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.enableNotifications(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            this.stackService.disableNotifications(this._stackId).subscribe(onSuccess, onFailure);
+            try {
+                const res = await this.stackService.disableNotifications(this._stackId).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 }

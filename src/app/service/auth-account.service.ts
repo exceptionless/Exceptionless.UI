@@ -56,7 +56,7 @@ export class AuthAccountService {
         return this.http.get(`auth/check-email-address/${email}`, { observe: 'response' });
     }
 
-    logout(withRedirect?, params?) {
+    async logout(withRedirect?, params?) {
         const logoutLocally = () => {
             this.authService.logout()
                 .subscribe({
@@ -71,33 +71,29 @@ export class AuthAccountService {
                 });
         };
 
-        return this.http.get('auth/logout/').subscribe(
-            res => {
-                logoutLocally();
-            },
-            err => {
-                this.notificationService.error('Failed!', 'Error Occurred');
-            }
-        );
+        try {
+            const res = await this.http.get('auth/logout/').toPromise();
+            logoutLocally();
+        } catch (err) {
+            this.notificationService.error('Failed!', 'Error Occurred');
+        }
     }
 
     resetPassword(resetPasswordModel) {
         return this.http.post('auth/reset-password',  resetPasswordModel);
     }
 
-    unlink(providerName, providerUserId) {
+    async unlink(providerName, providerUserId) {
         const onSuccess = (response) => {
             this.authService.setToken(JSON.parse(JSON.stringify(response)));
             return response;
         };
 
-        this.http.post(`auth/unlink/${providerName}`,  providerUserId).subscribe(
-            res => {
-                onSuccess(res);
-            },
-            err => {
-                this.notificationService.error('Failed!', 'Error Occurred');
-            }
-        );
+        try {
+            const res = await this.http.post(`auth/unlink/${providerName}`,  providerUserId).toPromise();
+            onSuccess(res);
+        } catch (err) {
+            this.notificationService.error('Failed!', 'Error Occurred');
+        }
     }
 }

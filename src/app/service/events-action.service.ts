@@ -27,8 +27,13 @@ export class EventsActionService {
                 this.notificationService.error('Error', 'An error occurred while deleting the events.');
             };
 
-            this.dialogService.confirmDanger(viewRef, 'Are you sure you want to delete these events?', 'DELETE EVENTS', () => {
-                this.removeEvent(ids, 0).then(onSuccess).catch(onFailure);
+            this.dialogService.confirmDanger(viewRef, 'Are you sure you want to delete these events?', 'DELETE EVENTS', async () => {
+                try {
+                    await this.removeEvent(ids, 0);
+                    onSuccess();
+                } catch (err) {
+                    onFailure();
+                }
                 return true;
             });
         }

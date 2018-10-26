@@ -183,30 +183,26 @@ export class ProjectEditComponent implements OnInit {
         return this.addSlackIntegration();
     }
 
-    addSlackIntegration() {
-        return this.projectService.addSlack(this._projectId).subscribe(
-            async (res) => {
-                this.notificationService.success('', await this.wordTranslateService.translate('Successfully added'));
-            },
-            async (err) => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding Slack to your project.'));
-            }
-        );
+    async addSlackIntegration() {
+        try {
+            const res = await this.projectService.addSlack(this._projectId).toPromise();
+            this.notificationService.success('', await this.wordTranslateService.translate('Successfully added'));
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding Slack to your project.'));
+        }
     }
 
-    addToken() {
+    async addToken() {
         const options = {
             organization_id: this.project['organization_id'],
             project_id: this._projectId
         };
-        return this.tokenService.create(options).subscribe(
-            res => {
-                this.tokens.push(JSON.parse(JSON.stringify(res)));
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while creating a new API key for your project.'));
-            }
-        );
+        try {
+            const res = await this.tokenService.create(options).toPromise();
+            this.tokens.push(JSON.parse(JSON.stringify(res)));
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while creating a new API key for your project.'));
+        }
     }
 
     addWebHook() {
@@ -245,7 +241,14 @@ export class ProjectEditComponent implements OnInit {
             return;
         }
 
-        return this.getProject().then(() => { this.getOrganization().then(() => { this.getConfiguration().then(() => { this.getTokens().then(() => { this.getSlackNotificationSettings().then(() => { this.getWebHooks(); }); }); } ); }); });
+        try {
+            await this.getProject();
+            await this.getOrganization();
+            await this.getConfiguration();
+            await this.getTokens();
+            await this.getSlackNotificationSettings();
+            await this.getWebHooks();
+        } catch (err) {}
     }
 
     async getOrganization() {
@@ -492,30 +495,27 @@ export class ProjectEditComponent implements OnInit {
         this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to reset the data for this project?', 'RESET PROJECT DATA', modalCallBackFunction);
     }
 
-    save(isValid) {
+    async save(isValid) {
         if (!isValid) {
             return;
         }
-        return this.projectService.update(this._projectId, this.project).subscribe(
-            res => {
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
-            }
-        );
+
+        try {
+            await this.projectService.update(this._projectId, this.project).toPromise();
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
+        }
     }
 
-    saveApiKeyNote(data) {
-        return this.tokenService.update(data['id'], { notes: data.notes }).subscribe(
-            res => {
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the API key note.'));
-            }
-        );
+    async saveApiKeyNote(data) {
+        try {
+            await this.tokenService.update(data['id'], { notes: data.notes }).toPromise();
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the API key note.'));
+        }
     }
 
-    saveCommonMethods() {
+    async saveCommonMethods() {
         const onSuccess = () => {
         };
 
@@ -524,27 +524,23 @@ export class ProjectEditComponent implements OnInit {
         };
 
         if (this.common_methods) {
-            return this.projectService.setData(this._projectId, 'CommonMethods', this.common_methods).subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.setData(this._projectId, 'CommonMethods', this.common_methods).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            return this.projectService.removeData(this._projectId, 'CommonMethods').subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.removeData(this._projectId, 'CommonMethods').toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 
-    saveDataExclusion() {
+    async saveDataExclusion() {
         const onSuccess = () => {
         };
 
@@ -553,37 +549,31 @@ export class ProjectEditComponent implements OnInit {
         };
 
         if (this.data_exclusions) {
-            return this.projectService.setConfig(this._projectId, '@@DataExclusions', this.data_exclusions).subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.setConfig(this._projectId, '@@DataExclusions', this.data_exclusions).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            return this.projectService.removeConfig(this._projectId, '@@DataExclusions').subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.removeConfig(this._projectId, '@@DataExclusions').toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 
-    saveDeleteBotDataEnabled() {
-        return this.projectService.update(this._projectId, {'delete_bot_data_enabled': this.project['delete_bot_data_enabled']}).subscribe(
-            res => {
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
-            }
-        );
+    async saveDeleteBotDataEnabled() {
+        try {
+            await this.projectService.update(this._projectId, {'delete_bot_data_enabled': this.project['delete_bot_data_enabled']}).toPromise();
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
+        }
     }
 
-    saveUserAgents() {
+    async saveUserAgents() {
         const onSuccess = () => {
         };
 
@@ -592,27 +582,23 @@ export class ProjectEditComponent implements OnInit {
         };
 
         if (this.user_agents) {
-            return this.projectService.setConfig(this._projectId, '@@UserAgentBotPatterns', this.user_agents).subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.setConfig(this._projectId, '@@UserAgentBotPatterns', this.user_agents).toPromise;
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            return this.projectService.removeConfig(this._projectId, '@@UserAgentBotPatterns').subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.removeConfig(this._projectId, '@@UserAgentBotPatterns').toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 
-    saveUserNamespaces() {
+    async saveUserNamespaces() {
         const onSuccess = () => {
         };
 
@@ -621,35 +607,24 @@ export class ProjectEditComponent implements OnInit {
         };
 
         if (this.user_namespaces) {
-            return this.projectService.setData(this._projectId, 'UserNamespaces', this.user_namespaces).subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.setData(this._projectId, 'UserNamespaces', this.user_namespaces).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         } else {
-            return this.projectService.removeData(this._projectId, 'UserNamespaces').subscribe(
-                res => {
-                    onSuccess();
-                },
-                err => {
-                    onFailure();
-                }
-            );
+            try {
+                await this.projectService.removeData(this._projectId, 'UserNamespaces').toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
         }
     }
 
-    saveSlackNotificationSettings() {
+    async saveSlackNotificationSettings() {
         const onFailure = async (response) => {
-            // if (response.status === 426) {
-            //     return billingService.confirmUpgradePlan(response.data.message, vm.project.organization_id).then(function () {
-            //         return saveSlackNotificationSettings();
-            //     }).catch(function(e){
-            //         return getSlackNotificationSettings();
-            //     });
-            // }
             if (response.status === 426) {
                 try {
                     return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project['organization_id'], () => {
@@ -663,13 +638,11 @@ export class ProjectEditComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving your slack notification settings.'));
         };
 
-        return this.projectService.setIntegrationNotificationSettings(this._projectId, 'slack', this.slackNotificationSettings).subscribe(
-            res => {
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.projectService.setIntegrationNotificationSettings(this._projectId, 'slack', this.slackNotificationSettings).toPromise();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
     showChangePlanDialog() {

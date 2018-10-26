@@ -33,7 +33,7 @@ export class ProjectConfigureComponent implements OnInit {
         });
 
         this.activatedRoute.queryParams.subscribe(params => {
-            this._canRedirect = params['redirect'] ? (params['redirect'] === 'true' ? true : false) : false;
+            this._canRedirect = params['redirect'] ? (params['redirect'] === 'true') : false;
             console.log(this._canRedirect);
         });
     }
@@ -44,7 +44,8 @@ export class ProjectConfigureComponent implements OnInit {
 
     async initData() {
         this.projectTypes = await this.getProjectTypes();
-        this.getDefaultApiKey().then(this.getProject.bind(this));
+        await this.getDefaultApiKey();
+        await this.getProject();
     }
 
 
@@ -69,7 +70,13 @@ export class ProjectConfigureComponent implements OnInit {
         const onFailure = async () => {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while getting the API key for your project.'));
         };
-        return this.tokenService.getProjectDefault(this._projectId).toPromise().then(onSuccess.bind(this), onFailure.bind(this));
+
+        try {
+            const res = await this.tokenService.getProjectDefault(this._projectId).toPromise();
+            onSuccess(res);
+        } catch (err) {
+            onFailure();
+        }
     }
 
     async getProject() {
@@ -85,7 +92,12 @@ export class ProjectConfigureComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project'));
         };
 
-        return this.projectService.getById(this._projectId).toPromise().then(onSuccess.bind(this), onFailure.bind(this));
+        try {
+            const res = await this.projectService.getById(this._projectId).toPromise();
+            onSuccess(res);
+        } catch (err) {
+            onFailure();
+        }
     }
 
     async getProjectTypes() {

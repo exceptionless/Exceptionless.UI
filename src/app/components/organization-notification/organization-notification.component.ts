@@ -49,8 +49,13 @@ export class OrganizationNotificationComponent implements OnInit {
         this.get();
     }
 
-    get() {
-        this.getOrganizations().then(() => { this.getProjects().then( () => { this.getFilterUsesPremiumFeatures().then(() => { this.getOrganizationNotifications(); }); } ); });
+    async get() {
+        try {
+            await this.getOrganizations();
+            await this.getProjects();
+            await this.getFilterUsesPremiumFeatures();
+            await this.getOrganizationNotifications();
+        } catch (err) {}
     }
 
     getCurrentOrganizationId() {
@@ -189,7 +194,7 @@ export class OrganizationNotificationComponent implements OnInit {
         this.hasNotifications = true;
     }
 
-    getOrganizations() {
+    async getOrganizations() {
         const getSelectedOrganization = async () => {
             const organizationId = this.getCurrentOrganizationId();
 
@@ -218,7 +223,10 @@ export class OrganizationNotificationComponent implements OnInit {
             }
         };
 
-        return getAllOrganizations().then(() => { getSelectedOrganization(); });
+        try {
+            await getAllOrganizations();
+            await getSelectedOrganization();
+        } catch (err) {}
     }
 
     async getProjects() {
@@ -280,8 +288,11 @@ export class OrganizationNotificationComponent implements OnInit {
         return this.environment.config.INTERCOM_APPID;
     }
 
-    onFilterChanged() {
-        return this.getFilterUsesPremiumFeatures().then( () => { this.getOrganizationNotifications(); });
+    async onFilterChanged() {
+        try {
+            await this.getFilterUsesPremiumFeatures();
+            await this.getOrganizationNotifications();
+        } catch (err) {}
     }
 
     async showChangePlanDialog(organizationId) {

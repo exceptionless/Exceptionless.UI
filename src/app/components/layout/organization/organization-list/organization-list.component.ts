@@ -134,7 +134,7 @@ export class OrganizationListComponent implements OnInit {
         }
     }
 
-    leave(organization, user) {
+    async leave(organization, user) {
         const modalCallBackFunction = async () => {
             const onSuccess = () => {
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
@@ -150,7 +150,12 @@ export class OrganizationListComponent implements OnInit {
                 this.notificationService.error('', message);
             };
 
-            return this.organizationService.removeUser(organization.id, user.email_address).toPromise().then(onSuccess.bind(this), onFailure.bind(this));
+            try {
+                await this.organizationService.removeUser(organization.id, user.email_address).toPromise();
+                onSuccess();
+            } catch (err) {
+                onFailure(err);
+            }
         };
 
         this.dialogService.confirm(this.viewRef, 'Are you sure you want to leave this organization?', 'Leave Organization', modalCallBackFunction.bind(this));

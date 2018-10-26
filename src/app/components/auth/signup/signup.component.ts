@@ -54,7 +54,7 @@ export class SignupComponent implements OnInit {
         );*/
     }
 
-    redirectOnSignup() {
+    async redirectOnSignup() {
         const onSuccess = (response) => {
             if (response.data && response.data.length > 0) {
                 this.router.navigateByUrl('/type/error/dashboard');
@@ -67,13 +67,11 @@ export class SignupComponent implements OnInit {
             this.router.navigateByUrl('/project/add');
         };
 
-        return this.projectService.getAll().subscribe(
-            res => {
-                onSuccess(JSON.parse(JSON.stringify(res.body)));
-            },
-            err => {
-                onFailure();
-            }
-        );
+        try {
+            const res = await this.projectService.getAll().toPromise();
+            onSuccess(JSON.parse(JSON.stringify(res.body)));
+        } catch (err) {
+            onFailure();
+        }
     }
 }

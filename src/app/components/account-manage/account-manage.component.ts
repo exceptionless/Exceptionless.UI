@@ -69,7 +69,7 @@ export class AccountManageComponent implements OnInit {
         return this.projects.filter(function(p) { return p.organization_name === organizationName; });
     }
 
-    authenticate(provider) {
+    async authenticate(provider) {
         const onFailure = async (response) => {
             let message =  await this.wordTranslateService.translate('An error occurred while adding external login.');
             if (response && response.error) {
@@ -78,11 +78,14 @@ export class AccountManageComponent implements OnInit {
 
             this.notificationService.error('', message);
         };
-
-        return this.authService.authenticate(provider).subscribe(onFailure);
+        try {
+            const res = await this.authService.authenticate(provider).toPromise();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
-    changePassword(isValid) {
+    async changePassword(isValid) {
         if (!isValid) {
             return;
         }
@@ -106,14 +109,12 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.authAccountService.changePassword(this.password).then(
-            res => {
-                onSuccess();
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try  {
+            await this.authAccountService.changePassword(this.password);
+            onSuccess();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
     async get(data?) {
@@ -122,10 +123,14 @@ export class AccountManageComponent implements OnInit {
             return this.authService.logout();
         }
 
-        return this.getUser().then(() => { this.getProjects().then(() => { this.getEmailNotificationSettings(); }); });
+        try {
+            await this.getUser();
+            await this.getProjects();
+            await this.getEmailNotificationSettings();
+        } catch (err) {}
     }
 
-    getEmailNotificationSettings() {
+    async getEmailNotificationSettings() {
         const onSuccess = (response) => {
             this.emailNotificationSettings = JSON.parse(JSON.stringify(response));
             return this.emailNotificationSettings;
@@ -140,14 +145,12 @@ export class AccountManageComponent implements OnInit {
             return;
         }
 
-        return this.projectService.getNotificationSettings(this.currentProject['id'], this.user['id']).subscribe(
-            res => {
-                onSuccess(res);
-            },
-            err => {
-                onFailure();
-            }
-        );
+        try {
+            const res = await this.projectService.getNotificationSettings(this.currentProject['id'], this.user['id']).toPromise();
+            onSuccess(res);
+        } catch (err) {
+            onFailure();
+        }
     }
 
     async getProjects() {
@@ -175,10 +178,8 @@ export class AccountManageComponent implements OnInit {
         try {
             const res = await this.projectService.getAll().toPromise();
             onSuccess(res.body);
-            return res;
         } catch (err) {
             onFailure();
-            return err;
         }
     }
 
@@ -202,10 +203,8 @@ export class AccountManageComponent implements OnInit {
         try {
             const res = await this.userService.getCurrentUser().toPromise();
             onSuccess(res);
-            return res;
         } catch (err) {
             onFailure(err);
-            return err;
         }
     }
 
@@ -248,7 +247,7 @@ export class AccountManageComponent implements OnInit {
         }
     }
 
-    resendVerificationEmail() {
+    async resendVerificationEmail() {
         const onFailure = async (response) => {
             let message = await this.wordTranslateService.translate('An error occurred while sending your verification email.');
             if (response && response.error) {
@@ -258,15 +257,14 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.userService.resendVerificationEmail(this.user['id']).subscribe(
-            res => {},
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.userService.resendVerificationEmail(this.user['id']).toPromise();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
-    saveEmailAddress(isRetrying?) {
+    async saveEmailAddress(isRetrying?) {
         const resetCanSaveEmailAddress = () => {
             this._canSaveEmailAddress = true;
         };
@@ -303,18 +301,16 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.userService.updateEmailAddress(this.user['id'], this.user['email_address']).subscribe(
-            res => {
-                onSuccess(res);
-                resetCanSaveEmailAddress();
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            const res = await this.userService.updateEmailAddress(this.user['id'], this.user['email_address']).toPromise();
+            onSuccess(res);
+            resetCanSaveEmailAddress();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
-    saveEmailNotificationSettings() {
+    async saveEmailNotificationSettings() {
         const onFailure = async (response) => {
             let message = await this.wordTranslateService.translate('An error occurred while saving your notification settings.');
             if (response && response.error) {
@@ -324,15 +320,14 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.projectService.setNotificationSettings(this.currentProject['id'], this.user['id'], this.emailNotificationSettings).subscribe(
-            res => {},
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            const res = await this.projectService.setNotificationSettings(this.currentProject['id'], this.user['id'], this.emailNotificationSettings).toPromise;
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
-    saveEnableEmailNotification() {
+    async saveEnableEmailNotification() {
         const onFailure = async (response) => {
             let message = await this.wordTranslateService.translate('An error occurred while saving your email notification preferences.');
             if (response && response.error) {
@@ -342,15 +337,14 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.userService.update(this.user['id'], { email_notifications_enabled: this.user['email_notifications_enabled'] }).subscribe(
-            res => {},
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.userService.update(this.user['id'], { email_notifications_enabled: this.user['email_notifications_enabled'] }).toPromise;
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
-    saveUser(isValid) {
+    async saveUser(isValid) {
         if (!isValid) {
             return;
         }
@@ -364,19 +358,18 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.userService.update(this.user['id'], this.user).subscribe(
-            res => {},
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.userService.update(this.user['id'], this.user).toPromise();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
     showChangePlanDialog() {
         this.billingService.changePlan(this.viewRef, () => {}, this.currentProject ? this.currentProject.organization_id : null);
     }
 
-    unlink(account) {
+    async unlink(account) {
         const onSuccess = () => {
             this.user['o_auth_accounts'].splice(this.user['o_auth_accounts'].indexOf(account), 1);
         };
@@ -390,13 +383,11 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.authService.unlink(account['provider'], account['provider_user_id']).subscribe(
-            res => {
-                onSuccess();
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.authService.unlink(account['provider'], account['provider_user_id']).toPromise;
+            onSuccess();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 }

@@ -11,18 +11,17 @@ export class AppConfigService {
 
     constructor (private injector: Injector) { }
 
-    loadAppConfig() {
+    async loadAppConfig() {
         const http = this.injector.get(HttpClient);
 
-        return http.get('/assets/app-config.json')
-            .toPromise()
-            .then(data => {
-                this.appConfig = data;
-            })
-            .catch(error => {
-                console.warn('Error loading app-config.json, using envrionment file instead');
-                this.appConfig = environment;
-            });
+        try {
+            const data = await http.get('/assets/app-config.json').toPromise();
+            this.appConfig = data;
+        } catch (error) {
+            console.warn('Error loading app-config.json, using envrionment file instead');
+            console.log(error);
+            this.appConfig = environment;
+        }
     }
 
     get config() {

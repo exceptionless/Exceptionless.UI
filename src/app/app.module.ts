@@ -100,6 +100,7 @@ import { RefreshOnDirective } from './directives/refresh-on.directive';
 import { ProjectConfigureComponent } from './components/layout/project/project-configure/project-configure.component';
 import { AutoActiveDirective } from './directives/auto-active.directive';
 import { AppConfigService } from './service/app-config.service';
+import { StatusComponent } from './components/status/status.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -191,7 +192,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
         SemverDirective,
         RefreshOnDirective,
         ProjectConfigureComponent,
-        AutoActiveDirective
+        AutoActiveDirective,
+        StatusComponent
     ],
     imports: [
         RouterModule,
@@ -222,9 +224,9 @@ const appInitializerFn = (appConfig: AppConfigService) => {
             }
         }),
         IntercomModule.forRoot({
-            appId: environment.INTERCOM_APPID
+            appId: ''
         }),
-        NgxStripeModule.forRoot(environment.STRIPE_PUBLISHABLE_KEY),
+        NgxStripeModule.forRoot(''),
     ],
     providers: [
         AuthGuardService,

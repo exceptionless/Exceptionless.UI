@@ -35,7 +35,7 @@ export class ResetPasswordComponent implements OnInit {
         }
     }
 
-    changePassword(isValid) {
+    async changePassword(isValid) {
         if (!isValid) {
             return;
         }
@@ -54,24 +54,20 @@ export class ResetPasswordComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.authAccountService.resetPassword(this.data).subscribe(
-            res => {
-                onSuccess();
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.authAccountService.resetPassword(this.data).toPromise();
+            onSuccess();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
-    cancelResetPassword() {
-        return this.authAccountService.cancelResetPassword(this.data.password_reset_token).subscribe(
-            res => {
-                this.router.navigate(['/login']);
-            },
-            err => {
-                this.router.navigate(['/login']);
-            }
-        );
+     async cancelResetPassword() {
+        try {
+            await this.authAccountService.cancelResetPassword(this.data.password_reset_token).toPromise();
+            this.router.navigate(['/login']);
+        } catch (err) {
+            this.router.navigate(['/login']);
+        }
     }
 }

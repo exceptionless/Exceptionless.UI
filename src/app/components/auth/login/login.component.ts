@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {}
 
-    onSubmit(isValid) {
+     async onSubmit(isValid) {
         this.submitted = true;
 
         if (isValid) {
@@ -40,28 +40,26 @@ export class LoginComponent implements OnInit {
                 password: this.model.password
             };
 
-            this.auth.login(loginData).subscribe(
-                res => {
-                    if (this.filterService.getProjectType() === 'All Projects') {
-                        this.filterUrlPattern = '';
+            try {
+                const res = await this.auth.login(loginData).toPromise();
+                if (this.filterService.getProjectType() === 'All Projects') {
+                    this.filterUrlPattern = '';
+                    this.router.navigate(['/type/error/dashboard']);
+                } else {
+                    this.projectId = this.filterService.getProjectTypeId();
+                    this.projectType = this.filterService.getProjectType();
+                    if (!this.projectType) {
+                        this.filterService.setProjectFilter('All Projects', '', 'All Projects');
+                        this.filterService.setTime('all');
                         this.router.navigate(['/type/error/dashboard']);
                     } else {
-                        this.projectId = this.filterService.getProjectTypeId();
-                        this.projectType = this.filterService.getProjectType();
-                        if (!this.projectType) {
-                            this.filterService.setProjectFilter('All Projects', '', 'All Projects');
-                            this.filterService.setTime('all');
-                            this.router.navigate(['/type/error/dashboard']);
-                        } else {
-                            this.filterUrlPattern = `${this.projectType}/${this.projectId}/`;
-                            this.router.navigate([`${this.filterUrlPattern}/error/dashboard`]);
-                        }
+                        this.filterUrlPattern = `${this.projectType}/${this.projectId}/`;
+                        this.router.navigate([`${this.filterUrlPattern}/error/dashboard`]);
                     }
-                },
-                async err => {
-                    this.notificationService.error('', await this.wordTranslateService.translate('Loggin_Failed_Message'));
                 }
-            );
+            } catch (err) {
+                this.notificationService.error('', await this.wordTranslateService.translate('Loggin_Failed_Message'));
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ export class ForgotPasswordComponent implements OnInit {
     ngOnInit() {
     }
 
-    resetPassword(isValid) {
+    async resetPassword(isValid) {
         if (!isValid) {
             return;
         }
@@ -41,13 +41,11 @@ export class ForgotPasswordComponent implements OnInit {
             this.notificationService.error('', message);
         };
 
-        return this.authAccountService.forgotPassword(this.emailAddress).subscribe(
-            res => {
-                onSuccess();
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            const res = await this.authAccountService.forgotPassword(this.emailAddress).toPromise();
+            onSuccess();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 }

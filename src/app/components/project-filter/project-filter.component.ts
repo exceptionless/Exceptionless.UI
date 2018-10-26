@@ -30,7 +30,14 @@ export class ProjectFilterComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.getOrganizations().then(() => { this.getProjects(); });
+        this.initData();
+    }
+
+    async initData() {
+        try {
+            await this.getOrganizations();
+            await this.getProjects();
+        } catch (err) {}
         this.filteredDisplayName = this.filterService.getProjectName();
     }
 
@@ -46,8 +53,11 @@ export class ProjectFilterComponent implements OnInit {
         }
     }
 
-    get() {
-        return this.getOrganizations().then(this.getProjects.bind(this));
+    async get() {
+        try {
+            await this.getOrganizations();
+            await this.getProjects();
+        } catch (err) {}
     }
 
     async getProjects() {

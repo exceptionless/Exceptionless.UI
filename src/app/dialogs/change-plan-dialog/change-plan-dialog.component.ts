@@ -64,12 +64,21 @@ export class ChangePlanDialogComponent implements IModalDialog {
             });
         }
 
-        this.getOrganizations().then(this.getPlans.bind(this)).then(this.getUser.bind(this));
+        try {
+            await this.getOrganizations();
+            await this.getPlans.bind(this);
+            await this.getUser.bind(this);
+        } catch (err) {}
     }
 
     async save(isValid) {
-        const onCreateTokenSuccess = (response) => {
-            return this.changePlan(false, { stripeToken: response.id, last4: response.card.last4, couponId: this.coupon }).then(onSuccess, onFailure);
+        const onCreateTokenSuccess = async (response) => {
+            try {
+                const res = await this.changePlan(false, { stripeToken: response.id, last4: response.card.last4, couponId: this.coupon });
+                onSuccess(res);
+            } catch (err) {
+                onFailure(err);
+            }
         };
 
         const onSuccess = async (response) => {
@@ -106,19 +115,32 @@ export class ChangePlanDialogComponent implements IModalDialog {
         }
 
         if (this.hasAdminRole() || this.currentPlan.id === this._freePlanId) {
-            return this.changePlan(this.hasAdminRole(), {}).then(onSuccess, onFailure);
+            try {
+                const res = await this.changePlan(this.hasAdminRole(), {});
+                onSuccess(res);
+            } catch (err) {
+                onFailure(err);
+            }
         }
 
         if (this.currentPlan.price > 0 && this.isNewCard()) {
             try {
-                return this.createStripeToken().then(onCreateTokenSuccess, onFailure);
-            } catch (error) {
+                const res = await this.createStripeToken();
+                onCreateTokenSuccess(res);
+                return res;
+            } catch (err) {
+                onFailure(err);
                 this.paymentMessage = await this.wordTranslateService.translate('An error occurred while changing plans.');
-                return null;
+                return err;
             }
         }
 
-        return this.changePlan(false, { couponId: this.coupon }).then(onSuccess, onFailure);
+        try {
+            const res = await this.changePlan(false, { couponId: this.coupon });
+            onSuccess(res);
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
     async createStripeToken() {
@@ -136,7 +158,10 @@ export class ChangePlanDialogComponent implements IModalDialog {
             name: this.card.name
         };
 
-        return this.stripe.createToken(this.elements.create('card', {}), payload).toPromise().then(onSuccess);
+        try {
+            const res = await this.stripe.createToken(this.elements.create('card', {}), payload).toPromise();
+            onSuccess(res);
+        } catch (err) {}
     }
 
     cancel() {
@@ -289,7 +314,14 @@ export class ChangePlanDialogComponent implements IModalDialog {
         };
 
         this.organizations = [];
-        return getAllOrganizations().then(getSelectedOrganization).then(onSuccess, onFailure);
+
+        try {
+            await getAllOrganizations();
+            await getSelectedOrganization;
+            onSuccess();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
 }

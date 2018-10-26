@@ -190,7 +190,7 @@ export class OrganizationEditComponent implements OnInit {
         this.billingService.changePlan(this.viewRef, () => {}, this._organizationId);
     }
 
-    createUser(emailAddress) {
+    async createUser(emailAddress) {
         const onFailure = async (response) => {
             if (response.status === 426) {
                 return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this._organizationId, () => {
@@ -206,13 +206,11 @@ export class OrganizationEditComponent implements OnInit {
            this.notificationService.error('', message);
         };
 
-        return this.organizationService.addUser(this._organizationId, emailAddress).subscribe(
-            res => {
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.organizationService.addUser(this._organizationId, emailAddress).toPromise();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
     get(data?) {
@@ -229,7 +227,7 @@ export class OrganizationEditComponent implements OnInit {
         return this.getOrganization();
     }
 
-    getOrganization() {
+    async getOrganization() {
         const onSuccess = (response) => {
             const getRemainingEventLimit = (organization) => {
                 if (!organization.max_events_per_month) {
@@ -277,14 +275,12 @@ export class OrganizationEditComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization'));
         };
 
-        return this.organizationService.getById(this._organizationId).subscribe(
-            res => {
-                onSuccess(res);
-            },
-            err => {
-                onFailure();
-            }
-        );
+        try {
+            const res = await this.organizationService.getById(this._organizationId).toPromise();
+            onSuccess(res);
+        } catch (err) {
+            onFailure();
+        }
     }
 
     hasAdminRole(user) {
@@ -337,16 +333,14 @@ export class OrganizationEditComponent implements OnInit {
         this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this organization?', 'Delete Organization', modalCallBackFunction);
     }
 
-    save(isValid) {
+    async save(isValid) {
         if (!isValid) {
             return;
         }
-        return this.organizationService.update(this._organizationId, this.organization).subscribe(
-            res => {
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the organization.'));
-            }
-        );
+        try {
+            await this.organizationService.update(this._organizationId, this.organization).toPromise();
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the organization.'));
+        }
     }
 }

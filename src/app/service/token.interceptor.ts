@@ -22,7 +22,11 @@ export class TokenInterceptor implements HttpInterceptor {
 
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
         // handle your auth error or rethrow
-        if (err instanceof HttpErrorResponse && this.router.url !== '/login' && err.status === 401) {
+        if (err instanceof HttpErrorResponse && this.router.url !== '/status' && (err.status === 404 || err.status === 503 || err.status === 0)) {
+            console.log(err);
+            this.router.navigate(['/status'], { queryParams: { redirect: true }});
+            return throwError(err);
+        } else if (err instanceof HttpErrorResponse && this.router.url !== '/login' && err.status === 401) {
             this.auth.logout()
                 .subscribe({
                     error: (authErr: any) => this.notificationService.error('Error Occurred!', 'Error'),

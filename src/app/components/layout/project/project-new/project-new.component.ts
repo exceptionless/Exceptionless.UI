@@ -40,7 +40,7 @@ export class ProjectNewComponent implements OnInit {
         this.getOrganizations();
     }
 
-    add(isRetrying?) {
+    async add(isRetrying?) {
         const resetCanAdd = () => {
             this._canAdd = true;
         };
@@ -65,10 +65,17 @@ export class ProjectNewComponent implements OnInit {
         }
 
         if (this.canCreateOrganization()) {
-            return this.createOrganization(this.organization_name).then(() => { this.createProject().then(() => { resetCanAdd(); }); });
+            try {
+                await this.createOrganization(this.organization_name);
+                await this.createProject();
+                await resetCanAdd();
+            } catch (err) {}
         }
 
-        return this.createProject(this.currentOrganization).then(() => { resetCanAdd(); });
+        try {
+            await this.createProject(this.currentOrganization);
+            await resetCanAdd();
+        } catch (err) {}
     }
 
     canCreateOrganization() {
@@ -142,7 +149,7 @@ export class ProjectNewComponent implements OnInit {
         }
     }
 
-    getOrganizations() {
+    async getOrganizations() {
         const onSuccess = (response) => {
             this.organizations = JSON.parse(JSON.stringify(response));
             this.organizations.push({id: this._newOrganizationId, name: '<New Organization>'});
@@ -153,16 +160,14 @@ export class ProjectNewComponent implements OnInit {
                 this.currentOrganization = this.organizations.length > 0 ? this.organizations[0] : {};
             }
         };
-        return this.organizationService.getAll().subscribe(
-            res => {
-                onSuccess(res.body);
-            },
-            err => {
-                if (!this.notificationService) {
-                    this.notificationService.error('', 'Error occurred while get organizations');
-                }
+        try {
+            const res = await this.organizationService.getAll().toPromise();
+            onSuccess(res.body);
+        } catch (err) {
+            if (!this.notificationService) {
+                this.notificationService.error('', 'Error occurred while get organizations');
             }
-        );
+        }
     }
 
     hasOrganizations() {

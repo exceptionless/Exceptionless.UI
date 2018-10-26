@@ -97,14 +97,12 @@ export class UserComponent implements OnInit {
         this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to remove this user from your organization?', 'Remove User', modalCallBackFunction);
     }
 
-    resendNotification(user) {
-        return this.organizationService.addUser(this.settings['organizationId'], user['email_address']).subscribe(
-            res => {
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to resend the notification.'));
-            }
-        );
+    async resendNotification(user) {
+        try {
+            await this.organizationService.addUser(this.settings['organizationId'], user['email_address']).toPromise();
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to resend the notification.'));
+        }
     }
 
     async updateAdminRole(user) {

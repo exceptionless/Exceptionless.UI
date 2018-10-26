@@ -146,7 +146,7 @@ export class SessionComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    get() {
+    async get() {
         const optionsCallback = (options) => {
             options.filter += ' type:session';
             if (this.includeLiveFilter) {
@@ -191,14 +191,12 @@ export class SessionComponent implements OnInit, OnDestroy {
         };
 
         const offset = this.filterService.getTimeOffset();
-        return this.eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback, false).subscribe(
-            res => {
-                onSuccess(res);
-            },
-            err => {
-                this.notificationService.error('', 'Error occurred while trying to get event service');
-            }
-        );
+        try {
+            const res = await this.eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback, false).toPromise();
+            onSuccess(res);
+        } catch (err) {
+            this.notificationService.error('', 'Error occurred while trying to get event service');
+        }
     }
 
     updateLiveFilter(isLive) {

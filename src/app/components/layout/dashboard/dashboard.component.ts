@@ -160,14 +160,16 @@ export class DashboardComponent implements OnInit {
         return true;
     }
 
-    get(isRefresh?) {
+     async get(isRefresh?) {
         if (isRefresh && !this.canRefresh(isRefresh)) {
             return;
         }
-        this.getOrganizations().then(this.getStats.bind(this)).then(() => {
+        try {
+            await this.getOrganizations();
+            await this.getStats();
             this.timeFilter = this.filterStoreService.getTimeFilter();
             this.projectFilter = this.filterService.getProjectTypeId();
-        });
+        } catch (err) {}
     }
 
     canRefresh(data) {

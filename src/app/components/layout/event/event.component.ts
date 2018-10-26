@@ -125,8 +125,12 @@ export class EventComponent implements OnInit {
 
     ngOnInit() {}
 
-    get() {
-        this.getEvent().then(() => { this.getProject().then(() => { this.buildTabs(this.activedTab); } ); });
+    async get() {
+        try {
+            await this.getEvent();
+            await this.getProject();
+            await this.buildTabs(this.activedTab);
+        } catch (err) {}
     }
 
     addHotKeys() {
@@ -282,7 +286,7 @@ export class EventComponent implements OnInit {
         this.notificationService.success('', await  this.wordTranslateService.translate('Copied!'));
     }
 
-    demoteTab(tabName) {
+    async demoteTab(tabName) {
         const onSuccess = () => {
             this.project['promoted_tabs'].splice(indexOf, 1);
             this.buildTabs('Extended Data');
@@ -297,14 +301,12 @@ export class EventComponent implements OnInit {
             return;
         }
 
-        return this.projectService.demoteTab(this.project['id'], tabName).subscribe(
-            res => {
-                onSuccess();
-            },
-            err => {
-                onFailure(err);
-            }
-        );
+        try {
+            await this.projectService.demoteTab(this.project['id'], tabName).toPromise();
+            onSuccess();
+        } catch (err) {
+            onFailure(err);
+        }
     }
 
     getPreviousTab() {
@@ -498,15 +500,13 @@ export class EventComponent implements OnInit {
         return this.project['promoted_tabs'].filter(function (tab) { return tab === tabName; }).length > 0;
     }
 
-    promoteTab(tabName) {
-        this.projectService.promoteTab(this.project['id'], tabName).subscribe(
-            res => {
-                this.project['promoted_tabs'].push(tabName);
-                this.buildTabs(tabName);
-            },
-            async err => {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred promoting tab.'));
-            }
-        );
+    async promoteTab(tabName) {
+        try {
+            await this.projectService.promoteTab(this.project['id'], tabName).toPromise();
+            this.project['promoted_tabs'].push(tabName);
+            this.buildTabs(tabName);
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred promoting tab.'));
+        }
     }
 }
