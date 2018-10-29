@@ -13,8 +13,6 @@ install:
 build_script:
 - node_modules\.bin\ng build
 
-test_script: off
-
 after_test:
 - node_modules\.bin\zip -r dist\exceptionless.zip dist\exceptionless
 - ps: Get-ChildItem .\*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName ReleaseArtifacts }
