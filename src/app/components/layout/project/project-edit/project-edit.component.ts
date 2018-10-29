@@ -6,7 +6,7 @@ import { ProjectService } from '../../../../service/project.service';
 import { TokenService } from '../../../../service/token.service';
 import { WebHookService } from '../../../../service/web-hook.service';
 import { NotificationService } from '../../../../service/notification.service';
-import { AppConfigService } from '../../../../service/app-config.service';
+import { environment } from '../../../../../environments/environment';
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
 import { WordTranslateService } from '../../../../service/word-translate.service';
@@ -121,7 +121,7 @@ export class ProjectEditComponent implements OnInit {
     data_exclusions = null;
     hasMonthlyUsage = true;
     hasPremiumFeatures = false;
-    isSlackEnabled = !!this.environment.config.SLACK_APPID;
+    isSlackEnabled = !!environment.SLACK_APPID;
     next_billing_date = moment().startOf('month').add(1, 'months').toDate();
     organization = {};
     project: any = {};
@@ -145,8 +145,7 @@ export class ProjectEditComponent implements OnInit {
         private notificationService: NotificationService,
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
-        private dialogService: DialogService,
-        private environment: AppConfigService
+        private dialogService: DialogService
     ) {
         this.activatedRoute.params.subscribe( (params) => {
             this._projectId = params['id'];
@@ -271,7 +270,7 @@ export class ProjectEditComponent implements OnInit {
             this.organization = JSON.parse(JSON.stringify(response));
             this.hasMonthlyUsage = this.organization['max_events_per_month'] > 0;
             this.remainingEventLimit = getRemainingEventLimit(this.organization);
-            this.canChangePlan = !!this.environment.config.STRIPE_PUBLISHABLE_KEY && !!this.organization;
+            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && !!this.organization;
 
             this.organization['usage'] = (this.organization['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: this.organization['max_events_per_month'], too_big: 0 }]).filter((usage) => {
                 return this.project['usage'].some(function(u) { return moment(u.date).isSame(usage.date); });

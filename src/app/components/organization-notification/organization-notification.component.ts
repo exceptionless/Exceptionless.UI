@@ -4,7 +4,7 @@ import { ProjectService } from '../../service/project.service';
 import { FilterService } from '../../service/filter.service';
 import { SearchService } from '../../service/search.service';
 import { NotificationService } from '../../service/notification.service';
-import { AppConfigService } from '../../service/app-config.service';
+import { environment } from '../../../environments/environment';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
 
@@ -41,8 +41,7 @@ export class OrganizationNotificationComponent implements OnInit {
         private notificationService: NotificationService,
         private wordTranslateService: WordTranslateService,
         private viewRef: ViewContainerRef,
-        private billingService: BillingService,
-        private environment: AppConfigService
+        private billingService: BillingService
     ) {}
 
     ngOnInit() {
@@ -285,7 +284,7 @@ export class OrganizationNotificationComponent implements OnInit {
     }
 
     isIntercomEnabled() {
-        return this.environment.config.INTERCOM_APPID;
+        return environment.INTERCOM_APPID;
     }
 
     async onFilterChanged() {
@@ -296,7 +295,7 @@ export class OrganizationNotificationComponent implements OnInit {
     }
 
     async showChangePlanDialog(organizationId) {
-        if (!this.environment.config.STRIPE_PUBLISHABLE_KEY) {
+        if (!environment.STRIPE_PUBLISHABLE_KEY) {
             this.notificationService.error('', await this.wordTranslateService.translate('Billing is currently disabled.'));
             return;
         }

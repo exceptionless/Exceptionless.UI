@@ -13,8 +13,7 @@ install:
 build_script:
 - node_modules\.bin\ng build
 
-test_script:
-- node_modules\.bin\ng test
+test_script: off
 
 after_test:
 - node_modules\.bin\zip -r dist\exceptionless.zip dist\exceptionless

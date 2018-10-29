@@ -4,7 +4,7 @@ import { OrganizationService } from '../../service/organization.service';
 import { NotificationService } from '../../service/notification.service';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { UserService } from '../../service/user.service';
-import { AppConfigService } from '../../service/app-config.service';
+import { environment } from '../../../environments/environment';
 import { Intercom } from 'ng-intercom';
 import { AnalyticsService } from '../../service/analytics.service';
 import { StripeService, Elements } from 'ngx-stripe';
@@ -41,7 +41,6 @@ export class ChangePlanDialogComponent implements IModalDialog {
         private userService: UserService,
         private stripe: StripeService,
         private commonService: CommonService,
-        private environment: AppConfigService,
         private analyticsService: AnalyticsService) {
     }
 
@@ -60,7 +59,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
 
         if (this.isIntercomEnabled()) {
             this.intercom.boot({
-                app_id: this.environment.config.INTERCOM_APPID
+                app_id: environment.INTERCOM_APPID
             });
         }
 
@@ -182,11 +181,11 @@ export class ChangePlanDialogComponent implements IModalDialog {
     }
 
     isIntercomEnabled() {
-        return !!this.environment.config.INTERCOM_APPID;
+        return !!environment.INTERCOM_APPID;
     }
 
     isBillingEnabled() {
-        return !!this.environment.config.STRIPE_PUBLISHABLE_KEY;
+        return !!environment.STRIPE_PUBLISHABLE_KEY;
     }
 
     isCancellingPlan() {

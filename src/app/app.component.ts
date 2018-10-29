@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { AppConfigService } from './service/app-config.service';
-import { StripeService } from 'ngx-stripe';
 
 @Component({
     selector: 'app-root',
@@ -14,9 +12,7 @@ export class AppComponent implements OnInit {
     constructor(
         private hotkeysService: HotkeysService,
         private router: Router,
-        public translateService: TranslateService,
-        private appConfig: AppConfigService,
-        private stripeService: StripeService
+        public translateService: TranslateService
     ) {}
 
     ngOnInit() {
@@ -26,7 +22,6 @@ export class AppComponent implements OnInit {
 
         const browserLang = this.translateService.getBrowserLang();
         this.translateService.use(browserLang.match(/en-us|zh-cn/) ? browserLang : 'en-us');
-        this.stripeService.changeKey(this.appConfig.config.STRIPE_PUBLISHABLE_KEY);
     }
 
     addHotKeys() {
