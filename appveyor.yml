@@ -14,7 +14,7 @@ build_script:
 - node_modules\.bin\ng build
 
 after_test:
-- node_modules\.bin\tar -zcvf dist\exceptionless.zip dist\exceptionless
+- tar -zcvf dist\exceptionless.zip dist\exceptionless
 - ps: Get-ChildItem .\*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName ReleaseArtifacts }
 - IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" node_modules\.bin\ngh --dir=dist\exceptionless
 
