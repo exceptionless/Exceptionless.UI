@@ -1,7 +1,6 @@
 version: 2.8.{build}
 
 environment:
-    GIT_BRANCH: %APPVEYOR_REPO_BRANCH% || 'feature/angular6'
     BUILD_REPO_URL:
         secure: vuYBT6D5arel88+Py/H3nnMPd4hInIXvr2cwhJaZSSSvJnmg+9sX1P5+bTWaJskYpGztHVMg0Iq7hgUCMKjh23w8WBrutLiUsixRE0LBjroIVJaRsYG1okSko0fNKVOCyOLKGt19Qrk45/TrTFlGMQ==
 
@@ -17,7 +16,13 @@ build_script:
 after_test:
 - tar -zcvf dist\exceptionless.zip dist\exceptionless
 - ps: Get-ChildItem .\*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName ReleaseArtifacts }
-- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=%GIT_BRANCH%
+- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" {
+    IF "%APPVEYOR_REPO_BRANCH%"=="" {
+        ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=feature\angular6
+    } ELSE {
+        ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=%APPVEYOR_REPO_BRANCH%
+    }
+  }
 
 artifacts:
 - path: .\*.zip
