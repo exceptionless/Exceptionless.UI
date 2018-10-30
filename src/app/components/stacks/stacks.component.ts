@@ -92,7 +92,7 @@ export class StacksComponent implements OnChanges {
         this.currentOptions = options || this.settings.options;
 
         try {
-            const res = await this.stackService.getFrequent(this.currentOptions).toPromise();
+            const res = await this.stackService.getFrequent(this.currentOptions);
             onSuccess(res.body, res.headers.get('link'));
             this.loading = false;
             return this.stacks;

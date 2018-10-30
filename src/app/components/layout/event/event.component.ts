@@ -302,7 +302,7 @@ export class EventComponent implements OnInit {
         }
 
         try {
-            await this.projectService.demoteTab(this.project['id'], tabName).toPromise();
+            await this.projectService.demoteTab(this.project['id'], tabName);
             onSuccess();
         } catch (err) {
             onFailure(err);
@@ -457,7 +457,7 @@ export class EventComponent implements OnInit {
         }
 
         try {
-            const res = await this.eventService.getById(this._eventId, {}, optionsCallback).toPromise();
+            const res = await this.eventService.getById(this._eventId, {}, optionsCallback);
             onSuccess(res, res.headers.get('link'));
             return res;
         } catch (err) {
@@ -483,7 +483,7 @@ export class EventComponent implements OnInit {
         }
 
         try {
-            const res = await this.projectService.getById(this.event['project_id']).toPromise();
+            const res = await this.projectService.getById(this.event['project_id']);
             onSuccess(res);
             return res;
         } catch (err) {
@@ -502,7 +502,7 @@ export class EventComponent implements OnInit {
 
     async promoteTab(tabName) {
         try {
-            await this.projectService.promoteTab(this.project['id'], tabName).toPromise();
+            await this.projectService.promoteTab(this.project['id'], tabName);
             this.project['promoted_tabs'].push(tabName);
             this.buildTabs(tabName);
         } catch (err) {

@@ -85,7 +85,7 @@ export class UserComponent implements OnInit {
     async remove(user) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.organizationService.removeUser(this.settings['organizationId'], user['email_address']).toPromise();
+                const res = await this.organizationService.removeUser(this.settings['organizationId'], user['email_address']);
                 this.users.splice(this.users.indexOf(user), 1);
                 return res;
             } catch (err) {
@@ -99,7 +99,7 @@ export class UserComponent implements OnInit {
 
     async resendNotification(user) {
         try {
-            await this.organizationService.addUser(this.settings['organizationId'], user['email_address']).toPromise();
+            await this.organizationService.addUser(this.settings['organizationId'], user['email_address']);
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to resend the notification.'));
         }
@@ -111,7 +111,7 @@ export class UserComponent implements OnInit {
         const modalCallBackFunction = async () => {
             if (!this.userService.hasAdminRole(user)) {
                 try {
-                    const res = await this.userService.addAdminRole(user['id']).toPromise();
+                    const res = await this.userService.addAdminRole(user['id']);
                     this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the user for change role.'));
                     return res;
                 } catch (err) {
@@ -121,7 +121,7 @@ export class UserComponent implements OnInit {
             }
 
             try {
-                const res = await this.userService.removeAdminRole(user['id']).toPromise();
+                const res = await this.userService.removeAdminRole(user['id']);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the user.'));

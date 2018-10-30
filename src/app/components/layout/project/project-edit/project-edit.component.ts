@@ -169,12 +169,12 @@ export class ProjectEditComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
         };
 
-        return this.projectService.setConfig(this._projectId, data.key, data.value).toPromise().catch(onFailure.bind(this));
+        return this.projectService.setConfig(this._projectId, data.key, data.value).catch(onFailure.bind(this));
     }
 
     addSlack() {
         if (!this.hasPremiumFeatures) {
-            return this.billingService.confirmUpgradePlan(this.viewRef, 'Please upgrade your plan to enable slack integration.', this.project.organization_id,() => {
+            return this.billingService.confirmUpgradePlan(this.viewRef, 'Please upgrade your plan to enable slack integration.', this.project.organization_id, () => {
                 return this.addSlackIntegration();
             });
         }
@@ -184,7 +184,7 @@ export class ProjectEditComponent implements OnInit {
 
     async addSlackIntegration() {
         try {
-            const res = await this.projectService.addSlack(this._projectId).toPromise();
+            await this.projectService.addSlack(this._projectId);
             this.notificationService.success('', await this.wordTranslateService.translate('Successfully added'));
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding Slack to your project.'));
@@ -197,7 +197,7 @@ export class ProjectEditComponent implements OnInit {
             project_id: this._projectId
         };
         try {
-            const res = await this.tokenService.create(options).toPromise();
+            const res = await this.tokenService.create(options);
             this.tokens.push(JSON.parse(JSON.stringify(res)));
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while creating a new API key for your project.'));
@@ -222,7 +222,7 @@ export class ProjectEditComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
         };
 
-        return this.webHookService.create(Object.assign(data, {project_id: this._projectId})).toPromise().catch(onFailure.bind(this));
+        return this.webHookService.create(Object.assign(data, {project_id: this._projectId})).catch(onFailure.bind(this));
     }
 
     async copied() {
@@ -303,7 +303,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         try {
-            const res = await this.organizationService.getById(this.project['organization_id']).toPromise();
+            const res = await this.organizationService.getById(this.project['organization_id']);
             onSuccess(res);
             return this.organization;
         } catch (err) {
@@ -328,7 +328,7 @@ export class ProjectEditComponent implements OnInit {
             return this.project;
         };
         try {
-            const res = await this.projectService.getById(this._projectId).toPromise();
+            const res = await this.projectService.getById(this._projectId);
             onSuccess(res);
             return this.project;
         } catch (err) {
@@ -347,7 +347,7 @@ export class ProjectEditComponent implements OnInit {
             return this.tokens;
         };
         try {
-            const res = await this.tokenService.getByProjectId(this._projectId).toPromise();
+            const res = await this.tokenService.getByProjectId(this._projectId);
             onSuccess(res);
             return res;
         } catch (err) {
@@ -375,7 +375,7 @@ export class ProjectEditComponent implements OnInit {
             return this.config;
         };
         try {
-            const res = await this.projectService.getConfig(this._projectId).toPromise();
+            const res = await this.projectService.getConfig(this._projectId);
             onSuccess(res);
             return this.project;
         } catch (err) {
@@ -387,7 +387,7 @@ export class ProjectEditComponent implements OnInit {
     async getSlackNotificationSettings() {
         this.slackNotificationSettings = null;
         try {
-            const res = await this.projectService.getIntegrationNotificationSettings(this._projectId, 'slack').toPromise();
+            const res = await this.projectService.getIntegrationNotificationSettings(this._projectId, 'slack');
             this.slackNotificationSettings = JSON.parse(JSON.stringify(res));
             return this.slackNotificationSettings;
         } catch (err) {
@@ -398,7 +398,7 @@ export class ProjectEditComponent implements OnInit {
 
     async getWebHooks() {
         try {
-            const res = await this.webHookService.getByProjectId(this._projectId).toPromise();
+            const res = await this.webHookService.getByProjectId(this._projectId);
             this.webHooks = JSON.parse(JSON.stringify(res));
             return this.webHooks;
         } catch (err) {
@@ -410,7 +410,7 @@ export class ProjectEditComponent implements OnInit {
     async removeConfig(config) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.removeConfig(this._projectId, config['key']).toPromise();
+                const res = await this.projectService.removeConfig(this._projectId, config['key']);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the configuration setting.'));
@@ -425,7 +425,7 @@ export class ProjectEditComponent implements OnInit {
         const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
             try {
-                const res = await this.projectService.remove(this._projectId).toPromise();
+                const res = await this.projectService.remove(this._projectId);
                 this.router.navigate(['/project/list']);
                 return res;
             } catch (err) {
@@ -441,7 +441,7 @@ export class ProjectEditComponent implements OnInit {
     async removeSlack() {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.removeSlack(this._projectId).toPromise();
+                const res = await this.projectService.removeSlack(this._projectId);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove slack.'));
@@ -455,7 +455,7 @@ export class ProjectEditComponent implements OnInit {
     async removeToken(token) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.tokenService.remove(token['id']).toPromise();
+                const res = await this.tokenService.remove(token['id']);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the API Key.'));
@@ -469,7 +469,7 @@ export class ProjectEditComponent implements OnInit {
     async removeWebHook(hook) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.webHookService.remove(hook['id']).toPromise();
+                const res = await this.webHookService.remove(hook['id']);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the web hook.'));
@@ -483,7 +483,7 @@ export class ProjectEditComponent implements OnInit {
     async resetData() {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.resetData(this._projectId).toPromise();
+                const res = await this.projectService.resetData(this._projectId);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while resetting project data.'));
@@ -500,7 +500,7 @@ export class ProjectEditComponent implements OnInit {
         }
 
         try {
-            await this.projectService.update(this._projectId, this.project).toPromise();
+            await this.projectService.update(this._projectId, this.project);
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
         }
@@ -508,7 +508,7 @@ export class ProjectEditComponent implements OnInit {
 
     async saveApiKeyNote(data) {
         try {
-            await this.tokenService.update(data['id'], { notes: data.notes }).toPromise();
+            await this.tokenService.update(data['id'], { notes: data.notes });
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the API key note.'));
         }
@@ -524,14 +524,14 @@ export class ProjectEditComponent implements OnInit {
 
         if (this.common_methods) {
             try {
-                await this.projectService.setData(this._projectId, 'CommonMethods', this.common_methods).toPromise();
+                await this.projectService.setData(this._projectId, 'CommonMethods', this.common_methods);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                await this.projectService.removeData(this._projectId, 'CommonMethods').toPromise();
+                await this.projectService.removeData(this._projectId, 'CommonMethods');
                 onSuccess();
             } catch (err) {
                 onFailure();
@@ -549,14 +549,14 @@ export class ProjectEditComponent implements OnInit {
 
         if (this.data_exclusions) {
             try {
-                await this.projectService.setConfig(this._projectId, '@@DataExclusions', this.data_exclusions).toPromise();
+                await this.projectService.setConfig(this._projectId, '@@DataExclusions', this.data_exclusions);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                await this.projectService.removeConfig(this._projectId, '@@DataExclusions').toPromise();
+                await this.projectService.removeConfig(this._projectId, '@@DataExclusions');
                 onSuccess();
             } catch (err) {
                 onFailure();
@@ -566,7 +566,7 @@ export class ProjectEditComponent implements OnInit {
 
     async saveDeleteBotDataEnabled() {
         try {
-            await this.projectService.update(this._projectId, {'delete_bot_data_enabled': this.project['delete_bot_data_enabled']}).toPromise();
+            await this.projectService.update(this._projectId, {'delete_bot_data_enabled': this.project['delete_bot_data_enabled']});
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
         }
@@ -582,14 +582,14 @@ export class ProjectEditComponent implements OnInit {
 
         if (this.user_agents) {
             try {
-                await this.projectService.setConfig(this._projectId, '@@UserAgentBotPatterns', this.user_agents).toPromise;
+                await this.projectService.setConfig(this._projectId, '@@UserAgentBotPatterns', this.user_agents);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                await this.projectService.removeConfig(this._projectId, '@@UserAgentBotPatterns').toPromise();
+                await this.projectService.removeConfig(this._projectId, '@@UserAgentBotPatterns');
                 onSuccess();
             } catch (err) {
                 onFailure();
@@ -607,14 +607,14 @@ export class ProjectEditComponent implements OnInit {
 
         if (this.user_namespaces) {
             try {
-                await this.projectService.setData(this._projectId, 'UserNamespaces', this.user_namespaces).toPromise();
+                await this.projectService.setData(this._projectId, 'UserNamespaces', this.user_namespaces);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                await this.projectService.removeData(this._projectId, 'UserNamespaces').toPromise();
+                await this.projectService.removeData(this._projectId, 'UserNamespaces');
                 onSuccess();
             } catch (err) {
                 onFailure();
@@ -638,7 +638,7 @@ export class ProjectEditComponent implements OnInit {
         };
 
         try {
-            await this.projectService.setIntegrationNotificationSettings(this._projectId, 'slack', this.slackNotificationSettings).toPromise();
+            await this.projectService.setIntegrationNotificationSettings(this._projectId, 'slack', this.slackNotificationSettings);
         } catch (err) {
             onFailure(err);
         }

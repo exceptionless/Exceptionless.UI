@@ -17,7 +17,7 @@ export class TokenService {
             'scopes': ['client']
         };
 
-        return this.http.post('tokens', token);
+        return this.http.post('tokens', token).toPromise();
     }
 
     getById(id) {
@@ -29,18 +29,18 @@ export class TokenService {
     }
 
     getByProjectId(id, options?) {
-        return this.http.get(`projects/${id}/tokens`, { params: options });
+        return this.http.get(`projects/${id}/tokens`, { params: options }).toPromise();
     }
 
     getProjectDefault(id) {
-        return this.http.get(`projects/${id}/tokens/default`);
+        return this.http.get(`projects/${id}/tokens/default`).toPromise();
     }
 
     remove(id) {
-        return this.http.delete(`tokens/${id}`);
+        return this.http.delete(`tokens/${id}`).toPromise();
     }
 
     update(id, token) {
-        return this.http.patch(`tokens/${id}`, token);
+        return this.http.patch(`tokens/${id}`, token).toPromise();
     }
 }

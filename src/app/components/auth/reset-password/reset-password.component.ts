@@ -55,7 +55,7 @@ export class ResetPasswordComponent implements OnInit {
         };
 
         try {
-            await this.authAccountService.resetPassword(this.data).toPromise();
+            await this.authAccountService.resetPassword(this.data);
             onSuccess();
         } catch (err) {
             onFailure(err);
@@ -64,7 +64,7 @@ export class ResetPasswordComponent implements OnInit {
 
      async cancelResetPassword() {
         try {
-            await this.authAccountService.cancelResetPassword(this.data.password_reset_token).toPromise();
+            await this.authAccountService.cancelResetPassword(this.data.password_reset_token);
             this.router.navigate(['/login']);
         } catch (err) {
             this.router.navigate(['/login']);

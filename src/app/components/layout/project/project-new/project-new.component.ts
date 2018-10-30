@@ -105,7 +105,7 @@ export class ProjectNewComponent implements OnInit {
         };
 
         try {
-            const res = await this.organizationService.create(name).toPromise();
+            const res = await this.organizationService.create(name);
             onSuccess(res);
             return res;
         } catch (err) {
@@ -140,7 +140,7 @@ export class ProjectNewComponent implements OnInit {
         };
 
         try {
-            const res = await this.projectService.create(organization.id, this.project_name).toPromise();
+            const res = await this.projectService.create(organization.id, this.project_name);
             onSuccess(res);
             return res;
         } catch (err) {
@@ -161,8 +161,8 @@ export class ProjectNewComponent implements OnInit {
             }
         };
         try {
-            const res = await this.organizationService.getAll().toPromise();
-            onSuccess(res.body);
+            const res = await this.organizationService.getAll();
+            onSuccess(res['body']);
         } catch (err) {
             if (!this.notificationService) {
                 this.notificationService.error('', 'Error occurred while get organizations');

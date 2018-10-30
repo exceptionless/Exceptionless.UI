@@ -202,7 +202,7 @@ export class OrganizationNotificationComponent implements OnInit {
             }
 
             try {
-                const res = await this.organizationService.getById(organizationId).toPromise();
+                const res = await this.organizationService.getById(organizationId);
                 this.organizations.push(JSON.parse(JSON.stringify(res)));
                 return this.organizations;
             } catch (err) {
@@ -213,8 +213,8 @@ export class OrganizationNotificationComponent implements OnInit {
 
         const getAllOrganizations = async () => {
             try {
-                const res = await this.organizationService.getAll('').toPromise();
-                this.organizations = JSON.parse(JSON.stringify(res.body));
+                const res = await this.organizationService.getAll('');
+                this.organizations = JSON.parse(JSON.stringify(res['body']));
                 return this.organizations;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
@@ -230,7 +230,7 @@ export class OrganizationNotificationComponent implements OnInit {
 
     async getProjects() {
         try {
-            const res = await this.projectService.getAll('').toPromise();
+            const res = await this.projectService.getAll('');
             this.projects = JSON.parse(JSON.stringify(res.body));
             return this.projects;
         } catch (err) {

@@ -21,7 +21,7 @@ export class AuthAccountService {
 
     cancelResetPassword(resetToken) {
         const data = {};
-        return this.http.post(`auth/cancel-reset-password/${resetToken}`,  data);
+        return this.http.post(`auth/cancel-reset-password/${resetToken}`,  data).toPromise();
     }
 
     async changePassword(changePasswordModel) {
@@ -41,7 +41,7 @@ export class AuthAccountService {
     }
 
     forgotPassword(email) {
-        return this.http.get(`auth/forgot-password/${email}`);
+        return this.http.get(`auth/forgot-password/${email}`).toPromise();
     }
 
     getToken() {
@@ -80,7 +80,7 @@ export class AuthAccountService {
     }
 
     resetPassword(resetPasswordModel) {
-        return this.http.post('auth/reset-password',  resetPasswordModel);
+        return this.http.post('auth/reset-password',  resetPasswordModel).toPromise();
     }
 
     async unlink(providerName, providerUserId) {

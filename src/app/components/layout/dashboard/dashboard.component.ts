@@ -186,8 +186,9 @@ export class DashboardComponent implements OnInit {
 
     async getOrganizations() {
         try {
-            const response = await this.organizationService.getAll('').toPromise();
-            this.organizations = JSON.parse(JSON.stringify(response.body));
+            const response = await this.organizationService.getAll('');
+            console.log(response);
+            this.organizations = JSON.parse(JSON.stringify(response['body']));
             return this.organizations;
         } catch (err) {
             this.notificationService.error('', 'Error Occurred!');
@@ -232,7 +233,7 @@ export class DashboardComponent implements OnInit {
 
         const offset = this.filterService.getTimeOffset();
 
-        const res = await this.eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1').toPromise();
+        const res = await this.eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1');
         onSuccess(res);
         return res;
     }

@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit {
 
     async getUser() {
         try {
-            const res = await this.userService.getCurrentUser().toPromise();
+            const res = await this.userService.getCurrentUser();
             this.user = JSON.parse(JSON.stringify(res));
             this.userService.setAuthUser(this.user);
             this.appEvent.fireEvent({type: 'UPDATE_USER'});

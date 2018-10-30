@@ -72,7 +72,7 @@ export class ProjectConfigureComponent implements OnInit {
         };
 
         try {
-            const res = await this.tokenService.getProjectDefault(this._projectId).toPromise();
+            const res = await this.tokenService.getProjectDefault(this._projectId);
             onSuccess(res);
         } catch (err) {
             onFailure();
@@ -93,7 +93,7 @@ export class ProjectConfigureComponent implements OnInit {
         };
 
         try {
-            const res = await this.projectService.getById(this._projectId).toPromise();
+            const res = await this.projectService.getById(this._projectId);
             onSuccess(res);
         } catch (err) {
             onFailure();

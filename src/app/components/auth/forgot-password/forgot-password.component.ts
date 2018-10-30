@@ -42,7 +42,7 @@ export class ForgotPasswordComponent implements OnInit {
         };
 
         try {
-            const res = await this.authAccountService.forgotPassword(this.emailAddress).toPromise();
+            await this.authAccountService.forgotPassword(this.emailAddress);
             onSuccess();
         } catch (err) {
             onFailure(err);

@@ -43,8 +43,8 @@ export class ProjectFilterComponent implements OnInit {
 
     async getOrganizations() {
         try {
-            const res = await this.organizationService.getAll('').toPromise();
-            this.organizations = JSON.parse(JSON.stringify(res.body));
+            const res = await this.organizationService.getAll('');
+            this.organizations = JSON.parse(JSON.stringify(res['body']));
             this.isLoadingOrganizations = false;
             return this.organizations;
         } catch (err) {
@@ -62,7 +62,7 @@ export class ProjectFilterComponent implements OnInit {
 
     async getProjects() {
         try {
-            const res = await this.projectService.getAll('').toPromise();
+            const res = await this.projectService.getAll('');
             this.projects = JSON.parse(JSON.stringify(res.body));
             this.isLoadingProjects = false;
             return res;

@@ -20,11 +20,11 @@ export class UserService {
 
     addAdminRole(id) {
         const data = {};
-        return this.http.post(`users/${id}/admin-role`,  data);
+        return this.http.post(`users/${id}/admin-role`,  data).toPromise();
     }
 
     getCurrentUser() {
-        return this.http.get('users/me');
+        return this.http.get('users/me').toPromise();
     }
 
     getById(id) {
@@ -44,24 +44,24 @@ export class UserService {
     }
 
     removeAdminRole(id) {
-        return this.http.delete(`users/${id}/admin-role`);
+        return this.http.delete(`users/${id}/admin-role`).toPromise();
     }
 
     removeCurrentUser() {
-        return this.http.delete('users/me');
+        return this.http.delete('users/me').toPromise();
     }
 
     resendVerificationEmail(id) {
-        return this.http.get(`users/${id}/resend-verification-email`);
+        return this.http.get(`users/${id}/resend-verification-email`).toPromise();
     }
 
     update(id, project) {
-        return this.http.patch(`users/${id}`, project);
+        return this.http.patch(`users/${id}`, project).toPromise();
     }
 
     updateEmailAddress(id, email) {
         const data = {};
-        return this.http.post(`users/${id}/email-address/${email}`,  data);
+        return this.http.post(`users/${id}/email-address/${email}`,  data).toPromise();
     }
 
     verifyEmailAddress(token) {
@@ -69,6 +69,6 @@ export class UserService {
     }
 
     adminChangePlan(data) {
-        return this.http.post('admin/change-plan', data);
+        return this.http.post('admin/change-plan', data).toPromise();
     }
 }

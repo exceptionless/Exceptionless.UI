@@ -192,7 +192,7 @@ export class SessionComponent implements OnInit, OnDestroy {
 
         const offset = this.filterService.getTimeOffset();
         try {
-            const res = await this.eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback, false).toPromise();
+            const res = await this.eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback, false);
             onSuccess(res);
         } catch (err) {
             this.notificationService.error('', 'Error occurred while trying to get event service');

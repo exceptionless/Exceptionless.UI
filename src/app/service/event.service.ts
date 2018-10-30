@@ -31,15 +31,15 @@ export class EventService {
 
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/events/count`, { params: options });
+            return this.http.get(`organizations/${organization}/events/count`, { params: options }).toPromise();
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/events/count`, { params: options });
+            return this.http.get(`projects/${project}/events/count`, { params: options }).toPromise();
         }
 
-        return this.http.get('events/count', { params: options });
+        return this.http.get('events/count', { params: options }).toPromise();
     }
 
     getAll(options, optionsCallback?, includeHiddenAndFixedFilter?): Observable<HttpResponse<any>> {
@@ -76,10 +76,10 @@ export class EventService {
         return this.http.get(`events/sessions`, { observe: 'response', params: mergedOptions });
     }
 
-    getById(id, options, optionsCallback): Observable<HttpResponse<any>> {
+    getById(id, options, optionsCallback) {
         optionsCallback = typeof optionsCallback === 'function' ? optionsCallback : function(o) { return o; };
         const data = optionsCallback(this.filterService.apply(options));
-        return this.http.get(`events/${id}`, { observe: 'response', params: data });
+        return this.http.get(`events/${id}`, { observe: 'response', params: data }).toPromise();
     }
 
     getByReferenceId(id, options) {
@@ -107,6 +107,6 @@ export class EventService {
     }
 
     remove(id) {
-        return this.http.delete(`events/${id}`);
+        return this.http.delete(`events/${id}`).toPromise();
     }
 }

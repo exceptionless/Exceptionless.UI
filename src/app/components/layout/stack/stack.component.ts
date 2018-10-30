@@ -194,7 +194,7 @@ export class StackComponent implements OnInit {
                 this.stackService.addLink(this._stackId, url);
 
                 try {
-                    const res = await this.stackService.addLink(this._stackId, url).toPromise();
+                    const res = await this.stackService.addLink(this._stackId, url);
                     this.stack['references'].push(url);
                     return res;
                 } catch (err) {
@@ -277,8 +277,8 @@ export class StackComponent implements OnInit {
 
     async getOrganizations() {
         try {
-            const res = await this.organizationService.getAll('').toPromise();
-            this._organizations = JSON.parse(JSON.stringify(res.body));
+            const res = await this.organizationService.getAll('');
+            this._organizations = JSON.parse(JSON.stringify(res['body']));
             return this._organizations;
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
@@ -288,7 +288,7 @@ export class StackComponent implements OnInit {
 
     async getProject() {
         try {
-            const res = await this.projectService.getById(this.stack['project_id']).toPromise();
+            const res = await this.projectService.getById(this.stack['project_id']);
             this.project = JSON.parse(JSON.stringify(res));
             return this.project;
         } catch (err) {
@@ -299,7 +299,7 @@ export class StackComponent implements OnInit {
 
     async getStack() {
         try {
-            const res = await this.stackService.getById(this._stackId).toPromise();
+            const res = await this.stackService.getById(this._stackId);
             this.stack = JSON.parse(JSON.stringify(res.body));
             this.stack['references'] = this.stack['references'] || [];
             return this.stack;
@@ -322,7 +322,7 @@ export class StackComponent implements OnInit {
         };
 
         try {
-            const res = await this.eventService.count('cardinality:user', optionsCallback).toPromise();
+            const res = await this.eventService.count('cardinality:user', optionsCallback);
             const getAggregationValue = (data, name, defaultValue) => {
                 const aggs = data['aggregations'];
                 return aggs && aggs[name] && aggs[name].value || defaultValue;
@@ -420,7 +420,7 @@ export class StackComponent implements OnInit {
         const offset = this.filterService.getTimeOffset();
 
         try {
-            const res = await this.eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(this.chartOptions) + ') min:date max:date cardinality:user sum:count~1', optionsCallback, false).toPromise();
+            const res = await this.eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(this.chartOptions) + ') min:date max:date cardinality:user sum:count~1', optionsCallback, false);
             onSuccess(res);
             this.getProjectUserStats();
             return res;
@@ -468,7 +468,7 @@ export class StackComponent implements OnInit {
         };
 
         try {
-            const res = await this.stackService.promote(this._stackId).toPromise();
+            await this.stackService.promote(this._stackId);
             onSuccess();
         } catch (err) {
             onFailure(err);
@@ -478,7 +478,7 @@ export class StackComponent implements OnInit {
     async removeReferenceLink(reference) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.stackService.removeLink(this._stackId, reference).toPromise();
+                const res = await this.stackService.removeLink(this._stackId, reference);
                 this.stack['references'] = this.stack['references'].filter(item => item !== reference);
                 return res;
             } catch (err) {
@@ -493,7 +493,7 @@ export class StackComponent implements OnInit {
     async remove() {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.stackService.remove(this._stackId).toPromise();
+                const res = await this.stackService.remove(this._stackId);
                 this.notificationService.error('', await this.wordTranslateService.translate('Successfully queued the stack for deletion.'));
                 return res;
             } catch (err) {
@@ -516,14 +516,14 @@ export class StackComponent implements OnInit {
 
         if (this.stack['occurrences_are_critical']) {
             try {
-                const res = await this.stackService.markNotCritical(this._stackId).toPromise();
+                const res = await this.stackService.markNotCritical(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                const res = await this.stackService.markCritical(this._stackId).toPromise();
+                const res = await this.stackService.markCritical(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();
@@ -546,14 +546,14 @@ export class StackComponent implements OnInit {
 
         if (this['stack.date_fixed'] && !this.stack['is_regressed']) {
             try {
-                const res = await this.stackService.markNotFixed(this._stackId).toPromise();
+                const res = await this.stackService.markNotFixed(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                const res = await this.stackService.markFixed(this._stackId).toPromise();
+                const res = await this.stackService.markFixed(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();
@@ -573,14 +573,14 @@ export class StackComponent implements OnInit {
 
         if (!this.stack['is_hidden']) {
             try {
-                const res = await this.stackService.markHidden(this._stackId).toPromise();
+                await this.stackService.markHidden(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                const res = await this.stackService.markNotHidden(this._stackId).toPromise();
+                await this.stackService.markNotHidden(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();
@@ -605,14 +605,14 @@ export class StackComponent implements OnInit {
 
         if (this.stack['disable_notifications']) {
             try {
-                const res = await this.stackService.enableNotifications(this._stackId).toPromise();
+                await this.stackService.enableNotifications(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
         } else {
             try {
-                const res = await this.stackService.disableNotifications(this._stackId).toPromise();
+                await this.stackService.disableNotifications(this._stackId);
                 onSuccess();
             } catch (err) {
                 onFailure();

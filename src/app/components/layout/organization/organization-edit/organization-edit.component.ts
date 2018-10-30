@@ -206,7 +206,7 @@ export class OrganizationEditComponent implements OnInit {
         };
 
         try {
-            await this.organizationService.addUser(this._organizationId, emailAddress).toPromise();
+            await this.organizationService.addUser(this._organizationId, emailAddress);
         } catch (err) {
             onFailure(err);
         }
@@ -275,7 +275,7 @@ export class OrganizationEditComponent implements OnInit {
         };
 
         try {
-            const res = await this.organizationService.getById(this._organizationId).toPromise();
+            const res = await this.organizationService.getById(this._organizationId);
             onSuccess(res);
         } catch (err) {
             onFailure();
@@ -290,7 +290,7 @@ export class OrganizationEditComponent implements OnInit {
         const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
             try {
-                const res = await this.organizationService.removeUser(this._organizationId, currentUser['email_address']).toPromise();
+                const res = await this.organizationService.removeUser(this._organizationId, currentUser['email_address']);
                 this.router.navigate(['/organization/list']);
                 return res;
             } catch (err) {
@@ -313,7 +313,7 @@ export class OrganizationEditComponent implements OnInit {
             this._ignoreRefresh = true;
 
             try {
-                const res = await this.organizationService.remove(this._organizationId).toPromise();
+                const res = await this.organizationService.remove(this._organizationId);
                 this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
                 this.router.navigate(['/organization/list']);
                 return res;
@@ -337,7 +337,7 @@ export class OrganizationEditComponent implements OnInit {
             return;
         }
         try {
-            await this.organizationService.update(this._organizationId, this.organization).toPromise();
+            await this.organizationService.update(this._organizationId, this.organization);
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the organization.'));
         }

@@ -19,16 +19,16 @@ export class StackService {
                 'Content-Type':  'text/plain; charset=UTF-8',
             })
         };
-        return this.http.post(`stacks/${id}/add-link`,  url, httpOptions);
+        return this.http.post(`stacks/${id}/add-link`,  url, httpOptions).toPromise();
     }
 
     disableNotifications(id) {
-        return this.http.delete(`stacks/${id}/notifications`);
+        return this.http.delete(`stacks/${id}/notifications`).toPromise();
     }
 
     enableNotifications(id) {
         const data = {};
-        return this.http.post(`stacks/${id}/notifications`,  data);
+        return this.http.post(`stacks/${id}/notifications`,  data).toPromise();
     }
 
     getAll(options) {
@@ -46,24 +46,24 @@ export class StackService {
         return this.http.get(`stacks`, { params: mergedOptions });
     }
 
-    getById(id): Observable<HttpResponse<any>> {
-        return this.http.get('stacks/' + id, { observe: 'response' });
+    getById(id) {
+        return this.http.get('stacks/' + id, { observe: 'response' }).toPromise();
     }
 
-    getFrequent(options?): Observable<HttpResponse<any>> {
+    getFrequent(options?) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/frequent`, { observe: 'response', params: mergedOptions });
+            return this.http.get(`organizations/${organization}/stacks/frequent`, { observe: 'response', params: mergedOptions }).toPromise();
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks/frequent`, { observe: 'response', params: mergedOptions });
+            return this.http.get(`projects/${project}/stacks/frequent`, { observe: 'response', params: mergedOptions }).toPromise();
         }
 
         const data = mergedOptions;
-        return this.http.get('stacks/frequent', { observe: 'response', params: data });
+        return this.http.get('stacks/frequent', { observe: 'response', params: data }).toPromise();
     }
 
     getUsers(options) {
@@ -98,40 +98,40 @@ export class StackService {
 
     markCritical(id) {
         const data = {};
-        return this.http.post(`stacks/${id}/mark-critical`, data);
+        return this.http.post(`stacks/${id}/mark-critical`, data).toPromise();
     }
 
     markNotCritical(id) {
-        return this.http.delete(`stacks/${id}/mark-critical`);
+        return this.http.delete(`stacks/${id}/mark-critical`).toPromise();
     }
 
     markFixed(id, version?) {
         const data = {
             version: version
         };
-        return this.http.post(`stacks/${id}/mark-fixed`, data);
+        return this.http.post(`stacks/${id}/mark-fixed`, data).toPromise();
     }
 
     markNotFixed(id?) {
-        return this.http.delete(`stacks/${id}/mark-fixed`);
+        return this.http.delete(`stacks/${id}/mark-fixed`).toPromise();
     }
 
     markHidden(id?) {
         const data = {};
-        return this.http.post(`stacks/${id}/mark-hidden`, data);
+        return this.http.post(`stacks/${id}/mark-hidden`, data).toPromise();
     }
 
     markNotHidden(id?) {
-        return this.http.delete(`stacks/${id}/mark-hidden`);
+        return this.http.delete(`stacks/${id}/mark-hidden`).toPromise();
     }
 
-    promote(id): Observable<HttpResponse<any>> {
+    promote(id) {
         const data = {};
-        return this.http.post(`stacks/${id}/promote`,  data, { observe: 'response' });
+        return this.http.post(`stacks/${id}/promote`,  data, { observe: 'response' }).toPromise();
     }
 
     remove(id?) {
-        return this.http.delete(`stacks/${id}`);
+        return this.http.delete(`stacks/${id}`).toPromise();
     }
 
     removeLink(id, url) {
@@ -141,6 +141,6 @@ export class StackService {
             }),
             body: url
         };
-        return this.http.delete(`stacks/${id}/remove-link`, httpOptions);
+        return this.http.delete(`stacks/${id}/remove-link`, httpOptions).toPromise();
     }
 }

@@ -16,19 +16,19 @@ export class OrganizationService {
 
     addUser(id, email) {
         const data = {};
-        return this.http.post(`organizations/${id}/users/${email}`, data);
+        return this.http.post(`organizations/${id}/users/${email}`, data).toPromise();
     }
 
-    create(name): Observable<HttpResponse<any>> {
+    create(name) {
         const data = {
             'name': name
         };
-        return this.http.post('organizations', data, { observe: 'response' });
+        return this.http.post('organizations', data, { observe: 'response' }).toPromise();
     }
 
     changePlan(id, options) {
         const data = {};
-        return this.http.post(`organizations/${id}/change-plan`, data, { params: options });
+        return this.http.post(`organizations/${id}/change-plan`, data, { params: options }).toPromise();
     }
 
     getOldestCreationDate(organizations) {
@@ -74,13 +74,13 @@ export class OrganizationService {
         ]).toDate();
     }
 
-    getAll(options?): Observable<HttpResponse<any>> {
+    getAll(options?) {
         const mergedOptions = Object.assign({ limit: 100 }, options);
-        return this.http.get('organizations', { observe: 'response', params: mergedOptions });
+        return this.http.get('organizations', { observe: 'response', params: mergedOptions }).toPromise();
     }
 
     getById(id) {
-        return this.http.get(`organizations/${id}`);
+        return this.http.get(`organizations/${id}`).toPromise();
     }
 
     getInvoice(id) {
@@ -92,7 +92,7 @@ export class OrganizationService {
     }
 
     getPlans(id) {
-        return this.http.get(`organizations/${id}/plans`);
+        return this.http.get(`organizations/${id}/plans`).toPromise();
     }
 
     isNameAvailable(name): Observable<HttpResponse<any>> {
@@ -100,14 +100,14 @@ export class OrganizationService {
     }
 
     remove(id) {
-        return this.http.delete(`organizations/${id}`);
+        return this.http.delete(`organizations/${id}`).toPromise();
     }
 
     removeUser(id, email) {
-        return this.http.delete(`organizations/${id}/users/` + email);
+        return this.http.delete(`organizations/${id}/users/` + email).toPromise();
     }
 
     update(id, organization) {
-        return this.http.patch(`api/v2/organizations/${id}`, organization);
+        return this.http.patch(`api/v2/organizations/${id}`, organization).toPromise();
     }
 }

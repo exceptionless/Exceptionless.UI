@@ -145,7 +145,7 @@ export class AccountManageComponent implements OnInit {
         }
 
         try {
-            const res = await this.projectService.getNotificationSettings(this.currentProject['id'], this.user['id']).toPromise();
+            const res = await this.projectService.getNotificationSettings(this.currentProject['id'], this.user['id']);
             onSuccess(res);
         } catch (err) {
             onFailure();
@@ -175,7 +175,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            const res = await this.projectService.getAll().toPromise();
+            const res = await this.projectService.getAll();
             onSuccess(res.body);
         } catch (err) {
             onFailure();
@@ -200,7 +200,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            const res = await this.userService.getCurrentUser().toPromise();
+            const res = await this.userService.getCurrentUser();
             onSuccess(res);
         } catch (err) {
             onFailure(err);
@@ -210,7 +210,7 @@ export class AccountManageComponent implements OnInit {
     async deleteAccount() {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.userService.removeCurrentUser().toPromise();
+                const res = await this.userService.removeCurrentUser();
                 this.notificationService.success('', await this.wordTranslateService.translate('Successfully removed your user account.'));
                 this.authAccountService.logout();
                 return res;
@@ -257,7 +257,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            await this.userService.resendVerificationEmail(this.user['id']).toPromise();
+            await this.userService.resendVerificationEmail(this.user['id']);
         } catch (err) {
             onFailure(err);
         }
@@ -301,7 +301,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            const res = await this.userService.updateEmailAddress(this.user['id'], this.user['email_address']).toPromise();
+            const res = await this.userService.updateEmailAddress(this.user['id'], this.user['email_address']);
             onSuccess(res);
             resetCanSaveEmailAddress();
         } catch (err) {
@@ -320,7 +320,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            const res = await this.projectService.setNotificationSettings(this.currentProject['id'], this.user['id'], this.emailNotificationSettings).toPromise;
+            await this.projectService.setNotificationSettings(this.currentProject['id'], this.user['id'], this.emailNotificationSettings);
         } catch (err) {
             onFailure(err);
         }
@@ -337,7 +337,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            await this.userService.update(this.user['id'], { email_notifications_enabled: this.user['email_notifications_enabled'] }).toPromise;
+            await this.userService.update(this.user['id'], { email_notifications_enabled: this.user['email_notifications_enabled'] });
         } catch (err) {
             onFailure(err);
         }
@@ -358,7 +358,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            await this.userService.update(this.user['id'], this.user).toPromise();
+            await this.userService.update(this.user['id'], this.user);
         } catch (err) {
             onFailure(err);
         }
@@ -383,7 +383,7 @@ export class AccountManageComponent implements OnInit {
         };
 
         try {
-            await this.authService.unlink(account['provider'], account['provider_user_id']).toPromise;
+            await this.authService.unlink(account['provider'], account['provider_user_id']).toPromise();
             onSuccess();
         } catch (err) {
             onFailure(err);

@@ -147,7 +147,7 @@ export class ProjectsComponent implements OnInit {
     async remove(project) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.remove(project['id']).toPromise();
+                const res = await this.projectService.remove(project['id']);
                 this.projects.splice(this.projects.indexOf(project), 1);
                 this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the project for deletion.'));
                 return res;

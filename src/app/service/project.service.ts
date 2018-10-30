@@ -13,7 +13,7 @@ export class ProjectService {
 
     addSlack(id) {
         // need to implement later Exceptionless
-        return this.http.post(`projects/${id}/slack`, { code: '' });
+        return this.http.post(`projects/${id}/slack`, { code: '' }).toPromise();
     }
 
     create(organizationId, name) {
@@ -22,20 +22,20 @@ export class ProjectService {
             'name': name,
             'delete_bot_data_enabled': true
         };
-        return this.http.post('projects', data);
+        return this.http.post('projects', data).toPromise();
     }
 
     demoteTab(id, name) {
-        return this.http.delete(`projects/${id}/promotedtabs?name=${name}`);
+        return this.http.delete(`projects/${id}/promotedtabs?name=${name}`).toPromise();
     }
 
-    getAll(options?): Observable<HttpResponse<any>> {
+    getAll(options?) {
         const mergedOptions = Object.assign({ limit: 100 }, options);
-        return this.http.get('projects', { observe: 'response', params: mergedOptions });
+        return this.http.get('projects', { observe: 'response', params: mergedOptions }).toPromise();
     }
 
     getById(id) {
-        return this.http.get(`projects/${id}`);
+        return this.http.get(`projects/${id}`).toPromise();
     }
 
     getByOrganizationId(id, options): Observable<HttpResponse<any>> {
@@ -43,15 +43,15 @@ export class ProjectService {
     }
 
     getConfig(id) {
-        return this.http.get(`projects/${id}/config`);
+        return this.http.get(`projects/${id}/config`).toPromise();
     }
 
     getNotificationSettings(id, userId) {
-        return this.http.get(`users/${userId}/projects/${id}/notifications`);
+        return this.http.get(`users/${userId}/projects/${id}/notifications`).toPromise();
     }
 
     getIntegrationNotificationSettings(id, integration) {
-        return this.http.get(`projects/${id}/${integration}/notifications`);
+        return this.http.get(`projects/${id}/${integration}/notifications`).toPromise();
     }
 
     isNameAvailable(organizationId, name): Observable<HttpResponse<any>> {
@@ -62,23 +62,23 @@ export class ProjectService {
         const data = {
             id: id
         };
-        return this.http.post(`projects/${id}/promotedtabs?name=${name}`,  data);
+        return this.http.post(`projects/${id}/promotedtabs?name=${name}`,  data).toPromise();
     }
 
     remove(id) {
-        return this.http.delete(`projects/${id}`);
+        return this.http.delete(`projects/${id}`).toPromise();
     }
 
     removeConfig(id, key) {
-        return this.http.delete(`projects/${id}/config?key=${key}`);
+        return this.http.delete(`projects/${id}/config?key=${key}`).toPromise();
     }
 
     removeData(id, key) {
-        return this.http.delete(`projects/${id}/data?key=${key}`);
+        return this.http.delete(`projects/${id}/data?key=${key}`).toPromise();
     }
 
     removeSlack(id) {
-        return this.http.delete(`projects/${id}/slack`);
+        return this.http.delete(`projects/${id}/slack`).toPromise();
     }
 
     removeNotificationSettings(id, userId) {
@@ -86,12 +86,12 @@ export class ProjectService {
     }
 
     resetData(id) {
-        return this.http.get(`projects/${id}/reset-data`);
+        return this.http.get(`projects/${id}/reset-data`).toPromise();
     }
 
     update(id, project) {
         const data = project;
-        return this.http.patch(`projects/${id}`,  data);
+        return this.http.patch(`projects/${id}`,  data).toPromise();
     }
 
     setConfig(id, key, value) {
@@ -103,7 +103,7 @@ export class ProjectService {
         const data = {
             value: value
         };
-        return this.http.post(`projects/${id}/config?key=${key}`,  data, httpOptions);
+        return this.http.post(`projects/${id}/config?key=${key}`,  data, httpOptions).toPromise();
     }
 
     setData(id, key, value) {
@@ -115,15 +115,15 @@ export class ProjectService {
         const data = {
             key: key
         };
-        return this.http.post(`projects/${id}/data/${value}`,  data, httpOptions);
+        return this.http.post(`projects/${id}/data/${value}`,  data, httpOptions).toPromise();
     }
 
     setNotificationSettings(id, userId, settings) {
-        return this.http.post(`users/${userId}/projects/${id}/notifications`,  settings);
+        return this.http.post(`users/${userId}/projects/${id}/notifications`,  settings).toPromise();
     }
 
     setIntegrationNotificationSettings(id, integration, settings) {
         const data = settings;
-        return this.http.get(`projects/${id}/${integration}/notifications`);
+        return this.http.get(`projects/${id}/${integration}/notifications`).toPromise();
     }
 }

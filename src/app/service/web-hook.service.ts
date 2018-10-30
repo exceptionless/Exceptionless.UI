@@ -11,7 +11,7 @@ export class WebHookService {
     ) {}
 
     create(webHook) {
-        return this.http.post('webhooks', webHook);
+        return this.http.post('webhooks', webHook).toPromise();
     }
 
     getAll(options) {
@@ -27,10 +27,10 @@ export class WebHookService {
     }
 
     getByProjectId(id, options?) {
-        return this.http.get(`projects/${id}/webhooks`, { params: options || {} });
+        return this.http.get(`projects/${id}/webhooks`, { params: options || {} }).toPromise();
     }
 
     remove(id) {
-        return this.http.delete(`webhooks/${id}`);
+        return this.http.delete(`webhooks/${id}`).toPromise();
     }
 }

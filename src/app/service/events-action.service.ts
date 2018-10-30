@@ -43,7 +43,7 @@ export class EventsActionService {
         if (i < ids.length) {
             const temparray = ids.slice(i, i + 10);
             try {
-                const response = await this.eventService.remove(temparray.join(',')).toPromise();
+                await this.eventService.remove(temparray.join(','));
                 return this.removeEvent(ids, i + 10);
             } catch (e) {
                 return false;

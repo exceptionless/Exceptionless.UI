@@ -68,7 +68,7 @@ export class SignupComponent implements OnInit {
         };
 
         try {
-            const res = await this.projectService.getAll().toPromise();
+            const res = await this.projectService.getAll();
             onSuccess(JSON.parse(JSON.stringify(res.body)));
         } catch (err) {
             onFailure();

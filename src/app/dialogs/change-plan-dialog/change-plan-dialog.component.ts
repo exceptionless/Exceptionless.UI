@@ -174,9 +174,9 @@ export class ChangePlanDialogComponent implements IModalDialog {
 
     async changePlan(isAdmin, options) {
         if (isAdmin) {
-            return this.userService.adminChangePlan({ organizationId: this.currentOrganization.id, planId: this.currentPlan.id }).toPromise();
+            return this.userService.adminChangePlan({ organizationId: this.currentOrganization.id, planId: this.currentPlan.id });
         } else {
-            return this.organizationService.changePlan(this.currentOrganization.id, Object.assign({}, { planId: this.currentPlan.id }, options)).toPromise();
+            return this.organizationService.changePlan(this.currentOrganization.id, Object.assign({}, { planId: this.currentPlan.id }, options));
         }
     }
 
@@ -239,7 +239,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
         };
 
         try {
-            const res = await this.userService.getCurrentUser().toPromise();
+            const res = await this.userService.getCurrentUser();
             return onSuccess(res);
         } catch (err) {
             return onFailure(err);
@@ -264,7 +264,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
         };
 
         try {
-            const res = await this.organizationService.getPlans(this.currentOrganization.id).toPromise();
+            const res = await this.organizationService.getPlans(this.currentOrganization.id);
             return onSuccess(res);
         } catch (err) {
             return onFailure(err);
@@ -282,7 +282,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
                 return;
             }
 
-            const response = await this.organizationService.getById(this.organizationId).toPromise();
+            const response = await this.organizationService.getById(this.organizationId);
             return onSucceed(response['body']);
         };
 
@@ -294,7 +294,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
                 return this.organizations;
             };
 
-            const response = await this.organizationService.getAll({}).toPromise();
+            const response = await this.organizationService.getAll({});
             return onSucceed(response['body']);
         };
 

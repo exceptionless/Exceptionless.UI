@@ -10,16 +10,11 @@ export class AutoActiveDirective {
         private router: Router,
         private el: ElementRef) {
 
-        this.initConst();
-    }
-
-    async initConst() {
-        try {
-            const val = await this.router.events.toPromise();
+        this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
                 this.checkActive(val.url);
             }
-        } catch (err) {}
+        });
     }
 
     checkActive(currentUrl) {

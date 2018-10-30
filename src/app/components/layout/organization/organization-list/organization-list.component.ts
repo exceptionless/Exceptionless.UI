@@ -91,7 +91,7 @@ export class OrganizationListComponent implements OnInit {
         };
 
         try {
-            const res = await this.organizationService.create(name).toPromise();
+            const res = await this.organizationService.create(name);
             onSuccess(res);
             return res;
         } catch (err) {
@@ -122,7 +122,7 @@ export class OrganizationListComponent implements OnInit {
         this.currentOptions = options || this._settings;
 
         try {
-            const res = await this.organizationService.getAll(this.currentOptions).toPromise();
+            const res = await this.organizationService.getAll(this.currentOptions);
             onSuccess(res['body'], res['headers'].get('link'));
             this.loading = false;
             return this.organizations;
@@ -150,7 +150,7 @@ export class OrganizationListComponent implements OnInit {
             };
 
             try {
-                await this.organizationService.removeUser(organization.id, user.email_address).toPromise();
+                await this.organizationService.removeUser(organization.id, user.email_address);
                 onSuccess();
             } catch (err) {
                 onFailure(err);
@@ -182,7 +182,7 @@ export class OrganizationListComponent implements OnInit {
     async remove(organization) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.organizationService.remove(organization['id']).toPromise();
+                const res = await this.organizationService.remove(organization['id']);
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
                 this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
                 this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
