@@ -50,13 +50,13 @@ function updateAppConfig() {
     console.log('Config generated.');
   });
 
-  replace({
-    regex: "scripts\.*\.js",
-    replacement: configFile,
-    paths: ['../../../../index.html'],
-    recursive: false,
-    silent: false
-  });
+  // replace({
+  //   regex: "scripts.js",
+  //   replacement: configFile,
+  //   paths: ['../../../../index.html'],
+  //   recursive: false,
+  //   silent: false
+  // });
 }
 
 function installGoogleTagManager() {
