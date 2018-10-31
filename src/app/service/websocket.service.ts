@@ -105,7 +105,7 @@ export class WebsocketService {
     }
 
     getPushUrl() {
-        const pushUrl = environment.BASE_URL + 'push?access_token=' + this.authService.getToken();
+        const pushUrl = environment.BASE_URL + '/api/v2/push?access_token=' + this.authService.getToken();
         const protoMatch = /^(https?):\/\//;
         if (environment.BASE_URL.startsWith('https:')) {
             return pushUrl.replace(protoMatch, 'wss://');

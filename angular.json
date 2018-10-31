@@ -27,7 +27,8 @@
                             "src/assets",
                             "src/.deployment",
                             "src/deploy.sh",
-                            "src/app_data"
+                            "src/app_data",
+                            "src/web.config"
                         ],
                         "styles": [
                             "src/assets/app.less",

@@ -40,8 +40,9 @@ function updateAppConfig() {
     '//# sourceMappingURL=scripts.js.map'
   ].join('\n');
 
+  var hash = md5(content);
 // todo: use cache buster in name
-  var configFile = 'scripts.js';
+  var configFile = 'scripts.' + hash + '.js';
 
   fs.writeFile('../../../../' + configFile, content, function (err) {
     if (err)
@@ -50,13 +51,13 @@ function updateAppConfig() {
     console.log('Config generated.');
   });
 
-  // replace({
-  //   regex: "scripts.js",
-  //   replacement: configFile,
-  //   paths: ['../../../../index.html'],
-  //   recursive: false,
-  //   silent: false
-  // });
+  replace({
+    regex: "scripts.js",
+    replacement: configFile,
+    paths: ['../../../../index.html'],
+    recursive: false,
+    silent: false
+  });
 }
 
 function installGoogleTagManager() {
