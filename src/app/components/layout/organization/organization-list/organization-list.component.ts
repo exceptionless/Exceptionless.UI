@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../../../environments/environment';
 import { LinkService } from '../../../../service/link.service';
 import { PaginationService } from '../../../../service/pagination.service';
 import { NotificationService } from '../../../../service/notification.service';
@@ -10,6 +9,8 @@ import { UserService } from '../../../../service/user.service';
 import { DialogService } from '../../../../service/dialog.service';
 import { AppEventService } from '../../../../service/app-event.service';
 import { BillingService } from '../../../../service/billing.service';
+
+declare var environment;
 
 @Component({
     selector: 'app-organization-list',

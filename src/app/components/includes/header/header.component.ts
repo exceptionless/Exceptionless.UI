@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../../../service/notification.service';
 import { UserService } from '../../../service/user.service';
 import { TranslateService } from '@ngx-translate/core';
-import { environment } from '../../../../environments/environment';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { AppEventService } from '../../../service/app-event.service';
 import { Intercom } from 'ng-intercom';
+
+declare var environment;
 
 @Component({
     selector: 'app-header',

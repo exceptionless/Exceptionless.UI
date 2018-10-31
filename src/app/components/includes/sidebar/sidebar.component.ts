@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterService } from '../../../service/filter.service';
 import { FilterStoreService } from '../../../service/filter-store.service';
-import { environment } from '../../../../environments/environment';
 import { Intercom } from 'ng-intercom';
+
+declare var environment;
 
 @Component({
     selector: 'app-sidebar',

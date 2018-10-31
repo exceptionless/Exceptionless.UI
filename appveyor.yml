@@ -16,8 +16,8 @@ build_script:
 after_test:
 - tar -zcvf dist\exceptionless.zip dist\exceptionless
 - ps: Get-ChildItem .\*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName ReleaseArtifacts }
-- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" IF "%APPVEYOR_REPO_BRANCH%"=="" ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=feature\angular6
-- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" IF not "%APPVEYOR_REPO_BRANCH%"=="" ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=%APPVEYOR_REPO_BRANCH%
+- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" IF "%APPVEYOR_REPO_BRANCH%"=="" ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=feature\angular6 --repo=%BUILD_REPO_URL%
+- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" IF not "%APPVEYOR_REPO_BRANCH%"=="" ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=%APPVEYOR_REPO_BRANCH%  --repo=%BUILD_REPO_URL%
 
 artifacts:
 - path: .\*.zip

@@ -7,11 +7,12 @@ import { UserService } from '../../../../service/user.service';
 import { NotificationService } from '../../../../service/notification.service';
 import * as moment from 'moment';
 import * as Rickshaw from 'rickshaw';
-import { environment } from '../../../../../environments/environment';
 import { WordTranslateService } from '../../../../service/word-translate.service';
 import { BillingService } from '../../../../service/billing.service';
 import { AppEventService } from '../../../../service/app-event.service';
 import { DialogService } from '../../../../service/dialog.service';
+
+declare var environment;
 
 @Component({
     selector: 'app-organization-edit',

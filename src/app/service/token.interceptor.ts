@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from 'ng2-ui-auth';
-import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/empty';
 import { throwError } from 'rxjs';
 import { NotificationService } from './notification.service';
+
+declare var environment;
 
 @Injectable()
 
@@ -38,8 +39,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const isTranslate = request.url.includes('i18n');
-        const isConfig = request.url.includes('app-config.json');
-        if (isTranslate || isConfig) {
+        if (isTranslate) {
             return next.handle(request);
         } else {
             request = request.clone({

@@ -24,24 +24,21 @@
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": [
                             "src/favicon.ico",
-                            "src/assets"
+                            "src/assets",
+                            "src/.deployment",
+                            "src/deploy.sh",
+                            "src/app_data"
                         ],
                         "styles": [
                             "src/assets/app.less",
                             "src/styles.less"
                         ],
                         "scripts": [
-
+                            "src/app-config.js"
                         ]
                     },
                     "configurations": {
                         "production": {
-                            "fileReplacements": [
-                                {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.prod.ts"
-                                }
-                            ],
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,

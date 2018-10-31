@@ -6,10 +6,11 @@ import { NotificationService } from '../../service/notification.service';
 import { AuthAccountService } from '../../service/auth-account.service';
 import { ProjectService } from '../../service/project.service';
 import { UserService } from '../../service/user.service';
-import { environment } from '../../../environments/environment';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
 import { DialogService } from '../../service/dialog.service';
+
+declare var environment;
 
 @Component({
     selector: 'app-account-manage',

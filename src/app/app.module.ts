@@ -24,7 +24,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IntercomModule } from 'ng-intercom';
 import { NgxStripeModule } from 'ngx-stripe';
 
-import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './components/auth/login/login.component';
@@ -100,6 +99,8 @@ import { RefreshOnDirective } from './directives/refresh-on.directive';
 import { ProjectConfigureComponent } from './components/layout/project/project-configure/project-configure.component';
 import { AutoActiveDirective } from './directives/auto-active.directive';
 import { StatusComponent } from './components/status/status.component';
+
+declare var environment;
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},

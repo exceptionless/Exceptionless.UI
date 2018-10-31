@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { AuthService } from 'ng2-ui-auth';
 import { AppEventService } from './app-event.service';
+
+declare var environment;
 
 @Injectable({
     providedIn: 'root'

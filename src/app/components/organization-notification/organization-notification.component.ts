@@ -4,9 +4,10 @@ import { ProjectService } from '../../service/project.service';
 import { FilterService } from '../../service/filter.service';
 import { SearchService } from '../../service/search.service';
 import { NotificationService } from '../../service/notification.service';
-import { environment } from '../../../environments/environment';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
+
+declare var environment;
 
 @Component({
     selector: 'app-organization-notification',
