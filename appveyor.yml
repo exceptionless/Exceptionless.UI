@@ -11,7 +11,7 @@ install:
 - npm install -g @angular/cli
 
 build_script:
-- node_modules\.bin\ng build
+- node_modules\.bin\ng build --prod
 
 after_test:
 - tar -zcvf dist\exceptionless.zip dist\exceptionless
