@@ -52,7 +52,7 @@ function updateAppConfig() {
   });
 
   replace({
-    regex: '"scripts\.*\.js"',
+    regex: '"scripts\.[a-z0-9]+\.js"',
     replacement: configFile,
     paths: ['../../../../index.html'],
     recursive: false,
