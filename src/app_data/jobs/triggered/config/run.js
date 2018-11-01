@@ -42,7 +42,7 @@ function updateAppConfig() {
 
   var hash = md5(content);
 // todo: use cache buster in name
-  var configFile = 'scripts.' + hash + '.js';
+  var configFile = '"scripts.' + hash + '.js"';
 
   fs.writeFile('../../../../' + configFile, content, function (err) {
     if (err)
@@ -52,7 +52,7 @@ function updateAppConfig() {
   });
 
   replace({
-    regex: "scripts\.*\.js",
+    regex: '"scripts\.*\.js"',
     replacement: configFile,
     paths: ['../../../../index.html'],
     recursive: false,
