@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -189,7 +188,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         StatusComponent
     ],
     imports: [
-        RouterModule,
         BrowserModule,
         FormsModule,
         AppRoutingModule,
