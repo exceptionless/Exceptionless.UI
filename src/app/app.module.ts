@@ -15,7 +15,7 @@ import 'rickshaw';
 import { RickshawModule } from 'ng2-rickshaw';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DaterangepickerModule } from 'angular-2-daterangepicker';
+import { Daterangepicker } from 'ng2-daterangepicker';
 import { ChecklistModule } from 'angular-checklist';
 import { GravatarModule } from 'ngx-gravatar';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -98,8 +98,6 @@ import { RefreshOnDirective } from './directives/refresh-on.directive';
 import { ProjectConfigureComponent } from './components/layout/project/project-configure/project-configure.component';
 import { AutoActiveDirective } from './directives/auto-active.directive';
 import { StatusComponent } from './components/status/status.component';
-
-declare var environment;
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -200,7 +198,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         RickshawModule,
         ModalDialogModule.forRoot(),
         NgbModule.forRoot(),
-        DaterangepickerModule,
+        Daterangepicker,
         ChecklistModule,
         Ng2UiAuthModule.forRoot(AuthConfig),
         HotkeyModule.forRoot(),

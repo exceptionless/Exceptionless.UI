@@ -9,10 +9,7 @@ import 'rxjs/add/observable/empty';
 import { throwError } from 'rxjs';
 import { NotificationService } from './notification.service';
 
-declare var environment;
-
 @Injectable()
-
 export class TokenInterceptor implements HttpInterceptor {
     constructor(
         private auth: AuthService,

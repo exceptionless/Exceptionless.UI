@@ -10,8 +10,6 @@ import { DialogService } from '../../../../service/dialog.service';
 import { AppEventService } from '../../../../service/app-event.service';
 import { BillingService } from '../../../../service/billing.service';
 
-declare var environment;
-
 @Component({
     selector: 'app-organization-list',
     templateUrl: './organization-list.component.html'

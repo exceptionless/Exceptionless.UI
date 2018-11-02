@@ -29,6 +29,14 @@ export class CustomDateRangeDialogComponent implements IModalDialog {
         preDefinedRanges: [],
         disableBeforeStart: true
     };
+
+    public options: any = {
+        locale: { format: 'MM/DD/YYYY' },
+        alwaysShowCalendars: false,
+    };
+
+    public daterange: any = {};
+
     constructor(
         private filterService: FilterService
     ) {}
@@ -37,6 +45,23 @@ export class CustomDateRangeDialogComponent implements IModalDialog {
         const confirmedFilterDate = date.start.format('YYYY-MM-DDTHH:mm:ss') + '-' + date.end.format('YYYY-MM-DDTHH:mm:ss');
 
         this.filterService.setTime(confirmedFilterDate);
+    }
+
+    public selectedDate(value: any, datepicker?: any) {
+        // this is the date the iser selected
+        console.log(value);
+
+        // any object can be passed to the selected event and it will be passed back here
+        datepicker.start = value.start;
+        datepicker.end = value.end;
+
+        const confirmedFilterDate = value.start.format('YYYY-MM-DDTHH:mm:ss') + '-' + value.end.format('YYYY-MM-DDTHH:mm:ss');
+        this.filterService.setTime(confirmedFilterDate);
+
+        // or manupulat your own internal property
+        this.daterange.start = value.start;
+        this.daterange.end = value.end;
+        this.daterange.label = value.label;
     }
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {

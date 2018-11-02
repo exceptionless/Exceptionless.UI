@@ -45,10 +45,10 @@
                             "sourceMap": false,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": false,
+                            "aot": true,
                             "extractLicenses": false,
                             "vendorChunk": false,
-                            "buildOptimizer": false
+                            "buildOptimizer": true
                         }
                     }
                 },

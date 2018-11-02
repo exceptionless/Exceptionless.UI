@@ -7,8 +7,6 @@ import { NotificationService } from '../../service/notification.service';
 import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
 
-declare var environment;
-
 @Component({
     selector: 'app-organization-notification',
     templateUrl: './organization-notification.component.html'

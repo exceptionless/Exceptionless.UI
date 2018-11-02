@@ -12,8 +12,6 @@ import { BillingService } from '../../../../service/billing.service';
 import { AppEventService } from '../../../../service/app-event.service';
 import { DialogService } from '../../../../service/dialog.service';
 
-declare var environment;
-
 @Component({
     selector: 'app-organization-edit',
     templateUrl: './organization-edit.component.html'

@@ -8,8 +8,6 @@ import { WordTranslateService } from '../../../service/word-translate.service';
 import { AppEventService } from '../../../service/app-event.service';
 import { Intercom } from 'ng-intercom';
 
-declare var environment;
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html'

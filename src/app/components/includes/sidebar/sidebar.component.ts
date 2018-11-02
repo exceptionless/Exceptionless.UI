@@ -3,8 +3,6 @@ import { FilterService } from '../../../service/filter.service';
 import { FilterStoreService } from '../../../service/filter-store.service';
 import { Intercom } from 'ng-intercom';
 
-declare var environment;
-
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html'

@@ -10,8 +10,6 @@ import { WordTranslateService } from '../../service/word-translate.service';
 import { BillingService } from '../../service/billing.service';
 import { DialogService } from '../../service/dialog.service';
 
-declare var environment;
-
 @Component({
     selector: 'app-account-manage',
     templateUrl: './account-manage.component.html'

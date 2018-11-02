@@ -9,8 +9,6 @@ import { AnalyticsService } from '../../service/analytics.service';
 import { StripeService, Elements } from 'ngx-stripe';
 import { CommonService } from '../../service/common.service';
 
-declare var environment;
-
 @Component({
     selector: 'app-change-plan-dialog',
     templateUrl: './change-plan-dialog.component.html'

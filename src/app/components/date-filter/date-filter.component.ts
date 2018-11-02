@@ -55,6 +55,7 @@ export class DateFilterComponent implements OnInit {
         }
 
         const range = this.dateRangeParserService.parse(time);
+
         if (range && range.start && range.end) {
             return moment(range.start).format('MMM DD, hh:ss A') + ' - ' + moment(range.end).format('MMM DD, hh:ss A');
         }
