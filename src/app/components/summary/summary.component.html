@@ -1,4 +1,4 @@
-<ng-container *ngIf="source.template_key == 'stack-log-summary'">
+<ng-container *ngIf="source['template_key'] == 'stack-log-summary'">
     <span *ngIf="showType">
         <strong>{{ 'Log source' | translate }}</strong>:&nbsp;
     </span>
@@ -9,12 +9,12 @@
     </a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'stack-notfound-summary'">
+<ng-container *ngIf="source['template_key'] == 'stack-notfound-summary'">
     <span *ngIf="showType"><strong>404</strong>:&nbsp;</span>
     <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'stack-error-summary'">
+<ng-container *ngIf="source['template_key'] == 'stack-error-summary'">
     <div>
         <strong>
             <abbr title="{{ source.data.TypeFullName }}">{{ source.data.Type }}</abbr>
@@ -35,17 +35,17 @@
     </div>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'stack-feature-summary'">
+<ng-container *ngIf="source['template_key'] == 'stack-feature-summary'">
     <span *ngIf="showType"><strong>Feature</strong>:&nbsp;</span>
     <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'stack-session-summary'">
+<ng-container *ngIf="source['template_key'] == 'stack-session-summary'">
     <span *ngIf="showType"><strong>Session</strong>:&nbsp;</span>
     <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'stack-simple-summary'">
+<ng-container *ngIf="source['template_key'] == 'stack-simple-summary'">
     <div>
         <strong>
             <abbr title="{{ source.data.TypeFullName }}">{{ source.data.Type }}</abbr>:
@@ -59,7 +59,7 @@
     </div>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'stack-summary'">
+<ng-container *ngIf="source['template_key'] == 'stack-summary'">
     <strong *ngIf="showType">{{ source.data.Type }}</strong>
     <span *ngIf="showType && source.data.Source">&nbsp;in&nbsp;</span>
     <strong *ngIf="source.data.Source">{{ source.data.Source }}</strong>
@@ -67,7 +67,7 @@
     <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'event-error-summary'">
+<ng-container *ngIf="source['template_key'] == 'event-error-summary'">
     <div>
         <strong *ngIf="source.data.Type">
             <abbr title="{{ source.data.TypeFullName }}">{{ source.data.Type }}</abbr>
@@ -88,12 +88,12 @@
     </div>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'event-feature-summary'">
+<ng-container *ngIf="source['template_key'] == 'event-feature-summary'">
     <span *ngIf="showType"><strong>{{ 'Feature' | translate }}</strong>:&nbsp;</span>
     <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'event-log-summary'">
+<ng-container *ngIf="source['template_key'] == 'event-log-summary'">
     <span *ngIf="source.data.Level" class="label label-default" [ngClass]="{ 'label-success': isLevelSuccess, 'label-info': isLevelInfo, 'label-warning': isLevelWarning, 'label-danger': isLevelError }">
         {{ source.data.Level }}
     </span>
@@ -108,12 +108,12 @@
     <span *ngIf="showType || source.data.Source">:&nbsp;</span><a ui-sref="app.event({ id: source.id })" truncate lines="2">{{ source.data.Message }}</a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'event-notfound-summary'">
+<ng-container *ngIf="source['template_key'] == 'event-notfound-summary'">
     <span *ngIf="showType"><strong>404</strong>:&nbsp;</span>
     <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Source }}</a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'event-session-summary'">
+<ng-container *ngIf="source['template_key'] == 'event-session-summary'">
     <span *ngIf="showType">
         <strong>
             <span *ngIf="source.data.Type === 'sessionend'">{{ 'Session End' | translate }}</span>
@@ -128,7 +128,7 @@
     </a>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'event-simple-summary'">
+<ng-container *ngIf="source['template_key'] == 'event-simple-summary'">
     <div>
         <strong>
             <abbr title="{{ source.data.TypeFullName }}">{{ source.data.Type }}</abbr>:
@@ -142,7 +142,7 @@
     </div>
 </ng-container>
 
-<ng-container *ngIf="source.template_key == 'event-summary'">
+<ng-container *ngIf="source['template_key'] == 'event-summary'">
     <strong *ngIf="showType">{{ source.data.Type }}</strong>
     <span *ngIf="showType && source.data.Source">&nbsp;in&nbsp;</span>
     <strong *ngIf="source.data.Source">{{ source.data.Source }}</strong>

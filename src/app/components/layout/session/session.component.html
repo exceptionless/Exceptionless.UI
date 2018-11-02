@@ -66,7 +66,7 @@
                             <input type="checkbox" [(ngModel)]="includeLiveFilter" (click)="updateLiveFilter(includeLiveFilter)">
                             <i></i>
                         </label>
-                        <div class="switch-text" [ngClass]="{'text-success': vincludeLiveFilter}" (click)="updateLiveFilter(!includeLiveFilter)">{{ 'View Active' | translate }}</div>
+                        <div class="switch-text" [ngClass]="{'text-success': includeLiveFilter}" (click)="updateLiveFilter(!includeLiveFilter)">{{ 'View Active' | translate }}</div>
                     </div>
                 </div>
 

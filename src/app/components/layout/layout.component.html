@@ -1,5 +1,5 @@
 <div class="app-header-fixed app-aside-fixed" [ngClass]="{'app-aside-folded': isSideNavCollapsed, 'app-res-nav': isShowResponsiveNav, 'app-res-side': isShowResponsiveSide}">
-    <app-header (navigationCollapseToggle)="onToggleSideNavCollapsed($event)" (showResponsiveSideToggle)="onShowResponsiveSide($event)" (showResponsiveNavToggle)="onShowResponsiveNav($event)"></app-header>
+    <app-header (navigationCollapseToggle)="onToggleSideNavCollapsed()" (showResponsiveSideToggle)="onShowResponsiveSide()" (showResponsiveNavToggle)="onShowResponsiveNav()"></app-header>
 
     <app-sidebar class="off-screen"></app-sidebar>
 

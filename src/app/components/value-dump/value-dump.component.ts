@@ -10,10 +10,16 @@ export class ValueDumpComponent implements OnInit {
     @Input() content;
     @Input() isRoot;
 
+    contentType: any;
+    _isArray: any;
+
     constructor() {
+        this._isArray = false;
     }
 
     ngOnInit() {
+        this.contentType = this.getType();
+        this._isArray = this.isArray();
     }
 
     getType() {
