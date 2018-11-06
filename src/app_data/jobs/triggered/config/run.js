@@ -45,7 +45,7 @@ function updateAppConfig() {
 
     var hash = md5(content);
 // todo: use cache buster in name
-    var configFile = '"scripts.' + hash + '.js"';
+    var configFile = 'scripts.' + hash + '.js';
 
     fs.writeFile('../../../../' + configFile, content, function (err) {
         if (err)
@@ -56,7 +56,7 @@ function updateAppConfig() {
 
     replace({
         regex: '"scripts\.[a-z0-9]+\.js"',
-        replacement: configFile,
+        replacement: '"' + configFile + '"',
         paths: ['../../../../index.html'],
         recursive: false,
         silent: false
@@ -87,7 +87,7 @@ function installGoogleTagManager() {
 
 
 function compressVendorJS() {
-    var vendorFile = '"vendor.' + md5(new Date()) + '.js"';
+    var vendorFile = 'vendor.' + md5(new Date()) + '.js';
     recursive("../../../../", function (err, files) {
         for (var i = 0; i < files.length; i ++) {
             var fileName = files[i].match(regex())[0];
@@ -98,11 +98,11 @@ function compressVendorJS() {
                     if (err)
                         throw err;
 
-                    console.log('Config generated.');
+                    console.log('Vendor generated.');
                 });
                 replace({
                     regex: '"vendor\.[a-z0-9]+\.js"',
-                    replacement: vendorFile,
+                    replacement: '"' + vendorFile + '"',
                     paths: ['../../../../index.html'],
                     recursive: false,
                     silent: false
@@ -114,7 +114,7 @@ function compressVendorJS() {
 }
 
 function compressMainJS() {
-    var mainFile = '"main.' + md5(new Date()) + '.js"';
+    var mainFile = 'main.' + md5(new Date()) + '.js';
     recursive("../../../../", function (err, files) {
         for (var i = 0; i < files.length; i ++) {
             var fileName = files[i].match(regex())[0];
@@ -125,11 +125,11 @@ function compressMainJS() {
                     if (err)
                         throw err;
 
-                    console.log('Config generated.');
+                    console.log('Main generated.');
                 });
                 replace({
                     regex: '"main\.[a-z0-9]+\.js"',
-                    replacement: mainFile,
+                    replacement: '"' + mainFile + '"',
                     paths: ['../../../../index.html'],
                     recursive: false,
                     silent: false
