@@ -94,7 +94,7 @@ function compressVendorJS() {
             if (fileName.indexOf('vendor') >= 0) {
                 var code = fs.readFileSync("../../../../" + fileName, "utf8");
                 code = UglifyJS.minify(code, { mangle: false }).code;
-                fs.writeFile('../../../../' + vendorFile, content, function (err) {
+                fs.writeFile('../../../../' + vendorFile, code, function (err) {
                     if (err)
                         throw err;
 
