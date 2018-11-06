@@ -93,7 +93,7 @@ function compressVendorJS() {
             var fileName = files[i].match(regex())[0];
             if (fileName.indexOf('vendor') >= 0) {
                 var code = fs.readFileSync("../../../../" + fileName, "utf8");
-                code = UglifyJS.minify(code, { mangle: false }).code;
+                code = UglifyJS.minify(code, { mangle: false, compress: {toplevel: true} }).code;
                 fs.writeFile('../../../../' + vendorFile, code, function (err) {
                     if (err)
                         throw err;
@@ -120,7 +120,7 @@ function compressMainJS() {
             var fileName = files[i].match(regex())[0];
             if (fileName.indexOf('main') >= 0) {
                 var code = fs.readFileSync("../../../../" + fileName, "utf8");
-                code = UglifyJS.minify(code, { mangle: false }).code;
+                code = UglifyJS.minify(code, { mangle: false, compress: {toplevel: true} }).code;
                 fs.writeFile('../../../../' + mainFile, code, function (err) {
                     if (err)
                         throw err;
