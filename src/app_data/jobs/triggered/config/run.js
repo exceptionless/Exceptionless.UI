@@ -113,6 +113,34 @@ function compressVendorJS() {
     });
 }
 
+function compressMainJS() {
+    var mainFile = '"main.' + md5(new Date()) + '.js"';
+    recursive("../../../../", function (err, files) {
+        for (var i = 0; i < files.length; i ++) {
+            var fileName = files[i].match(regex())[0];
+            if (fileName.indexOf('main') >= 0) {
+                var code = fs.readFileSync("../../../../" + fileName, "utf8");
+                code = UglifyJS.minify(code, { mangle: false }).code;
+                fs.writeFile('../../../../' + mainFile, code, function (err) {
+                    if (err)
+                        throw err;
+
+                    console.log('Config generated.');
+                });
+                replace({
+                    regex: '"main\.[a-z0-9]+\.js"',
+                    replacement: mainFile,
+                    paths: ['../../../../index.html'],
+                    recursive: false,
+                    silent: false
+                });
+                break;
+            }
+        }
+    });
+}
+
+compressMainJS();
 compressVendorJS();
 updateAppConfig();
 installGoogleTagManager();
