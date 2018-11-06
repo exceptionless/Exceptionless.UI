@@ -1,8 +1,9 @@
 import { Component, OnChanges, ViewChild, Input, ElementRef, SimpleChanges } from '@angular/core';
+import { rickshaw } from 'ng2-rickshaw';
 import * as Rickshaw from 'rickshaw';
 import * as d3 from 'd3';
 import * as moment from 'moment';
-import {FilterService} from '../../service/filter.service';
+import { FilterService } from '../../service/filter.service';
 
 @Component({
     selector: 'app-rickshaw',
@@ -22,10 +23,11 @@ export class RickshawComponent implements OnChanges {
 
     constructor(private filterService: FilterService) {
         Rickshaw.namespace('Rickshaw.Graph.RangeSelector');
+        const self = this;
         Rickshaw.Graph.RangeSelector = Rickshaw.Class.create({
             initialize: function (args) {
                 const element = this.element = args.element;
-                const graph = this.graph = args.graph;
+                const graph = self.graph = args.graph;
                 graph._selectionCallback = args.selectionCallback;
                 const position = this.position = {};
                 const startPointerX = 0;
@@ -43,7 +45,7 @@ export class RickshawComponent implements OnChanges {
                 }.bind(this));
             },
             _addListeners: function () {
-                const graph = this.graph;
+                const graph = self.graph;
                 const position = this.position;
                 let _startPointerX = this.startPointerX;
                 const selectionBox = this.selectionBox;
@@ -122,8 +124,8 @@ export class RickshawComponent implements OnChanges {
                     _startPointerX = 0;
                 }, false);
             },
-            update: function () {
-                const graph = this.graph;
+            update: function() {
+                const graph = self.graph;
                 const position = this.position;
 
                 if (graph.window.xMin === null) {
