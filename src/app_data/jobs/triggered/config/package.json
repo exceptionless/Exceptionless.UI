@@ -3,7 +3,7 @@
     "version": "2.0.0",
     "private": true,
     "dependencies": {
-        "filename-regex": "^2.0.1",
+        "filename-regex": "2.0.1",
         "md5": "2.2.1",
         "recursive-readdir": "2.2.2",
         "replace": "0.3.0",
