@@ -3,9 +3,6 @@
 var fs = require('fs');
 var md5 = require('md5');
 var replace = require("replace");
-var recursive = require("recursive-readdir");
-var regex = require('filename-regex');
-var UglifyJS = require("uglify-js");
 
 function updateAppConfig() {
     var baseURL = process.env.Exceptionless_BaseURL ? process.env.Exceptionless_BaseURL : 'http://localhost:5001';
@@ -45,7 +42,7 @@ function updateAppConfig() {
 
     var hash = md5(content);
 // todo: use cache buster in name
-    var configFile = 'scripts.' + hash + '.js';
+    var configFile = '"scripts.' + hash + '.js"';
 
     fs.writeFile('../../../../' + configFile, content, function (err) {
         if (err)
@@ -56,7 +53,7 @@ function updateAppConfig() {
 
     replace({
         regex: '"scripts\.[a-z0-9]+\.js"',
-        replacement: '"' + configFile + '"',
+        replacement: configFile,
         paths: ['../../../../index.html'],
         recursive: false,
         silent: false
@@ -85,62 +82,5 @@ function installGoogleTagManager() {
     });
 }
 
-
-function compressVendorJS() {
-    var vendorFile = 'vendor.' + md5(new Date()) + '.js';
-    recursive("../../../../", function (err, files) {
-        for (var i = 0; i < files.length; i ++) {
-            var fileName = files[i].match(regex())[0];
-            if (fileName.indexOf('vendor') >= 0) {
-                var code = fs.readFileSync("../../../../" + fileName, "utf8");
-                code = UglifyJS.minify(code, { mangle: false, compress: {toplevel: true} }).code;
-                fs.writeFile('../../../../' + vendorFile, code, function (err) {
-                    if (err)
-                        throw err;
-
-                    console.log('Vendor generated.');
-                });
-                replace({
-                    regex: '"vendor\.[a-z0-9]+\.js"',
-                    replacement: '"' + vendorFile + '"',
-                    paths: ['../../../../index.html'],
-                    recursive: false,
-                    silent: false
-                });
-                break;
-            }
-        }
-    });
-}
-
-function compressMainJS() {
-    var mainFile = 'main.' + md5(new Date()) + '.js';
-    recursive("../../../../", function (err, files) {
-        for (var i = 0; i < files.length; i ++) {
-            var fileName = files[i].match(regex())[0];
-            if (fileName.indexOf('main') >= 0) {
-                var code = fs.readFileSync("../../../../" + fileName, "utf8");
-                code = UglifyJS.minify(code, { mangle: false, compress: {toplevel: true} }).code;
-                fs.writeFile('../../../../' + mainFile, code, function (err) {
-                    if (err)
-                        throw err;
-
-                    console.log('Main generated.');
-                });
-                replace({
-                    regex: '"main\.[a-z0-9]+\.js"',
-                    replacement: '"' + mainFile + '"',
-                    paths: ['../../../../index.html'],
-                    recursive: false,
-                    silent: false
-                });
-                break;
-            }
-        }
-    });
-}
-
-compressMainJS();
-compressVendorJS();
 updateAppConfig();
 installGoogleTagManager();

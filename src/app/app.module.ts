@@ -98,6 +98,8 @@ import { RefreshOnDirective } from './directives/refresh-on.directive';
 import { ProjectConfigureComponent } from './components/layout/project/project-configure/project-configure.component';
 import { AutoActiveDirective } from './directives/auto-active.directive';
 import { StatusComponent } from './components/status/status.component';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -216,6 +218,8 @@ export function HttpLoaderFactory(http: HttpClient) {
             appId: environment.INTERCOM_APPID
         }),
         NgxStripeModule.forRoot(environment.STRIPE_PUBLISHABLE_KEY),
+        LoadingBarRouterModule,
+        LoadingBarHttpClientModule
     ],
     providers: [
         AuthGuardService,
