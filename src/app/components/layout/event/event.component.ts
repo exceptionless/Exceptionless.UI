@@ -12,6 +12,7 @@ import { NotificationService } from '../../../service/notification.service';
 import { ProjectService } from '../../../service/project.service';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
+import { $ExceptionlessClient } from '../../../exceptionlessclient';
 
 @Component({
     selector: 'app-event',
@@ -19,6 +20,7 @@ import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 })
 
 export class EventComponent implements OnInit {
+    _source = 'app.event.Event';
     _eventId = [];
     _knownDataKeys = ['error', '@error', '@simple_error', '@request', '@trace', '@environment', '@user', '@user_description', '@version', '@level', '@location', '@submission_method', '@submission_client', 'session_id', 'sessionend', 'haserror', '@stack'];
     activeTabIndex = -1;
@@ -136,12 +138,20 @@ export class EventComponent implements OnInit {
     addHotKeys() {
         if (this.event['stack_id']) {
             this.hotkeysService.add(new Hotkey('mod+up', (event: KeyboardEvent): boolean => {
+                $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.GoToStack')
+                    .addTags('hotkeys')
+                    .setProperty('id', this._eventId)
+                    .submit();
                 this.router.navigate([`/type/event/${this._eventId}`]);
                 return false;
             }));
 
             if (this.clipboardService.isSupported) {
                 this.hotkeysService.add(new Hotkey('mod+shift+c', (event: KeyboardEvent): boolean => {
+                    $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.CopyEventJSON')
+                        .addTags('hotkeys')
+                        .setProperty('id', this._eventId)
+                        .submit();
                     this.clipboardService.copyFromContent(this.event_json);
                     return false;
                 }));
@@ -150,6 +160,10 @@ export class EventComponent implements OnInit {
 
         if (this.previous) {
             this.hotkeysService.add(new Hotkey('mod+left', (event: KeyboardEvent): boolean => {
+                $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.PreviousOccurrence')
+                    .addTags('hotkeys')
+                    .setProperty('id', this._eventId)
+                    .submit();
                 this.router.navigate([`/type/event/${this.previous}`], { queryParams: { tab: this.getCurrentTab() } });
                 return false;
             }));
@@ -157,6 +171,10 @@ export class EventComponent implements OnInit {
 
         if (this.next) {
             this.hotkeysService.add(new Hotkey('mod+left', (event: KeyboardEvent): boolean => {
+                $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.NextOccurrence')
+                    .addTags('hotkeys')
+                    .setProperty('id', this._eventId)
+                    .submit();
                 this.router.navigate([`/type/event/${this.next}`], { queryParams: { tab: this.getCurrentTab() } });
                 return false;
             }));
@@ -288,11 +306,22 @@ export class EventComponent implements OnInit {
 
     async demoteTab(tabName) {
         const onSuccess = () => {
+            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.success')
+                .setProperty('id', this._eventId)
+                .setProperty('TabName', tabName)
+                .submit();
+
             this.project['promoted_tabs'].splice(indexOf, 1);
             this.buildTabs('Extended Data');
         };
 
         const onFailure = async (response) => {
+            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.error')
+                .setProperty('id', this._eventId)
+                .setProperty('response', response)
+                .setProperty('TabName', tabName)
+                .submit();
+
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred promoting tab.'));
         };
 
@@ -300,6 +329,11 @@ export class EventComponent implements OnInit {
         if (indexOf < 0) {
             return;
         }
+
+        $ExceptionlessClient.createFeatureUsage(this._source + '.demoteTab')
+            .setProperty('id', this._eventId)
+            .setProperty('TabName', tabName)
+            .submit();
 
         try {
             await this.projectService.demoteTab(this.project['id'], tabName);
@@ -501,11 +535,28 @@ export class EventComponent implements OnInit {
     }
 
     async promoteTab(tabName) {
+
+        $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab')
+            .setProperty('id', this._eventId)
+            .setProperty('TabName', tabName)
+            .submit();
+
         try {
             await this.projectService.promoteTab(this.project['id'], tabName);
+
+            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.success')
+                .setProperty('id', this._eventId)
+                .setProperty('TabName', tabName)
+                .submit();
+
             this.project['promoted_tabs'].push(tabName);
             this.buildTabs(tabName);
         } catch (err) {
+            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.error')
+                .setProperty('id', this._eventId)
+                .setProperty('response', err)
+                .setProperty('TabName', tabName)
+                .submit();
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred promoting tab.'));
         }
     }

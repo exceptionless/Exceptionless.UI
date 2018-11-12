@@ -36,13 +36,12 @@ function updateAppConfig() {
         '    USE_HTML5_MODE: ' + useHTML5Mode + ',',
         '    USE_SSL: ' + useSSL + ',',
         '    ENABLE_ACCOUNT_CREATION: ' + enableAccountCreation + '};',
-        ';',
-        '//# sourceMappingURL=scripts.js.map'
+        ';'
     ].join('\n');
 
     var hash = md5(content);
 // todo: use cache buster in name
-    var configFile = '"scripts.' + hash + '.js"';
+    var configFile = '"app-config.' + hash + '.js"';
 
     fs.writeFile('../../../../' + configFile, content, function (err) {
         if (err)
@@ -52,7 +51,7 @@ function updateAppConfig() {
     });
 
     replace({
-        regex: '"scripts\.[a-z0-9]+\.js"',
+        regex: '"app-config.js"',
         replacement: configFile,
         paths: ['../../../../index.html'],
         recursive: false,

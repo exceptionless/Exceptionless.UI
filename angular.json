@@ -28,14 +28,15 @@
                             "src/.deployment",
                             "src/deploy.sh",
                             "src/app_data",
-                            "src/web.config"
+                            "src/web.config",
+                            "src/app-config.js"
                         ],
                         "styles": [
                             "src/assets/app.less",
                             "src/styles.less"
                         ],
                         "scripts": [
-                            "src/app-config.js"
+                            "src/assets/library/exceptionless.js"
                         ]
                     },
                     "configurations": {

@@ -5,6 +5,7 @@ import { AuthService } from 'ng2-ui-auth';
 import { NotificationService } from '../../../service/notification.service';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { FilterService } from '../../../service/filter.service';
+import { $ExceptionlessClient } from '../../../exceptionlessclient';
 
 @Component({
     selector: 'app-login',
@@ -12,6 +13,7 @@ import { FilterService } from '../../../service/filter.service';
 })
 
 export class LoginComponent implements OnInit {
+    _source = 'app.auth.Login';
     model = new Login();
     submitted = false;
     filterUrlPattern = '';
@@ -42,6 +44,7 @@ export class LoginComponent implements OnInit {
 
             try {
                 const res = await this.auth.login(loginData).toPromise();
+                $ExceptionlessClient.submitFeatureUsage(this._source + '.login');
                 if (this.filterService.getProjectType() === 'All Projects') {
                     this.filterUrlPattern = '';
                     this.router.navigate(['/type/error/dashboard']);
@@ -58,6 +61,7 @@ export class LoginComponent implements OnInit {
                     }
                 }
             } catch (err) {
+                $ExceptionlessClient.createFeatureUsage(this._source + '.login.error').setUserIdentity(this.model.email).submit();
                 this.notificationService.error('', await this.wordTranslateService.translate('Loggin_Failed_Message'));
             }
         }
