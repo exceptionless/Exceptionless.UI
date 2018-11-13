@@ -18,7 +18,7 @@ export class BillingService {
 
     async changePlan(viewRef, callback, organizationId?) {
         this.analyticsService.initiateCheckout();
-        $ExceptionlessClient.createFeatureUsage(this.source + '.changePlan')
+        $ExceptionlessClient.createFeatureUsage(`${this.source}.changePlan`)
             .setProperty('OrganizationId', organizationId)
             .submit();
 
@@ -28,7 +28,7 @@ export class BillingService {
     }
 
     async confirmUpgradePlan(viewRef, message, organizationId, callback) {
-        $ExceptionlessClient.createFeatureUsage(this.source + '.confirmUpgradePlan')
+        $ExceptionlessClient.createFeatureUsage(`${this.source}.confirmUpgradePlan`)
             .setMessage(message)
             .setProperty('OrganizationId', organizationId)
             .submit();
@@ -36,7 +36,7 @@ export class BillingService {
         return this.dialogService.confirm(viewRef, message, 'Upgrade Plan', () => {
             return this.changePlan(viewRef, callback, organizationId);
         }, () => {
-            $ExceptionlessClient.createFeatureUsage(this.source + '.confirmUpgradePlan.cancel')
+            $ExceptionlessClient.createFeatureUsage(`${this.source}.confirmUpgradePlan.cancel`)
                 .setMessage(message)
                 .setProperty('OrganizationId', organizationId)
                 .submit();

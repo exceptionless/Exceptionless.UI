@@ -138,7 +138,7 @@ export class EventComponent implements OnInit {
     addHotKeys() {
         if (this.event['stack_id']) {
             this.hotkeysService.add(new Hotkey('mod+up', (event: KeyboardEvent): boolean => {
-                $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.GoToStack')
+                $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.GoToStack`)
                     .addTags('hotkeys')
                     .setProperty('id', this._eventId)
                     .submit();
@@ -148,7 +148,7 @@ export class EventComponent implements OnInit {
 
             if (this.clipboardService.isSupported) {
                 this.hotkeysService.add(new Hotkey('mod+shift+c', (event: KeyboardEvent): boolean => {
-                    $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.CopyEventJSON')
+                    $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.CopyEventJSON`)
                         .addTags('hotkeys')
                         .setProperty('id', this._eventId)
                         .submit();
@@ -160,7 +160,7 @@ export class EventComponent implements OnInit {
 
         if (this.previous) {
             this.hotkeysService.add(new Hotkey('mod+left', (event: KeyboardEvent): boolean => {
-                $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.PreviousOccurrence')
+                $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.PreviousOccurrence`)
                     .addTags('hotkeys')
                     .setProperty('id', this._eventId)
                     .submit();
@@ -171,7 +171,7 @@ export class EventComponent implements OnInit {
 
         if (this.next) {
             this.hotkeysService.add(new Hotkey('mod+left', (event: KeyboardEvent): boolean => {
-                $ExceptionlessClient.createFeatureUsage(this._source + '.hotkeys.NextOccurrence')
+                $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.NextOccurrence`)
                     .addTags('hotkeys')
                     .setProperty('id', this._eventId)
                     .submit();
@@ -306,7 +306,7 @@ export class EventComponent implements OnInit {
 
     async demoteTab(tabName) {
         const onSuccess = () => {
-            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.success')
+            $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.success`)
                 .setProperty('id', this._eventId)
                 .setProperty('TabName', tabName)
                 .submit();
@@ -316,7 +316,7 @@ export class EventComponent implements OnInit {
         };
 
         const onFailure = async (response) => {
-            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.error')
+            $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.error`)
                 .setProperty('id', this._eventId)
                 .setProperty('response', response)
                 .setProperty('TabName', tabName)
@@ -330,7 +330,7 @@ export class EventComponent implements OnInit {
             return;
         }
 
-        $ExceptionlessClient.createFeatureUsage(this._source + '.demoteTab')
+        $ExceptionlessClient.createFeatureUsage(`${this._source}.demoteTab`)
             .setProperty('id', this._eventId)
             .setProperty('TabName', tabName)
             .submit();
@@ -536,7 +536,7 @@ export class EventComponent implements OnInit {
 
     async promoteTab(tabName) {
 
-        $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab')
+        $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab`)
             .setProperty('id', this._eventId)
             .setProperty('TabName', tabName)
             .submit();
@@ -544,7 +544,7 @@ export class EventComponent implements OnInit {
         try {
             await this.projectService.promoteTab(this.project['id'], tabName);
 
-            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.success')
+            $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.success`)
                 .setProperty('id', this._eventId)
                 .setProperty('TabName', tabName)
                 .submit();
@@ -552,7 +552,7 @@ export class EventComponent implements OnInit {
             this.project['promoted_tabs'].push(tabName);
             this.buildTabs(tabName);
         } catch (err) {
-            $ExceptionlessClient.createFeatureUsage(this._source + '.promoteTab.error')
+            $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.error`)
                 .setProperty('id', this._eventId)
                 .setProperty('response', err)
                 .setProperty('TabName', tabName)

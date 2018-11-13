@@ -36,7 +36,6 @@
                             "src/styles.less"
                         ],
                         "scripts": [
-                            "src/assets/library/exceptionless.js"
                         ]
                     },
                     "configurations": {

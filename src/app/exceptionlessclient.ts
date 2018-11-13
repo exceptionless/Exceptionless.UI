@@ -1,3 +1,5 @@
+import * as exceptionless from 'exceptionless';
+
 export const $ExceptionlessClient = exceptionless.ExceptionlessClient.default;
 $ExceptionlessClient.config.apiKey = environment.EXCEPTIONLESS_API_KEY;
 if (environment.EXCEPTIONLESS_SERVER_URL) {

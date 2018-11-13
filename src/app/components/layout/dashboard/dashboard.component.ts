@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
                 const end = moment.unix(position.coordMaxX).utc().local();
                 this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
 
-                $ExceptionlessClient.createFeatureUsage('app.session.Dashboard' + '.chart.range.onSelection')
+                $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
                     .setProperty('start', start)
                     .setProperty('end', end)
                     .submit();

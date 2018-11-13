@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
             try {
                 const res = await this.auth.login(loginData).toPromise();
-                $ExceptionlessClient.submitFeatureUsage(this._source + '.login');
+                $ExceptionlessClient.submitFeatureUsage(`${this._source}.login`);
                 if (this.filterService.getProjectType() === 'All Projects') {
                     this.filterUrlPattern = '';
                     this.router.navigate(['/type/error/dashboard']);
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
                     }
                 }
             } catch (err) {
-                $ExceptionlessClient.createFeatureUsage(this._source + '.login.error').setUserIdentity(this.model.email).submit();
+                $ExceptionlessClient.createFeatureUsage(`${this._source}.login.error`).setUserIdentity(this.model.email).submit();
                 this.notificationService.error('', await this.wordTranslateService.translate('Loggin_Failed_Message'));
             }
         }
