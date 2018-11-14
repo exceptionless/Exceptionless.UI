@@ -1,8 +1,6 @@
 import { Directive, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { AppEventService } from '../service/app-event.service';
 import { Subscription } from 'rxjs/Subscription';
-import * as _ from 'lodash';
-import { debounce } from 'ts-debounce';
 
 @Directive({
     selector: '[appRefreshOn]'

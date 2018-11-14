@@ -193,7 +193,6 @@ export class DashboardComponent implements OnInit {
     async getOrganizations() {
         try {
             const response = await this.organizationService.getAll('');
-            console.log(response);
             this.organizations = JSON.parse(JSON.stringify(response['body']));
             return this.organizations;
         } catch (err) {
