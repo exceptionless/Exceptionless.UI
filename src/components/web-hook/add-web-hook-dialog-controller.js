@@ -17,6 +17,16 @@
             description: translateService.T('Occurs when a new error that has never been seen before is reported to your project.')
           },
           {
+            key: 'Error',
+            name: 'Error',
+            description: 'Occurs when a error.'
+          },
+          {
+            key: 'LogError',
+            name: 'LogError',
+            description: 'Occurs when a log error.'
+          },
+          {
             key: 'CriticalError',
             name: translateService.T('Critical Error'),
             description: translateService.T('Occurs when an error that has been marked as critical is reported to your project.')
