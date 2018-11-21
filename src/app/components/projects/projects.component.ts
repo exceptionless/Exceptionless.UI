@@ -61,7 +61,7 @@ export class ProjectsComponent implements OnInit {
         this.currentOptions = options || this.settings.options;
 
         try {
-            const res = await this.settings.get(this.currentOptions).toPromise();
+            const res = await this.settings.get(this.currentOptions);
             onSuccess(res.body, res.headers.get('link'));
             this.loading = false;
             return this.projects;

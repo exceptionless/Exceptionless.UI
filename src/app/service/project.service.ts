@@ -38,8 +38,8 @@ export class ProjectService {
         return this.http.get(`projects/${id}`).toPromise();
     }
 
-    getByOrganizationId(id, options): Observable<HttpResponse<any>> {
-        return this.http.get(`organizations/${id}/projects`, { observe: 'response', params: options || {} });
+    getByOrganizationId(id, options) {
+        return this.http.get(`organizations/${id}/projects`, { observe: 'response', params: options || {} }).toPromise();
     }
 
     getConfig(id) {
