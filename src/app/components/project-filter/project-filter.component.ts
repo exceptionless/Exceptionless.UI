@@ -39,6 +39,10 @@ export class ProjectFilterComponent implements OnInit {
             await this.getProjects();
         } catch (err) {}
         this.filteredDisplayName = this.filterService.getProjectName();
+        if (!this.filteredDisplayName) {
+            this.filteredDisplayName = 'All Projects';
+            this.setItem('', 'All Projects', 'All Projects');
+        }
     }
 
     async getOrganizations() {

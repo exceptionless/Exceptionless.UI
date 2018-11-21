@@ -1,5 +1,5 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Locker, DRIVERS } from 'angular-safeguard';
+import {EventEmitter, Injectable} from '@angular/core';
+import {DRIVERS, Locker} from 'angular-safeguard';
 
 @Injectable({
     providedIn: 'root'
@@ -42,6 +42,10 @@ export class FilterStoreService {
 
     getProjectName() {
         return this.locker.get(DRIVERS.LOCAL, 'project_name');
+    }
+
+    removeProjectName() {
+        return this.locker.remove(DRIVERS.LOCAL, 'project_name');
     }
 
     setProjectName(projectName) {

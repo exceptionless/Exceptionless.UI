@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { AppEventService } from '../../../service/app-event.service';
 import { Intercom } from 'ng-intercom';
+import { FilterStoreService } from '../../../service/filter-store.service';
 
 @Component({
     selector: 'app-header',
@@ -34,7 +35,8 @@ export class HeaderComponent implements OnInit {
         private translateService: TranslateService,
         private wordTranslateService: WordTranslateService,
         private appEvent: AppEventService,
-        private intercom: Intercom
+        private intercom: Intercom,
+        private filterStoreService: FilterStoreService
     ) {}
 
     ngOnInit() {
@@ -56,7 +58,10 @@ export class HeaderComponent implements OnInit {
         this.auth.logout()
             .subscribe({
                 error: (err: any) => this.notificationService.error('', 'Error Occurred!'),
-                complete: () => this.router.navigate(['/login'])
+                complete: () => {
+                    this.filterStoreService.removeProjectName();
+                    this.router.navigate(['/login']);
+                }
             });
     }
 
