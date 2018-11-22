@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
@@ -104,8 +104,10 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
     providers: {
-        google: { clientId: '' },
-        facebook: { clientId: '' }
+        google: { clientId: environment.GOOGLE_APPID },
+        facebook: { clientId: environment.FACEBOOK_APPID },
+        github: { clientId: environment.GITHUB_APPID },
+        live: { clientId: environment.LIVE_APPID }
     },
     tokenName: 'token',
 };
@@ -190,6 +192,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     imports: [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         AppRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule, // required animations module

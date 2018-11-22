@@ -144,7 +144,7 @@
 
                         <ngb-tab title="{{ 'Password' | translate }}" id="password">
                             <ng-template ngbTabContent>
-                                <form name="vm.passwordForm" role="form" class="form-validation" #passwordForm="ngForm">
+                                <form name="passwordForm" role="form" class="form-validation" #passwordForm="ngForm" (ngSubmit)="changePassword(passwordForm.valid)">
                                     <div class="form-group" *ngIf="hasLocalAccount">
                                         <label for="current">{{ 'Current Password' | translate }}</label>
                                         <input id="current" name="current" type="password" class="form-control" [(ngModel)]="password['current_password']" required #current="ngModel"/>
@@ -177,7 +177,7 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" role="button" class="btn btn-primary" (click)="changePassword(passwordForm.valid)" promise-button-busy-text="Changing Password">{{ hasLocalAccount ? 'Change Password' : 'Set Password' | translate }}</button>
+                                    <button type="submit" role="button" class="btn btn-primary" promise-button-busy-text="Changing Password">{{ hasLocalAccount ? 'Change Password' : 'Set Password' | translate }}</button>
                                 </form>
                             </ng-template>
                         </ngb-tab>

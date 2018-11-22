@@ -30,14 +30,9 @@ export class AuthAccountService {
             return response;
         };
 
-        try {
-            const res = await this.http.post(`auth/change-password`,  changePasswordModel).toPromise();
-            onSuccess(res);
-            return res;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred'));
-            return err;
-        }
+        const res = await this.http.post(`auth/change-password`,  changePasswordModel).toPromise();
+        onSuccess(res);
+        return res;
     }
 
     forgotPassword(email) {

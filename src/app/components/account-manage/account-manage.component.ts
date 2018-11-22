@@ -40,6 +40,9 @@ export class AccountManageComponent implements OnInit {
         'border-style': 'solid',
         'border-color': '#ddd'
     };
+
+    submitted = false;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -84,6 +87,9 @@ export class AccountManageComponent implements OnInit {
     }
 
     async changePassword(isValid) {
+
+        this.submitted = true;
+
         if (!isValid) {
             return;
         }
