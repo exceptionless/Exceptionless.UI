@@ -72,7 +72,7 @@ export class OrganizationListComponent implements OnInit {
 
     async createOrganization(name) {
         const onSuccess = (response) => {
-            this.organizations.push(JSON.parse(JSON.stringify(response)));
+            this.organizations.push(JSON.parse(JSON.stringify(response.body)));
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
         };
 

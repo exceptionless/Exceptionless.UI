@@ -21,6 +21,8 @@ export class ProjectNewComponent implements OnInit {
     organization_name = '';
     project_name = '';
     organizationId = '';
+    submitted = false;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -41,6 +43,9 @@ export class ProjectNewComponent implements OnInit {
     }
 
     async add(isRetrying?) {
+
+        this.submitted = true;
+
         const resetCanAdd = () => {
             this._canAdd = true;
         };

@@ -28,7 +28,7 @@
                                 </span>
                             </div>
 
-                            <div class="error" *ngIf="(organizationName.invalid && (organizationName.dirty || organizationName.touched)) || addForm.submitted">
+                            <div class="error" *ngIf="(organizationName.invalid && (organizationName.dirty || organizationName.touched)) || submitted">
                                 <small [hidden]="!organizationName.errors?.required">{{ 'Organization Name is required.' | translate }}</small>
                                 <small [hidden]="!organizationName.errors?.uniqueOrganization">{{ 'A organizations with this name already exists.' | translate }}</small>
                             </div>
@@ -50,7 +50,7 @@
                                 </span>
                             </div>
 
-                            <div class="error" *ngIf="(projectName.invalid && (projectName.dirty || projectName.touched)) || addForm.submitted">
+                            <div class="error" *ngIf="(projectName.invalid && (projectName.dirty || projectName.touched)) || submitted">
                                 <small [hidden]="!projectName.errors?.required">{{ 'Project Name is required.' | translate }}</small>
                                 <small [hidden]="!projectName.errors?.uniqueProject">{{ 'A project with this name already exists.' | translate }}</small>
                             </div>

@@ -319,7 +319,7 @@ export class OrganizationEditComponent implements OnInit {
             } catch (err) {
                 let message = await this.wordTranslateService.translate('An error occurred while trying to delete the organization.');
                 if (err.status === 400) {
-                    message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
+                    message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.error.message;
                 }
 
                 this.notificationService.error('', message);
