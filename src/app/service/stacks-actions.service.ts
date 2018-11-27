@@ -110,7 +110,7 @@ export class StacksActionsService {
         try {
             const res = await _.chunk(ids, 10).reduce(async (previous, item) => {
                 const response = await previous();
-                return action(item.join(',')).toPromise();
+                return action(item.join(','));
             }, async () => true );
             onSuccess();
             return res;
