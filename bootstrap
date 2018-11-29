@@ -5,6 +5,33 @@ Html5Mode="${Html5Mode:-false}"
 EnableSsl="${EnableSsl:-false}"
 EnableAccountCreation="${EnableAccountCreation:-true}"
 
+OAuth="${ConnectionStrings__OAuth:-}"
+IFS=';' read -a oauthParts <<< "$OAuth"
+for part in ${oauthParts[@]}
+do
+  key="$( cut -d '=' -f 1 <<< $part )"; echo "key: $key"
+  value="$( cut -d '=' -f 2- <<< $part )"; echo "value: $value"
+
+  if [ "$key" == "FacebookId" ]; then
+    FacebookAppId=$value
+  fi
+  if [ "$key" == "GitHubId" ]; then
+    GitHubAppId=$value
+  fi
+  if [ "$key" == "GoogleId" ]; then
+    GoogleAppId=$value
+  fi
+  if [ "$key" == "IntercomId" ]; then
+    IntercomAppId=$value
+  fi
+  if [ "$key" == "MicrosoftId" ]; then
+    MicrosoftAppId=$value
+  fi
+  if [ "$key" == "SlackId" ]; then
+    SlackAppId=$value
+  fi
+done
+
 config="(function () {
   'use strict';
 
