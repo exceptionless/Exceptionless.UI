@@ -1,4 +1,4 @@
-import * as exceptionless from 'exceptionless';
+import * as exceptionless from 'exceptionless/dist/exceptionless';
 
 export const $ExceptionlessClient = exceptionless.ExceptionlessClient.default;
 $ExceptionlessClient.config.apiKey = environment.EXCEPTIONLESS_API_KEY;

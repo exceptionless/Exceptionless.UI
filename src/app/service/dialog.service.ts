@@ -11,7 +11,7 @@ import { AddConfigurationDialogComponent } from '../dialogs/add-configuration-di
 import { AddWebHookDialogComponent } from '../dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
 import { AddOrganizationDialogComponent } from '../dialogs/add-organization-dialog/add-organization-dialog.component';
 import { AppEventService } from './app-event.service';
-import { $ExceptionlessClient } from '../exceptionlessclient';
+// import { $ExceptionlessClient } from '../exceptionlessclient';
 
 @Injectable({
     providedIn: 'root'
@@ -70,13 +70,13 @@ export class DialogService {
             childComponent: AddReferenceDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => {
-                    $ExceptionlessClient.submitFeatureUsage('app.stack.AddReferenceDialog.cancel');
+                    // $ExceptionlessClient.submitFeatureUsage('app.stack.AddReferenceDialog.cancel');
                     return true;
                 }},
                 { text: await this.wordTranslateService.translate('Save Reference Link'), buttonClass: 'btn btn-primary', onAction: () => {
                     const url = this.modalParameterService.getModalParameter('referenceLink');
                     if (url) {
-                        $ExceptionlessClient.createFeatureUsage('app.stack.AddReferenceDialog.save').setProperty('url', url).submit();
+                        // $ExceptionlessClient.createFeatureUsage('app.stack.AddReferenceDialog.save').setProperty('url', url).submit();
                         onConfirm(url);
                         return;
                     } else {
@@ -140,13 +140,13 @@ export class DialogService {
             childComponent: AddWebHookDialogComponent,
             actionButtons: [
                 { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => {
-                    $ExceptionlessClient.submitFeatureUsage('exceptionless.web-hook.AddWebHookDialog.cancel');
+                    // $ExceptionlessClient.submitFeatureUsage('exceptionless.web-hook.AddWebHookDialog.cancel');
                     return true;
                 }},
                 { text: await this.wordTranslateService.translate('Create Web Hook'), buttonClass: 'btn btn-primary', onAction: () => {
                     const data = this.modalParameterService.getModalParameter('webhook_data');
                     if (data && data.url && data.event_types.length > 0) {
-                        $ExceptionlessClient.createFeatureUsage('exceptionless.web-hook.AddWebHookDialog.save').setProperty('WebHook', data).submit();
+                        // $ExceptionlessClient.createFeatureUsage('exceptionless.web-hook.AddWebHookDialog.save').setProperty('WebHook', data).submit();
                         onConfirm(data);
                         return true;
                     } else {

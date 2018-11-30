@@ -5,7 +5,7 @@ import { AuthService } from 'ng2-ui-auth';
 import { NotificationService } from '../../../service/notification.service';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { FilterService } from '../../../service/filter.service';
-import { $ExceptionlessClient } from '../../../exceptionlessclient';
+// import { $ExceptionlessClient } from '../../../exceptionlessclient';
 
 @Component({
     selector: 'app-login',
@@ -72,12 +72,12 @@ export class LoginComponent implements OnInit {
 
     async authenticate(provider) {
         const onSuccess = () => {
-            $ExceptionlessClient.createFeatureUsage('app.auth.Login.authenticate').addTags(provider).submit();
+            // $ExceptionlessClient.createFeatureUsage('app.auth.Login.authenticate').addTags(provider).submit();
             return this.redirectOnLogin();
         };
 
         const onFailure = async (response) =>{
-            $ExceptionlessClient.createFeatureUsage('app.auth.Login.authenticate.error').setProperty('response', response).addTags(provider).submit();
+            // $ExceptionlessClient.createFeatureUsage('app.auth.Login.authenticate.error').setProperty('response', response).addTags(provider).submit();
             this.notificationService.error('', await this.getMessage(response));
         };
 
@@ -113,10 +113,10 @@ export class LoginComponent implements OnInit {
 
             try {
                 const res = await this.auth.login(loginData).toPromise();
-                $ExceptionlessClient.submitFeatureUsage(`${this._source}.login`);
+                // $ExceptionlessClient.submitFeatureUsage(`${this._source}.login`);
                 this.redirectOnLogin();
             } catch (err) {
-                $ExceptionlessClient.createFeatureUsage(`${this._source}.login.error`).setUserIdentity(this.model.email).submit();
+                // $ExceptionlessClient.createFeatureUsage(`${this._source}.login.error`).setUserIdentity(this.model.email).submit();
                 this.notificationService.error('', await this.wordTranslateService.translate('Loggin_Failed_Message'));
             }
         }
