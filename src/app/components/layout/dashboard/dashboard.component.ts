@@ -7,7 +7,6 @@ import { EventService } from '../../../service/event.service';
 import { StackService } from '../../../service/stack.service';
 import { OrganizationService } from '../../../service/organization.service';
 import { NotificationService } from '../../../service/notification.service';
-import * as Rickshaw from 'rickshaw';
 import { $ExceptionlessClient } from '../../../exceptionlessclient';
 
 @Component({
@@ -22,25 +21,57 @@ export class DashboardComponent implements OnInit {
     type = '';
     eventType = '';
     seriesData: any[];
-    chart: any = {
+    apexChart: any = {
         options: {
-            padding: {top: 0.085},
-            renderer: 'stack',
-            series1: [{
-                name: 'Unique',
-                color: 'rgba(60, 116, 0, .9)',
-                stroke: 'rgba(0, 0, 0, 0.15)',
-                data: []
-            }, {
-                name: 'Count',
-                color: 'rgba(124, 194, 49, .7)',
-                stroke: 'rgba(0, 0, 0, 0.15)',
-                data: []
-            }],
-            stroke: true,
-            unstack: true,
-            height: '150px'
-        }
+            chart: {
+                height: 200,
+                type: 'area',
+                stacked: true,
+                events: {
+                    zoomed: (chartContext, { xaxis, yaxis }) => {
+                        const start = moment(xaxis.min).utc().local();
+                        const end = moment(xaxis.max).utc().local();
+                        this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+
+                        $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
+                            .setProperty('start', start)
+                            .setProperty('end', end)
+                            .submit();
+
+                        return false;
+                    }
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMM yyyy'
+                    }
+                }
+            },
+            colors: ['rgba(60, 116, 0, .9)', 'rgba(124, 194, 49, .7)'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+
+            series: [],
+            fill: {
+                gradient: {
+                    enabled: true,
+                    opacityFrom: 0.6,
+                    opacityTo: 0.8,
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left'
+            },
+            xaxis: {
+                type: 'datetime'
+            },
+        },
+        seriesData: []
     };
     organizations: any[];
     stats: any = {
@@ -64,65 +95,6 @@ export class DashboardComponent implements OnInit {
         options: {
             limit: 10,
             mode: 'summary'
-        }
-    };
-    features: any = {
-        hover: {
-            render: function (args) {
-                const date = moment.unix(args.domainX);
-                const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
-                let content = '<div class="date">' + formattedDate + '</div>';
-                args.detail.sort(function (a, b) {
-                    return a.order - b.order;
-                }).forEach(function (d) {
-                    const swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                    content += swatch + (d.formattedYValue * 1.0).toFixed(2) + ' ' + d.series.name + ' <br />';
-                }, this);
-
-                const xLabel = document.createElement('div');
-                xLabel.className = 'x_label';
-                xLabel.innerHTML = content;
-                this.element.appendChild(xLabel);
-
-                // If left-alignment results in any error, try right-alignment.
-                const leftAlignError = this._calcLayoutError([xLabel]);
-                if (leftAlignError > 0) {
-                    xLabel.classList.remove('left');
-                    xLabel.classList.add('right');
-
-                    // If right-alignment is worse than left alignment, switch back.
-                    const rightAlignError = this._calcLayoutError([xLabel]);
-                    if (rightAlignError > leftAlignError) {
-                        xLabel.classList.remove('right');
-                        xLabel.classList.add('left');
-                    }
-                }
-
-                this.show();
-            }
-        },
-        range: {
-            onSelection: (position) => {
-                const start = moment.unix(position.coordMinX).utc().local();
-                const end = moment.unix(position.coordMaxX).utc().local();
-                this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
-
-                $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
-                    .setProperty('start', start)
-                    .setProperty('end', end)
-                    .submit();
-
-                return false;
-            }
-        },
-        xAxis: {
-            timeFixture: new Rickshaw.Fixtures.Time.Local(),
-            overrideTimeFixtureCustomFormatters: true
-        },
-        yAxis: {
-            ticks: 5,
-            tickFormat: 'formatKMBT',
-            ticksTreatment: 'glow'
         }
     };
 
@@ -224,15 +196,25 @@ export class DashboardComponent implements OnInit {
             };
             const dateAggregation = getAggregationItems(results, 'date_date', []);
 
-            this.chart.options.series1[0].data = dateAggregation.map((item) => {
-                return {x: moment(item.key).unix(), y: getAggregationValue(item, 'cardinality_stack', 0), data: item};
+            const data1 = dateAggregation.map((item) => {
+                return [moment(item.key), getAggregationValue(item, 'cardinality_stack', 0)];
             });
 
-            this.chart.options.series1[1].data = dateAggregation.map((item) => {
-                return {x: moment(item.key).unix(), y: getAggregationValue(item, 'sum_count', 0), data: item};
+            const data2 = dateAggregation.map((item) => {
+                return [moment(item.key), getAggregationValue(item, 'sum_count', 0)];
             });
 
-            this.seriesData = this.chart.options.series1;
+            this.apexChart.seriesData = [];
+
+            this.apexChart.seriesData.push({
+                name: 'Unique',
+                data: data1
+            });
+
+            this.apexChart.seriesData.push({
+                name: 'Count',
+                data: data2
+            });
             this.eventType = this.type;
         };
 

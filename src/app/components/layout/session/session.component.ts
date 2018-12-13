@@ -4,7 +4,6 @@ import { FilterService } from '../../../service/filter.service';
 import { NotificationService } from '../../../service/notification.service';
 import { FilterStoreService } from '../../../service/filter-store.service';
 import * as moment from 'moment';
-import * as Rickshaw from 'rickshaw';
 
 @Component({
     selector: 'app-session',
@@ -20,79 +19,57 @@ export class SessionComponent implements OnInit, OnDestroy {
     subscription: any;
     includeLiveFilter = false;
     seriesData: any[];
-    chart = {
+    apexChart: any = {
         options: {
-            padding: {top: 0.085},
-            renderer: 'stack',
-            series1: [{
-                name: 'Users',
-                color: 'rgba(60, 116, 0, .9)',
-                stroke: 'rgba(0, 0, 0, 0.15)',
-                data: []
-            }, {
-                name: 'Sessions',
-                color: 'rgba(124, 194, 49, .7)',
-                stroke: 'rgba(0, 0, 0, 0.15)',
-                data: []
-            }],
-            stroke: true,
-            unstack: true
-        },
-        features: {
-            hover: {
-                render: function (args) {
-                    const date = moment.unix(args.domainX);
-                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
-                    let content = '<div class="date">' + formattedDate + '</div>';
-                    args.detail.sort(function (a, b) {
-                        return a.order - b.order;
-                    }).forEach(function (d) {
-                        const swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                        content += swatch + parseInt(d.formattedYValue, 10) + ' ' + d.series.name + ' <br />';
-                    }, this);
+            chart: {
+                height: 200,
+                type: 'area',
+                stacked: true,
+                events: {
+                    zoomed: (chartContext, { xaxis, yaxis }) => {
+                        const start = moment(xaxis.min).utc().local();
+                        const end = moment(xaxis.max).utc().local();
+                        this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
 
-                    const xLabel = document.createElement('div');
-                    xLabel.className = 'x_label';
-                    xLabel.innerHTML = content;
-                    this.element.appendChild(xLabel);
+                        // $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
+                        //     .setProperty('start', start)
+                        //     .setProperty('end', end)
+                        //     .submit();
 
-                    // If left-alignment results in any error, try right-alignment.
-                    const leftAlignError = this._calcLayoutError([xLabel]);
-                    if (leftAlignError > 0) {
-                        xLabel.classList.remove('left');
-                        xLabel.classList.add('right');
-
-                        // If right-alignment is worse than left alignment, switch back.
-                        const rightAlignError = this._calcLayoutError([xLabel]);
-                        if (rightAlignError > leftAlignError) {
-                            xLabel.classList.remove('right');
-                            xLabel.classList.add('left');
-                        }
+                        return false;
                     }
-
-                    this.show();
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMM yyyy'
+                    }
                 }
             },
-            range: {
-                onSelection: function (position) {
-                    const start = moment.unix(position.coordMinX).utc().local();
-                    const end = moment.unix(position.coordMaxX).utc().local();
+            colors: ['rgba(60, 116, 0, .9)', 'rgba(124, 194, 49, .7)'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
 
-                    this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
-
-                    return false;
+            series: [],
+            fill: {
+                gradient: {
+                    enabled: true,
+                    opacityFrom: 0.6,
+                    opacityTo: 0.8,
                 }
             },
-            xAxis: {
-                timeFixture: new Rickshaw.Fixtures.Time.Local(),
-                overrideTimeFixtureCustomFormatters: true
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left'
             },
-            yAxis: {
-                ticks: 5,
-                tickFormat: 'formatKMBT',
-                ticksTreatment: 'glow'
-            }
-        }
+            xaxis: {
+                type: 'datetime'
+            },
+        },
+        seriesData: []
     };
     stats = {
         total: 0,
@@ -176,15 +153,22 @@ export class SessionComponent implements OnInit, OnDestroy {
             };
 
             const dateAggregation = getAggregationItems(results, 'date_date', []);
-            this.chart.options.series1[0]['data'] = dateAggregation.map(function (item) {
-                return {x: moment(item.key).unix(), y: getAggregationValue(item, 'cardinality_user', 0), data: item};
+
+            this.apexChart.seriesData = [];
+            this.apexChart.seriesData.push({
+                name: 'Users',
+                data: dateAggregation.map(function (item) {
+                    return [moment(item.key), getAggregationValue(item, 'cardinality_user', 0)];
+                })
+            });
+            this.apexChart.seriesData.push({
+                name: 'Sessions',
+                data: dateAggregation.map(function (item) {
+                    return [moment(item.key), item.total || 0];
+                })
             });
 
-            this.chart.options.series1[1]['data'] = dateAggregation.map(function (item) {
-                return {x: moment(item.key).unix(), y: item.total || 0, data: item};
-            });
-
-            this.seriesData = this.chart.options.series1;
+            this.seriesData = this.apexChart.seriesData;
             this.eventType = this.type;
             this.timeFilter = this.filterStoreService.getTimeFilter();
             this.projectFilter = this.filterService.getProjectTypeId();

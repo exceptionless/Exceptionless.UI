@@ -36,11 +36,13 @@
                             "src/styles.less"
                         ],
                         "scripts": [
-                            "src/assets/library/exceptionless.js"
+                            "src/assets/library/exceptionless.js",
+                            "src/assets/library/ApexCharts.js"
                         ]
                     },
                     "configurations": {
                         "production": {
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
                             "extractCss": true,

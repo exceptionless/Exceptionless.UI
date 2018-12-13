@@ -7,7 +7,6 @@ import { TokenService } from '../../../../service/token.service';
 import { WebHookService } from '../../../../service/web-hook.service';
 import { NotificationService } from '../../../../service/notification.service';
 import * as moment from 'moment';
-import * as Rickshaw from 'rickshaw';
 import { WordTranslateService } from '../../../../service/word-translate.service';
 import { BillingService } from '../../../../service/billing.service';
 import { DialogService } from '../../../../service/dialog.service';
@@ -22,99 +21,59 @@ export class ProjectEditComponent implements OnInit {
     _projectId = '';
     canChangePlan = false;
     seriesData: any[];
-    chart = {
+    apexChart: any = {
         options: {
-            padding: {top: 0.085},
-            renderer: 'multi',
-            unstack: true,
-            stroke: true,
-            series1: [{
-                name: 'Allowed in Organization',
-                color: '#f5f5f5',
-                renderer: 'area',
-                data: []
-                }, {
-                    name: 'Allowed',
-                    color: '#a4d56f',
-                    renderer: 'stack',
-                    data: []
-                }, {
-                    name: 'Blocked',
-                    color: '#e2e2e2',
-                    renderer: 'stack',
-                    data: []
-                }, {
-                    name: 'Too Big',
-                    color: '#ccc',
-                    renderer: 'stack',
-                    data: []
-                }, {
-                    name: 'Limit',
-                    color: '#a94442',
-                    renderer: 'dotted_line',
-                    data: []
-                }]
-        },
-        features: {
-            hover: {
-                render: function (args) {
-                    const date = moment.utc(args.domainX, 'X');
-                    const dateTimeFormat = 'DateTimeFormat';
-                    const formattedDate = date.hours() === 0 && date.minutes() === 0 ? date.format('ddd, MMM D, YYYY') : date.format('ddd, MMM D, YYYY h:mma');
-                    let content = '<div class="date">' + formattedDate + '</div>';
-                    args.detail.sort(function (a, b) {
-                        return a.order - b.order;
-                    }).forEach(function (d) {
-                        const swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
-                        content += swatch + (d.formattedYValue * 1.0).toFixed(2) + ' ' + d.series.name + '<br />';
-                    }, this);
+            chart: {
+                height: 200,
+                type: 'area',
+                stacked: true,
+                events: {
+                    zoomed: (chartContext, { xaxis, yaxis }) => {
+                        const start = moment(xaxis.min).utc().local();
+                        const end = moment(xaxis.max).utc().local();
+                        this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
 
-                    content += '<span class="detail-swatch"></span>' + parseFloat(args.detail[1].value.data.total) + ' Total<br />';
+                        // $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
+                        //     .setProperty('start', start)
+                        //     .setProperty('end', end)
+                        //     .submit();
 
-                    const xLabel = document.createElement('div');
-                    xLabel.className = 'x_label';
-                    xLabel.innerHTML = content;
-                    this.element.appendChild(xLabel);
-
-                    // If left-alignment results in any error, try right-alignment.
-                    const leftAlignError = this._calcLayoutError([xLabel]);
-                    if (leftAlignError > 0) {
-                        xLabel.classList.remove('left');
-                        xLabel.classList.add('right');
-
-                        // If right-alignment is worse than left alignment, switch back.
-                        const rightAlignError = this._calcLayoutError([xLabel]);
-                        if (rightAlignError > leftAlignError) {
-                            xLabel.classList.remove('right');
-                            xLabel.classList.add('left');
-                        }
+                        return false;
                     }
-
-                    this.show();
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMM yyyy'
+                    }
                 }
             },
-            range: {
-                onSelection: function (position) {
-                    const start = moment.unix(position.coordMinX).utc().local();
-                    const end = moment.unix(position.coordMaxX).utc().local();
+            colors: ['#f5f5f5', '#a4d56f', '#e2e2e2', '#ccc', '#a94442'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
 
-                    this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
-
-                    /*$state.go('app.project-dashboard', { projectId: vm.project.id });*/
-                    return false;
+            series: [],
+            fill: {
+                gradient: {
+                    enabled: true,
+                    opacityFrom: 0.6,
+                    opacityTo: 0.8,
                 }
             },
-            xAxis: {
-                timeFixture: new Rickshaw.Fixtures.Time.Local(),
-                overrideTimeFixtureCustomFormatters: true
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left'
             },
-            yAxis: {
-                ticks: 5,
-                tickFormat: 'formatKMBT',
-                ticksTreatment: 'glow'
-            }
-        }
+            xaxis: {
+                type: 'datetime'
+            },
+        },
+        seriesData: []
     };
+
     config = [];
     common_methods = null;
     data_exclusions = null;
@@ -276,27 +235,43 @@ export class ProjectEditComponent implements OnInit {
             });
 
 
-            this.chart.options.series1[0]['data'] = this.organization['usage'].map((item) => {
-                return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
+            this.apexChart.seriesData = [];
+
+            this.apexChart.seriesData.push({
+                name: 'Allowed in Organization',
+                data: this.organization['usage'].map((item) => {
+                    return [moment.utc(item.date), item.total - item.blocked - item.too_big];
+                })
             });
 
-            this.chart.options.series1[1]['data'] = this.project['usage'].map((item) => {
-                return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
+            this.apexChart.seriesData.push({
+                name: 'Allowed',
+                data: this.project['usage'].map((item) => {
+                    return [moment.utc(item.date), item.total - item.blocked - item.too_big];
+                })
             });
 
-            this.chart.options.series1[2]['data'] = this.project['usage'].map((item) => {
-                return {x: moment.utc(item.date).unix(), y: item.blocked, data: item};
+            this.apexChart.seriesData.push({
+                name: 'Blocked',
+                data: this.project['usage'].map((item) => {
+                    return [moment.utc(item.date), item.blocked];
+                })
             });
 
-            this.chart.options.series1[3]['data'] = this.project['usage'].map((item) => {
-                return {x: moment.utc(item.date).unix(), y: item.too_big, data: item};
+            this.apexChart.seriesData.push({
+                name: 'Too Big',
+                data: this.project['usage'].map((item) => {
+                    return [moment.utc(item.date), item.too_big];
+                })
             });
 
-            this.chart.options.series1[4]['data'] = this.organization['usage'].map((item) => {
-                return {x: moment.utc(item.date).unix(), y: item.limit, data: item};
+            this.apexChart.seriesData.push({
+                name: 'Limit',
+                data: this.organization['usage'].map((item) => {
+                    return [moment.utc(item.date), item.limit];
+                })
             });
 
-            this.seriesData = this.chart.options.series1;
             console.log(this.seriesData);
             return this.organization;
         };

@@ -100,6 +100,7 @@ import { AutoActiveDirective } from './directives/auto-active.directive';
 import { StatusComponent } from './components/status/status.component';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { ApexchartComponent } from './components/apexchart/apexchart.component';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -187,7 +188,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         RefreshOnDirective,
         ProjectConfigureComponent,
         AutoActiveDirective,
-        StatusComponent
+        StatusComponent,
+        ApexchartComponent
     ],
     imports: [
         BrowserModule,

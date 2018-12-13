@@ -71,7 +71,8 @@
                 </div>
 
                 <div class="panel-body">
-                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [features]="chart['features']" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-rickshaw>
+                    <!--<app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [features]="chart['features']" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter"></app-rickshaw>-->
+                    <app-apexchart [options]="apexChart.options" [seriesData]="apexChart.seriesData"></app-apexchart>
                 </div>
             </div>
 

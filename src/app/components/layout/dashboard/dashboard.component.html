@@ -63,7 +63,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-bar-chart-o"></i>{{ 'History' | translate }}</div>
                 <div class="panel-body">
-                    <app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter" [features]="features"></app-rickshaw>
+                    <!--<app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [eventType]="eventType" [filterTime]="timeFilter" [projectFilter]="projectFilter" [features]="features"></app-rickshaw>-->
+                    <app-apexchart [options]="apexChart.options" [seriesData]="apexChart.seriesData"></app-apexchart>
                 </div>
             </div>
 
