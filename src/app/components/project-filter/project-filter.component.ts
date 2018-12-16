@@ -77,6 +77,18 @@ export class ProjectFilterComponent implements OnInit {
         }
     }
 
+    isActive(id, name, type) {
+        const projectId = this.filterService.getProjectId();
+        const projectName = this.filterService.getProjectName();
+        const projectType = this.filterService.getProjectType();
+
+        if (id === projectId && name === projectName && projectType === type) {
+            return true;
+        }
+
+        return false;
+    }
+
     setItem(id, name, type) {
         this.filteredDisplayName = name;
         this.filterService.setProjectFilter(type, id, name);

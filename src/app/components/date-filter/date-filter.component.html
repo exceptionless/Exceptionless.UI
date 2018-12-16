@@ -3,13 +3,13 @@
         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ filteredDisplayName | translate }}<span class="caret"></span></a>
 
         <ul class="dropdown-menu">
-            <li><a (click)="setFilter('last hour')">{{ 'Last Hour' | translate }}</a></li>
-            <li><a (click)="setFilter('last 24 hours')">{{ 'Last 24 Hours' | translate }}</a></li>
-            <li><a (click)="setFilter('last week')">{{ 'Last Week' | translate }}</a></li>
-            <li><a (click)="setFilter('last 30 days')">{{ 'Last 30 Days' | translate }}</a></li>
-            <li><a (click)="setFilter('all')">{{ 'All Time' | translate }}</a></li>
+            <li [ngClass]="{'active': isActive('last hour')}"><a (click)="setFilter('last hour')">{{ 'Last Hour' | translate }}</a></li>
+            <li [ngClass]="{'active': isActive('last 24 hours')}"><a (click)="setFilter('last 24 hours')">{{ 'Last 24 Hours' | translate }}</a></li>
+            <li [ngClass]="{'active': isActive('last week')}"><a (click)="setFilter('last week')">{{ 'Last Week' | translate }}</a></li>
+            <li [ngClass]="{'active': isActive('last 30 days')}"><a (click)="setFilter('last 30 days')">{{ 'Last 30 Days' | translate }}</a></li>
+            <li [ngClass]="{'active': isActive('all')}"><a (click)="setFilter('all')">{{ 'All Time' | translate }}</a></li>
             <li role="separator" class="divider hidden-xs"></li>
-            <li class="hidden-xs"><a (click)="setCustomFilter();">{{ 'Custom' | translate }}</a></li>
+            <li class="hidden-xs" [ngClass]="{'active': isActive('Custom')}"><a (click)="setCustomFilter();">{{ 'Custom' | translate }}</a></li>
         </ul>
     </li>
 </ul>

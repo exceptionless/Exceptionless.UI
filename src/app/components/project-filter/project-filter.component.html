@@ -2,19 +2,19 @@
     <li class="dropdown" open appRefreshOn  [refreshOn]="'filterChanged'" (refreshAction)="update()">
         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >{{ filteredDisplayName }} <span class="caret"></span></a>
 
-        <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" auto-active>
-            <li><a (click)="setItem('', 'All Projects', 'All Projects');">{{ 'All Projects' | translate }}</a></li>
+        <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" appAutoActive>
+            <li [ngClass]="{'active': isActive('', 'All Projects', 'All Projects')}"><a (click)="setItem('', 'All Projects', 'All Projects');">{{ 'All Projects' | translate }}</a></li>
             <li role="separator" class="divider"></li>
             <li *ngIf="isLoadingOrganizations" disabled><a href="#">{{ 'Loading Organizations...' | translate }}</a></li>
             <ng-container *ngFor="let organization of organizations;">
-                <li class="hover-parent">
+                <li class="hover-parent" [ngClass]="{'active' : isActive(organization.id, organization.name, 'organization')}">
                     <a (click)="setItem(organization.id, organization.name, 'organization');">
                         {{ organization.name }}
                         <span class="icon-right hover-child" routerLink="/organization/{{ organization.id }}/manage"><i class="fa fa-gear fa-fw"></i></span>
                     </a>
                 </li>
                 <li *ngIf="isLoadingProjects" class="child-menu" disabled><a href="#">{{ 'Loading Projects...' | translate }}</a></li>
-                <li *ngFor="let project of getProjectsByOrganizationId(organization['id'])" class="child-menu hover-parent">
+                <li *ngFor="let project of getProjectsByOrganizationId(organization['id'])" class="child-menu hover-parent" [ngClass]="{'active': isActive(project.id, project.name, 'project')}">
                     <a (click)="setItem(project.id, project.name, 'project');">
                         {{ project.name }}
                         <span class="icon-right hover-child" routerLink="/project/{{ project.id }}/manage"><i class="fa fa-gear fa-fw"></i></span>

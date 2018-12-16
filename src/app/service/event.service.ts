@@ -35,6 +35,7 @@ export class EventService {
         }
 
         const project = this.filterService.getProjectId();
+        console.log('event-service-project:', project);
         if (project) {
             return this.http.get(`projects/${project}/events/count`, { params: options }).toPromise();
         }

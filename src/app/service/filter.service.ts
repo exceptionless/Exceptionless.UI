@@ -275,6 +275,7 @@ export class FilterService {
     }
 
     setProjectFilter(type, id, name) {
+        this._projectId = id;
         this.filterStoreService.setProjectId(id);
         this.filterStoreService.setProjectName(name);
         this.filterStoreService.setProjectType(type);

@@ -89,4 +89,14 @@ export class DateFilterComponent implements OnInit {
     updateFilterDisplayName() {
         this.filteredDisplayName = this.getFilteredDisplayName();
     }
+
+    isActive(timeRangeName) {
+        const time = this.filterService.getTime();
+        if (time && timeRangeName === 'Custom') {
+            const range = this.dateRangeParserService.parse(time);
+            return range && range.start && range.end;
+        }
+
+        return timeRangeName === time;
+    }
 }
