@@ -9,6 +9,7 @@ export class ApexchartComponent implements OnInit, OnChanges {
 
     @Input() options;
     @Input() seriesData;
+    @Input() updatedOptions;
 
     chart: any;
 
@@ -24,7 +25,12 @@ export class ApexchartComponent implements OnInit, OnChanges {
         console.log('apexchart-on-changes');
         console.log(changes);
         if (this.chart) {
-            this.chart.updateSeries(changes.seriesData.currentValue);
+            if (changes.seriesData) {
+                this.chart.updateSeries(changes.seriesData.currentValue);
+            }
+            if (changes.updatedOptions) {
+                this.chart.updateOptions(changes.updatedOptions.currentValue);
+            }
         }
     }
 }

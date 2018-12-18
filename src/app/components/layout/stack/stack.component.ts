@@ -54,7 +54,25 @@ export class StackComponent implements OnInit {
                     x: {
                         format: 'dd MMM yyyy'
                     }
-                }
+                },
+                toolbar: {
+                    tools: {
+                        download: true,
+                        customMenu: [{
+                            title: (this.chartOptions[1].selected ? 'Hide' : 'Show') + ' Average Value',
+                            on_select: () => {
+                                this.chartOptions[1].selected = !this.chartOptions[1].selected;
+                                this.updateStats();
+                            }
+                        }, {
+                            title: (this.chartOptions[2].selected ? 'Hide' : 'Show') + ' Value Sum',
+                            on_select: () => {
+                                this.chartOptions[2].selected = !this.chartOptions[2].selected;
+                                this.updateStats();
+                            }
+                        }]
+                    }
+                },
             },
             colors: ['rgba(124, 194, 49, .7)', 'rgba(60, 116, 0, .9)', 'rgba(89, 89, 89, .3)'],
             dataLabels: {
@@ -80,7 +98,8 @@ export class StackComponent implements OnInit {
                 type: 'datetime'
             },
         },
-        seriesData: []
+        seriesData: [],
+        updatedOptions: {}
     };
     project = {};
     recentOccurrences = {
@@ -327,6 +346,27 @@ export class StackComponent implements OnInit {
 
     async updateStats() {
         try {
+            this.apexChart.updatedOptions = {
+                chart: {
+                    toolbar: {
+                        tools: {
+                            customMenu: [{
+                                title: (this.chartOptions[1].selected ? 'Hide' : 'Show') + ' Average Value',
+                                on_select: () => {
+                                    this.chartOptions[1].selected = !this.chartOptions[1].selected;
+                                    this.updateStats();
+                                }
+                            }, {
+                                title: (this.chartOptions[2].selected ? 'Hide' : 'Show') + ' Value Sum',
+                                on_select: () => {
+                                    this.chartOptions[2].selected = !this.chartOptions[2].selected;
+                                    this.updateStats();
+                                }
+                            }]
+                        }
+                    },
+                }
+            };
             await this.getOrganizations();
             await this.getStats();
         } catch (err) {}

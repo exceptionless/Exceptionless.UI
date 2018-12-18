@@ -174,21 +174,21 @@
                 </table>
 
                 <div>
-                    <div class="btn-group btn-group-xs pull-right" role="group" open>
-                        <button type="button" role="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="visible-xs-inline"><i class="fa fa-fw fa-gear"></i></span>
-                            <span class="hidden-xs">{{ 'Chart Option' | translate }}</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li *ngFor="let o of chartOptions">
-                                <a (click)="o.selected = !o.selected; updateStats();" title="{{o.title}}" *ngIf="o.render"><i class="fa fa-fw" [ngClass]="{'fa-check': !!o.selected}" *ngIf="hasSelectedChartOption()"></i>{{ 'Show '+o.name }}</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <!--<div class="btn-group btn-group-xs pull-right" role="group" open>-->
+                        <!--<button type="button" role="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->
+                            <!--<span class="visible-xs-inline"><i class="fa fa-fw fa-gear"></i></span>-->
+                            <!--<span class="hidden-xs">{{ 'Chart Option' | translate }}</span>-->
+                            <!--<span class="caret"></span>-->
+                        <!--</button>-->
+                        <!--<ul class="dropdown-menu dropdown-menu-right" role="menu">-->
+                            <!--<li *ngFor="let o of chartOptions">-->
+                                <!--<a (click)="o.selected = !o.selected; updateStats();" title="{{o.title}}" *ngIf="o.render"><i class="fa fa-fw" [ngClass]="{'fa-check': !!o.selected}" *ngIf="hasSelectedChartOption()"></i>{{ 'Show '+o.name }}</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
                     <div class="clearfix"></div>
                     <!--<app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [eventType]="eventType" [features]="features"></app-rickshaw>-->
-                    <app-apexchart [options]="apexChart.options" [seriesData]="apexChart.seriesData"></app-apexchart>
+                    <app-apexchart [options]="apexChart.options" [seriesData]="apexChart.seriesData" [updatedOptions]="apexChart.updatedOptions"></app-apexchart>
                 </div>
             </div>
         </div>
