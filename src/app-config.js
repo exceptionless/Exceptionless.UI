@@ -8,8 +8,8 @@ var environment = {
     INTERCOM_APPID: 'ssjo62bn',
     LIVE_APPID: '000000004C137E8B',
     SLACK_APPID: '',
-    STRIPE_PUBLISHABLE_KEY: '',
-    SYSTEM_NOTIFICATION_MESSAGE: 'pk_test_nStD8zuwsiyVjPhfxxxMEFeE',
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_nStD8zuwsiyVjPhfxxxMEFeE',
+    SYSTEM_NOTIFICATION_MESSAGE: '',
     USE_HTML5_MODE: true,
     USE_SSL: true,
     ENABLE_ACCOUNT_CREATION: true

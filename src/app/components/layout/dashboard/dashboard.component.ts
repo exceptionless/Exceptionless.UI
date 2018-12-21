@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
                     }
                 }
             },
-            colors: ['rgba(60, 116, 0, .9)', 'rgba(124, 194, 49, .7)'],
+            colors: ['#3c6e00', '#7cc231'],
             dataLabels: {
                 enabled: false
             },

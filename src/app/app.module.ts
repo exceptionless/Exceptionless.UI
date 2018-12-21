@@ -10,9 +10,6 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { NgxAnalyticsModule } from 'ngx-analytics';
 import { NgxAnalyticsGoogleAnalytics } from 'ngx-analytics/ga';
 import { ClipboardModule } from 'ngx-clipboard';
-import 'd3';
-import 'rickshaw';
-import { RickshawModule } from 'ng2-rickshaw';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Daterangepicker } from 'ng2-daterangepicker';
@@ -47,7 +44,6 @@ import { FrequentComponent } from './components/layout/frequent/frequent.compone
 import { OrganizationNotificationComponent } from './components/organization-notification/organization-notification.component';
 import { OrganizationService } from './service/organization.service';
 import { FilterService } from './service/filter.service';
-import { RickshawComponent } from './components/rickshaw/rickshaw.component';
 import { ProjectListComponent } from './components/layout/project/project-list/project-list.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { ProjectNewComponent } from './components/layout/project/project-new/project-new.component';
@@ -138,7 +134,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         NewComponent,
         FrequentComponent,
         OrganizationNotificationComponent,
-        RickshawComponent,
         StacksComponent,
         EventsComponent,
         ConfirmDialogComponent,
@@ -202,7 +197,6 @@ export function HttpLoaderFactory(http: HttpClient) {
             positionClass: 'toast-bottom-right'
         }), // ToastrModule added
         LockerModule,
-        RickshawModule,
         ModalDialogModule.forRoot(),
         NgbModule.forRoot(),
         Daterangepicker,

@@ -28,7 +28,9 @@ export class RefreshOnDirective implements OnInit, OnDestroy {
             this.refreshOn.split(' ').forEach(key => {
                 this.subscriptions.push(this.appEvent.subscribe({
                     next: (event: any) => {
-                        this.refreshAction.emit(event.value);
+                        if (event.type === key) {
+                            this.refreshAction.emit(event.value);
+                        }
                     }
                 }));
             });

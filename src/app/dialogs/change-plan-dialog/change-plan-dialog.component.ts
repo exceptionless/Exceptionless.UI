@@ -64,8 +64,8 @@ export class ChangePlanDialogComponent implements IModalDialog {
 
         try {
             await this.getOrganizations();
-            await this.getPlans.bind(this);
-            await this.getUser.bind(this);
+            await this.getPlans();
+            await this.getUser();
         } catch (err) {}
     }
 

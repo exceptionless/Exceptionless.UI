@@ -22,8 +22,6 @@ export class ApexchartComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log('apexchart-on-changes');
-        console.log(changes);
         if (this.chart) {
             if (changes.seriesData) {
                 this.chart.updateSeries(changes.seriesData.currentValue);
