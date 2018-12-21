@@ -16823,6 +16823,7 @@
                 _createClass(Line, [{
                     key: 'draw',
                     value: function draw(series, ptype, seriesIndex) {
+
                         var w = this.w;
 
                         var graphics = new _Graphics2.default(this.ctx);
@@ -17107,6 +17108,7 @@
                                     lineFill = w.globals.stroke.colors[realIndex];
                                 }
 
+
                                 for (var p = 0; p < linePaths.length; p++) {
                                     var renderedPath = graphics.renderPaths(_extends({}, defaultRenderedPathOptions, {
                                         pathFrom: pathFromLine,
@@ -17134,7 +17136,7 @@
                                         stroke: 'none',
                                         strokeWidth: 0,
                                         strokeLineCap: null,
-                                        fill: pathFill
+                                        fill: w.globals.stroke.colors[realIndex]
                                     }));
 
                                     elSeries.add(_renderedPath);
