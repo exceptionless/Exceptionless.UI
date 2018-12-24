@@ -48,7 +48,8 @@
                             "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
-                            "buildOptimizer": true
+                            "buildOptimizer": true,
+                            "vendorChunk": true
                         }
                     }
                 },
