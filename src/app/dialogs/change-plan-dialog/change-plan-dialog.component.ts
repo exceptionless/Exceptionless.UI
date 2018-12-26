@@ -78,29 +78,29 @@ export class ChangePlanDialogComponent implements IModalDialog {
             }
         });
 
-        this.stripe.elements(this.elementsOptions)
-            .subscribe(elements => {
-                this.elements = elements;
-                // Only mount the element the first time
-                // if (!this.stripeCard) {
-                //     this.stripeCard = this.elements.create('card', {
-                //         style: {
-                //             base: {
-                //                 iconColor: '#666EE8',
-                //                 color: '#31325F',
-                //                 lineHeight: '40px',
-                //                 fontWeight: 300,
-                //                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                //                 fontSize: '18px',
-                //                 '::placeholder': {
-                //                     color: '#CFD7E0'
-                //                 }
-                //             }
-                //         }
-                //     });
-                //     this.stripeCard.mount('#card-element');
-                // }
-            });
+        // this.stripe.elements(this.elementsOptions)
+        //     .subscribe(elements => {
+        //         this.elements = elements;
+        //         // Only mount the element the first time
+        //         // if (!this.stripeCard) {
+        //         //     this.stripeCard = this.elements.create('card', {
+        //         //         style: {
+        //         //             base: {
+        //         //                 iconColor: '#666EE8',
+        //         //                 color: '#31325F',
+        //         //                 lineHeight: '40px',
+        //         //                 fontWeight: 300,
+        //         //                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        //         //                 fontSize: '18px',
+        //         //                 '::placeholder': {
+        //         //                     color: '#CFD7E0'
+        //         //                 }
+        //         //             }
+        //         //         }
+        //         //     });
+        //         //     this.stripeCard.mount('#card-element');
+        //         // }
+        //     });
 
         try {
             await this.getOrganizations();
