@@ -220,6 +220,7 @@ export class DialogService {
                         onConfirm();
                         return true;
                     });
+                    this.appEvent.fireEvent({type: 'change_plan_form_submitted'});
                 }}
             ],
             data: {

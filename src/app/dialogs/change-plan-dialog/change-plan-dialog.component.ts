@@ -6,8 +6,9 @@ import { WordTranslateService } from '../../service/word-translate.service';
 import { UserService } from '../../service/user.service';
 import { Intercom } from 'ng-intercom';
 import { AnalyticsService } from '../../service/analytics.service';
-import { StripeService, Elements } from 'ngx-stripe';
+import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { CommonService } from '../../service/common.service';
+import { AppEventService } from '../../service/app-event.service';
 
 @Component({
     selector: 'app-change-plan-dialog',
@@ -32,6 +33,11 @@ export class ChangePlanDialogComponent implements IModalDialog {
     currentOrganizationId = '';
     currentPlanId = '';
 
+    stripeCard: StripeElement;
+    elementsOptions: ElementsOptions = {
+        locale: 'en'
+    };
+
     constructor(
         private organizationService: OrganizationService,
         private notificationService: NotificationService,
@@ -40,6 +46,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
         private userService: UserService,
         private stripe: StripeService,
         private commonService: CommonService,
+        private appEvent: AppEventService,
         private analyticsService: AnalyticsService) {
     }
 
@@ -61,6 +68,39 @@ export class ChangePlanDialogComponent implements IModalDialog {
                 app_id: environment.INTERCOM_APPID
             });
         }
+
+        this.appEvent.subscribe({
+            next: (event: any) => {
+                if (event.type === 'change_plan_form_submitted') {
+                    console.log('change_plan_submitted');
+                    this.save(true);
+                }
+            }
+        });
+
+        this.stripe.elements(this.elementsOptions)
+            .subscribe(elements => {
+                this.elements = elements;
+                // Only mount the element the first time
+                if (!this.stripeCard) {
+                    this.stripeCard = this.elements.create('card', {
+                        style: {
+                            base: {
+                                iconColor: '#666EE8',
+                                color: '#31325F',
+                                lineHeight: '40px',
+                                fontWeight: 300,
+                                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                                fontSize: '18px',
+                                '::placeholder': {
+                                    color: '#CFD7E0'
+                                }
+                            }
+                        }
+                    });
+                    this.stripeCard.mount('#card-element');
+                }
+            });
 
         try {
             await this.getOrganizations();
@@ -156,10 +196,28 @@ export class ChangePlanDialogComponent implements IModalDialog {
             name: this.card.name
         };
 
+        // const name = payload.name;
+        // this.stripeService
+        //     .createToken(this.stripeCard, { name })
+        //     .subscribe(result => {
+        //         if (result.token) {
+        //             // Use the token to create a charge or a customer
+        //             // https://stripe.com/docs/charges
+        //             console.log(result.token.id);
+        //         } else if (result.error) {
+        //             // Error creating the token
+        //             console.log(result.error.message);
+        //         }
+        //     });
+
         try {
+            console.log(this.elements);
             const res = await this.stripe.createToken(this.elements.create('card', {}), payload).toPromise();
+            console.log(res);
             onSuccess(res);
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     cancel() {
