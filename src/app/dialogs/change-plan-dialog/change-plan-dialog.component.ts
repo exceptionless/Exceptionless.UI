@@ -212,7 +212,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
 
         try {
             console.log(this.elements);
-            const res = await this.stripe.createToken(this.elements.create('card', {}), payload).toPromise();
+            const res = await this.stripe.createToken(this.stripeCard, payload).toPromise();
             console.log(res);
             onSuccess(res);
         } catch (err) {
