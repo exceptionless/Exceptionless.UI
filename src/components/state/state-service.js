@@ -35,9 +35,25 @@
       _store.put('params', $state.params);
     }
 
+    function saveRequested(exclusions, requestedStateName, requestedStateParams) {
+      save(exclusions);
+
+      if (!requestedStateName) {
+        return;
+      }
+
+      if (_store.get('name', false)) {
+        return;
+      }
+
+      _store.put('name', requestedStateName);
+      _store.put('params', requestedStateParams);
+    }
+
     var service = {
       clear: clear,
       restore: restore,
+      saveRequested: saveRequested,
       save: save
     };
 
