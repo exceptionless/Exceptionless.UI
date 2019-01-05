@@ -308,13 +308,13 @@
       }
     };
 
-    $rootScope.$on('$stateChangeStart', function (event, toState) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
       if (!toState || !toState.data || !toState.data.requireAuthentication)
         return;
 
       if (!authService.isAuthenticated()) {
         event.preventDefault();
-        stateService.save(['auth.']);
+        stateService.saveRequested(['auth.'], toState.name, toParams);
         $state.transitionTo('auth.login');
       }
 
