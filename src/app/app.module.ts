@@ -15,7 +15,7 @@ import { Daterangepicker } from 'ng2-daterangepicker';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IntercomModule } from 'ng-intercom';
-import { NgxStripeModule } from 'ngx-stripe';
+import { NgxStripeModule } from '@nomadreservations/ngx-stripe';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';

@@ -6,7 +6,7 @@ import { WordTranslateService } from '../../service/word-translate.service';
 import { UserService } from '../../service/user.service';
 import { Intercom } from 'ng-intercom';
 import { AnalyticsService } from '../../service/analytics.service';
-import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
+import { Element as StripeElement, ElementOptions, ElementsOptions, StripeService } from '@nomadreservations/ngx-stripe';
 import { CommonService } from '../../service/common.service';
 import { AppEventService } from '../../service/app-event.service';
 
@@ -29,11 +29,26 @@ export class ChangePlanDialogComponent implements IModalDialog {
     _freePlanId = 'EX_FREE';
     saveEvent: any;
     closeEvent: any;
-    elements: Elements;
     currentOrganizationId = '';
     currentPlanId = '';
 
-    stripeCard: StripeElement;
+    error: any;
+    element: StripeElement;
+    cardOptions: ElementOptions = {
+        style: {
+            base: {
+                iconColor: '#276fd3',
+                color: '#31325F',
+                lineHeight: '40px',
+                fontWeight: 300,
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSize: '18px',
+                '::placeholder': {
+                    color: '#CFD7E0'
+                }
+            }
+        }
+    };
     elementsOptions: ElementsOptions = {
         locale: 'en'
     };
@@ -48,6 +63,8 @@ export class ChangePlanDialogComponent implements IModalDialog {
         private commonService: CommonService,
         private appEvent: AppEventService,
         private analyticsService: AnalyticsService) {
+
+        this.stripe.changeKey(environment.STRIPE_PUBLISHABLE_KEY);
     }
 
     dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
@@ -78,30 +95,6 @@ export class ChangePlanDialogComponent implements IModalDialog {
             }
         });
 
-        // this.stripe.elements(this.elementsOptions)
-        //     .subscribe(elements => {
-        //         this.elements = elements;
-        //         // Only mount the element the first time
-        //         // if (!this.stripeCard) {
-        //         //     this.stripeCard = this.elements.create('card', {
-        //         //         style: {
-        //         //             base: {
-        //         //                 iconColor: '#666EE8',
-        //         //                 color: '#31325F',
-        //         //                 lineHeight: '40px',
-        //         //                 fontWeight: 300,
-        //         //                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        //         //                 fontSize: '18px',
-        //         //                 '::placeholder': {
-        //         //                     color: '#CFD7E0'
-        //         //                 }
-        //         //             }
-        //         //         }
-        //         //     });
-        //         //     this.stripeCard.mount('#card-element');
-        //         // }
-        //     });
-
         try {
             await this.getOrganizations();
             await this.getPlans();
@@ -120,9 +113,9 @@ export class ChangePlanDialogComponent implements IModalDialog {
         };
 
         const onSuccess = async (response) => {
-            if (!response.data.success) {
+            if (!response.success) {
                 this.analyticsService.lead(this.getAnalyticsData());
-                this.paymentMessage = await this.wordTranslateService.translate('An error occurred while changing plans.') + ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.data.message;
+                this.paymentMessage = await this.wordTranslateService.translate('An error occurred while changing plans.') + ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.message;
                 return;
             }
 
@@ -130,6 +123,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
 
             this.saveEvent.emit(this.currentPlan);
             this.notificationService.success('', await this.wordTranslateService.translate('Thanks! Your billing plan has been successfully changed.'));
+            this.closeEvent.emit();
         };
 
         const onFailure = async (response) => {
@@ -164,6 +158,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
         if (this.currentPlan.price > 0 && this.isNewCard()) {
             try {
                 const res = await this.createStripeToken();
+                console.log(res);
                 onCreateTokenSuccess(res);
                 return res;
             } catch (err) {
@@ -184,40 +179,27 @@ export class ChangePlanDialogComponent implements IModalDialog {
     async createStripeToken() {
         const onSuccess = (response) => {
             this.analyticsService.addPaymentInfo();
-            return response;
         };
 
         const expiration = this.commonService.parseExpiry(this.card.expiry);
         const payload = {
-            number: this.card.number,
-            cvc: this.card.cvc,
-            exp_month: expiration.month,
-            exp_year: expiration.year,
             name: this.card.name
         };
 
-        // const name = payload.name;
-        // this.stripeService
-        //     .createToken(this.stripeCard, { name })
-        //     .subscribe(result => {
-        //         if (result.token) {
-        //             // Use the token to create a charge or a customer
-        //             // https://stripe.com/docs/charges
-        //             console.log(result.token.id);
-        //         } else if (result.error) {
-        //             // Error creating the token
-        //             console.log(result.error.message);
-        //         }
-        //     });
-
         try {
-            console.log(this.elements);
-            const res = await this.stripe.createToken(this.stripeCard, payload).toPromise();
-            console.log(res);
+            const res = await this.stripe.createToken(this.element, payload).toPromise();
             onSuccess(res);
+            return res.token;
         } catch (err) {
             console.log(err);
         }
+    }
+
+
+    cardUpdated(result) {
+        console.log(result);
+        this.element = result.element;
+        this.error = undefined;
     }
 
     cancel() {
