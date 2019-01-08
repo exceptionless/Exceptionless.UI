@@ -39,7 +39,7 @@ ENTRYPOINT [ "npx", "grunt", "test" ]
 
 # ui
 
-FROM nginx:stable-alpine as ui
+FROM nginx:stable as ui
 WORKDIR /app
 COPY --from=build /app/dist ./
 COPY bootstrap /usr/local/bin/bootstrap

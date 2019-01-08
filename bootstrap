@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 BaseUrl="${BaseUrl:-http://ex-api.localtest.me:5000}"
 Html5Mode="${Html5Mode:-false}"
