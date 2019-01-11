@@ -9,9 +9,10 @@ install:
 - npm install
 - npm install -g angular-cli-ghpages
 - npm install -g @angular/cli
+- npm install -g gzipper
 
 build_script:
-- node_modules\.bin\ng build --prod
+- node_modules\.bin\ng build --prod && gzipper ./dist
 
 after_test:
 - tar -zcvf dist\exceptionless.zip dist\exceptionless
