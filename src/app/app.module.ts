@@ -19,9 +19,6 @@ import { NgxStripeModule } from '@nomadreservations/ngx-stripe';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginComponent } from './components/auth/login/login.component';
-import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
-import { SignupComponent } from './components/auth/signup/signup.component';
 import { TokenInterceptor } from './service/token.interceptor';
 import { AuthGuardService } from './service/auth-guard.service';
 import { OrganizationService } from './service/organization.service';
@@ -36,8 +33,6 @@ import { AddWebHookDialogComponent } from './dialogs/add-web-hook-dialog/add-web
 import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialog.component';
 import { AddOrganizationDialogComponent } from './dialogs/add-organization-dialog/add-organization-dialog.component';
 import { PaymentComponent } from './components/payment/payment.component';
-import { RateLimitComponent } from './components/rate-limit/rate-limit.component';
-import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { EmailUniqueValidatorDirective } from './validators/email-unique.validator';
 import { OrganizationUniqueValidatorDirective } from './validators/organization-unique.validator';
 import { SemanticVersionValidatorDirective } from './validators/semantic-version.validator';
@@ -65,9 +60,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
     declarations: [
         AppComponent,
-        LoginComponent,
-        ForgotPasswordComponent,
-        SignupComponent,
         ConfirmDialogComponent,
         CustomDateRangeDialogComponent,
         AddReferenceDialogComponent,
@@ -78,8 +70,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         AddUserDialogComponent,
         AddOrganizationDialogComponent,
         PaymentComponent,
-        RateLimitComponent,
-        ResetPasswordComponent,
         EmailUniqueValidatorDirective,
         OrganizationUniqueValidatorDirective,
         SemanticVersionValidatorDirective,
