@@ -10,6 +10,7 @@ import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dial
 import { AddConfigurationDialogComponent } from '../dialogs/add-configuration-dialog/add-configuration-dialog.component';
 import { AddWebHookDialogComponent } from '../dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
 import { AddOrganizationDialogComponent } from '../dialogs/add-organization-dialog/add-organization-dialog.component';
+import { CustomDateRangeDialogComponent } from '../dialogs/custom-date-range-dialog/custom-date-range-dialog.component';
 import { AppEventService } from './app-event.service';
 import { $ExceptionlessClient } from '../exceptionlessclient';
 
@@ -44,6 +45,20 @@ export class DialogService {
             data: {
                 text: await this.wordTranslateService.translate(message)
             }
+        });
+    }
+
+    async customFilter(viewRef, onConfirm) {
+        return this.modalDialogService.openDialog(viewRef, {
+            title: await this.wordTranslateService.translate('Select Date Range'),
+            childComponent: CustomDateRangeDialogComponent,
+            actionButtons: [
+                { text: await this.wordTranslateService.translate('Cancel'), buttonClass: 'btn btn-default', onAction: () => true },
+                { text: await this.wordTranslateService.translate('Apply'), buttonClass: 'btn btn-danger', onAction: () => {
+                        onConfirm();
+                        return true;
+                    }}
+            ]
         });
     }
 

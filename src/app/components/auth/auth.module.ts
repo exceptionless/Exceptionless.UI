@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthRoutingModule } from './auth-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
@@ -13,6 +14,12 @@ import { RateLimitComponent } from '../rate-limit/rate-limit.component';
 
 import { HttpLoaderFactory } from '../../app.module';
 
+import {EmailUniqueValidatorDirective} from '../../validators/email-unique.validator';
+import {OrganizationUniqueValidatorDirective} from '../../validators/organization-unique.validator';
+import {SemanticVersionValidatorDirective} from '../../validators/semantic-version.validator';
+import {SemverDirective} from '../../directives/semver.directive';
+
+
 @NgModule({
     imports: [
         CommonModule,
@@ -20,6 +27,7 @@ import { HttpLoaderFactory } from '../../app.module';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
+        NgbModule.forRoot(),
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,
@@ -33,7 +41,11 @@ import { HttpLoaderFactory } from '../../app.module';
         SignupComponent,
         ForgotPasswordComponent,
         ResetPasswordComponent,
-        RateLimitComponent
+        RateLimitComponent,
+        EmailUniqueValidatorDirective,
+        OrganizationUniqueValidatorDirective,
+        SemanticVersionValidatorDirective,
+        SemverDirective,
     ]
 })
 export class AuthModule {}
