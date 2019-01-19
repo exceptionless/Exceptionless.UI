@@ -7,7 +7,7 @@
             <li role="separator" class="divider"></li>
             <li *ngIf="isLoadingOrganizations" disabled><a href="#">{{ 'Loading Organizations...' | translate }}</a></li>
             <ng-container *ngFor="let organization of organizations;">
-                <li class="hover-parent" [ngClass]="{'active' : isActive(organization.id, organization.name, 'organization')}">
+                <li class="hover-parent heading-menu" [ngClass]="{'active' : isActive(organization.id, organization.name, 'organization')}">
                     <a (click)="setItem(organization.id, organization.name, 'organization');">
                         {{ organization.name }}
                         <span class="icon-right hover-child" routerLink="/organization/{{ organization.id }}/manage"><i class="fa fa-gear fa-fw"></i></span>

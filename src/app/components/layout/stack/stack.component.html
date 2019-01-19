@@ -94,8 +94,10 @@
 
                 <div class="btn-toolbar pull-right hidden-print" role="toolbar" aria-label="Stack Options">
                     <div class="btn-group btn-group-sm" role="group" *ngIf="stack['type'] === 'error' || stack['type'] === '404'">
-                        <button type="button" role="button" class="btn btn-default" title="{{ (stack['date_fixed'] && !stack['is_regressed']) ? 'Mark this stack as not fixed' : 'Mark this stack as fixed' | translate }}">
-                            {{ (stack['date_fixed ']&& !stack['is_regressed']) ? 'Mark Not Fixed' : 'Mark Fixed' | translate }}
+                        <button type="button" role="button" class="btn btn-default"
+                                title="{{ (stack['date_fixed'] && !stack['is_regressed']) ? 'Mark this stack as not fixed' : 'Mark this stack as fixed' | translate }}"
+                                (click)="updateIsFixed(true)">
+                            {{ (stack['date_fixed'] && !stack['is_regressed']) ? 'Mark Not Fixed' : 'Mark Fixed' | translate }}
                         </button>
                     </div>
 
@@ -132,7 +134,7 @@
                     </tr>
                     <tr *ngIf="(stack['date_fixed'] && !stack['is_regressed'])">
                         <th>{{ 'Date Fixed' | translate }}</th>
-                        <td><span>{{ stack['date_fixed'] }}</span></td>
+                        <td><span>{{ stack['date_fixed'] | date: 'medium' }}</span></td>
                     </tr>
                     <tr *ngIf="stack['description']">
                         <th>{{ 'Description' | translate }}</th>

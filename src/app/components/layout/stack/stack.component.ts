@@ -513,7 +513,7 @@ export class StackComponent implements OnInit {
             }
         };
 
-        this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this reference link?', 'DELETE REFERENCE LINK', modalCallBackFunction);
     }
 
     async remove() {
@@ -521,6 +521,7 @@ export class StackComponent implements OnInit {
             try {
                 const res = await this.stackService.remove(this._stackId);
                 this.notificationService.error('', await this.wordTranslateService.translate('Successfully queued the stack for deletion.'));
+                this.router.navigate([`/project/${this.stack['project_id']}/dashboard`]);
                 return res;
             } catch (err) {
                 this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while deleting this stack.'));
@@ -528,7 +529,7 @@ export class StackComponent implements OnInit {
             }
         };
 
-        this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this stack (includes all stack events)?', 'DELETE STACK', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this stack (includes all stack events)?', 'DELETE STACK', modalCallBackFunction);
     }
 
     async updateIsCritical() {
@@ -570,21 +571,28 @@ export class StackComponent implements OnInit {
             this.notificationService.error('', await this.wordTranslateService.translate((this['stack.date_fixed'] && !this.stack['is_regressed']) ? 'An error occurred while marking this stack as not fixed.' : 'An error occurred while marking this stack as fixed.'));
         };
 
-        if (this['stack.date_fixed'] && !this.stack['is_regressed']) {
+        if (this.stack['date_fixed'] && !this.stack['is_regressed']) {
             try {
                 const res = await this.stackService.markNotFixed(this._stackId);
+                this.stack['date_fixed'] = '';
                 onSuccess();
             } catch (err) {
                 onFailure();
             }
-        } else {
-            try {
-                const res = await this.stackService.markFixed(this._stackId);
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
+
+            return;
         }
+
+        return this.dialogService.markFixed(this.viewRef, async (versionNo) => {
+            try {
+                const res = await this.stackService.markFixed(this._stackId, versionNo);
+                this.stack['date_fixed'] = new Date();
+                this.stack['fixed_in_version'] = versionNo;
+                onSuccess();
+            } catch (err) {
+                onFailure();
+            }
+        });
     }
 
     async updateIsHidden() {

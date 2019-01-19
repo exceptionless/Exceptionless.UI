@@ -93,7 +93,7 @@ export class DialogService {
                     if (url) {
                         $ExceptionlessClient.createFeatureUsage('app.stack.AddReferenceDialog.save').setProperty('url', url).submit();
                         onConfirm(url);
-                        return;
+                        return true;
                     } else {
                         this.appEvent.fireEvent({type: 'form_submitted'});
                     }

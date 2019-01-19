@@ -16,8 +16,6 @@ import { HttpLoaderFactory } from '../../app.module';
 
 import {EmailUniqueValidatorDirective} from '../../validators/email-unique.validator';
 import {OrganizationUniqueValidatorDirective} from '../../validators/organization-unique.validator';
-import {SemanticVersionValidatorDirective} from '../../validators/semantic-version.validator';
-import {SemverDirective} from '../../directives/semver.directive';
 
 
 @NgModule({
@@ -43,9 +41,7 @@ import {SemverDirective} from '../../directives/semver.directive';
         ResetPasswordComponent,
         RateLimitComponent,
         EmailUniqueValidatorDirective,
-        OrganizationUniqueValidatorDirective,
-        SemanticVersionValidatorDirective,
-        SemverDirective,
+        OrganizationUniqueValidatorDirective
     ]
 })
 export class AuthModule {}

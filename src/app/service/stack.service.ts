@@ -16,10 +16,10 @@ export class StackService {
     addLink(id, url) {
         const httpOptions = {
             headers: new HttpHeaders({
-                'Content-Type':  'text/plain; charset=UTF-8',
+                'Content-Type':  'application/json;charset=UTF-8',
             })
         };
-        return this.http.post(`stacks/${id}/add-link`,  url, httpOptions).toPromise();
+        return this.http.post(`stacks/${id}/add-link`,  {value: url}, httpOptions).toPromise();
     }
 
     disableNotifications(id) {
@@ -107,9 +107,9 @@ export class StackService {
 
     markFixed(id, version?) {
         const data = {
-            version: version
+            id: id
         };
-        return this.http.post(`stacks/${id}/mark-fixed`, data).toPromise();
+        return this.http.post(`stacks/${id}/mark-fixed` + (version ? `?version=${version}` : ''), data).toPromise();
     }
 
     markNotFixed(id?) {
@@ -137,10 +137,10 @@ export class StackService {
     removeLink(id, url) {
         const httpOptions = {
             headers: new HttpHeaders({
-                'Content-Type':  'text/plain; charset=UTF-8',
+                'Content-Type':  'application/json;charset=UTF-8',
             }),
             body: url
         };
-        return this.http.delete(`stacks/${id}/remove-link`, httpOptions).toPromise();
+        return this.http.post(`stacks/${id}/remove-link`, {value: url}, httpOptions).toPromise();
     }
 }

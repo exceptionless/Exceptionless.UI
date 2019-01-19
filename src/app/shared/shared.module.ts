@@ -15,6 +15,7 @@ import {TimeagoComponent} from '../components/timeago/timeago.component';
 import {ApexchartComponent} from '../components/apexchart/apexchart.component';
 import {ProjectsComponent} from '../components/projects/projects.component';
 import {OpenDirective} from '../directives/open.directive';
+import {UiScrollDirective} from '../directives/ui-scroll.directive';
 
 @NgModule({
     imports: [
@@ -40,6 +41,7 @@ import {OpenDirective} from '../directives/open.directive';
         ApexchartComponent,
         ProjectsComponent,
         OpenDirective,
+        UiScrollDirective
     ],
     exports: [
         TranslateModule,
@@ -55,6 +57,7 @@ import {OpenDirective} from '../directives/open.directive';
         ApexchartComponent,
         ProjectsComponent,
         OpenDirective,
+        UiScrollDirective
     ]
 })
 export class SharedModule {

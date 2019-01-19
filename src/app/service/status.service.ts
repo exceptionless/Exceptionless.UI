@@ -12,6 +12,6 @@ export class StatusService {
     ) {}
 
     get() {
-        return this.http.get(`status`);
+        return this.http.get(`status`).toPromise();
     }
 }

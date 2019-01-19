@@ -22,10 +22,10 @@
         </strong>
 
         <span *ngIf="source.data.Method"> in
-        <strong>
-          <abbr title="{{ source.data.MethodFullName }}">{{ source.data.Method }}</abbr>
-        </strong>
-    </span>
+            <strong>
+                <abbr title="{{ source.data.MethodFullName }}">{{ source.data.Method }} </abbr>
+            </strong>
+        </span>
 
         <a routerLink="/stack/{{ source['id'] }}" truncate lines="2">{{ source.title }}</a>
     </div>
@@ -75,10 +75,10 @@
         </strong>
 
         <span *ngIf="source.data.Method"> in
-        <strong>
-          <abbr title="{{ source.data.MethodFullName }}">{{ source.data.Method }}</abbr>
-        </strong>
-    </span>
+            <strong>
+              <abbr title="{{ source.data.MethodFullName }}">{{ source.data.Method }} </abbr>
+            </strong>
+        </span>
 
         <a routerLink="/event/{{ source['id'] }}" truncate lines="2">{{ source.data.Message }}</a>
     </div>

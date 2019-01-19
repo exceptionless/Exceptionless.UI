@@ -37,6 +37,8 @@ import {ChangePlanDialogComponent} from './dialogs/change-plan-dialog/change-pla
 import {AddUserDialogComponent} from './dialogs/add-user-dialog/add-user-dialog.component';
 import {AddConfigurationDialogComponent} from './dialogs/add-configuration-dialog/add-configuration-dialog.component';
 import {AddWebHookDialogComponent} from './dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
+import {SemverDirective} from './directives/semver.directive';
+import {SemanticVersionValidatorDirective} from './validators/semantic-version.validator';
 
 
 export const AuthConfig = {
@@ -68,7 +70,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         ChangePlanDialogComponent,
         AddUserDialogComponent,
         AddConfigurationDialogComponent,
-        AddWebHookDialogComponent
+        AddWebHookDialogComponent,
+        SemverDirective,
+        SemanticVersionValidatorDirective
     ],
     imports: [
         BrowserModule,
