@@ -43,7 +43,7 @@ export class TokenInterceptor implements HttpInterceptor {
                 setHeaders: {
                     Authorization: `Bearer ${this.auth.getToken()}`
                 },
-                url: environment.BASE_URL + '/api/v2/' + request.url
+                url: environment.BASE_URL + '/api/v2/' + (request.url.indexOf('/') === 0 ? request.url.substr(1) : request.url)
             });
             return next.handle(request).catch(x => this.handleAuthError(x));
         }
