@@ -105,7 +105,6 @@ export class EventsComponent implements OnChanges {
             return this.events;
         };
         this.loading = true;
-        this.events = [];
         this.currentOptions = options || this.settings.options;
 
         if (!this.currentEvent || (this.currentEvent && this.currentEvent.project_id)) {

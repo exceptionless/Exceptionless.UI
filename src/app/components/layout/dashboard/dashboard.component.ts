@@ -70,6 +70,25 @@ export class DashboardComponent implements OnInit {
             xaxis: {
                 type: 'datetime'
             },
+            yaxis: {
+                labels: {
+                    formatter: function(rep) {
+                        rep = rep * 1; // coerce to string
+
+                        if (rep < 1000) { // return the same number
+                            return rep;
+                        }
+
+                        if (rep < 10000) { // place a comma between
+                            const rep1 = rep + '';
+                            return rep1.charAt(0) + ',' + rep1.substring(1);
+                        }
+
+                        // divide and format
+                        return (rep / 1000).toFixed() + 'k';
+                    }
+                }
+            }
         },
         seriesData: []
     };

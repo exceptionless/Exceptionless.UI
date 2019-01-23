@@ -1,6 +1,6 @@
 var environment = {
-    BASE_URL: 'https://dev-api.exceptionless.io',
-    EXCEPTIONLESS_API_KEY: 'cc6kFN6tCa2eBerabeeDDfxVnxLu1wjDeCcDCRfP',
+    BASE_URL: 'https://api.exceptionless.io',
+    EXCEPTIONLESS_API_KEY: 'Ap1D6m0IWbI1FoRovXEjKUl37dGQz0Wzcr235JUX',
     EXCEPTIONLESS_SERVER_URL: '',
     FACEBOOK_APPID: '395178683904310',
     GITHUB_APPID: '7ef1dd5bfbc4ccf7f5ef',

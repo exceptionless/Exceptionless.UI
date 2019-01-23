@@ -88,7 +88,6 @@ export class StacksComponent implements OnChanges {
         };
 
         this.loading = true;
-        this.stacks = [];
         this.currentOptions = options || this.settings.options;
 
         try {

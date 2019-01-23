@@ -1,6 +1,6 @@
 <div class="table-responsive" appRefreshOn [refreshOn]="'filterChanged'" (refreshAction)="get()">
     <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable"
-           appRefreshOn [refreshOn]="'StackChanged PlanChanged'" (refreshAction)="get(currentOptions, $event)" refresh-throttle="10000">
+           appRefreshOn [refreshOn]="'StackChanged PlanChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
         <thead>
             <tr>
                 <th class="selection hidden-xs">

@@ -1,6 +1,6 @@
 <app-organization-notification></app-organization-notification>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'PersistentEventChanged PlanChanged'" (refreshAction)="get($event)" refresh-throttle="10000">
+<div class="hbox hbox-auto-xs hbox-auto-sm" appRefreshOn [refreshOn]="'PersistentEventChanged PlanChanged'" (refreshAction)="get($event)" [refreshThrottle]="10000">
     <div class="col" appRefreshOn [refreshOn]="'filterChanged'" (refreshAction)="get()">
         <div class="wrapper-md">
             <div class="row">
