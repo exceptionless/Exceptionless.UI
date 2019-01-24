@@ -13,7 +13,7 @@
                                 </div>
                                 <div class="details">
                                     <span class="title">{{ 'Count' | translate }}</span>
-                                    <span class="sub">{{ stats.count }}</span>
+                                    <span class="sub">{{ stats.count | number }}</span>
                                 </div>
                                 <i class="fa fa-chevron-right fa-2x more"></i>
                             </a>
@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="details">
                                     <span class="title">{{ 'Unique' | translate }}</span>
-                                    <span class="sub">{{ stats.unique }}</span>
+                                    <span class="sub">{{ stats.unique | number }}</span>
                                 </div>
                                 <i class="fa fa-chevron-right fa-2x more"></i>
                             </a>
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="details">
                                     <span class="title">{{ 'New' | translate }}</span>
-                                    <span class="sub">{{ stats.new }}</span>
+                                    <span class="sub">{{ stats.new | number }}</span>
                                 </div>
                                 <i class="fa fa-chevron-right fa-2x more"></i>
                             </a>
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="details">
                                     <span class="title">{{ 'Per Hour' | translate }}</span>
-                                    <span class="sub">{{ stats.avg_per_hour }}</span>
+                                    <span class="sub">{{ stats.avg_per_hour | number }}</span>
                                 </div>
                             </div>
                         </div>

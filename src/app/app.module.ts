@@ -39,7 +39,7 @@ import {AddConfigurationDialogComponent} from './dialogs/add-configuration-dialo
 import {AddWebHookDialogComponent} from './dialogs/add-web-hook-dialog/add-web-hook-dialog.component';
 import {SemverDirective} from './directives/semver.directive';
 import {SemanticVersionValidatorDirective} from './validators/semantic-version.validator';
-
+import {ThousandSuffixPipe} from './pipes/thousand-suffix.pipe';
 
 export const AuthConfig = {
     defaultHeaders: {'Content-Type': 'application/json'},
@@ -72,7 +72,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         AddConfigurationDialogComponent,
         AddWebHookDialogComponent,
         SemverDirective,
-        SemanticVersionValidatorDirective
+        SemanticVersionValidatorDirective,
+        ThousandSuffixPipe
     ],
     imports: [
         BrowserModule,
@@ -112,7 +113,8 @@ export function HttpLoaderFactory(http: HttpClient) {
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptor,
             multi: true
-        }
+        },
+        ThousandSuffixPipe
     ],
     bootstrap: [AppComponent],
     entryComponents: [
