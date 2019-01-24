@@ -28,16 +28,7 @@ export class LayoutComponent implements OnInit {
 
     ngOnInit() {
         this.websocketService.startDelayed(1000);
-        this.getVersionNo();
-    }
-
-    async getVersionNo() {
-        try {
-            const res = await this.statusService.get();
-            this.versionNo = res['informational_version'];
-        } catch (err) {
-            console.log(err);
-        }
+        this.versionNo = environment.APPVEYOR_BUILD_VERSION;
     }
 
     onToggleSideNavCollapsed(): void {

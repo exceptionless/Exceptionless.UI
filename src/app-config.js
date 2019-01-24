@@ -12,5 +12,6 @@ var environment = {
     SYSTEM_NOTIFICATION_MESSAGE: '',
     USE_HTML5_MODE: true,
     USE_SSL: true,
-    ENABLE_ACCOUNT_CREATION: true
+    ENABLE_ACCOUNT_CREATION: true,
+    APPVEYOR_BUILD_VERSION: '2.0.0'
 };
