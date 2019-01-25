@@ -36,7 +36,7 @@ function updateAppConfig() {
         '    SYSTEM_NOTIFICATION_MESSAGE: "' + notificationMessage + '",',
         '    USE_HTML5_MODE: ' + useHTML5Mode + ',',
         '    USE_SSL: ' + useSSL + ',',
-        '    APPVEYOR_BUILD_VERSION: ' + appveyorVersionNo + ',',
+        '    APPVEYOR_BUILD_VERSION: "' + appveyorVersionNo + '",',
         '    ENABLE_ACCOUNT_CREATION: ' + enableAccountCreation + '};',
         ';'
     ].join('\n');
