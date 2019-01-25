@@ -19,7 +19,7 @@ function updateAppConfig() {
     var useHTML5Mode = process.env.Exceptionless_HTML5Mode ? process.env.Exceptionless_HTML5Mode === 'true' : false;
     var useSSL = process.env.Exceptionless_EnableSSL ? process.env.Exceptionless_EnableSSL === 'true' : false;
     var enableAccountCreation = process.env.Exceptionless_EnableAccountCreation ? process.env.Exceptionless_EnableAccountCreation === 'true' : true;
-    var appveyorVersionNo = process.env.APPVEYOR_BUILD_VERSION ? process.env.APPVEYOR_BUILD_VERSION : '2.0.0';
+    var appveyorVersionNo = process.env.APPVEYOR_BUILD_VERSION ? process.env.APPVEYOR_BUILD_VERSION + '' : '2.0.0';
 
     var content = [
         'var environment = {',
