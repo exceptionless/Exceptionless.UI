@@ -1,5 +1,5 @@
 var environment = {
-    BASE_URL: 'https://api.exceptionless.io',
+    BASE_URL: 'https://dev-api.exceptionless.io',
     EXCEPTIONLESS_API_KEY: 'Ap1D6m0IWbI1FoRovXEjKUl37dGQz0Wzcr235JUX',
     EXCEPTIONLESS_SERVER_URL: '',
     FACEBOOK_APPID: '395178683904310',
@@ -12,6 +12,5 @@ var environment = {
     SYSTEM_NOTIFICATION_MESSAGE: '',
     USE_HTML5_MODE: true,
     USE_SSL: true,
-    ENABLE_ACCOUNT_CREATION: true,
-    APPVEYOR_BUILD_VERSION: '2.0.0'
+    ENABLE_ACCOUNT_CREATION: true
 };

@@ -75,6 +75,7 @@ export class OrganizationService {
     }
 
     getAll(options?) {
+        console.log('get-all-organization');
         const mergedOptions = Object.assign({ limit: 100 }, options);
         return this.http.get('organizations', { observe: 'response', params: mergedOptions }).toPromise();
     }

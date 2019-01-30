@@ -12,7 +12,7 @@ export class LayoutComponent implements OnInit {
     isSideNavCollapsed = false;
     isShowResponsiveSide = false;
     isShowResponsiveNav = false;
-    versionNo = '';
+    versionNo = '@@version';
 
     constructor(
         private websocketService: WebsocketService,
@@ -28,7 +28,6 @@ export class LayoutComponent implements OnInit {
 
     ngOnInit() {
         this.websocketService.startDelayed(1000);
-        this.versionNo = environment.APPVEYOR_BUILD_VERSION;
     }
 
     onToggleSideNavCollapsed(): void {

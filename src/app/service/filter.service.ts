@@ -204,9 +204,9 @@ export class FilterService {
         }
 
         // The all filter is set.
-        if (!this._organizationId && !this._projectId) {
-            return true;
-        }
+        // if (!this._organizationId && !this._projectId) {
+        //     return true;
+        // }
 
         return this._organizationId === data.organizationId || this._projectId === data.projectId;
     }

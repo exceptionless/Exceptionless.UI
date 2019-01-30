@@ -1,6 +1,6 @@
 <div>
     <div *ngIf="hasNotifications" appRefreshOn [refreshOn]="'filterChanged'" (refreshAction)="onFilterChanged()">
-        <div appRefreshOn [refreshOn]="'OrganizationChanged ProjectChanged PersistentEventChanged PlanChanged PlanOverage'" (refreshAction)="get()" [refreshThrottle]="10000"></div>
+        <div appRefreshOn [refreshOn]="'OrganizationChanged ProjectChanged PersistentEventChanged PlanChanged PlanOverage'" (refreshAction)="get($event)" [refreshThrottle]="10000"></div>
 
         <div class="alert alert-success alert-banner m-b-none" *ngIf="!hasOrganizations()">
             <h4>{{ 'Setup your first project' | translate }}</h4>

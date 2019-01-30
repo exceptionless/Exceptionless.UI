@@ -47,13 +47,29 @@ export class OrganizationNotificationComponent implements OnInit {
         this.get();
     }
 
-    async get() {
+    async get(isRefresh?) {
+        if (isRefresh && !this.canRefresh(isRefresh)) {
+            return;
+        }
         try {
             await this.getOrganizations();
             await this.getProjects();
             await this.getFilterUsesPremiumFeatures();
             await this.getOrganizationNotifications();
         } catch (err) {}
+    }
+
+    canRefresh(data) {
+        if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
+            // return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+            return false;
+        }
+
+        if (!!data && data.type === 'Organization' || data.type === 'Project') {
+            return this.filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        }
+
+        return !data;
     }
 
     getCurrentOrganizationId() {

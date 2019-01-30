@@ -169,7 +169,8 @@ export class DashboardComponent implements OnInit {
 
     canRefresh(data) {
         if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
-            return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+            // return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+            return false;
         }
 
         if (!!data && data.type === 'Organization' || data.type === 'Project') {

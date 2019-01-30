@@ -38,7 +38,7 @@
                 </td>
             </tr>
 
-            <tr *ngIf="events.length === 0 || loading">
+            <tr *ngIf="events.length === 0">
                 <td class="hidden-xs" *ngIf="actions.length > 0"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
                 <td colspan="3">
                     <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
