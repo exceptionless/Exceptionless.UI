@@ -12,7 +12,7 @@ install:
 - npm install -g gzipper
 
 build_script:
-- IF "%APPVEYOR_BUILD_VERSION%" != "" sed -i 's/@@version/%APPVEYOR_BUILD_VERSION%/g' src\app\components\layout\layout.component.ts
+- sed -i 's/@@version/%APPVEYOR_BUILD_VERSION%/g' src\app\components\layout\layout.component.ts
 - node_modules\.bin\ng build --prod && gzipper ./dist
 
 after_test:
