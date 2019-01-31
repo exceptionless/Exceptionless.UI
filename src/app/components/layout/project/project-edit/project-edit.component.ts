@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterService } from '../../../../service/filter.service';
 import { OrganizationService } from '../../../../service/organization.service';
@@ -18,7 +18,7 @@ import { ThousandSuffixPipe } from '../../../../pipes/thousand-suffix.pipe';
     templateUrl: './project-edit.component.html'
 })
 
-export class ProjectEditComponent implements OnInit {
+export class ProjectEditComponent implements OnInit, OnDestroy {
     _ignoreRefresh = false;
     _projectId = '';
     canChangePlan = false;
@@ -107,6 +107,7 @@ export class ProjectEditComponent implements OnInit {
     user_namespaces = null;
     webHooks = [];
     editable = [];
+    subscriptions: any;
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -121,14 +122,20 @@ export class ProjectEditComponent implements OnInit {
         private billingService: BillingService,
         private dialogService: DialogService,
         private thousandSuffixPipe: ThousandSuffixPipe
-    ) {
-        this.activatedRoute.params.subscribe( (params) => {
-            this._projectId = params['id'];
-            this.get();
-        });
-    }
+    ) {}
 
     ngOnInit() {
+        this.subscriptions = [];
+        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
+            this._projectId = params['id'];
+            this.get();
+        }));
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     addConfiguration() {

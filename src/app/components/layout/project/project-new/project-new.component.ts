@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { NotificationService } from '../../../../service/notification.service';
@@ -12,7 +12,7 @@ import { BillingService } from '../../../../service/billing.service';
     templateUrl: './project-new.component.html'
 })
 
-export class ProjectNewComponent implements OnInit {
+export class ProjectNewComponent implements OnInit, OnDestroy {
     @ViewChild('addForm') public addForm: NgForm;
     _canAdd = true;
     _newOrganizationId = '__newOrganization';
@@ -22,6 +22,7 @@ export class ProjectNewComponent implements OnInit {
     project_name = '';
     organizationId = '';
     submitted = false;
+    subscriptions: any;
 
     constructor(
         private router: Router,
@@ -32,14 +33,20 @@ export class ProjectNewComponent implements OnInit {
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
         private viewRef: ViewContainerRef
-    ) {
-        this.activatedRoute.params.subscribe( (params) => {
-            this.organizationId = params['id'];
-        });
-    }
+    ) {}
 
     ngOnInit() {
+        this.subscriptions = [];
+        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
+            this.organizationId = params['id'];
+        }));
         this.getOrganizations();
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     async add(isRetrying?) {

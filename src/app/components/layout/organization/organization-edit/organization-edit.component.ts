@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterService } from '../../../../service/filter.service';
 import { OrganizationService } from '../../../../service/organization.service';
@@ -16,7 +16,7 @@ import { DialogService } from '../../../../service/dialog.service';
     templateUrl: './organization-edit.component.html'
 })
 
-export class OrganizationEditComponent implements OnInit {
+export class OrganizationEditComponent implements OnInit, OnDestroy {
     _organizationId = '';
     _ignoreRefresh = false;
     canChangePlan = false;
@@ -108,6 +108,7 @@ export class OrganizationEditComponent implements OnInit {
     };
     activeTab = 'general';
     authUser: any = {};
+    subscriptions: any;
 
     constructor(
         private router: Router,
@@ -122,27 +123,33 @@ export class OrganizationEditComponent implements OnInit {
         private billingService: BillingService,
         private appEvent: AppEventService,
         private dialogService: DialogService
-    ) {
-        this.activatedRoute.params.subscribe( (params) => {
+    ) {}
+
+    ngOnInit() {
+        this.subscriptions = [];
+        this.authUser = this.userService.authUser;
+
+        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
             this._organizationId = params['id'];
             this.users.organizationId = this._organizationId;
             this.get();
-        });
-
-        this.activatedRoute.queryParams.subscribe(params => {
+        }));
+        this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
             this.activeTab = params['tab'] || 'general';
-        });
-    }
-
-    ngOnInit() {
-        this.authUser = this.userService.authUser;
-        this.appEvent.subscribe({
+        }));
+        this.subscriptions.push(this.appEvent.subscribe({
             next: (event: any) => {
                 if (event.type === 'UPDATE_USER') {
                     this.authUser = this.userService.authUser;
                 }
             }
-        });
+        }));
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     addUser() {

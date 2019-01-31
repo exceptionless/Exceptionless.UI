@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { LinkService } from '../../../../service/link.service';
 import { PaginationService } from '../../../../service/pagination.service';
@@ -15,7 +15,7 @@ import { BillingService } from '../../../../service/billing.service';
     templateUrl: './organization-list.component.html'
 })
 
-export class OrganizationListComponent implements OnInit {
+export class OrganizationListComponent implements OnInit, OnDestroy {
     _settings = { mode: 'stats' };
     canChangePlan = false;
     loading = true;
@@ -25,6 +25,7 @@ export class OrganizationListComponent implements OnInit {
     organizations = [];
     pageSummary: string;
     authUser: any = {};
+    subscriptions: any;
 
     constructor(
         private router: Router,
@@ -41,15 +42,22 @@ export class OrganizationListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.subscriptions = [];
         this.authUser = this.userService.authUser;
-        this.appEvent.subscribe({
+        this.subscriptions.push(this.appEvent.subscribe({
             next: (event: any) => {
                 if (event.type === 'UPDATE_USER') {
                     this.authUser = this.userService.authUser;
                 }
             }
-        });
+        }));
         this.get();
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     add() {

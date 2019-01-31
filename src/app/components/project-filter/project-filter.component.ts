@@ -5,6 +5,7 @@ import { ProjectService } from '../../service/project.service';
 import { OrganizationService } from '../../service/organization.service';
 import { FilterService } from '../../service/filter.service';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { AppEventService } from '../../service/app-event.service';
 
 @Component({
     selector: 'app-project-filter',
@@ -26,7 +27,8 @@ export class ProjectFilterComponent implements OnInit {
         private projectService: ProjectService,
         private organizationService: OrganizationService,
         private filterService: FilterService,
-        private wordTranslateService: WordTranslateService
+        private wordTranslateService: WordTranslateService,
+        private appEvent: AppEventService
     ) {}
 
     ngOnInit() {
@@ -39,9 +41,20 @@ export class ProjectFilterComponent implements OnInit {
             await this.getProjects();
         } catch (err) {}
         this.filteredDisplayName = this.filterService.getProjectName();
-        if (!this.filteredDisplayName) {
+        if (!this.filteredDisplayName || this.filteredDisplayName === 'All Projects') {
             this.filteredDisplayName = 'All Projects';
             this.setItem('', 'All Projects', 'All Projects');
+        } else {
+            const projectId = this.filterService.getProjectTypeId();
+            const projectType = this.filterService.getProjectType();
+
+            const basicURl =  this.getStateName();
+            setTimeout(() => {
+                this.router.navigateByUrl(`/${projectType}/${projectId}/${basicURl}`, { skipLocationChange: false });
+                this.appEvent.fireEvent({
+                    type: 'ProjectFilterChanged'
+                });
+            }, 100);
         }
     }
 

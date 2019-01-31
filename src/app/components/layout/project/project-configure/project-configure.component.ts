@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WordTranslateService } from '../../../../service/word-translate.service';
 import { NotificationService } from '../../../../service/notification.service';
 import { TokenService } from '../../../../service/token.service';
@@ -9,7 +9,7 @@ import { ProjectService } from '../../../../service/project.service';
     selector: 'app-project-configure',
     templateUrl: './project-configure.component.html'
 })
-export class ProjectConfigureComponent implements OnInit {
+export class ProjectConfigureComponent implements OnInit, OnDestroy {
 
     _projectId = '';
     _canRedirect = false;
@@ -19,6 +19,7 @@ export class ProjectConfigureComponent implements OnInit {
     project: any = {};
     projectName = '';
     projectTypes: any = [];
+    subscriptions: any;
 
     constructor(
         private wordTranslateService: WordTranslateService,
@@ -27,19 +28,24 @@ export class ProjectConfigureComponent implements OnInit {
         private router: Router,
         private projectService: ProjectService,
         private activatedRoute: ActivatedRoute,
-    ) {
-        this.activatedRoute.params.subscribe( (params) => {
-            this._projectId = params['id'];
-        });
-
-        this.activatedRoute.queryParams.subscribe(params => {
-            this._canRedirect = params['redirect'] ? (params['redirect'] === 'true') : false;
-            console.log(this._canRedirect);
-        });
-    }
+    ) {}
 
     ngOnInit() {
+        this.subscriptions = [];
+        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
+            this._projectId = params['id'];
+        }));
+        this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
+            this._canRedirect = params['redirect'] ? (params['redirect'] === 'true') : false;
+            console.log(this._canRedirect);
+        }));
         this.initData();
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     async initData() {

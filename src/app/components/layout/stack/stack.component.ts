@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import * as moment from 'moment';
@@ -22,7 +22,7 @@ import { ThousandSuffixPipe } from '../../../pipes/thousand-suffix.pipe';
     templateUrl: './stack.component.html'
 })
 
-export class StackComponent implements OnInit {
+export class StackComponent implements OnInit, OnDestroy {
     _organizations = [];
     _stackId = '';
     eventType = 'stack';
@@ -143,6 +143,7 @@ export class StackComponent implements OnInit {
     users = 0;
     total_users = 0;
     action = '';
+    subscriptions: any;
 
     constructor(
         private router: Router,
@@ -163,11 +164,6 @@ export class StackComponent implements OnInit {
         private wordTranslateService: WordTranslateService,
         private thousandSuffixPipe: ThousandSuffixPipe
     ) {
-        this.activatedRoute.params.subscribe( (params) => {
-            this._stackId = params['id'];
-            this.filterStoreService.setEventType(params['type']);
-        });
-
         this.hotkeysService.add(new Hotkey('shift+h', (event: KeyboardEvent): boolean => {
             this.updateIsHidden();
             return false;
@@ -202,7 +198,18 @@ export class StackComponent implements OnInit {
     }
 
     async ngOnInit() {
+        this.subscriptions = [];
+        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
+            this._stackId = params['id'];
+            this.filterStoreService.setEventType(params['type']);
+        }));
         this.initData();
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     async initData() {

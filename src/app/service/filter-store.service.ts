@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {DRIVERS, Locker} from 'angular-safeguard';
+import {AppEventService} from './app-event.service';
 
 @Injectable({
     providedIn: 'root'
@@ -10,6 +11,7 @@ export class FilterStoreService {
     projectFilterEventFire: EventEmitter<any> = new EventEmitter();
     constructor(
         private locker: Locker,
+        private appEvent: AppEventService
     ) {
         this.locker.setDriverFallback(DRIVERS.LOCAL);
         this.locker.setNamespace('filter');
@@ -22,6 +24,9 @@ export class FilterStoreService {
     setTimeFilter(timeFilter) {
         this.locker.set(DRIVERS.LOCAL, 'time', timeFilter);
         this.timeFilterEventFire.emit(this.getTimeFilter());
+        this.appEvent.fireEvent({
+            type: 'TimeFilterChanged'
+        });
     }
 
     getTimeFilterEmitter() {
@@ -59,6 +64,9 @@ export class FilterStoreService {
     setProjectType(projectType) {
         this.locker.set(DRIVERS.LOCAL, 'project_type', projectType);
         this.projectFilterEventFire.emit({type: this.getProjectType(), id: this.getProjectId()});
+        this.appEvent.fireEvent({
+            type: 'ProjectFilterChanged'
+        });
     }
 
     getEventType() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { FilterService } from '../../../service/filter.service';
@@ -10,14 +10,15 @@ import { NotificationService } from '../../../service/notification.service';
 import { $ExceptionlessClient } from '../../../exceptionlessclient';
 import { formatNumber } from '@angular/common';
 import { ThousandSuffixPipe } from '../../../pipes/thousand-suffix.pipe';
+import { AppEventService } from '../../../service/app-event.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html'
 })
 
-export class DashboardComponent implements OnInit {
-    subscription: any;
+export class DashboardComponent implements OnInit, OnDestroy {
+    subscriptions: any;
     timeFilter = '';
     projectFilter = '';
     type = '';
@@ -122,33 +123,32 @@ export class DashboardComponent implements OnInit {
         private stackService: StackService,
         private organizationService: OrganizationService,
         private notificationService: NotificationService,
-        private thousandSuffixPipe: ThousandSuffixPipe
+        private thousandSuffixPipe: ThousandSuffixPipe,
+        private appEvent: AppEventService
     ) {
-        this.route.params.subscribe( (params) => {
-            this.type = params['type'];
-            this.filterStoreService.setEventType(this.type);
-
-            const projectType = params['project_type'];
-            const queryId = params['id'];
-            if (projectType === 'project') {
-                this.filterService.setProjectId(queryId, true);
-                this.filterService.setEventType('project', true);
-            } else if (projectType === 'organization') {
-                this.filterService.setOrganizationId(queryId, true);
-                this.filterService.setEventType('organization', true);
-            }
-
-            this.get();
-        });
+        this.subscriptions = [];
     }
 
     ngOnInit() {
-        this.subscription = this.filterStoreService.getTimeFilterEmitter()
-            .subscribe(item => { this.get(); });
+        this.subscriptions = [];
+        this.subscriptions.push(this.appEvent.subscribe({
+            next: (event: any) => {
+                if (event.type === 'ProjectFilterChanged' || event.type === 'TimeFilterChanged') {
+                    console.log('dashboard-get-by-app-event');
+                    this.getStats();
+                    this.timeFilter = this.filterStoreService.getTimeFilter();
+                    this.projectFilter = this.filterService.getProjectTypeId();
+                }
+            }
+        }));
+        console.log('dashboard-init');
+        this.get();
+    }
 
-        this.filterStoreService.getProjectFilterEmitter().subscribe(item => {
-            this.get();
-        });
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     customDateSetting() {

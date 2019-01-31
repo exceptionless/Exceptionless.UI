@@ -16,7 +16,7 @@ export class SessionComponent implements OnInit, OnDestroy {
     projectFilter = '';
     type = '';
     eventType = '';
-    subscription: any;
+    subscriptions: any;
     includeLiveFilter = false;
     seriesData: any[];
     apexChart: any = {
@@ -110,17 +110,20 @@ export class SessionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.filterStoreService.getTimeFilterEmitter().subscribe(item => {
+        this.subscriptions = [];
+        this.subscriptions.push(this.filterStoreService.getTimeFilterEmitter().subscribe(item => {
             this.get();
-        });
-        this.filterStoreService.getProjectFilterEmitter().subscribe(item => {
+        }));
+        this.subscriptions.push(this.filterStoreService.getProjectFilterEmitter().subscribe(item => {
             this.get();
-        });
+        }));
         this.get();
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     async get() {

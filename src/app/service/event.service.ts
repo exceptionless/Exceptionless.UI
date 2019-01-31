@@ -34,9 +34,9 @@ export class EventService {
             return this.http.get(`organizations/${organization}/events/count`, { params: options }).toPromise();
         }
 
-        const project = this.filterService.getProjectId();
+        const project = this.filterService.getProjectTypeId();
         console.log('event-service-project:', project);
-        if (project) {
+        if (typeof project === 'string' && project) {
             return this.http.get(`projects/${project}/events/count`, { params: options }).toPromise();
         }
 

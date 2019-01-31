@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FilterService } from '../../../service/filter.service';
 import { FilterStoreService } from '../../../service/filter-store.service';
 import { Intercom } from 'ng-intercom';
@@ -8,7 +8,7 @@ import { Intercom } from 'ng-intercom';
     templateUrl: './sidebar.component.html'
 })
 
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
     type = 'type/';
     types = {
         exceptions: 'error',
@@ -41,6 +41,10 @@ export class SidebarComponent implements OnInit {
                 app_id: environment.INTERCOM_APPID
             });
         }
+    }
+
+    ngOnDestroy() {
+        this.filterStoreService.getProjectFilterEmitter().unsubscribe();
     }
 
     setFilterUrlPattern() {

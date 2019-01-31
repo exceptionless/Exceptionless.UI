@@ -126,7 +126,7 @@ export class WebsocketService {
                 data.message.deleted = data.message.change_type === 2;
             }
 
-            console.log(data);
+            // console.log(data);
 
             this.appEvent.fireEvent({
                 type: data.type,

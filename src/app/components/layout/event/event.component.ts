@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { ClipboardService } from 'ngx-clipboard';
@@ -19,7 +19,7 @@ import { $ExceptionlessClient } from '../../../exceptionlessclient';
     templateUrl: './event.component.html'
 })
 
-export class EventComponent implements OnInit {
+export class EventComponent implements OnInit, OnDestroy {
     _source = 'app.event.Event';
     _eventId = [];
     _knownDataKeys = ['error', '@error', '@simple_error', '@request', '@trace', '@environment', '@user', '@user_description', '@version', '@level', '@location', '@submission_method', '@submission_client', 'session_id', 'sessionend', 'haserror', '@stack'];
@@ -100,6 +100,8 @@ export class EventComponent implements OnInit {
     clipboardSupported = this.clipboardService.isSupported;
     template: any;
     @ViewChild('tabsChild') tabsChild: NgbTabset;
+    subscriptions: any;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -114,18 +116,25 @@ export class EventComponent implements OnInit {
         private projectService: ProjectService,
         private wordTranslateService: WordTranslateService,
         private viewRef: ViewContainerRef
-    ) {
-        this.activatedRoute.params.subscribe( (params) => {
+    ) {}
+
+    ngOnInit() {
+        this.subscriptions = [];
+        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
             this._eventId = params['id'];
             this.get();
-        });
+        }));
 
-        this.activatedRoute.queryParams.subscribe(params => {
+        this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
             /*this.activedTab = params['tab'];*/
-        });
+        }));
     }
 
-    ngOnInit() {}
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
+    }
 
     async get() {
         try {

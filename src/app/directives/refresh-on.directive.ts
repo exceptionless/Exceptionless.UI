@@ -38,10 +38,10 @@ export class RefreshOnDirective implements OnInit, OnDestroy {
                                     return;
                                 }
                             }
-                            console.log('last-time:', this.lastRunTime[key]);
-                            console.log('current-time:', tt);
-                            console.log('duration:', (tt - this.lastRunTime[key]) / 1000);
-                            console.log('run-event:', event);
+                            // console.log('last-time:', this.lastRunTime[key]);
+                            // console.log('current-time:', tt);
+                            // console.log('duration:', (tt - this.lastRunTime[key]) / 1000);
+                            // console.log('run-event:', event);
                             this.lastRunTime[key] = tt;
                             this.refreshAction.emit(event.value);
                         }
