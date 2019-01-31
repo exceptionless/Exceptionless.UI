@@ -35,7 +35,7 @@ export class LayoutComponent implements OnInit {
     async getVersionNo() {
         try {
             const res = await this.statusService.get();
-            this.apiVersionNo = res['informational_version'];
+            this.apiVersionNo = res['informational_version'].split('+')[0];
         } catch (err) {
             console.log(err);
         }
