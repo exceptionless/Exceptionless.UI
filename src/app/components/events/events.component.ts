@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, HostBinding, ViewContainerRef } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, HostBinding, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../service/filter.service';
 import { EventsActionService } from '../../service/events-action.service';
@@ -6,13 +6,14 @@ import { NotificationService } from '../../service/notification.service';
 import { LinkService } from '../../service/link.service';
 import { PaginationService } from '../../service/pagination.service';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { AppEventService } from '../../service/app-event.service';
 
 @Component({
     selector: 'app-events',
     templateUrl: './events.component.html'
 })
 
-export class EventsComponent implements OnChanges {
+export class EventsComponent implements OnChanges, OnInit, OnDestroy {
     @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     @Input() eventType;
@@ -31,6 +32,7 @@ export class EventsComponent implements OnChanges {
     sortByDateDescending: any;
     timeHeaderText: string;
     hideSessionStartTime: boolean;
+    subscriptions: any;
     constructor(
         private router: Router,
         private filterService: FilterService,
@@ -39,7 +41,8 @@ export class EventsComponent implements OnChanges {
         private linkService: LinkService,
         private paginationService: PaginationService,
         private wordTranslateService: WordTranslateService,
-        private viewRef: ViewContainerRef
+        private viewRef: ViewContainerRef,
+        private appEvent: AppEventService
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
@@ -49,6 +52,23 @@ export class EventsComponent implements OnChanges {
         this.actions = this.settings['hideActions'] ? [] : this.eventsActionService.getActions();
         this.showType = this.settings['summary'] ? this.settings['summary']['showType'] : !this.filterService.getEventType();
         this.get();
+    }
+
+    ngOnInit() {
+        this.subscriptions = [];
+        this.subscriptions.push(this.appEvent.subscribe({
+            next: (event: any) => {
+                if (event.type === 'ProjectFilterChanged' || event.type === 'TimeFilterChanged') {
+                    this.get();
+                }
+            }
+        }));
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     canRefresh(data) {

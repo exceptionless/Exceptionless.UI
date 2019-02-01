@@ -33,15 +33,19 @@ export class FilterService {
         includeHiddenAndFixedFilter = (typeof includeHiddenAndFixedFilter !== 'undefined') ?  includeHiddenAndFixedFilter : true;
         const filters: any[] = [];
 
-        if (this._organizationId) {
-            filters.push('organization:' + this._organizationId);
+        const origanizationId = this.getOrganizationId();
+        const projectId = this.getProjectTypeId();
+        const eventType = this.getEventType();
+
+        if (origanizationId) {
+            filters.push('organization:' + origanizationId);
         }
 
-        if (this._projectId) {
-            filters.push('project:' + this._projectId);
+        if (projectId) {
+            filters.push('project:' + projectId);
         }
 
-        if (this._eventType && !_.isEmpty(this.filterStoreService.getEventType())) {
+        if (eventType) {
             filters.push('type:' + this.filterStoreService.getEventType());
         }
 
@@ -129,11 +133,11 @@ export class FilterService {
     }
 
     getProjectTypeId() {
-        return this.filterStoreService.getProjectId();
+        return typeof this.filterStoreService.getProjectId() === 'string' ? this.filterStoreService.getProjectId() : '';
     }
 
     getOrganizationId() {
-        return this._organizationId;
+        return typeof this.filterStoreService.getOrganizationId() === 'string' ? this.filterStoreService.getOrganizationId() : '';
     }
 
     getProjectId() {
@@ -145,7 +149,7 @@ export class FilterService {
     }
 
     getEventType() {
-        return this._eventType;
+        return typeof this.filterStoreService.getEventType() === 'string' ? this.filterStoreService.getEventType() : '';
     }
 
     getOldestPossibleEventDate() {
@@ -276,7 +280,13 @@ export class FilterService {
 
     setProjectFilter(type, id, name) {
         this._projectId = id;
-        this.filterStoreService.setProjectId(id);
+        if (type === 'project') {
+            this.filterStoreService.setProjectId(id);
+            this.filterStoreService.setOrganizationId('');
+        } else {
+            this.filterStoreService.setOrganizationId(id);
+            this.filterStoreService.setProjectId('');
+        }
         this.filterStoreService.setProjectName(name);
         this.filterStoreService.setProjectType(type);
     }

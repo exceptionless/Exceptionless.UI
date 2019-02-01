@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, SimpleChanges, HostBinding, ViewContainerRef } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges, HostBinding, ViewContainerRef, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../service/filter.service';
 import { StackService } from '../../service/stack.service';
@@ -7,13 +7,14 @@ import { PaginationService } from '../../service/pagination.service';
 import { NotificationService } from '../../service/notification.service';
 import { StacksActionsService } from '../../service/stacks-actions.service';
 import { WordTranslateService } from '../../service/word-translate.service';
+import { AppEventService } from '../../service/app-event.service';
 
 @Component({
     selector: 'app-stacks',
     templateUrl: './stacks.component.html'
 })
 
-export class StacksComponent implements OnChanges {
+export class StacksComponent implements OnChanges, OnInit, OnDestroy {
     @HostBinding('class.app-component') appComponent = true;
     @Input() settings;
     @Input() eventType;
@@ -28,6 +29,7 @@ export class StacksComponent implements OnChanges {
     currentOptions: any;
     loading = true;
     showType: any;
+    subscriptions: any;
 
     constructor(
         private router: Router,
@@ -38,13 +40,31 @@ export class StacksComponent implements OnChanges {
         private notificationService: NotificationService,
         private stacksActionsService: StacksActionsService,
         private wordTranslateService: WordTranslateService,
-        private viewRef: ViewContainerRef
+        private viewRef: ViewContainerRef,
+        private appEvent: AppEventService
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
         this.actions = this.stacksActionsService.getActions();
         this.showType = this.settings['summary'] ? this.settings['showType'] : !this.filterService.getEventType();
         this.get();
+    }
+
+    ngOnInit() {
+        this.subscriptions = [];
+        this.subscriptions.push(this.appEvent.subscribe({
+            next: (event: any) => {
+                if (event.type === 'ProjectFilterChanged' || event.type === 'TimeFilterChanged') {
+                    this.get();
+                }
+            }
+        }));
+    }
+
+    ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
     canRefresh(data) {

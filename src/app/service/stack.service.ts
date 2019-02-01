@@ -57,7 +57,7 @@ export class StackService {
             return this.http.get(`organizations/${organization}/stacks/frequent`, { observe: 'response', params: mergedOptions }).toPromise();
         }
 
-        const project = this.filterService.getProjectId();
+        const project = this.filterService.getProjectTypeId();
         if (project) {
             return this.http.get(`projects/${project}/stacks/frequent`, { observe: 'response', params: mergedOptions }).toPromise();
         }

@@ -124,7 +124,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private organizationService: OrganizationService,
         private notificationService: NotificationService,
         private thousandSuffixPipe: ThousandSuffixPipe,
-        private appEvent: AppEventService
+        private appEvent: AppEventService,
+        private activatedRoute: ActivatedRoute
     ) {
         this.subscriptions = [];
     }
@@ -140,6 +141,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.projectFilter = this.filterService.getProjectTypeId();
                 }
             }
+        }));
+        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
+            this.filterStoreService.setEventType(params['type']);
         }));
         console.log('dashboard-init');
         this.get();

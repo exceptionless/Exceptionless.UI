@@ -45,8 +45,11 @@ export class ProjectFilterComponent implements OnInit {
             this.filteredDisplayName = 'All Projects';
             this.setItem('', 'All Projects', 'All Projects');
         } else {
-            const projectId = this.filterService.getProjectTypeId();
+            let projectId = this.filterService.getProjectTypeId();
             const projectType = this.filterService.getProjectType();
+            if (projectType === 'organization') {
+                projectId = this.filterService.getOrganizationId();
+            }
 
             const basicURl =  this.getStateName();
             setTimeout(() => {

@@ -49,6 +49,14 @@ export class FilterStoreService {
         return this.locker.get(DRIVERS.LOCAL, 'project_name');
     }
 
+    setOrganizationId(organizationId) {
+        this.locker.set(DRIVERS.LOCAL, 'organization_id', organizationId);
+    }
+
+    getOrganizationId() {
+        return this.locker.get(DRIVERS.LOCAL, 'organization_id');
+    }
+
     removeProjectName() {
         return this.locker.remove(DRIVERS.LOCAL, 'project_name');
     }
@@ -75,5 +83,8 @@ export class FilterStoreService {
 
     setEventType(type) {
         this.locker.set(DRIVERS.LOCAL, 'type', type);
+        this.appEvent.fireEvent({
+            type: 'ProjectFilterChanged'
+        });
     }
 }
