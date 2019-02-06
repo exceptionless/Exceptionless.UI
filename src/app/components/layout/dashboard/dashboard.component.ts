@@ -173,8 +173,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     canRefresh(data) {
         if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
-            // return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
-            return false;
+            return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
         }
 
         if (!!data && data.type === 'Organization' || data.type === 'Project') {
@@ -195,7 +194,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    async getStats() {
+    async getStats(isRefresh?) {
+        if (isRefresh && !this.canRefresh(isRefresh)) {
+            return;
+        }
         const onSuccess = (response) => {
             const getAggregationValue = (data, name, defaultValue) => {
                 const aggs = data.aggregations;

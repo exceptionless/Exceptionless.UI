@@ -38,6 +38,7 @@ import {ValueDumpComponent} from '../value-dump/value-dump.component';
 import {ArrayDumpComponent} from '../array-dump/array-dump.component';
 import {ObjectDumpComponent} from '../object-dump/object-dump.component';
 import {ActiveDirective} from '../../directives/active.directive';
+import {SpaceWordPipe} from '../../pipes/spaceWord.pipe';
 
 import {TokenInterceptor} from '../../service/token.interceptor';
 
@@ -121,6 +122,7 @@ export const ROUTES: Routes = [
         ValueDumpComponent,
         ArrayDumpComponent,
         ActiveDirective,
+        SpaceWordPipe
     ],
     providers: [
         {

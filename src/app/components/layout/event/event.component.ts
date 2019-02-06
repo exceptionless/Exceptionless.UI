@@ -13,6 +13,7 @@ import { ProjectService } from '../../../service/project.service';
 import { WordTranslateService } from '../../../service/word-translate.service';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 import { $ExceptionlessClient } from '../../../exceptionlessclient';
+import { UrlService } from '../../../service/url.service';
 
 @Component({
     selector: 'app-event',
@@ -21,7 +22,7 @@ import { $ExceptionlessClient } from '../../../exceptionlessclient';
 
 export class EventComponent implements OnInit, OnDestroy {
     _source = 'app.event.Event';
-    _eventId = [];
+    eventId = '';
     _knownDataKeys = ['error', '@error', '@simple_error', '@request', '@trace', '@environment', '@user', '@user_description', '@version', '@level', '@location', '@submission_method', '@submission_client', 'session_id', 'sessionend', 'haserror', '@stack'];
     activeTabIndex = -1;
     event = {
@@ -32,25 +33,15 @@ export class EventComponent implements OnInit, OnDestroy {
     event_json = '';
     textStackTrace = '';
     excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
-    errorType = 'Unknown';
-    environment = {};
     location = '';
-    message = '';
     isSessionStart = false;
     level = '';
     isLevelSuccess = false;
     isLevelInfo = false;
     isLevelWarning = false;
     isLevelError = false;
-    request = {};
-    requestUrl = '';
     hasCookies = false;
     hasError = false;
-    user = {};
-    userIdentity = '';
-    userName = '';
-    userEmail = '';
-    userDescription = '';
     version = '';
     project = {};
     references = [];
@@ -115,14 +106,17 @@ export class EventComponent implements OnInit, OnDestroy {
         private notificationService: NotificationService,
         private projectService: ProjectService,
         private wordTranslateService: WordTranslateService,
-        private viewRef: ViewContainerRef
+        private viewRef: ViewContainerRef,
+        private urlService: UrlService
     ) {}
 
     ngOnInit() {
         this.subscriptions = [];
         this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
-            this._eventId = params['id'];
-            this.get();
+            if (this.eventId !== params['id']) {
+                this.eventId = params['id'];
+                this.get();
+            }
         }));
 
         this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
@@ -149,9 +143,9 @@ export class EventComponent implements OnInit, OnDestroy {
             this.hotkeysService.add(new Hotkey('mod+up', (event: KeyboardEvent): boolean => {
                 $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.GoToStack`)
                     .addTags('hotkeys')
-                    .setProperty('id', this._eventId)
+                    .setProperty('id', this.eventId)
                     .submit();
-                this.router.navigate([`/type/event/${this._eventId}`]);
+                this.router.navigate([`/type/event/${this.eventId}`]);
                 return false;
             }));
 
@@ -159,7 +153,7 @@ export class EventComponent implements OnInit, OnDestroy {
                 this.hotkeysService.add(new Hotkey('mod+shift+c', (event: KeyboardEvent): boolean => {
                     $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.CopyEventJSON`)
                         .addTags('hotkeys')
-                        .setProperty('id', this._eventId)
+                        .setProperty('id', this.eventId)
                         .submit();
                     this.clipboardService.copyFromContent(this.event_json);
                     return false;
@@ -171,7 +165,7 @@ export class EventComponent implements OnInit, OnDestroy {
             this.hotkeysService.add(new Hotkey('mod+left', (event: KeyboardEvent): boolean => {
                 $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.PreviousOccurrence`)
                     .addTags('hotkeys')
-                    .setProperty('id', this._eventId)
+                    .setProperty('id', this.eventId)
                     .submit();
                 this.router.navigate([`/type/event/${this.previous}`], { queryParams: { tab: this.getCurrentTab() } });
                 return false;
@@ -182,7 +176,7 @@ export class EventComponent implements OnInit, OnDestroy {
             this.hotkeysService.add(new Hotkey('mod+left', (event: KeyboardEvent): boolean => {
                 $ExceptionlessClient.createFeatureUsage(`${this._source}.hotkeys.NextOccurrence`)
                     .addTags('hotkeys')
-                    .setProperty('id', this._eventId)
+                    .setProperty('id', this.eventId)
                     .submit();
                 this.router.navigate([`/type/event/${this.next}`], { queryParams: { tab: this.getCurrentTab() } });
                 return false;
@@ -245,11 +239,13 @@ export class EventComponent implements OnInit, OnDestroy {
             tabs.push({index: ++tabIndex, title: 'Exception', template_key: 'simple-error'});
         }
 
-        if (this.request && Object.keys(this.request).length > 0) {
+        if (this.event['request'] && Object.keys(this.event['request']).length > 0) {
             tabs.push({index: ++tabIndex, title: this.isSessionStart ? 'Browser' : 'Request', template_key: 'request'});
         }
 
-        if (this.environment && Object.keys(this.environment).length > 0) {
+        if (this.event['environment'] && Object.keys(this.event['environment']).length > 0) {
+            console.log('event-environment');
+            console.log(this.event['environment']);
             tabs.push({index: ++tabIndex, title: 'Environment', template_key: 'environment'});
         }
 
@@ -309,14 +305,10 @@ export class EventComponent implements OnInit, OnDestroy {
         return !data;
     }
 
-    async copied() {
-        this.notificationService.success('', await  this.wordTranslateService.translate('Copied!'));
-    }
-
     async demoteTab(tabName) {
         const onSuccess = () => {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.success`)
-                .setProperty('id', this._eventId)
+                .setProperty('id', this.eventId)
                 .setProperty('TabName', tabName)
                 .submit();
 
@@ -326,7 +318,7 @@ export class EventComponent implements OnInit, OnDestroy {
 
         const onFailure = async (response) => {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.error`)
-                .setProperty('id', this._eventId)
+                .setProperty('id', this.eventId)
                 .setProperty('response', response)
                 .setProperty('TabName', tabName)
                 .submit();
@@ -340,7 +332,7 @@ export class EventComponent implements OnInit, OnDestroy {
         }
 
         $ExceptionlessClient.createFeatureUsage(`${this._source}.demoteTab`)
-            .setProperty('id', this._eventId)
+            .setProperty('id', this.eventId)
             .setProperty('TabName', tabName)
             .submit();
 
@@ -445,10 +437,10 @@ export class EventComponent implements OnInit, OnDestroy {
             this.event = JSON.parse(JSON.stringify(response.body));
             this.event_json = JSON.stringify(this.event);
             this.sessionEvents['relativeTo'] = this.event['date'];
-            this.errorType = getErrorType(this.event);
-            this.environment = this.event['data'] && this.event['data']['@environment'];
+            this.event['errorType'] = getErrorType(this.event);
+            this.event['environment'] = this.event['data'] && this.event['data']['@environment'];
             this.location = this.getLocation(this.event);
-            this.message = this.getMessage(this.event);
+            this.event['message'] = this.getMessage(this.event);
             this.hasError = this.event['data'] && (this.event['data']['@error'] || this.event['data']['@simple_error']);
             this.isSessionStart = this.event['type'] === 'session';
             this.level = this.event['data'] && !!this.event['data']['@level'] ? this.event['data']['@level'].toLowerCase() : null;
@@ -457,18 +449,18 @@ export class EventComponent implements OnInit, OnDestroy {
             this.isLevelWarning = this.level === 'warn';
             this.isLevelError = this.level === 'error';
 
-            this.request = this.event['data'] && this.event['data']['@request'];
-            this.hasCookies = this.request && !!this.request['cookies'] && Object.keys(this.request['cookies']).length > 0;
-            /*this.requestUrl = this.request && this.urlService.buildUrl(this.request.is_secure, this.request.host, this.request.port, this.request.path, this.request.query_string);*/
+            this.event['request'] = this.event['data'] && this.event['data']['@request'];
+            this.hasCookies = this.event['request'] && !!this.event['request']['cookies'] && Object.keys(this.event['request']['cookies']).length > 0;
+            this.event['requestUrl'] = this.event['request'] && this.urlService.buildUrl(this.event['request']['is_secure'], this.event['request'].host, this.event['request'].port, this.event['request'].path, this.event['request'].query_string);
 
-            this.user = this.event['data'] && this.event['data']['@user'];
-            this.userIdentity = this.user && this.user['identity'];
-            this.userName = this.user && this.user['name'];
+            this.event['user'] = this.event['data'] && this.event['data']['@user'];
+            this.event['userIdentity'] = this.event['user'] && this.event['user']['identity'];
+            this.event['userName'] = this.event['user'] && this.event['user']['name'];
 
-            this.userDescription = this.event['data'] && this.event['data']['@user_description'];
-            this.userEmail = this.userDescription && this.userDescription['email_address'];
-            this.userDescription = this.userDescription && this.userDescription['description'];
-            this.version = this.event['data'] && this.event['data']['@version'];
+            this.event['userDescription'] = this.event['data'] && this.event['data']['@user_description'];
+            this.event['userEmail'] = this.event['userDescription'] && this.event['userDescription']['email_address'];
+            this.event['userDescription'] = this.event['userDescription'] && this.event['userDescription']['description'];
+            this.event['version'] = this.event['data'] && this.event['data']['@version'];
 
             const links = this.linkService.getLinks(link);
             this.previous = links['previous'] ? links['previous'].split('/').pop() : null;
@@ -495,12 +487,12 @@ export class EventComponent implements OnInit, OnDestroy {
             this.notificationService.error('Failed!', 'Cannot_Find_Event');
         };
 
-        if (!this._eventId) {
+        if (!this.eventId) {
             onFailure();
         }
 
         try {
-            const res = await this.eventService.getById(this._eventId, {}, optionsCallback);
+            const res = await this.eventService.getById(this.eventId, {}, optionsCallback);
             onSuccess(res, res.headers.get('link'));
             return res;
         } catch (err) {
@@ -546,7 +538,7 @@ export class EventComponent implements OnInit, OnDestroy {
     async promoteTab(tabName) {
 
         $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab`)
-            .setProperty('id', this._eventId)
+            .setProperty('id', this.eventId)
             .setProperty('TabName', tabName)
             .submit();
 
@@ -554,7 +546,7 @@ export class EventComponent implements OnInit, OnDestroy {
             await this.projectService.promoteTab(this.project['id'], tabName);
 
             $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.success`)
-                .setProperty('id', this._eventId)
+                .setProperty('id', this.eventId)
                 .setProperty('TabName', tabName)
                 .submit();
 
@@ -562,7 +554,7 @@ export class EventComponent implements OnInit, OnDestroy {
             this.buildTabs(tabName);
         } catch (err) {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.error`)
-                .setProperty('id', this._eventId)
+                .setProperty('id', this.eventId)
                 .setProperty('response', err)
                 .setProperty('TabName', tabName)
                 .submit();

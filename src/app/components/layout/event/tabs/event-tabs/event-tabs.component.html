@@ -54,7 +54,7 @@
             <td>{{ event['value'] }}</td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="event['message'] || getMessage(event)">
+        <tr class="hidden-print" *ngIf="event['message']">
             <th>{{ 'Message' | translate }}</th>
             <td><span truncate lines="10">{{ event['message'] || message }}</span></td>
         </tr>
@@ -80,25 +80,25 @@
         </tr>
     </table>
 
-    <div *ngIf="userEmail || userDescription || userIdentity">
+    <div *ngIf="event['userEmail'] || event['userDescription'] || event['userIdentity']">
         <h4>{{ 'User Info' | translate }}</h4>
         <table class="table table-striped table-bordered table-fixed table-key-value b-t">
-            <tr *ngIf="userEmail">
+            <tr *ngIf="event['userEmail']">
                 <th>{{ 'User Email' | translate }}</th>
-                <td><a href="#" truncate>{{ userEmail }}</a>
+                <td><a href="#" truncate>{{ event['userEmail'] }}</a>
                 </td>
             </tr>
-            <tr *ngIf="userIdentity">
+            <tr *ngIf="event['userIdentity']">
                 <th>{{ 'User Identity' | translate }}</th>
-                <td><span truncate>{{ userIdentity }}</span></td>
+                <td><span truncate>{{ event['userIdentity'] }}</span></td>
             </tr>
-            <tr *ngIf="userName">
+            <tr *ngIf="event['userName']">
                 <th>{{ 'User Name' | translate }}</th>
-                <td><span truncate>{{ userName }}</span></td>
+                <td><span truncate>{{ event['userName'] }}</span></td>
             </tr>
-            <tr *ngIf="userDescription">
+            <tr *ngIf="event['userDescription']">
                 <th>{{ 'User Description' | translate }}</th>
-                <td><span truncate lines="2">{{ userDescription }}</span></td>
+                <td><span truncate lines="2">{{ event['userDescription'] }}</span></td>
             </tr>
         </table>
     </div>
@@ -125,73 +125,73 @@
             <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
 
-        <tr *ngIf="environment['machine_name']">
+        <tr *ngIf="event['environment']['machine_name']">
             <th>{{ 'Machine Name' | translate }}</th>
-            <td><span truncate>{{ environment['machine_name'] }}</span></td>
+            <td><span truncate>{{ event['environment']['machine_name'] }}</span></td>
         </tr>
 
-        <tr *ngIf="environment['ip_address']">
+        <tr *ngIf="event['environment']['ip_address']">
             <th>{{ 'IP Address' | translate }}</th>
-            <td>{{ environment['ip_address'] }}</td>
+            <td>{{ event['environment']['ip_address'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['processor_count']">
+        <tr *ngIf="event['environment']['processor_count']">
             <th>{{ 'Processor Count' | translate }}</th>
-            <td>{{ environment['processor_count'] }}</td>
+            <td>{{ event['environment']['processor_count'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['total_physical_memory']">
+        <tr *ngIf="event['environment']['total_physical_memory']">
             <th>{{ 'Total Memory' | translate }}</th>
-            <td>{{ environment['total_physical_memory'] }}</td>
+            <td>{{ event['environment']['total_physical_memory'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['available_physical_memory']">
+        <tr *ngIf="event['environment']['available_physical_memory']">
             <th>{{ 'Available Memory' | translate }}</th>
-            <td>{{ environment['available_physical_memory'] }}</td>
+            <td>{{ event['environment']['available_physical_memory'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['process_memory_size']">
+        <tr *ngIf="event['environment']['process_memory_size']">
             <th>{{ 'Process Memory' | translate }}</th>
-            <td>{{ environment['process_memory_size'] }}</td>
+            <td>{{ event['environment']['process_memory_size'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['o_s_name']">
+        <tr *ngIf="event['environment']['o_s_name']">
             <th>{{ 'OS Name' | translate }}</th>
-            <td><span truncate>{{ environment['o_s_name'] }}</span></td>
+            <td><span truncate>{{ event['environment']['o_s_name'] }}</span></td>
         </tr>
 
-        <tr *ngIf="environment['o_s_version']">
+        <tr *ngIf="event['environment']['o_s_version']">
             <th>{{ 'OS Version' | translate }}</th>
-            <td>{{ environment['o_s_version'] }}</td>
+            <td>{{ event['environment']['o_s_version'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['architecture']">
+        <tr *ngIf="event['environment']['architecture']">
             <th>{{ 'Architecture' | translate }}</th>
-            <td>{{ environment['architecture'] }}</td>
+            <td>{{ event['environment']['architecture'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['runtime_version']">
+        <tr *ngIf="event['environment']['runtime_version']">
             <th>{{ 'Runtime Version' | translate }}</th>
-            <td>{{ environment['runtime_version'] }}</td>
+            <td>{{ event['environment']['runtime_version'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['process_id']">
+        <tr *ngIf="event['environment']['process_id']">
             <th>{{ 'Process ID' | translate }}</th>
-            <td>{{ environment['process_id'] }}</td>
+            <td>{{ event['environment']['process_id'] }}</td>
         </tr>
 
-        <tr *ngIf="environment['process_name']">
+        <tr *ngIf="event['environment']['process_name']">
             <th>{{ 'Process Name' | translate }}</th>
-            <td><span truncate>{{ environment['process_name'] }}</span></td>
+            <td><span truncate>{{ event['environment']['process_name'] }}</span></td>
         </tr>
 
-        <tr *ngIf="environment['command_line']">
+        <tr *ngIf="event['environment']['command_line']">
             <th>{{ 'Command Line' | translate }}</th>
-            <td><span truncate lines="2">{{ environment['command_line'] }}</span></td>
+            <td><span truncate lines="2">{{ event['environment']['command_line'] }}</span></td>
         </tr>
     </table>
 
-    <!--<app-extended-data-item [can-promote]="false" title="'Additional Data'" [data]="environment['data']"></app-extended-data-item>-->
+    <app-extended-data-item [title]="'Additional Data'" [data]="event['environment']['data']" (promoteTabParam)="tabPromote($event)" [showOptions]="false"></app-extended-data-item>
 </ng-container>
 
 <ng-container *ngIf="tab['template_key'] == 'error'">
@@ -205,12 +205,12 @@
 
         <tr>
             <th>{{ 'Error Type' | translate }}</th>
-            <td><span truncate>{{ errorType }}</span></td>
+            <td><span truncate>{{ event['errorType'] }}</span></td>
         </tr>
 
         <tr>
             <th>{{ 'Message' | translate }}</th>
-            <td><span truncate lines="10">{{ message }}</span></td>
+            <td><span truncate lines="10">{{ event['message'] }}</span></td>
         </tr>
 
         <tr *ngIf="event['data'] != null && event['data']['@error'] != null && event['data']['@error']['code'] != null">
@@ -261,49 +261,49 @@
             <td>{{ event['date'] | date:'medium' }} (<app-timeago [date]="event['date']"></app-timeago>)</td>
         </tr>
 
-        <tr *ngIf="request['http_method']">
+        <tr *ngIf="event['request']['http_method']">
             <th>{{ 'HTTP Method' | translate }}</th>
-            <td>{{ request['http_method'] }}</td>
+            <td>{{ event['request']['http_method'] }}</td>
         </tr>
 
-        <tr *ngIf="requestUrl">
+        <tr *ngIf="event['requestUrl']">
             <th>{{ 'URL' | translate }}</th>
-            <td><a href="#" target="_blank" truncate>{{ requestUrl }}</a></td>
+            <td><a href="#" target="_blank" truncate>{{ event['requestUrl'] }}</a></td>
         </tr>
 
         <tr>
             <th>{{ 'Referrer' | translate }}</th>
             <td>
-            <span *ngIf="request['referrer']">
-                <a href="#" target="_blank" truncate>{{ request['referrer'] }}</a>
+            <span *ngIf="event['request']['referrer']">
+                <a href="#" target="_blank" truncate>{{ event['request']['referrer'] }}</a>
             </span>
-                <em *ngIf="!request['referrer']">None</em>
+                <em *ngIf="!event['request']['referrer']">None</em>
             </td>
         </tr>
 
-        <tr *ngIf="request['client_ip_address']">
+        <tr *ngIf="event['request']['client_ip_address']">
             <th>{{ 'Client IP' | translate }}</th>
-            <td>{{ request['client_ip_address'] }}</td>
+            <td>{{ event['request']['client_ip_address'] }}</td>
         </tr>
 
-        <tr *ngIf="request['user_agent']">
+        <tr *ngIf="event['request']['user_agent']">
             <th>{{ 'User Agent' | translate }}</th>
-            <td><span truncate lines="2">{{ request['user_agent'] }}</span></td>
+            <td><span truncate lines="2">{{ event['request']['user_agent'] }}</span></td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="request['data'] != null && request['data']['@device'] != null">
+        <tr class="hidden-print" *ngIf="event['request']['data'] != null && event['request']['data']['@device'] != null">
             <th>{{ 'Device' | translate }}</th>
-            <td>{{ request['data']['@device'] }}</td>
+            <td>{{ event['request']['data']['@device'] }}</td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="request['data'] != null && request['data']['@browser'] != null">
+        <tr class="hidden-print" *ngIf="event['request']['data'] != null && event['request']['data']['@browser'] != null">
             <th>{{ 'Browser' | translate }}</th>
-            <td>{{ request['data']['@browser' ]}} <abbr *ngIf="request['data']['@browser_major_version']" title="{{ request['data']['@browser_version']}}">{{ request['data']['@browser_major_version'] }}</abbr></td>
+            <td>{{ event['request']['data']['@browser' ]}} <abbr *ngIf="event['request']['data']['@browser_major_version']" title="{{ event['request']['data']['@browser_version']}}">{{ event['request']['data']['@browser_major_version'] }}</abbr></td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="request['data'] != null && request['data']['@os'] != null">
+        <tr class="hidden-print" *ngIf="event['request']['data'] != null && event['request']['data']['@os'] != null">
             <th>{{ 'Browser OS' | translate }}</th>
-            <td>{{ request['data']['@os'] }} <abbr *ngIf="request['data']['@os_major_version']" title="{{ request['data']['@os_version'] }}">{{ request['data']['@os_major_version'] }}</abbr></td>
+            <td>{{ event['request']['data']['@os'] }} <abbr *ngIf="event['request']['data']['@os_major_version']" title="{{ event['request']['data']['@os_version'] }}">{{ event['request']['data']['@os_major_version'] }}</abbr></td>
         </tr>
     </table>
 
@@ -320,9 +320,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let key of request['cookies'] | ObjNgFor">
+                <tr *ngFor="let key of event['request']['cookies'] | ObjNgFor">
                     <td>{{ key }}</td>
-                    <td><span truncate lines="3">{{ request['cookies'][key] }}</span></td>
+                    <td><span truncate lines="3">{{ event['request']['cookies'][key] }}</span></td>
                 </tr>
             </tbody>
         </table>

@@ -25,7 +25,7 @@ export class RefreshOnDirective implements OnInit, OnDestroy {
         //     action = _.throttle(action, this.refreshThrottle || 1000);
         // }
         this.lastRunTime = {};
-        const throttleTime = (this.refreshThrottle || 1000) * 2;
+        const throttleTime = (this.refreshThrottle || 10000) * 1;
 
         if (this.refreshOn) {
             this.refreshOn.split(' ').forEach(key => {

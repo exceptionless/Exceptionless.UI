@@ -52,12 +52,14 @@ export class ProjectFilterComponent implements OnInit {
             }
 
             const basicURl =  this.getStateName();
-            setTimeout(() => {
-                this.router.navigateByUrl(`/${projectType}/${projectId}/${basicURl}`, { skipLocationChange: false });
-                this.appEvent.fireEvent({
-                    type: 'ProjectFilterChanged'
-                });
-            }, 100);
+            if (basicURl) {
+                setTimeout(() => {
+                    this.router.navigateByUrl(`/${projectType}/${projectId}/${basicURl}`, { skipLocationChange: false });
+                    this.appEvent.fireEvent({
+                        type: 'ProjectFilterChanged'
+                    });
+                }, 100);
+            }
         }
     }
 

@@ -40,11 +40,11 @@
                                 <span class="title">{{ 'First' | translate }}</span>
                                 <span class="sub visible-md visible-lg"><app-timeago [date]="stats.first_occurrence"></app-timeago></span>
                                 <span class="sub visible-sm">
-                                    <span *ngIf="isValidDate(stats.first_occurrence)">{{ stats.first_occurrence }}</span>
+                                    <span *ngIf="isValidDate(stats.first_occurrence)">{{ stats.first_occurrence | date: 'shortDate' }}</span>
                                     <span *ngIf="!isValidDate(stats.first_occurrence)">{{ 'never' | translate }}</span>
                                 </span>
                                 <span class="sub visible-xs">
-                                    <span *ngIf="isValidDate(stats.first_occurrence)">{{ stats.first_occurrence }}</span>
+                                    <span *ngIf="isValidDate(stats.first_occurrence)">{{ stats.first_occurrence | date:'M/d' }}</span>
                                     <span *ngIf="!isValidDate(stats.first_occurrence)">{{ 'NA' | translate }}</span>
                                 </span>
                             </div>
@@ -60,11 +60,11 @@
                                 <span class="title">{{ 'Last' | translate }}</span>
                                 <span class="sub visible-md visible-lg"><app-timeago [date]="stats.last_occurrence"></app-timeago></span>
                                 <span class="sub visible-sm">
-                                    <span *ngIf="isValidDate(stats.last_occurrence)">{{ stats.last_occurrence }}</span>
+                                    <span *ngIf="isValidDate(stats.last_occurrence)">{{ stats.last_occurrence | date:'shortDate' }}</span>
                                     <span *ngIf="!isValidDate(stats.last_occurrence)">{{ 'never' | translate }}</span>
                                 </span>
                                 <span class="sub visible-xs">
-                                    <span *ngIf="isValidDate(stats.last_occurrence)">{{ stats.last_occurrence }}</span>
+                                    <span *ngIf="isValidDate(stats.last_occurrence)">{{ stats.last_occurrence | date:'M/d' }}</span>
                                     <span *ngIf="!isValidDate(stats.last_occurrence)">{{ 'NA' | translate }}</span>
                                 </span>
                             </div>

@@ -289,6 +289,7 @@ export class StackComponent implements OnInit, OnDestroy {
         if (data && !this.canRefresh(data)) {
             return;
         }
+
         if (data && data.type === 'Stack' && data.deleted) {
             this.notificationService.error('', await this.wordTranslateService.translate('Stack_Deleted'));
             this.router.navigate(['/type/events/dashboard']);
@@ -393,7 +394,9 @@ export class StackComponent implements OnInit, OnDestroy {
             };
             await this.getOrganizations();
             await this.getStats();
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async getStats() {

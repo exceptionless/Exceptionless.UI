@@ -12,6 +12,7 @@ export class ExtendedDataItemComponent implements OnInit {
     @Input() title;
     @Input() data;
     @Input() isPromoted;
+    @Input() showOptions = true;
     @Output() promoteTabParam = new EventEmitter<any>();
     @Output() demoteTabParam = new EventEmitter<any>();
     showRaw = false;
@@ -24,6 +25,7 @@ export class ExtendedDataItemComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        console.log('extended-data-item:', this.data);
     }
 
     async copied() {
@@ -35,6 +37,7 @@ export class ExtendedDataItemComponent implements OnInit {
     }
 
     hasData() {
+        console.log(this.data);
         return typeof this.data !== 'undefined' && Object.keys(this.data).length !== 0;
     }
 

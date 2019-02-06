@@ -26,18 +26,15 @@ export class EventService {
     }
 
     count(aggregations, optionsCallback?, includeHiddenAndFixedFilter?) {
-        console.log('aggergations:', aggregations);
         let options = this.filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, includeHiddenAndFixedFilter);
         options = typeof optionsCallback === 'function' ? optionsCallback(options) : options;
 
         const organization = this.filterService.getOrganizationId();
-        console.log(organization);
         if (typeof organization === 'string' && organization) {
             return this.http.get(`organizations/${organization}/events/count`, { params: options }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
-        console.log('event-service-project:', project);
         if (typeof project === 'string' && project) {
             return this.http.get(`projects/${project}/events/count`, { params: options }).toPromise();
         }
@@ -67,7 +64,6 @@ export class EventService {
         const mergedOptions = optionsCallback(this.filterService.apply(options, false));
 
         const organization = this.filterService.getOrganizationId();
-        console.log(organization);
         if (typeof organization === 'string' && organization) {
             return this.http.get(`organizations/${organization}/events/sessions`, { observe: 'response', params: mergedOptions });
         }

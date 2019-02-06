@@ -1,14 +1,14 @@
 <div *ngIf="hasData">
     <div class="pull-right hidden-print">
-        <button type="button" role="button" class="btn btn-dark btn-xs" title="{{ 'Copy to Clipboard' | translate }}" ngxClipboard [cbContent]="data | json" (cbOnSuccess)="copied()" [hidden]="!clipboardSupported">
+        <button type="button" role="button" class="btn btn-dark btn-xs" title="{{ 'Copy to Clipboard' | translate }}" ngxClipboard [cbContent]="data | json" (cbOnSuccess)="copied()" [hidden]="!clipboardSupported" style="margin-right: 5px;">
             <i class="fa fa-copy"></i>
         </button>
-        <div class="btn-group btn-group-xs" open>
-            <button type="button" role="button" class="btn btn-dark btn-xs" (click)="showRaw = !showRaw">{{ 'Toggle View' | translate }}</button>
-            <button type="button" role="button" class="btn btn-dark btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <button type="button" role="button" class="btn btn-dark btn-xs" (click)="showRaw = !showRaw">{{ 'Toggle View' | translate }}</button>
+        <div class="btn-group btn-group-xs" open style="margin-left: -4px;">
+            <button type="button" role="button" class="btn btn-dark btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" *ngIf="showOptions">
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu pull-right" role="menu">
+            <ul class="dropdown-menu pull-right" role="menu" *ngIf="showOptions">
                 <li *ngIf="!isPromoted"><a (click)="promoteTab()">{{ 'Promote to Tab' | translate }}</a></li>
                 <li *ngIf="isPromoted"><a (click)="demoteTab()">{{ 'Demote Tab' | translate }}</a></li>
             </ul>

@@ -18,6 +18,7 @@ export class ValueDumpComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('value-dump-init');
         this.contentType = this.getType();
         this._isArray = this.isArray();
     }

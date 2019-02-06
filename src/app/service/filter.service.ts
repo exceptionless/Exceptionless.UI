@@ -207,12 +207,14 @@ export class FilterService {
             return false;
         }
 
-        // The all filter is set.
-        // if (!this._organizationId && !this._projectId) {
-        //     return true;
-        // }
+        const projectId = this.getProjectTypeId();
+        const organizationId = this.getOrganizationId();
 
-        return this._organizationId === data.organizationId || this._projectId === data.projectId;
+        if (!organizationId && !projectId) {
+            return true;
+        }
+
+        return organizationId === data.organizationId || projectId === data.projectId;
     }
 
     setEventType(eventType, suspendNotifications) {
