@@ -2,7 +2,7 @@
     <li class="dropdown" open appRefreshOn  [refreshOn]="'filterChanged'" (refreshAction)="update()">
         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >{{ filteredDisplayName }} <span class="caret"></span></a>
 
-        <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" appAutoActive>
+        <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" appAutoActive style="max-height: calc(100vh - 100px)">
             <li [ngClass]="{'active': isActive('', 'All Projects', 'All Projects')}"><a (click)="setItem('', 'All Projects', 'All Projects');">{{ 'All Projects' | translate }}</a></li>
             <li role="separator" class="divider"></li>
             <li *ngIf="isLoadingOrganizations" disabled><a href="#">{{ 'Loading Organizations...' | translate }}</a></li>

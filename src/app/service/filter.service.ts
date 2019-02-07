@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { FilterStoreService } from './filter-store.service';
 import { DateRangeParserService } from './date-range-parser.service';
 import { ObjectIdService } from './object-id.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { AppEventService } from "./app-event.service";
+import { AppEventService } from './app-event.service';
 
 @Injectable()
 
-export class FilterService {
+export class FilterService implements OnInit {
     DEFAULT_TIME_FILTER = 'last week';
     _time: any;
     _eventType = '';
@@ -21,6 +21,9 @@ export class FilterService {
         private objectIdService: ObjectIdService,
         private appEvent: AppEventService
     ) {
+    }
+
+    ngOnInit() {
         this._time = this.filterStoreService.getTimeFilter() || this.DEFAULT_TIME_FILTER;
         this._eventType = this.filterStoreService.getEventType() || null;
     }
@@ -117,8 +120,9 @@ export class FilterService {
             Object.assign(options, { filter: filter });
         }
 
-        if (!!this._time && this._time !== 'all') {
-            Object.assign(options, { time: this._time });
+        const time = this.filterStoreService.getTimeFilter();
+        if (!!time && time !== 'all') {
+            Object.assign(options, { time: time });
         }
 
         return options;
@@ -162,7 +166,7 @@ export class FilterService {
     }
 
     getTimeRange() {
-        const time = this.getTime();
+        const time = this.filterStoreService.getTimeFilter();
 
         if (time === 'all') {
             return { start: undefined, end: undefined };
@@ -256,6 +260,7 @@ export class FilterService {
     }
 
     setTime(time, suspendNotifications?) {
+        console.log('filter-service-set-time');
         if (time === this._time) {
             return;
         }

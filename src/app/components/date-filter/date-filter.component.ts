@@ -31,7 +31,9 @@ export class DateFilterComponent implements OnInit {
     }
 
     getFilteredDisplayName() {
-        const time = this.filterService.getTime();
+        const time = this.filterStoreService.getTimeFilter();
+
+        console.log('get-filtered-display-name:', time);
 
         if (time === 'last hour') {
             return 'Last Hour';
@@ -87,11 +89,12 @@ export class DateFilterComponent implements OnInit {
     }
 
     updateFilterDisplayName() {
+        console.log('update-filter-display-name');
         this.filteredDisplayName = this.getFilteredDisplayName();
     }
 
     isActive(timeRangeName) {
-        const time = this.filterService.getTime();
+        const time = this.filterStoreService.getTimeFilter();
         if (time && timeRangeName === 'Custom') {
             const range = this.dateRangeParserService.parse(time);
             return range && range.start && range.end;

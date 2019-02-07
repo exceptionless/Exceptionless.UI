@@ -100,7 +100,6 @@ export function HttpLoaderFactory(http: HttpClient) {
             appId: environment.INTERCOM_APPID
         }),
         LoadingBarRouterModule,
-        LoadingBarHttpClientModule,
         ModalDialogModule.forRoot(),
         Daterangepicker,
         NgxStripeModule.forRoot(environment.STRIPE_PUBLISHABLE_KEY)

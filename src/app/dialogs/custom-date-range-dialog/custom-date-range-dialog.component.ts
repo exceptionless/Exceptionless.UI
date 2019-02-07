@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { FilterService } from '../../service/filter.service';
 import { DateRangeParserService } from '../../service/date-range-parser.service';
 import { DaterangePickerComponent } from 'ng2-daterangepicker';
+import { FilterStoreService } from '../../service/filter-store.service';
 
 @Component({
     selector: 'app-custom-date-range-dialog',
@@ -25,7 +26,8 @@ export class CustomDateRangeDialogComponent implements IModalDialog, AfterViewIn
 
     constructor(
         private filterService: FilterService,
-        private dateRangeParserService: DateRangeParserService
+        private dateRangeParserService: DateRangeParserService,
+        private filterStoreService: FilterStoreService
     ) {
 
         this.daterangepickerOptions = {
@@ -52,7 +54,7 @@ export class CustomDateRangeDialogComponent implements IModalDialog, AfterViewIn
     }
 
     ngAfterViewInit() {
-        const time = this.filterService.getTime();
+        const time = this.filterStoreService.getTimeFilter();
         const range = this.dateRangeParserService.parse(time);
 
         if (range && range.start && range.end) {

@@ -1,5 +1,8 @@
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { ErrorService } from '../../service/error.service';
+import { ClipboardService } from 'ngx-clipboard';
+import { NotificationService } from '../../service/notification.service';
+import { WordTranslateService } from '../../service/word-translate.service';
 
 @Component({
     selector: 'app-stack-trace',
@@ -11,9 +14,13 @@ export class StackTraceComponent implements OnInit, OnChanges {
     @Input() exception;
     @Input() textStackTrace;
     stackTrace: any;
+    clipboardSupported = this.clipboardService.isSupported;
 
     constructor(
-        private errorService: ErrorService
+        private errorService: ErrorService,
+        private clipboardService: ClipboardService,
+        private notificationService: NotificationService,
+        private wordTranslateService: WordTranslateService
     ) {}
 
     ngOnInit() {}
@@ -21,7 +28,11 @@ export class StackTraceComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         const errors = this.errorService.getExceptions(this.exception);
         this.stackTrace = this.buildStackTrace(errors, true);
-        this.textStackTrace = this.buildStackTrace(errors, true);
+        this.textStackTrace = this.buildStackTrace(errors, false);
+    }
+
+    async copied() {
+        this.notificationService.success('', await  this.wordTranslateService.translate('Copied!'));
     }
 
     buildParameter(parameter) {

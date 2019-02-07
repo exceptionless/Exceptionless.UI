@@ -9,7 +9,7 @@
             <th>{{ 'Duration' | translate }}</th>
             <td>
                 <span *ngIf="!event['data']['sessionend']" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
-                <abbr title="Seconds"><app-duration [value]="getDuration()"></app-duration></abbr>
+                <abbr title="Seconds" style="margin-right: 10px;"><app-duration [value]="getDuration()"></app-duration></abbr>
                 <span *ngIf="event['data']['sessionend']">(ended <app-timeago [date]="event['data']['sessionend']"></app-timeago>)</span>
             </td>
         </tr>
@@ -104,12 +104,6 @@
     </div>
 
     <div class="hidden-print" *ngIf="hasError">
-        <div class="pull-right">
-            <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()" [hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Stack Trace to Clipboard' | translate }}"></a>
-        </div>
-
-        <h4>{{ 'Stack Trace' | translate }}</h4>
-
         <app-stack-trace class="stack-trace-mini" [exception]="event['data']['@error']" *ngIf="event['data']['@error']"></app-stack-trace>
 
         <app-simple-stack-trace class="stack-trace-mini" [exception]="event['data']['@simple_error']" *ngIf="event['data']['@simple_error']"></app-simple-stack-trace>
@@ -223,12 +217,6 @@
             <td><span truncate>{{ event['data']['@submission_method'] }}</span></td>
         </tr>
     </table>
-
-    <div class="pull-right m-t-xs hidden-print">
-        <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()"[hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Stack Trace to Clipboard' | translate }}"></a>
-    </div>
-
-    <h3>{{ 'Stack Trace' | translate }}</h3>
 
     <app-stack-trace [exception]="event['data']['@error']" [textStackTrace]="textStackTrace"></app-stack-trace>
 
