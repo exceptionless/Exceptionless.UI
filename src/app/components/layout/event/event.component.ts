@@ -305,6 +305,10 @@ export class EventComponent implements OnInit, OnDestroy {
         return !data;
     }
 
+    async copied() {
+        this.notificationService.success('', await  this.wordTranslateService.translate('Copied!'));
+    }
+
     async demoteTab(tabName) {
         const onSuccess = () => {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.promoteTab.success`)
