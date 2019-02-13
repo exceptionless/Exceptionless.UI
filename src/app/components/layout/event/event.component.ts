@@ -119,9 +119,9 @@ export class EventComponent implements OnInit, OnDestroy {
             }
         }));
 
-        this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
-            /*this.activedTab = params['tab'];*/
-        }));
+        // this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
+        //     this.activateTab(params['tab']);
+        // }));
     }
 
     ngOnDestroy() {
@@ -185,6 +185,9 @@ export class EventComponent implements OnInit, OnDestroy {
     }
 
     activateTab(tabName) {
+        if (this.tabs.length === 0) {
+            return;
+        }
         for (let index = 0; index < this.tabs.length; index++) {
             const tab = this.tabs[index];
             if (tab.title !== tabName) {
@@ -445,7 +448,7 @@ export class EventComponent implements OnInit, OnDestroy {
             this.event['environment'] = this.event['data'] && this.event['data']['@environment'];
             this.location = this.getLocation(this.event);
             this.event['message'] = this.getMessage(this.event);
-            this.hasError = this.event['data'] && (this.event['data']['@error'] || this.event['data']['@simple_error']);
+            this.event['hasError'] = this.event['data'] && (this.event['data']['@error'] || this.event['data']['@simple_error']);
             this.isSessionStart = this.event['type'] === 'session';
             this.level = this.event['data'] && !!this.event['data']['@level'] ? this.event['data']['@level'].toLowerCase() : null;
             this.isLevelSuccess = this.level === 'trace' || this.level === 'debug';
@@ -454,7 +457,7 @@ export class EventComponent implements OnInit, OnDestroy {
             this.isLevelError = this.level === 'error';
 
             this.event['request'] = this.event['data'] && this.event['data']['@request'];
-            this.hasCookies = this.event['request'] && !!this.event['request']['cookies'] && Object.keys(this.event['request']['cookies']).length > 0;
+            this.event['hasCookies'] = this.event['request'] && !!this.event['request']['cookies'] && Object.keys(this.event['request']['cookies']).length > 0;
             this.event['requestUrl'] = this.event['request'] && this.urlService.buildUrl(this.event['request']['is_secure'], this.event['request'].host, this.event['request'].port, this.event['request'].path, this.event['request'].query_string);
 
             this.event['user'] = this.event['data'] && this.event['data']['@user'];

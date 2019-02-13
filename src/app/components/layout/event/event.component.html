@@ -28,8 +28,8 @@
                 <div class="pull-right">
                     <a routerLink="/stack/{{ event['stack_id'] }}" [ngClass]="{'disabled': !event['stack_id']}" class="btn btn-default" role="button">{{ 'Go To Stack' | translate }}</a>
                 </div>
-                <a routerLink="/event/{{ previous }}" [queryParams]="{tab: getPreviousTab()}" [ngClass]="{'disabled': !previous}" class="btn btn-primary" role="button">{{ 'Previous Occurrence' | translate }}</a>
-                <a routerLink="/event/{{ next }}" [queryParams]="{tab: getNextTab()}" [ngClass]="{'disabled': !next}" class="btn btn-primary" role="button">{{ 'Next Occurrence' | translate }}</a>
+                <a routerLink="/event/{{ previous }}" [queryParams]="{tab: getCurrentTab()}" [ngClass]="{'disabled': !previous}" class="btn btn-primary" role="button">{{ 'Previous Occurrence' | translate }}</a>
+                <a routerLink="/event/{{ next }}" [queryParams]="{tab: getCurrentTab()}" [ngClass]="{'disabled': !next}" class="btn btn-primary" role="button">{{ 'Next Occurrence' | translate }}</a>
             </footer>
         </div>
     </div>

@@ -12,6 +12,7 @@ import { WordTranslateService } from '../../service/word-translate.service';
 
 export class StackTraceComponent implements OnInit, OnChanges {
     @Input() exception;
+    @Input() isOverview;
     @Input() textStackTrace;
     stackTrace: any;
     clipboardSupported = this.clipboardService.isSupported;
