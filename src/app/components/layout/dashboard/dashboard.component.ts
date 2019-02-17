@@ -143,6 +143,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
         }));
         this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
+            this.type = params['type'];
             this.filterStoreService.setEventType(params['type']);
         }));
         console.log('dashboard-init');

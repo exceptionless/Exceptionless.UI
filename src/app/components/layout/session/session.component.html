@@ -14,7 +14,7 @@
                                 </div>
                                 <div class="details">
                                     <span class="title">{{ 'Sessions' | translate }}</span>
-                                    <span class="sub">{{ stats['total'] }}</span>
+                                    <span class="sub">{{ stats['total'] | number }}</span>
                                 </div>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="details">
                                     <span class="title">{{ 'Per Hour' | translate }}</span>
-                                    <span class="sub">{{ stats['avg_per_hour'] }}</span>
+                                    <span class="sub">{{ stats['avg_per_hour'] | number }}</span>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="details">
                                     <span class="title">{{ 'Users' | translate }}</span>
-                                    <span class="sub">{{ stats['users'] }}</span>
+                                    <span class="sub">{{ stats['users'] | number }}</span>
                                 </div>
                             </div>
                         </div>
