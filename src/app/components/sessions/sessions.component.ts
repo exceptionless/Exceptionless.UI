@@ -90,7 +90,6 @@ export class SessionsComponent implements OnChanges {
         };
 
         this.loading = true;
-        this.events = [];
         this.currentOptions = options || this.settings.options;
 
         try {
