@@ -1,7 +1,9 @@
-.idea
 bower_components
 dist
 lib
 node_modules
 .sass-cache/
 src/results
+
+.idea/
+src/.idea/

@@ -4,9 +4,9 @@
   angular.module('exceptionless.status', [
     'restangular'
   ])
-  .factory('statusService', function (Restangular) {
+  .factory('statusService', function (Restangular, BASE_URL) {
     function get() {
-      return Restangular.one('status').get();
+      return Restangular.oneUrl('HealthChecks', BASE_URL + '/health').get();
     }
 
     var service = {

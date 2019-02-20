@@ -1,11 +1,11 @@
 #!/bin/bash
 
-ApiUrl="${ApiUrl:-http://ex-api.localtest.me:5000}"
-Html5Mode="${Html5Mode:-false}"
-EnableSsl="${EnableSsl:-false}"
-EnableAccountCreation="${EnableAccountCreation:-true}"
+ApiUrl="${EX_ApiUrl:-http://ex-api.localtest.me:5000}"
+Html5Mode="${EX_Html5Mode:-false}"
+EnableSsl="${EX_EnableSsl:-false}"
+EnableAccountCreation="${EX_EnableAccountCreation:-true}"
 
-OAuth="${ConnectionStrings__OAuth:-}"
+OAuth="${EX_ConnectionStrings__OAuth:-}"
 IFS=';' read -a oauthParts <<< "$OAuth"
 for part in ${oauthParts[@]}
 do
@@ -37,16 +37,16 @@ config="(function () {
 
   angular.module('app.config', [])
     .constant('BASE_URL', '$ApiUrl')
-    .constant('EXCEPTIONLESS_API_KEY', '$ExceptionlessApiKey')
-    .constant('EXCEPTIONLESS_SERVER_URL', '$ExceptionlessServerUrl')
+    .constant('EXCEPTIONLESS_API_KEY', '$EX_ExceptionlessApiKey')
+    .constant('EXCEPTIONLESS_SERVER_URL', '$EX_ExceptionlessServerUrl')
     .constant('FACEBOOK_APPID', '$FacebookAppId')
     .constant('GITHUB_APPID', '$GitHubAppId')
     .constant('GOOGLE_APPID', '$GoogleAppId')
     .constant('INTERCOM_APPID', '$IntercomAppId')
     .constant('LIVE_APPID', '$MicrosoftAppId')
     .constant('SLACK_APPID', '$SlackAppId')
-    .constant('STRIPE_PUBLISHABLE_KEY', '$StripePublishableApiKey')
-    .constant('SYSTEM_NOTIFICATION_MESSAGE', '$NotificationMessage')
+    .constant('STRIPE_PUBLISHABLE_KEY', '$EX_StripePublishableApiKey')
+    .constant('SYSTEM_NOTIFICATION_MESSAGE', '$EX_NotificationMessage')
     .constant('USE_HTML5_MODE', $Html5Mode)
     .constant('USE_SSL', $EnableSsl)
     .constant('ENABLE_ACCOUNT_CREATION', $EnableAccountCreation);
