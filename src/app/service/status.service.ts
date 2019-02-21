@@ -12,6 +12,10 @@ export class StatusService {
     ) {}
 
     get() {
-        return this.http.get(`status`).toPromise();
+        return this.http.get(`about`).toPromise();
+    }
+
+    healthy() {
+        return this.http.get('health', {responseType: 'text'}).toPromise();
     }
 }

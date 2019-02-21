@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { ErrorService } from '../../service/error.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { NotificationService } from '../../service/notification.service';
@@ -7,7 +7,8 @@ import { WordTranslateService } from '../../service/word-translate.service';
 @Component({
     selector: 'app-stack-trace',
     templateUrl: './stack-trace.component.html',
-    styleUrls: ['./stack-trace.component.less']
+    styleUrls: ['./stack-trace.component.less'],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class StackTraceComponent implements OnInit, OnChanges {

@@ -16,7 +16,7 @@
 
         <tr>
             <th>{{ 'Project' | translate }}</th>
-            <td><a href="#">{{ project['name'] }}</a></td>
+            <td><a routerLink="/project/{{project.id}}/dashboard">{{ project['name'] }}</a></td>
         </tr>
 
         <tr *ngIf="event['reference_id']">
@@ -24,9 +24,9 @@
             <td>{{ event['reference_id'] }}</td>
         </tr>
 
-        <tr *ngFor="let reference of references">
+        <tr *ngFor="let reference of event['references']">
             <th>{{ reference['name'] }}</th>
-            <td><a href="#">{{ reference['id'] }}</a></td>
+            <td><a routerLink="event/{{reference['id']}}">{{ reference['id'] }}</a></td>
         </tr>
 
         <tr *ngIf="level">
@@ -39,9 +39,9 @@
             <td><span truncate>{{ event['type'] }}</span></td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="hasError">
+        <tr class="hidden-print" *ngIf="event['hasError']">
             <th>{{ 'Error Type' | translate }}</th>
-            <td><span truncate>{{ errorType }}</span></td>
+            <td><span truncate>{{ event['errorType'] }}</span></td>
         </tr>
 
         <tr *ngIf="event['source']">
@@ -59,14 +59,14 @@
             <td><span truncate lines="10">{{ event['message'] || message }}</span></td>
         </tr>
 
-        <tr *ngIf="version">
+        <tr *ngIf="event['version']">
             <th>{{ 'Version' | translate }}</th>
-            <td>{{ version }}</td>
+            <td>{{ event['version'] }}</td>
         </tr>
 
-        <tr *ngIf="location">
+        <tr *ngIf="event['location']">
             <th>{{ 'Geo' | translate }}</th>
-            <td><span truncate>{{ location }}</span></td>
+            <td><span truncate>{{ event['location'] }}</span></td>
         </tr>
 
         <tr *ngIf="event['tags']">
@@ -74,9 +74,9 @@
             <td><span class="label label-info" *ngFor="let tag of event['tags']">{{ tag }}</span></td>
         </tr>
 
-        <tr class="hidden-print" *ngIf="requestUrl">
+        <tr class="hidden-print" *ngIf="event['requestUrl']">
             <th>{{ 'URL' | translate }}</th>
-            <td><a href="{{ requestUrl }}" target="_blank" truncate>{{ requestUrl }}</a></td>
+            <td><a href="{{ event['requestUrl'] }}" target="_blank" truncate>{{ event['requestUrl'] }}</a></td>
         </tr>
     </table>
 

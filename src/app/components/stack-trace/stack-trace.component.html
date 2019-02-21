@@ -4,4 +4,4 @@
 <h3 *ngIf="!isOverview">{{ 'Stack Trace' | translate }}</h3>
 <h4 *ngIf="isOverview">{{ 'Stack Trace' | translate }}</h4>
 
-<pre class="stack-trace"><code [innerHtml]="stackTrace"></code></pre>
+<pre class="stack-trace" [innerHtml]="stackTrace"></pre>

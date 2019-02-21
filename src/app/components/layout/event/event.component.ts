@@ -215,13 +215,13 @@ export class EventComponent implements OnInit, OnDestroy {
             return value.length > 1 ? value.charAt(0).toUpperCase() + value.slice(1) : value;
         };
 
-        this.references = [];
+        this.event['references'] = [];
 
         const referencePrefix = '@ref:';
 
         Object.keys(this.event['data']).map((key) => {
             if (key.startsWith(referencePrefix)) {
-                this.references.push({ id: this.event['data'][key], name: toSpacedWords(key.slice(5)) });
+                this.event['references'].push({ id: this.event['data'][key], name: toSpacedWords(key.slice(5)) });
             }
         });
     }
@@ -446,7 +446,7 @@ export class EventComponent implements OnInit, OnDestroy {
             this.sessionEvents['relativeTo'] = this.event['date'];
             this.event['errorType'] = getErrorType(this.event);
             this.event['environment'] = this.event['data'] && this.event['data']['@environment'];
-            this.location = this.getLocation(this.event);
+            this.event['location'] = this.getLocation(this.event);
             this.event['message'] = this.getMessage(this.event);
             this.event['hasError'] = this.event['data'] && (this.event['data']['@error'] || this.event['data']['@simple_error']);
             this.isSessionStart = this.event['type'] === 'session';
