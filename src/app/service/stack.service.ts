@@ -68,32 +68,33 @@ export class StackService {
 
     getUsers(options) {
         const mergedOptions = this.filterService.apply(options);
+
         const organization = this.filterService.getOrganizationId();
-        if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/users`, { params: mergedOptions });
+        if (typeof organization === 'string' && organization) {
+            return this.http.get(`organizations/${organization}/stacks/users`, { observe: 'response', params: mergedOptions }).toPromise();
         }
 
-        const project = this.filterService.getProjectId();
-        if (project) {
-            return this.http.get(`projects/${project}/stacks/users`, { params: mergedOptions });
+        const project = this.filterService.getProjectTypeId();
+        if (typeof project === 'string' && project) {
+            return this.http.get(`projects/${project}/stacks/users`, { observe: 'response', params: mergedOptions }).toPromise();
         }
 
-        return this.http.get(`stacks/users`, { params: mergedOptions });
+        return this.http.get(`stacks/users`, { observe: 'response', params: mergedOptions }).toPromise();
     }
 
     getNew(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
-        if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/new`, { params: mergedOptions });
+        if (typeof organization === 'string' && organization) {
+            return this.http.get(`organizations/${organization}/stacks/new`, { observe: 'response', params: mergedOptions }).toPromise();
         }
 
-        const project = this.filterService.getProjectId();
-        if (project) {
-            return this.http.get(`projects/${project}/stacks/new`, { params: mergedOptions });
+        const project = this.filterService.getProjectTypeId();
+        if (typeof project === 'string' && project) {
+            return this.http.get(`projects/${project}/stacks/new`, { observe: 'response', params: mergedOptions }).toPromise();
         }
 
-        return this.http.get(`stacks/new`, { params: mergedOptions });
+        return this.http.get(`stacks/new`, { observe: 'response', params: mergedOptions }).toPromise();
     }
 
     markCritical(id) {

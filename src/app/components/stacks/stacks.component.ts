@@ -110,8 +110,16 @@ export class StacksComponent implements OnChanges, OnInit, OnDestroy {
         this.loading = true;
         this.currentOptions = options || this.settings.options;
 
+        let result: any;
         try {
-            const res = await this.stackService.getFrequent(this.currentOptions);
+            if (this.settings.type === 'get-users') {
+                result = await this.stackService.getUsers(this.currentOptions);
+            } else if (this.settings.type === 'get-frequent') {
+                result = await this.stackService.getFrequent(this.currentOptions);
+            } else if (this.settings.type === 'get-new') {
+                result = await this.stackService.getNew(this.currentOptions);
+            }
+            const res = result;
             onSuccess(res.body, res.headers.get('link'));
             this.loading = false;
             return this.stacks;

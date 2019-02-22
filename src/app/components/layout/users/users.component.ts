@@ -14,6 +14,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     projectFilter = '';
     mostUsers: any = {
         get: this.stackService.getUsers,
+        type: 'get-users',
         options: {
             limit: 20,
             mode: 'summary'

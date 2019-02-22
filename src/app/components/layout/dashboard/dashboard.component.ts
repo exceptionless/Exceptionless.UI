@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
     mostFrequent: any = {
         get: this.stackService.getFrequent(),
+        type: 'get-frequent',
         options: {
             limit: 10,
             mode: 'summary'
