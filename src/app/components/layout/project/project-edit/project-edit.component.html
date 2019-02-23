@@ -102,6 +102,15 @@
                                 <input type="text" class="form-control" placeholder="Example: *Password*, CreditCard*, SSN"
                                        [(ngModel)]="data_exclusions"
                                        (input)="saveDataExclusion()"/>
+                                <div class="checkbox">
+                                    <label class="checks">
+                                        <input type="checkbox"
+                                               [(ngModel)]="exclude_private_information"
+                                               (change)="saveIncludePrivateInformation()">
+                                        <i></i>
+                                        {{ 'Automatically remove user identifiable information from events (e.g., Machine Name, User Information, IP Addresses and more...).' | translate }}
+                                    </label>
+                                </div>
 
                                 <h4>{{ 'Error Stacking' | translate }}</h4>
                                 <h5>{{ 'User Namespaces' | translate }}</h5>

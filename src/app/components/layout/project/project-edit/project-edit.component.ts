@@ -23,6 +23,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     _projectId = '';
     canChangePlan = false;
     seriesData: any[];
+    exclude_private_information = false;
     apexChart: any = {
         options: {
             chart: {
@@ -359,12 +360,15 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             this.config = [];
             this.data_exclusions = null;
             this.user_agents = null;
+            this.exclude_private_information = false;
 
             Object.keys(response['settings']).map((key) => {
                 if (key === '@@DataExclusions') {
                     this.data_exclusions = response['settings'][key];
                 } else if (key === '@@UserAgentBotPatterns') {
                     this.user_agents = response['settings'][key];
+                } else if (key === '@@IncludePrivateInformation') {
+                    this.exclude_private_information = response['settings'][key] === 'false';
                 } else {
                     this.config.push({key: key, value: response['settings'][key], is_editable: false});
                 }
@@ -379,6 +383,19 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
             return err;
+        }
+    }
+
+    async saveIncludePrivateInformation() {
+        let result: any;
+        try {
+            if (this.exclude_private_information) {
+                result = await this.projectService.setConfig(this._projectId, '@@IncludePrivateInformation', false);
+            } else {
+                result = await this.projectService.removeConfig(this._projectId, '@@IncludePrivateInformation');
+            }
+        } catch (err) {
+            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the include private information setting.'));
         }
     }
 

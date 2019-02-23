@@ -212,7 +212,7 @@
                                                 </td>
                                             </tr>
 
-                                            <tr *ngIf="user['o_auth_accounts.length'] === 0">
+                                            <tr *ngIf="user['o_auth_accounts'].length === 0">
                                                 <td colspan="2">
                                                     <strong>{{ 'No external logins were found.' | translate }}</strong>
                                                 </td>

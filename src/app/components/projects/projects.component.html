@@ -13,8 +13,8 @@
             <tr class="row-clickable" *ngFor="let project of projects">
                 <td (click)="open(project.id, $event)">{{ project.name }}</td>
                 <td *ngIf="includeOrganizationName" (click)="open(project.id, $event)">{{ project.organization_name }}</td>
-                <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['stack_count'] }}</td>
-                <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['event_count'] }}</td>
+                <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['stack_count'] | number }}</td>
+                <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['event_count'] | number }}</td>
                 <td>
                     <div class="btn-group" open>
                         <button type="button" role="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
