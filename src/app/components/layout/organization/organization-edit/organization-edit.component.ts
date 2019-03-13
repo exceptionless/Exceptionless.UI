@@ -45,6 +45,12 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                     x: {
                         format: 'dd MMM yyyy'
                     }
+                },
+                toolbar: {
+                    show: true,
+                    tools: {
+                        pan: false,
+                    }
                 }
             },
             colors: ['#a4d56f', '#e2e2e2', '#ccc', '#a94442'],

@@ -48,6 +48,12 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                     x: {
                         format: 'dd MMM yyyy'
                     }
+                },
+                toolbar: {
+                    show: true,
+                    tools: {
+                        pan: false,
+                    }
                 }
             },
             colors: ['rgba(245, 245, 245, 0.7)', 'rgba(164, 213, 111, 0.7)', 'rgba(226, 226, 226, 0.7)', 'rgba(204, 204, 204, 0.7)', 'rgba(169, 68, 66, 0.7)'],

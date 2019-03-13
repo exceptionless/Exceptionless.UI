@@ -43,6 +43,12 @@ export class SessionComponent implements OnInit, OnDestroy {
                     x: {
                         format: 'dd MMM yyyy'
                     }
+                },
+                toolbar: {
+                    show: true,
+                    tools: {
+                        pan: false,
+                    }
                 }
             },
             colors: ['rgba(60, 116, 0, .9)', 'rgba(124, 194, 49, .7)'],

@@ -59,6 +59,7 @@ export class StackComponent implements OnInit, OnDestroy {
                 },
                 toolbar: {
                     tools: {
+                        pan: false,
                         download: true,
                         customMenu: [{
                             title: (this.chartOptions[1].selected ? 'Hide' : 'Show') + ' Average Value',
