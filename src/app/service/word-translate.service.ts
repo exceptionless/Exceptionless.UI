@@ -11,8 +11,8 @@ export class WordTranslateService {
         private translateService: TranslateService,
     ) {}
 
-    async translate(string): Promise<string> {
-        const response = await this.translateService.get(string).toPromise();
+    async translate(string, params = null): Promise<string> {
+        const response = await this.translateService.get(string, params).toPromise();
         return response;
     }
 }

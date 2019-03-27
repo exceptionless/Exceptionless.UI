@@ -1,16 +1,16 @@
 var environment = {
-    BASE_URL: 'https://localhost:5001',
-    EXCEPTIONLESS_API_KEY: '',
+    BASE_URL: 'https://api.exceptionless.io',
+    EXCEPTIONLESS_API_KEY: 'Ap1D6m0IWbI1FoRovXEjKUl37dGQz0Wzcr235JUX',
     EXCEPTIONLESS_SERVER_URL: '',
-    FACEBOOK_APPID: '',
-    GITHUB_APPID: '',
-    GOOGLE_APPID: '',
-    INTERCOM_APPID: '',
-    LIVE_APPID: '',
+    FACEBOOK_APPID: '395178683904310',
+    GITHUB_APPID: '7ef1dd5bfbc4ccf7f5ef',
+    GOOGLE_APPID: '809763155066-enkkdmt4ierc33q9cft9nf5d5c02h30q.apps.googleusercontent.com',
+    INTERCOM_APPID: 'ssjo62bn',
+    LIVE_APPID: '000000004C137E8B',
     SLACK_APPID: '',
-    STRIPE_PUBLISHABLE_KEY: '',
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_nStD8zuwsiyVjPhfxxxMEFeE',
     SYSTEM_NOTIFICATION_MESSAGE: '',
-    USE_HTML5_MODE: false,
-    USE_SSL: false,
-    ENABLE_ACCOUNT_CREATION: false
+    USE_HTML5_MODE: true,
+    USE_SSL: true,
+    ENABLE_ACCOUNT_CREATION: true
 };

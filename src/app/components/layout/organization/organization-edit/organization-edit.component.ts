@@ -259,8 +259,8 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
         };
 
         const onFailure = async () => {
-            this.router.navigate(['/type/organization/list']);
-            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization'));
+            this.router.navigate(['/organization/list']);
+            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization', {organizationId: this._organizationId}));
         };
 
         try {

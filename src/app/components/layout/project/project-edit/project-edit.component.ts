@@ -236,7 +236,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             await this.getTokens();
             await this.getSlackNotificationSettings();
             await this.getWebHooks();
-        } catch (err) {}
+        } catch (err) {
+            this.router.navigate(['/project/list']);
+        }
     }
 
     async getOrganization() {
@@ -312,7 +314,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             onSuccess(res);
             return this.organization;
         } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization'));
+            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization', {organizationId: this.project['organization_id']}));
             return err;
         }
     }
@@ -332,13 +334,14 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             this.project['usage'] = this.project['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: 3000, too_big: 0 }];
             return this.project;
         };
+
         try {
             const res = await this.projectService.getById(this._projectId);
             onSuccess(res);
             return this.project;
         } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project'));
-            return err;
+            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project', {projectId: this._projectId}));
+            throw err;
         }
     }
 
@@ -357,7 +360,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             return res;
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the api keys.'));
-            return err;
+            throw err;
         }
     }
 
@@ -388,7 +391,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             return this.project;
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
-            return err;
+            throw err;
         }
     }
 
@@ -413,7 +416,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             return this.slackNotificationSettings;
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the slack notification settings.'));
-            return err;
+            throw err;
         }
     }
 
@@ -424,7 +427,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             return this.webHooks;
         } catch (err) {
             this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
-            return err;
+            throw err;
         }
     }
 

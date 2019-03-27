@@ -21,7 +21,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
         // handle your auth error or rethrow
-        if (err instanceof HttpErrorResponse && this.router.url !== '/status' && (err.status === 404 || err.status === 503 || err.status === 0)) {
+        if (err instanceof HttpErrorResponse && this.router.url !== '/status' && (err.status === 503 || err.status === 0)) {
             console.log(err);
             this.checkHealth();
             return throwError(err);
