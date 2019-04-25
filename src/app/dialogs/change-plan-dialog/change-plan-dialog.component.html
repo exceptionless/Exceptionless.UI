@@ -4,14 +4,14 @@
         {{paymentMessage}}
     </div>
 
-    <div class="form-group" *ngIf="organizations.length > 1">
+    <div class="form-group" *ngIf="organizations?.length > 1">
         <label for="organization">{{'Organization to change' | translate}}</label>
         <select id="organization" class="form-control" [(ngModel)]="currentOrganizationId" (ngModelChange)="changeOrganization(currentOrganizationId)" [disabled]="!isBillingEnabled()">
             <option *ngFor="let item of organizations" value="{{item.id}}">{{item.name}}</option>
         </select>
     </div>
 
-    <p [innerHTML] = "'Organization_Payment_Plan' | translate:{organization: currentOrganization.name, planName: currentOrganization.plan_name}"></p>
+    <p [innerHTML] = "'Organization_Payment_Plan' | translate:{organization: currentOrganization?.name, planName: currentOrganization?.plan_name}"></p>
 
     <div class="form-group">
         <label for="plan" [innerHTML]="'Payment_Select_New_Plan' | translate"></label>
@@ -30,7 +30,7 @@
                     <label for="cardName">{{'Name on card' | translate}}</label>
                     <input id="cardName" type="text" class="form-control" placeholder="{{'Name on card' | translate}}"
                            x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
-                           [(ngModel)]="card.name"
+                           [(ngModel)]="card?.name"
                            [disabled]="!isBillingEnabled()"
                            required />
                 </div>

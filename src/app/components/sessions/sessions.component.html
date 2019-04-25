@@ -20,7 +20,7 @@
                     <app-timeago [date]="event.date"></app-timeago>
                 </abbr></td>
                 <td (click)="open(event.id, $event)"><abbr title="{{ event.duration }} seconds">
-                    <app-duration [value]="event.duration"></app-duration>
+                    <app-duration [value]="getDuration(event)"></app-duration>
                 </abbr></td>
             </tr>
 

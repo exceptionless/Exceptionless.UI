@@ -1,7 +1,7 @@
-import { Directive, Output, EventEmitter, HostListener } from '@angular/core';
+import { Directive, Output, EventEmitter, HostListener } from "@angular/core";
 
 @Directive({
-    selector: '[ui-scroll]'
+    selector: "[appUiScroll]"
 })
 
 export class UiScrollDirective {
@@ -10,9 +10,9 @@ export class UiScrollDirective {
     @Output()
     public clickOutside = new EventEmitter();
 
-    @HostListener('document:click', ['$event.target'])
-    public onClick(targetElement) {
-        if (targetElement.tagName === 'I' && targetElement.classList.value.indexOf('icon-scroll') >= 0) {
+    @HostListener("document:click", ["$event.target"])
+    public onClick(targetElement: Element) {
+        if (targetElement.tagName === "I" && targetElement.classList.value.indexOf("icon-scroll") >= 0) {
             const scrollToTop = window.setInterval(() => {
                 const pos = window.pageYOffset;
                 if (pos > 0) {

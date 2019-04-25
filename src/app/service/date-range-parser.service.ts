@@ -1,21 +1,26 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class DateRangeParserService {
-    _rangeRegex: any = /(\d{4}-\d{2}-\d{2}(?:T(?:\d{2}:\d{2}:\d{2}|\d{2}:\d{2}|\d{2}))?)/g;
+    _rangeRegex: RegExp = /(\d{4}-\d{2}-\d{2}(?:T(?:\d{2}:\d{2}:\d{2}|\d{2}:\d{2}|\d{2}))?)/g;
     constructor() {}
 
-    parse(input) {
+    public parse(input): { start: string, end: string } {
         if (!input) {
             return null;
         }
 
         const matches = [];
-        let found;
-        while (found = this._rangeRegex.exec(input)) {
+        let found: RegExpExecArray;
+        while (true) {
+            found = this._rangeRegex.exec(input);
+            if (!found) {
+                break;
+            }
+
             matches.push(found[0]);
         }
 

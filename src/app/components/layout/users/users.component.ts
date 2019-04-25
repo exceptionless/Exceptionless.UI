@@ -1,26 +1,26 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FilterStoreService } from '../../../service/filter-store.service';
-import { StackService } from '../../../service/stack.service';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { FilterStoreService } from "../../../service/filter-store.service";
+import { StackService } from "../../../service/stack.service";
+import { Subscription } from "rxjs";
 
 @Component({
-    selector: 'app-users',
-    templateUrl: './users.component.html'
+    selector: "app-users",
+    templateUrl: "./users.component.html"
 })
 
 export class UsersComponent implements OnInit, OnDestroy {
-    type = '';
-    timeFilter = '';
-    projectFilter = '';
-    mostUsers: any = {
+    public timeFilter = "";
+    public projectFilter = ""; // TODO: I don't know why time filter and project filter are passed here. this should be coming from the filter service.
+    public mostUsers: any = {
         get: this.stackService.getUsers,
-        type: 'get-users',
+        type: "get-users",
         options: {
             limit: 20,
-            mode: 'summary'
+            mode: "summary"
         },
     };
-    subscriptions: any;
+    private subscriptions: Subscription[];
 
     constructor(
         private route: ActivatedRoute,
@@ -28,14 +28,14 @@ export class UsersComponent implements OnInit, OnDestroy {
         private stackService: StackService
     ) {}
 
-    ngOnInit() {
+    public ngOnInit() {
         this.subscriptions = [];
-        this.subscriptions.push(this.route.params.subscribe( (params) => { this.filterStoreService.setEventType(params['type']); }));
+        this.subscriptions.push(this.route.params.subscribe( (params) => { this.filterStoreService.setEventType(params.type); }));
         this.subscriptions.push(this.filterStoreService.getTimeFilterEmitter().subscribe(item => { this.timeFilter = item; }));
-        this.subscriptions.push(this.filterStoreService.getProjectFilterEmitter().subscribe(item => { this.projectFilter = item['id']; }));
+        this.subscriptions.push(this.filterStoreService.getProjectFilterEmitter().subscribe(item => { this.projectFilter = item.id; }));
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         for (const subscription of this.subscriptions) {
             subscription.unsubscribe();
         }

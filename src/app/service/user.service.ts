@@ -1,74 +1,65 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpResponse, HttpHeaders } from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
+import { User, UpdateEmailAddressResult, CurrentUser } from "../models/user";
+import { WorkInProgressResult, SuccessResult } from "../models/results";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class UserService {
+    constructor(private http: HttpClient) {}
 
-    authUser: any = {};
-
-    constructor(
-        private http: HttpClient
-    ) {}
-
-    setAuthUser(userData) {
-        this.authUser = userData;
+    public addAdminRole(id: string) {
+        this.http.post<never>(`users/${id}/admin-role`, {}).toPromise();
     }
 
-    addAdminRole(id) {
-        const data = {};
-        return this.http.post(`users/${id}/admin-role`,  data).toPromise();
+    public getCurrentUser() {
+        return this.http.get<CurrentUser>("users/me").toPromise();
     }
 
-    getCurrentUser() {
-        return this.http.get('users/me').toPromise();
+    public getById(id: string) {
+        return this.http.get<User>(`users/${id}`);
     }
 
-    getById(id) {
-        return this.http.get(`users/${id}`);
+    public getByOrganizationId(id: string, options) {
+        return this.http.get<User[]>(`organizations/${id}/users`, { params: options }).toPromise();
     }
 
-    getByOrganizationId(id, options): Observable<HttpResponse<any>> {
-        return this.http.get(`organizations/${id}/users`, { observe: 'response', params: options });
+    public hasAdminRole(user: User): boolean {
+        return this.hasRole(user, "global");
     }
 
-    hasAdminRole(user) {
-        return this.hasRole(user, 'global');
-    }
-
-    hasRole(user, role) {
+    public hasRole(user: User, role: string): boolean {
         return !!user && !!user.roles && user.roles.indexOf(role) !== -1;
     }
 
-    removeAdminRole(id) {
-        return this.http.delete(`users/${id}/admin-role`).toPromise();
+    public removeAdminRole(id: string) {
+        return this.http.delete<never>(`users/${id}/admin-role`).toPromise();
     }
 
-    removeCurrentUser() {
-        return this.http.delete('users/me').toPromise();
+    public removeCurrentUser() {
+        return this.http.delete<WorkInProgressResult>("users/me").toPromise();
     }
 
-    resendVerificationEmail(id) {
-        return this.http.get(`users/${id}/resend-verification-email`).toPromise();
+    public resendVerificationEmail(id: string) {
+        return this.http.get<never>(`users/${id}/resend-verification-email`).toPromise();
     }
 
-    update(id, project) {
-        return this.http.patch(`users/${id}`, project).toPromise();
+    public update(id: string, user: User) {
+        return this.http.patch<User>(`users/${id}`, user).toPromise();
     }
 
-    updateEmailAddress(id, email) {
-        const data = {};
-        return this.http.post(`users/${id}/email-address/${email}`,  data).toPromise();
+    public updateEmailAddress(id: string, email: string) {
+        return this.http.post<UpdateEmailAddressResult>(`users/${id}/email-address/${email}`, {}).toPromise();
     }
 
-    verifyEmailAddress(token) {
-        return this.http.get(`users/verify-email-address/${token}`);
+    public verifyEmailAddress(token: string) {
+        return this.http.get<never>(`users/verify-email-address/${token}`);
     }
 
-    adminChangePlan(data) {
-        return this.http.post('admin/change-plan', data).toPromise();
+    public adminChangePlan(organizationId: string, planId: string) {
+        return this.http.post<SuccessResult>("admin/change-plan", { organizationId, planId }).toPromise();
     }
 }

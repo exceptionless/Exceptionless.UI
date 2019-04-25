@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
+import { Project, NewProject, ClientConfiguration, NotificationSettings } from "../models/project";
+import { WorkInProgressResult } from "../models/results";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class ProjectService {
@@ -11,119 +13,100 @@ export class ProjectService {
         private http: HttpClient,
     ) {}
 
-    addSlack(id) {
-        // need to implement later Exceptionless
-        return this.http.post(`projects/${id}/slack`, { code: '' }).toPromise();
+    public addSlack(id) {
+        throw new Error("NOT IMPLEMENTED: Implement client side for getting slack oauth.");
+        return this.http.post<never>(`projects/${id}/slack`, { params: { code: "" } }).toPromise();
     }
 
-    create(organizationId, name) {
+    public create(organizationId: string, name: string) {
         const data = {
-            'organization_id': organizationId,
-            'name': name,
-            'delete_bot_data_enabled': true
-        };
-        return this.http.post('projects', data).toPromise();
+            organization_id: organizationId,
+            name,
+            delete_bot_data_enabled: true
+        } as NewProject;
+        return this.http.post<Project>("projects", data).toPromise();
     }
 
-    demoteTab(id, name) {
-        return this.http.delete(`projects/${id}/promotedtabs?name=${name}`).toPromise();
+    public demoteTab(id: string, name: string) {
+        return this.http.delete<never>(`projects/${id}/promotedtabs`, { params: { name }}).toPromise();
     }
 
-    getAll(options?) {
+    // TODO: How do we better handle large amounts of projects (e.g. 250 projects)
+    public getAll(options?) {
         const mergedOptions = Object.assign({ limit: 100 }, options);
-        return this.http.get('projects', { observe: 'response', params: mergedOptions }).toPromise();
+        return this.http.get<Project[]>("projects", { params: mergedOptions }).toPromise();
     }
 
-    getById(id) {
-        return this.http.get(`projects/${id}`).toPromise();
+    public getById(id: string) {
+        return this.http.get<Project>(`projects/${id}`).toPromise();
     }
 
-    getByOrganizationId(id, options) {
-        return this.http.get(`organizations/${id}/projects`, { observe: 'response', params: options || {} }).toPromise();
+    public getByOrganizationId(id: string, options) {
+        return this.http.get<Project[]>(`organizations/${id}/projects`, { params: options || {} }).toPromise();
     }
 
-    getConfig(id) {
-        return this.http.get(`projects/${id}/config`).toPromise();
+    public getConfig(id: string) {
+        return this.http.get<ClientConfiguration>(`projects/${id}/config`).toPromise();
     }
 
-    getNotificationSettings(id, userId) {
-        return this.http.get(`users/${userId}/projects/${id}/notifications`).toPromise();
+    public getNotificationSettings(id: string, userId: string) {
+        return this.http.get<NotificationSettings>(`users/${userId}/projects/${id}/notifications`).toPromise();
     }
 
-    getIntegrationNotificationSettings(id, integration) {
-        return this.http.get(`projects/${id}/${integration}/notifications`).toPromise();
+    public getIntegrationNotificationSettings(id: string, integration: string) {
+        return this.http.get<NotificationSettings>(`projects/${id}/${integration}/notifications`).toPromise();
     }
 
-    isNameAvailable(organizationId, name): Observable<HttpResponse<any>> {
-        return this.http.get(`organizations/${organizationId}/projects/check-name?name=${encodeURIComponent(name)}`, { observe: 'response' });
+    public async isNameAvailable(organizationId: string, name: string): Promise<boolean> {
+        const response = await this.http.get(`organizations/${organizationId}/projects/check-name`, { params: { name }}).toPromise();
+        return response.status === 204;
     }
 
-    promoteTab(id, name) {
-        const data = {
-            id: id
-        };
-        return this.http.post(`projects/${id}/promotedtabs?name=${name}`,  data).toPromise();
+    public promoteTab(id: string, name: string) {
+        return this.http.post<never>(`projects/${id}/promotedtabs`, { params: { name }}).toPromise();
     }
 
-    remove(id) {
-        return this.http.delete(`projects/${id}`).toPromise();
+    public remove(id: string) {
+        return this.http.delete<WorkInProgressResult>(`projects/${id}`).toPromise();
     }
 
-    removeConfig(id, key) {
-        return this.http.delete(`projects/${id}/config?key=${key}`).toPromise();
+    public removeConfig(id: string, key: string) {
+        return this.http.delete<never>(`projects/${id}/config`, { params: { key }}).toPromise();
     }
 
-    removeData(id, key) {
-        return this.http.delete(`projects/${id}/data?key=${key}`).toPromise();
+    public removeData(id: string, key: string) {
+        return this.http.delete<never>(`projects/${id}/data`, { params: { key }}).toPromise();
     }
 
-    removeSlack(id) {
-        return this.http.delete(`projects/${id}/slack`).toPromise();
+    public removeSlack(id: string) {
+        return this.http.delete<never>(`projects/${id}/slack`).toPromise();
     }
 
-    removeNotificationSettings(id, userId) {
-        return this.http.delete(`users/${userId}/projects/${id}/notifications`);
+    public removeNotificationSettings(id: string, userId: string) {
+        return this.http.delete<never>(`users/${userId}/projects/${id}/notifications`).toPromise();
     }
 
-    resetData(id) {
-        return this.http.get(`projects/${id}/reset-data`).toPromise();
+    public resetData(id: string) {
+        return this.http.get<WorkInProgressResult>(`projects/${id}/reset-data`).toPromise();
     }
 
-    update(id, project) {
-        const data = project;
-        return this.http.patch(`projects/${id}`,  data).toPromise();
+    public update(id: string, project: Project) {
+        return this.http.patch<Project>(`projects/${id}`, project).toPromise();
     }
 
-    setConfig(id, key, value) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type':  'text/plain; charset=UTF-8',
-            })
-        };
-        const data = {
-            value: value
-        };
-        return this.http.post(`projects/${id}/config?key=${key}`,  data, httpOptions).toPromise();
+    public setConfig(id: string, key: string, value: string|boolean) {
+        return this.http.post<never>(`projects/${id}/config`, value, { params: { key } }).toPromise();
     }
 
-    setData(id, key, value) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type':  'text/plain; charset=UTF-8',
-            })
-        };
-        const data = {
-            key: key
-        };
-        return this.http.post(`projects/${id}/data/${value}`,  data, httpOptions).toPromise();
+    public setData(id: string, key: string, value: string) {
+        return this.http.post<never>(`projects/${id}/data/`, value, { params: { key } }).toPromise();
     }
 
-    setNotificationSettings(id, userId, settings) {
-        return this.http.post(`users/${userId}/projects/${id}/notifications`,  settings).toPromise();
+    public setNotificationSettings(id: string, userId: string, settings: NotificationSettings) {
+        return this.http.post<never>(`users/${userId}/projects/${id}/notifications`, settings).toPromise();
     }
 
-    setIntegrationNotificationSettings(id, integration, settings) {
-        const data = settings;
-        return this.http.get(`projects/${id}/${integration}/notifications`).toPromise();
+    public setIntegrationNotificationSettings(id: string, integration: string, settings: NotificationSettings) {
+        return this.http.post<never>(`projects/${id}/${integration}/notifications`, settings).toPromise();
     }
 }

@@ -1,24 +1,24 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { NextObserver } from 'rxjs/Observer';
-import { Subscription } from 'rxjs/Subscription';
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
+import { NextObserver } from "rxjs/Observer";
+import { Subscription } from "rxjs/Subscription";
+import { TypedMessage } from "../models/messaging";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class AppEventService {
-
-    eventEmitter = new Subject();
+    private _eventEmitter = new Subject();
 
     constructor() {
     }
 
-    subscribe(observer: NextObserver<any>): Subscription {
-        return this.eventEmitter.subscribe(observer);
+    public subscribe(observer: NextObserver<TypedMessage>): Subscription {
+        return this._eventEmitter.subscribe(observer);
     }
 
-    fireEvent(event: any) {
-        this.eventEmitter.next(event);
+    public fireEvent(event: TypedMessage) {
+        this._eventEmitter.next(event);
     }
 
 }

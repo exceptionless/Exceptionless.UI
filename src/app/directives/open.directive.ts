@@ -1,7 +1,7 @@
-import { Directive, ElementRef, Output, EventEmitter, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, Output, EventEmitter, HostListener, Renderer2 } from "@angular/core";
 
 @Directive({
-    selector: '[open]'
+    selector: "[appOpen]"
 })
 
 export class OpenDirective {
@@ -13,19 +13,19 @@ export class OpenDirective {
     @Output()
     public clickOutside = new EventEmitter();
 
-    @HostListener('document:click', ['$event.target'])
-    public onClick(targetElement) {
+    @HostListener("document:click", ["$event.target"])
+    public onClick(targetElement: Element) {
         const clickedInside = this._elementRef.nativeElement.contains(targetElement);
         if (!clickedInside) {
             this.clickOutside.emit(null);
 
-            this.renderer.removeClass(this._elementRef.nativeElement, 'open');
+            this.renderer.removeClass(this._elementRef.nativeElement, "open");
         } else {
             const classList = this._elementRef.nativeElement.classList.value;
-            if (classList.includes('open')) {
-                this.renderer.removeClass(this._elementRef.nativeElement, 'open');
+            if (classList.includes("open")) {
+                this.renderer.removeClass(this._elementRef.nativeElement, "open");
             } else {
-                this.renderer.addClass(this._elementRef.nativeElement, 'open');
+                this.renderer.addClass(this._elementRef.nativeElement, "open");
             }
         }
     }

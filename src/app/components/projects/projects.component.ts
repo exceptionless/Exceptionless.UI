@@ -1,27 +1,30 @@
-import { Component, OnInit, Input, ViewContainerRef, HostBinding } from '@angular/core';
-import { Router } from '@angular/router';
-import { ProjectService } from '../../service/project.service';
-import { LinkService } from '../../service/link.service';
-import { PaginationService } from '../../service/pagination.service';
-import { NotificationService } from '../../service/notification.service';
-import { WordTranslateService } from '../../service/word-translate.service';
-import { DialogService } from '../../service/dialog.service';
+import { Component, OnInit, Input, ViewContainerRef, HostBinding } from "@angular/core";
+import { Router } from "@angular/router";
+import { ProjectService } from "../../service/project.service";
+import { LinkService } from "../../service/link.service";
+import { PaginationService } from "../../service/pagination.service";
+import { NotificationService } from "../../service/notification.service";
+import { WordTranslateService } from "../../service/word-translate.service";
+import { DialogService } from "../../service/dialog.service";
+import { EntityChanged, ChangeType } from "src/app/models/messaging";
+import { Project } from "src/app/models/project";
 
 @Component({
-    selector: 'app-projects',
-    templateUrl: './projects.component.html',
+    selector: "app-projects",
+    templateUrl: "./projects.component.html",
 })
 
 export class ProjectsComponent implements OnInit {
-    @HostBinding('class.app-component') appComponent = true;
-    @Input() settings;
-    next: string;
-    previous: string;
-    currentOptions = {};
-    loading = true;
-    pageSummary: string;
-    projects = [];
-    includeOrganizationName: any;
+    @HostBinding("class.app-component") appComponent: boolean = true;
+    @Input() public settings: any;
+    public next: string;
+    public previous: string;
+    public currentOptions: any;
+    public loading: boolean = true;
+    public pageSummary: string;
+    public projects: Project[];
+    public includeOrganizationName: boolean;
+
     constructor(
         private router: Router,
         private projectService: ProjectService,
@@ -33,91 +36,84 @@ export class ProjectsComponent implements OnInit {
         private dialogService: DialogService
     ) {}
 
-    ngOnInit() {
-        this.includeOrganizationName = !this.settings['organization'];
-        this.get();
+    public async ngOnInit() {
+        this.includeOrganizationName = !this.settings.organization;
+        await this.get();
     }
 
-    async get(options?, isRefresh?) {
+    private async get(options?, isRefresh?) {
         if (isRefresh && !this.canRefresh(isRefresh)) {
             return;
         }
-        const onSuccess = (response, link) => {
-            this.projects = JSON.parse(JSON.stringify(response));
-            const links = this.linkService.getLinksQueryParameters(link);
-            this.previous = links['previous'];
-            this.next = links['next'];
-
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions['page'], this.currentOptions['limit']);
-
-            if (this.projects.length === 0 && this.currentOptions['page'] && this.currentOptions['page'] > 1) {
-                return this.get();
-            }
-
-            return this.projects;
-        };
 
         this.loading = this.projects.length === 0;
         this.currentOptions = options || this.settings.options;
 
         try {
-            const res = await this.settings.get(this.currentOptions);
-            onSuccess(res.body, res.headers.get('link'));
+            this.projects = await this.settings.get(this.currentOptions);
+            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
+            this.previous = links.previous;
+            this.next = links.next;
+
+            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+            if (this.projects.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
+                return await this.get();
+            }
+        } catch (ex) {
             this.loading = false;
-            return this.projects;
-        } catch (err) {
-            this.loading = false;
-            this.notificationService.error('', this.wordTranslateService.translate('Error Occurred!'));
+            this.notificationService.error("", this.wordTranslateService.translate("Error Occurred!"));
             return err;
+        } finally {
+            this.loading = false;
         }
     }
 
-    hasProjects() {
+    public hasProjects() {
         return this.projects && this.projects.length > 0;
     }
 
-    canRefresh(data) {
-        if (!data || !data.type) {
+    public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
+        if (!message || !message.type) {
             return true;
         }
 
-        const organizationId = this.settings['organization'];
-        if (data['type'] === 'Organization') {
-            if (!this.hasProjects() && data['id'] === organizationId) {
+        const organizationId = this.settings.organization;
+        if (message.type === "Organization") {
+            if (!this.hasProjects() && message.id === organizationId) {
                 return true;
             }
 
-            return this.projects.filter(function (e) { return data.id === e.organization_id; }).length === 0;
+            return this.projects.filter(e => message.id === e.organization_id).length === 0;
         }
 
-        if (data['type'] === 'Project') {
-            if (!this.hasProjects() && data['organization_id'] === organizationId) {
+        if (message.type === "Project") {
+            if (!this.hasProjects() && message.organization_id === organizationId) {
                 return true;
             }
 
-            if (data['deleted']) {
+            if (message.change_type === ChangeType.Removed) {
                 return true;
             }
 
-            return this.projects.filter(function (e) {
-                if (data['id']) {
-                    return data['id'] === e.id;
+            return this.projects.filter(e => {
+                if (message.id) {
+                    return message.id === e.id;
                 } else {
-                    return data['organization_id'] = e.organization_id;
+                    return message.organization_id = e.organization_id;
                 }
             }).length === 0;
         }
 
-        if ((data['type'] === 'PersistentEvent' && !data['updated'])) {
-            if (!this.hasProjects() && data['organization_id'] === organizationId) {
+        if ((message.type === "PersistentEvent" && message.change_type !== ChangeType.Saved)) {
+            if (!this.hasProjects() && message.organization_id === organizationId) {
                 return true;
             }
 
-            return this.projects.filter(function (e) {
-                if (data['project_id']) {
-                    return data['project_id'] === e.id;
+            return this.projects.filter(e => {
+                if (message.project_id) {
+                    return message.project_id === e.id;
                 } else {
-                    return data['organization_id'] = e.organization_id;
+                    return message.organization_id = e.organization_id;
                 }
             }).length === 0;
         }
@@ -125,10 +121,10 @@ export class ProjectsComponent implements OnInit {
         return false;
     }
 
-    open(id, event) {
+    public open(id: string, event: MouseEvent) {
         const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
-            window.open(`/project/${id}/manage`, '_blank');
+            window.open(`/project/${id}/manage`, "_blank");
         } else {
             this.router.navigate([`/project/${id}/manage`]);
         }
@@ -136,27 +132,26 @@ export class ProjectsComponent implements OnInit {
         event.preventDefault();
     }
 
-    nextPage() {
-        return this.get(this.next);
+    public async nextPage() {
+        await this.get(this.next);
     }
 
-    previousPage() {
-        return this.get(this.previous);
+    public async previousPage() {
+        await this.get(this.previous);
     }
 
-    async remove(project) {
+    public async remove(project) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.remove(project['id']);
+                await this.projectService.remove(project.id);
                 this.projects.splice(this.projects.indexOf(project), 1);
-                this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the project for deletion.'));
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove the project.'));
-                return err;
+                this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the project for deletion."));
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove the project."));
+                throw ex;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this project?', 'Delete Project', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to delete this project?", "Delete Project", modalCallBackFunction);
     }
 }

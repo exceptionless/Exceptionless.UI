@@ -507,7 +507,7 @@
   "New Password must be at least 6 characters long.":"New Password must be at least 6 characters long.",
   "New Password must be less than 101 characters long.":"New Password must be less than 101 characters long.",
   "Confirm password":"Confirm password",
-  "New Password and Confirmation Password fields do not match.":"New Password and Confirmation Password fields do not match.",
+  "New Password and Confirmation Password fields should not match.":"New Password and Confirmation Password fields should not match.",
   "Confirm Password is required.":"Confirm Password is required.",
   "Confirm Password must be at least 6 characters long.":"Confirm Password must be at least 6 characters long.",
   "Confirm Password must be less than 101 characters long.":"Confirm Password must be less than 101 characters long.",

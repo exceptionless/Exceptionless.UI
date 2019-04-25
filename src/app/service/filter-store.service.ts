@@ -1,90 +1,92 @@
-import {EventEmitter, Injectable} from '@angular/core';
-import {DRIVERS, Locker} from 'angular-safeguard';
-import {AppEventService} from './app-event.service';
+import {EventEmitter, Injectable} from "@angular/core";
+import {DRIVERS, Locker} from "angular-safeguard";
+import {AppEventService} from "./app-event.service";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class FilterStoreService {
-    timeFilterEventFire: EventEmitter<any> = new EventEmitter();
-    projectFilterEventFire: EventEmitter<any> = new EventEmitter();
+    private timeFilterEventFire: EventEmitter<string>  = new EventEmitter();
+    private projectFilterEventFire: EventEmitter<{ type: string, id: string }>  = new EventEmitter();
+
     constructor(
         private locker: Locker,
         private appEvent: AppEventService
     ) {
         this.locker.setDriverFallback(DRIVERS.LOCAL);
-        this.locker.setNamespace('filter');
+        this.locker.setNamespace("filter");
     }
 
-    getTimeFilter() {
-        return this.locker.get(DRIVERS.LOCAL, 'time');
+    // TODO: Convert this to use properties.
+    public getTimeFilter(): string {
+        return this.locker.get(DRIVERS.LOCAL, "time");
     }
 
-    setTimeFilter(timeFilter) {
-        this.locker.set(DRIVERS.LOCAL, 'time', timeFilter);
+    public setTimeFilter(timeFilter: string) {
+        this.locker.set(DRIVERS.LOCAL, "time", timeFilter);
         this.timeFilterEventFire.emit(this.getTimeFilter());
         this.appEvent.fireEvent({
-            type: 'TimeFilterChanged'
+            type: "TimeFilterChanged"
         });
     }
 
-    getTimeFilterEmitter() {
+    public getTimeFilterEmitter() {
         return this.timeFilterEventFire;
     }
 
-    getProjectFilterEmitter() {
+    public getProjectFilterEmitter() {
         return this.projectFilterEventFire;
     }
 
-    getProjectId() {
-        return this.locker.get(DRIVERS.LOCAL, 'project_id');
+    public getProjectId(): string {
+        return this.locker.get(DRIVERS.LOCAL, "project_id");
     }
 
-    setProjectId(projectId) {
-        this.locker.set(DRIVERS.LOCAL, 'project_id', projectId);
+    public setProjectId(projectId: string) {
+        this.locker.set(DRIVERS.LOCAL, "project_id", projectId);
     }
 
-    getProjectName() {
-        return this.locker.get(DRIVERS.LOCAL, 'project_name');
+    public getProjectName(): string {
+        return this.locker.get(DRIVERS.LOCAL, "project_name");
     }
 
-    setOrganizationId(organizationId) {
-        this.locker.set(DRIVERS.LOCAL, 'organization_id', organizationId);
+    public setOrganizationId(organizationId: string) {
+        this.locker.set(DRIVERS.LOCAL, "organization_id", organizationId);
     }
 
-    getOrganizationId() {
-        return this.locker.get(DRIVERS.LOCAL, 'organization_id');
+    public getOrganizationId(): string {
+        return this.locker.get(DRIVERS.LOCAL, "organization_id");
     }
 
-    removeProjectName() {
-        return this.locker.remove(DRIVERS.LOCAL, 'project_name');
+    public removeProjectName() {
+        return this.locker.remove(DRIVERS.LOCAL, "project_name");
     }
 
-    setProjectName(projectName) {
-        this.locker.set(DRIVERS.LOCAL, 'project_name', projectName);
+    public setProjectName(projectName: string) {
+        this.locker.set(DRIVERS.LOCAL, "project_name", projectName);
     }
 
-    getProjectType() {
-        return this.locker.get(DRIVERS.LOCAL, 'project_type');
+    public getProjectType(): string {
+        return this.locker.get(DRIVERS.LOCAL, "project_type");
     }
 
-    setProjectType(projectType) {
-        this.locker.set(DRIVERS.LOCAL, 'project_type', projectType);
+    public setProjectType(projectType: string) {
+        this.locker.set(DRIVERS.LOCAL, "project_type", projectType);
         this.projectFilterEventFire.emit({type: this.getProjectType(), id: this.getProjectId()});
         this.appEvent.fireEvent({
-            type: 'ProjectFilterChanged'
+            type: "ProjectFilterChanged"
         });
     }
 
-    getEventType() {
-        return this.locker.get(DRIVERS.LOCAL, 'type');
+    public getEventType(): string {
+        return this.locker.get(DRIVERS.LOCAL, "type");
     }
 
-    setEventType(type) {
-        this.locker.set(DRIVERS.LOCAL, 'type', type);
+    public setEventType(type: string) {
+        this.locker.set(DRIVERS.LOCAL, "type", type);
         this.appEvent.fireEvent({
-            type: 'ProjectFilterChanged'
+            type: "ProjectFilterChanged"
         });
     }
 }

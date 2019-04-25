@@ -5,7 +5,7 @@
             <tr>
                 <th class="selection hidden-xs">
                     <label class="checks m-b-none">
-                        <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds.length > 0" [disabled]="stacks.length === 0"><i></i>
+                        <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds?.length > 0" [disabled]="stacks?.length === 0"><i></i>
                     </label>
                 </th>
                 <th>{{ 'Summary' | translate }}</th>
@@ -38,7 +38,7 @@
                     </abbr>
                 </td>
             </tr>
-            <tr *ngIf="stacks.length === 0">
+            <tr *ngIf="stacks?.length === 0">
                 <td class="hidden-xs"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
                 <td colspan="5" class="hidden-xs">
                     <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>

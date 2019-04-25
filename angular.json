@@ -10,7 +10,7 @@
             "prefix": "app",
             "schematics": {
                 "@schematics/angular:component": {
-                    "styleext": "less"
+                    "style": "less"
                 }
             },
             "architect": {
@@ -38,18 +38,27 @@
                         ],
                         "scripts": [
                             "src/assets/library/ApexCharts.js"
-                        ]
+                        ],
+                        "es5BrowserSupport": true
                     },
                     "configurations": {
                         "production": {
                             "optimization": true,
                             "outputHashing": "all",
-                            "sourceMap": false,
+                            "sourceMap": true,
                             "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": true,
                             "buildOptimizer": true,
-                            "vendorChunk": true
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
+                                }
+                            ]
                         }
                     }
                 },
@@ -104,12 +113,18 @@
         "exceptionless-e2e": {
             "root": "e2e/",
             "projectType": "application",
+            "prefix": "",
             "architect": {
                 "e2e": {
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "e2e/protractor.conf.js",
                         "devServerTarget": "exceptionless:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "exceptionless:serve:production"
+                        }
                     }
                 },
                 "lint": {

@@ -1,11 +1,11 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: 'ObjNgFor'
+    name: "ObjNgFor"
 })
 
 export class ObjNgForPipe implements PipeTransform {
-    transform(value: any, args: any): any {
+    public transform(value: object): string[] {
         return Object.keys(value);
     }
 }

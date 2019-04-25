@@ -1,25 +1,33 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WordTranslateService } from '../../../../service/word-translate.service';
-import { NotificationService } from '../../../../service/notification.service';
-import { TokenService } from '../../../../service/token.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ProjectService } from '../../../../service/project.service';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { WordTranslateService } from "../../../../service/word-translate.service";
+import { NotificationService } from "../../../../service/notification.service";
+import { TokenService } from "../../../../service/token.service";
+import { Router, ActivatedRoute } from "@angular/router";
+import { ProjectService } from "../../../../service/project.service";
+import { Subscription } from "rxjs";
+import { Project } from "src/app/models/project";
+
+interface ProjectType {
+    key: string;
+    name: string;
+    config?: string;
+    platform: string;
+ }
 
 @Component({
-    selector: 'app-project-configure',
-    templateUrl: './project-configure.component.html'
+    selector: "app-project-configure",
+    templateUrl: "./project-configure.component.html"
 })
 export class ProjectConfigureComponent implements OnInit, OnDestroy {
-
-    _projectId = '';
-    _canRedirect = false;
-    apiKey = null;
-    currentProjectType: any = {};
-    currentProjectTypeKey: any = '';
-    project: any = {};
-    projectName = '';
-    projectTypes: any = [];
-    subscriptions: any;
+    private _projectId: string;
+    private _canRedirect: boolean = false; // TODO: This page needs to automatically redirect when a new PersistentEvent comes in... a message will be fired over the websocket...
+    public apiKey: string;
+    public currentProjectType: ProjectType;
+    public currentProjectTypeKey: string;
+    private project: Project;
+    public projectName: string;
+    public projectTypes: ProjectType[];
+    private subscriptions: Subscription[];
 
     constructor(
         private wordTranslateService: WordTranslateService,
@@ -30,122 +38,98 @@ export class ProjectConfigureComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
     ) {}
 
-    ngOnInit() {
+    public async ngOnInit() {
         this.subscriptions = [];
         this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
-            this._projectId = params['id'];
+            this._projectId = params.id;
         }));
+
         this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
-            this._canRedirect = params['redirect'] ? (params['redirect'] === 'true') : false;
-            console.log(this._canRedirect);
+            this._canRedirect = params.redirect ? (params.redirect === "true") : false;
         }));
-        this.initData();
-    }
 
-    ngOnDestroy() {
-        for (const subscription of this.subscriptions) {
-            subscription.unsubscribe();
-        }
-    }
-
-    async initData() {
         this.projectTypes = await this.getProjectTypes();
         await this.getDefaultApiKey();
         await this.getProject();
     }
 
+    public ngOnDestroy() {
+        for (const subscription of this.subscriptions) {
+            subscription.unsubscribe();
+        }
+    }
 
-    canRedirect(data) {
+    private canRedirect(data): boolean {
         return this._canRedirect && !!data && data.project_id === this._projectId;
     }
 
-    updateCurrentProjectType() {
+    public updateCurrentProjectType() {
         this.currentProjectType = this.projectTypes.filter((o) => o.key === this.currentProjectTypeKey )[0];
     }
 
-    async copied() {
-        this.notificationService.success('', await this.wordTranslateService.translate('Copied!'));
+    public async copied() {
+        this.notificationService.success("", await this.wordTranslateService.translate("Copied!"));
     }
 
     async getDefaultApiKey() {
-        const onSuccess = (response) => {
-            this.apiKey = response.id;
-            return this.apiKey;
-        };
-
-        const onFailure = async () => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while getting the API key for your project.'));
-        };
-
         try {
-            const res = await this.tokenService.getProjectDefault(this._projectId);
-            onSuccess(res);
-        } catch (err) {
-            onFailure();
+            const token = await this.tokenService.getProjectDefault(this._projectId);
+            this.apiKey = token.id;
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while getting the API key for your project."));
         }
     }
 
-    async getProject() {
-        const onSuccess = (response) => {
-            this.project = response;
-            this.projectName = this.project['name'] ? ('"' + this.project['name'] + '"') : '';
-            return this.project;
-        };
-
-        const onFailure = async () => {
-            // $state.go('app.dashboard');
-            this.router.navigate(['/dashboard']);
-            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project'));
-        };
-
+    private async getProject() {
         try {
-            const res = await this.projectService.getById(this._projectId);
-            onSuccess(res);
-        } catch (err) {
-            onFailure();
+            this.project = await this.projectService.getById(this._projectId);
+            this.projectName = this.project.name ? ("\"" + this.project.name + "\"") : "";
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Project"));
+            await this.router.navigate(["/dashboard"]);
         }
     }
 
-    async getProjectTypes() {
+    private async getProjectTypes(): Promise<ProjectType[]> {
         return [
-            { key: 'Exceptionless', name: await this.wordTranslateService.translate('Console and Service applications'), platform: '.NET' },
-            { key: 'Exceptionless.AspNetCore', name: 'ASP.NET Core', platform: '.NET' },
-            { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config', platform: '.NET' },
-            { key: 'Exceptionless.WebApi', name: 'ASP.NET Web API', config: 'web.config', platform: '.NET' },
-            { key: 'Exceptionless.Web', name: 'ASP.NET Web Forms', config: 'web.config', platform: '.NET' },
-            { key: 'Exceptionless.Windows', name: 'Windows Forms', config: 'app.config', platform: '.NET' },
-            { key: 'Exceptionless.Wpf', name: 'Windows Presentation Foundation (WPF)', config: 'app.config', platform: '.NET' },
-            { key: 'Exceptionless.Nancy', name: 'Nancy', config: 'app.config', platform: '.NET' },
-            { key: 'Exceptionless.JavaScript', name: await this.wordTranslateService.translate('Browser applications'), platform: 'JavaScript' },
-            { key: 'Exceptionless.Node', name: 'Node.js', platform: 'JavaScript' }
+            { key: "Exceptionless", name: await this.wordTranslateService.translate("Console and Service applications"), platform: ".NET" },
+            { key: "Exceptionless.AspNetCore", name: "ASP.NET Core", platform: ".NET" },
+            { key: "Exceptionless.Mvc", name: "ASP.NET MVC", config: "web.config", platform: ".NET" },
+            { key: "Exceptionless.WebApi", name: "ASP.NET Web API", config: "web.config", platform: ".NET" },
+            { key: "Exceptionless.Web", name: "ASP.NET Web Forms", config: "web.config", platform: ".NET" },
+            { key: "Exceptionless.Windows", name: "Windows Forms", config: "app.config", platform: ".NET" },
+            { key: "Exceptionless.Wpf", name: "Windows Presentation Foundation (WPF)", config: "app.config", platform: ".NET" },
+            { key: "Exceptionless.Nancy", name: "Nancy", config: "app.config", platform: ".NET" },
+            { key: "Exceptionless.JavaScript", name: await this.wordTranslateService.translate("Browser applications"), platform: "JavaScript" },
+            { key: "Exceptionless.Node", name: "Node.js", platform: "JavaScript" }
         ];
     }
 
-    isDotNet() {
-        return this.currentProjectType['platform'] === '.NET';
+    public isDotNet(): boolean {
+        return this.currentProjectType.platform === ".NET";
     }
 
-    isJavaScript() {
-        return this.currentProjectType['platform'] === 'JavaScript';
+    public isJavaScript(): boolean {
+        return this.currentProjectType.platform === "JavaScript";
     }
 
-    isNode() {
-        return this.currentProjectType['platform'] === 'Exceptionless.Node';
+    public isNode(): boolean {
+        return this.currentProjectType.platform === "Exceptionless.Node";
     }
 
-    navigateToDashboard(isRefresh?) {
-        console.log(isRefresh);
+    public async navigateToDashboard(isRefresh?: boolean) {
         if (isRefresh && !this.canRedirect(isRefresh)) {
             return;
         }
-        this.router.navigate([`/project/${this.project.id}/dashboard`]);
+
+        await this.router.navigate([`/project/${this.project.id}/dashboard`]);
     }
 
-    goToAccountManage() {
-        this.router.navigate(['/account/manage'], { queryParams: { tab: 'notifications', projectId: this.project.id } });
+    public async goToAccountManage() {
+        await this.router.navigate(["/account/manage"], { queryParams: { tab: "notifications", projectId: this.project.id } });
     }
 
-    goToProjectManage() {
-        this.router.navigate([`/project/${this.project.id}/manage`]);
+    public async goToProjectManage() {
+        await this.router.navigate([`/project/${this.project.id}/manage`]);
     }
 }

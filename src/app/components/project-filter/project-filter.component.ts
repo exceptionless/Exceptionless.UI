@@ -1,25 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { NotificationService } from '../../service/notification.service';
-import { ProjectService } from '../../service/project.service';
-import { OrganizationService } from '../../service/organization.service';
-import { FilterService } from '../../service/filter.service';
-import { WordTranslateService } from '../../service/word-translate.service';
-import { AppEventService } from '../../service/app-event.service';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { NotificationService } from "../../service/notification.service";
+import { ProjectService } from "../../service/project.service";
+import { OrganizationService } from "../../service/organization.service";
+import { FilterService } from "../../service/filter.service";
+import { WordTranslateService } from "../../service/word-translate.service";
+import { AppEventService } from "../../service/app-event.service";
+import { Project } from "src/app/models/project";
+import { Organization } from "src/app/models/organization";
 
 @Component({
-    selector: 'app-project-filter',
-    templateUrl: './project-filter.component.html',
-    styleUrls: ['./project-filter.component.less']
+    selector: "app-project-filter",
+    templateUrl: "./project-filter.component.html",
+    styleUrls: ["./project-filter.component.less"]
 })
 
 export class ProjectFilterComponent implements OnInit {
-    isLoadingOrganizations = true;
-    isLoadingProjects = true;
-    filteredDisplayName = 'All Projects';
-    organizations = [];
-    projects = [];
-    types = ['error', 'log', '404', 'usage', 'events', 'session'];
+    public isLoadingOrganizations: boolean = true;
+    public isLoadingProjects: boolean = true;
+    public filteredDisplayName: string = "All Projects";
+    public organizations: Organization[];
+    private projects: Project[];
+    private types: string[] = ["error", "log", "404", "usage", "events", "session"];
 
     constructor(
         private router: Router,
@@ -31,23 +33,20 @@ export class ProjectFilterComponent implements OnInit {
         private appEvent: AppEventService
     ) {}
 
-    ngOnInit() {
-        this.initData();
-    }
-
-    async initData() {
+    public async ngOnInit() {
         try {
             await this.getOrganizations();
             await this.getProjects();
-        } catch (err) {}
+        } catch (ex) {}
+
         this.filteredDisplayName = this.filterService.getProjectName();
-        if (!this.filteredDisplayName || this.filteredDisplayName === 'All Projects') {
-            this.filteredDisplayName = 'All Projects';
-            this.setItem('', 'All Projects', 'All Projects');
+        if (!this.filteredDisplayName || this.filteredDisplayName === "All Projects") {
+            this.filteredDisplayName = "All Projects";
+            this.setItem("", "All Projects", "All Projects");
         } else {
             let projectId = this.filterService.getProjectTypeId();
             const projectType = this.filterService.getProjectType();
-            if (projectType === 'organization') {
+            if (projectType === "organization") {
                 projectId = this.filterService.getOrganizationId();
             }
 
@@ -55,47 +54,40 @@ export class ProjectFilterComponent implements OnInit {
             if (basicURl) {
                 setTimeout(() => {
                     this.router.navigateByUrl(`/${projectType}/${projectId}/${basicURl}`, { skipLocationChange: false });
-                    this.appEvent.fireEvent({
-                        type: 'ProjectFilterChanged'
-                    });
+                    this.appEvent.fireEvent({ type: "ProjectFilterChanged" }); // TODO: Is this meant to be emmitted here? Is there a better place todo this? Seems like the filter service should handle this.. This probably should be calling this.filterService.fireFilterChanged()...
                 }, 100);
             }
         }
     }
 
-    async getOrganizations() {
-        try {
-            const res = await this.organizationService.getAll('');
-            this.organizations = JSON.parse(JSON.stringify(res['body']));
-            this.isLoadingOrganizations = false;
-            return this.organizations;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
-            this.isLoadingOrganizations = false;
-        }
-    }
-
-    async get() {
+    private async get() {
         try {
             await this.getOrganizations();
             await this.getProjects();
-        } catch (err) {}
+        } catch (ex) {}
     }
 
-    async getProjects() {
+    private async getOrganizations() {
         try {
-            const res = await this.projectService.getAll('');
-            this.projects = JSON.parse(JSON.stringify(res.body));
-            this.isLoadingProjects = false;
-            return res;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
-            this.isLoadingProjects = false;
-            return err;
+            this.organizations = await this.organizationService.getAll();
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+        } finally {
+            this.isLoadingOrganizations = false;
         }
     }
 
-    isActive(id, name, type) {
+    private async getProjects() {
+        try {
+            this.projects = await this.projectService.getAll();
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+        } finally {
+            this.isLoadingProjects = false;
+        }
+    }
+
+    public isActive(id: string, name: string, type: string): boolean {
         const projectId = this.filterService.getProjectId();
         const projectName = this.filterService.getProjectName();
         const projectType = this.filterService.getProjectType();
@@ -107,17 +99,17 @@ export class ProjectFilterComponent implements OnInit {
         return false;
     }
 
-    setItem(id, name, type) {
+    public setItem(id: string, name: string, type: string) {
         this.filteredDisplayName = name;
         this.filterService.setProjectFilter(type, id, name);
         const basicURl =  this.getStateName();
         const url = this.router.url;
-        const urlTypeArray = url.split('/');
+        const urlTypeArray = url.split("/");
         const urlType = urlTypeArray[urlTypeArray.length - 2];
         if (basicURl) {
-            if (type === 'All Projects') {
+            if (type === "All Projects") {
                 if (this.hasType()) {
-                    if (urlType === 'session') {
+                    if (urlType === "session") {
                         setTimeout(() => { this.router.navigateByUrl(`/${basicURl}`, { skipLocationChange: false }); }, 100);
                     } else {
                         setTimeout(() => { this.router.navigateByUrl(`/type/${basicURl}`, { skipLocationChange: false }); }, 100);
@@ -131,10 +123,10 @@ export class ProjectFilterComponent implements OnInit {
         }
     }
 
-    getFilterName() {
+    private getFilterName() {
         const organizationId = this.filterService.getOrganizationId();
         if (organizationId) {
-            const organization = this.organizations.filter(function(o) { return o.id === organizationId; })[0];
+            const organization = this.organizations.filter(o => o.id === organizationId)[0];
             if (organization) {
                 return organization.name;
             }
@@ -142,73 +134,73 @@ export class ProjectFilterComponent implements OnInit {
 
         const projectId = this.filterService.getProjectId();
         if (projectId) {
-            const project = this.projects.filter(function(p) { return p.id === projectId; })[0];
+            const project = this.projects.filter(p => p.id === projectId)[0];
             if (project) {
                 return project.name;
             }
         }
 
-        return 'All Projects';
+        return "All Projects";
     }
 
-    getProjectsByOrganizationId(id) {
-        return this.projects.filter(function (project) { return project.organization_id === id; });
+    public getProjectsByOrganizationId(id): Project[] {
+        return this.projects.filter(project => project.organization_id === id);
     }
 
-    update() {
+    public update() {
         this.filteredDisplayName = this.getFilterName();
     }
 
-    getStateName() {
+    private getStateName(): string {
         const url = this.router.url;
-        const urlTypeArray = url.split('/');
+        const urlTypeArray = url.split("/");
         const urlType = urlTypeArray[urlTypeArray.length - 2];
-        if (url.endsWith('frequent')) {
+        if (url.endsWith("frequent")) {
             if (this.hasType()) {
                 return `${urlType}/frequent`;
             } else {
-                return 'frequent';
+                return "frequent";
             }
         }
 
-        if (url.endsWith('new')) {
+        if (url.endsWith("new")) {
             if (this.hasType()) {
                 return `${urlType}/new`;
             } else {
-                return 'new';
+                return "new";
             }
         }
 
-        if (url.endsWith('recent')) {
+        if (url.endsWith("recent")) {
             if (this.hasType()) {
                 return `${urlType}/recent`;
             } else {
-                return 'recent';
+                return "recent";
             }
         }
 
-        if (url.endsWith('users')) {
+        if (url.endsWith("users")) {
             if (this.hasType()) {
                 return `${urlType}/users`;
             } else {
-                return 'users';
+                return "users";
             }
         }
 
-        if (url.endsWith('dashboard')) {
+        if (url.endsWith("dashboard")) {
             if (this.hasType()) {
                 return `${urlType}/dashboard`;
             } else {
-                return 'dashboard';
+                return "dashboard";
             }
         }
 
         return null;
     }
 
-    hasType() {
+    private hasType(): boolean {
         const url = this.router.url;
-        const urlTypeArray = url.split('/');
+        const urlTypeArray = url.split("/");
         const urlType = urlTypeArray[urlTypeArray.length - 2];
         const hasType = this.types.some(e => e === urlType);
 

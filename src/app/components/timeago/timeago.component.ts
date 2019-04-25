@@ -1,28 +1,27 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
-import * as moment from 'moment';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from "@angular/core";
+import * as moment from "moment";
 
 @Component({
-    selector: 'app-timeago',
-    templateUrl: './timeago.component.html'
+    selector: "app-timeago",
+    templateUrl: "./timeago.component.html"
 })
 
 export class TimeagoComponent implements OnInit, OnChanges {
-    @Input() date;
-    text = '';
+    @Input() public date: Date;
+    public text: string;
 
-    constructor() {
-    }
+    constructor() {}
 
-    ngOnInit() {
+    public ngOnInit() {
         this.setTimeagoText();
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges) {
         this.setTimeagoText();
     }
 
-    setTimeagoText() {
+    private setTimeagoText() {
         const dateInstance = moment(this.date);
-        this.text = (!!this.date && dateInstance.isValid() && dateInstance.year() > 1) ? dateInstance.fromNow() : 'never';
+        this.text = (!!this.date && dateInstance.isValid() && dateInstance.year() > 1) ? dateInstance.fromNow() : "never";
     }
 }

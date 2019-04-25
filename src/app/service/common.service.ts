@@ -1,24 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class CommonService {
 
     constructor() {
     }
 
-    parseExpiry (value) {
-        let month, prefix, year, _ref;
+    public parseExpiry(value: string) {
+        let month: string | number;
+        let prefix: string;
+        let year: string | number;
+        let _ref: string[];
 
-        value = value || '';
+        value = value || "";
 
-        value = value.replace(/\s/g, '');
-        _ref = value.split('/', 2), month = _ref[0], year = _ref[1];
+        value = value.replace(/\s/g, "");
+        _ref = value.split("/", 2), month = _ref[0], year = _ref[1];
 
         if ((year != null ? year.length : void 0) === 2 && /^\d+$/.test(year)) {
-            prefix = (new Date).getFullYear();
-            prefix = prefix.toString().slice(0, 2);
+            prefix = (new Date()).getFullYear().toString().slice(0, 2);
             year = prefix + year;
         }
 
@@ -26,8 +28,8 @@ export class CommonService {
         year = parseInt(year, 10);
 
         return {
-            month: month,
-            year: year
+            month,
+            year
         };
     }
 }

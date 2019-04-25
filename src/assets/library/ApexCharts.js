@@ -1,3 +1,5 @@
+// TODO: There should be nothing in this assets folder.. This should be pulled from NPM.
+
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === 'object' && typeof module === 'object')
         module.exports = factory();
@@ -792,7 +794,7 @@
                                         elPath.node.setAttribute('selected', 'false');
                                         filters.getDefaultFilter(elPath);
                                     }
-                                } catch (err) {
+                                } catch (ex) {
                                     _didIteratorError = true;
                                     _iteratorError = err;
                                 } finally {
@@ -818,7 +820,7 @@
                                         circle.node.setAttribute('selected', 'false');
                                         filters.getDefaultFilter(circle);
                                     }
-                                } catch (err) {
+                                } catch (ex) {
                                     _didIteratorError2 = true;
                                     _iteratorError2 = err;
                                 } finally {
@@ -13153,7 +13155,7 @@
 
                                         fn.method(fn.params, false, fn.context);
                                     }
-                                } catch (err) {
+                                } catch (ex) {
                                     _didIteratorError = true;
                                     _iteratorError = err;
                                 } finally {
@@ -13593,7 +13595,7 @@
                                     }
                                 }, {capture: false, passive: true});
                             }
-                        } catch (err) {
+                        } catch (ex) {
                             _didIteratorError2 = true;
                             _iteratorError2 = err;
                         } finally {
@@ -14830,7 +14832,7 @@
                     Internal.call(this);
                     try {
                         executor(ctx($resolve, this, 1), ctx($reject, this, 1));
-                    } catch (err) {
+                    } catch (ex) {
                         $reject.call(this, err);
                     }
                 };
@@ -19094,7 +19096,7 @@
 
                         if (format === 'array') {
                             if (ser[i].data[0][1].length !== 4) {
-                                throw new Error(err);
+                                throw new Error(ex);
                             }
                             for (var j = 0; j < ser[i].data.length; j++) {
                                 serO.push(ser[i].data[j][1][0]);
@@ -19104,7 +19106,7 @@
                             }
                         } else if (format === 'xy') {
                             if (ser[i].data[0].y.length !== 4) {
-                                throw new Error(err);
+                                throw new Error(ex);
                             }
                             for (var _j2 = 0; _j2 < ser[i].data.length; _j2++) {
                                 serO.push(ser[i].data[_j2].y[0]);
@@ -21073,7 +21075,7 @@
                                     passive: true
                                 });
                             }
-                        } catch (err) {
+                        } catch (ex) {
                             _didIteratorError = true;
                             _iteratorError = err;
                         } finally {
@@ -21110,7 +21112,7 @@
                                     });
                                 }
                             }
-                        } catch (err) {
+                        } catch (ex) {
                             _didIteratorError2 = true;
                             _iteratorError2 = err;
                         } finally {

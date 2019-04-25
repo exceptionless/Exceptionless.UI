@@ -31,14 +31,14 @@
                                             <li><a routerLink="/organization/{{organization.id}}/manage"><i class="fa fa-fw fa-edit"></i> {{ 'Edit' | translate }}</a></li>
                                             <li *ngIf="canChangePlan"><a (click)="changePlan(organization.id)"><i class="fa fa-credit-card fa-fw"></i> {{ 'Change Plan' | translate }}</a></li>
                                             <li><a routerLink="/organization/{{organization.id}}/manage" [queryParams]="{tab: 'billing'}"><i class="fa fa-fw fa-file"></i> View Invoices</a></li>
-                                            <li><a (click)="leave(organization, authUser)"><i class="fa fa-fw fa-sign-out"></i> {{ 'Leave Organization' | translate }}</a></li>
+                                            <li><a (click)="leave(organization, user)"><i class="fa fa-fw fa-sign-out"></i> {{ 'Leave Organization' | translate }}</a></li>
                                             <li><a (click)="remove(organization)"><i class="fa fa-fw fa-times"></i> {{ 'Delete' | translate }}</a></li>
                                         </ul>
                                     </div>
                                 </td>
                             </tr>
 
-                            <tr *ngIf="organizations.length === 0 || loading">
+                            <tr *ngIf="organizations?.length === 0 || loading">
                                 <td colspan="6">
                                     <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
                                     <strong *ngIf="!loading">{{ hasFilter ? 'No organizations were found with the current filter.': 'No organizations were found.' | translate }}</strong>

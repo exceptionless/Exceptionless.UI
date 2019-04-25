@@ -43,8 +43,8 @@ function updateAppConfig() {
 // todo: use cache buster in name
     var configFile = "app-config." + hash + ".js";
 
-    fs.writeFile('../../../../' + configFile, content, function (err) {
-        if (err)
+    fs.writeFile('../../../../' + configFile, content, function (ex) {
+        if (ex)
             throw err;
 
         console.log('Config generated.');

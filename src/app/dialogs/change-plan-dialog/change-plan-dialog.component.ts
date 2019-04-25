@@ -1,56 +1,65 @@
-import { Component, ComponentRef } from '@angular/core';
-import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
-import { OrganizationService } from '../../service/organization.service';
-import { NotificationService } from '../../service/notification.service';
-import { WordTranslateService } from '../../service/word-translate.service';
-import { UserService } from '../../service/user.service';
-import { Intercom } from 'ng-intercom';
-import { AnalyticsService } from '../../service/analytics.service';
-import { Element as StripeElement, ElementOptions, ElementsOptions, StripeService } from '@nomadreservations/ngx-stripe';
-import { CommonService } from '../../service/common.service';
-import { AppEventService } from '../../service/app-event.service';
+import { Component, ComponentRef } from "@angular/core";
+import { IModalDialog, IModalDialogOptions } from "ngx-modal-dialog";
+import { OrganizationService } from "../../service/organization.service";
+import { NotificationService } from "../../service/notification.service";
+import { WordTranslateService } from "../../service/word-translate.service";
+import { UserService } from "../../service/user.service";
+import { Intercom } from "ng-intercom";
+import { AnalyticsService } from "../../service/analytics.service";
+import { Element as StripeElement, ElementOptions, ElementsOptions, StripeService, CardDataOptions, Token } from "@nomadreservations/ngx-stripe";
+import { CommonService } from "../../service/common.service";
+import { AppEventService } from "../../service/app-event.service";
+import { Organization, BillingPlan } from "src/app/models/organization";
+import { TypedMessage } from "src/app/models/messaging";
+import { CurrentUser } from "src/app/models/user";
+
+interface StripeCard {
+    name: string;
+    mode: "new" | "existing";
+    expiry: string;
+}
 
 @Component({
-    selector: 'app-change-plan-dialog',
-    templateUrl: './change-plan-dialog.component.html'
+    selector: "app-change-plan-dialog",
+    templateUrl: "./change-plan-dialog.component.html"
 })
 
 export class ChangePlanDialogComponent implements IModalDialog {
-    organizations: any[];
-    currentOrganization: any = {};
-    plans: any[];
-    currentPlan: any = {};
-    card: any = {};
-    user: any = {};
-    organizationId = '';
-    _contactSupport = '';
-    paymentMessage = '';
-    coupon = null;
-    _freePlanId = 'EX_FREE';
-    saveEvent: any;
-    closeEvent: any;
-    currentOrganizationId = '';
-    currentPlanId = '';
+    public organizations: Organization[];
+    public currentOrganization: Organization;
+    public plans: BillingPlan[];
+    private currentPlan: BillingPlan;
+    public card: StripeCard;
+    private user: CurrentUser;
+    private organizationId;
+    private _contactSupport;
+    public paymentMessage;
+    public coupon: string;
+    private _freePlanId = "EX_FREE";
+    private saveEvent: any;
+    private closeEvent: any;
+    public currentOrganizationId: string;
+    public currentPlanId: string;
 
-    error: any;
-    element: StripeElement;
-    cardOptions: ElementOptions = {
+    public error: string;
+    private element: StripeElement;
+    public cardOptions: ElementOptions = {
         style: {
             base: {
-                iconColor: '#276fd3',
-                color: '#31325F',
-                lineHeight: '40px',
+                iconColor: "#276fd3",
+                color: "#31325F",
+                lineHeight: "40px",
                 fontWeight: 300,
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                fontSize: '18px',
-                '::placeholder': {
-                    color: '#CFD7E0'
+                fontFamily: "\"Helvetica Neue\", Helvetica, sans-serif",
+                fontSize: "18px",
+                "::placeholder": {
+                    color: "#CFD7E0"
                 }
             }
         }
     };
-    elementsOptions: ElementsOptions = {
-        locale: 'en'
+    public elementsOptions: ElementsOptions = {
+        locale: "en"
     };
 
     constructor(
@@ -67,18 +76,15 @@ export class ChangePlanDialogComponent implements IModalDialog {
         this.stripe.changeKey(environment.STRIPE_PUBLISHABLE_KEY);
     }
 
-    dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-        // no processing needed
-        this.organizationId = options.data['organizationId'];
-        this.saveEvent = options.data['saveEvent'];
-        this.closeEvent = options.data['closeEvent'];
+    // TODO: Seems like we are doing async http requests in dialog init and NgOnInit...
+    public async dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+        this.organizationId = options.data.organizationId;
+        this.saveEvent = options.data.saveEvent;
+        this.closeEvent = options.data.closeEvent;
         this.saveEvent.subscribe(this.save.bind(this));
-        this.init();
-    }
 
-    async init() {
-        this._contactSupport = await this.wordTranslateService.translate('Please contact support for more information.');
-        this.paymentMessage = !this.isBillingEnabled() ? await this.wordTranslateService.translate('Billing is currently disabled.') : null;
+        this._contactSupport = await this.wordTranslateService.translate("Please contact support for more information.");
+        this.paymentMessage = !this.isBillingEnabled() ? await this.wordTranslateService.translate("Billing is currently disabled.") : null;
 
         if (this.isIntercomEnabled()) {
             this.intercom.boot({
@@ -87,9 +93,8 @@ export class ChangePlanDialogComponent implements IModalDialog {
         }
 
         this.appEvent.subscribe({
-            next: (event: any) => {
-                if (event.type === 'change_plan_form_submitted') {
-                    console.log('change_plan_submitted');
+            next: (event: TypedMessage) => {
+                if (event.type === "change_plan_form_submitted") { // TODO: Where is this message type coming from?
                     this.save(true);
                 }
             }
@@ -99,30 +104,21 @@ export class ChangePlanDialogComponent implements IModalDialog {
             await this.getOrganizations();
             await this.getPlans();
             await this.getUser();
-        } catch (err) {}
+        } catch (ex) {}
     }
 
     async save(isValid) {
-        const onCreateTokenSuccess = async (response) => {
-            try {
-                const res = await this.changePlan(false, { stripeToken: response.id, last4: response.card.last4, couponId: this.coupon });
-                onSuccess(res);
-            } catch (err) {
-                onFailure(err);
-            }
-        };
-
         const onSuccess = async (response) => {
             if (!response.success) {
                 this.analyticsService.lead(this.getAnalyticsData());
-                this.paymentMessage = await this.wordTranslateService.translate('An error occurred while changing plans.') + ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.message;
+                this.paymentMessage = await this.wordTranslateService.translate("An error occurred while changing plans.") + " " + await this.wordTranslateService.translate("Message:") + " " + response.message;
                 return;
             }
 
             this.analyticsService.purchase(this.getAnalyticsData());
 
             this.saveEvent.emit(this.currentPlan);
-            this.notificationService.success('', await this.wordTranslateService.translate('Thanks! Your billing plan has been successfully changed.'));
+            this.notificationService.success("", await this.wordTranslateService.translate("Thanks! Your billing plan has been successfully changed."));
             this.closeEvent.emit();
         };
 
@@ -130,10 +126,19 @@ export class ChangePlanDialogComponent implements IModalDialog {
             if (response.error && response.error.message) {
                 this.paymentMessage = response.error.message;
             } else {
-                this.paymentMessage = await this.wordTranslateService.translate('An error occurred while changing plans.');
+                this.paymentMessage = await this.wordTranslateService.translate("An error occurred while changing plans.");
             }
 
             this.analyticsService.lead(this.getAnalyticsData());
+        };
+
+        const onCreateTokenSuccess = async (response) => {
+            try {
+                const res = await this.changePlan(false, { stripeToken: response.id, last4: response.card.last4, couponId: this.coupon });
+                onSuccess(res);
+            } catch (ex) {
+                onFailure(ex);
+            }
         };
 
         if (!isValid || !this.currentPlan) {
@@ -150,8 +155,8 @@ export class ChangePlanDialogComponent implements IModalDialog {
             try {
                 const res = await this.changePlan(this.hasAdminRole(), {});
                 onSuccess(res);
-            } catch (err) {
-                onFailure(err);
+            } catch (ex) {
+                onFailure(ex);
             }
         }
 
@@ -161,9 +166,9 @@ export class ChangePlanDialogComponent implements IModalDialog {
                 console.log(res);
                 onCreateTokenSuccess(res);
                 return res;
-            } catch (err) {
-                onFailure(err);
-                this.paymentMessage = await this.wordTranslateService.translate('An error occurred while changing plans.');
+            } catch (ex) {
+                onFailure(ex);
+                this.paymentMessage = await this.wordTranslateService.translate("An error occurred while changing plans.");
                 return err;
             }
         }
@@ -171,195 +176,143 @@ export class ChangePlanDialogComponent implements IModalDialog {
         try {
             const res = await this.changePlan(false, { couponId: this.coupon });
             onSuccess(res);
-        } catch (err) {
-            onFailure(err);
+        } catch (ex) {
+            onFailure(ex);
         }
     }
 
-    async createStripeToken() {
-        const onSuccess = (response) => {
-            this.analyticsService.addPaymentInfo();
-        };
-
+    private async createStripeToken(): Promise<Token> {
+        // TODO: Confirm we don't need expiration by looking at old code base.
         const expiration = this.commonService.parseExpiry(this.card.expiry);
-        const payload = {
-            name: this.card.name
-        };
+        const data: CardDataOptions = { name: this.card.name,  };
 
-        try {
-            const res = await this.stripe.createToken(this.element, payload).toPromise();
-            onSuccess(res);
-            return res.token;
-        } catch (err) {
-            console.log(err);
-        }
+        const response = await this.stripe.createToken(this.element, data).toPromise();
+        this.analyticsService.addPaymentInfo();
+        return response.token;
     }
 
-
-    cardUpdated(result) {
-        console.log(result);
+    public cardUpdated(result) {
         this.element = result.element;
-        this.error = undefined;
+        this.error = null;
     }
 
-    cancel() {
+    private cancel() {
         this.analyticsService.lead(this.getAnalyticsData());
         this.closeEvent.emit();
     }
 
-    getAnalyticsData() {
-        return { content_name: this.currentPlan.name, content_ids: [this.currentPlan.id], content_type: 'product', currency: 'USD', value: this.currentPlan.price };
+    private getAnalyticsData() {
+        return {
+            content_name: this.currentPlan.name,
+            content_ids: [this.currentPlan.id],
+            content_type: "product",
+            currency: "USD",
+            value: this.currentPlan.price
+        };
     }
 
-    async changePlan(isAdmin, options) {
+    private async changePlan(isAdmin: boolean, options: any) {
         if (isAdmin) {
-            return this.userService.adminChangePlan({ organizationId: this.currentOrganization.id, planId: this.currentPlan.id });
+            return this.userService.adminChangePlan(this.currentOrganization.id, this.currentPlan.id);
         } else {
             return this.organizationService.changePlan(this.currentOrganization.id, Object.assign({}, { planId: this.currentPlan.id }, options));
         }
     }
 
-    isIntercomEnabled() {
+    private isIntercomEnabled() {
         return !!environment.INTERCOM_APPID;
     }
 
-    isBillingEnabled() {
+    public isBillingEnabled() {
         return !!environment.STRIPE_PUBLISHABLE_KEY;
     }
 
-    isCancellingPlan() {
+    public isCancellingPlan() {
         return this.currentPlan && this.currentPlan.id === this._freePlanId && this.currentOrganization.plan_id !== this._freePlanId;
     }
 
-    isPaidPlan() {
+    public isPaidPlan() {
         return this.currentPlan && this.currentPlan.price !== 0;
     }
 
-    hasAdminRole() {
+    public hasAdminRole() {
         return this.userService.hasAdminRole(this.user);
     }
 
-    isNewCard() {
-        return this.card && this.card.mode === 'new';
+    private isNewCard() {
+        return this.card && this.card.mode === "new";
     }
 
-    hasExistingCard() {
+    public hasExistingCard() {
         return !!this.currentOrganization.card_last4;
     }
 
-    changeOrganization(newId) {
-        this.card.mode = this.hasExistingCard() ? 'existing' : 'new';
-        this.currentOrganization = this.organizations.filter((o) => o.id === newId )[0];
+    public changeOrganization(newOrganizationId: string) {
+        this.card.mode = this.hasExistingCard() ? "existing" : "new";
+        this.currentOrganization = this.organizations.filter((o) => o.id === newOrganizationId )[0];
         return this.getPlans();
     }
 
-    changePlanObject(newId) {
-        this.currentPlan = this.plans.filter((p) => p.id === newId)[0] || this.plans[0];
+    public changePlanObject(newPlanId: string) {
+        this.currentPlan = this.plans.filter((p) => p.id === newPlanId)[0] || this.plans[0];
     }
 
-    showIntercom() {
+    public showIntercom() {
         this.intercom.showNewMessage();
     }
 
-    async getUser() {
-        const onSuccess = (response) => {
-            this.user = response;
-
+    private async getUser() {
+        try {
+            this.user = await this.userService.getCurrentUser();
             if (!this.card.name) {
                 this.card.name = this.user.full_name;
             }
-
-            return this.user;
-        };
-
-        const onFailure = async (response) => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading your user account.') + ' ' + this._contactSupport);
+        } catch (ex) {
+            this.notificationService.error("", `${await this.wordTranslateService.translate("An error occurred while loading your user account.")} ${this._contactSupport}`);
             this.cancel();
-        };
-
-        try {
-            const res = await this.userService.getCurrentUser();
-            return onSuccess(res);
-        } catch (err) {
-            return onFailure(err);
         }
     }
 
-    async getPlans() {
-        const onSuccess = (response) => {
-            this.plans = response;
+    private async getPlans() {
+        try {
+            this.plans = await this.organizationService.getPlans(this.currentOrganization.id);
 
             // Upsell to the next plan.
             const currentPlan = this.plans.filter((p) => p.id === this.currentOrganization.plan_id)[0] || this.plans[0];
             const currentPlanIndex = this.plans.indexOf(currentPlan);
             this.currentPlan = this.plans.length > currentPlanIndex + 1 ? this.plans[currentPlanIndex + 1] : currentPlan;
             this.currentPlanId = this.currentPlan.id;
-            return this.plans;
-        };
-
-        const onFailure = async (response) => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading available billing plans.') + ' ' + this._contactSupport);
+        } catch (ex) {
+            this.notificationService.error("", `${await this.wordTranslateService.translate("An error occurred while loading available billing plans.")} ${this._contactSupport}`);
             this.cancel();
-        };
-
-        try {
-            const res = await this.organizationService.getPlans(this.currentOrganization.id);
-            return onSuccess(res);
-        } catch (err) {
-            return onFailure(err);
         }
     }
 
-    async getOrganizations() {
+    private async getOrganizations() {
         const getSelectedOrganization = async () => {
-            const onSucceed = resp => {
-                this.organizations.push(resp);
-                return this.organizations;
-            };
-
             if (!this.organizationId || this.organizations.filter((o) => o.id === this.organizationId )[0]) {
                 return;
             }
 
-            const response = await this.organizationService.getById(this.organizationId);
-            return onSucceed(response['body']);
-        };
-
-        const getAllOrganizations = async () => {
-            const onSucceed = resp => {
-                resp.forEach((value, key) => {
-                    this.organizations.push(value);
-                });
-                return this.organizations;
-            };
-
-            const response = await this.organizationService.getAll({});
-            return onSucceed(response['body']);
-        };
-
-        const onSuccess = () => {
-            this.currentOrganization = this.organizations.filter((o) => o.id === (this.currentOrganization.id || this.organizationId) )[0];
-            if (!this.currentOrganization) {
-                this.currentOrganization = this.organizations.length > 0 ? this.organizations[0] : {};
-            }
-            this.currentOrganizationId = this.currentOrganization.id;
-            this.card.mode = this.hasExistingCard() ? 'existing' : 'new';
-        };
-
-        const onFailure = async (response) => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading your organizations.') + ' ' + this._contactSupport);
-            this.cancel();
+            const organization = await this.organizationService.getById(this.organizationId);
+            this.organizations.push(organization);
         };
 
         this.organizations = [];
-
         try {
-            await getAllOrganizations();
-            await getSelectedOrganization;
-            onSuccess();
-        } catch (err) {
-            onFailure(err);
+            this.organizations = await this.organizationService.getAll();
+            await getSelectedOrganization();
+
+            this.currentOrganization = this.organizations.filter((o) => o.id === (this.currentOrganization.id || this.organizationId) )[0];
+            if (!this.currentOrganization &&  this.organizations.length > 0) {
+                this.currentOrganization = this.organizations[0];
+            }
+
+            this.currentOrganizationId = this.currentOrganization.id;
+            this.card.mode = this.hasExistingCard() ? "existing" : "new";
+        } catch (ex) {
+            this.notificationService.error("", `${await this.wordTranslateService.translate("An error occurred while loading your organizations.")} ${this._contactSupport}`);
+            this.cancel();
         }
     }
-
 }

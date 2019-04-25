@@ -1,37 +1,41 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { ObjectIdService } from './object-id.service';
-import * as moment from 'moment';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { ObjectIdService } from "./object-id.service";
+import * as moment from "moment";
+import { WorkInProgressResult } from "../models/results";
+import { Organization, BillingPlan, InvoiceGridModel, NewOrganization, ChangePlanResult } from "../models/organization";
+import { User } from "../models/user";
+
+export interface GetInvoiceParameters {
+    limit?: number;
+    before?: string;
+    after?: string;
+}
+
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class OrganizationService {
     constructor(
-        private http: HttpClient,
+        private http: HttpClient, // TODO: Caching...
         private objectIdService: ObjectIdService,
     ) {}
 
-    addUser(id, email) {
-        const data = {};
-        return this.http.post(`organizations/${id}/users/${email}`, data).toPromise();
+    public addUser(id: string, email: string) {
+        return this.http.post<User>(`organizations/${id}/users/${email}`, {}).toPromise();
     }
 
-    create(name) {
-        const data = {
-            'name': name
-        };
-        return this.http.post('organizations', data, { observe: 'response' }).toPromise();
+    public create(name: string) {
+        return this.http.post<Organization>("organizations", { name } as NewOrganization).toPromise();
     }
 
-    changePlan(id, options) {
-        const data = {};
-        return this.http.post(`organizations/${id}/change-plan`, data, { params: options }).toPromise();
+    public changePlan(id: string, options) {
+        return this.http.post<ChangePlanResult>(`organizations/${id}/change-plan`, {}, { params: options }).toPromise();
     }
 
-    getOldestCreationDate(organizations) {
+    public getOldestCreationDate(organizations: Organization[]): Date {
         if (organizations) {
             if (organizations.length > 1) {
                 return new Date(organizations.reduce((o1, o2)  => {
@@ -47,68 +51,66 @@ export class OrganizationService {
         return new Date(2012, 1, 1);
     }
 
-    getOldestRetentionStartDate(organizations, maximumRetentionDays) {
+    public getOldestRetentionStartDate(organizations: Organization[], maximumRetentionDays?: number): Date {
         if (!maximumRetentionDays) {
-            maximumRetentionDays = moment().diff(new Date(2012, 1, 1), 'days');
+            maximumRetentionDays = moment().diff(new Date(2012, 1, 1), "days");
         }
 
-        let retentionDays = maximumRetentionDays;
+        let retentionDays: number = maximumRetentionDays;
 
         if (organizations) {
             if (organizations.length > 1) {
-                retentionDays = organizations.reduce(function (o1, o2) {
-                    return Math.max(o1.retention_days > 0 ? o1.retention_days : maximumRetentionDays, o2.retention_days > 0 ? o2.retention_days : maximumRetentionDays);
-                });
+                retentionDays = organizations.reduce((o1, o2) => Math.max(o1.retention_days > 0 ? o1.retention_days : maximumRetentionDays, o2.retention_days > 0 ? o2.retention_days : maximumRetentionDays));
             } else if (organizations.length === 1) {
                 retentionDays = organizations[0].retention_days;
             }
         }
 
-        return retentionDays <= 0 ? new Date(2012, 1, 1) : moment().subtract(retentionDays, 'days').toDate();
+        return retentionDays <= 0 ? new Date(2012, 1, 1) : moment().subtract(retentionDays, "days").toDate();
     }
 
-    getOldestPossibleEventDate(organizations, maximumRetentionDays?) {
+    public getOldestPossibleEventDate(organizations: Organization[], maximumRetentionDays?: number): Date {
         return moment.max([
-            moment(this.getOldestCreationDate(organizations)).subtract(3, 'days'),
+            moment(this.getOldestCreationDate(organizations)).subtract(3, "days"),
             moment(this.getOldestRetentionStartDate(organizations, maximumRetentionDays))
         ]).toDate();
     }
 
-    getAll(options?) {
-        console.log('get-all-organization');
+    public getAll(options?) {
         const mergedOptions = Object.assign({ limit: 100 }, options);
-        return this.http.get('organizations', { observe: 'response', params: mergedOptions }).toPromise();
+        return this.http.get<Organization[]>("organizations", { params: mergedOptions }).toPromise();
     }
 
-    getById(id) {
-        return this.http.get(`organizations/${id}`).toPromise();
+    public getById(id: string) {
+        return this.http.get<Organization>(`organizations/${id}`).toPromise();
     }
 
-    getInvoice(id) {
-        return this.http.get(`organizations/invoice/${id}`);
+    public getInvoice(id: string) {
+        return this.http.get<InvoiceGridModel>(`organizations/invoice/${id}`).toPromise();
     }
 
-    getInvoices(id, options): Observable<HttpResponse<any>> {
-        return this.http.get(`organizations/${id}/invoices`, {  observe: 'response', params: options || {} });
+    public getInvoices(id: string, options?: GetInvoiceParameters) {
+        return this.http.get<InvoiceGridModel[]>(`organizations/${id}/invoices`, { params: options || {} }).toPromise();
     }
 
-    getPlans(id) {
-        return this.http.get(`organizations/${id}/plans`).toPromise();
+    public getPlans(id: string) {
+        return this.http.get<BillingPlan[]>(`organizations/${id}/plans`).toPromise();
     }
 
-    isNameAvailable(name): Observable<HttpResponse<any>> {
-        return this.http.get(`organizations/check-name?name=${encodeURIComponent(name)}`,  { observe: 'response' });
+    public async isNameAvailable(name: string): Promise<boolean> {
+        const response = await this.http.get(`organizations/check-name`, { params: { name }}).toPromise();
+        return response.status === 204;
     }
 
-    remove(id) {
-        return this.http.delete(`organizations/${id}`).toPromise();
+    public remove(id: string) {
+        return this.http.delete<WorkInProgressResult>(`organizations/${id}`).toPromise();
     }
 
-    removeUser(id, email) {
-        return this.http.delete(`organizations/${id}/users/` + email).toPromise();
+    public removeUser(id: string, email: string) {
+        return this.http.delete<never>(`organizations/${id}/users/` + email).toPromise();
     }
 
-    update(id, organization) {
-        return this.http.patch(`api/v2/organizations/${id}`, organization).toPromise();
+    public update(id: string, organization: Organization) {
+        return this.http.patch<Organization>(`api/v2/organizations/${id}`, organization).toPromise();
     }
 }

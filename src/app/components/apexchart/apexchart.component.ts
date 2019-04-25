@@ -1,33 +1,33 @@
-import {Component, Input, OnInit, SimpleChanges, OnChanges} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges, OnChanges} from "@angular/core";
+import { ApexOptions } from "apexcharts";
 
 @Component({
-    selector: 'app-apexchart',
-    templateUrl: './apexchart.component.html',
-    styleUrls: ['./apexchart.component.less']
+    selector: "app-apexchart",
+    templateUrl: "./apexchart.component.html",
+    styleUrls: ["./apexchart.component.less"]
 })
 export class ApexchartComponent implements OnInit, OnChanges {
+    @Input() options: ApexOptions;
+    @Input() seriesData: ApexAxisChartSeries;
+    @Input() updatedOptions: ApexOptions;
 
-    @Input() options;
-    @Input() seriesData;
-    @Input() updatedOptions;
-
-    chart: any;
+    private _chart: ApexCharts;
 
     constructor() {
     }
 
-    ngOnInit() {
-        this.chart = new ApexCharts(document.querySelector('#apexchart'), this.options);
-        this.chart.render();
+    public async ngOnInit() {
+        this._chart = new ApexCharts(document.querySelector("#apexchart"), this.options);
+        await this._chart.render();
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (this.chart) {
+    public ngOnChanges(changes: SimpleChanges) {
+        if (this._chart) {
             if (changes.seriesData) {
-                this.chart.updateSeries(changes.seriesData.currentValue);
+                this._chart.updateSeries(changes.seriesData.currentValue);
             }
             if (changes.updatedOptions) {
-                this.chart.updateOptions(changes.updatedOptions.currentValue);
+                this._chart.updateOptions(changes.updatedOptions.currentValue);
             }
         }
     }

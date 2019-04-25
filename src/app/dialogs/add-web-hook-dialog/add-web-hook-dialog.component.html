@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="url">{{ 'URL' | translate }}</label>
         <input id="url" name="url" type="text" class="form-control" placeholder="{{'Enter the URL to call' | translate}}"
-               [(ngModel)]="data['url']" [required]="true" autofocus #url="ngModel" (ngModelChange)="updateValue()" pattern="https?://.+" />
+               [(ngModel)]="data.url" [required]="true" autofocus #url="ngModel" (ngModelChange)="updateValue()" pattern="https?://.+" />
         <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched))">
             <small [hidden]="!url.errors?.required">{{ 'URL is required.' | translate }}</small>
             <small [hidden]="!url.errors?.pattern">{{ 'URL is required.' | translate }}</small>

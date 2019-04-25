@@ -1,36 +1,35 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { NewWebHook, WebHook } from "../models/webhook";
+import { WorkInProgressResult } from "../models/results";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
-
 export class WebHookService {
-    constructor(
-        private http: HttpClient
-    ) {}
+    constructor(private http: HttpClient) {}
 
-    create(webHook) {
-        return this.http.post('webhooks', webHook).toPromise();
+    public create(webHook: NewWebHook) {
+        return this.http.post<WebHook>("webhooks", webHook).toPromise();
     }
 
-    getAll(options) {
-        return this.http.get(`webhooks`, { params: options || {} });
+    public getAll(options) {
+        return this.http.get<WebHook[]>(`webhooks`, { params: options || {} }).toPromise();
     }
 
-    getById(id) {
-        return this.http.get(`webhooks/${id}`);
+    public getById(id: string) {
+        return this.http.get<WebHook>(`webhooks/${id}`).toPromise();
     }
 
-    getByOrganizationId(id, options?) {
-        return this.http.get(`organizations/${id}/webhooks`, { params: options || {} });
+    public getByOrganizationId(id: string, options?) {
+        return this.http.get<WebHook[]>(`organizations/${id}/webhooks`, { params: options || {} }).toPromise();
     }
 
-    getByProjectId(id, options?) {
-        return this.http.get(`projects/${id}/webhooks`, { params: options || {} }).toPromise();
+    public getByProjectId(id: string, options?) {
+        return this.http.get<WebHook[]>(`projects/${id}/webhooks`, { params: options || {} }).toPromise();
     }
 
-    remove(id) {
-        return this.http.delete(`webhooks/${id}`).toPromise();
+    public remove(id: string) {
+        return this.http.delete<WorkInProgressResult>(`webhooks/${id}`).toPromise();
     }
 }

@@ -1,18 +1,18 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class SimpleErrorService {
     constructor() {}
 
-    getExceptions(exception) {
+    public getExceptions(exception) {
         const exceptions = [];
         let currentException = exception;
         while (currentException) {
             exceptions.push(currentException);
-            currentException = currentException['inner'];
+            currentException = currentException.inner;
         }
 
         return exceptions;

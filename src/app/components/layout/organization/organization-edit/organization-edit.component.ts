@@ -1,37 +1,38 @@
-import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FilterService } from '../../../../service/filter.service';
-import { OrganizationService } from '../../../../service/organization.service';
-import { ProjectService } from '../../../../service/project.service';
-import { UserService } from '../../../../service/user.service';
-import { NotificationService } from '../../../../service/notification.service';
-import * as moment from 'moment';
-import { WordTranslateService } from '../../../../service/word-translate.service';
-import { BillingService } from '../../../../service/billing.service';
-import { AppEventService } from '../../../../service/app-event.service';
-import { DialogService } from '../../../../service/dialog.service';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FilterService } from "../../../../service/filter.service";
+import { OrganizationService } from "../../../../service/organization.service";
+import { ProjectService } from "../../../../service/project.service";
+import { UserService } from "../../../../service/user.service";
+import { NotificationService } from "../../../../service/notification.service";
+import * as moment from "moment";
+import { WordTranslateService } from "../../../../service/word-translate.service";
+import { BillingService } from "../../../../service/billing.service";
+import { DialogService } from "../../../../service/dialog.service";
+import { Subscription } from "rxjs";
+import { Organization } from "src/app/models/organization";
+import { NgForm } from "@angular/forms";
 
 @Component({
-    selector: 'app-organization-edit',
-    templateUrl: './organization-edit.component.html'
+    selector: "app-organization-edit",
+    templateUrl: "./organization-edit.component.html"
 })
 
 export class OrganizationEditComponent implements OnInit, OnDestroy {
-    _organizationId = '';
-    _ignoreRefresh = false;
-    canChangePlan = false;
-    seriesData: any[];
-    apexChart: any = {
+    private _organizationId: string;
+    private _ignoreRefresh: boolean = false;
+    public canChangePlan: boolean = false;
+    public apexChart: any = {
         options: {
             chart: {
                 height: 200,
-                type: 'area',
+                type: "area",
                 stacked: true,
                 events: {
                     zoomed: (chartContext, { xaxis, yaxis }) => {
                         const start = moment(xaxis.min).utc().local();
                         const end = moment(xaxis.max).utc().local();
-                        this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+                        this.filterService.setTime(start.format("YYYY-MM-DDTHH:mm:ss") + "-" + end.format("YYYY-MM-DDTHH:mm:ss"));
 
                         // $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
                         //     .setProperty('start', start)
@@ -43,7 +44,7 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 },
                 tooltip: {
                     x: {
-                        format: 'dd MMM yyyy'
+                        format: "dd MMM yyyy"
                     }
                 },
                 toolbar: {
@@ -53,12 +54,12 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                     }
                 }
             },
-            colors: ['#a4d56f', '#e2e2e2', '#ccc', '#a94442'],
+            colors: ["#a4d56f", "#e2e2e2", "#ccc", "#a94442"],
             dataLabels: {
                 enabled: false
             },
             stroke: {
-                curve: 'smooth'
+                curve: "smooth"
             },
 
             series: [],
@@ -70,17 +71,17 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 }
             },
             legend: {
-                position: 'top',
-                horizontalAlign: 'left'
+                position: "top",
+                horizontalAlign: "left"
             },
             xaxis: {
-                type: 'datetime'
+                type: "datetime"
             },
         },
         seriesData: []
     };
-    hasMonthlyUsage = true;
-    invoices = {
+    public hasMonthlyUsage: boolean = true;
+    public invoices = {
         get: (options) => {
             return this.organizationService.getInvoices(this._organizationId, options);
         },
@@ -89,21 +90,21 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
         },
         organizationId: this._organizationId
     };
-    next_billing_date = moment().startOf('month').add(1, 'months').toDate();
-    organization = {};
-    organizationForm = {};
-    projects = {
+    public nextBillingDate: Date = moment().startOf("month").add(1, "months").toDate();
+    public organization: Organization;
+    public organizationForm: NgForm;
+    public projects = {
         get: (options) => {
             return this.projectService.getByOrganizationId(this._organizationId, options);
         },
         organization: this._organizationId,
         options: {
             limit: 10,
-            mode: 'stats'
+            mode: "stats"
         }
     };
-    remainingEventLimit = 3000;
-    users = {
+    public remainingEventLimit: number = 3000;
+    public users = {
         get: (options) => {
             return this.userService.getByOrganizationId(this._organizationId, options);
         },
@@ -112,9 +113,8 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
         },
         organizationId: this._organizationId
     };
-    activeTab = 'general';
-    authUser: any = {};
-    subscriptions: any;
+    public activeTab: string = "general";
+    private subscriptions: Subscription[];
 
     constructor(
         private router: Router,
@@ -127,46 +127,37 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private wordTranslateService: WordTranslateService,
         private billingService: BillingService,
-        private appEvent: AppEventService,
         private dialogService: DialogService
     ) {}
 
-    ngOnInit() {
+    public async ngOnInit() {
         this.subscriptions = [];
-        this.authUser = this.userService.authUser;
 
         this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
-            this._organizationId = params['id'];
+            this._organizationId = params.id;
             this.users.organizationId = this._organizationId;
             this.get();
         }));
         this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
-            this.activeTab = params['tab'] || 'general';
-        }));
-        this.subscriptions.push(this.appEvent.subscribe({
-            next: (event: any) => {
-                if (event.type === 'UPDATE_USER') {
-                    this.authUser = this.userService.authUser;
-                }
-            }
+            this.activeTab = params.tab || "general";
         }));
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         for (const subscription of this.subscriptions) {
             subscription.unsubscribe();
         }
     }
 
-    addUser() {
+    public addUser() {
         this.dialogService.addUser(this.viewRef, this.createUser.bind(this));
     }
 
-    changePlan() {
+    public changePlan() {
         this.billingService.changePlan(this.viewRef, () => {}, this._organizationId);
     }
 
-    async createUser(emailAddress) {
+    private async createUser(emailAddress) {
         const onFailure = async (response) => {
             if (response.status === 426) {
                 return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this._organizationId, () => {
@@ -174,45 +165,46 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 });
             }
 
-            let message = await this.wordTranslateService.translate('An error occurred while inviting the user.');
+            const message = await this.wordTranslateService.translate("An error occurred while inviting the user.");
             if (response.data && response.data.message) {
-                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.data.message;
+                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.data.message;
             }
 
-           this.notificationService.error('', message);
+            this.notificationService.error("", message);
         };
 
         try {
             await this.organizationService.addUser(this._organizationId, emailAddress);
-        } catch (err) {
-            onFailure(err);
+        } catch (ex) {
+            onFailure(ex);
         }
     }
 
-    get(data?) {
+    private get(data?: any) { // TODO: see how this is called and if the typing is correct.
         if (this._ignoreRefresh) {
             return;
         }
 
-        if (data && data['type'] === 'Organization' && data['deleted'] && data['id'] === this._organizationId) {
-            this.router.navigate(['/type/organization/list']);
-            this.notificationService.error('Failed!', 'Organization_Deleted');
+        if (data && data.type === "Organization" && data.deleted && data.id === this._organizationId) {
+            this.router.navigate(["/type/organization/list"]);
+            this.notificationService.error("Failed!", "Organization_Deleted");
             return;
         }
 
         return this.getOrganization();
     }
 
-    async getOrganization() {
-        const onSuccess = (response) => {
+    private async getOrganization() {
+        try {
+            this.organization = await this.organizationService.getById(this._organizationId);
             const getRemainingEventLimit = (organization) => {
                 if (!organization.max_events_per_month) {
                     return 0;
                 }
 
-                const bonusEvents = moment.utc().isBefore(moment.utc(organization['bonus_expiration'])) ? organization['bonus_events_per_month'] : 0;
-                const usage = organization.usage && organization.usage[this.organization['usage'].length - 1];
-                if (usage && moment.utc(usage.date).isSame(moment.utc().startOf('month'))) {
+                const bonusEvents = moment.utc().isBefore(moment.utc(organization.bonus_expiration)) ? organization.bonus_events_per_month : 0;
+                const usage = organization.usage && organization.usage[this.organization.usage.length - 1];
+                if (usage && moment.utc(usage.date).isSame(moment.utc().startOf("month"))) {
                     const remaining = usage.limit - (usage.total - usage.blocked);
                     return remaining > 0 ? remaining : 0;
                 }
@@ -220,115 +212,90 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 return organization.max_events_per_month + bonusEvents;
             };
 
-            this.organization = JSON.parse(JSON.stringify(response));
-            this.organization['usage'] = this.organization['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: this.organization['max_events_per_month'], too_big: 0 }];
-            this.hasMonthlyUsage = this.organization['max_events_per_month'] > 0;
+            this.organization.usage = this.organization.usage || [{ date: moment.utc().startOf("month").toISOString(), total: 0, blocked: 0, limit: this.organization.max_events_per_month, too_big: 0 }];
+            this.hasMonthlyUsage = this.organization.max_events_per_month > 0;
             this.remainingEventLimit = getRemainingEventLimit(this.organization);
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && !!this.organization;
 
             this.apexChart.seriesData = [];
             this.apexChart.seriesData.push({
-                name: 'Allowed',
-                data: this.organization['usage'].map(function (item) {
-                    return [moment.utc(item.date), item.total - item.blocked - item.too_big];
-                })
+                name: "Allowed",
+                data: this.organization.usage.map(item => [moment.utc(item.date), item.total - item.blocked - item.too_big])
             });
 
             this.apexChart.seriesData.push({
-                name: 'Blocked',
-                data: this.organization['usage'].map(function (item) {
-                    return [moment.utc(item.date), item.blocked];
-                })
+                name: "Blocked",
+                data: this.organization.usage.map(item => [moment.utc(item.date), item.blocked])
             });
 
             this.apexChart.seriesData.push({
-                name: 'Too big',
-                data: this.organization['usage'].map(function (item) {
-                    return [moment.utc(item.date), item.too_big];
-                })
+                name: "Too big",
+                data: this.organization.usage.map(item => [moment.utc(item.date), item.too_big])
             });
 
             this.apexChart.seriesData.push({
-                name: 'Limit',
-                data: this.organization['usage'].map(function (item) {
-                    return [moment.utc(item.date), item.limit];
-                })
+                name: "Limit",
+                data: this.organization.usage.map(item => [moment.utc(item.date), item.limit])
             });
-            this.seriesData = this.apexChart.seriesData;
-            return this.organization;
-        };
-
-        const onFailure = async () => {
-            this.router.navigate(['/organization/list']);
-            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization', {organizationId: this._organizationId}));
-        };
-
-        try {
-            const res = await this.organizationService.getById(this._organizationId);
-            onSuccess(res);
-        } catch (err) {
-            onFailure();
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Organization", {organizationId: this._organizationId}));
+            await this.router.navigate(["/organization/list"]);
         }
     }
 
-    hasAdminRole(user) {
-        return this.userService.hasAdminRole(user);
-    }
-
-    async leaveOrganization(currentUser) {
+    public async leaveOrganization(currentUser) {
         const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
             try {
-                const res = await this.organizationService.removeUser(this._organizationId, currentUser['email_address']);
-                this.router.navigate(['/organization/list']);
+                const res = await this.organizationService.removeUser(this._organizationId, currentUser.email_address);
+                this.router.navigate(["/organization/list"]);
                 return res;
-            } catch (err) {
-                let message = await this.wordTranslateService.translate('An error occurred while trying to leave the organization.');
-                if (err.status === 400) {
-                    message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.data.message;
+            } catch (ex) { // TODO: verify that error has status code.
+                let message = await this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
+                if (ex.status === 400) {
+                    message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.data.message;
                 }
 
-                this.notificationService.error('', message);
+                this.notificationService.error("", message);
                 this._ignoreRefresh = false;
-                return err;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to leave this organization?', 'Leave Organization', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to leave this organization?", "Leave Organization", modalCallBackFunction);
     }
 
-    async removeOrganization() {
+    public async removeOrganization() {
         const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
 
             try {
                 const res = await this.organizationService.remove(this._organizationId);
-                this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
-                this.router.navigate(['/organization/list']);
+                this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the organization for deletion."));
+                this.router.navigate(["/organization/list"]);
                 return res;
-            } catch (err) {
-                let message = await this.wordTranslateService.translate('An error occurred while trying to delete the organization.');
-                if (err.status === 400) {
-                    message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + err.error.message;
+            } catch (ex) { // TODO: verify that error has status code.
+                let message = await this.wordTranslateService.translate("An error occurred while trying to delete the organization.");
+                if (ex.status === 400) {
+                    message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
                 }
 
-                this.notificationService.error('', message);
+                this.notificationService.error("", message);
                 this._ignoreRefresh = false;
-                return err;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this organization?', 'Delete Organization', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to delete this organization?", "Delete Organization", modalCallBackFunction);
     }
 
-    async save(isValid) {
+    public async save(isValid) {
         if (!isValid) {
             return;
         }
+
         try {
             await this.organizationService.update(this._organizationId, this.organization);
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the organization.'));
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the organization."));
         }
     }
 }

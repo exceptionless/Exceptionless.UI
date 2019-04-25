@@ -1,77 +1,94 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Signup } from './signup.class';
-import { NotificationService } from '../../../service/notification.service';
-import { AuthService } from 'ng2-ui-auth';
-import { ProjectService } from '../../../service/project.service';
-import { WordTranslateService } from '../../../service/word-translate.service';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { NotificationService } from "../../../service/notification.service";
+import { AuthService } from "ng2-ui-ng2Auth";
+import { ProjectService } from "../../../service/project.service";
+import { WordTranslateService } from "../../../service/word-translate.service";
 
 @Component({
-    selector: 'app-signup',
-    templateUrl: './signup.component.html'
+    selector: "app-signup",
+    templateUrl: "./signup.component.html"
 })
 
 export class SignupComponent implements OnInit {
-    model = new Signup();
-    submitted = false;
+    public model: SignupModel = new SignupModel();
+    public submitted: boolean = false;
+    public isExternalLoginEnabled: ExternalLoginEnabled;
 
     constructor(
         private router: Router,
-        private auth: AuthService,
+        private ng2Auth: AuthService,
         private notificationService: NotificationService,
         private projectService: ProjectService,
         private wordTranslateService: WordTranslateService,
     ) {}
 
-    ngOnInit() {}
+    public ngOnInit() {
+        this.isExternalLoginEnabled = {
+            enabled: this.isProviderEnabled(),
+            facebook: this.isProviderEnabled("facebook"),
+            github: this.isProviderEnabled("github"),
+            google: this.isProviderEnabled("google"),
+            live: this.isProviderEnabled("live")
+        };
+    }
 
-    onSubmit(isValid) {
-        this.submitted = true;
+    private isProviderEnabled(provider?: string) {
+        if (!provider) {
+            return !!environment.FACEBOOK_APPID || !!environment.GITHUB_APPID || !!environment.GOOGLE_APPID || !!environment.LIVE_APPID;
+        }
 
-        if (isValid) {
-            const data = {
-                name: this.model.name,
-                email: this.model.email,
-                password: this.model.password
-            };
-
-            this.auth.signup(data).subscribe({
-                next: (response) => { this.auth.setToken(response.token); },
-                error: async (err: any) => this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while signing up.  Please contact support for more information.')),
-                complete: () => { this.redirectOnSignup(); }
-            });
+        switch (provider) {
+            case "facebook":
+                return !!environment.FACEBOOK_APPID;
+            case "github":
+                return !!environment.GITHUB_APPID;
+            case "google":
+                return !!environment.GOOGLE_APPID;
+            case "live":
+                return !!environment.LIVE_APPID;
+            default:
+                return false;
         }
     }
 
-    checkEmailValidation() {
-        /*this.authService.checkEmailUnique(this.model.email).subscribe(
-            res => {
-                console.log(this.model.email);
-            },
-            err => {
-                console.log(err.status);
-            }
-        );*/
+    public async authenticate(provider: string) {
+        try {
+            await this.ng2Auth.authenticate(provider).toPromise();
+            $ExceptionlessClient.createFeatureUsage(`${this._source}.authenticate`).addTags(provider).submit();
+            await this.redirectOnLogin();
+        } catch (ex) {
+            $ExceptionlessClient.createFeatureUsage(`${this._source}.authenticate.error`).setProperty("error", ex).addTags(provider).submit();
+            this.notificationService.error("", await this.wordTranslateService.translate("Loggin_Failed_Message"));
+        }
     }
 
-    async redirectOnSignup() {
-        const onSuccess = (response) => {
-            if (response.data && response.data.length > 0) {
-                this.router.navigateByUrl('/type/error/dashboard');
-            }
+    public onSubmit(isValid) {
+        if (!isValid) {
+            return;
+        }
 
-            this.router.navigateByUrl('/project/add');
-        };
-
-        const onFailure = () => {
-            this.router.navigateByUrl('/project/add');
-        };
-
+        // TODO: analytics & exceptionless
+        this.submitted = true;
         try {
-            const res = await this.projectService.getAll();
-            onSuccess(JSON.parse(JSON.stringify(res.body)));
-        } catch (err) {
-            onFailure();
+            const response = await this.ng2Auth.signup(this.model).toPromise();
+            this.ng2Auth.setToken(response.token);
+            await this.redirectOnSignup();
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while signing up.  Please contact support for more information."))
+        }
+    }
+
+    private async redirectOnSignup() {
+        try {
+            const projects = await this.projectService.getAll();
+            if (projects && projects.length > 0) {
+                await this.router.navigateByUrl("/type/error/dashboard");
+            } else {
+                await this.router.navigateByUrl("/project/add");
+            }
+        } catch (ex) {
+            await this.router.navigateByUrl("/project/add");
         }
     }
 }

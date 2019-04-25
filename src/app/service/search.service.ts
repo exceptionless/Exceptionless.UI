@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { ToastrService } from "ngx-toastr";
+import { QueryProcessResult } from "../models/results";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class SearchService {
@@ -12,24 +13,19 @@ export class SearchService {
         private toastr: ToastrService,
     ) {}
 
-    async validate(query) {
-        if (!query || (query.trim && query.trim() === '*')) {
+    public async validate(query: string): Promise<QueryProcessResult> {
+        if (!query || (query.trim && query.trim() === "*")) {
             return {
-                data: {
-                    is_valid: true,
-                    uses_premium_features: false
-                }
-            };
+                is_valid: true,
+                uses_premium_features: false
+            } as QueryProcessResult;
         }
 
-        const data = { query: query };
-
         try {
-            const res = await this.http.get('search/validate', { responseType: 'json' }).toPromise();
-            return JSON.parse(JSON.stringify(res));
-        } catch (err) {
-            this.toastr.error('Error Occurred!', 'Failed');
-            return err;
+            return await this.http.get<QueryProcessResult>("search/validate", { params: {query } }).toPromise();
+        } catch (ex) {
+            this.toastr.error("Error Occurred!", "Failed");
+            throw ex;
         }
     }
 }

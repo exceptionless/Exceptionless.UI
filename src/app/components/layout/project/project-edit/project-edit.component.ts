@@ -1,40 +1,44 @@
-import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FilterService } from '../../../../service/filter.service';
-import { OrganizationService } from '../../../../service/organization.service';
-import { ProjectService } from '../../../../service/project.service';
-import { TokenService } from '../../../../service/token.service';
-import { WebHookService } from '../../../../service/web-hook.service';
-import { NotificationService } from '../../../../service/notification.service';
-import * as moment from 'moment';
-import { WordTranslateService } from '../../../../service/word-translate.service';
-import { BillingService } from '../../../../service/billing.service';
-import { DialogService } from '../../../../service/dialog.service';
-import { formatNumber } from '@angular/common';
-import { ThousandSuffixPipe } from '../../../../pipes/thousand-suffix.pipe';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FilterService } from "../../../../service/filter.service";
+import { OrganizationService } from "../../../../service/organization.service";
+import { ProjectService } from "../../../../service/project.service";
+import { TokenService } from "../../../../service/token.service";
+import { WebHookService } from "../../../../service/web-hook.service";
+import { NotificationService } from "../../../../service/notification.service";
+import * as moment from "moment";
+import { WordTranslateService } from "../../../../service/word-translate.service";
+import { BillingService } from "../../../../service/billing.service";
+import { DialogService } from "../../../../service/dialog.service";
+import { formatNumber } from "@angular/common";
+import { ThousandSuffixPipe } from "../../../../pipes/thousand-suffix.pipe";
+import { Subscription } from "rxjs";
+import { Project } from "src/app/models/project";
+import { Organization } from "src/app/models/organization";
+import { Token, NewToken } from "src/app/models/token";
+import { EntityChanged, ChangeType } from "src/app/models/messaging";
 
 @Component({
-    selector: 'app-project-edit',
-    templateUrl: './project-edit.component.html'
+    selector: "app-project-edit",
+    templateUrl: "./project-edit.component.html"
 })
 
 export class ProjectEditComponent implements OnInit, OnDestroy {
-    _ignoreRefresh = false;
-    _projectId = '';
-    canChangePlan = false;
-    seriesData: any[];
-    exclude_private_information = false;
-    apexChart: any = {
+    private _ignoreRefresh: boolean = false;
+    private _projectId: string;
+    public canChangePlan: boolean = false;
+    public excludePrivateInformation: boolean = false;
+    public apexChart: any = {
         options: {
             chart: {
                 height: 200,
-                type: 'area',
+                type: "area",
                 stacked: true,
                 events: {
                     zoomed: (chartContext, { xaxis, yaxis }) => {
                         const start = moment(xaxis.min).utc().local();
                         const end = moment(xaxis.max).utc().local();
-                        this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+                        this.filterService.setTime(start.format("YYYY-MM-DDTHH:mm:ss") + "-" + end.format("YYYY-MM-DDTHH:mm:ss"));
 
                         // $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
                         //     .setProperty('start', start)
@@ -46,7 +50,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 },
                 tooltip: {
                     x: {
-                        format: 'dd MMM yyyy'
+                        format: "dd MMM yyyy"
                     }
                 },
                 toolbar: {
@@ -56,12 +60,12 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                     }
                 }
             },
-            colors: ['rgba(245, 245, 245, 0.7)', 'rgba(164, 213, 111, 0.7)', 'rgba(226, 226, 226, 0.7)', 'rgba(204, 204, 204, 0.7)', 'rgba(169, 68, 66, 0.7)'],
+            colors: ["rgba(245, 245, 245, 0.7)", "rgba(164, 213, 111, 0.7)", "rgba(226, 226, 226, 0.7)", "rgba(204, 204, 204, 0.7)", "rgba(169, 68, 66, 0.7)"],
             dataLabels: {
                 enabled: false
             },
             stroke: {
-                curve: 'smooth'
+                curve: "smooth"
             },
 
             series: [],
@@ -73,11 +77,11 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 }
             },
             legend: {
-                position: 'top',
-                horizontalAlign: 'left'
+                position: "top",
+                horizontalAlign: "left"
             },
             xaxis: {
-                type: 'datetime'
+                type: "datetime"
             },
             yaxis: {
                 labels: {
@@ -89,7 +93,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             tooltip: {
                 y: {
                     formatter: (rep) => {
-                        return formatNumber(rep, 'en');
+                        return formatNumber(rep, "en");
                     }
                 }
             }
@@ -97,24 +101,25 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         seriesData: []
     };
 
-    config = [];
-    common_methods = null;
-    data_exclusions = null;
-    hasMonthlyUsage = true;
-    hasPremiumFeatures = false;
-    isSlackEnabled = !!environment.SLACK_APPID;
-    next_billing_date = moment().startOf('month').add(1, 'months').toDate();
-    organization = {};
-    project: any = {};
-    projectForm = {};
-    remainingEventLimit = 3000;
-    slackNotificationSettings = null;
-    tokens = [];
-    user_agents = null;
-    user_namespaces = null;
-    webHooks = [];
-    editable = [];
-    subscriptions: any;
+    public config: {key: string, value: string, is_editable: boolean}[];
+    public commonMethods: string;
+    public dataExclusions: string;
+    public hasMonthlyUsage : boolean= true;
+    public hasPremiumFeatures: boolean = false;
+    public isSlackEnabled: boolean = !!environment.SLACK_APPID;
+    public nextBillingDate: Date = moment().startOf("month").add(1, "months").toDate();
+    public organization: Organization;
+    public project: Project;
+    public projectForm: ngForm;
+    public remainingEventLimit: number = 3000;
+    public slackNotificationSettings: NotificationSetings;
+    public tokens: Token[];
+    public userAgents: string;
+    public userNamespaces: string;
+    public webHooks: WebHook[];
+    public editable: boolean[] = [];
+    private subscriptions: Subscription[];
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -131,101 +136,102 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         private thousandSuffixPipe: ThousandSuffixPipe
     ) {}
 
-    ngOnInit() {
+    public async ngOnInit() {
         this.subscriptions = [];
-        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
-            this._projectId = params['id'];
-            this.get();
+        this.subscriptions.push(this.activatedRoute.params.subscribe(async (params) => {
+            this._projectId = params.id;
+            await this.get();
         }));
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         for (const subscription of this.subscriptions) {
             subscription.unsubscribe();
         }
     }
 
-    addConfiguration() {
-        this.dialogService.addConfiguration(this.viewRef, this.saveClientConfiguration.bind(this));
+    public async addConfiguration() {
+        await this.dialogService.addConfiguration(this.viewRef, this.saveClientConfiguration.bind(this));
     }
 
-    saveClientConfiguration(data) {
+    public async saveClientConfiguration(data: any) {
         if (!data.value) {
             return;
         }
 
-        const onFailure = async () => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
-        };
-
-        return this.projectService.setConfig(this._projectId, data.key, data.value).catch(onFailure.bind(this));
+        try {
+            this.projectService.setConfig(this._projectId, data.key, data.value);
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the configuration setting."));
+        }
     }
 
-    addSlack() {
+    public async addSlack() {
         if (!this.hasPremiumFeatures) {
-            return this.billingService.confirmUpgradePlan(this.viewRef, 'Please upgrade your plan to enable slack integration.', this.project.organization_id, () => {
-                return this.addSlackIntegration();
+            return this.billingService.confirmUpgradePlan(this.viewRef, "Please upgrade your plan to enable slack integration.", this.project.organization_id, async () => {
+                await this.addSlackIntegration();
             });
         }
 
-        return this.addSlackIntegration();
+        await this.addSlackIntegration();
     }
 
-    async addSlackIntegration() {
+    private async addSlackIntegration() {
         try {
             await this.projectService.addSlack(this._projectId);
-            this.notificationService.success('', await this.wordTranslateService.translate('Successfully added'));
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while adding Slack to your project.'));
+            this.notificationService.success("", await this.wordTranslateService.translate("Successfully added"));
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while adding Slack to your project."));
         }
     }
 
-    async addToken() {
-        const options = {
-            organization_id: this.project['organization_id'],
+    public async addToken() {
+        const mewToken: NewToken = {
+            organization_id: this.project.organization_id,
             project_id: this._projectId
         };
+
         try {
-            const res = await this.tokenService.create(options);
-            this.tokens.push(JSON.parse(JSON.stringify(res)));
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while creating a new API key for your project.'));
+            const res = await this.tokenService.create(mewToken);
+            this.tokens.push(res);
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while creating a new API key for your project."));
         }
     }
 
-    addWebHook() {
+    public addWebHook() {
         this.dialogService.addWebHook(this.viewRef, this.createWebHook.bind(this));
     }
 
-    changePlan() {
-        this.billingService.changePlan(this.viewRef, () => {}, this.project.organization.id);
+    public changePlan() {
+        this.billingService.changePlan(this.viewRef, () => {}, this.project.organization_id);
     }
 
-    createWebHook(data) {
+    private createWebHook(data) {
         const onFailure = async (response) => {
             if (response.status === 426) {
                 return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project.organization_id, () => {
                     return this.createWebHook(data);
                 });
             }
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the configuration setting.'));
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the configuration setting."));
         };
 
-        return this.webHookService.create(Object.assign(data, {project_id: this._projectId})).catch(onFailure.bind(this));
+        return this.webHookService.create(Object.assign(data, { project_id: this._projectId })).catch(onFailure.bind(this));
     }
 
-    async copied() {
-        this.notificationService.success('', await this.wordTranslateService.translate('Copied'));
+    public async copied() {
+        this.notificationService.success("", await this.wordTranslateService.translate("Copied"));
     }
 
-    async get(data?) {
+    public async get(message?: EntityChanged) {
         if (this._ignoreRefresh) {
             return;
         }
 
-        if (data && data['type'] === 'Project' && data['deleted'] && data['id'] === this._projectId) {
-            this.router.navigate(['/type/project/list']);
-            this.notificationService.error('', await this.wordTranslateService.translate('Project_Deleted'));
+        if (message && message.type === "Project" && message.change_type === ChangeType.Removed && message.id === this._projectId) {
+            await this.router.navigate(["/type/project/list"]);
+            this.notificationService.error("", await this.wordTranslateService.translate("Project_Deleted"));
             return;
         }
 
@@ -236,443 +242,347 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             await this.getTokens();
             await this.getSlackNotificationSettings();
             await this.getWebHooks();
-        } catch (err) {
-            this.router.navigate(['/project/list']);
+        } catch (ex) {
+            await this.router.navigate(["/project/list"]);
         }
     }
 
-    async getOrganization() {
-        const onSuccess = (response) => {
+    public async getOrganization() {
+        try {
+            this.organization = await this.organizationService.getById(this.project.organization_id);
             const getRemainingEventLimit = (organization) => {
-                if (!organization['max_events_per_month']) {
+                if (!organization.max_events_per_month) {
                     return 0;
                 }
 
-                const bonusEvents = moment.utc().isBefore(moment.utc(organization['bonus_expiration'])) ? organization['bonus_events_per_month'] : 0;
-                const usage = organization['usage'] && organization['usage'][organization['usage'].length - 1];
-                if (usage && moment.utc(usage.date).isSame(moment.utc().startOf('month'))) {
+                const bonusEvents = moment.utc().isBefore(moment.utc(organization.bonus_expiration)) ? organization.bonus_events_per_month : 0;
+                const usage = organization.usage && organization.usage[organization.usage.length - 1];
+                if (usage && moment.utc(usage.date).isSame(moment.utc().startOf("month"))) {
                     const remaining = usage.limit - (usage.total - usage.blocked);
                     return remaining > 0 ? remaining : 0;
                 }
 
-                return organization['max_events_per_month'] + bonusEvents;
+                return organization.max_events_per_month + bonusEvents;
             };
 
-            this.organization = JSON.parse(JSON.stringify(response));
-            this.hasMonthlyUsage = this.organization['max_events_per_month'] > 0;
+            this.hasMonthlyUsage = this.organization.max_events_per_month > 0;
             this.remainingEventLimit = getRemainingEventLimit(this.organization);
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && !!this.organization;
 
-            this.organization['usage'] = (this.organization['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: this.organization['max_events_per_month'], too_big: 0 }]).filter((usage) => {
-                return this.project['usage'].some(function(u) { return moment(u.date).isSame(usage.date); });
+            this.organization.usage = (this.organization.usage || [{ date: moment.utc().startOf("month").toISOString(), total: 0, blocked: 0, limit: this.organization.max_events_per_month, too_big: 0 }]).filter((usage) => {
+                return this.project.usage.some(u => moment(u.date).isSame(usage.date));
             });
-
 
             this.apexChart.seriesData = [];
 
             this.apexChart.seriesData.push({
-                name: 'Allowed in Organization',
-                data: this.organization['usage'].map((item) => {
+                name: "Allowed in Organization",
+                data: this.organization.usage.map((item) => {
                     return [moment.utc(item.date), item.total - item.blocked - item.too_big];
                 })
             });
 
             this.apexChart.seriesData.push({
-                name: 'Allowed',
-                data: this.project['usage'].map((item) => {
+                name: "Allowed",
+                data: this.project.usage.map((item) => {
                     return [moment.utc(item.date), item.total - item.blocked - item.too_big];
                 })
             });
 
             this.apexChart.seriesData.push({
-                name: 'Blocked',
-                data: this.project['usage'].map((item) => {
+                name: "Blocked",
+                data: this.project.usage.map((item) => {
                     return [moment.utc(item.date), item.blocked];
                 })
             });
 
             this.apexChart.seriesData.push({
-                name: 'Too Big',
-                data: this.project['usage'].map((item) => {
+                name: "Too Big",
+                data: this.project.usage.map((item) => {
                     return [moment.utc(item.date), item.too_big];
                 })
             });
 
             this.apexChart.seriesData.push({
-                name: 'Limit',
-                data: this.organization['usage'].map((item) => {
+                name: "Limit",
+                data: this.organization.usage.map((item) => {
                     return [moment.utc(item.date), item.limit];
                 })
             });
-
-            console.log(this.seriesData);
-            return this.organization;
-        };
-
-        try {
-            const res = await this.organizationService.getById(this.project['organization_id']);
-            onSuccess(res);
-            return this.organization;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Organization', {organizationId: this.project['organization_id']}));
-            return err;
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Organization", {organizationId: this.project.organization_id}));
+            throw ex;
         }
     }
 
-    async getProject() {
-        const onSuccess = (response) => {
-            this.common_methods = null;
-            this.user_namespaces = null;
+    private async getProject() {
+        try {
+            this.project = await this.projectService.getById(this._projectId);
+            this.commonMethods = null;
+            this.userNamespaces = null;
 
-            this.project = JSON.parse(JSON.stringify(response));
-            this.hasPremiumFeatures = this.project['has_premium_features'];
-            if (this.project && this.project['data']) {
-                this.common_methods = this.project['data']['CommonMethods'];
-                this.user_namespaces = this.project['data']['UserNamespaces'];
+            this.hasPremiumFeatures = this.project.has_premium_features;
+            if (this.project && this.project.data) {
+                this.commonMethods = this.project.data.CommonMethods;
+                this.userNamespaces = this.project.data.UserNamespaces;
             }
 
-            this.project['usage'] = this.project['usage'] || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: 3000, too_big: 0 }];
-            return this.project;
-        };
-
-        try {
-            const res = await this.projectService.getById(this._projectId);
-            onSuccess(res);
-            return this.project;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Cannot_Find_Project', {projectId: this._projectId}));
-            throw err;
+            this.project.usage = this.project.usage || [{ date: moment.utc().startOf("month").toISOString(), total: 0, blocked: 0, limit: 3000, too_big: 0 }];
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Project", {projectId: this._projectId}));
+            throw ex;
         }
     }
 
-    async getTokens() {
-        const onSuccess = (response) => {
-            const responseTokens = JSON.parse(JSON.stringify(response));
-            responseTokens.forEach((item, key) => {
+    public async getTokens() {
+        try {
+            this.tokens = await this.tokenService.getByProjectId(this._projectId);
+            this.tokens.forEach((item, key) => {
                 this.editable[key] = false;
             });
-            this.tokens = responseTokens;
-            return this.tokens;
-        };
-        try {
-            const res = await this.tokenService.getByProjectId(this._projectId);
-            onSuccess(res);
-            return res;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the api keys.'));
-            throw err;
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the api keys."));
+            throw ex;
         }
     }
 
-    async getConfiguration() {
-        const onSuccess = (response) => {
+    private async getConfiguration() {
+        try {
+            const response = await this.projectService.getConfig(this._projectId);
             this.config = [];
-            this.data_exclusions = null;
-            this.user_agents = null;
-            this.exclude_private_information = false;
+            this.dataExclusions = null;
+            this.userAgents = null;
+            this.excludePrivateInformation = false;
 
-            Object.keys(response['settings']).map((key) => {
-                if (key === '@@DataExclusions') {
-                    this.data_exclusions = response['settings'][key];
-                } else if (key === '@@UserAgentBotPatterns') {
-                    this.user_agents = response['settings'][key];
-                } else if (key === '@@IncludePrivateInformation') {
-                    this.exclude_private_information = response['settings'][key] === 'false';
+            Object.keys(response.settings).map((key) => {
+                if (key === "@@DataExclusions") {
+                    this.dataExclusions = response.settings[key];
+                } else if (key === "@@UserAgentBotPatterns") {
+                    this.userAgents = response.settings[key];
+                } else if (key === "@@IncludePrivateInformation") {
+                    this.excludePrivateInformation = response.settings[key] === "false";
                 } else {
-                    this.config.push({key: key, value: response['settings'][key], is_editable: false});
+                    this.config.push({key, value: response.settings[key], is_editable: false});
                 }
             });
 
-            return this.config;
-        };
-        try {
-            const res = await this.projectService.getConfig(this._projectId);
-            onSuccess(res);
-            return this.project;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
-            throw err;
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the notification settings."));
+            throw ex;
         }
     }
 
-    async saveIncludePrivateInformation() {
-        let result: any;
+    public async saveIncludePrivateInformation() {
         try {
-            if (this.exclude_private_information) {
-                result = await this.projectService.setConfig(this._projectId, '@@IncludePrivateInformation', false);
+            if (this.excludePrivateInformation) {
+                await this.projectService.setConfig(this._projectId, "@@IncludePrivateInformation", false);
             } else {
-                result = await this.projectService.removeConfig(this._projectId, '@@IncludePrivateInformation');
+                await this.projectService.removeConfig(this._projectId, "@@IncludePrivateInformation");
             }
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the include private information setting.'));
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the include private information setting."));
         }
     }
 
-    async getSlackNotificationSettings() {
+    private async getSlackNotificationSettings() {
         this.slackNotificationSettings = null;
         try {
-            const res = await this.projectService.getIntegrationNotificationSettings(this._projectId, 'slack');
-            this.slackNotificationSettings = JSON.parse(JSON.stringify(res));
-            return this.slackNotificationSettings;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while loading the slack notification settings.'));
-            throw err;
+            this.slackNotificationSettings = await this.projectService.getIntegrationNotificationSettings(this._projectId, "slack");
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while loading the slack notification settings."));
+            throw ex;
         }
     }
 
-    async getWebHooks() {
+    public async getWebHooks() {
         try {
-            const res = await this.webHookService.getByProjectId(this._projectId);
-            this.webHooks = JSON.parse(JSON.stringify(res));
-            return this.webHooks;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred loading the notification settings.'));
-            throw err;
+            this.webHooks = await this.webHookService.getByProjectId(this._projectId);
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the notification settings."));
+            throw ex;
         }
     }
 
-    async removeConfig(config) {
+    public async removeConfig(config) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.removeConfig(this._projectId, config['key']);
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the configuration setting.'));
-                return err;
+                await this.projectService.removeConfig(this._projectId, config.key);
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the configuration setting."));
+                throw ex;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this configuration setting?', 'DELETE CONFIGURATION SETTING', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to delete this configuration setting?", "DELETE CONFIGURATION SETTING", modalCallBackFunction);
     }
 
-    async removeProject() {
+    public async removeProject() {
         const modalCallBackFunction = async () => {
             this._ignoreRefresh = true;
             try {
-                const res = await this.projectService.remove(this._projectId);
-                this.router.navigate(['/project/list']);
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the project.'));
+                await this.projectService.remove(this._projectId);
+                await this.router.navigate(["/project/list"]);
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the project."));
                 this._ignoreRefresh = false;
-                return err;
+                throw ex;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this project?', 'Delete Project', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to delete this project?", "Delete Project", modalCallBackFunction);
     }
 
-    async removeSlack() {
+    public async removeSlack() {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.removeSlack(this._projectId);
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to remove slack.'));
-                return err;
+                await this.projectService.removeSlack(this._projectId);
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove slack."));
+                throw ex;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to remove slack support?', 'Remove Slack', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to remove slack support?", "Remove Slack", modalCallBackFunction);
     }
 
-    async removeToken(token) {
+    public async removeToken(token) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.tokenService.remove(token['id']);
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the API Key.'));
-                return err;
+                await this.tokenService.remove(token.id);
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the API Key."));
+                throw ex;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this API key?', 'DELETE API KEY', modalCallBackFunction);
+        this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to delete this API key?", "DELETE API KEY", modalCallBackFunction);
     }
 
-    async removeWebHook(hook) {
+    public async removeWebHook(hook) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.webHookService.remove(hook['id']);
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the web hook.'));
-                return err;
+                await this.webHookService.remove(hook.id);
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the web hook."));
+                throw ex;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to delete this web hook?', 'DELETE WEB HOOK', modalCallBackFunction);
+        await this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to delete this web hook?", "DELETE WEB HOOK", modalCallBackFunction);
     }
 
-    async resetData() {
+    public async resetData() {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.projectService.resetData(this._projectId);
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while resetting project data.'));
-                return err;
+                await this.projectService.resetData(this._projectId);
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while resetting project data."));
+                throw ex;
             }
         };
 
-        this.dialogService.confirmDanger(this.viewRef, 'Are you sure you want to reset the data for this project?', 'RESET PROJECT DATA', modalCallBackFunction);
+        await this.dialogService.confirmDanger(this.viewRef, "Are you sure you want to reset the data for this project?", "RESET PROJECT DATA", modalCallBackFunction);
     }
 
-    async save(isValid) {
+    public async save(isValid: boolean) {
         if (!isValid) {
             return;
         }
 
         try {
             await this.projectService.update(this._projectId, this.project);
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the project."));
         }
     }
 
-    async saveApiKeyNote(data) {
+    public async saveApiKeyNote(data: Token) {
         try {
-            await this.tokenService.update(data['id'], { notes: data.notes });
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the API key note.'));
+            await this.tokenService.update(data.id, { notes: data.notes } as Token);
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the API key note."));
         }
     }
 
-    async saveCommonMethods() {
-        const onSuccess = () => {
-        };
-
-        const onFailure = async () => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the common methods.'));
-        };
-
-        if (this.common_methods) {
-            try {
-                await this.projectService.setData(this._projectId, 'CommonMethods', this.common_methods);
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
-        } else {
-            try {
-                await this.projectService.removeData(this._projectId, 'CommonMethods');
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
-        }
-    }
-
-    async saveDataExclusion() {
-        const onSuccess = () => {
-        };
-
-        const onFailure = async () => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the data exclusion.'));
-        };
-
-        if (this.data_exclusions) {
-            try {
-                await this.projectService.setConfig(this._projectId, '@@DataExclusions', this.data_exclusions);
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
-        } else {
-            try {
-                await this.projectService.removeConfig(this._projectId, '@@DataExclusions');
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
-        }
-    }
-
-    async saveDeleteBotDataEnabled() {
+    public async saveCommonMethods() {
         try {
-            await this.projectService.update(this._projectId, {'delete_bot_data_enabled': this.project['delete_bot_data_enabled']});
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the project.'));
+            if (this.commonMethods) {
+                await this.projectService.setData(this._projectId, "CommonMethods", this.commonMethods);
+            } else {
+                await this.projectService.removeData(this._projectId, "CommonMethods");
+            }
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the common methods."));
         }
     }
 
-    async saveUserAgents() {
-        const onSuccess = () => {
-        };
-
-        const onFailure = async () => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the user agents.'));
-        };
-
-        if (this.user_agents) {
-            try {
-                await this.projectService.setConfig(this._projectId, '@@UserAgentBotPatterns', this.user_agents);
-                onSuccess();
-            } catch (err) {
-                onFailure();
+    public async saveDataExclusion() {
+        try {
+            if (this.dataExclusions) {
+                await this.projectService.setConfig(this._projectId, "@@DataExclusions", this.dataExclusions);
+            } else {
+                await this.projectService.removeConfig(this._projectId, "@@DataExclusions");
             }
-        } else {
-            try {
-                await this.projectService.removeConfig(this._projectId, '@@UserAgentBotPatterns');
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the data exclusion."));
         }
     }
 
-    async saveUserNamespaces() {
-        const onSuccess = () => {
-        };
-
-        const onFailure = async () => {
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving the user namespaces.'));
-        };
-
-        if (this.user_namespaces) {
-            try {
-                await this.projectService.setData(this._projectId, 'UserNamespaces', this.user_namespaces);
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
-        } else {
-            try {
-                await this.projectService.removeData(this._projectId, 'UserNamespaces');
-                onSuccess();
-            } catch (err) {
-                onFailure();
-            }
+    public async saveDeleteBotDataEnabled() {
+        try {
+            await this.projectService.update(this._projectId, { delete_bot_data_enabled: this.project.delete_bot_data_enabled } as Project);
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the project."));
         }
     }
 
-    async saveSlackNotificationSettings() {
-        const onFailure = async (response) => {
+    public async saveUserAgents() {
+        try {
+            if (this.userAgents) {
+                await this.projectService.setConfig(this._projectId, "@@UserAgentBotPatterns", this.userAgents);
+            } else {
+                await this.projectService.removeConfig(this._projectId, "@@UserAgentBotPatterns");
+            }
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the user agents."));
+        }
+    }
+
+    public async saveUserNamespaces() {
+        try {
+            if (this.userNamespaces) {
+                await this.projectService.setData(this._projectId, "UserNamespaces", this.userNamespaces);
+            } else {
+                await this.projectService.removeData(this._projectId, "UserNamespaces");
+            }
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the user namespaces."));
+        }
+    }
+
+    public async saveSlackNotificationSettings() {
+        try {
+            await this.projectService.setIntegrationNotificationSettings(this._projectId, "slack", this.slackNotificationSettings);
+        } catch (ex) { // TODO: Verify ex has status code...
             if (response.status === 426) {
                 try {
-                    return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project['organization_id'], () => {
+                    return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project.organization_id, () => {
                         return this.saveSlackNotificationSettings();
                     });
-                } catch (err) {
+                } catch (ex) {
                     return this.getSlackNotificationSettings();
                 }
             }
 
-            this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while saving your slack notification settings.'));
-        };
-
-        try {
-            await this.projectService.setIntegrationNotificationSettings(this._projectId, 'slack', this.slackNotificationSettings);
-        } catch (err) {
-            onFailure(err);
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving your slack notification settings."));
         }
     }
 
-    showChangePlanDialog() {
-        // implement later Exceoptionless
+    public showChangePlanDialog() {
+        // TODO: implement show billing dialog.
     }
 
-    validateApiKeyNote(original, data) {
+    private validateApiKeyNote(original, data) { // TODO: Ensure this being validated.. might need to check old site.
         if (original === data) {
             return false;
         }
@@ -680,11 +590,11 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         return null;
     }
 
-    async validateClientConfiguration(original, data) {
+    private async validateClientConfiguration(original, data) { // TODO: Ensure this being validated.. might need to check old site.
         if (original === data) {
             return false;
         }
 
-        return !data ? await this.wordTranslateService.translate('Please enter a valid value.') : null;
+        return !data ? await this.wordTranslateService.translate("Please enter a valid value.") : null;
     }
 }

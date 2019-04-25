@@ -1,25 +1,18 @@
-import { Component, ComponentRef } from '@angular/core';
-import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
-import { WordTranslateService } from '../../service/word-translate.service';
+import { Component, ComponentRef } from "@angular/core";
+import { IModalDialog, IModalDialogOptions, } from "ngx-modal-dialog";
 
 @Component({
-    selector: 'app-confirm-dialog',
-    templateUrl: './confirm-dialog.component.html'
+    selector: "app-confirm-dialog",
+    templateUrl: "./confirm-dialog.component.html"
 })
 
+// TODO: Confirm this is working..
 export class ConfirmDialogComponent implements IModalDialog {
-    text = '';
-    constructor(
-        private wordTranslateService: WordTranslateService
-    ) {}
+    public text: string;
 
-    async dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-        this.text = await this.wordTranslateService.translate('Are you sure you want to delete your account?');
-        // no processing needed
-        this.text = options.data['text'];
-    }
+    constructor() {}
 
-    setText(content) {
-        this.text = content;
+    public async dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+        this.text = options.data.text;
     }
 }

@@ -1,19 +1,19 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class ModalParameterService {
     modalParameter = {};
     constructor() {}
 
-    setModalParameter(key, value) {
+    public setModalParameter(key, value) {
         this.modalParameter = {};
         this.modalParameter[key] = value;
     }
 
-    getModalParameter(key) {
+    public getModalParameter(key) {
         return this.modalParameter[key];
     }
 }

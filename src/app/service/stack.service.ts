@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { FilterService } from './filter.service';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { FilterService } from "./filter.service";
+import { Stack } from "../models/stack";
+import { WorkInProgressResult } from "../models/results";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class StackService {
@@ -13,135 +14,116 @@ export class StackService {
         private filterService: FilterService,
     ) {}
 
-    addLink(id, url) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type':  'application/json;charset=UTF-8',
-            })
-        };
-        return this.http.post(`stacks/${id}/add-link`,  {value: url}, httpOptions).toPromise();
+    public addLink(id: string, url: string) {
+        return this.http.post<never>(`stacks/${id}/add-link`, url).toPromise();
     }
 
-    disableNotifications(id) {
-        return this.http.delete(`stacks/${id}/notifications`).toPromise();
+    public disableNotifications(id: string) {
+        return this.http.delete<never>(`stacks/${id}/notifications`).toPromise();
     }
 
-    enableNotifications(id) {
-        const data = {};
-        return this.http.post(`stacks/${id}/notifications`,  data).toPromise();
+    public enableNotifications(id: string) {
+        return this.http.post<never>(`stacks/${id}/notifications`, {}).toPromise();
     }
 
-    getAll(options) {
+    public getAll(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks`, { params: mergedOptions });
+            return this.http.get<Stack[]>(`organizations/${organization}/stacks`, { params: mergedOptions });
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks`, { params: mergedOptions });
+            return this.http.get<Stack[]>(`projects/${project}/stacks`, { params: mergedOptions });
         }
 
-        return this.http.get(`stacks`, { params: mergedOptions });
+        return this.http.get<Stack[]>(`stacks`, { params: mergedOptions });
     }
 
-    getById(id) {
-        return this.http.get('stacks/' + id, { observe: 'response' }).toPromise();
+    public getById(id) {
+        return this.http.get<Stack>("stacks/" + id, { observe: "response" }).toPromise();
     }
 
-    getFrequent(options?) {
+    public getFrequent(options?) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get(`organizations/${organization}/stacks/frequent`, { observe: 'response', params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`organizations/${organization}/stacks/frequent`, { params: mergedOptions }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
         if (project) {
-            return this.http.get(`projects/${project}/stacks/frequent`, { observe: 'response', params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`projects/${project}/stacks/frequent`, { params: mergedOptions }).toPromise();
         }
 
-        const data = mergedOptions;
-        return this.http.get('stacks/frequent', { observe: 'response', params: data }).toPromise();
+        return this.http.get<Stack[]>("stacks/frequent", { params: mergedOptions }).toPromise();
     }
 
-    getUsers(options) {
+    public getUsers(options) {
         const mergedOptions = this.filterService.apply(options);
 
         const organization = this.filterService.getOrganizationId();
-        if (typeof organization === 'string' && organization) {
-            return this.http.get(`organizations/${organization}/stacks/users`, { observe: 'response', params: mergedOptions }).toPromise();
+        if (typeof organization === "string" && organization) {
+            return this.http.get<Stack[]>(`organizations/${organization}/stacks/users`, { params: mergedOptions }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
-        if (typeof project === 'string' && project) {
-            return this.http.get(`projects/${project}/stacks/users`, { observe: 'response', params: mergedOptions }).toPromise();
+        if (typeof project === "string" && project) {
+            return this.http.get<Stack[]>(`projects/${project}/stacks/users`, { params: mergedOptions }).toPromise();
         }
 
-        return this.http.get(`stacks/users`, { observe: 'response', params: mergedOptions }).toPromise();
+        return this.http.get<Stack[]>(`stacks/users`, { params: mergedOptions }).toPromise();
     }
 
-    getNew(options) {
+    public getNew(options) {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
-        if (typeof organization === 'string' && organization) {
-            return this.http.get(`organizations/${organization}/stacks/new`, { observe: 'response', params: mergedOptions }).toPromise();
+        if (typeof organization === "string" && organization) {
+            return this.http.get<Stack[]>(`organizations/${organization}/stacks/new`, { params: mergedOptions }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
-        if (typeof project === 'string' && project) {
-            return this.http.get(`projects/${project}/stacks/new`, { observe: 'response', params: mergedOptions }).toPromise();
+        if (typeof project === "string" && project) {
+            return this.http.get<Stack[]>(`projects/${project}/stacks/new`, { params: mergedOptions }).toPromise();
         }
 
-        return this.http.get(`stacks/new`, { observe: 'response', params: mergedOptions }).toPromise();
+        return this.http.get<Stack[]>(`stacks/new`, { params: mergedOptions }).toPromise();
     }
 
-    markCritical(id) {
-        const data = {};
-        return this.http.post(`stacks/${id}/mark-critical`, data).toPromise();
+    public markCritical(id: string) {
+        return this.http.post<never>(`stacks/${id}/mark-critical`, {}).toPromise();
     }
 
-    markNotCritical(id) {
-        return this.http.delete(`stacks/${id}/mark-critical`).toPromise();
+    public markNotCritical(id: string) {
+        return this.http.delete<never>(`stacks/${id}/mark-critical`).toPromise();
     }
 
-    markFixed(id, version?) {
-        const data = {
-            id: id
-        };
-        return this.http.post(`stacks/${id}/mark-fixed` + (version ? `?version=${version}` : ''), data).toPromise();
+    public markFixed(ids: string[], version?: string) {
+        return this.http.post<WorkInProgressResult>(`stacks/${ids.join(",")}/mark-fixed`, { params: { version }}).toPromise();
     }
 
-    markNotFixed(id?) {
-        return this.http.delete(`stacks/${id}/mark-fixed`).toPromise();
+    public markNotFixed(id: string) {
+        return this.http.delete<WorkInProgressResult>(`stacks/${id}/mark-fixed`).toPromise();
     }
 
-    markHidden(id?) {
-        const data = {};
-        return this.http.post(`stacks/${id}/mark-hidden`, data).toPromise();
+    public markHidden(id: string) {
+        return this.http.post<WorkInProgressResult>(`stacks/${id}/mark-hidden`, {}).toPromise();
     }
 
-    markNotHidden(id?) {
-        return this.http.delete(`stacks/${id}/mark-hidden`).toPromise();
+    public markNotHidden(id: string) {
+        return this.http.delete<WorkInProgressResult>(`stacks/${id}/mark-hidden`).toPromise();
     }
 
-    promote(id) {
-        const data = {};
-        return this.http.post(`stacks/${id}/promote`,  data, { observe: 'response' }).toPromise();
+    public promote(id: string) {
+        return this.http.post<never>(`stacks/${id}/promote`, {}).toPromise();
     }
 
-    remove(id?) {
-        return this.http.delete(`stacks/${id}`).toPromise();
+    public remove(id: string) {
+        return this.http.delete<WorkInProgressResult>(`stacks/${id}`).toPromise();
     }
 
-    removeLink(id, url) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type':  'application/json;charset=UTF-8',
-            }),
-            body: url
-        };
-        return this.http.post(`stacks/${id}/remove-link`, {value: url}, httpOptions).toPromise();
+    public removeLink(id: string, url: string) {
+        return this.http.post<never>(`stacks/${id}/remove-link`, url).toPromise();
     }
 }

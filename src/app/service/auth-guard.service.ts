@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from 'ng2-ui-auth';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
+import { AuthService } from "ng2-ui-auth";
+import { Observable } from "rxjs/Observable";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class AuthGuardService implements CanActivate {
@@ -13,10 +13,9 @@ export class AuthGuardService implements CanActivate {
         private router: Router,
     ) {}
 
-    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        console.log('auth-gaurd-here');
+    public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         if (!this.authService.isAuthenticated()) {
-            this.router.navigate(['/login'], { queryParams: next.queryParams });
+            this.router.navigate(["/login"], { queryParams: next.queryParams });
             return false;
         }
         return true;

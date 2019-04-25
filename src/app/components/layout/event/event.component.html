@@ -7,7 +7,7 @@
                 <i class="fa fa-calendar"></i> {{ 'Event Occurrence' | translate }}
 
                 <div class="pull-right hidden-print">
-                    <a ngxClipboard [cbContent]="event_json" (cbOnSuccess)="copied()" [hidden]="!event['stack_id'] || !clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Event JSON to Clipboard' | translate }}"></a>
+                    <a ngxClipboard [cbContent]="eventJson" (cbOnSuccess)="copied()" [hidden]="!event['stack_id'] || !clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Event JSON to Clipboard' | translate }}"></a>
                     <a routerLink="/stack/{{ event['stack_id'] }}" [ngClass]="{'disabled': !event['stack_id']}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="{{ 'Go To Stack' | translate }}"></a>
                     <a routerLink="/event/{{ previous }}" [queryParams]="{ tab: getPreviousTab() }" [ngClass]="{'disabled': !previous}" class="btn btn-default btn-xs fa fa-fw fa-caret-left" role="button" title="{{ 'Previous Occurrence' | translate }}"></a>
                     <a routerLink="/event/{{ next }}" [queryParams]="{ tab: getNextTab() }" [ngClass]="{'disabled': !next}" class="btn btn-default btn-xs fa fa-fw fa-caret-right" role="button" title="{{ 'Next Occurrence' | translate }}"></a>
@@ -15,7 +15,7 @@
             </div>
 
             <div class="panel-body">
-                <ngb-tabset class="tab-container" [activeId]="activedTab" #tabsChild (tabChange)="updateHistory()">
+                <ngb-tabset class="tab-container" [activeId]="activeTab" #tabsChild (tabChange)="updateHistory()">
                     <ngb-tab *ngFor="let tab of tabs" title="{{ tab['title'] | translate }}" id="{{ tab['template_key'] }}">
                         <ng-template ngbTabContent>
                             <app-event-tabs [tab]="tab" (demoteTabParam)="demoteTab($event)" (promoteTabParam)="promoteTab($event)" [event]="event" [project]="project" [sessionEvents]="sessionEvents"></app-event-tabs>

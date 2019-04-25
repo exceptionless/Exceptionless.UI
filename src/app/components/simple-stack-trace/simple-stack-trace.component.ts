@@ -1,46 +1,43 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { SimpleErrorService } from '../../service/simple-error.service';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from "@angular/core";
+import { SimpleErrorService } from "../../service/simple-error.service";
 
 @Component({
-    selector: 'app-simple-stack-trace',
-    templateUrl: './simple-stack-trace.component.html',
-    styleUrls: ['./simple-stack-trace.component.less']
+    selector: "app-simple-stack-trace",
+    templateUrl: "./simple-stack-trace.component.html",
+    styleUrls: ["./simple-stack-trace.component.less"]
 })
 
-export class SimpleStackTraceComponent implements OnInit, OnChanges {
-    @Input() exception;
-    @Input() textStackTrace;
-    stackTrace: any;
+export class SimpleStackTraceComponent implements OnChanges {
+    @Input() public exception: any;  // TODO: Why doesn't this have overview and clipboard? Does it need it? See Stack Trace Component
+    public stackTrace: any;
+
     constructor(
         private simpleErrorService: SimpleErrorService
     ) {}
 
-    ngOnInit() {}
-
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges) {
         const errors = this.simpleErrorService.getExceptions(this.exception);
         this.stackTrace = this.buildStackTrace(errors, true);
-        this.textStackTrace = this.buildStackTrace(errors, true);
     }
 
-    buildStackFrames(exceptions, includeHTML) {
-        let frames = '';
+    private buildStackFrames(exceptions: any[], includeHTML: string): string {
+        let frames = "";
         for (let index = 0; index < exceptions.length; index++) {
             const stackTrace = exceptions[index].stack_trace;
             if (!!stackTrace) {
                 if (includeHTML) {
-                    frames += '<div class="stack-frame">' + this.escapeHTML(stackTrace.replace(' ', ''));
+                    frames += "<div class=\"stack-frame\">" + this.escapeHTML(stackTrace.replace(" ", ""));
 
                     if (index < (exceptions.length - 1)) {
-                        frames += '<div>--- End of inner exception stack trace ---</div>';
+                        frames += "<div>--- End of inner exception stack trace ---</div>";
                     }
 
-                    frames += '</div>';
+                    frames += "</div>";
                 } else {
-                    frames += stackTrace.replace(' ', '');
+                    frames += stackTrace.replace(" ", "");
 
                     if (index < (exceptions.length - 1)) {
-                        frames += '--- End of inner exception stack trace ---';
+                        frames += "--- End of inner exception stack trace ---";
                     }
                 }
             }
@@ -49,37 +46,38 @@ export class SimpleStackTraceComponent implements OnInit, OnChanges {
         return frames;
     }
 
-    escapeHTML(input) {
+    private escapeHTML(input: string): string {
         if (!input || !input.replace) {
             return input;
         }
 
-        return input.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        // TODO: Figure out a better way to sanitize this.
+        return input.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-    buildStackTraceHeader(exceptions, includeHTML) {
-        let header = '';
+    private  buildStackTraceHeader(exceptions: any[], includeHTML: string): string {
+        let header = "";
         for (let index = 0; index < exceptions.length; index++) {
             if (includeHTML) {
-                header += '<span class="ex-header">';
+                header += "<span class=\"ex-header\">";
             }
 
             if (index > 0) {
-                header += ' ---> ';
+                header += " ---> ";
             }
 
             const hasType = !!exceptions[index].type;
             if (hasType) {
                 if (includeHTML) {
-                    header += '<span class="ex-type">' + this.escapeHTML(exceptions[index].type) + '</span>: ';
+                    header += "<span class=\"ex-type\">" + this.escapeHTML(exceptions[index].type) + "</span>: ";
                 } else {
-                    header += exceptions[index].type + ': ';
+                    header += exceptions[index].type + ": ";
                 }
             }
 
             if (exceptions[index].message) {
                 if (includeHTML) {
-                    header += '<span class="ex-message">' + this.escapeHTML(exceptions[index].message) + '</span>';
+                    header += "<span class=\"ex-message\">" + this.escapeHTML(exceptions[index].message) + "</span>";
                 } else {
                     header += exceptions[index].message;
                 }
@@ -87,9 +85,9 @@ export class SimpleStackTraceComponent implements OnInit, OnChanges {
 
             if (hasType) {
                 if (includeHTML) {
-                    header += '</span>';
+                    header += "</span>";
                 } else {
-                    header += '\r\n';
+                    header += "\r\n";
                 }
             }
         }
@@ -97,7 +95,7 @@ export class SimpleStackTraceComponent implements OnInit, OnChanges {
         return header;
     }
 
-    buildStackTrace(exceptions, includeHTML) {
+    private buildStackTrace(exceptions: any[], includeHTML: string): string {
         return this.buildStackTraceHeader(exceptions, includeHTML) + this.buildStackFrames(exceptions.reverse(), includeHTML);
     }
 }

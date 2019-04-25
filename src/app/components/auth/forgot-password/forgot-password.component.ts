@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { NotificationService } from '../../../service/notification.service';
-import { AuthAccountService } from '../../../service/auth-account.service';
-import { WordTranslateService } from '../../../service/word-translate.service';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { NotificationService } from "../../../service/notification.service";
+import { AuthAccountService } from "../../../service/auth-account.service";
+import { WordTranslateService } from "../../../service/word-translate.service";
 
 @Component({
-    selector: 'app-forgot-password',
-    templateUrl: './forgot-password.component.html'
+    selector: "app-forgot-password",
+    templateUrl: "./forgot-password.component.html"
 })
 
 export class ForgotPasswordComponent implements OnInit {
-    emailAddress = '';
+    public emailAddress: string;
 
     constructor(
         private router: Router,
@@ -19,33 +19,20 @@ export class ForgotPasswordComponent implements OnInit {
         private wordTranslateService: WordTranslateService
     ) {}
 
-    ngOnInit() {
+    public ngOnInit() {
     }
 
-    async resetPassword(isValid) {
+    public async resetPassword(isValid: boolean) {
         if (!isValid) {
             return;
         }
 
-        const onSuccess = async () => {
-            this.notificationService.info('', await this.wordTranslateService.translate('ResetPassword_Success_Message'));
-            return this.router.navigate(['/login']);
-        };
-
-        const onFailure = async (response) => {
-            let message = await this.wordTranslateService.translate('ResetPassword_Failed_Message');
-            if (response && response.error) {
-                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
-            }
-
-            this.notificationService.error('', message);
-        };
-
         try {
             await this.authAccountService.forgotPassword(this.emailAddress);
-            onSuccess();
-        } catch (err) {
-            onFailure(err);
+            this.notificationService.info("", await this.wordTranslateService.translate("ResetPassword_Success_Message"));
+            return this.router.navigate(["/login"]);
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("ResetPassword_Failed_Message"));
         }
     }
 }

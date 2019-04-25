@@ -1,40 +1,40 @@
-import { Component, ComponentRef } from '@angular/core';
-import { IModalDialog, IModalDialogOptions, } from 'ngx-modal-dialog';
-import { ModalParameterService } from '../../service/modal-parameter.service';
-import { AppEventService } from '../../service/app-event.service';
+import { Component, ComponentRef } from "@angular/core";
+import { IModalDialog, IModalDialogOptions, } from "ngx-modal-dialog";
+import { ModalParameterService } from "../../service/modal-parameter.service";
+import { AppEventService, AppEvent } from "../../service/app-event.service";
 
 @Component({
-    selector: 'app-add-configuration-dialog',
-    templateUrl: './add-configuration-dialog.component.html'
+    selector: "app-add-configuration-dialog",
+    templateUrl: "./add-configuration-dialog.component.html"
 })
 
 export class AddConfigurationDialogComponent implements IModalDialog {
-    configuration: any;
-    data = {
-        key: '',
-        value: ''
+    private configuration: any;
+    public data = { // TODO: View is accessing data via indexer.
+        key: "",
+        value: ""
     };
-    submitted = false;
+    public submitted: boolean = false;
 
     constructor(
         private modalParameterService: ModalParameterService,
         private appEvent: AppEventService
     ) {
         this.appEvent.subscribe({
-            next: (event: any) => {
-                if (event.type === 'form_submitted') {
+            next: (event: AppEvent) => {
+                if (event.type === "form_submitted") {
                     this.submitted = true;
                 }
             }
         });
     }
 
-    dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+    public dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
         // no processing needed
-        this.configuration = options.data['key'];
+        this.configuration = options.data.key;
     }
 
-    updateValue() {
+    public updateValue() {
         this.modalParameterService.setModalParameter(this.configuration, this.data);
     }
 }

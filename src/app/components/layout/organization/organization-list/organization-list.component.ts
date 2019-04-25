@@ -1,31 +1,35 @@
-import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { LinkService } from '../../../../service/link.service';
-import { PaginationService } from '../../../../service/pagination.service';
-import { NotificationService } from '../../../../service/notification.service';
-import { OrganizationService } from '../../../../service/organization.service';
-import { WordTranslateService } from '../../../../service/word-translate.service';
-import { UserService } from '../../../../service/user.service';
-import { DialogService } from '../../../../service/dialog.service';
-import { AppEventService } from '../../../../service/app-event.service';
-import { BillingService } from '../../../../service/billing.service';
+import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
+import { Router } from "@angular/router";
+import { LinkService } from "../../../../service/link.service";
+import { PaginationService } from "../../../../service/pagination.service";
+import { NotificationService } from "../../../../service/notification.service";
+import { OrganizationService } from "../../../../service/organization.service";
+import { WordTranslateService } from "../../../../service/word-translate.service";
+import { UserService } from "../../../../service/user.service";
+import { DialogService } from "../../../../service/dialog.service";
+import { AppEventService } from "../../../../service/app-event.service";
+import { BillingService } from "../../../../service/billing.service";
+import { Subscription } from "rxjs";
+import { Organization } from "src/app/models/organization";
+import { CurrentUser, User } from "src/app/models/user";
+import { EntityChanged } from "src/app/models/messaging";
 
 @Component({
-    selector: 'app-organization-list',
-    templateUrl: './organization-list.component.html'
+    selector: "app-organization-list",
+    templateUrl: "./organization-list.component.html"
 })
 
 export class OrganizationListComponent implements OnInit, OnDestroy {
-    _settings = { mode: 'stats' };
-    canChangePlan = false;
-    loading = true;
-    next: string;
-    previous: string;
-    currentOptions = {};
-    organizations = [];
-    pageSummary: string;
-    authUser: any = {};
-    subscriptions: any;
+    private _settings: any  = { mode: "stats" };
+    public canChangePlan: boolean = false;
+    public loading: boolean = true;
+    public next: any;
+    public previous: any;
+    public currentOptions: any = {};
+    public organizations: Organization[];
+    public pageSummary: string;
+    public user: CurrentUser;
+    private subscriptions: Subscription[];
 
     constructor(
         private router: Router,
@@ -41,136 +45,110 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         private billingService: BillingService
     ) {}
 
-    ngOnInit() {
+    public async ngOnInit() {
         this.subscriptions = [];
-        this.authUser = this.userService.authUser;
+        this.user = await this.userService.getCurrentUser();
         this.subscriptions.push(this.appEvent.subscribe({
-            next: (event: any) => {
-                if (event.type === 'UPDATE_USER') {
-                    this.authUser = this.userService.authUser;
+            next: async (event: EntityChanged) => {
+                if (event.type === "UPDATE_USER") {
+                    this.user = await this.userService.getCurrentUser(); // TODO: Do we need to store this in the service?
                 }
             }
         }));
-        this.get();
+
+        await this.get();
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         for (const subscription of this.subscriptions) {
             subscription.unsubscribe();
         }
     }
 
-    add() {
-        const modalCallBackFunction = (name) => {
+    public async add() {
+        const modalCallBackFunction = (name: string) => {
             this.createOrganization(name);
             return true;
         };
 
-        this.dialogService.addOrganization(this.viewRef, modalCallBackFunction.bind(this));
+        await this.dialogService.addOrganization(this.viewRef, modalCallBackFunction.bind(this));
     }
 
-    async changePlan(organizationId) {
+    public async changePlan(organizationId: string) {
         if (!environment.STRIPE_PUBLISHABLE_KEY) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Billing is currently disabled.'));
+            this.notificationService.error("", await this.wordTranslateService.translate("Billing is currently disabled."));
             return;
         }
 
-        return this.billingService.changePlan(this.viewRef, () => {}, organizationId);
+        await this.billingService.changePlan(this.viewRef, () => {}, organizationId);
     }
 
-    async createOrganization(name) {
-        const onSuccess = (response) => {
-            this.organizations.push(JSON.parse(JSON.stringify(response.body)));
-            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-        };
-
-        const onFailure = async (response) => {
-            if (response.status === 426) {
-                // need to implement later(billing service)
-            }
-
-            let message = await this.wordTranslateService.translate('An error occurred while creating the organization.');
-            if (response && response.error.message) {
-                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error.message;
-            }
-
-            this.notificationService.error('', message);
-        };
-
+    private async createOrganization(name: string) {
         try {
-            const res = await this.organizationService.create(name);
-            onSuccess(res);
-            return res;
-        } catch (err) {
-            onFailure(err);
-            return err;
+            const organization = await this.organizationService.create(name);
+            this.organizations.push(organization);
+            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+        } catch (ex) {
+            if (response.status === 426) {
+                // TODO: need to implement later(billing service)
+            }
+
+            const message = await this.wordTranslateService.translate("An error occurred while creating the organization.");
+            if (response && response.error.message) {
+                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.error.message;
+            }
+
+            this.notificationService.error("", message);
         }
     }
 
-    async get(options?) {
-        const onSuccess = (response, link) => {
-            this.organizations = JSON.parse(JSON.stringify(response));
-            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-
-            const links = this.linkService.getLinksQueryParameters(link);
-            this.previous = links['previous'];
-            this.next = links['next'];
-
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions['page'], this.currentOptions['limit']);
-
-            if (this.organizations.length === 0 && this.currentOptions['page'] && this.currentOptions['page'] > 1) {
-                return this.get();
-            }
-
-            return this.organizations;
-        };
-
+    private async get(options?) {
         this.loading = this.organizations.length === 0;
         this.currentOptions = options || this._settings;
 
         try {
-            const res = await this.organizationService.getAll(this.currentOptions);
-            onSuccess(res['body'], res['headers'].get('link'));
+            this.organizations = await this.organizationService.getAll(this.currentOptions);
+            this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+
+            const links = this.linkService.getLinksQueryParameters(res.headers.get("link"));
+            this.previous = links.previous;
+            this.next = links.next;
+
+            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+
+            if (this.organizations.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
+                return await this.get();
+            }
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+        } finally {
             this.loading = false;
-            return this.organizations;
-        } catch (err) {
-            this.loading = false;
-            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
-            return err;
         }
     }
 
-    async leave(organization, user) {
+    public async leave(organization: Organization, user: User) {
         const modalCallBackFunction = async () => {
-            const onSuccess = () => {
-                this.organizations.splice(this.organizations.indexOf(organization), 1);
-                this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-            };
-
-            const onFailure = (response) => {
-                let message: any = this.wordTranslateService.translate('An error occurred while trying to leave the organization.');
-                if (response.status === 400) {
-                    message += ' ' + this.wordTranslateService.translate('Message:') + ' ' + response.error.message;
-                }
-
-                this.notificationService.error('', message);
-            };
-
             try {
                 await this.organizationService.removeUser(organization.id, user.email_address);
-                onSuccess();
-            } catch (err) {
-                onFailure(err);
+                this.organizations.splice(this.organizations.indexOf(organization), 1);
+                this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
+            } catch (ex) {
+                let message: any = this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
+                if (response.status === 400) {
+                    message += " " + this.wordTranslateService.translate("Message:") + " " + response.error.message;
+                }
+
+                this.notificationService.error("", message);
             }
         };
 
-        this.dialogService.confirm(this.viewRef, 'Are you sure you want to leave this organization?', 'Leave Organization', modalCallBackFunction.bind(this));
+        this.dialogService.confirm(this.viewRef, "Are you sure you want to leave this organization?", "Leave Organization", modalCallBackFunction.bind(this));
     }
 
-    open(id, event) {
+    public open(id: string, event: MouseEvent) {
         const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
         if (openInNewTab) {
-            window.open(`/organization/${id}/manage`, '_blank');
+            window.open(`/organization/${id}/manage`, "_blank");
         } else {
             this.router.navigate([`/organization/${id}/manage`]);
         }
@@ -178,28 +156,27 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         event.preventDefault();
     }
 
-    nextPage() {
-        return this.get(this.next);
+    public async nextPage() {
+        await this.get(this.next);
     }
 
-    previousPage() {
-        return this.get(this.previous);
+    public async previousPage() {
+        await this.get(this.previous);
     }
 
-    async remove(organization) {
+    public async remove(organization) {
         const modalCallBackFunction = async () => {
             try {
-                const res = await this.organizationService.remove(organization['id']);
+                await this.organizationService.remove(organization.id);
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
                 this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-                this.notificationService.success('', await this.wordTranslateService.translate('Successfully queued the organization for deletion.'));
-                return res;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('An error occurred while trying to delete the organization.'));
-                return err;
+                this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the organization for deletion."));
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the organization."));
+                throw ex;
             }
         };
 
-        this.dialogService.confirm(this.viewRef, 'Are you sure you want to delete this organization?', 'Delete Project', modalCallBackFunction.bind(this));
+        this.dialogService.confirm(this.viewRef, "Are you sure you want to delete this organization?", "Delete Project", modalCallBackFunction.bind(this));
     }
 }

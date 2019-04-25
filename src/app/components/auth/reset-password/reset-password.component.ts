@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthAccountService } from '../../../service/auth-account.service';
-import { NotificationService } from '../../../service/notification.service';
-import { WordTranslateService } from '../../../service/word-translate.service';
+import { Component, OnInit } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+import { AuthAccountService } from "../../../service/auth-account.service";
+import { NotificationService } from "../../../service/notification.service";
+import { WordTranslateService } from "../../../service/word-translate.service";
 
 @Component({
-    selector: 'app-reset-password',
-    templateUrl: './reset-password.component.html'
+    selector: "app-reset-password",
+    templateUrl: "./reset-password.component.html"
 })
 
 export class ResetPasswordComponent implements OnInit {
-    data = {
-        password: '',
-        confirm_password: '',
-        password_reset_token: ''
-    };
-    _cancelResetToken = true;
+    private _cancelResetToken: boolean = true;
+    public model: ResetPasswordModel = new ResetPasswordModel();
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -23,51 +20,38 @@ export class ResetPasswordComponent implements OnInit {
         private notificationService: NotificationService,
         private wordTranslateService: WordTranslateService
     ) {
-        this.activatedRoute.params.subscribe( (params) => {
-            this.data.password_reset_token = params['tokenId'];
-            this._cancelResetToken = params['cancel'];
+        this.activatedRoute.params.subscribe(params => {
+            this.model.password_reset_token = params.tokenId;
+            this._cancelResetToken = params.cancel;
         });
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         if (this._cancelResetToken) {
             this.cancelResetPassword();
         }
     }
 
-    async changePassword(isValid) {
+    public async changePassword(isValid) {
         if (!isValid) {
             return;
         }
 
-        const onSuccess = async () => {
-            this.notificationService.info('', await this.wordTranslateService.translate('You have successfully changed your password.'));
-            return this.router.navigate(['/login']);
-        };
-
-        const onFailure = async (response) => {
-            let message = await this.wordTranslateService.translate('An error occurred while trying to change your password.');
-            if (response && response.error) {
-                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
-            }
-
-            this.notificationService.error('', message);
-        };
-
         try {
-            await this.authAccountService.resetPassword(this.data);
-            onSuccess();
-        } catch (err) {
-            onFailure(err);
+            await this.authAccountService.resetPassword(this.model);
+            this.notificationService.info("", await this.wordTranslateService.translate("You have successfully changed your password."));
+            await this.router.navigate(["/login"]);
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to change your password."));
         }
     }
 
-     async cancelResetPassword() {
+    public async cancelResetPassword() {
         try {
-            await this.authAccountService.cancelResetPassword(this.data.password_reset_token);
-            this.router.navigate(['/login']);
-        } catch (err) {
-            this.router.navigate(['/login']);
+            await this.authAccountService.cancelResetPassword(this.model.password_reset_token);
+            await this.router.navigate(["/login"]);
+        } catch (ex) {
+            await this.router.navigate(["/login"]);
         }
     }
 }

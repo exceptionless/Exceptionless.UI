@@ -15,9 +15,9 @@
 
                         <div class="form-group" *ngIf="canCreateOrganization()">
                             <div [ngClass]="{'input-group': !!addForm.pending }">
-                                <input name="organization_name" type="text" class="form-control" placeholder="{{ 'New Organization Name' | translate }}"
-                                       [(ngModel)]="organization_name"
-                                       uniqueOrganization
+                                <input name="organizationName" type="text" class="form-control" placeholder="{{ 'New Organization Name' | translate }}"
+                                       [(ngModel)]="organizationName"
+                                       appUniqueOrganization
                                        ng-required="canCreateOrganization()"
                                        #organizationName="ngModel"
                                        required
@@ -35,11 +35,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="project_name">Project Name</label>
+                            <label for="projectName">Project Name</label>
                             <div [ngClass]="{'input-group': !!addForm.pending }">
-                                <input id="project_name" name="project_name" type="text" class="form-control" placeholder="New Project Name"
-                                       [(ngModel)]="project_name"
-                                       [uniqueProject]="currentOrganization['id']"
+                                <input id="projectName" name="projectName" type="text" class="form-control" placeholder="New Project Name"
+                                       [(ngModel)]="projectName"
+                                       [appUniqueProject]="currentOrganization['id']"
                                        organization-id="currentOrganization.id"
                                        required
                                        #projectName="ngModel"

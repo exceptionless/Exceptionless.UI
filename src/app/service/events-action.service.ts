@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
-import { NotificationService } from './notification.service';
-import { DialogService } from './dialog.service';
-import { EventService } from './event.service';
-import * as _ from 'lodash';
+import { Injectable, ViewContainerRef } from "@angular/core";
+import { NotificationService } from "./notification.service";
+import { DialogService } from "./dialog.service";
+import { EventService } from "./event.service";
+
+export interface EventAction {
+    name: string;
+    run(ids: string[], viewRef: ViewContainerRef, callback: () => void): Promise<void>;
+}
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class EventsActionService {
@@ -15,23 +19,23 @@ export class EventsActionService {
         private eventService: EventService,
     ) {}
 
-    deleteAction: object = {
-        name: 'Delete',
+    public deleteAction: EventAction = {
+        name: "Delete",
         run: (ids, viewRef, callback) => {
             const onSuccess = () => {
-                this.notificationService.info('Success', 'Successfully queued the events for deletion.');
+                this.notificationService.info("Success", "Successfully queued the events for deletion.");
                 callback();
             };
 
             const onFailure = () => {
-                this.notificationService.error('Error', 'An error occurred while deleting the events.');
+                this.notificationService.error("Error", "An error occurred while deleting the events.");
             };
 
-            this.dialogService.confirmDanger(viewRef, 'Are you sure you want to delete these events?', 'DELETE EVENTS', async () => {
+            return this.dialogService.confirmDanger(viewRef, "Are you sure you want to delete these events?", "DELETE EVENTS", async () => {
                 try {
                     await this.removeEvent(ids, 0);
                     onSuccess();
-                } catch (err) {
+                } catch (ex) {
                     onFailure();
                 }
                 return true;
@@ -39,12 +43,12 @@ export class EventsActionService {
         }
     };
 
-    async removeEvent(ids, i) {
-        if (i < ids.length) {
-            const temparray = ids.slice(i, i + 10);
+    public async removeEvent(ids: string[], startingPoint) {
+        if (startingPoint < ids.length) {
+            const temporary = ids.slice(startingPoint, startingPoint + 10);
             try {
-                await this.eventService.remove(temparray.join(','));
-                return this.removeEvent(ids, i + 10);
+                await this.eventService.remove(temporary.join(","));
+                return this.removeEvent(ids, startingPoint + 10);
             } catch (e) {
                 return false;
             }
@@ -53,7 +57,7 @@ export class EventsActionService {
         }
     }
 
-    getActions() {
+    getActions(): EventAction[] {
         return [this.deleteAction];
     }
 }

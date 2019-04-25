@@ -1,25 +1,25 @@
-import { Injectable } from '@angular/core';
-import { AnalyticsService } from './analytics.service';
-import { DialogService } from './dialog.service';
-import { $ExceptionlessClient } from '../exceptionlessclient';
+import { Injectable } from "@angular/core";
+import { AnalyticsService } from "./analytics.service";
+import { DialogService } from "./dialog.service";
+import { $ExceptionlessClient } from "../exceptionlessclient";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class BillingService {
 
-    source = 'exceptionless.billing.billingService';
+    private source = "exceptionless.billing.billingService";
 
     constructor(
         private analyticsService: AnalyticsService,
         private dialogService: DialogService
     ) {}
 
-    async changePlan(viewRef, callback, organizationId?) {
+    public async changePlan(viewRef, callback, organizationId?) {
         this.analyticsService.initiateCheckout();
         $ExceptionlessClient.createFeatureUsage(`${this.source}.changePlan`)
-            .setProperty('OrganizationId', organizationId)
+            .setProperty("OrganizationId", organizationId)
             .submit();
 
         return this.dialogService.changePlan(viewRef, organizationId, () => {
@@ -27,18 +27,18 @@ export class BillingService {
         });
     }
 
-    async confirmUpgradePlan(viewRef, message, organizationId, callback) {
+    public async confirmUpgradePlan(viewRef, message, organizationId, callback) {
         $ExceptionlessClient.createFeatureUsage(`${this.source}.confirmUpgradePlan`)
             .setMessage(message)
-            .setProperty('OrganizationId', organizationId)
+            .setProperty("OrganizationId", organizationId)
             .submit();
 
-        return this.dialogService.confirm(viewRef, message, 'Upgrade Plan', () => {
+        return this.dialogService.confirm(viewRef, message, "Upgrade Plan", () => {
             return this.changePlan(viewRef, callback, organizationId);
         }, () => {
             $ExceptionlessClient.createFeatureUsage(`${this.source}.confirmUpgradePlan.cancel`)
                 .setMessage(message)
-                .setProperty('OrganizationId', organizationId)
+                .setProperty("OrganizationId", organizationId)
                 .submit();
         });
     }

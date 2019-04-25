@@ -9,7 +9,7 @@
                     <ngb-tabset class="tab-container" [activeId]="activeTab">
                         <ngb-tab title="{{ 'General' | translate }}" id="general">
                             <ng-template ngbTabContent>
-                                <form name="vm.organizationForm" role="form" class="form-validation" #organizationForm="ngForm">
+                                <form name="organizationForm" role="form" class="form-validation" #organizationForm="ngForm">
                                     <div class="form-group m-b-none">
                                         <label for="name">{{ 'Organization Name' | translate }}</label>
                                         <div [ngClass]="{'input-group': !!organizationForm.pending }">
@@ -36,7 +36,7 @@
                                     <h4 style="margin-top: 20px;">{{ 'Monthly Usage' | translate }}</h4>
                                     <p>
                                         You are currently on the <a *ngIf="canChangePlan" (click)="changePlan()"><strong>{{ organization['plan_name'] }}</strong> plan</a> with
-                                        <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ next_billing_date }}</b> (<app-timeago [date]="next_billing_date"></app-timeago>).
+                                        <b [ngClass]="{'text-warning': remainingEventLimit === 0}">{{ remainingEventLimit }}</b> events remaining until this billing period's limit is reset on <b>{{ nextBillingDate }}</b> (<app-timeago [date]="nextBillingDate"></app-timeago>).
                                         <a *ngIf="canChangePlan" (click)="changePlan()">{{ 'Click here to change your plan or billing information.' | translate }}</a>
                                     </p>
                                     <!--<app-rickshaw [options]="chart['options']" [seriesData]="seriesData" [features]="chart['features']"></app-rickshaw>-->

@@ -1,5 +1,5 @@
 var environment = {
-    BASE_URL: 'https://localhost:5001',
+    BASE_URL: 'http://localhost:5000',
     EXCEPTIONLESS_API_KEY: '',
     EXCEPTIONLESS_SERVER_URL: '',
     FACEBOOK_APPID: '',

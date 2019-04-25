@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { AboutResult } from "../models/results";
 
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class StatusService {
 
@@ -11,11 +12,11 @@ export class StatusService {
         private http: HttpClient,
     ) {}
 
-    get() {
-        return this.http.get(`about`).toPromise();
+    public get() {
+        return this.http.get<AboutResult>(`about`).toPromise();
     }
 
-    healthy() {
-        return this.http.get('health', {responseType: 'text'}).toPromise();
+    public healthy() {
+        return this.http.get("health", { responseType: "text" }).toPromise();
     }
 }

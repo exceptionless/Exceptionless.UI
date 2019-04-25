@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from 'ng2-ui-auth';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { NotificationService } from './notification.service';
-import { Observable } from 'rxjs/Observable';
-import { WordTranslateService } from './word-translate.service';
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { AuthService } from "ng2-ui-auth";
+import { HttpClient, HttpResponse } from "@angular/common/http";
+import { NotificationService } from "./notification.service";
+import { Observable } from "rxjs/Observable";
+import { WordTranslateService } from "./word-translate.service";
+import { ChangePasswordModel, TokenResult, ResetPasswordModel } from "../models/auth";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class AuthAccountService {
@@ -19,76 +20,57 @@ export class AuthAccountService {
         public wordTranslateService: WordTranslateService
     ) {}
 
-    cancelResetPassword(resetToken) {
-        const data = {};
-        return this.http.post(`auth/cancel-reset-password/${resetToken}`,  data).toPromise();
+    public cancelResetPassword(resetToken: string) {
+        return this.http.post(`auth/cancel-reset-password/${resetToken}`, {}).toPromise();
     }
 
-    async changePassword(changePasswordModel) {
-        const onSuccess = (response) => {
-            this.authService.setToken(JSON.parse(JSON.stringify(response)));
-            return response;
-        };
-
-        const res = await this.http.post(`auth/change-password`,  changePasswordModel).toPromise();
-        onSuccess(res);
-        return res;
+    public async changePassword(changePasswordModel: ChangePasswordModel) {
+        const response = await this.http.post<TokenResult>(`auth/change-password`, changePasswordModel).toPromise();
+        this.authService.setToken(response.token);
+        return response;
     }
 
-    forgotPassword(email) {
-        return this.http.get(`auth/forgot-password/${email}`).toPromise();
+    public forgotPassword(email: string) {
+        return this.http.get<never>(`auth/forgot-password/${email}`).toPromise();
     }
 
-    getToken() {
+    public getToken(): string {
         return this.authService.getToken();
     }
 
-    isAuthenticated() {
+    public isAuthenticated(): boolean {
         return this.authService.isAuthenticated();
     }
 
-    isEmailAddressAvailable(email): Observable<HttpResponse<any>> {
-        return this.http.get(`auth/check-email-address/${email}`, { observe: 'response' });
+    public async isEmailAddressAvailable(email): Promise<boolean> {
+        const response = await this.http.get(`auth/check-email-address/${email}`).toPromise();
+        return response.status === 204;
     }
 
-    async logout(withRedirect?, params?) {
-        const logoutLocally = () => {
-            this.authService.logout()
-                .subscribe({
-                    error: (err: any) => this.notificationService.error('Error!', 'Error Occurred'),
-                    complete: () => {
-                        if (withRedirect) {
-                            this.router.navigate([withRedirect], params);
-                        } else {
-                            this.router.navigate(['/login']);
-                        }
-                    }
-                });
-        };
-
+    public async logout(withRedirect?: boolean, params?) {
         try {
-            const res = await this.http.get('auth/logout/').toPromise();
-            logoutLocally();
-        } catch (err) {
-            this.notificationService.error('Failed!', 'Error Occurred');
+            await this.http.get<never>("auth/logout").toPromise();
+            await this.authService.logout().toPromise();
+            if (withRedirect) {
+                this.router.navigate([withRedirect], params);
+            } else {
+                this.router.navigate(["/login"]);
+            }
+        } catch (ex) {
+            this.notificationService.error("Failed!", "Error Occurred");
         }
     }
 
-    resetPassword(resetPasswordModel) {
-        return this.http.post('auth/reset-password',  resetPasswordModel).toPromise();
+    public resetPassword(resetPasswordModel: ResetPasswordModel) {
+        return this.http.post<never>("auth/reset-password", resetPasswordModel).toPromise();
     }
 
-    async unlink(providerName, providerUserId) {
-        const onSuccess = (response) => {
-            this.authService.setToken(JSON.parse(JSON.stringify(response)));
-            return response;
-        };
-
+    public async unlink(providerName: string, providerUserId: string) {
         try {
-            const res = await this.http.post(`auth/unlink/${providerName}`,  providerUserId).toPromise();
-            onSuccess(res);
-        } catch (err) {
-            this.notificationService.error('Failed!', 'Error Occurred');
+            const response = await this.http.post<TokenResult>(`auth/unlink/${providerName}`, providerUserId).toPromise();
+            this.authService.setToken(response);
+        } catch (ex) {
+            this.notificationService.error("Failed!", "Error Occurred");
         }
     }
 }

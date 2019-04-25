@@ -1,36 +1,39 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { OrganizationService } from '../../service/organization.service';
-import { ProjectService } from '../../service/project.service';
-import { FilterService } from '../../service/filter.service';
-import { SearchService } from '../../service/search.service';
-import { NotificationService } from '../../service/notification.service';
-import { WordTranslateService } from '../../service/word-translate.service';
-import { BillingService } from '../../service/billing.service';
+import { Component, OnInit, ViewContainerRef } from "@angular/core";
+import { OrganizationService } from "../../service/organization.service";
+import { ProjectService } from "../../service/project.service";
+import { FilterService } from "../../service/filter.service";
+import { SearchService } from "../../service/search.service";
+import { NotificationService } from "../../service/notification.service";
+import { WordTranslateService } from "../../service/word-translate.service";
+import { BillingService } from "../../service/billing.service";
+import { Organization } from "src/app/models/organization";
+import { Project } from "src/app/models/project";
+import { EntityChanged } from "src/app/models/messaging";
 
 @Component({
-    selector: 'app-organization-notification',
-    templateUrl: './organization-notification.component.html'
+    selector: "app-organization-notification",
+    templateUrl: "./organization-notification.component.html"
 })
 
 export class OrganizationNotificationComponent implements OnInit {
-    exceededRequestLimitOrganizations: any[];
-    freeOrganizations: any[];
-    hasNotifications = false;
-    organizations: any[];
-    organizationsWithoutPremiumFeatures: any[];
-    organizationsWithNoProjects: any[];
-    hourlyOverageOrganizations: any[];
-    monthlyOverageOrganizations: any[];
-    projects: any[];
-    projectsRequiringConfiguration: any[];
-    suspendedForBillingOrganizations: any[];
-    suspendedForAbuseOrOverageOrNotActiveOrganizations: any[];
-    suspendedOrganizations: any[];
-    organizationId = '';
-    ignoreFree = '';
-    ignoreConfigureProjects = '';
-    requiresPremium = '';
-    filterUsesPremiumFeatures = false;
+    public exceededRequestLimitOrganizations: Organization[];
+    public freeOrganizations: Organization[];
+    public hasNotifications: boolean = false;
+    private organizations: Organization[];
+    public organizationsWithoutPremiumFeatures: Organization[];
+    public organizationsWithNoProjects: Organization[];
+    public hourlyOverageOrganizations: Organization[];
+    public monthlyOverageOrganizations: Organization[];
+    public projects: Project[];
+    public projectsRequiringConfiguration: Project[];
+    public suspendedForBillingOrganizations: Organization[];
+    public suspendedForAbuseOrOverageOrNotActiveOrganizations: Organization[];
+    public suspendedOrganizations: Organization[];
+    public organizationId: string;
+    private ignoreFree: boolean = false;
+    private ignoreConfigureProjects: boolean = false;
+    private requiresPremium: boolean = false;
+    private filterUsesPremiumFeatures: boolean = false;
 
     constructor(
         private organizationService: OrganizationService,
@@ -43,11 +46,11 @@ export class OrganizationNotificationComponent implements OnInit {
         private billingService: BillingService
     ) {}
 
-    ngOnInit() {
-        this.get();
+    public async ngOnInit() {
+        await this.get();
     }
 
-    async get(isRefresh?) {
+    private async get(isRefresh?) {
         if (isRefresh && !this.canRefresh(isRefresh)) {
             return;
         }
@@ -56,64 +59,65 @@ export class OrganizationNotificationComponent implements OnInit {
             await this.getProjects();
             await this.getFilterUsesPremiumFeatures();
             await this.getOrganizationNotifications();
-        } catch (err) {}
+        } catch (ex) {}
     }
 
-    canRefresh(data) {
-        if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
-            // return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
-            return false;
+    public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
+        if (!!message && message.type === "Organization") {
+            return this.filterService.includedInProjectOrOrganizationFilter({organizationId: message.id});
         }
 
-        if (!!data && data.type === 'Organization' || data.type === 'Project') {
-            return this.filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        if (!!message && message.type === "Project") {
+            return this.filterService.includedInProjectOrOrganizationFilter({organizationId: message.organization_id, projectId: message.id});
         }
 
-        return !data;
+        if (!!message && message.type === "PersistentEvent" || message.type === "Stack") {
+            return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: message.organization_id, projectId: message.project_id });
+        }
+
+        return !message;
     }
 
-    getCurrentOrganizationId() {
+    private getCurrentOrganizationId(): string {
         const getOrganizationFromProjectFilter = () => {
             if (!this.projects || !this.filterService.getProjectId()) {
                 return null;
             }
             const projectId =  this.filterService.getProjectId();
-            const project = this.projects.filter(function(o) { return o.id === projectId; })[0];
+            const project = this.projects.filter(o => o.id === projectId)[0];
             return project ? project.organization_id : null;
         };
 
         return this.organizationId || this.filterService.getOrganizationId() || getOrganizationFromProjectFilter();
     }
 
-    getCurrentProjects() {
+    private getCurrentProjects(): Project[] {
         const currentOrganizationId = this.organizationId || this.filterService.getOrganizationId();
 
         if (currentOrganizationId) {
-            return this.projects.filter(function (p) { return p.organization_id === currentOrganizationId; });
+            return this.projects.filter(p => p.organization_id === currentOrganizationId);
         }
 
         if (this.filterService.getProjectId()) {
             const projectId =  this.filterService.getProjectId();
-            return this.projects.filter(function (p) { return p.id === projectId; });
+            return this.projects.filter(p =>  p.id === projectId);
         }
 
         return this.projects;
     }
 
-    async getFilterUsesPremiumFeatures() {
+    private async getFilterUsesPremiumFeatures(): Promise<void> {
         this.filterUsesPremiumFeatures = false;
 
         try {
-            const res = await this.searchService.validate(this.filterService.getFilter());
-            this.filterUsesPremiumFeatures = res['data'].uses_premium_features === true;
-            return this.filterUsesPremiumFeatures;
-        } catch (err) {
-            this.notificationService.error('Error Occurred!', 'Failed');
-            return err;
+            const result = await this.searchService.validate(this.filterService.getFilter());
+            this.filterUsesPremiumFeatures = result.uses_premium_features === true;
+        } catch (ex) {
+            this.notificationService.error("Error Occurred!", "Failed");
         }
     }
 
-    getOrganizationNotifications() {
+    private getOrganizationNotifications() {
         this.exceededRequestLimitOrganizations = [];
         this.freeOrganizations = [];
         this.hourlyOverageOrganizations = [];
@@ -136,9 +140,9 @@ export class OrganizationNotificationComponent implements OnInit {
             if (organization.is_suspended === true) {
                 this.suspendedOrganizations.push(organization);
 
-                if (organization.suspension_code === 'Billing') {
+                if (organization.suspension_code === "Billing") {
                     this.suspendedForBillingOrganizations.push(organization);
-                } else if (organization.billing_status !== 1 || organization.suspension_code === 'Abuse' || organization.suspension_code === 'Overage') {
+                } else if (organization.billing_status !== 1 || organization.suspension_code === "Abuse" || organization.suspension_code === "Overage") {
                     this.suspendedForAbuseOrOverageOrNotActiveOrganizations.push(organization);
                 }
 
@@ -146,7 +150,7 @@ export class OrganizationNotificationComponent implements OnInit {
             }
 
             // Only show it if you absolutely have no data or the current project has no data or if the current org has no data.
-            const canShowConfigurationAlert = currentProjects.filter(function(p) { return p.is_configured === false; }).length === currentProjects.length;
+            const canShowConfigurationAlert = currentProjects.filter(p => p.is_configured === false).length === currentProjects.length;
 
             // Only show the premium features dialog when searching on a plan without premium features and your project has been configured.
             const tryingToSearchWithoutPremiumFeatures = this.filterUsesPremiumFeatures && !organization.has_premium_features;
@@ -200,7 +204,7 @@ export class OrganizationNotificationComponent implements OnInit {
                 return;
             }
 
-            if (!this.ignoreFree && organization.plan_id === 'EX_FREE') {
+            if (!this.ignoreFree && organization.plan_id === "EX_FREE") {
                 this.freeOrganizations.push(organization);
             }
         });
@@ -208,115 +212,103 @@ export class OrganizationNotificationComponent implements OnInit {
         this.hasNotifications = true;
     }
 
-    async getOrganizations() {
+    private async getOrganizations() {
         const getSelectedOrganization = async () => {
             const organizationId = this.getCurrentOrganizationId();
-
-            if (!organizationId || this.organizations.filter(function(o) { return o.id === organizationId; })[0]) {
+            if (!organizationId || this.organizations.filter(o => o.id === organizationId)[0]) {
                 return;
             }
 
             try {
-                const res = await this.organizationService.getById(organizationId);
-                this.organizations.push(JSON.parse(JSON.stringify(res)));
-                return this.organizations;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
-                return err;
+                const organization = await this.organizationService.getById(organizationId);
+                this.organizations.push(organization);
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
             }
         };
 
         const getAllOrganizations = async () => {
             try {
-                const res = await this.organizationService.getAll('');
-                this.organizations = JSON.parse(JSON.stringify(res['body']));
-                return this.organizations;
-            } catch (err) {
-                this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
-                return err;
+                this.organizations = await this.organizationService.getAll();
+            } catch (ex) {
+                this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
             }
         };
 
-        try {
-            await getAllOrganizations();
-            await getSelectedOrganization();
-        } catch (err) {}
+        await getAllOrganizations();
+        await getSelectedOrganization();
     }
 
-    async getProjects() {
+    private async getProjects() {
         try {
-            const res = await this.projectService.getAll('');
-            this.projects = JSON.parse(JSON.stringify(res.body));
-            return this.projects;
-        } catch (err) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Error Occurred!'));
-            return err;
+            this.projects = await this.projectService.getAll();
+        } catch (ex) {
+            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         }
     }
 
-    hasExceededRequestLimitOrganizations() {
+    public hasExceededRequestLimitOrganizations() {
         return this.exceededRequestLimitOrganizations && this.exceededRequestLimitOrganizations.length > 0;
     }
 
-    hasFreeOrganizations() {
+    public hasFreeOrganizations() {
         return this.freeOrganizations && this.freeOrganizations.length > 0;
     }
 
-    hasHourlyOverageOrganizations() {
+    public hasHourlyOverageOrganizations() {
         return this.hourlyOverageOrganizations && this.hourlyOverageOrganizations.length > 0;
     }
 
-    hasMonthlyOverageOrganizations() {
+    public hasMonthlyOverageOrganizations() {
         return this.monthlyOverageOrganizations && this.monthlyOverageOrganizations.length > 0;
     }
 
-    hasProjectsRequiringConfiguration() {
+    public hasProjectsRequiringConfiguration() {
         return this.projectsRequiringConfiguration && this.projectsRequiringConfiguration.length > 0;
     }
 
-    hasOrganizations() {
+    public hasOrganizations() {
         return this.organizations && this.organizations.length > 0;
     }
 
-    hasOrganizationsWithoutPremiumFeatures() {
+    public hasOrganizationsWithoutPremiumFeatures() {
         return this.organizationsWithoutPremiumFeatures && this.organizationsWithoutPremiumFeatures.length > 0;
     }
 
-    hasOrganizationsWithNoProjects() {
+    public hasOrganizationsWithNoProjects() {
         return this.organizationsWithNoProjects && this.organizationsWithNoProjects.length > 0;
     }
 
-    hasSuspendedForBillingOrganizations() {
+    public hasSuspendedForBillingOrganizations() {
         return this.suspendedForBillingOrganizations && this.suspendedForBillingOrganizations.length > 0;
     }
 
-    hasSuspendedForAbuseOrOverageOrNotActiveOrganizations() {
+    public hasSuspendedForAbuseOrOverageOrNotActiveOrganizations() {
         return this.suspendedForAbuseOrOverageOrNotActiveOrganizations && this.suspendedForAbuseOrOverageOrNotActiveOrganizations.length > 0;
     }
 
-    hasSuspendedOrganizations() {
+    public hasSuspendedOrganizations() {
         return this.suspendedOrganizations && this.suspendedOrganizations.length > 0;
     }
 
-    isIntercomEnabled() {
+    public isIntercomEnabled() {
         return environment.INTERCOM_APPID;
     }
 
-    async onFilterChanged() {
+    public async onFilterChanged() {
         try {
             await this.getFilterUsesPremiumFeatures();
             await this.getOrganizationNotifications();
-        } catch (err) {}
+        } catch (ex) {}
     }
 
-    async showChangePlanDialog(organizationId) {
+    public async showChangePlanDialog(organizationId: string) {
         if (!environment.STRIPE_PUBLISHABLE_KEY) {
-            this.notificationService.error('', await this.wordTranslateService.translate('Billing is currently disabled.'));
+            this.notificationService.error("", await this.wordTranslateService.translate("Billing is currently disabled."));
             return;
         }
 
         organizationId = organizationId || this.getCurrentOrganizationId();
-
         if (!organizationId && this.hasSuspendedOrganizations()) {
             organizationId = this.suspendedOrganizations[0].id;
         }
@@ -333,8 +325,10 @@ export class OrganizationNotificationComponent implements OnInit {
             organizationId = this.freeOrganizations[0].id;
         }
 
-        return this.billingService.changePlan(this.viewRef, () => {}, organizationId);
+        await this.billingService.changePlan(this.viewRef, () => {}, organizationId);
     }
 
-    showIntercom() {}
+    public showIntercom() {
+        // TODO: Show intercom.
+    }
 }

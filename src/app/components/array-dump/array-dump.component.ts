@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
 
 @Component({
-    selector: 'app-array-dump',
-    templateUrl: './array-dump.component.html',
-    styleUrls: ['./array-dump.component.less']
+    selector: "app-array-dump",
+    templateUrl: "./array-dump.component.html",
+    styleUrls: ["./array-dump.component.less"]
 })
 export class ArrayDumpComponent implements OnInit {
 
@@ -12,7 +12,6 @@ export class ArrayDumpComponent implements OnInit {
     constructor() {
     }
 
-    ngOnInit() {
+    public ngOnInit() {
     }
-
 }

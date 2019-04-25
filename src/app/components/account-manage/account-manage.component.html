@@ -10,7 +10,7 @@
                             <ng-template ngbTabContent>
                                 <form name="fullNameForm" role="form" class="form-validation" autocomplete="on" #fullNameForm="ngForm">
                                     <div class="form-group">
-                                        <img ngxGravatar [email]="user['email_address']" [round]="false" [size]="110" alt="{{ user['full_name'] }}" alt="avatar" class="img-thumbnail" [style]="gravatarStyle">
+                                        <img ngxGravatar [email]="user?.email_address" [round]="false" [size]="110" alt="{{ user?.full_name }}" alt="avatar" class="img-thumbnail" [style]="gravatarStyle">
                                         <div>
                                             <small [innerHTML]="'NOTICE_GRAVATAR' | translate"></small>
                                         </div>
@@ -20,7 +20,7 @@
                                         <label for="name">{{ 'Full Name' | translate }}</label>
                                         <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                                                placeholder="{{ 'Your first and last name' | translate }}"
-                                               [(ngModel)]="user['full_name']"
+                                               [(ngModel)]="user?.full_name"
                                                (input)="saveUser(fullNameForm.valid)"
                                                required
                                                #name="ngModel"/>
@@ -37,10 +37,10 @@
                                         <div [ngClass]="{'input-group': !!emailAddressForm.pending }">
                                             <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                                                    placeholder="{{ 'Email Address' | translate }}"
-                                                   [(ngModel)]="user['email_address']"
+                                                   [(ngModel)]="user?.email_address"
                                                    (input)="saveEmailAddress()"
                                                    required
-                                                   uniqueEmail
+                                                   appUniqueEmail
                                                    #email="ngModel"/>
 
                                             <span class="input-group-addon" *ngIf="emailAddressForm.pending">
@@ -54,7 +54,7 @@
                                             <small [hidden]="!email.errors?.uniqueEmail">{{ 'A user already exists with this email address.' | translate }}</small>
                                         </div>
 
-                                        <p *ngIf="!user['is_email_address_verified']" class="help-block">{{ 'Email not verified.' | translate }} <a (click)="resendVerificationEmail()">{{ 'Resend' | translate }}</a> {{ 'verification email.' | translate }}</p>
+                                        <p *ngIf="!user?.is_email_address_verified" class="help-block">{{ 'Email not verified.' | translate }} <a (click)="resendVerificationEmail()">{{ 'Resend' | translate }}</a> {{ 'verification email.' | translate }}</p>
                                     </div>
                                 </form>
                             </ng-template>
@@ -63,31 +63,31 @@
                         <ngb-tab title="{{ 'Notifications' | translate }}" id="notifications">
                             <ng-template ngbTabContent>
                                 <form role="form" class="form-validation" #notificationForm="ngForm">
-                                    <div class="alert in fade alert-danger" *ngIf="!user['is_email_address_verified'] || !user['email_notifications_enabled']">
-                                        {{ 'Email notifications are currently disabled.' | translate }} <span *ngIf="!user['is_email_address_verified']">{{ 'To enable email notifications you must first verify your email address.' | translate }} <a (click)="resendVerificationEmail()">{{ 'Resend' | translate }}</a> {{ 'verification email.' | translate }}</span>
+                                    <div class="alert in fade alert-danger" *ngIf="!user?.is_email_address_verified || !user?.email_notifications_enabled">
+                                        {{ 'Email notifications are currently disabled.' | translate }} <span *ngIf="!user?.is_email_address_verified">{{ 'To enable email notifications you must first verify your email address.' | translate }} <a (click)="resendVerificationEmail()">{{ 'Resend' | translate }}</a> {{ 'verification email.' | translate }}</span>
                                     </div>
                                     <div class="checkbox">
                                         <label class="checks">
-                                            <input name="email-notifications-enabled" type="checkbox" [(ngModel)]="user['email_notifications_enabled']" ng-change="vm.saveEnableEmailNotification()">
+                                            <input name="email-notifications-enabled" type="checkbox" [(ngModel)]="user?.email_notifications_enabled" ng-change="vm.saveEnableEmailNotification()">
                                             <i></i>
                                             {{ 'Enable email notifications' | translate }}
                                         </label>
                                     </div>
 
-                                    <div *ngIf="projects.length > 0">
+                                    <div *ngIf="projects?.length > 0">
                                         <hr/>
 
                                         <p>{{ 'Choose how often you want to receive notifications for event occurrences in this project.' | translate }}</p>
 
-                                        <select class="form-control" name="current-project" [(ngModel)]="currentProject" (change)="getEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings != {})">
-                                            <optgroup *ngFor="let organization of organizations" label="{{ organization }}">
-                                                <option *ngFor="let project of filterProject(organization)" [ngValue]="project">{{ project['name'] }}</option>
+                                        <select class="form-control" name="current-project" [(ngModel)]="currentProject" (change)="getEmailNotificationSettings()" [disabled]="!(user?.email_notifications_enabled && emailNotificationSettings != {})">
+                                            <optgroup *ngFor="let organizationName of organizationNames" label="{{ organizationName }}">
+                                                <option *ngFor="let project of filterProject(organizationName)" [ngValue]="project">{{ project.name }}</option>
                                             </optgroup>
                                         </select>
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="send_daily_summary" [(ngModel)]="emailNotificationSettings['send_daily_summary']" (change)="saveEmailNotificationSettings()" [disabled]="!(user['email_notifications_enabled'] && emailNotificationSettings)">
+                                                <input type="checkbox" name="send_daily_summary" [(ngModel)]="emailNotificationSettings?.send_daily_summary" (change)="saveEmailNotificationSettings()" [disabled]="!(user?.email_notifications_enabled && emailNotificationSettings)">
                                                 <i></i>
                                                 {{ 'Send daily project summary' | translate }}
                                             </label>
@@ -100,7 +100,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_new_errors" [(ngModel)]="emailNotificationSettings['report_new_errors']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_errors" [(ngModel)]="emailNotificationSettings?.report_new_errors" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on new errors' | translate }}
                                             </label>
@@ -108,7 +108,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_critical_errors" [(ngModel)]="emailNotificationSettings['report_critical_errors']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_errors" [(ngModel)]="emailNotificationSettings?.report_critical_errors" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on critical errors' | translate }}
                                             </label>
@@ -116,7 +116,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_event_regressions" [(ngModel)]="emailNotificationSettings['report_event_regressions']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_event_regressions" [(ngModel)]="emailNotificationSettings?.report_event_regressions" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on error regressions' | translate }}
                                             </label>
@@ -124,7 +124,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_new_events" [(ngModel)]="emailNotificationSettings['report_new_events']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_events" [(ngModel)]="emailNotificationSettings?.report_new_events" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on new events' | translate }}
                                             </label>
@@ -132,7 +132,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_critical_events" [(ngModel)]="emailNotificationSettings['report_critical_events']" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_events" [(ngModel)]="emailNotificationSettings?.report_critical_events" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on critical events' | translate }}
                                             </label>
@@ -147,7 +147,7 @@
                                 <form name="passwordForm" role="form" class="form-validation" #passwordForm="ngForm" (ngSubmit)="changePassword(passwordForm.valid)">
                                     <div class="form-group" *ngIf="hasLocalAccount">
                                         <label for="current">{{ 'Current Password' | translate }}</label>
-                                        <input id="current" name="current" type="password" class="form-control" [(ngModel)]="password['current_password']" required #current="ngModel"/>
+                                        <input id="current" name="current" type="password" class="form-control" [(ngModel)]="password.current_password" required #current="ngModel"/>
 
                                         <div class="error" *ngIf="(current.invalid && (current.dirty || current.touched)) || submitted">
                                             <small [hidden]="!current.errors?.required">{{ 'Current Password is required.' | translate }}</small>
@@ -156,7 +156,7 @@
 
                                     <div class="form-group">
                                         <label for="newPassword">{{ 'New Password' | translate }}</label>
-                                        <input id="newPassword" name="newPassword" type="password" class="form-control" [(ngModel)]="password['password']" required minlength="6" maxlength="101" required #newPassword="ngModel"/>
+                                        <input id="newPassword" name="newPassword" type="password" class="form-control" [(ngModel)]="password.password" required minlength="6" maxlength="101" required #newPassword="ngModel"/>
 
                                         <div class="error" *ngIf="(newPassword.invalid && (newPassword.dirty || newPassword.touched)) || submitted">
                                             <small [hidden]="!newPassword.errors?.required">{{ 'New Password is required.' | translate }}</small>
@@ -167,13 +167,13 @@
 
                                     <div class="form-group">
                                         <label for="confirmPassword">Confirm password</label>
-                                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" [(ngModel)]="password['confirm_password']" required minlength="6" maxlength="101"  #confirmPassword="ngModel" />
+                                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" [(ngModel)]="confirmPassword" required minlength="6" maxlength="101"  #confirmPassword="ngModel" />
 
-                                        <div class="error" *ngIf="((confirmPassword.invalid || (password['password'] != password['confirm_password'])) && (confirmPassword.dirty || confirmPassword.touched))|| submitted">
+                                        <div class="error" *ngIf="((confirmPassword.invalid || (password.password != confirmPassword)) && (confirmPassword.dirty || confirmPassword.touched))|| submitted">
                                             <small [hidden]="!confirmPassword.errors?.required">{{ 'Confirm Password is required.' | translate }}</small>
                                             <small [hidden]="!confirmPassword.errors?.minlength">{{ 'Confirm Password must be at least 6 characters long.' | translate }}</small>
                                             <small [hidden]="!confirmPassword.errors?.maxlength">{{ 'Confirm Password must be less than 101 characters long.' | translate }}</small>
-                                            <small [hidden]="password['password'] == password['confirm_password']">{{ 'New Password and Confirmation Password fields do not match.' | translate }}</small>
+                                            <small [hidden]="password.password == confirmPassword">{{ 'New Password and Confirmation Password fields should not match.' | translate }}</small>
                                         </div>
                                     </div>
 
@@ -203,16 +203,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="account in vm.user.o_auth_accounts" *ngIf="user['o_auth_accounts'].length > 0">
-                                                <td>   </td>
+                                            <tr ng-repeat="account in vm.user?.o_auth_accounts" *ngIf="user?.o_auth_accounts?.length > 0">
+                                                <td></td>
                                                 <td>
-                                                    <button type="button" role="button" class="btn btn-sm" title="Remove" [disabled]="!(hasLocalAccount || user['o_auth_accounts'].length > 1)" (click)="unlink(account)">
+                                                    <button type="button" role="button" class="btn btn-sm" title="Remove" [disabled]="!(hasLocalAccount || user?.o_auth_accounts.length > 1)" (click)="unlink(account)">
                                                         <i class="fa fa-times"></i>
                                                     </button>
                                                 </td>
                                             </tr>
 
-                                            <tr *ngIf="user['o_auth_accounts'].length === 0">
+                                            <tr *ngIf="user?.o_auth_accounts?.length === 0">
                                                 <td colspan="2">
                                                     <strong>{{ 'No external logins were found.' | translate }}</strong>
                                                 </td>
@@ -227,12 +227,12 @@
 
                 <footer class="panel-footer">
                     <div class="pull-right">
-                        <div *ngIf="!currentProject['id']">
+                        <div *ngIf="!currentProject?.id">
                             <a ui-sref="app.dashboard" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
                         </div>
 
-                        <div *ngIf="currentProject['id']">
-                            <a routerLink="/project/{{ currentProject['id'] }}/dashboard" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
+                        <div *ngIf="currentProject?.id">
+                            <a routerLink="/project/{{ currentProject?.id }}/dashboard" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
                         </div>
                     </div>
                     <div>

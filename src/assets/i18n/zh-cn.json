@@ -509,7 +509,7 @@
     "New Password must be at least 6 characters long.":"新密码不能少于6个字符。",
     "New Password must be less than 101 characters long.":"新密码不能多于101个字符。",
     "Confirm password":"确认密码",
-    "New Password and Confirmation Password fields do not match.":"新密码与确认密码不一致。",
+    "New Password and Confirmation Password fields should not match.":"新密码与确认密码不一致。",
     "Confirm Password is required.":"请填写确认密码。",
     "Confirm Password must be at least 6 characters long.":"确认密码不能少于6个字符。",
     "Confirm Password must be less than 101 characters long.":"确认密码不能多于101个字符。",

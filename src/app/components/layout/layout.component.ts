@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { WebsocketService } from '../../service/websocket.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { StatusService } from '../../service/status.service';
+import { Component, OnInit } from "@angular/core";
+import { WebsocketService } from "../../service/websocket.service";
+import { Router, NavigationEnd } from "@angular/router";
+import { StatusService } from "../../service/status.service";
+import { AboutResult } from "src/app/models/results";
 
 @Component({
-    selector: 'app-layout',
-    templateUrl: './layout.component.html'
+    selector: "app-layout",
+    templateUrl: "./layout.component.html"
 })
 
 export class LayoutComponent implements OnInit {
     isSideNavCollapsed = false;
     isShowResponsiveSide = false;
     isShowResponsiveNav = false;
-    versionNo = '@@version';
-    apiVersionNo = '@@version';
+    versionNumber = "@@version"; // TODO: Ensure the version number is being replaced as part of the build.
+    apiVersionNumber = "@@version";
 
     constructor(
         private websocketService: WebsocketService,
@@ -21,39 +22,39 @@ export class LayoutComponent implements OnInit {
         private statusService: StatusService
     ) {
         this.router.events.subscribe((val) => {
-            if ((val instanceof NavigationEnd) && this.router.url === '/') {
-                this.router.navigate(['/dashboard']);
+            if ((val instanceof NavigationEnd) && this.router.url === "/") {
+                this.router.navigate(["/dashboard"]);
             }
         });
     }
 
-    ngOnInit() {
+    public async ngOnInit() {
         this.websocketService.startDelayed(1000);
-        this.getVersionNo();
+        await this.getServerVersionNumber(); // TODO: I'm not sure if we want to await this, but it seems like a good idea to always await if async
     }
 
-    async getVersionNo() {
+    public async getServerVersionNumber() {
         try {
-            const res = await this.statusService.get();
-            this.apiVersionNo = res['informational_version'].split('+')[0];
-        } catch (err) {
-            console.log(err);
+            const result: AboutResult = await this.statusService.get();
+            this.apiVersionNumber = result.informational_version.split("+")[0];
+        } catch (ex) {
+            console.log(ex);
         }
     }
 
-    onToggleSideNavCollapsed(): void {
+    public onToggleSideNavCollapsed(): void {
         this.isSideNavCollapsed = !this.isSideNavCollapsed;
     }
 
-    onShowResponsiveSide(): void {
+    public onShowResponsiveSide(): void {
         this.isShowResponsiveSide = !this.isShowResponsiveSide;
     }
 
-    onShowResponsiveNav(): void {
+    public onShowResponsiveNav(): void {
         this.isShowResponsiveNav = !this.isShowResponsiveNav;
     }
 
-    hideSideBar() {
+    public hideSideBar() {
         this.isShowResponsiveSide = !this.isShowResponsiveSide;
     }
 }

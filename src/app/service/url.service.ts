@@ -1,27 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class UrlService {
-
     constructor() {}
 
-    buildUrl(isSecure, host, port, path, queryString) {
+    public buildUrl(isSecure, host, port, path, queryString) {
         if (!host) {
             return null;
         }
 
-        let url = (isSecure ? 'https://' : 'http://') + host;
+        let url = (isSecure ? "https://" : "http://") + host;
 
         if (port !== 80 && port !== 443) {
-            url += ':' + port;
+            url += ":" + port;
         }
 
         if (path) {
-            if (path && path.indexOf('/') !== 0) {
-                url += '/';
+            if (path && path.indexOf("/") !== 0) {
+                url += "/";
             }
 
             url += path;
@@ -31,13 +30,13 @@ export class UrlService {
             let isFirst = true;
             for (const key of queryString) {
                 if (isFirst) {
-                    url += '?';
+                    url += "?";
                     isFirst = false;
                 } else {
-                    url += '&';
+                    url += "&";
                 }
 
-                url += key + '=' + queryString[key];
+                url += key + "=" + queryString[key];
             }
         }
 

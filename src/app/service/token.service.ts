@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Token, NewToken } from "../models/token";
+import { WorkInProgressResult } from "../models/results";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class TokenService {
@@ -10,37 +12,31 @@ export class TokenService {
         private http: HttpClient
     ) {}
 
-    create(options) {
-        const token = {
-            'organization_id': options['organization_id'],
-            'project_id': options['project_id'],
-            'scopes': ['client']
-        };
-
-        return this.http.post('tokens', token).toPromise();
+    public create(token: NewToken) {
+        return this.http.post<Token>("tokens", Object.assign({}, token, { scopes: ["client"] }) as NewToken).toPromise();
     }
 
-    getById(id) {
-        return this.http.get(`tokens/${id}`);
+    public getById(id: string) {
+        return this.http.get<Token>(`tokens/${id}`).toPromise();
     }
 
-    getByOrganizationId(id, options) {
-        return this.http.get(`organizations/${id}/tokens`, { params: options });
+    public getByOrganizationId(id: string, options) {
+        return this.http.get<Token[]>(`organizations/${id}/tokens`, { params: options }).toPromise();
     }
 
-    getByProjectId(id, options?) {
-        return this.http.get(`projects/${id}/tokens`, { params: options }).toPromise();
+    public getByProjectId(id: string, options?) {
+        return this.http.get<Token[]>(`projects/${id}/tokens`, { params: options }).toPromise();
     }
 
-    getProjectDefault(id) {
-        return this.http.get(`projects/${id}/tokens/default`).toPromise();
+    public getProjectDefault(id: string) {
+        return this.http.get<Token>(`projects/${id}/tokens/default`).toPromise();
     }
 
-    remove(id) {
-        return this.http.delete(`tokens/${id}`).toPromise();
+    public remove(id: string) {
+        return this.http.delete<WorkInProgressResult>(`tokens/${id}`).toPromise();
     }
 
-    update(id, token) {
-        return this.http.patch(`tokens/${id}`, token).toPromise();
+    public update(id: string, token: Token) {
+        return this.http.patch<Token>(`tokens/${id}`, token).toPromise();
     }
 }

@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class ErrorService {
     constructor() {}
 
-    getExceptions(exception) {
+    public getExceptions(exception) {
         const exceptions = [];
         let currentException = exception;
         while (currentException) {
@@ -18,21 +18,21 @@ export class ErrorService {
         return exceptions;
     }
 
-    getTargetInfo(exception) {
-        return exception && exception.data ? exception.data['@target'] : null;
+    public getTargetInfo(exception) {
+        return exception && exception.data ? exception.data["@target"] : null;
     }
 
-    getTargetInfoExceptionType(exception) {
+    public getTargetInfoExceptionType(exception) {
         const target = this.getTargetInfo(exception);
         return target && target.ExceptionType ? target.ExceptionType : null;
     }
 
-    getTargetInfoMethod(exception) {
+    public getTargetInfoMethod(exception) {
         const target = this.getTargetInfo(exception);
         return target && target.Method ? target.Method : null;
     }
 
-    getTargetInfoMessage(exception) {
+    public getTargetInfoMessage(exception) {
         const target = this.getTargetInfo(exception);
         return target && target.Message ? target.Message : null;
     }

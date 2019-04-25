@@ -1,12 +1,12 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: 'thousandSuff'
+    name: "thousandSuff"
 })
 export class ThousandSuffixPipe implements PipeTransform {
-    transform(value: any, args?: any): any {
+    public transform(value: number, fractionDigits?: number): number|string {
         let exp;
-        const suffixes = ['k', 'M', 'G', 'T', 'P', 'E'];
+        const suffixes = ["k", "M", "G", "T", "P", "E"];
 
         if (Number.isNaN(value)) {
             return null;
@@ -18,6 +18,6 @@ export class ThousandSuffixPipe implements PipeTransform {
 
         exp = Math.floor(Math.log(value) / Math.log(1000));
 
-        return (value / Math.pow(1000, exp)).toFixed(args) + suffixes[exp - 1];
+        return (value / Math.pow(1000, exp)).toFixed(fractionDigits) + suffixes[exp - 1];
     }
 }

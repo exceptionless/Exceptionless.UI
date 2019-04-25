@@ -1,44 +1,44 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
-import { FilterService } from '../../../service/filter.service';
-import { FilterStoreService } from '../../../service/filter-store.service';
-import { EventService } from '../../../service/event.service';
-import { StackService } from '../../../service/stack.service';
-import { OrganizationService } from '../../../service/organization.service';
-import { NotificationService } from '../../../service/notification.service';
-import { $ExceptionlessClient } from '../../../exceptionlessclient';
-import { formatNumber } from '@angular/common';
-import { ThousandSuffixPipe } from '../../../pipes/thousand-suffix.pipe';
-import { AppEventService } from '../../../service/app-event.service';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import * as moment from "moment";
+import { FilterService } from "../../../service/filter.service";
+import { FilterStoreService } from "../../../service/filter-store.service";
+import { EventService } from "../../../service/event.service";
+import { StackService } from "../../../service/stack.service";
+import { OrganizationService } from "../../../service/organization.service";
+import { NotificationService } from "../../../service/notification.service";
+import { $ExceptionlessClient } from "../../../exceptionlessclient";
+import { formatNumber } from "@angular/common";
+import { ThousandSuffixPipe } from "../../../pipes/thousand-suffix.pipe";
+import { AppEventService } from "../../../service/app-event.service";
+import { Organization } from "src/app/models/organization";
+import { Subscription } from "rxjs";
+import { TypedMessage } from "src/app/models/messaging";
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html'
+    selector: "app-dashboard",
+    templateUrl: "./dashboard.component.html"
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {
-    subscriptions: any;
-    timeFilter = '';
-    projectFilter = '';
-    type = '';
-    eventType = '';
-    seriesData: any[];
-    apexChart: any = {
+    private subscriptions: Subscription[];
+    public type: string;
+    public  eventType: string;
+    public apexChart: any = {
         options: {
             chart: {
                 height: 200,
-                type: 'area',
+                type: "area",
                 stacked: true,
                 events: {
                     zoomed: (chartContext, { xaxis, yaxis }) => {
                         const start = moment(xaxis.min).utc().local();
                         const end = moment(xaxis.max).utc().local();
-                        this.filterService.setTime(start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end.format('YYYY-MM-DDTHH:mm:ss'));
+                        this.filterService.setTime(start.format("YYYY-MM-DDTHH:mm:ss") + "-" + end.format("YYYY-MM-DDTHH:mm:ss"));
 
-                        $ExceptionlessClient.createFeatureUsage('app.session.Dashboard.chart.range.onSelection')
-                            .setProperty('start', start)
-                            .setProperty('end', end)
+                        $ExceptionlessClient.createFeatureUsage("app.session.Dashboard.chart.range.onSelection")
+                            .setProperty("start", start)
+                            .setProperty("end", end)
                             .submit();
 
                         return false;
@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 },
                 tooltip: {
                     x: {
-                        format: 'dd MMM yyyy'
+                        format: "dd MMM yyyy"
                     }
                 },
                 toolbar: {
@@ -56,12 +56,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     }
                 }
             },
-            colors: ['rgba(60, 116, 0, .9)', 'rgba(124, 194, 49, .7)'],
+            colors: ["rgba(60, 116, 0, .9)", "rgba(124, 194, 49, .7)"],
             dataLabels: {
                 enabled: false
             },
             stroke: {
-                curve: 'smooth'
+                curve: "smooth"
             },
 
             series: [],
@@ -73,11 +73,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             },
             legend: {
-                position: 'top',
-                horizontalAlign: 'left'
+                position: "top",
+                horizontalAlign: "left"
             },
             xaxis: {
-                type: 'datetime'
+                type: "datetime"
             },
             yaxis: {
                 labels: {
@@ -89,41 +89,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
             tooltip: {
                 y: {
                     formatter: (rep) => {
-                        return formatNumber(rep, 'en');
+                        return formatNumber(rep, "en");
                     }
                 }
             }
         },
         seriesData: []
     };
-    organizations: any[];
-    stats: any = {
+    private organizations: Organization[];
+    public stats: any = {
         count: 0,
         unique: 0,
         new: 0,
         avg_per_hour: 0.0
     };
-    mostFrequent: any = {
-        get: this.stackService.getFrequent(),
-        type: 'get-frequent',
+    public mostFrequent: any = {
+        get: this.stackService.getFrequent,
+        type: "get-frequent",
         options: {
             limit: 10,
-            mode: 'summary'
+            mode: "summary"
         }
     };
-    mostRecent: any = {
-        header: 'Most Recent',
-        get: (options) => {
-            return this.eventService.getAll(options);
-        },
+    public mostRecent: any = {
+        header: "Most Recent",
+        get: this.eventService.getAll,
         options: {
             limit: 10,
-            mode: 'summary'
+            mode: "summary"
         }
     };
 
     constructor(
-        private route: ActivatedRoute,
         private filterService: FilterService,
         private filterStoreService: FilterStoreService,
         private eventService: EventService,
@@ -137,123 +134,112 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions = [];
     }
 
-    ngOnInit() {
+    public async ngOnInit() {
         this.subscriptions = [];
         this.subscriptions.push(this.appEvent.subscribe({
-            next: (event: any) => {
-                if (event.type === 'ProjectFilterChanged' || event.type === 'TimeFilterChanged') {
-                    console.log('dashboard-get-by-app-event');
+            next: (event: TypedMessage) => {
+                if (event.type === "ProjectFilterChanged" || event.type === "TimeFilterChanged") {
                     this.getStats();
-                    this.timeFilter = this.filterStoreService.getTimeFilter();
-                    this.projectFilter = this.filterService.getProjectTypeId();
                 }
             }
         }));
+
         this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
-            this.type = params['type'];
-            this.filterStoreService.setEventType(params['type']);
+            this.type = params.type;
+            this.filterStoreService.setEventType(params.type);
         }));
-        console.log('dashboard-init');
-        this.get();
+
+        await this.get();
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         for (const subscription of this.subscriptions) {
             subscription.unsubscribe();
         }
     }
 
-    customDateSetting() {
+    private customDateSetting() {
         return true;
     }
 
-     async get(isRefresh?) {
+    private async get(isRefresh?) {
         if (isRefresh && !this.canRefresh(isRefresh)) {
             return;
         }
         try {
             await this.getOrganizations();
             await this.getStats();
-            this.timeFilter = this.filterStoreService.getTimeFilter();
-            this.projectFilter = this.filterService.getProjectTypeId();
-        } catch (err) {}
+        } catch (ex) {}
     }
 
-    canRefresh(data) {
-        if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
+    public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
+        if (!!data && data.type === "PersistentEvent" || data.type === "Stack") {
             return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
         }
 
-        if (!!data && data.type === 'Organization' || data.type === 'Project') {
+        if (!!data && data.type === "Organization" || data.type === "Project") {
             return this.filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
         }
 
         return !data;
     }
 
-    async getOrganizations() {
+    private async getOrganizations() {
         try {
-            const response = await this.organizationService.getAll('');
-            this.organizations = JSON.parse(JSON.stringify(response['body']));
-            return this.organizations;
-        } catch (err) {
-            this.notificationService.error('', 'Error Occurred!');
-            return err;
+            this.organizations = await this.organizationService.getAll();
+        } catch (ex) {
+            this.notificationService.error("", "Error Occurred!");
         }
     }
 
-    async getStats(isRefresh?) {
+    private async getStats(isRefresh?) {
         if (isRefresh && !this.canRefresh(isRefresh)) {
             return;
         }
-        const onSuccess = (response) => {
-            const getAggregationValue = (data, name, defaultValue) => {
-                const aggs = data.aggregations;
-                return aggs && aggs[name] && aggs[name].value || defaultValue;
-            };
-
-            const getAggregationItems = (data, name, defaultValue) => {
-                const aggs = data.aggregations;
-                return aggs && aggs[name] && aggs[name].items || defaultValue;
-            };
-
-            const results = JSON.parse(JSON.stringify(response));
-            const termsAggregation = getAggregationItems(results, 'terms_first', []);
-            const count = getAggregationValue(results, 'sum_count', 0);
-            this.stats = {
-                count: count.toFixed(0),
-                unique: parseInt(getAggregationValue(results, 'cardinality_stack', 0), 10),
-                new: parseInt(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 10),
-                avg_per_hour: this.eventService.calculateAveragePerHour(count, this.organizations).toFixed(1)
-            };
-            const dateAggregation = getAggregationItems(results, 'date_date', []);
-
-            const data1 = dateAggregation.map((item) => {
-                return [moment(item.key), getAggregationValue(item, 'cardinality_stack', 0)];
-            });
-
-            const data2 = dateAggregation.map((item) => {
-                return [moment(item.key), getAggregationValue(item, 'sum_count', 0)];
-            });
-
-            this.apexChart.seriesData = [];
-
-            this.apexChart.seriesData.push({
-                name: 'Unique',
-                data: data1
-            });
-
-            this.apexChart.seriesData.push({
-                name: 'Count',
-                data: data2
-            });
-            this.eventType = this.type;
-        };
 
         const offset = this.filterService.getTimeOffset();
 
-        const res = await this.eventService.count('date:(date' + (offset ? '^' + offset : '') + ' cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1');
-        onSuccess(res);
-        return res;
+        const response = await this.eventService.count("date:(date" + (offset ? "^" + offset : "") + " cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1");
+        const getAggregationValue = (data, name, defaultValue) => {
+            const aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].value || defaultValue;
+        };
+
+        const getAggregationItems = (data, name, defaultValue) => {
+            const aggs = data.aggregations;
+            return aggs && aggs[name] && aggs[name].items || defaultValue;
+        };
+
+        const results = response;
+        const termsAggregation = getAggregationItems(results, "terms_first", []);
+        const count = getAggregationValue(results, "sum_count", 0);
+        this.stats = {
+            count: count.toFixed(0),
+            unique: parseInt(getAggregationValue(results, "cardinality_stack", 0), 10),
+            new: parseInt(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 10),
+            avg_per_hour: this.eventService.calculateAveragePerHour(count, this.organizations).toFixed(1)
+        };
+        const dateAggregation = getAggregationItems(results, "date_date", []);
+
+        const data1 = dateAggregation.map((item) => {
+            return [moment(item.key), getAggregationValue(item, "cardinality_stack", 0)];
+        });
+
+        const data2 = dateAggregation.map((item) => {
+            return [moment(item.key), getAggregationValue(item, "sum_count", 0)];
+        });
+
+        this.apexChart.seriesData = [];
+        this.apexChart.seriesData.push({
+            name: "Unique",
+            data: data1
+        });
+
+        this.apexChart.seriesData.push({
+            name: "Count",
+            data: data2
+        });
+
+        this.eventType = this.type;
     }
 }

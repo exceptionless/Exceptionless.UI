@@ -1,10 +1,10 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: 'hasProp'
+    name: "hasProp"
 })
 export class HasPropPipe implements PipeTransform {
-    transform(value: any, args?: any): any {
+    public transform(value: object, args?: string): boolean {
         return value.hasOwnProperty(args);
     }
 }

@@ -1,28 +1,30 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { NotificationService } from '../../../../service/notification.service';
-import { OrganizationService } from '../../../../service/organization.service';
-import { ProjectService } from '../../../../service/project.service';
-import { WordTranslateService } from '../../../../service/word-translate.service';
-import { BillingService } from '../../../../service/billing.service';
+import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NgForm } from "@angular/forms";
+import { NotificationService } from "../../../../service/notification.service";
+import { OrganizationService } from "../../../../service/organization.service";
+import { ProjectService } from "../../../../service/project.service";
+import { WordTranslateService } from "../../../../service/word-translate.service";
+import { BillingService } from "../../../../service/billing.service";
+import { Organization } from "src/app/models/organization";
+import { Subscription } from "rxjs";
 
 @Component({
-    selector: 'app-project-new',
-    templateUrl: './project-new.component.html'
+    selector: "app-project-new",
+    templateUrl: "./project-new.component.html"
 })
 
 export class ProjectNewComponent implements OnInit, OnDestroy {
-    @ViewChild('addForm') public addForm: NgForm;
-    _canAdd = true;
-    _newOrganizationId = '__newOrganization';
-    currentOrganization = {};
-    organizations = [];
-    organization_name = '';
-    project_name = '';
-    organizationId = '';
-    submitted = false;
-    subscriptions: any;
+    @ViewChild("addForm") public addForm: NgForm;
+    private _canAdd: boolean = true;
+    private _newOrganizationId: string = "__newOrganization";
+    public currentOrganization: Organization;
+    public organizations: Organization[];
+    public organizationName: string;
+    public projectName: string;
+    public organizationId: string;
+    public submitted: boolean = false;
+    private subscriptions: Subscription[];
 
     constructor(
         private router: Router,
@@ -35,23 +37,23 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
         private viewRef: ViewContainerRef
     ) {}
 
-    ngOnInit() {
+    public async ngOnInit() {
         this.subscriptions = [];
         this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
-            this.organizationId = params['id'];
+            this.organizationId = params.id;
         }));
-        this.getOrganizations();
+
+        await this.getOrganizations();
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         for (const subscription of this.subscriptions) {
             subscription.unsubscribe();
         }
     }
 
-    async add(isRetrying?) {
-
-        this.submitted = true;
+    public async add(isRetrying?: boolean) {
+        this.submitted = true; // TODO: Can this be simplified? It seems overly complex.
 
         const resetCanAdd = () => {
             this._canAdd = true;
@@ -66,7 +68,7 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
             /*return !isRetrying && retry(1000);*/
         }
 
-        if ((this.canCreateOrganization() && !this.organization_name) || !this.project_name || this.addForm.pending) {
+        if ((this.canCreateOrganization() && !this.organizationName) || !this.projectName || this.addForm.pending) {
             return retry();
         }
 
@@ -78,111 +80,86 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
 
         if (this.canCreateOrganization()) {
             try {
-                await this.createOrganization(this.organization_name);
+                await this.createOrganization(this.organizationName);
                 await this.createProject();
                 await resetCanAdd();
-            } catch (err) {}
+            } catch (ex) {}
         }
 
         try {
             await this.createProject(this.currentOrganization);
             await resetCanAdd();
-        } catch (err) {}
+        } catch (ex) {}
     }
 
-    canCreateOrganization() {
-        return this.currentOrganization['id'] === this._newOrganizationId || !this.hasOrganizations();
+    public canCreateOrganization(): boolean {
+        return this.currentOrganization.id === this._newOrganizationId || !this.hasOrganizations();
     }
 
-    async createOrganization(name) {
-        const onSuccess = (response) => {
-            this.organizations.push(JSON.parse(JSON.stringify(response)));
-            this.currentOrganization = JSON.parse(JSON.stringify(response));
-            return response;
-        };
-
-        const onFailure = async (response) => {
+    private async createOrganization(name: string) {
+        try {
+            const organization = await this.organizationService.create(name);
+            this.organizations.push(organization);
+            this.currentOrganization = organization;
+        } catch (ex) {
             if (response.status === 426) {
                 return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, null, () => {
                     this.createOrganization(name);
                 });
             }
 
-            let message = await this.wordTranslateService.translate('An error occurred while creating the organization.');
+            let message = await this.wordTranslateService.translate("An error occurred while creating the organization.");
             if (response && response.error) {
-                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error;
+                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.error;
             }
 
-            this.notificationService.error('', message);
-        };
-
-        try {
-            const res = await this.organizationService.create(name);
-            onSuccess(res);
-            return res;
-        } catch (err) {
-            onFailure(err);
-            return err;
+            this.notificationService.error("", message);
         }
     }
 
-    async createProject(organization?) {
+    private async createProject(organization?: Organization) {
         if (!organization) {
             this._canAdd = true;
             return;
         }
 
-        const onSuccess = (response) => {
-            this.router.navigate([`/project/${response['id']}/configure`], { queryParams: { redirect: true } });
-        };
-
-        const onFailure = async (response) => {
+        try {
+            const project = await this.projectService.create(organization.id, this.projectName);
+            await this.router.navigate([`/project/${project.id}/configure`], { queryParams: { redirect: true } });
+        } catch (ex) {
             if (response.status === 426) {
-                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, organization.id, () => {
-                    return this.createProject(organization);
+                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, organization.id, async () => {
+                    await this.createProject(organization);
                 });
             }
 
-            let message = await this.wordTranslateService.translate('An error occurred while creating the project.');
+            let message = await this.wordTranslateService.translate("An error occurred while creating the project.");
             if (response && response.error) {
-                message += ' ' + await this.wordTranslateService.translate('Message:') + ' ' + response.error.message;
+                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.error.message;
             }
 
-            this.notificationService.error('', message);
-        };
-
-        try {
-            const res = await this.projectService.create(organization.id, this.project_name);
-            onSuccess(res);
-            return res;
-        } catch (err) {
-            onFailure(err);
-            return err;
+            this.notificationService.error("", message);
         }
     }
 
-    async getOrganizations() {
-        const onSuccess = (response) => {
-            this.organizations = JSON.parse(JSON.stringify(response));
-            this.organizations.push({id: this._newOrganizationId, name: '<New Organization>'});
+    public async getOrganizations() {
+        try {
+            this.organizations = await this.organizationService.getAll();
+            this.organizations.push({id: this._newOrganizationId, name: "<New Organization>"});
 
-            const currentOrganizationId = this.currentOrganization['id'] ? this.currentOrganization['id'] : this.organizationId;
-            this.currentOrganization = this.organizations.filter(function(o) { return o.id === currentOrganizationId; })[0];
+            const currentOrganizationId = this.currentOrganization.id ? this.currentOrganization.id : this.organizationId;
+            this.currentOrganization = this.organizations.filter(o => o.id === currentOrganizationId)[0];
             if (!this.currentOrganization) {
                 this.currentOrganization = this.organizations.length > 0 ? this.organizations[0] : {};
             }
-        };
-        try {
-            const res = await this.organizationService.getAll();
-            onSuccess(res['body']);
-        } catch (err) {
+        } catch (ex) {
             if (!this.notificationService) {
-                this.notificationService.error('', 'Error occurred while get organizations');
+                this.notificationService.error("", "Error occurred while get organizations");
             }
         }
     }
 
-    hasOrganizations() {
+    public hasOrganizations(): boolean {
         return this.organizations.filter((o) => {
             return o.id !== this._newOrganizationId;
         }).length > 0;

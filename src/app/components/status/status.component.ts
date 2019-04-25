@@ -1,23 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import * as moment from 'moment';
-import { Router, ActivatedRoute } from '@angular/router';
-import { StatusService } from '../../service/status.service';
-import { WordTranslateService } from '../../service/word-translate.service';
-import { AuthService } from 'ng2-ui-auth';
-import { StateService } from '../../service/state.service';
-import { timer } from 'rxjs';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import * as moment from "moment";
+import { Router, ActivatedRoute } from "@angular/router";
+import { StatusService } from "../../service/status.service";
+import { WordTranslateService } from "../../service/word-translate.service";
+import { AuthService } from "ng2-ui-auth";
+import { StateService } from "../../service/state.service";
+import { timer } from "rxjs";
+import { AboutResult } from "src/app/models/results";
 
 @Component({
-    selector: 'app-status',
-    templateUrl: './status.component.html',
-    styleUrls: ['./status.component.less']
+    selector: "app-status",
+    templateUrl: "./status.component.html",
+    styleUrls: ["./status.component.less"]
 })
-export class StatusComponent implements OnInit, OnDestroy {
-
-    _lastChecked: any = moment();
-    _message: any;
-    _redirect: any;
-    contactSupport = '';
+export class StatusComponent implements OnInit {
+    private _lastChecked: moment.Moment = moment();
+    private _redirect: boolean;
+    private contactSupport: string;
+    public message: string;
 
     constructor(
         private router: Router,
@@ -28,66 +28,55 @@ export class StatusComponent implements OnInit, OnDestroy {
         private stateService: StateService
     ) {
         this.activatedRoute.queryParams.subscribe(params => {
-            this._redirect = params['redirect'] ? (params['redirect'] === 'true') : false;
+            this._redirect = params.redirect ? (params.redirect === "true") : false;
         });
     }
 
-    ngOnInit() {
-        this.initData();
-        timer(0, 30 * 1000).subscribe(val => {
+    public async ngOnInit() {
+        this.contactSupport = await this.wordTranslateService.translate("Please contact support for more information.");
+        this.message = await this.getMessage();
+
+        timer(0, 30 * 1000).subscribe(val => { // TODO: I notice we subscribe in a lot of places. Are we destorying these subscriptions everywhere?
             this.updateStatus();
         });
     }
 
-    ngOnDestroy() {
-    }
-
-    async initData() {
-        this.contactSupport = await this.wordTranslateService.translate('Please contact support for more information.');
-        this._message = await this.getMessage();
-        console.log(this._message);
-    }
-
-    async updateStatus() {
-        const updateMessage = (response) => {
+    private async updateStatus() {
+        const updateMessage = (response?: AboutResult) => { // TODO: This needs to pull a message from the healthy end point and NOT the about end point.
             if (response && response.data && response.data.message) {
-                this._message = response.data.message;
+                this.message = response.data.message;
                 if (response.status !== 200) {
-                    this._message += ' ' + this.contactSupport;
+                    this.message += " " + this.contactSupport;
                 }
             } else {
-                this._message = '';
+                this.message = "";
             }
         };
 
-        const onSuccess = (response) => {
-            if (this._redirect && moment().diff(this._lastChecked, 'seconds') > 30) {
+        try {
+            const response = await this.statusService.get();
+            if (this._redirect && moment().diff(this._lastChecked, "seconds") > 30) {
                 if (!this.authService.isAuthenticated()) {
-                    return this.router.navigate(['/login']);
+                    return this.router.navigate(["/login"]);
                 }
 
                 return this.stateService.restore();
             }
 
-
-            return updateMessage(response);
-        };
-
-        try {
-            const res = await this.statusService.get();
-            onSuccess(res);
-        } catch (err) {
-            updateMessage(err);
+            updateMessage(response);
+        } catch (ex) {
+            updateMessage();
         }
     }
 
-    async getMessage() {
-        const underMaintenance = await this.wordTranslateService.translate('We\'re sorry but the website is currently undergoing maintenance.');
+    // TODO: This should be using es6 string interpolation.
+    private async getMessage() {
+        const underMaintenance = await this.wordTranslateService.translate("We're sorry but the website is currently undergoing maintenance.");
 
         if (this._redirect) {
-            return underMaintenance + ' ' + await this.wordTranslateService.translate('You’ll be automatically redirected when the maintenance is completed.') + ' ' + this.contactSupport;
+            return underMaintenance + " " + await this.wordTranslateService.translate("You'll be automatically redirected when the maintenance is completed.") + " " + this.contactSupport;
         }
 
-        return underMaintenance + ' ' + this.contactSupport;
+        return underMaintenance + " " + this.contactSupport;
     }
 }

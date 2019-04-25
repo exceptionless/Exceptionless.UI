@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { NgxAnalytics } from 'ngx-analytics';
-import { Locker, DRIVERS } from 'angular-safeguard';
+import { Injectable } from "@angular/core";
+import { NgxAnalytics } from "ngx-analytics";
+import { Locker, DRIVERS } from "angular-safeguard";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 
 export class AnalyticsService {
@@ -12,17 +12,17 @@ export class AnalyticsService {
         private ngxAnalytics: NgxAnalytics
     ) {
         this.locker.setDriverFallback(DRIVERS.SESSION);
-        this.locker.setNamespace('analytics');
+        this.locker.setNamespace("analytics");
     }
 
-    addPaymentInfo() {
+    public addPaymentInfo() {
         return this.ngxAnalytics.eventTrack.next({
-            action: 'AddPaymentInfo',
-            properties: { category: 'AddPaymentInfo' },
+            action: "AddPaymentInfo",
+            properties: { category: "AddPaymentInfo" },
         });
     }
 
-    completeRegistration(queryString) {
+    public completeRegistration(queryString) {
         let data = {};
         if (queryString && (queryString.domain || queryString.medium || queryString.type || queryString.campaign || queryString.content || queryString.keyword)) {
             data = {
@@ -34,35 +34,35 @@ export class AnalyticsService {
                 marketing_keyword: queryString.keyword
             };
 
-            this.locker.set(DRIVERS.SESSION, 'registration', data);
+            this.locker.set(DRIVERS.SESSION, "registration", data);
         }
 
         return this.ngxAnalytics.eventTrack.next({
-            action: 'CompleteRegistration',
+            action: "CompleteRegistration",
             properties: data
         });
     }
 
-    getRegistrationQueryStringData() {
-        return this.locker.get(DRIVERS.LOCAL, 'registration') || {};
+    public getRegistrationQueryStringData() {
+        return this.locker.get(DRIVERS.LOCAL, "registration") || {};
     }
 
-    initiateCheckout() {
+    public initiateCheckout() {
         return this.ngxAnalytics.eventTrack.next({
-            action: 'InitiateCheckout'
+            action: "InitiateCheckout"
         });
     }
 
-    lead(data) {
+    public lead(data) {
         return this.ngxAnalytics.eventTrack.next({
-            action: 'Lead',
+            action: "Lead",
             properties: data,
         });
     }
 
-    purchase(data) {
+    public purchase(data) {
         return this.ngxAnalytics.eventTrack.next({
-            action: 'Purchase',
+            action: "Purchase",
             properties: data,
         });
     }

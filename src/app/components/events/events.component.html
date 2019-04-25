@@ -3,9 +3,9 @@
            appRefreshOn [refreshOn]="'StackChanged PlanChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
         <thead appRefreshOn [refreshOn]="'PersistentEventChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
             <tr>
-                <th class="selection hidden-xs" *ngIf="actions.length > 0">
+                <th class="selection hidden-xs" *ngIf="actions?.length > 0">
                     <label class="checks m-b-none">
-                        <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds.length > 0" [disabled]="events.length === 0"><i></i>
+                        <input type="checkbox" (click)="updateSelection()" [checked]="selectedIds?.length > 0" [disabled]="events?.length === 0"><i></i>
                     </label>
                 </th>
                 <th>{{ 'Summary' | translate }}</th>
@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             <tr class="row-clickable" *ngFor="let event of events">
-                <td class="hidden-xs" *ngIf="actions.length > 0"><label class="checks m-b-none"><input type="checkbox" [(checklist)]="selectedIds" [checklistValue]="event.id"><i></i></label></td>
+                <td class="hidden-xs" *ngIf="actions?.length > 0"><label class="checks m-b-none"><input type="checkbox" [(checklist)]="selectedIds" [checklistValue]="event.id"><i></i></label></td>
                 <td (click)="open(event.id, $event)">
                     <app-summary [source]="event" [showType]="showType"></app-summary>
                 </td>
@@ -38,8 +38,8 @@
                 </td>
             </tr>
 
-            <tr *ngIf="events.length === 0">
-                <td class="hidden-xs" *ngIf="actions.length > 0"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
+            <tr *ngIf="events?.length === 0">
+                <td class="hidden-xs" *ngIf="actions?.length > 0"><label class="checks m-b-none"><input type="checkbox" disabled><i></i></label></td>
                 <td colspan="3">
                     <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
                     <strong *ngIf="!loading">{{ 'No events were found with the current filter.' | translate }}</strong>
@@ -51,7 +51,7 @@
     <div class="table-footer">
         <div class="row">
             <div class="col-sm-4 hidden-xs">
-                <div class="dropdown" *ngIf="actions.length > 0" open>
+                <div class="dropdown" *ngIf="actions?.length > 0" open>
                     <button type="button" role="button" id="bulkActions" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         {{ 'Bulk Action' | translate }}
                         <span class="caret"></span>

@@ -1,3 +1,4 @@
+// TODO: There should be nothing in this assets folder.. This should be pulled from NPM.
 /**
  * https://github.com/csnover/TraceKit
  * @license MIT

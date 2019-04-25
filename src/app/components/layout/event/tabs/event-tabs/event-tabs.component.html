@@ -220,6 +220,7 @@
 
     <app-stack-trace [exception]="event['data']['@error']" [textStackTrace]="textStackTrace"></app-stack-trace>
 
+    <!-- TODO: I'm sure the following content is supposed to be there..... -->
     <!--<app-extended-data-item [can-promote]="false" [title]="'Additional Data'" [data]="event['data']['@error']['data']['@ext']"></app-extended-data-item>-->
 
     <div *ngIf="event['data'] != null && event['data']['@error'] != null && event['data']['@error']['modules'] != null">
