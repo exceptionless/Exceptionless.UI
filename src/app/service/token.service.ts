@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Token, NewToken } from "../models/token";
-import { WorkInProgressResult } from "../models/results";
+import { WorkInProgressResult } from "../models/network";
 
 @Injectable({
     providedIn: "root"

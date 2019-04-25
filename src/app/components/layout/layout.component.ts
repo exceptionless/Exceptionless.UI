@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { WebsocketService } from "../../service/websocket.service";
 import { Router, NavigationEnd } from "@angular/router";
 import { StatusService } from "../../service/status.service";
-import { AboutResult } from "src/app/models/results";
+import { AboutResult } from "src/app/models/network";
 
 @Component({
     selector: "app-layout",

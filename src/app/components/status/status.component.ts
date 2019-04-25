@@ -6,7 +6,7 @@ import { WordTranslateService } from "../../service/word-translate.service";
 import { AuthService } from "ng2-ui-auth";
 import { StateService } from "../../service/state.service";
 import { timer } from "rxjs";
-import { AboutResult } from "src/app/models/results";
+import { AboutResult } from "src/app/models/network";
 
 @Component({
     selector: "app-status",

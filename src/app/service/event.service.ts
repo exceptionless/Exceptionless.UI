@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { FilterService } from "./filter.service";
 import { OrganizationService } from "./organization.service";
 import * as moment from "moment";
-import { CountResult, WorkInProgressResult } from "../models/results";
+import { CountResult, WorkInProgressResult } from "../models/network";
 import { Organization } from "../models/organization";
 import { PersistentEvent } from "../models/event";
 
@@ -71,6 +71,15 @@ export class EventService {
             return this.http.get<PersistentEvent[]>(`projects/${project}/events`, { params: mergedOptions }).toPromise();
         }
 
+        // TODO: We need to be looking into if there is a good way to wrap this, so we can get status code (426 if needed, headers for paging (next, previous) and total)
+        /*
+        // perhaps a model like this?
+        export interface ListResults<T> {
+            results: T[];
+            headers: { [key: string]: string | string[] }
+            total: number;
+        }
+        */
         return this.http.get<PersistentEvent[]>("events", { params: mergedOptions }).toPromise();
     }
 
@@ -95,6 +104,8 @@ export class EventService {
     public getById(id: string, options: GetEventParameters, optionsCallback?: EventParametersCallback) {
         optionsCallback = typeof optionsCallback === "function" ? optionsCallback : o => o;
         const params = optionsCallback(this.filterService.apply(options));
+
+        // TODO: We need to be looking into if there is a good way to wrap this, so we can get status code (426 if needed, headers for paging (next, previous, parent))
         return this.http.get<PersistentEvent>(`events/${id}`, { params }).toPromise();
     }
 

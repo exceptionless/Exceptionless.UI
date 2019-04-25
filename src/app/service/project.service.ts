@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { Project, NewProject, ClientConfiguration, NotificationSettings } from "../models/project";
-import { WorkInProgressResult } from "../models/results";
+import { WorkInProgressResult } from "../models/network";
 
 @Injectable({
     providedIn: "root"

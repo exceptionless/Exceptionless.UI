@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { ObjectIdService } from "./object-id.service";
 import * as moment from "moment";
-import { WorkInProgressResult } from "../models/results";
+import { WorkInProgressResult } from "../models/network";
 import { Organization, BillingPlan, InvoiceGridModel, NewOrganization, ChangePlanResult } from "../models/organization";
 import { User } from "../models/user";
 

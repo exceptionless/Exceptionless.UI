@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { FilterService } from "./filter.service";
 import { Stack } from "../models/stack";
-import { WorkInProgressResult } from "../models/results";
+import { WorkInProgressResult } from "../models/network";
 
 @Injectable({
     providedIn: "root"

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
-import { QueryProcessResult } from "../models/results";
+import { QueryProcessResult } from "../models/network";
 
 @Injectable({
     providedIn: "root"

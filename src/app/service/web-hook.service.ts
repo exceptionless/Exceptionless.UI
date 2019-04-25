@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { NewWebHook, WebHook } from "../models/webhook";
-import { WorkInProgressResult } from "../models/results";
+import { WorkInProgressResult } from "../models/network";
 
 @Injectable({
     providedIn: "root"
