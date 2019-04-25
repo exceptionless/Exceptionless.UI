@@ -1,4 +1,38 @@
 {
+  // TypeScript: SDK.
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // Editor: Insert spaces when pressing Tab.
+  "editor.insertSpaces": true,
+
+  // Editor: Controls the rendering size of tabs in characters. Accepted values: "auto", 2, 4, 6, etc. If set to "auto", the value will be guessed when a file is opened.
+  "editor.tabSize": 2,
+
+  // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
+  "editor.formatOnPaste": false,
+
+  // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
+  "editor.formatOnSave": true,
+
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+
+  // Controls whether the editor should render the vertical glyph margin. Glyph margin is mostly used for debugging.
+  "editor.glyphMargin": true,
+
+  // Render vertical rulers after a certain number of monospace characters. Use multiple values for multiple rulers. No rulers are drawn if array is empty
+  "editor.rulers": [100],
+
+  // Editor: When enabled, will trim trailing whitespace when you save a file.
+  "files.trimTrailingWhitespace": true,
+
+  // HTML: End with a newline.
+  "html.format.endWithNewline": true,
+
+  // Enable/disable autoclosing of HTML tags.
+  "html.autoClosingTags": true,
+  
   "cSpell.words": [
     "APPID",
     "timeago",
