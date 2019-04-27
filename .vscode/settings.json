@@ -12,10 +12,12 @@
   "editor.formatOnPaste": false,
 
   // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
-  "editor.formatOnSave": true,
+  // TODO: true
+  "editor.formatOnSave": false,
 
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true
+    // TODO: true
+    "source.organizeImports": false
   },
 
   // Controls whether the editor should render the vertical glyph margin. Glyph margin is mostly used for debugging.
@@ -32,11 +34,6 @@
 
   // Enable/disable autoclosing of HTML tags.
   "html.autoClosingTags": true,
-  
-  "cSpell.words": [
-    "APPID",
-    "timeago",
-    "toastr",
-    "webhook"
-  ]
+
+  "cSpell.words": ["APPID", "timeago", "toastr", "webhook"]
 }
