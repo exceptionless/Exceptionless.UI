@@ -7,25 +7,25 @@ export interface NewOrganization {
 
 export interface Organization {
     id: string;
-    created_utc: Date;
+    created_utc: string;
     name: string;
     plan_id: string;
     plan_name: string;
     plan_description: string;
     card_last4: string;
-    subscribe_date: Date;
-    billing_change_date: Date;
+    subscribe_date: string;
+    billing_change_date: string;
     billing_changed_by_user_id: string;
     billing_status: BillingStatus;
     billing_price: number;
     max_events_per_month: number;
     bonus_events_per_month: number;
-    bonus_expiration: Date;
+    bonus_expiration: string;
     retention_days: number;
     is_suspended: boolean;
     suspension_code: string;
     suspension_notes: string;
-    suspension_date: Date;
+    suspension_date: string;
     has_premium_features: boolean;
     max_users: number;
     max_projects: number;
@@ -72,7 +72,7 @@ export interface Invoice {
     id: string;
     organization_id: string;
     organization_name: string;
-    date: Date; // TODO: Check response and see if this should be a date or string?
+    date: string;
     paid: boolean;
     total: number;
     items: InvoiceLineItem[];
@@ -80,18 +80,18 @@ export interface Invoice {
 
 export interface InvoiceLineItem {
     description: string;
-    date: string; // TODO: Check response and see if this should be a date or string?
+    date: string;
     amount: number;
 }
 
 export interface InvoiceGridModel {
     id: string;
-    date: Date; // TODO: Check response and see if this should be a date or string?
+    date: string;
     paid: boolean;
 }
 
 export interface UsageInfo {
-    date: Date; // TODO: Check response and see if this should be a date or string?
+    date: string;
     total: number;
     blocked: number;
     limit: number;

@@ -54,7 +54,7 @@ export class ProjectFilterComponent implements OnInit {
             if (basicURl) {
                 setTimeout(() => {
                     this.router.navigateByUrl(`/${projectType}/${projectId}/${basicURl}`, { skipLocationChange: false });
-                    this.appEvent.fireEvent({ type: "ProjectFilterChanged" }); // TODO: Is this meant to be emmitted here? Is there a better place todo this? Seems like the filter service should handle this.. This probably should be calling this.filterService.fireFilterChanged()...
+                    this.appEvent.fireEvent(x{ type: "ProjectFilterChanged" }); // TODO: Is this meant to be emmitted here? Is there a better place todo this? Seems like the filter service should handle this.. This probably should be calling this.filterService.fireFilterChanged()...
                 }, 100);
             }
         }

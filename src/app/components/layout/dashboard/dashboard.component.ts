@@ -13,7 +13,7 @@ import { ThousandSuffixPipe } from "../../../pipes/thousand-suffix.pipe";
 import { AppEventService } from "../../../service/app-event.service";
 import { Organization } from "src/app/models/organization";
 import { Subscription } from "rxjs";
-import { TypedMessage } from "src/app/models/messaging";
+import { TypedMessage, EntityChanged } from "src/app/models/messaging";
 
 @Component({
     selector: "app-dashboard",
@@ -173,15 +173,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
-        if (!!data && data.type === "PersistentEvent" || data.type === "Stack") {
-            return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
+        if (!!message && message.type === "PersistentEvent" || message.type === "Stack") {
+            return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: message.organization_id, projectId: message.project_id });
         }
 
-        if (!!data && data.type === "Organization" || data.type === "Project") {
-            return this.filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
+        if (!!message && message.type === "Organization" || message.type === "Project") {
+            return this.filterService.includedInProjectOrOrganizationFilter({organizationId: message.id, projectId: message.id});
         }
 
-        return !data;
+        return !message;
     }
 
     private async getOrganizations() {

@@ -1,5 +1,5 @@
 <ul class="nav navbar-nav navbar-left" appRefreshOn [refreshOn]="'OrganizationChanged ProjectChanged'" (refreshAction)="get()" [refreshThrottle]="5000">
-    <li class="dropdown" appOpen appRefreshOn  [refreshOn]="'filterChanged'" (refreshAction)="update()">
+    <li class="dropdown" appOpen appRefreshOn  [refreshOn]="'FilterChanged'" (refreshAction)="update()">
         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >{{ filteredDisplayName }} <span class="caret"></span></a>
 
         <ul class="dropdown-menu w-xl scrollable-menu" ng-style="{'max-height': vm.filterDropDownMaxHeight + 'px'}" appAutoActive style="max-height: calc(100vh - 100px)">

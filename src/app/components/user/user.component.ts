@@ -43,7 +43,7 @@ export class UserComponent implements OnInit {
 
         try {
             this.users = await this.settings.get(this.currentOptions).toPromise();
-            const links = this.linkService.getLinksQueryParameters(res.headers.get("link"));
+            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
 

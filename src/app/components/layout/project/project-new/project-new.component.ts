@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import { NotificationService } from "../../../../service/notification.service";
@@ -101,17 +102,17 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
             const organization = await this.organizationService.create(name);
             this.organizations.push(organization);
             this.currentOrganization = organization;
-        } catch (ex) {
-            if (response.status === 426) {
-                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, null, () => {
+        } catch (ex: HttpErrorResponse) {
+            if (ex.status === 426) {
+                return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, null, () => {
                     this.createOrganization(name);
                 });
             }
 
             let message = await this.wordTranslateService.translate("An error occurred while creating the organization.");
-            if (response && response.error) {
-                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.error;
-            }
+            if (ex.error) {
+                message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
+            } // TODO: Find for usages of message translation and ensure we are resolving the error message correctly.
 
             this.notificationService.error("", message);
         }
@@ -126,16 +127,16 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
         try {
             const project = await this.projectService.create(organization.id, this.projectName);
             await this.router.navigate([`/project/${project.id}/configure`], { queryParams: { redirect: true } });
-        } catch (ex) {
-            if (response.status === 426) {
-                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, organization.id, async () => {
+        } catch (ex: HttpErrorResponse) {
+            if (ex.status === 426) {
+                return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, organization.id, async () => {
                     await this.createProject(organization);
                 });
             }
 
             let message = await this.wordTranslateService.translate("An error occurred while creating the project.");
-            if (response && response.error) {
-                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.error.message;
+            if (ex.error) {
+                message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
             }
 
             this.notificationService.error("", message);
@@ -145,12 +146,12 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
     public async getOrganizations() {
         try {
             this.organizations = await this.organizationService.getAll();
-            this.organizations.push({id: this._newOrganizationId, name: "<New Organization>"});
+            this.organizations.push({id: this._newOrganizationId, name: "<New Organization>"} as Organization);
 
             const currentOrganizationId = this.currentOrganization.id ? this.currentOrganization.id : this.organizationId;
             this.currentOrganization = this.organizations.filter(o => o.id === currentOrganizationId)[0];
             if (!this.currentOrganization) {
-                this.currentOrganization = this.organizations.length > 0 ? this.organizations[0] : {};
+                this.currentOrganization = this.organizations.length > 0 ? this.organizations[0] : {} as Organization;
             }
         } catch (ex) {
             if (!this.notificationService) {

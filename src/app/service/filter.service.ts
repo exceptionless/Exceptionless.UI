@@ -4,7 +4,8 @@ import { DateRangeParserService } from "./date-range-parser.service";
 import { ObjectIdService } from "./object-id.service";
 import { AppEventService } from "./app-event.service";
 import * as moment from "moment";
-import { Moment } from "moment";
+import { Moment } from "moment"; // TODO Fix moment
+import { FilterChanged } from "../models/messaging";
 
 @Injectable()
 
@@ -94,18 +95,14 @@ export class FilterService implements OnInit {
     }
 
     public fireFilterChanged(includeHiddenAndFixedFilter?) {
-        const options = {
+        const message: FilterChanged = {
             organization_id: this._organizationId,
             project_id: this._projectId,
             type: this._eventType
         };
 
-        Object.assign(options, this.getDefaultOptions(includeHiddenAndFixedFilter));
-
-        this.appEvent.fireEvent({
-            type: "filterChanged",
-            value: options
-        });
+        Object.assign(message, this.getDefaultOptions(includeHiddenAndFixedFilter));
+        this.appEvent.fireEvent({ type: "FilterChanged", message });
     }
 
     public getDefaultOptions(includeHiddenAndFixedFilter): { filter?: string, offset?: string, time?: string } {

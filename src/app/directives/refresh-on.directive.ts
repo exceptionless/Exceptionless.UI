@@ -1,6 +1,7 @@
 import { Directive, Input, Output, EventEmitter, OnInit, OnDestroy } from "@angular/core";
-import { AppEventService, AppEvent } from "../service/app-event.service";
+import { AppEventService } from "../service/app-event.service";
 import { Subscription } from "rxjs/Subscription";
+import { TypedMessage, AllTypedMessageTypes } from "../models/messaging";
 
 @Directive({
     selector: "[appRefreshOn]"
@@ -10,7 +11,7 @@ export class RefreshOnDirective implements OnInit, OnDestroy {
     @Input() public refreshOn: string;
     @Input() public refreshThrottle: any;
     @Input() public refreshDebounce: any;
-    @Output() public refreshAction = new EventEmitter<string> ();
+    @Output() public refreshAction = new EventEmitter<AllTypedMessageTypes> ();
     private subscriptions: Subscription[] = [];
     private lastRunTime: { [id: string]: number };
 
@@ -31,7 +32,7 @@ export class RefreshOnDirective implements OnInit, OnDestroy {
         if (this.refreshOn) {
             this.refreshOn.split(" ").forEach(key => {
                 this.subscriptions.push(this.appEvent.subscribe({
-                    next: (event: AppEvent) => {
+                    next: (event: TypedMessage) => {
                         if (event.type === key) {
                             const tt = new Date().getTime();
                             if (this.lastRunTime[key]) {
@@ -44,7 +45,7 @@ export class RefreshOnDirective implements OnInit, OnDestroy {
                             // console.log('duration:', (tt - this.lastRunTime[key]) / 1000);
                             // console.log('run-event:', event);
                             this.lastRunTime[key] = tt;
-                            this.refreshAction.emit(event);
+                            this.refreshAction.emit(event.message);
                         }
                     }
                 }));

@@ -1,6 +1,7 @@
-export interface TypedMessage {
+export type AllTypedMessageTypes = PlanOverage | PlanChanged | SystemNotification | ReleaseNotification | UserMembershipChanged | EntityChanged | FilterChanged | FormSubmitted;
+export class TypedMessage {
     type: string;
-    message: PlanOverage | PlanChanged | SystemNotification | ReleaseNotification | UserMembershipChanged | EntityChanged;
+    message: AllTypedMessageTypes;
 }
 
 export enum ChangeType {
@@ -9,33 +10,33 @@ export enum ChangeType {
     Removed = 2
 }
 
-export interface UserMembershipChanged {
+export class UserMembershipChanged {
     change_type: ChangeType;
     user_id: string;
     organization_id: string;
 }
 
-export interface PlanOverage {
+export class PlanOverage {
     organization_id: string;
     is_hourly: boolean;
 }
 
-export interface PlanChanged {
+export class PlanChanged {
     organization_id: string;
 }
 
-export interface SystemNotification {
+export class SystemNotification {
     date: Date;
     message: string;
 }
 
-export interface ReleaseNotification {
+export class ReleaseNotification {
     critical: boolean;
     date: Date;
     message: string;
 }
 
-export interface EntityChanged {
+export class EntityChanged {
     type: string;
     id: string;
     organization_id: string;
@@ -44,3 +45,14 @@ export interface EntityChanged {
     change_type: ChangeType;
     data: { [key: string]: string | boolean; }; // possible keys UserId, IsAuthenticationToken
 }
+
+export class FilterChanged {
+    type: string;
+    organization_id: string;
+    project_id?: string;
+    filter?: string;
+    offset?: string;
+    time?: string;
+}
+
+export class FormSubmitted {}

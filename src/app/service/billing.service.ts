@@ -35,7 +35,7 @@ export class BillingService {
 
         return this.dialogService.confirm(viewRef, message, "Upgrade Plan", () => {
             return this.changePlan(viewRef, callback, organizationId);
-        }, () => {
+        }, async () => {
             $ExceptionlessClient.createFeatureUsage(`${this.source}.confirmUpgradePlan.cancel`)
                 .setMessage(message)
                 .setProperty("OrganizationId", organizationId)

@@ -38,9 +38,7 @@ export class OrganizationService {
     public getOldestCreationDate(organizations: Organization[]): Date {
         if (organizations) {
             if (organizations.length > 1) {
-                return new Date(organizations.reduce((o1, o2)  => {
-                    return Math.min(this.objectIdService.create(o1.id).getDate(), this.objectIdService.create(o2.id).getDate());
-                }));
+                return new Date(Math.min(...organizations.map(o => this.objectIdService.create(o.id).getDate())));
             }
 
             if (organizations.length === 1) {
@@ -60,7 +58,7 @@ export class OrganizationService {
 
         if (organizations) {
             if (organizations.length > 1) {
-                retentionDays = organizations.reduce((o1, o2) => Math.max(o1.retention_days > 0 ? o1.retention_days : maximumRetentionDays, o2.retention_days > 0 ? o2.retention_days : maximumRetentionDays));
+                retentionDays = Math.max(...organizations.map(o => o.retention_days > 0 ? o.retention_days : maximumRetentionDays));
             } else if (organizations.length === 1) {
                 retentionDays = organizations[0].retention_days;
             }

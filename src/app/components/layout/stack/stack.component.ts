@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 import * as moment from "moment";
@@ -306,7 +307,7 @@ export class StackComponent implements OnInit, OnDestroy {
         try {
             this.stack = await this.stackService.getById(this._stackId);
             this.stack.references = this.stack.references || [];
-        } catch (ex) {
+        } catch (ex: HttpErrorResponse) {
             if (ex.status === 404) {
                 this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Stack"));
             } else {
@@ -314,7 +315,7 @@ export class StackComponent implements OnInit, OnDestroy {
             }
 
             this.router.navigate(["/type/events/dashboard"]);
-            return err;
+            return ex;
         }
     }
 
@@ -464,15 +465,15 @@ export class StackComponent implements OnInit, OnDestroy {
         try {
             await this.stackService.promote(this._stackId);
             this.notificationService.success("", await this.wordTranslateService.translate("Successfully promoted stack!"));
-        } catch (ex) {
-            if (response.status === 426) { // TODO: figure out if the api call throws a network exception that has the status code.
-                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.stack.organization_id, async () => {
+        } catch (ex: HttpErrorResponse) {
+            if (ex === 426) { // TODO: figure out if the api call throws a network exception that has the status code.
+                return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.stack.organization_id, async () => {
                     return await this.promoteToExternal();
                 });
             }
 
-            if (response.status === 501) {
-                return this.dialogService.confirm(this.viewRef, response.error.message, "Manage Integrations", async () => {
+            if (ex.status === 501) {
+                return this.dialogService.confirm(this.viewRef, ex.error.message, "Manage Integrations", async () => {
                     await this.router.navigate([`/project/${this.stack.project_id}/manage`]);
                 });
             }

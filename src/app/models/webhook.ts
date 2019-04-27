@@ -1,4 +1,4 @@
-export interface WebHook {
+export class WebHook {
     id: string;
     organization_id: string;
     project_id: string;
@@ -9,7 +9,7 @@ export interface WebHook {
     created_utc: Date;
 }
 
-export interface NewWebHook {
+export class NewWebHook {
     organization_id: string;
     project_id: string;
     url: string;

@@ -49,7 +49,7 @@ export class InvoicesComponent implements OnInit {
         this.currentOptions = options || this.settings.options;
 
         try {
-            this.invoices = await this.settings.get(this.currentOptions).toPromise();
+            this.invoices = await this.settings.get(this.currentOptions);
             const links = this.linkService.getLinksQueryParameters(link);
             this.previous = links.previous;
             this.next = links.next;

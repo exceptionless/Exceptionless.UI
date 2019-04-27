@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { LinkService } from "../../../../service/link.service";
 import { PaginationService } from "../../../../service/pagination.service";
@@ -12,7 +13,7 @@ import { BillingService } from "../../../../service/billing.service";
 import { Subscription } from "rxjs";
 import { Organization } from "src/app/models/organization";
 import { CurrentUser, User } from "src/app/models/user";
-import { EntityChanged } from "src/app/models/messaging";
+import { TypedMessage } from "src/app/models/messaging";
 
 @Component({
     selector: "app-organization-list",
@@ -49,7 +50,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         this.subscriptions = [];
         this.user = await this.userService.getCurrentUser();
         this.subscriptions.push(this.appEvent.subscribe({
-            next: async (event: EntityChanged) => {
+            next: async (event: TypedMessage) => {
                 if (event.type === "UPDATE_USER") {
                     this.user = await this.userService.getCurrentUser(); // TODO: Do we need to store this in the service?
                 }
@@ -88,14 +89,14 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
             const organization = await this.organizationService.create(name);
             this.organizations.push(organization);
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-        } catch (ex) {
-            if (response.status === 426) {
+        } catch (ex: HttpErrorResponse) {
+            if (ex.status === 426) {
                 // TODO: need to implement later(billing service)
             }
 
-            const message = await this.wordTranslateService.translate("An error occurred while creating the organization.");
-            if (response && response.error.message) {
-                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.error.message;
+            let message = await this.wordTranslateService.translate("An error occurred while creating the organization.");
+            if (ex.error && ex.error.message) {
+                message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
             }
 
             this.notificationService.error("", message);
@@ -110,7 +111,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
             this.organizations = await this.organizationService.getAll(this.currentOptions);
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
 
-            const links = this.linkService.getLinksQueryParameters(res.headers.get("link"));
+            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
 
@@ -132,10 +133,10 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
                 await this.organizationService.removeUser(organization.id, user.email_address);
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
                 this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-            } catch (ex) {
+            } catch (ex: HttpErrorResponse) {
                 let message: any = this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
-                if (response.status === 400) {
-                    message += " " + this.wordTranslateService.translate("Message:") + " " + response.error.message;
+                if (ex.status === 400) {
+                    message += " " + this.wordTranslateService.translate("Message:") + " " + ex.error.message;
                 }
 
                 this.notificationService.error("", message);

@@ -41,8 +41,8 @@ export class StackService {
         return this.http.get<Stack[]>(`stacks`, { params: mergedOptions });
     }
 
-    public getById(id) {
-        return this.http.get<Stack>("stacks/" + id, { observe: "response" }).toPromise();
+    public async getById(id) {
+        return await this.http.get<Stack>(`stacks/${id}`).toPromise();
     }
 
     public getFrequent(options?) {

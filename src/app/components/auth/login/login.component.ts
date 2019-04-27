@@ -1,13 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { AuthService } from "ng2-ui-ng2Auth";
+import { AuthService } from "ng2-ui-auth";
 import { NotificationService } from "../../../service/notification.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
 import { FilterService } from "../../../service/filter.service";
 import { $ExceptionlessClient } from "../../../exceptionlessclient";
-import { LoginModel } from "src/app/models/ng2Auth";
+import { LoginModel } from "src/app/models/auth";
 
-export interface ExternalLoginEnabled {
+export class ExternalLoginEnabled {
     enabled: boolean;
     facebook: boolean;
     github: boolean;
@@ -20,7 +20,7 @@ export interface ExternalLoginEnabled {
     templateUrl: "./login.component.html"
 })
 export class LoginComponent implements OnInit {
-    private _source = "app.ng2Auth.Login";
+    private _source: string = "app.auth.Login";
     private filterUrlPattern: string;
     private projectId: string;
     private projectType: string;
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
         private wordTranslateService: WordTranslateService
     ) {
         if (this.ng2Auth.isAuthenticated()) {
-            await this.redirectOnLogin();
+            this.redirectOnLogin();
         }
     }
 

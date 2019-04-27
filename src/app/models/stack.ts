@@ -1,4 +1,4 @@
-export interface Stack {
+export class Stack {
     id: string;
     organization_id: string;
     project_id: string;

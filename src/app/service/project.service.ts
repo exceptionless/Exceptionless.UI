@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
+import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Project, NewProject, ClientConfiguration, NotificationSettings } from "../models/project";
 import { WorkInProgressResult } from "../models/network";
 
@@ -59,7 +58,7 @@ export class ProjectService {
 
     public async isNameAvailable(organizationId: string, name: string): Promise<boolean> {
         const response = await this.http.get(`organizations/${organizationId}/projects/check-name`, { params: { name }}).toPromise();
-        return response.status === 204;
+        return response.status === 204; // TODO: A good way to get typing on this?
     }
 
     public promoteTab(id: string, name: string) {

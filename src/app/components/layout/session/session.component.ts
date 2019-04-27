@@ -176,7 +176,6 @@ export class SessionComponent implements OnInit, OnDestroy { // TODO: This shoul
                 data: dateAggregation.map(item => [moment(item.key), item.total || 0])
             });
 
-            this.seriesData = this.apexChart.seriesData;
             this.eventType = this.type;
             this.timeFilter = this.filterStoreService.getTimeFilter();
             this.projectFilter = this.filterService.getProjectTypeId();

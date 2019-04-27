@@ -13,6 +13,7 @@ import { AddOrganizationDialogComponent } from "../dialogs/add-organization-dial
 import { CustomDateRangeDialogComponent } from "../dialogs/custom-date-range-dialog/custom-date-range-dialog.component";
 import { AppEventService } from "./app-event.service";
 import { $ExceptionlessClient } from "../exceptionlessclient";
+import { FormSubmitted } from "../models/messaging";
 
 @Injectable({
     providedIn: "root"
@@ -95,7 +96,7 @@ export class DialogService {
                         onConfirm(url);
                         return true;
                     } else {
-                        this.appEvent.fireEvent({type: "form_submitted"});
+                        this.appEvent.fireEvent({ type: "form_submitted", message: new FormSubmitted() });
                     }
                 }}
             ],
@@ -117,7 +118,7 @@ export class DialogService {
                         onConfirm(data);
                         return true;
                     } else {
-                        this.appEvent.fireEvent({type: "form_submitted"});
+                        this.appEvent.fireEvent({ type: "form_submitted", message: new FormSubmitted() });
                     }
                 }}
             ],
@@ -139,7 +140,7 @@ export class DialogService {
                         onConfirm(data);
                         return true;
                     } else {
-                        this.appEvent.fireEvent({type: "form_submitted"});
+                        this.appEvent.fireEvent({ type: "form_submitted", message: new FormSubmitted() });
                     }
                 }}
             ],
@@ -165,7 +166,7 @@ export class DialogService {
                         onConfirm(data);
                         return true;
                     } else {
-                        this.appEvent.fireEvent({type: "form_submitted"});
+                        this.appEvent.fireEvent({ type: "form_submitted", message: new FormSubmitted() });
                     }
                 }}
             ],
@@ -187,7 +188,7 @@ export class DialogService {
                         onConfirm(userEmail);
                         return true;
                     } else {
-                        this.appEvent.fireEvent({type: "form_submitted"});
+                        this.appEvent.fireEvent({ type: "form_submitted", message: new FormSubmitted() });
                     }
                 }}
             ],
@@ -210,7 +211,7 @@ export class DialogService {
                         onConfirm(versionNo.replace(r, "$1.$2.$3-$4"));
                         return true;
                     } else {
-                        this.appEvent.fireEvent({type: "form_submitted"});
+                        this.appEvent.fireEvent({ type: "form_submitted", message: new FormSubmitted() });
                     }
                 }}
             ],
@@ -235,7 +236,7 @@ export class DialogService {
                         onConfirm();
                         return true;
                     });
-                    this.appEvent.fireEvent({type: "change_plan_form_submitted"});
+                    this.appEvent.fireEvent({ type: "change_plan_form_submitted", message: new FormSubmitted() });
                 }}
             ],
             data: {

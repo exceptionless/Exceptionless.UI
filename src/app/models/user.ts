@@ -1,4 +1,4 @@
-export interface User {
+export class User {
     id: string;
     organization_ids: string[];
     full_name: string;
@@ -10,19 +10,19 @@ export interface User {
     roles: string[];
 }
 
-export interface CurrentUser extends User {
+export class CurrentUser extends User {
     hash: string;
     has_local_account: boolean;
     o_auth_accounts: OAuthAccount[];
 }
 
-export interface OAuthAccount {
+export class OAuthAccount {
     provider: string;
     provider_user_id: string;
     username: string;
     readonly extra_data: { [key: string]: string; };
 }
 
-export interface UpdateEmailAddressResult {
+export class UpdateEmailAddressResult {
     is_verified: boolean;
 }
