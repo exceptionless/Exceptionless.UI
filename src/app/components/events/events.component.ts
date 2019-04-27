@@ -13,6 +13,7 @@ import { TypedMessage, EntityChanged, ChangeType } from "src/app/models/messagin
 import { GetEventParameters as GetEventsParameters } from "src/app/service/event.service";
 
 export interface EventsSettings {
+    relativeTo: Date;
     hideActions?: boolean;
     hideSessionStartTime?: boolean;
     sortByDateDescending?: boolean;
@@ -113,7 +114,7 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     async get(options?: GetEventsParameters, isRefresh?: boolean) {
-        if (isRefresh && !this.canRefresh(isRefresh)) {
+        if (isRefresh && !this.canRefresh(isRefresh)) { // TODO: This is messed up, refresh is only ever supposed to take an entity changed type.
             return;
         }
 

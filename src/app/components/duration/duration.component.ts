@@ -24,7 +24,7 @@ export class DurationComponent implements OnInit, OnChanges {
 
     public setDurationText() {
         if (typeof this.value === "number") {
-            const duration = moment.duration(this.value, this.period || "seconds");
+            const duration = moment.duration(this.value, (this.period || "seconds") as moment.unitOfTime.DurationConstructor);
             this.text = duration.humanize();
         } else {
             this.text = "never";

@@ -1,7 +1,8 @@
 import { Component, ComponentRef } from "@angular/core";
 import { IModalDialog, IModalDialogOptions, } from "ngx-modal-dialog";
 import { ModalParameterService } from "../../service/modal-parameter.service";
-import { AppEventService, AppEvent } from "../../service/app-event.service";
+import { AppEventService } from "../../service/app-event.service";
+import { TypedMessage } from "src/app/models/messaging";
 
 @Component({
     selector: "app-add-configuration-dialog",
@@ -21,7 +22,7 @@ export class AddConfigurationDialogComponent implements IModalDialog {
         private appEvent: AppEventService
     ) {
         this.appEvent.subscribe({
-            next: (event: AppEvent) => {
+            next: (event: TypedMessage) => {
                 if (event.type === "form_submitted") {
                     this.submitted = true;
                 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { HttpErrorResponse } from "@angular/common/http";
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 import { ClipboardService } from "ngx-clipboard";
 import * as moment from "moment";
@@ -480,13 +481,13 @@ export class EventComponent implements OnInit, OnDestroy {
 
             this.addHotKeys();
             this.buildReferences();
-        } catch (ex) {
-            if (response && response.status === 426) { // TODO: Does an exception here return a status code?
+        } catch (ex: HttpErrorResponse) {
+            if (ex.status === 426) { // TODO: Does an exception here return a status code?
                 try {
-                    return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project.organization_id, () => {
+                    return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.project.organization_id, () => {
                         return this.getEvent();
                     });
-                } catch (ex) {
+                } catch (err) {
                     this.router.navigate(["/type/events/dashboard"]);
                 }
             }

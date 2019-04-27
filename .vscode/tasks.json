@@ -4,6 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Build App",
             "type": "npm",
             "script": "build",
             "problemMatcher": [
@@ -11,6 +12,7 @@
             ]
         },
         {
+            "label": "Run App",
             "type": "npm",
             "script": "start",
             "problemMatcher": [
@@ -18,6 +20,7 @@
             ]
         },
         {
+            "label": "Test App",
             "type": "npm",
             "script": "test",
             "problemMatcher": [
@@ -25,6 +28,7 @@
             ]
         },
         {
+            "label": "Lint App",
             "type": "npm",
             "script": "lint",
             "problemMatcher": [

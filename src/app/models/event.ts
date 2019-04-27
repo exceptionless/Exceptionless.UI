@@ -1,4 +1,4 @@
-export interface PersistentEvent {
+export class PersistentEvent {
     readonly id: string;
     readonly organization_id: string;
     readonly project_id: string;
@@ -21,7 +21,7 @@ export interface PersistentEvent {
     readonly reference_id: string;
 }
 
-export interface UserDescription {
+export class UserDescription {
     email_address: string;
     description: string;
     data: { [key: string]: any; };

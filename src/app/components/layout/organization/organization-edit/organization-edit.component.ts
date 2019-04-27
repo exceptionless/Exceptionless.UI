@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { HttpErrorResponse } from "@angular/common/http";
 import { FilterService } from "../../../../service/filter.service";
 import { OrganizationService } from "../../../../service/organization.service";
 import { ProjectService } from "../../../../service/project.service";
@@ -158,19 +159,14 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
     }
 
     private async createUser(emailAddress) {
-        const onFailure = async (response) => {
-            if (response.status === 426) {
-                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this._organizationId, () => {
+        const onFailure = async (ex: HttpErrorResponse) => {
+            if (ex.status === 426) {
+                return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this._organizationId, () => {
                     return this.createUser(emailAddress);
                 });
             }
 
-            const message = await this.wordTranslateService.translate("An error occurred while inviting the user.");
-            if (response.data && response.data.message) {
-                message += " " + await this.wordTranslateService.translate("Message:") + " " + response.data.message;
-            }
-
-            this.notificationService.error("", message);
+            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while inviting the user."));
         };
 
         try {
@@ -250,7 +246,7 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 const res = await this.organizationService.removeUser(this._organizationId, currentUser.email_address);
                 this.router.navigate(["/organization/list"]);
                 return res;
-            } catch (ex) { // TODO: verify that error has status code.
+            } catch (ex: HttpErrorResponse) {
                 let message = await this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
                 if (ex.status === 400) {
                     message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.data.message;
@@ -273,7 +269,7 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the organization for deletion."));
                 this.router.navigate(["/organization/list"]);
                 return res;
-            } catch (ex) { // TODO: verify that error has status code.
+            } catch (ex: HttpErrorResponse) {
                 let message = await this.wordTranslateService.translate("An error occurred while trying to delete the organization.");
                 if (ex.status === 400) {
                     message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;

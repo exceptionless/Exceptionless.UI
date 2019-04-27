@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from "@angular/common/http";
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { AuthService } from "ng2-ui-auth";
 import { Router } from "@angular/router";
@@ -19,16 +19,16 @@ export class TokenInterceptor implements HttpInterceptor {
         private statusService: StatusService
     ) {}
 
-    private handleAuthError(err: HttpErrorResponse): Observable<any> {
+    private handleAuthError(ex: HttpErrorResponse): Observable<never> {
         // handle your auth error or rethrow
-        if (err instanceof HttpErrorResponse && this.router.url !== "/status" && (ex.status === 503 || ex.status === 0)) {
+        if (ex instanceof HttpErrorResponse && this.router.url !== "/status" && (ex.status === 503 || ex.status === 0)) {
             console.log(ex);
             this.checkHealth();
             return throwError(ex);
-        } else if (err instanceof HttpErrorResponse && this.router.url !== "/login" && ex.status === 401) {
+        } else if (ex instanceof HttpErrorResponse && this.router.url !== "/login" && ex.status === 401) {
             this.auth.logout()
                 .subscribe({
-                    error: (authErr: any) => this.notificationService.error("Error Occurred!", "Error"),
+                    error: (err) => this.notificationService.error("Error Occurred!", "Error"),
                     complete: () => this.router.navigate(["/login"])
                 });
             return EMPTY;

@@ -104,7 +104,7 @@ class ResilientWebSocket {
 })
 export class WebsocketService {
     private _connection: ResilientWebSocket;
-    private _websocketTimeout: NodeJS.Timeout;
+    private _websocketTimeout;
 
     constructor(
         private appEvent: AppEventService,

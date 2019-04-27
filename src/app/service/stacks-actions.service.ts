@@ -117,7 +117,7 @@ export class StacksActionsService {
             return res;
         } catch (ex) {
             onFailure();
-            return err;
+            return ex;
         }
     }
 

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { AuthAccountService } from "../../../service/auth-account.service";
 import { NotificationService } from "../../../service/notification.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
+import { ResetPasswordModel } from "src/app/models/auth";
 
 @Component({
     selector: "app-reset-password",

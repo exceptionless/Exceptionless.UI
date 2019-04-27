@@ -1,26 +1,26 @@
-export interface LoginModel {
+export class LoginModel {
     email: string;
     password: string;
     invite_token: string;
 }
 
-export interface SignupModel {
+export class SignupModel {
     name: string;
     email: string;
     password: string;
     invite_token: string;
 }
 
-export interface ChangePasswordModel {
+export class ChangePasswordModel {
     current_password: string;
     password: string;
 }
 
-export interface ResetPasswordModel {
+export class ResetPasswordModel {
     password_reset_token: string;
     password: string;
 }
 
-export interface TokenResult {
+export class TokenResult {
     token: string;
 }

@@ -61,8 +61,8 @@ export class ProjectsComponent implements OnInit {
             }
         } catch (ex) {
             this.loading = false;
-            this.notificationService.error("", this.wordTranslateService.translate("Error Occurred!"));
-            return err;
+            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+            return ex;
         } finally {
             this.loading = false;
         }

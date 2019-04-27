@@ -44,7 +44,7 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
     public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
         if (!!message && message.type === "PersistentEvent") {
             // We are already listening to the stack changed event... This prevents a double refresh.
-            if (message.change_type !== ChangeType.removed) {
+            if (message.change_type !== ChangeType.Removed) {
                 return false;
             }
 
@@ -95,8 +95,8 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
 
     public getDuration(ev: PersistentEvent): number {
         // TODO: this binding expression can be optimized.
-        if (ev.message.SessionEnd) {
-            return ev.message.Value || 0;
+        if (ev.data.SessionEnd) {
+            return ev.data.Value || 0;
         }
 
         return moment().diff(ev.date, "seconds");

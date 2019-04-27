@@ -1,4 +1,4 @@
-export interface Token {
+export class Token {
     id: string;
     organization_id: string;
     project_id: string;
@@ -11,7 +11,7 @@ export interface Token {
     updated_utc: Date;
 }
 
-export interface NewToken {
+export class NewToken {
     organization_id: string;
     project_id?: string;
     default_project_id?: string;

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FilterService } from "../../../../service/filter.service";
 import { OrganizationService } from "../../../../service/organization.service";
@@ -13,10 +14,12 @@ import { DialogService } from "../../../../service/dialog.service";
 import { formatNumber } from "@angular/common";
 import { ThousandSuffixPipe } from "../../../../pipes/thousand-suffix.pipe";
 import { Subscription } from "rxjs";
-import { Project } from "src/app/models/project";
+import { Project, NotificationSettings } from "src/app/models/project";
 import { Organization } from "src/app/models/organization";
 import { Token, NewToken } from "src/app/models/token";
 import { EntityChanged, ChangeType } from "src/app/models/messaging";
+import { WebHook } from "src/app/models/webhook";
+import { NgForm } from "@angular/forms";
 
 @Component({
     selector: "app-project-edit",
@@ -110,9 +113,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     public nextBillingDate: Date = moment().startOf("month").add(1, "months").toDate();
     public organization: Organization;
     public project: Project;
-    public projectForm: ngForm;
+    public projectForm: NgForm;
     public remainingEventLimit: number = 3000;
-    public slackNotificationSettings: NotificationSetings;
+    public slackNotificationSettings: NotificationSettings;
     public tokens: Token[];
     public userAgents: string;
     public userNamespaces: string;
@@ -208,9 +211,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     }
 
     private createWebHook(data) {
-        const onFailure = async (response) => {
-            if (response.status === 426) {
-                return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project.organization_id, () => {
+        const onFailure = async (ex: HttpErrorResponse) => {
+            if (ex.status === 426) {
+                return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.project.organization_id, () => {
                     return this.createWebHook(data);
                 });
             }
@@ -563,10 +566,10 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     public async saveSlackNotificationSettings() {
         try {
             await this.projectService.setIntegrationNotificationSettings(this._projectId, "slack", this.slackNotificationSettings);
-        } catch (ex) { // TODO: Verify ex has status code...
-            if (response.status === 426) {
+        } catch (ex: HttpErrorResponse) { // TODO: Verify ex has status code...
+            if (ex.status === 426) {
                 try {
-                    return this.billingService.confirmUpgradePlan(this.viewRef, response.error.message, this.project.organization_id, () => {
+                    return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.project.organization_id, () => {
                         return this.saveSlackNotificationSettings();
                     });
                 } catch (ex) {

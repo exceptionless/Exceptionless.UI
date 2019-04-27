@@ -169,7 +169,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
             } catch (ex) {
                 onFailure(ex);
                 this.paymentMessage = await this.wordTranslateService.translate("An error occurred while changing plans.");
-                return err;
+                return ex;
             }
         }
 

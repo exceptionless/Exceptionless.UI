@@ -1,7 +1,5 @@
 import { Directive } from "@angular/core";
 import { AsyncValidator, AbstractControl, ValidationErrors, NG_ASYNC_VALIDATORS } from "@angular/forms";
-import { Observable } from "rxjs";
-import "rxjs/add/operator/map";
 import { OrganizationService } from "../service/organization.service";
 
 @Directive({
@@ -10,19 +8,9 @@ import { OrganizationService } from "../service/organization.service";
 })
 
 export class OrganizationUniqueValidatorDirective implements AsyncValidator {
-    constructor(
-        private organizationService: OrganizationService
-    ) {}
+    constructor(private organizationService: OrganizationService) {}
 
-    public validate(c: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-        return this.organizationService.isNameAvailable(c.value).map(
-            res => {
-                if (res.status === 201 ) {
-                    return { uniqueOrganization: true };
-                } else {
-                    return null;
-                }
-            }
-        );
+    public async validate(c: AbstractControl): Promise<ValidationErrors | null> {
+        return await this.organizationService.isNameAvailable(c.value) ? null : { uniqueOrganization: true };
     }
 }

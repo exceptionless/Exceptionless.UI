@@ -1,6 +1,6 @@
 import { UsageInfo } from "./organization";
 
-export interface Project {
+export class Project {
     id: string;
     organization_id: string;
     organization_name: string;
@@ -18,13 +18,13 @@ export interface Project {
     created_utc: Date;
 }
 
-export interface NewProject {
+export class NewProject {
     organization_id: string;
     name: string;
     delete_bot_data_enabled: boolean;
 }
 
-export interface NotificationSettings {
+export class NotificationSettings {
     send_daily_summary: boolean;
     report_new_errors: boolean;
     report_critical_errors: boolean;
@@ -33,7 +33,7 @@ export interface NotificationSettings {
     report_critical_events: boolean;
 }
 
-export interface ClientConfiguration {
+export class ClientConfiguration {
     version: number;
     readonly settings: { [key: string]: string; };
 }

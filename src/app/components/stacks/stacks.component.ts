@@ -7,10 +7,10 @@ import { PaginationService } from "../../service/pagination.service";
 import { NotificationService } from "../../service/notification.service";
 import { StacksActionsService, StackAction } from "../../service/stacks-actions.service";
 import { WordTranslateService } from "../../service/word-translate.service";
-import { AppEventService, AppEvent } from "../../service/app-event.service";
+import { AppEventService } from "../../service/app-event.service";
 import { Subscription } from "rxjs";
 import { Stack } from "src/app/models/stack";
-import { EntityChanged } from "src/app/models/messaging";
+import { EntityChanged, TypedMessage } from "src/app/models/messaging";
 
 @Component({
     selector: "app-stacks",
@@ -56,7 +56,7 @@ export class StacksComponent implements OnChanges, OnInit, OnDestroy {
     public ngOnInit() {
         this.subscriptions = [];
         this.subscriptions.push(this.appEvent.subscribe({
-            next: async (event: AppEvent) => {
+            next: async (event: TypedMessage) => {
                 if (event.type === "ProjectFilterChanged" || event.type === "TimeFilterChanged") {
                     await this.get();
                 }

@@ -1,9 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NotificationService } from "../../../service/notification.service";
-import { AuthService } from "ng2-ui-ng2Auth";
+import { AuthService } from "ng2-ui-auth";
 import { ProjectService } from "../../../service/project.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
+import { SignupModel } from "src/app/models/auth";
+import { ExternalLoginEnabled } from "../login/login.component";
+import { $ExceptionlessClient } from "src/app/exceptionlessclient";
 
 @Component({
     selector: "app-signup",
@@ -11,6 +14,7 @@ import { WordTranslateService } from "../../../service/word-translate.service";
 })
 
 export class SignupComponent implements OnInit {
+    private _source: string = "app.auth.Signup";
     public model: SignupModel = new SignupModel();
     public submitted: boolean = false;
     public isExternalLoginEnabled: ExternalLoginEnabled;
@@ -56,14 +60,14 @@ export class SignupComponent implements OnInit {
         try {
             await this.ng2Auth.authenticate(provider).toPromise();
             $ExceptionlessClient.createFeatureUsage(`${this._source}.authenticate`).addTags(provider).submit();
-            await this.redirectOnLogin();
+            await this.redirectOnSignup();
         } catch (ex) {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.authenticate.error`).setProperty("error", ex).addTags(provider).submit();
             this.notificationService.error("", await this.wordTranslateService.translate("Loggin_Failed_Message"));
         }
     }
 
-    public onSubmit(isValid) {
+    public async onSubmit(isValid) {
         if (!isValid) {
             return;
         }
