@@ -4,7 +4,7 @@ WORKDIR /app
 RUN apt-get update \
      && apt-get install -y git --no-install-recommends
 
-COPY src/package.json src/bower.json src/.bowerrc ./
+COPY src/package.json src/package-lock.json src/bower.json src/.bowerrc ./
 
 # dependencies
 
