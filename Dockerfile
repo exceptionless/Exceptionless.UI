@@ -1,10 +1,8 @@
 FROM buildkite/puppeteer:v1.15.0 AS base
 WORKDIR /app
 
-USER root
-RUN apt update && \
-    apt install -yq git
-USER pptruser
+RUN apt-get update \
+     && apt-get install -y git --no-install-recommends
 
 COPY src/package.json src/bower.json src/.bowerrc ./
 
@@ -34,7 +32,6 @@ RUN npx grunt build
 FROM build AS testrunner
 WORKDIR /app
 
-USER pptruser
 ENTRYPOINT [ "npx", "grunt", "test" ]
 
 # ui
