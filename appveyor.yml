@@ -16,7 +16,7 @@ environment:
 
 build_script:
   - docker build --target testrunner -t exceptionless:test .
-  - docker run -e APPVEYOR_API_URL --net=host -v $(pwd)/TestResults:/app/artifacts exceptionless:test
+  - docker run -e APPVEYOR_API_URL --net=host -v $(pwd)/artifacts:/app/artifacts exceptionless:test
 
 after_build:
   - docker build --target ui -t $UI_DOCKER_IMAGE .
