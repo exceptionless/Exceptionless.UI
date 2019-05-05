@@ -27,9 +27,8 @@ after_build:
         docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
         docker push exceptionless/$UI_DOCKER_IMAGE:$tag
       ) &
-    done
-    wait
-
+    done; wait;
+    
 artifacts:
   - path: artifacts/*.xml
     name: Test Results
