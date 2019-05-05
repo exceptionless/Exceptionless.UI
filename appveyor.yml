@@ -16,7 +16,7 @@ environment:
 
 build_script:
   - docker build --target testrunner -t exceptionless:test .
-  - docker run -e APPVEYOR_API_URL --net=host -v $(pwd)/artifacts:/app/artifacts exceptionless:test
+  - docker run -e APPVEYOR_API_URL --net=host exceptionless:test
 
 after_build:
   - docker build --target ui -t $UI_DOCKER_IMAGE .
@@ -26,10 +26,6 @@ after_build:
       docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
       docker push exceptionless/$UI_DOCKER_IMAGE:$tag
     done
-    
-artifacts:
-  - path: artifacts/*.xml
-    name: Test Results
 
 notifications:
   - provider: Slack
