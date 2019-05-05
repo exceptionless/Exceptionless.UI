@@ -1,9 +1,9 @@
-FROM alekzonder/puppeteer:1.8.0-0 AS base
+FROM buildkite/puppeteer:v1.15.0 AS base
 WORKDIR /app
 
 USER root
-RUN apt-get update && \
-    apt-get install -yq git
+RUN apt update && \
+    apt install -yq git
 USER pptruser
 
 COPY src/package.json src/bower.json src/.bowerrc ./
@@ -16,7 +16,7 @@ WORKDIR /app
 RUN npm set progress=false && \
     npm config set depth 0
 
-RUN npm install && \
+RUN npm ci && \
     npx bower --allow-root install
 
 # build
