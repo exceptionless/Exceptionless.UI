@@ -1,4 +1,4 @@
-FROM alekzonder/puppeteer:1.3.0 AS base
+FROM alekzonder/puppeteer:1.8.0-0 AS base
 WORKDIR /app
 
 USER root
