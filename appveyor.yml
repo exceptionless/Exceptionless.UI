@@ -23,7 +23,7 @@ after_build:
   - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
   - |
     for tag in {$APPVEYOR_BUILD_NUMBER,latest}; do
-      docker tag $image exceptionless/$UI_DOCKER_IMAGE:$tag
+      docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
       docker push exceptionless/$UI_DOCKER_IMAGE:$tag
     done
     
