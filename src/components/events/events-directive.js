@@ -145,6 +145,7 @@
             vm.save = save;
             vm.selectedIds = [];
             vm.showType = vm.settings.summary ? vm.settings.summary.showType : !filterService.getEventType();
+            vm.showIPAddress = vm.settings.summary ? vm.settings.summary.showIPAddress : filterService.getEventType() === '404';
             vm.updateSelection = updateSelection;
             get();
           };

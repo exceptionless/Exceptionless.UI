@@ -8,6 +8,7 @@
         </label>
       </th>
       <th>{{::'Summary' | translate}}</th>
+      <th class="action-xl hidden-xs" ng-if="vm.showIPAddress">{{::'IP'}}</th>
       <th class="action-xl hidden-xs">{{::'User' | translate}}</th>
       <th class="clickable" ng-class="{ 'relative-date': vm.relativeTo(), 'date': !vm.relativeTo(), 'dropup': !vm.sortByDateDescending }" ng-click="vm.toggleDateSort()">
         <abbr title="{{::vm.sortByDateDescending ? 'Sort Descending' : 'Sort Ascending' | translate}}">
@@ -21,6 +22,12 @@
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="event.id"><i></i></label></td>
         <td ng-click="vm.open(event.id, $event)">
           <summary source="event" show-type="vm.showType"></summary>
+        </td>
+        <td ng-click="vm.open(event.id, $event)" ng-if="vm.showIPAddress">
+          <span ng-if="event.data && event.data.IpAddress">
+            <span ng-if="event.data.IpAddress.length === 1">{{::event.data.IpAddress[0]}}</span>
+            <abbr ng-if="event.data.IpAddress.length > 1" title="{{::event.data.IpAddress.join(',')}}">{{::event.data.IpAddress[0]}}</abbr>
+          </span>
         </td>
         <td class="hidden-xs" ng-click="vm.open(event.id, $event)">
           <abbr ng-if="event.data.Name && event.data.Identity" title="{{::event.data.Name}} ({{::event.data.Identity}})" truncate overwrite-tooltip="false" ng-bind-template="{{::event.data.Name}}"></abbr>
