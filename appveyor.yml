@@ -21,13 +21,11 @@ build_script:
 after_build:
   - docker build --target ui -t $UI_DOCKER_IMAGE .
   - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-  - >-
+  - |
     for tag in {$APPVEYOR_BUILD_NUMBER,latest}; do
-      (
-        docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
-        docker push exceptionless/$UI_DOCKER_IMAGE:$tag
-      ) &
-    done; wait;
+      docker tag $image exceptionless/$UI_DOCKER_IMAGE:$tag
+      docker push exceptionless/$UI_DOCKER_IMAGE:$tag
+    done
     
 artifacts:
   - path: artifacts/*.xml
