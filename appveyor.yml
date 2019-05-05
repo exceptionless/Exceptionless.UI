@@ -1,4 +1,4 @@
-version: 2.8.'{build}'
+version: 2.8.{build}
 image: ubuntu
 clone_depth: 2
 
@@ -22,7 +22,7 @@ after_build:
   - docker build --target ui -t $UI_DOCKER_IMAGE .
   - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
   - >-
-    for tag in {$APPVEYOR_BUILD_VERSION,latest}; do
+    for tag in {$APPVEYOR_BUILD_NUMBER,latest}; do
       (
         docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
         docker push exceptionless/$UI_DOCKER_IMAGE:$tag
