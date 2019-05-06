@@ -22,7 +22,7 @@ after_build:
   - docker build --build-arg UI_VERSION=$APPVEYOR_BUILD_VERSION --target ui -t $UI_DOCKER_IMAGE .
   - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
   - |
-    for tag in {$APPVEYOR_BUILD_NUMBER,latest}; do
+    for tag in {$APPVEYOR_BUILD_VERSION,latest}; do
       docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
       docker push exceptionless/$UI_DOCKER_IMAGE:$tag
     done
