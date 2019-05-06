@@ -22,6 +22,9 @@ RUN npm ci && \
 FROM dependencies AS build
 WORKDIR /app
 
+ARG UI_VERSION=2.0.0-dev
+ENV UI_VERSION=$UI_VERSION
+
 COPY src/. .
 
 USER root

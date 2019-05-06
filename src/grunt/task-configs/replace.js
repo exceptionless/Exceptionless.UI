@@ -5,7 +5,7 @@ module.exports = {
       patterns: [
         {
           match: 'version',
-          replacement: process.env.APPVEYOR_BUILD_VERSION || '2.0.0'
+          replacement: process.env.UI_VERSION || '2.0.0-dev'
         }
       ]
     },
