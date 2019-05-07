@@ -163,7 +163,6 @@ export class ChangePlanDialogComponent implements IModalDialog {
         if (this.currentPlan.price > 0 && this.isNewCard()) {
             try {
                 const res = await this.createStripeToken();
-                console.log(res);
                 onCreateTokenSuccess(res);
                 return res;
             } catch (ex) {
