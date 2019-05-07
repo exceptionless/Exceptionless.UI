@@ -1,6 +1,3 @@
-
-import { Invite } from "./invite";
-
 export interface NewOrganization {
     name: string;
 }

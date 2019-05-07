@@ -351,7 +351,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
 
     private async getConfiguration() {
         try {
-            const response = await this.projectService.getConfig(this._projectId);
+            const response: any = await this.projectService.getConfig(this._projectId);
             this.config = [];
             this.dataExclusions = null;
             this.userAgents = null;

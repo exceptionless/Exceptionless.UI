@@ -146,7 +146,7 @@ export class SessionComponent implements OnInit, OnDestroy { // TODO: This shoul
 
         const offset = this.filterService.getTimeOffset();
         try {
-            const response = await this.eventService.count("avg:value cardinality:user date:(date" + (offset ? "^" + offset : "") + " cardinality:user)", optionsCallback, false);
+            const response: any = await this.eventService.count("avg:value cardinality:user date:(date" + (offset ? "^" + offset : "") + " cardinality:user)", optionsCallback, false);
             const getAggregationValue = (data, name, defaultValue?) => { // TODO: We may want to create a helper utility for parsing aggregations.
                 const aggs = data.aggregations;
                 return aggs && aggs[name] && aggs[name].value || defaultValue;

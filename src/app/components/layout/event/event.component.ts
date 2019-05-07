@@ -21,11 +21,11 @@ import { Subscription } from "rxjs";
 import { EntityChanged } from "src/app/models/messaging";
 
 export interface Tab {
-    active: boolean;
+    active?: boolean;
     index: number;
     title: string;
     template_key: string;
-    data: any;
+    data?: any;
 }
 
 @Component({
@@ -38,7 +38,7 @@ export class EventComponent implements OnInit, OnDestroy {
     private eventId: string;
     private _knownDataKeys: string[] = ["error", "@error", "@simple_error", "@request", "@trace", "@environment", "@user", "@user_description", "@version", "@level", "@location", "@submission_method", "@submission_client", "session_id", "sessionend", "haserror", "@stack"];
     private activeTabIndex: number = -1;
-    public event: PersistentEvent;
+    public event: PersistentEvent | any; // TODO: any?
     public eventJson: string;
     textStackTrace: string; // TODO: All these properties without a modifier I believe are being used in the event tabs component... need to verify how this is being passed through..
     excludedAdditionalData: string[] = ["@browser", "@browser_version", "@browser_major_version", "@device", "@os", "@os_version", "@os_major_version", "@is_bot"];
@@ -55,7 +55,7 @@ export class EventComponent implements OnInit, OnDestroy {
     references: { id: string, name: string }[] = [];
 
     public project: Project;
-    public sessionEvents = {
+    public sessionEvents: any = {
         get: (options, event?) => {
             let curEvent = event;
             if (!curEvent) {
@@ -236,8 +236,7 @@ export class EventComponent implements OnInit, OnDestroy {
     private buildTabs(tabNameToActivate: string) {
         let tabIndex = 0;
         let promotedIndex = 0;
-        let tabs: Array<{index: number, title: string, template_key: string, data?: any}> = [];
-        tabs = [{index: tabIndex, title: "Overview", template_key: "overview"}];
+        let tabs: Tab[] = [{index: tabIndex, title: "Overview", template_key: "overview"}];
 
         if (this.event.reference_id && this.isSessionStart) {
             tabs.push({index: ++tabIndex, title: "Session Events", template_key: "session"});

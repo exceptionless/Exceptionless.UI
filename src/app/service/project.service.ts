@@ -57,7 +57,7 @@ export class ProjectService {
     }
 
     public async isNameAvailable(organizationId: string, name: string): Promise<boolean> {
-        const response = await this.http.get(`organizations/${organizationId}/projects/check-name`, { params: { name }}).toPromise();
+        const response: any = await this.http.get(`organizations/${organizationId}/projects/check-name`, { params: { name }}).toPromise();
         return response.status === 204; // TODO: A good way to get typing on this?
     }
 

@@ -224,7 +224,7 @@ export class AccountManageComponent implements OnInit {
         this._canSaveEmailAddress = false;
 
         try {
-            const response = await this.userService.updateEmailAddress(this.user.id, this.user.email_address);
+            const response: any = await this.userService.updateEmailAddress(this.user.id, this.user.email_address);
             this.user.is_email_address_verified = response.is_verified;
             this._canSaveEmailAddress = true;
         } catch (ex) {

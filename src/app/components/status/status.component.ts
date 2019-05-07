@@ -54,7 +54,7 @@ export class StatusComponent implements OnInit {
         };
 
         try {
-            const response = await this.statusService.get();
+            const response: any = await this.statusService.get();
             if (this._redirect && moment().diff(this._lastChecked, "seconds") > 30) {
                 if (!this.authService.isAuthenticated()) {
                     return this.router.navigate(["/login"]);

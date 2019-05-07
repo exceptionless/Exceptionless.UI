@@ -75,7 +75,7 @@ export class SignupComponent implements OnInit {
         // TODO: analytics & exceptionless
         this.submitted = true;
         try {
-            const response = await this.ng2Auth.signup(this.model).toPromise();
+            const response: any = await this.ng2Auth.signup(this.model).toPromise();
             this.ng2Auth.setToken(response.token);
             await this.redirectOnSignup();
         } catch (ex) {

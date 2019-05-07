@@ -384,7 +384,7 @@ export class StackComponent implements OnInit, OnDestroy {
 
         const offset = this.filterService.getTimeOffset();
         try {
-            const response = await this.eventService.count("date:(date" + (offset ? "^" + offset : "") + buildFields(this.chartOptions) + ") min:date max:date cardinality:user sum:count~1", optionsCallback, false);
+            const response: any = await this.eventService.count("date:(date" + (offset ? "^" + offset : "") + buildFields(this.chartOptions) + ") min:date max:date cardinality:user sum:count~1", optionsCallback, false);
             const getAggregationValue = (data, name, defaultValue?) => { // TODO: We need better typing here.
                 const aggs = data.aggregations;
                 return aggs && aggs[name] && aggs[name].value || defaultValue;
