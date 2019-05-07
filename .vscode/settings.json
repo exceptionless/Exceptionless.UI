@@ -1,8 +1,21 @@
 {
   "cSpell.words": [
     "APPID",
+    "apexcharts",
+    "codelyzer",
+    "compat",
+    "daterangepicker",
+    "devkit",
+    "gravatar",
+    "jasminewd",
+    "nomadreservations",
+    "objectid",
+    "oidc",
     "timeago",
     "toastr",
+    "tslib",
+    "twix",
     "webhook"
-  ]
+  ],
+  "git.ignoreLimitWarning": true
 }
