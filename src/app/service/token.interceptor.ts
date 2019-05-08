@@ -22,7 +22,6 @@ export class TokenInterceptor implements HttpInterceptor {
     private handleAuthError(ex: HttpErrorResponse): Observable<never> {
         // handle your auth error or rethrow
         if (ex instanceof HttpErrorResponse && this.router.url !== "/status" && (ex.status === 503 || ex.status === 0)) {
-            console.log(ex);
             this.checkHealth();
             return throwError(ex);
         } else if (ex instanceof HttpErrorResponse && this.router.url !== "/login" && ex.status === 401) {
@@ -39,7 +38,6 @@ export class TokenInterceptor implements HttpInterceptor {
     public async checkHealth() {
         try {
             const res = await this.statusService.healthy();
-            console.log(res);
             if (res === "Healthy") {
                 this.auth.logout()
                     .subscribe({
@@ -50,7 +48,7 @@ export class TokenInterceptor implements HttpInterceptor {
                 this.router.navigate(["/status"], { queryParams: { redirect: true }});
             }
         } catch (ex) {
-            console.log(ex);
+            debugger;
         }
     }
 

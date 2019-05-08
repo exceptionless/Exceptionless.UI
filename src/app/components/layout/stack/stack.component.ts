@@ -366,7 +366,7 @@ export class StackComponent implements OnInit, OnDestroy {
 
             await this.getStats();
         } catch (ex) {
-            console.log(ex);
+            debugger;
         }
     }
 

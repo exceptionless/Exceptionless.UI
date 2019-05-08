@@ -258,7 +258,6 @@ export class FilterService implements OnInit {
     }
 
     public setTime(time, suspendNotifications?) {
-        console.log("filter-service-set-time");
         if (time === this._time) {
             return;
         }

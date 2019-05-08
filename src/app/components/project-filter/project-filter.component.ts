@@ -8,6 +8,7 @@ import { WordTranslateService } from "../../service/word-translate.service";
 import { AppEventService } from "../../service/app-event.service";
 import { Project } from "src/app/models/project";
 import { Organization } from "src/app/models/organization";
+import { FilterChanged } from "src/app/models/messaging";
 
 @Component({
     selector: "app-project-filter",
@@ -54,7 +55,8 @@ export class ProjectFilterComponent implements OnInit {
             if (basicURl) {
                 setTimeout(() => {
                     this.router.navigateByUrl(`/${projectType}/${projectId}/${basicURl}`, { skipLocationChange: false });
-                    this.appEvent.fireEvent({ type: "ProjectFilterChanged" }); // TODO: Is this meant to be emmitted here? Is there a better place todo this? Seems like the filter service should handle this.. This probably should be calling this.filterService.fireFilterChanged()...
+                    // TODO: Is this meant to be emitted here? Is there a better place todo this? Seems like the filter service should handle this.. This probably should be calling this.filterService.fireFilterChanged()...
+                    this.appEvent.fireEvent({ type: "ProjectFilterChanged", message: new FilterChanged() });
                 }, 100);
             }
         }

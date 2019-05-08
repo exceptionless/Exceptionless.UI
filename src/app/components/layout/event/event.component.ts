@@ -19,9 +19,9 @@ import { PersistentEvent } from "src/app/models/event";
 import { Project } from "src/app/models/project";
 import { Subscription } from "rxjs";
 import { EntityChanged } from "src/app/models/messaging";
+import { IEnvironmentInfo, IRequestInfo, IUserInfo, IUserDescription } from "exceptionless";
 
 export interface Tab {
-    active?: boolean;
     index: number;
     title: string;
     template_key: string;
@@ -37,25 +37,33 @@ export class EventComponent implements OnInit, OnDestroy {
     private _source: string = "app.event.Event";
     private eventId: string;
     private _knownDataKeys: string[] = ["error", "@error", "@simple_error", "@request", "@trace", "@environment", "@user", "@user_description", "@version", "@level", "@location", "@submission_method", "@submission_client", "session_id", "sessionend", "haserror", "@stack"];
-    private activeTabIndex: number = -1;
-    public event: PersistentEvent | any; // TODO: any?
+    public textStackTrace: string; // TODO: All these properties without a modifier I believe are being used in the event tabs component... need to verify how this is being passed through..
+    public excludedAdditionalData: string[] = ["@browser", "@browser_version", "@browser_major_version", "@device", "@os", "@os_version", "@os_major_version", "@is_bot"];
+    public event: PersistentEvent;
+    public message: string;
     public eventJson: string;
-    textStackTrace: string; // TODO: All these properties without a modifier I believe are being used in the event tabs component... need to verify how this is being passed through..
-    excludedAdditionalData: string[] = ["@browser", "@browser_version", "@browser_major_version", "@device", "@os", "@os_version", "@os_major_version", "@is_bot"];
-    location: string;
-    isSessionStart: boolean = false;
-    level: string;
-    isLevelSuccess: boolean = false;
-    isLevelInfo: boolean = false;
-    isLevelWarning: boolean = false;
-    isLevelError: boolean = false;
-    hasCookies: boolean = false;
-    hasError: boolean = false;
-    version: string;
-    references: { id: string, name: string }[] = [];
+    public errorType: string;
+    public environment: IEnvironmentInfo;
+    public request: IRequestInfo;
+    public requestUrl: string;
+    public userIdentity: string;
+    public userName: string;
+    public userEmail: string;
+    public userDescription: string;
+    public location: string;
+    public isSessionStart: boolean = false;
+    public level: string;
+    public isLevelSuccess: boolean = false;
+    public isLevelInfo: boolean = false;
+    public isLevelWarning: boolean = false;
+    public isLevelError: boolean = false;
+    public hasCookies: boolean = false;
+    public hasError: boolean = false;
+    public version: string;
+    public references: { id: string, name: string }[] = [];
 
     public project: Project;
-    public sessionEvents: any = {
+    public sessionEvents = {
         get: (options, event?) => {
             let curEvent = event;
             if (!curEvent) {
@@ -91,7 +99,8 @@ export class EventComponent implements OnInit, OnDestroy {
         },
         timeHeaderText: "Session Time",
         hideActions: true,
-        hideSessionStartTime: true
+        hideSessionStartTime: true,
+        relativeTo: Date
     };
     public tabs: Tab[] = [];
     public activeTab: string = "overview";
@@ -128,9 +137,9 @@ export class EventComponent implements OnInit, OnDestroy {
             }
         }));
 
-        // this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
-        //     this.activateTab(params['tab']);
-        // }));
+        this.subscriptions.push(this.activatedRoute.queryParams.subscribe(params => {
+            this.activateTab(params.tab);
+        }));
     }
 
     public ngOnDestroy() {
@@ -197,22 +206,12 @@ export class EventComponent implements OnInit, OnDestroy {
         if (this.tabs.length === 0) {
             return;
         }
+
         for (const tab of this.tabs) {
-            if (tab.title !== tabName) {
-                tab.active = false;
-                continue;
+            if (tab.title === tabName) {
+                this.activeTab = tab.template_key;
+                break;
             }
-
-            tab.active = true;
-            this.activeTabIndex = tab.index;
-            this.activeTab = tab.template_key;
-            break;
-        }
-
-        if (this.activeTabIndex < 0 || this.activeTabIndex >= this.tabs.length) {
-            this.tabs[0].active = true;
-            this.activeTabIndex = 0;
-            this.activeTab = this.tabs[0].template_key;
         }
     }
 
@@ -236,7 +235,8 @@ export class EventComponent implements OnInit, OnDestroy {
     private buildTabs(tabNameToActivate: string) {
         let tabIndex = 0;
         let promotedIndex = 0;
-        let tabs: Tab[] = [{index: tabIndex, title: "Overview", template_key: "overview"}];
+        let tabs: Tab[] = [];
+        tabs = [{index: tabIndex, title: "Overview", template_key: "overview"}];
 
         if (this.event.reference_id && this.isSessionStart) {
             tabs.push({index: ++tabIndex, title: "Session Events", template_key: "session"});
@@ -249,13 +249,11 @@ export class EventComponent implements OnInit, OnDestroy {
         }
 
         // TODO: A bunch of made up properties..
-        if (this.event.request && Object.keys(this.event.request).length > 0) {
+        if (this.request && Object.keys(this.request).length > 0) {
             tabs.push({index: ++tabIndex, title: this.isSessionStart ? "Browser" : "Request", template_key: "request"});
         }
 
-        if (this.event.environment && Object.keys(this.event.environment).length > 0) {
-            console.log("event-environment");
-            console.log(this.event.environment);
+        if (this.environment && Object.keys(this.environment).length > 0) {
             tabs.push({index: ++tabIndex, title: "Environment", template_key: "environment"});
         }
 
@@ -282,10 +280,7 @@ export class EventComponent implements OnInit, OnDestroy {
             tabs.push({index: ++tabIndex, title: "Extended Data", template_key: "extended-data", data: extendedDataItems});
         }
 
-
         this.tabs = tabs;
-
-        console.log(this.tabs);
 
         if (tabNameToActivate) {
             setTimeout(() => {
@@ -376,7 +371,7 @@ export class EventComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getCurrentTab() {
+    public getCurrentTab(): string {
         if (this.tabsChild && this.tabsChild.activeId) {
             return this.tabsChild.activeId;
         } else {
@@ -384,7 +379,7 @@ export class EventComponent implements OnInit, OnDestroy {
         }
     }
 
-    public updateHistory() {
+    public updateHistory(): void {
         this.tabHistory.push(this.getCurrentTab());
     }
 
@@ -392,7 +387,7 @@ export class EventComponent implements OnInit, OnDestroy {
         return this.event.value || moment().diff(this.event.date, "seconds");
     }
 
-    private getMessage(event: PersistentEvent) {
+    private getMessage(event: PersistentEvent): string {
         if (event.data && event.data["@error"]) {
             const message = this.errorService.getTargetInfoMessage(event.data["@error"]);
             if (message) {
@@ -403,7 +398,7 @@ export class EventComponent implements OnInit, OnDestroy {
         return event.message;
     }
 
-    private getLocation(event: PersistentEvent) {
+    private getLocation(event: PersistentEvent): string {
         const location = event.data ? event.data["@location"] : null;
         if (!location) {
             return;
@@ -417,7 +412,7 @@ export class EventComponent implements OnInit, OnDestroy {
             }, "");
     }
 
-    private async getEvent() {
+    private async getEvent(): Promise<void> {
         const optionsCallback = (options) => {
             if (options.filter) {
                 options.filter += " stack:current";
@@ -434,26 +429,14 @@ export class EventComponent implements OnInit, OnDestroy {
         }
 
         try {
-
-            const getErrorType = (event) => {
-                const error = event.data && event.data["@error"];
-                if (error) {
-                    const type = this.errorService.getTargetInfoExceptionType(error);
-                    return type || error.type || "Unknown";
-                }
-
-                const simpleError = event.data && event.data["@simple_error"];
-                return (simpleError && simpleError.type) ? simpleError.type : "Unknown";
-            };
-
             this.event = await this.eventService.getById(this.eventId, {}, optionsCallback);
             this.eventJson = JSON.stringify(this.event);
             this.sessionEvents.relativeTo = this.event.date;
-            this.event.errorType = getErrorType(this.event);
-            this.event.environment = this.event.data && this.event.data["@environment"]; //TODO: TONS of made up properties that should be in their own root property....
-            this.event.location = this.getLocation(this.event);
-            this.event.message = this.getMessage(this.event);
-            this.event.hasError = this.event.data && (this.event.data["@error"] || this.event.data["@simple_error"]);
+            this.errorType = this.getErrorType(this.event);
+            this.environment = this.event.data && this.event.data["@environment"];
+            this.location = this.getLocation(this.event);
+            this.message = this.getMessage(this.event);
+            this.hasError = this.event.data && (this.event.data["@error"] || this.event.data["@simple_error"]);
             this.isSessionStart = this.event.type === "session";
             this.level = this.event.data && !!this.event.data["@level"] ? this.event.data["@level"].toLowerCase() : null;
             this.isLevelSuccess = this.level === "trace" || this.level === "debug";
@@ -462,16 +445,16 @@ export class EventComponent implements OnInit, OnDestroy {
             this.isLevelError = this.level === "error";
 
             this.request = this.event.data && this.event.data["@request"];
-            this.hasCookies = this.event.request && !!this.event.request.cookies && Object.keys(this.event.request.cookies).length > 0;
-            this.requestUrl = this.event.request && this.urlService.buildUrl(this.event.request.is_secure, this.event.request.host, this.event.request.port, this.event.request.path, this.event.request.query_string);
+            this.hasCookies = this.request && !!this.request.cookies && Object.keys(this.request.cookies).length > 0;
+            this.requestUrl = this.request && this.urlService.buildUrl(this.request.is_secure, this.request.host, this.request.port, this.request.path, this.request.query_string);
 
-            this.user = this.event.data && this.event.data["@user"];
-            this.userIdentity = this.event.user && this.event.user.identity;
-            this.event.userName = this.event.user && this.event.user.name;
+            const user: IUserInfo = this.event.data && this.event.data["@user"];
+            this.userIdentity = user && user.identity;
+            this.userName = user && user.name;
 
-            this.userDescription = this.event.data && this.event.data["@user_description"];
-            this.userEmail = this.event.userDescription && this.event.userDescription.email_address;
-            this.userDescription = this.event.userDescription && this.event.userDescription.description;
+            const userDescription: IUserDescription = this.event.data && this.event.data["@user_description"];
+            this.userEmail = userDescription && userDescription.email_address;
+            this.userDescription = userDescription && userDescription.description;
             this.version = this.event.data && this.event.data["@version"];
 
             const links = this.linkService.getLinks(response.headers.get("link")); // TODO: Need to investigate the best way to get by id but also to get header values. What were we doing before?
@@ -494,6 +477,17 @@ export class EventComponent implements OnInit, OnDestroy {
             this.router.navigate(["/type/events/dashboard"]);
             this.notificationService.error("Failed!", "Cannot_Find_Event");
         }
+    }
+
+    private getErrorType(event: PersistentEvent) {
+        const error = event.data && event.data["@error"];
+        if (error) {
+            const type = this.errorService.getTargetInfoExceptionType(error);
+            return type || error.type || "Unknown";
+        }
+
+        const simpleError = event.data && event.data["@simple_error"];
+        return (simpleError && simpleError.type) ? simpleError.type : "Unknown";
     }
 
     private async getProject() {

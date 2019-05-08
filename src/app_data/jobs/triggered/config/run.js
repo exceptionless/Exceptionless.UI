@@ -40,7 +40,7 @@ function updateAppConfig() {
     ].join('\n');
 
     var hash = md5(content);
-// todo: use cache buster in name
+    // TODO: use cache buster in name
     var configFile = "app-config." + hash + ".js";
 
     fs.writeFile('../../../../' + configFile, content, function (ex) {

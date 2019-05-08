@@ -12,7 +12,7 @@
             <tr class="row-clickable" *ngFor="let event of events">
                 <td (click)="open(event.id, $event)">
                     <div>
-                        <span *ngIf="event['data'] && !event['data']['SessionEnd']" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
+                        <span *ngIf="event.data && !event.data.SessionEnd" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
                         <app-summary [source]="event" [showType]="showType"></app-summary>
                     </div>
                 </td>

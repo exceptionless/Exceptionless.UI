@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
         }, null, "Go To Documentation"));
 
         this.hotkeysService.add(new Hotkey("s", (event: KeyboardEvent): boolean => {
-            console.log("hotkey-s");
             document.getElementById("search").focus();
             return false;
         }, null, "Focus Search Bar"));
@@ -72,7 +71,6 @@ export class AppComponent implements OnInit {
         }, null, "Go To GitHub project"));
 
         this.hotkeysService.add(new Hotkey("g s", (event: KeyboardEvent): boolean => {
-            console.log("hotkey-g-s");
             window.open("http://slack.exceptionless.com", "_blank");
             return false;
         }, null, "Go to public slack channel"));

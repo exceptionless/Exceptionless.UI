@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, SimpleChanges, OnChanges} from "@angular/core";
-import { ApexOptions } from "apexcharts";
+import { ApexOptions, ApexCharts, ApexAxisChartSeries } from "apexcharts";
 
 @Component({
     selector: "app-apexchart",
