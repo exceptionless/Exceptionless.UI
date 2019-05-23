@@ -34,7 +34,7 @@
               "src/.htaccess"
             ],
             "styles": ["src/assets/app.less", "src/styles.less"],
-            "scripts": ["src/assets/library/ApexCharts.js"],
+            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"],
             "es5BrowserSupport": true
           },
           "configurations": {
