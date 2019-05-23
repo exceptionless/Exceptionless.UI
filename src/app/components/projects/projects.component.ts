@@ -13,10 +13,11 @@ import { Project } from "src/app/models/project";
     selector: "app-projects",
     templateUrl: "./projects.component.html",
 })
-
 export class ProjectsComponent implements OnInit {
     @HostBinding("class.app-component") appComponent: boolean = true;
+
     @Input() public settings: any;
+
     public next: string;
     public previous: string;
     public currentOptions: any;
@@ -50,8 +51,11 @@ export class ProjectsComponent implements OnInit {
         this.currentOptions = options || this.settings.options;
 
         try {
-            this.projects = await this.settings.get(this.currentOptions);
-            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
+            // this.projects = await this.settings.get(this.currentOptions);
+            const response: any = await this.settings.get(this.currentOptions);
+            this.projects = response.data;
+
+            const links: any = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
 

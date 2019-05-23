@@ -307,7 +307,7 @@ export class StackComponent implements OnInit, OnDestroy {
         try {
             this.stack = await this.stackService.getById(this._stackId);
             this.stack.references = this.stack.references || [];
-        } catch (ex: HttpErrorResponse) {
+        } catch (ex) {
             if (ex.status === 404) {
                 this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Stack"));
             } else {
@@ -465,7 +465,7 @@ export class StackComponent implements OnInit, OnDestroy {
         try {
             await this.stackService.promote(this._stackId);
             this.notificationService.success("", await this.wordTranslateService.translate("Successfully promoted stack!"));
-        } catch (ex: HttpErrorResponse) {
+        } catch (ex) {
             if (ex === 426) { // TODO: figure out if the api call throws a network exception that has the status code.
                 return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.stack.organization_id, async () => {
                     return await this.promoteToExternal();

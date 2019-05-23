@@ -18,7 +18,6 @@ import { NgForm } from "@angular/forms";
     selector: "app-organization-edit",
     templateUrl: "./organization-edit.component.html"
 })
-
 export class OrganizationEditComponent implements OnInit, OnDestroy {
     private _organizationId: string;
     private _ignoreRefresh: boolean = false;
@@ -246,7 +245,7 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 const res = await this.organizationService.removeUser(this._organizationId, currentUser.email_address);
                 this.router.navigate(["/organization/list"]);
                 return res;
-            } catch (ex: HttpErrorResponse) {
+            } catch (ex) {
                 let message = await this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
                 if (ex.status === 400) {
                     message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.data.message;
@@ -269,7 +268,7 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the organization for deletion."));
                 this.router.navigate(["/organization/list"]);
                 return res;
-            } catch (ex: HttpErrorResponse) {
+            } catch (ex) {
                 let message = await this.wordTranslateService.translate("An error occurred while trying to delete the organization.");
                 if (ex.status === 400) {
                     message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;

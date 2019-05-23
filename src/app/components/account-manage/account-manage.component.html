@@ -20,7 +20,7 @@
                                         <label for="name">{{ 'Full Name' | translate }}</label>
                                         <input id="name" name="name" type="text" class="form-control" x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
                                                placeholder="{{ 'Your first and last name' | translate }}"
-                                               [(ngModel)]="user?.full_name"
+                                               [(ngModel)]="user.full_name"
                                                (input)="saveUser(fullNameForm.valid)"
                                                required
                                                #name="ngModel"/>
@@ -37,7 +37,7 @@
                                         <div [ngClass]="{'input-group': !!emailAddressForm.pending }">
                                             <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                                                    placeholder="{{ 'Email Address' | translate }}"
-                                                   [(ngModel)]="user?.email_address"
+                                                   [(ngModel)]="user.email_address"
                                                    (input)="saveEmailAddress()"
                                                    required
                                                    appUniqueEmail
@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="checkbox">
                                         <label class="checks">
-                                            <input name="email-notifications-enabled" type="checkbox" [(ngModel)]="user?.email_notifications_enabled" ng-change="vm.saveEnableEmailNotification()">
+                                            <input name="email-notifications-enabled" type="checkbox" [(ngModel)]="user.email_notifications_enabled" ng-change="vm.saveEnableEmailNotification()">
                                             <i></i>
                                             {{ 'Enable email notifications' | translate }}
                                         </label>
@@ -87,7 +87,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="send_daily_summary" [(ngModel)]="emailNotificationSettings?.send_daily_summary" (change)="saveEmailNotificationSettings()" [disabled]="!(user?.email_notifications_enabled && emailNotificationSettings)">
+                                                <input type="checkbox" name="send_daily_summary" [(ngModel)]="emailNotificationSettings.send_daily_summary" (change)="saveEmailNotificationSettings()" [disabled]="!(user?.email_notifications_enabled && emailNotificationSettings)">
                                                 <i></i>
                                                 {{ 'Send daily project summary' | translate }}
                                             </label>
@@ -100,7 +100,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_new_errors" [(ngModel)]="emailNotificationSettings?.report_new_errors" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_errors" [(ngModel)]="emailNotificationSettings.report_new_errors" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on new errors' | translate }}
                                             </label>
@@ -108,7 +108,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_critical_errors" [(ngModel)]="emailNotificationSettings?.report_critical_errors" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_errors" [(ngModel)]="emailNotificationSettings.report_critical_errors" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on critical errors' | translate }}
                                             </label>
@@ -116,7 +116,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_event_regressions" [(ngModel)]="emailNotificationSettings?.report_event_regressions" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_event_regressions" [(ngModel)]="emailNotificationSettings.report_event_regressions" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on error regressions' | translate }}
                                             </label>
@@ -124,7 +124,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_new_events" [(ngModel)]="emailNotificationSettings?.report_new_events" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_new_events" [(ngModel)]="emailNotificationSettings.report_new_events" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on new events' | translate }}
                                             </label>
@@ -132,7 +132,7 @@
 
                                         <div class="checkbox">
                                             <label class="checks">
-                                                <input type="checkbox" name="report_critical_events" [(ngModel)]="emailNotificationSettings?.report_critical_events" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
+                                                <input type="checkbox" name="report_critical_events" [(ngModel)]="emailNotificationSettings.report_critical_events" (change)="saveEmailNotificationSettings()" [disabled]="!hasPremiumEmailNotifications()">
                                                 <i></i>
                                                 {{ 'Notify me on critical events' | translate }}
                                             </label>
@@ -169,11 +169,11 @@
                                         <label for="confirmPassword">Confirm password</label>
                                         <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" [(ngModel)]="confirmPassword" required minlength="6" maxlength="101"  #confirmPassword="ngModel" />
 
-                                        <div class="error" *ngIf="((confirmPassword.invalid || (password.password != confirmPassword)) && (confirmPassword.dirty || confirmPassword.touched))|| submitted">
+                                        <div class="error" *ngIf="((confirmPassword.invalid || (password?.password != confirmPassword)) && (confirmPassword.dirty || confirmPassword.touched))|| submitted">
                                             <small [hidden]="!confirmPassword.errors?.required">{{ 'Confirm Password is required.' | translate }}</small>
                                             <small [hidden]="!confirmPassword.errors?.minlength">{{ 'Confirm Password must be at least 6 characters long.' | translate }}</small>
                                             <small [hidden]="!confirmPassword.errors?.maxlength">{{ 'Confirm Password must be less than 101 characters long.' | translate }}</small>
-                                            <small [hidden]="password.password == confirmPassword">{{ 'New Password and Confirmation Password fields should not match.' | translate }}</small>
+                                            <small [hidden]="password?.password == confirmPassword">{{ 'New Password and Confirmation Password fields should not match.' | translate }}</small>
                                         </div>
                                     </div>
 

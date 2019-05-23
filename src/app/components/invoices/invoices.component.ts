@@ -22,14 +22,15 @@ export interface InvoiceSettings {
     selector: "app-invoices",
     templateUrl: "./invoices.component.html"
 })
-
 export class InvoicesComponent implements OnInit {
     @HostBinding("class.app-component") appComponent = true;
-    @Input() private settings: InvoiceSettings;
+
+    @Input() settings: InvoiceSettings;
+
     public invoices: InvoiceGridModel[];
     public next: GetInvoiceParameters;
     public previous: GetInvoiceParameters;
-    public currentOptions: GetInvoiceParameters;
+    public currentOptions: GetInvoiceParameters | any;
     public pageSummary: string;
     public loading: boolean = true;
 
@@ -45,12 +46,15 @@ export class InvoicesComponent implements OnInit {
         this.get();
     }
 
-    private async get(options?) {
+    private async get(options?: any) {
         this.currentOptions = options || this.settings.options;
 
         try {
-            this.invoices = await this.settings.get(this.currentOptions);
-            const links = this.linkService.getLinksQueryParameters(link);
+            // this.invoices = await this.settings.get(this.currentOptions);
+            const response: any = await this.settings.get(this.currentOptions);
+            this.invoices = response.data;
+
+            const links: any = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
             this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);

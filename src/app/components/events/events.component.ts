@@ -27,14 +27,15 @@ export interface EventsSettings {
     selector: "app-events",
     templateUrl: "./events.component.html"
 })
-
 export class EventsComponent implements OnChanges, OnInit, OnDestroy {
     @HostBinding("class.app-component") appComponent: boolean = true;
-    @Input() private settings: EventsSettings;
-    @Input() private eventType: string; // TODO: never used
-    @Input() private currentEvent: PersistentEvent;
-    @Input() private filterTime: string; // TODO: never used
-    @Input() private projectFilter: string; // TODO: never used
+
+    @Input() settings: EventsSettings;
+    @Input() eventType: string; // TODO: never used
+    @Input() currentEvent: PersistentEvent;
+    @Input() filterTime: string; // TODO: never used
+    @Input() projectFilter: string; // TODO: never used
+
     public next: GetEventsParameters;
     public previous: GetEventsParameters;
     public events: PersistentEvent[];
@@ -87,8 +88,9 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
         }
     }
 
-    public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
-        if (!!message && message.type === "PersistentEvent") {
+    public canRefresh(message?: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
+      if (!!message) {
+        if (message.type === "PersistentEvent") {
             // We are already listening to the stack changed event... This prevents a double refresh.
             if (message.change_type !== ChangeType.Removed) {
                 return false;
@@ -102,19 +104,20 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
             return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: message.organization_id, projectId: message.project_id });
         }
 
-        if (!!message && message.type === "Stack") {
+        if (message.type === "Stack") {
             return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: message.organization_id, projectId: message.project_id });
         }
 
-        if (!!message && message.type === "Organization" || message.type === "Project") {
+        if (message.type === "Organization" || message.type === "Project") {
             return this.filterService.includedInProjectOrOrganizationFilter({organizationId: message.id, projectId: message.id});
         }
+      }
 
-        return !message;
+      return !message;
     }
 
     async get(options?: GetEventsParameters, isRefresh?: boolean) {
-        if (isRefresh && !this.canRefresh(isRefresh)) { // TODO: This is messed up, refresh is only ever supposed to take an entity changed type.
+        if (isRefresh && !this.canRefresh()) { // TODO: This is messed up, refresh is only ever supposed to take an entity changed type.
             return;
         }
 
@@ -127,7 +130,7 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
                 });
             }
 
-            const links = this.linkService.getLinksQueryParameters(link);
+            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
 
@@ -142,7 +145,8 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
 
         if (!this.currentEvent || (this.currentEvent && this.currentEvent.project_id)) {
             try {
-                const res: Response = await this.settings.get(this.currentOptions, this.currentEvent).toPromise();
+                // const res: any = await this.settings.get(this.currentOptions this.currentEvent).toPromise();
+                const res: any = await this.settings.get(this.currentOptions);
                 onSuccess(res.body, res.headers.get("link"));
                 return this.events;
             } catch (ex) {

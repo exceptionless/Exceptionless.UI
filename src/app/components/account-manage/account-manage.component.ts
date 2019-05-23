@@ -25,7 +25,7 @@ export class AccountManageComponent implements OnInit {
     private _projectId: string = "";
 
     public activeTab: string = "general";
-    public confirmPassword: string;
+    public confirmPassword: string | any;
     public password: ChangePasswordModel = new ChangePasswordModel();
     public emailNotificationSettings: NotificationSettings;
     public currentProject: Project;

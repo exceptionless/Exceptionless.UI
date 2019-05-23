@@ -42,7 +42,7 @@ export class StatusComponent implements OnInit {
     }
 
     private async updateStatus() {
-        const updateMessage = (response?: AboutResult) => { // TODO: This needs to pull a message from the healthy end point and NOT the about end point.
+        const updateMessage = (response?: AboutResult | any) => { // TODO: This needs to pull a message from the healthy end point and NOT the about end point.
             if (response && response.data && response.data.message) {
                 this.message = response.data.message;
                 if (response.status !== 200) {

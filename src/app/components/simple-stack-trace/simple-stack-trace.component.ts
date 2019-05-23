@@ -6,9 +6,9 @@ import { SimpleErrorService } from "../../service/simple-error.service";
     templateUrl: "./simple-stack-trace.component.html",
     styleUrls: ["./simple-stack-trace.component.less"]
 })
-
 export class SimpleStackTraceComponent implements OnChanges {
     @Input() public exception: any;  // TODO: Why doesn't this have overview and clipboard? Does it need it? See Stack Trace Component
+
     public stackTrace: any;
 
     constructor(
@@ -20,7 +20,7 @@ export class SimpleStackTraceComponent implements OnChanges {
         this.stackTrace = this.buildStackTrace(errors, true);
     }
 
-    private buildStackFrames(exceptions: any[], includeHTML: string): string {
+    private buildStackFrames(exceptions: any[], includeHTML: boolean): string {
         let frames = "";
         for (let index = 0; index < exceptions.length; index++) {
             const stackTrace = exceptions[index].stack_trace;
@@ -55,7 +55,7 @@ export class SimpleStackTraceComponent implements OnChanges {
         return input.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
-    private  buildStackTraceHeader(exceptions: any[], includeHTML: string): string {
+    private  buildStackTraceHeader(exceptions: any[], includeHTML: boolean): string {
         let header = "";
         for (let index = 0; index < exceptions.length; index++) {
             if (includeHTML) {
@@ -95,7 +95,7 @@ export class SimpleStackTraceComponent implements OnChanges {
         return header;
     }
 
-    private buildStackTrace(exceptions: any[], includeHTML: string): string {
+    private buildStackTrace(exceptions: any[], includeHTML: boolean): string {
         return this.buildStackTraceHeader(exceptions, includeHTML) + this.buildStackFrames(exceptions.reverse(), includeHTML);
     }
 }
