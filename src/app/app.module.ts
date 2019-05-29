@@ -125,6 +125,5 @@ export function HttpLoaderFactory(http: HttpClient) {
         AddWebHookDialogComponent
     ]
 })
-
 export class AppModule {
 }
