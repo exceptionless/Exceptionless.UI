@@ -110,7 +110,7 @@ export class StacksActionsService {
     public async executeAction(ids, action, onSuccess, onFailure) {
         try {
             const res = await chunk(ids, 10).reduce(async (previous, item) => {
-                const response = await previous();
+                const response: any = await previous();
                 return action(item.join(","));
             }, async () => true );
             onSuccess();

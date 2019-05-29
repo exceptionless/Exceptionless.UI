@@ -185,7 +185,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
         const expiration = this.commonService.parseExpiry(this.card.expiry);
         const data: CardDataOptions = { name: this.card.name,  };
 
-        const response = await this.stripe.createToken(this.element, data).toPromise();
+        const response: any = await this.stripe.createToken(this.element, data).toPromise();
         this.analyticsService.addPaymentInfo();
         return response.token;
     }

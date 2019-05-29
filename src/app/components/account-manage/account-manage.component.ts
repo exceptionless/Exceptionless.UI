@@ -25,7 +25,7 @@ export class AccountManageComponent implements OnInit {
     private _projectId: string = "";
 
     public activeTab: string = "general";
-    public confirmPassword: string;
+    public confirmPassword: string | any;
     public password: ChangePasswordModel = new ChangePasswordModel();
     public emailNotificationSettings: NotificationSettings;
     public currentProject: Project;
@@ -224,7 +224,7 @@ export class AccountManageComponent implements OnInit {
         this._canSaveEmailAddress = false;
 
         try {
-            const response = await this.userService.updateEmailAddress(this.user.id, this.user.email_address);
+            const response: any = await this.userService.updateEmailAddress(this.user.id, this.user.email_address);
             this.user.is_email_address_verified = response.is_verified;
             this._canSaveEmailAddress = true;
         } catch (ex) {

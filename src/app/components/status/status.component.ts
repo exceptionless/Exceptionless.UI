@@ -42,7 +42,7 @@ export class StatusComponent implements OnInit {
     }
 
     private async updateStatus() {
-        const updateMessage = (response?: AboutResult) => { // TODO: This needs to pull a message from the healthy end point and NOT the about end point.
+        const updateMessage = (response?: AboutResult | any) => { // TODO: This needs to pull a message from the healthy end point and NOT the about end point.
             if (response && response.data && response.data.message) {
                 this.message = response.data.message;
                 if (response.status !== 200) {
@@ -54,7 +54,7 @@ export class StatusComponent implements OnInit {
         };
 
         try {
-            const response = await this.statusService.get();
+            const response: any = await this.statusService.get();
             if (this._redirect && moment().diff(this._lastChecked, "seconds") > 30) {
                 if (!this.authService.isAuthenticated()) {
                     return this.router.navigate(["/login"]);

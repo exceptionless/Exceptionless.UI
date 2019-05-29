@@ -13,13 +13,14 @@ import { EntityChanged, ChangeType } from "src/app/models/messaging";
     selector: "app-sessions-replace-me-with-app-events",
     templateUrl: "./sessions.component.html"
 })
-
 export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE NEVER BEEN CREATED. What ever is using this should be using the EventsComponents
     @HostBinding("class.app-component") appComponent = true;
+
     @Input() settings;
     @Input() eventType;
     @Input() filterTime;
     @Input() projectFilter;
+
     next: string;
     previous: string;
     pageSummary: string;
@@ -27,6 +28,7 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
     loading = true;
     showType: boolean;
     events: PersistentEvent[] = [];
+
     constructor(
         private router: Router,
         private filterService: FilterService,
@@ -41,8 +43,9 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
         this.get();
     }
 
-    public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
-        if (!!message && message.type === "PersistentEvent") {
+    public canRefresh(message?: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
+      if (!!message) {
+        if (message.type === "PersistentEvent") {
             // We are already listening to the stack changed event... This prevents a double refresh.
             if (message.change_type !== ChangeType.Removed) {
                 return false;
@@ -56,19 +59,20 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
             return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: message.organization_id, projectId: message.project_id });
         }
 
-        if (!!message && message.type === "Stack") {
+        if (message.type === "Stack") {
             return this.filterService.includedInProjectOrOrganizationFilter({ organizationId: message.organization_id, projectId: message.project_id });
         }
 
-        if (!!message && message.type === "Organization" || message.type === "Project") {
+        if (message.type === "Organization" || message.type === "Project") {
             return this.filterService.includedInProjectOrOrganizationFilter({organizationId: message.id, projectId: message.id});
         }
+      }
 
-        return !message;
+      return !message;
     }
 
     private async get(options?: any, isRefresh?: boolean) {
-        if (isRefresh && !this.canRefresh(isRefresh)) {
+        if (isRefresh && !this.canRefresh()) {
             return;
         }
 
@@ -76,8 +80,11 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
         this.currentOptions = options || this.settings.options;
 
         try {
-            this.events = await this.settings.get(this.currentOptions).toPromise();
-            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
+            // this.events = await this.settings.get(this.currentOptions).toPromise();
+            const response: any = await this.settings.get(this.currentOptions).toPromise();
+            this.events = response.data;
+
+            const links: any = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
 

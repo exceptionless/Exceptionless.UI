@@ -25,7 +25,7 @@ export class AuthAccountService {
     }
 
     public async changePassword(changePasswordModel: ChangePasswordModel) {
-        const response = await this.http.post<TokenResult>(`auth/change-password`, changePasswordModel).toPromise();
+        const response: any = await this.http.post<TokenResult>(`auth/change-password`, changePasswordModel).toPromise();
         this.authService.setToken(response.token);
         return response;
     }
@@ -43,7 +43,7 @@ export class AuthAccountService {
     }
 
     public async isEmailAddressAvailable(email): Promise<boolean> {
-        const response = await this.http.get(`auth/check-email-address/${email}`).toPromise();
+        const response: any = await this.http.get(`auth/check-email-address/${email}`).toPromise();
         return response.status === 204;
     }
 
@@ -67,7 +67,7 @@ export class AuthAccountService {
 
     public async unlink(providerName: string, providerUserId: string) {
         try {
-            const response = await this.http.post<TokenResult>(`auth/unlink/${providerName}`, providerUserId).toPromise();
+            const response: any = await this.http.post<TokenResult>(`auth/unlink/${providerName}`, providerUserId).toPromise();
             this.authService.setToken(response);
         } catch (ex) {
             this.notificationService.error("Failed!", "Error Occurred");

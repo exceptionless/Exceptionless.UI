@@ -351,7 +351,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
 
     private async getConfiguration() {
         try {
-            const response = await this.projectService.getConfig(this._projectId);
+            const response: any = await this.projectService.getConfig(this._projectId);
             this.config = [];
             this.dataExclusions = null;
             this.userAgents = null;
@@ -566,7 +566,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     public async saveSlackNotificationSettings() {
         try {
             await this.projectService.setIntegrationNotificationSettings(this._projectId, "slack", this.slackNotificationSettings);
-        } catch (ex: HttpErrorResponse) { // TODO: Verify ex has status code...
+        } catch (ex) { // TODO: Verify ex has status code...
             if (ex.status === 426) {
                 try {
                     return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.project.organization_id, () => {

@@ -12,10 +12,11 @@ import { User } from "src/app/models/user";
     selector: "app-user",
     templateUrl: "./user.component.html"
 })
-
 export class UserComponent implements OnInit {
     @HostBinding("class.app-component") appComponent = true;
+
     @Input() public settings: any;
+
     public users: User[];
     public next: string;
     public previous: string;
@@ -42,12 +43,15 @@ export class UserComponent implements OnInit {
         this.currentOptions = options || this.settings.options;
 
         try {
-            this.users = await this.settings.get(this.currentOptions).toPromise();
-            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
+            // this.users = await this.settings.get(this.currentOptions).toPromise();
+            const response: any = await this.settings.get(this.currentOptions).toPromise();
+            this.users = response.data;
+
+            const links: any = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
 
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(this.users, this.currentOptions.page, this.currentOptions.limit);
             if (this.users.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
                 return await this.get();
             }

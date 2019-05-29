@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, SimpleChanges, OnChanges} from "@angular/core";
-import { ApexOptions, ApexCharts, ApexAxisChartSeries } from "apexcharts";
+import { ApexOptions } from "apexcharts";
+import * as ApexCharts from "apexcharts";
 
 @Component({
     selector: "app-apexchart",
@@ -8,7 +9,7 @@ import { ApexOptions, ApexCharts, ApexAxisChartSeries } from "apexcharts";
 })
 export class ApexchartComponent implements OnInit, OnChanges {
     @Input() options: ApexOptions;
-    @Input() seriesData: ApexAxisChartSeries;
+    @Input() seriesData: any; // ApexAxisChartSeries ?;
     @Input() updatedOptions: ApexOptions;
 
     private _chart: ApexCharts;

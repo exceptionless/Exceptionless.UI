@@ -30,7 +30,7 @@
                     <label for="cardName">{{'Name on card' | translate}}</label>
                     <input id="cardName" type="text" class="form-control" placeholder="{{'Name on card' | translate}}"
                            x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
-                           [(ngModel)]="card?.name"
+                           [(ngModel)]="card.name"
                            [disabled]="!isBillingEnabled()"
                            required />
                 </div>

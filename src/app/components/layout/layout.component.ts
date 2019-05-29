@@ -8,7 +8,6 @@ import { AboutResult } from "src/app/models/network";
     selector: "app-layout",
     templateUrl: "./layout.component.html"
 })
-
 export class LayoutComponent implements OnInit {
     isSideNavCollapsed = false;
     isShowResponsiveSide = false;

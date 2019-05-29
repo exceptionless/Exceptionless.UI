@@ -16,13 +16,14 @@ import { EntityChanged, TypedMessage } from "src/app/models/messaging";
     selector: "app-stacks",
     templateUrl: "./stacks.component.html"
 })
-
 export class StacksComponent implements OnChanges, OnInit, OnDestroy {
     @HostBinding("class.app-component") appComponent = true;
+
     @Input() public settings: any;
     @Input() public eventType: string; // TODO: I'm not sure why the eventType, filterType, project filter are being used for stacks and events components.
     @Input() public filterTime: string;
     @Input() public projectFilter: string;
+
     public next: any;
     public previous: any;
     public stacks: Stack[];
@@ -91,13 +92,17 @@ export class StacksComponent implements OnChanges, OnInit, OnDestroy {
         this.currentOptions = options || this.settings.options;
 
         try {
+            let response : any;
+
             if (this.settings.type === "get-users") {
-                this.stacks = await this.stackService.getUsers(this.currentOptions);
+              response = await this.stackService.getUsers(this.currentOptions);
             } else if (this.settings.type === "get-frequent") {
-                this.stacks = await this.stackService.getFrequent(this.currentOptions);
+              response = await this.stackService.getFrequent(this.currentOptions);
             } else if (this.settings.type === "get-new") {
-                this.stacks = await this.stackService.getNew(this.currentOptions);
+              response = await this.stackService.getNew(this.currentOptions);
             }
+
+            this.stacks = response.data;
 
             if (this.selectedIds) {
                 this.selectedIds = this.selectedIds.filter((id) => {

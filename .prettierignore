@@ -1,0 +1,11 @@
+package.json
+package-lock.json
+angular.json
+nx.json
+tslint.json
+tsconfig.json
+tsconfig.app.json
+tsconfig.lib.json
+tsconfig.e2e.json
+tsconfig.spec.json
+polyfills.ts

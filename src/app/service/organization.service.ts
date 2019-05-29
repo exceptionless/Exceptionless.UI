@@ -88,7 +88,8 @@ export class OrganizationService {
     }
 
     public getInvoices(id: string, options?: GetInvoiceParameters) {
-        return this.http.get<InvoiceGridModel[]>(`organizations/${id}/invoices`, { params: options || {} }).toPromise();
+        const params: any = options || {};
+        return this.http.get<InvoiceGridModel[]>(`organizations/${id}/invoices`, { params }).toPromise();
     }
 
     public getPlans(id: string) {
@@ -96,7 +97,7 @@ export class OrganizationService {
     }
 
     public async isNameAvailable(name: string): Promise<boolean> {
-        const response = await this.http.get(`organizations/check-name`, { params: { name }}).toPromise();
+        const response: any = await this.http.get(`organizations/check-name`, { params: { name }}).toPromise();
         return response.status === 204;
     }
 

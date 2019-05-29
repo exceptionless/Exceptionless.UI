@@ -100,7 +100,7 @@ export class EventComponent implements OnInit, OnDestroy {
         timeHeaderText: "Session Time",
         hideActions: true,
         hideSessionStartTime: true,
-        relativeTo: Date
+        relativeTo: new Date()
     };
     public tabs: Tab[] = [];
     public activeTab: string = "overview";
@@ -429,9 +429,12 @@ export class EventComponent implements OnInit, OnDestroy {
         }
 
         try {
-            this.event = await this.eventService.getById(this.eventId, {}, optionsCallback);
+            // this.event = await this.eventService.getById(this.eventId, {}, optionsCallback);
+            const response: any = await this.eventService.getById(this.eventId, {}, optionsCallback);
+            this.event = response.data;
+
             this.eventJson = JSON.stringify(this.event);
-            this.sessionEvents.relativeTo = this.event.date;
+            this.sessionEvents.relativeTo = this.event.date as any;
             this.errorType = this.getErrorType(this.event);
             this.environment = this.event.data && this.event.data["@environment"];
             this.location = this.getLocation(this.event);
@@ -457,13 +460,13 @@ export class EventComponent implements OnInit, OnDestroy {
             this.userDescription = userDescription && userDescription.description;
             this.version = this.event.data && this.event.data["@version"];
 
-            const links = this.linkService.getLinks(response.headers.get("link")); // TODO: Need to investigate the best way to get by id but also to get header values. What were we doing before?
+            const links: any = this.linkService.getLinks(response.headers.get("link")); // TODO: Need to investigate the best way to get by id but also to get header values. What were we doing before?
             this.previous = links.previous ? links.previous.split("/").pop() : null;
             this.next = links.next ? links.next.split("/").pop() : null;
 
             this.addHotKeys();
             this.buildReferences();
-        } catch (ex: HttpErrorResponse) {
+        } catch (ex) {
             if (ex.status === 426) { // TODO: Does an exception here return a status code?
                 try {
                     return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.project.organization_id, () => {

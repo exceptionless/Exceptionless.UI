@@ -199,7 +199,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         const offset = this.filterService.getTimeOffset();
 
-        const response = await this.eventService.count("date:(date" + (offset ? "^" + offset : "") + " cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1");
+        const response: any = await this.eventService.count("date:(date" + (offset ? "^" + offset : "") + " cardinality:stack sum:count~1) cardinality:stack terms:(first @include:true) sum:count~1");
         const getAggregationValue = (data, name, defaultValue) => {
             const aggs = data.aggregations;
             return aggs && aggs[name] && aggs[name].value || defaultValue;

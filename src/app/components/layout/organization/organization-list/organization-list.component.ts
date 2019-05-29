@@ -19,7 +19,6 @@ import { TypedMessage } from "src/app/models/messaging";
     selector: "app-organization-list",
     templateUrl: "./organization-list.component.html"
 })
-
 export class OrganizationListComponent implements OnInit, OnDestroy {
     private _settings: any  = { mode: "stats" };
     public canChangePlan: boolean = false;
@@ -89,7 +88,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
             const organization = await this.organizationService.create(name);
             this.organizations.push(organization);
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-        } catch (ex: HttpErrorResponse) {
+        } catch (ex) {
             if (ex.status === 426) {
                 // TODO: need to implement later(billing service)
             }
@@ -108,7 +107,11 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         this.currentOptions = options || this._settings;
 
         try {
-            this.organizations = await this.organizationService.getAll(this.currentOptions);
+            // this.organizations = await this.organizationService.getAll(this.currentOptions);
+
+            const response: any = await this.organizationService.getAll(this.currentOptions);
+            this.organizations = response.data;
+
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
 
             const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
@@ -133,7 +136,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
                 await this.organizationService.removeUser(organization.id, user.email_address);
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
                 this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
-            } catch (ex: HttpErrorResponse) {
+            } catch (ex) {
                 let message: any = this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
                 if (ex.status === 400) {
                     message += " " + this.wordTranslateService.translate("Message:") + " " + ex.error.message;

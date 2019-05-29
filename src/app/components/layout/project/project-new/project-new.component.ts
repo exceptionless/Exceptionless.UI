@@ -102,7 +102,7 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
             const organization = await this.organizationService.create(name);
             this.organizations.push(organization);
             this.currentOrganization = organization;
-        } catch (ex: HttpErrorResponse) {
+        } catch (ex) {
             if (ex.status === 426) {
                 return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, null, () => {
                     this.createOrganization(name);
@@ -127,7 +127,7 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
         try {
             const project = await this.projectService.create(organization.id, this.projectName);
             await this.router.navigate([`/project/${project.id}/configure`], { queryParams: { redirect: true } });
-        } catch (ex: HttpErrorResponse) {
+        } catch (ex) {
             if (ex.status === 426) {
                 return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, organization.id, async () => {
                     await this.createProject(organization);
