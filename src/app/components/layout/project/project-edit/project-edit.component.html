@@ -15,7 +15,7 @@
                                         <label for="project-name">{{ 'Project Name' | translate }}</label>
                                         <div [ngClass]="{'input-group': !!projectForm.pending }">
                                             <input id="project-name" name="project-name" type="text" class="form-control" placeholder="Project Name"
-                                                   [(ngModel)]="project?.name"
+                                                   [(ngModel)]="project.name"
                                                    (input)="save(projectForm.valid)"
                                                    project-name-available-validator
                                                    #name="ngModel"
@@ -134,7 +134,7 @@
                                 <div class="checkbox">
                                     <label class="checks">
                                         <input type="checkbox"
-                                               [(ngModel)]="project?.delete_bot_data_enabled"
+                                               [(ngModel)]="project.delete_bot_data_enabled"
                                                (change)="saveDeleteBotDataEnabled()">
                                         <i></i>
                                         {{ 'Reduce noise by automatically hiding high volumes of events coming from a single client IP address.' | translate }}
