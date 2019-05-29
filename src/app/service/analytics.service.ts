@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NgxAnalytics } from "ngx-analytics";
+import { Angulartics2 } from 'angulartics2';
 import { Locker, DRIVERS } from "angular-safeguard";
 
 @Injectable({
@@ -9,14 +9,14 @@ import { Locker, DRIVERS } from "angular-safeguard";
 export class AnalyticsService {
     constructor(
         private locker: Locker,
-        private ngxAnalytics: NgxAnalytics
+        private analytics: Angulartics2
     ) {
         this.locker.setDriverFallback(DRIVERS.SESSION);
         this.locker.setNamespace("analytics");
     }
 
     public addPaymentInfo() {
-        return this.ngxAnalytics.eventTrack.next({
+        return this.analytics.eventTrack.next({
             action: "AddPaymentInfo",
             properties: { category: "AddPaymentInfo" },
         });
@@ -37,7 +37,7 @@ export class AnalyticsService {
             this.locker.set(DRIVERS.SESSION, "registration", data);
         }
 
-        return this.ngxAnalytics.eventTrack.next({
+        return this.analytics.eventTrack.next({
             action: "CompleteRegistration",
             properties: data
         });
@@ -48,20 +48,20 @@ export class AnalyticsService {
     }
 
     public initiateCheckout() {
-        return this.ngxAnalytics.eventTrack.next({
+        return this.analytics.eventTrack.next({
             action: "InitiateCheckout"
         });
     }
 
     public lead(data) {
-        return this.ngxAnalytics.eventTrack.next({
+        return this.analytics.eventTrack.next({
             action: "Lead",
             properties: data,
         });
     }
 
     public purchase(data) {
-        return this.ngxAnalytics.eventTrack.next({
+        return this.analytics.eventTrack.next({
             action: "Purchase",
             properties: data,
         });

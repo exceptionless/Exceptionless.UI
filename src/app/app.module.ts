@@ -7,8 +7,7 @@ import { Ng2UiAuthModule } from "ng2-ui-auth";
 import { ToastrModule } from "ngx-toastr";
 import { LockerModule } from "angular-safeguard";
 import { HotkeyModule } from "angular2-hotkeys";
-import { NgxAnalyticsModule } from "ngx-analytics";
-import { NgxAnalyticsGoogleAnalytics } from "ngx-analytics/ga";
+import { Angulartics2Module } from 'angulartics2';
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { IntercomModule } from "ng-intercom";
@@ -85,7 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         LockerModule,
         Ng2UiAuthModule.forRoot(AUTH_CONFIG),
         HotkeyModule.forRoot(),
-        NgxAnalyticsModule.forRoot([NgxAnalyticsGoogleAnalytics]),
+        Angulartics2Module.forRoot(),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
