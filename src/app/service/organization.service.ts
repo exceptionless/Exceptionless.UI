@@ -38,7 +38,7 @@ export class OrganizationService {
     public getOldestCreationDate(organizations: Organization[]): Date {
         if (organizations) {
             if (organizations.length > 1) {
-                return new Date(Math.min(...organizations.map(o => this.objectIdService.create(o.id).getDate())));
+                return new Date(Math.min(...organizations.map(o => this.objectIdService.getDate(o.id).getTime())));
             }
 
             if (organizations.length === 1) {

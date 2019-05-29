@@ -8,7 +8,7 @@ import { Subscription } from "rxjs";
 import { Organization } from "src/app/models/organization";
 
 @Component({
-    selector: "app-session",
+    selector: "app-sessions",
     templateUrl: "./session.component.html",
     styleUrls: ["./session.component.less"]
 })

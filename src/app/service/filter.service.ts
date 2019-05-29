@@ -231,7 +231,7 @@ export class FilterService implements OnInit {
         }
     }
 
-    public setOrganizationId(id, suspendNotifications) {
+    public setOrganizationId(id: string, suspendNotifications: boolean) {
         if ((id === this._organizationId) || (id && !this.objectIdService.isValid(id))) {
             return;
         }
@@ -244,7 +244,7 @@ export class FilterService implements OnInit {
         }
     }
 
-    public setProjectId(id, suspendNotifications) {
+    public setProjectId(id: string, suspendNotifications: boolean) {
         if ((id === this._projectId) || (id && !this.objectIdService.isValid(id))) {
             return;
         }
