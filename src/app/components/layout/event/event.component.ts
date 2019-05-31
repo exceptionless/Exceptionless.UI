@@ -109,7 +109,7 @@ export class EventComponent implements OnInit, OnDestroy {
     public next: any;
     public clipboardSupported: boolean = this.clipboardService.isSupported;
     private subscriptions: Subscription[];
-    @ViewChild("tabsChild") tabsChild: NgbTabset;
+    @ViewChild("tabsChild", { static: true }) tabsChild: NgbTabset;
 
     constructor(
         private router: Router,

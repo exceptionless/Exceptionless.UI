@@ -12,7 +12,7 @@ import { FilterStoreService } from "../../service/filter-store.service";
 })
 
 export class CustomDateRangeDialogComponent implements IModalDialog, AfterViewInit {
-    @ViewChild(DaterangePickerComponent)
+    @ViewChild(DaterangePickerComponent, { static: false })
     private picker: DaterangePickerComponent;
 
     // TODO: Typings?

@@ -38,7 +38,7 @@
                                             <input id="email" name="email" type="email" class="form-control" x-autocompletetype="email" autocorrect="off" spellcheck="false"
                                                    placeholder="{{ 'Email Address' | translate }}"
                                                    [(ngModel)]="user.email_address"
-                                                   (input)="saveEmailAddress()"
+                                                   (input)="saveEmailAddress(emailAddressForm)"
                                                    required
                                                    appUniqueEmail
                                                    #email="ngModel"/>
@@ -144,7 +144,7 @@
 
                         <ngb-tab title="{{ 'Password' | translate }}" id="password">
                             <ng-template ngbTabContent>
-                                <form name="passwordForm" role="form" class="form-validation" #passwordForm="ngForm" (ngSubmit)="changePassword(passwordForm.valid)">
+                                <form name="passwordForm" role="form" class="form-validation" #passwordForm="ngForm" (ngSubmit)="changePassword(passwordForm)">
                                     <div class="form-group" *ngIf="hasLocalAccount">
                                         <label for="current">{{ 'Current Password' | translate }}</label>
                                         <input id="current" name="current" type="password" class="form-control" [(ngModel)]="password.current_password" required #current="ngModel"/>

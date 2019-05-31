@@ -4,7 +4,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="fa fa-asterisk"></i> {{ 'Project Information' | translate }}</div>
                 <div class="panel-body">
-                    <form name="addForm" role="form" class="form-validation" #addForm="ngForm">
+                    <form name="form" role="form" class="form-validation" #form="ngForm" (ngSubmit)="add(form)">
                         <div class="form-group" *ngIf="hasOrganizations()">
                             <label for="organization">{{ 'Organization Name' | translate }}</label>
 
@@ -14,7 +14,7 @@
                         </div>
 
                         <div class="form-group" *ngIf="canCreateOrganization()">
-                            <div [ngClass]="{'input-group': !!addForm.pending }">
+                            <div [ngClass]="{'input-group': !!form.pending }">
                                 <input name="organizationName" type="text" class="form-control" placeholder="{{ 'New Organization Name' | translate }}"
                                        [(ngModel)]="organizationName"
                                        appUniqueOrganization
@@ -23,7 +23,7 @@
                                        required
                                        autofocus />
 
-                                <span class="input-group-addon" *ngIf="addForm.pending">
+                                <span class="input-group-addon" *ngIf="form.pending">
                                     <i class="fa fa-fw fa-spinner fa-spin"></i>
                                 </span>
                             </div>
@@ -36,7 +36,7 @@
 
                         <div class="form-group">
                             <label for="projectName">Project Name</label>
-                            <div [ngClass]="{'input-group': !!addForm.pending }">
+                            <div [ngClass]="{'input-group': !!form.pending }">
                                 <input id="projectName" name="projectName" type="text" class="form-control" placeholder="New Project Name"
                                        [(ngModel)]="projectName"
                                        [appUniqueProject]="currentOrganization['id']"
@@ -45,7 +45,7 @@
                                        #projectName="ngModel"
                                        autofocus />
 
-                                <span class="input-group-addon" *ngIf="addForm.pending">
+                                <span class="input-group-addon" *ngIf="form.pending">
                                     <i class="fa fa-fw fa-spinner fa-spin"></i>
                                 </span>
                             </div>
@@ -62,7 +62,7 @@
                         <a routerLink="/dashboard" *ngIf="hasOrganizations()" class="btn btn-default" role="button">{{ 'Go To Dashboard' | translate }}</a>
                     </div>
                     <div class="clearfix">
-                        <input (click)="add()" type="submit" role="button" class="btn btn-primary" value="{{ 'Add Project' | translate }}" />
+                        <input type="submit" role="button" class="btn btn-primary" value="{{ 'Add Project' | translate }}" />
                     </div>
                 </footer>
             </div>
