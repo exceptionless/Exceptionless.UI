@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import { NotificationService } from "../../../../service/notification.service";
@@ -16,7 +15,6 @@ import { Subscription } from "rxjs";
 })
 
 export class ProjectNewComponent implements OnInit, OnDestroy {
-    @ViewChild("addForm") public addForm: NgForm;
     private _canAdd: boolean = true;
     private _newOrganizationId: string = "__newOrganization";
     public currentOrganization: Organization;
@@ -53,7 +51,7 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
         }
     }
 
-    public async add(isRetrying?: boolean) {
+    public async add(form: NgForm, isRetrying?: boolean) {
         this.submitted = true; // TODO: Can this be simplified? It seems overly complex.
 
         const resetCanAdd = () => {
@@ -61,15 +59,15 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
         };
 
         const retry = (delay?) => {
-            setTimeout(() => { this.add(true); }, delay || 100);
+            setTimeout(() => { this.add(form, true); }, delay || 100);
         };
 
-        if (!this.addForm || this.addForm.invalid) {
+        if (!form || form.invalid) {
             resetCanAdd();
             /*return !isRetrying && retry(1000);*/
         }
 
-        if ((this.canCreateOrganization() && !this.organizationName) || !this.projectName || this.addForm.pending) {
+        if ((this.canCreateOrganization() && !this.organizationName) || !this.projectName || form.pending) {
             return retry();
         }
 

@@ -19,8 +19,6 @@ import { EntityChanged, ChangeType } from "src/app/models/messaging";
     templateUrl: "./account-manage.component.html"
 })
 export class AccountManageComponent implements OnInit {
-    @ViewChild("emailAddressForm") public emailAddressForm: NgForm;
-    @ViewChild("passwordForm") public passwordForm: NgForm;
     private _canSaveEmailAddress: boolean = true;
     private _projectId: string = "";
 
@@ -78,8 +76,8 @@ export class AccountManageComponent implements OnInit {
         }
     }
 
-    public async changePassword(isValid) {
-        if (!isValid) {
+    public async changePassword(form: NgForm) {
+        if (!form.valid) {
             return;
         }
 
@@ -90,7 +88,7 @@ export class AccountManageComponent implements OnInit {
             this.notificationService.success("", await this.wordTranslateService.translate("You have successfully changed your password."));
             this.password = new ChangePasswordModel();
             this.confirmPassword = null;
-            this.passwordForm.form.reset(true);
+            form.reset(true);
         } catch (ex) {
             const message = await this.wordTranslateService.translate("An error occurred while trying to change your password.");
             this.notificationService.error("", message);
@@ -204,16 +202,16 @@ export class AccountManageComponent implements OnInit {
         }
     }
 
-    async saveEmailAddress(isRetrying?: boolean) {
+    async saveEmailAddress(form: NgForm, isRetrying?: boolean) {
         const retry = (delay?) => {
-            setTimeout(() => { this.saveEmailAddress(true); }, delay || 100);
+            setTimeout(() => { this.saveEmailAddress(form, true); }, delay || 100);
         };
 
-        if (!this.emailAddressForm || this.emailAddressForm.form.valid) {
+        if (!form || form.valid) {
             this._canSaveEmailAddress = true;
         }
 
-        if (!this.user.email_address || this.emailAddressForm.pending) {
+        if (!this.user.email_address || form.pending) {
             return retry();
         }
 
