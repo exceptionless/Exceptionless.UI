@@ -1,27 +1,27 @@
 <form name="addWebhookForm" role="form" class="form-validation">
-    <div class="form-group">
-        <label for="url">{{ 'URL' | translate }}</label>
-        <input id="url" name="url" type="text" class="form-control" placeholder="{{'Enter the URL to call' | translate}}"
-               [(ngModel)]="data.url" [required]="true" autofocus #url="ngModel" (ngModelChange)="updateValue()" pattern="https?://.+" />
-        <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched))">
-            <small [hidden]="!url.errors?.required">{{ 'URL is required.' | translate }}</small>
-            <small [hidden]="!url.errors?.pattern">{{ 'URL is required.' | translate }}</small>
-        </div>
-    </div>
-    <p>{{'Control when the web hook is called by choosing the event types below.' | translate}}</p>
-    <div class="form-group">
-        <div class="checkbox checkbox-inline" *ngFor="let type of eventTypes">
-            <label class="checks">
-                <input name="types" type="checkbox"
-                       [(ngModel)]="type.checked"
-                       (ngModelChange)="updateValue()"
-                       [required]="!hasEventTypeSelection()" />
-                <i></i>
-                <abbr title="{{type.description}}">{{type.name}}</abbr>
-            </label>
-        </div>
-        <div class="error" *ngIf="!hasEventTypeSelection()">
-            <small>{{'Please choose one or more event types.' | translate}}</small>
-        </div>
-    </div>
+  <div class="form-group">
+      <label for="url">{{ 'URL' | translate }}</label>
+      <input id="url" name="url" type="text" class="form-control" placeholder="{{'Enter the URL to call' | translate}}"
+             [(ngModel)]="data.url" [required]="true" autofocus #url="ngModel" (ngModelChange)="updateValue()" pattern="https?://.+" />
+      <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched))">
+          <small [hidden]="!url.errors?.required">{{ 'URL is required.' | translate }}</small>
+          <small [hidden]="!url.errors?.pattern">{{ 'URL is required.' | translate }}</small>
+      </div>
+  </div>
+  <p>{{'Control when the web hook is called by choosing the event types below.' | translate}}</p>
+  <div class="form-group">
+      <div class="checkbox checkbox-inline" *ngFor="let type of eventTypes">
+          <label class="checks">
+              <input name="types" type="checkbox"
+                     [(ngModel)]="type.checked"
+                     (ngModelChange)="updateValue()"
+                     [required]="!hasEventTypeSelection()" />
+              <i></i>
+              <abbr title="{{type.description}}">{{type.name}}</abbr>
+          </label>
+      </div>
+      <div class="error" *ngIf="!hasEventTypeSelection()">
+          <small>{{'Please choose one or more event types.' | translate}}</small>
+      </div>
+  </div>
 </form>

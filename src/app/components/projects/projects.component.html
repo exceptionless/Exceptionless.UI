@@ -1,73 +1,75 @@
 <div class="table-responsive" appRefreshOn [refreshOn]="'OrganizationChanged ProjectChanged'" (refreshAction)="get(currentOptions, $event)">
-    <table class="table table-striped table-bordered table-fixed b-t">
-        <thead>
-            <tr>
-                <th>{{ 'Name' | translate }}</th>
-                <th *ngIf="includeOrganizationName">{{ 'Organization' | translate }}</th>
-                <th class="number hidden-xs"><abbr title="{{ 'Total number of stacks' | translate }}">{{ 'Stacks' | translate }}</abbr></th>
-                <th class="number hidden-xs"><abbr title="{{ 'Total number of events within the retention period' | translate }}">{{ 'Events' | translate }}</abbr></th>
-                <th class="action">{{ 'Actions' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="row-clickable" *ngFor="let project of projects">
-                <td (click)="open(project.id, $event)">{{ project.name }}</td>
-                <td *ngIf="includeOrganizationName" (click)="open(project.id, $event)">{{ project.organization_name }}</td>
-                <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['stack_count'] | number }}</td>
-                <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['event_count'] | number }}</td>
-                <td>
-                    <div class="btn-group" open>
-                        <button type="button" role="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li><a routerLink="/dashboard"><i class="fa fa-fw fa-dashboard"></i> {{ 'Project Dashboard' | translate }}</a></li>
-                            <li><a routerLink="/project/{{project.id}}/manage"><i class="fa fa-fw fa-edit"></i> {{ 'Edit' | translate }}</a></li>
-                            <li><a routerLink="/project/{{project.id}}/configure"><i class="fa fa-fw fa-cloud-download"></i> {{ 'Download & Configure Client' | translate }}</a></li>
-                            <li><a (click)="remove(project)"><i class="fa fa-fw fa-times"></i> {{ 'Delete' | translate }}</a></li>
-                            <li class="divider"></li>
-                            <li><a routerLink="/organization/{{project.organization_id}}/manage"><i class="fa fa-fw fa-group"></i> {{ 'View Organization' | translate }}</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
+  <table class="table table-striped table-bordered table-fixed b-t">
+      <thead>
+          <tr>
+              <th>{{ 'Name' | translate }}</th>
+              <th *ngIf="includeOrganizationName">{{ 'Organization' | translate }}</th>
+              <th class="number hidden-xs"><abbr title="{{ 'Total number of stacks' | translate }}">{{ 'Stacks' | translate }}</abbr></th>
+              <th class="number hidden-xs"><abbr title="{{ 'Total number of events within the retention period' | translate }}">{{ 'Events' | translate }}</abbr></th>
+              <th class="action">{{ 'Actions' | translate }}</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="row-clickable" *ngFor="let project of projects">
+              <td (click)="open(project.id, $event)">{{ project.name }}</td>
+              <td *ngIf="includeOrganizationName" (click)="open(project.id, $event)">{{ project.organization_name }}</td>
+              <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['stack_count'] | number }}</td>
+              <td (click)="open(project.id, $event)" class="number hidden-xs">{{ project['event_count'] | number }}</td>
+              <td>
+                  <div class="btn-group" open>
+                      <button type="button" role="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                          <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                          <li><a routerLink="/dashboard"><i class="fa fa-fw fa-dashboard"></i> {{ 'Project Dashboard' | translate }}</a></li>
+                          <li><a routerLink="/project/{{project.id}}/manage"><i class="fa fa-fw fa-edit"></i> {{ 'Edit' | translate }}</a></li>
+                          <li><a routerLink="/project/{{project.id}}/configure"><i class="fa fa-fw fa-cloud-download"></i> {{ 'Download & Configure Client' | translate }}</a></li>
+                          <li><a (click)="remove(project)"><i class="fa fa-fw fa-times"></i> {{ 'Delete' | translate }}</a></li>
+                          <li class="divider"></li>
+                          <li><a routerLink="/organization/{{project.organization_id}}/manage"><i class="fa fa-fw fa-group"></i> {{ 'View Organization' | translate }}</a></li>
+                      </ul>
+                  </div>
+              </td>
+          </tr>
 
-            <tr *ngIf="!hasProjects() && includeOrganizationName">
-                <td class="hidden-xs" colspan="5">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
-                </td>
-                <td class="visible-xs" colspan="3">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
-                </td>
-            </tr>
+          <!-- TODO:YAG hasFilter?
+          <tr *ngIf="!hasProjects() && includeOrganizationName">
+              <td class="hidden-xs" colspan="5">
+                  <strong *ngIf="loading">Loading...</strong>
+                  <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
+              </td>
+              <td class="visible-xs" colspan="3">
+                  <strong *ngIf="loading">Loading...</strong>
+                  <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
+              </td>
+          </tr>
 
-            <tr *ngIf="!hasProjects() && !includeOrganizationName">
-                <td class="hidden-xs" colspan="4">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
-                </td>
-                <td class="visible-xs" colspan="2">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+          <tr *ngIf="!hasProjects() && !includeOrganizationName">
+              <td class="hidden-xs" colspan="4">
+                  <strong *ngIf="loading">Loading...</strong>
+                  <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
+              </td>
+              <td class="visible-xs" colspan="2">
+                  <strong *ngIf="loading">Loading...</strong>
+                  <strong *ngIf="!loading">{{ hasFilter ? 'No projects were found with the current filter.': 'No projects were found.' | translate }}</strong>
+              </td>
+          </tr>
+          -->
+      </tbody>
+  </table>
 
-    <div class="table-footer" *ngIf="previous || next">
-        <div class="row">
-            <div class="col-sm-8 col-xs-8 text-center" *ngIf="pageSummary">
-                <small class="text-muted inline m-t-xs">{{ pageSummary }}</small>
-            </div>
-            <div class="col-sm-4 col-xs-4 text-right">
-                <ul class="pagination pagination-sm m-t-none m-b-none">
-                    <li [hidden]="!(currentOptions.page && currentOptions.page > 2)"><a (click)="get()"><i class="fa fa-fast-backward"></i></a></li>
-                    <li [ngClass]="{'disabled': !previous}"><a [attr.disabled]="!previous" (click)="!previous || previousPage()"><i class="fa fa-chevron-left"></i></a></li>
-                    <li [ngClass]="{'disabled': !next}"><a [attr.disabled]="!next" (click)="!next || nextPage()"><i class="fa fa-chevron-right"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+  <div class="table-footer" *ngIf="previous || next">
+      <div class="row">
+          <div class="col-sm-8 col-xs-8 text-center" *ngIf="pageSummary">
+              <small class="text-muted inline m-t-xs">{{ pageSummary }}</small>
+          </div>
+          <div class="col-sm-4 col-xs-4 text-right">
+              <ul class="pagination pagination-sm m-t-none m-b-none">
+                  <li [hidden]="!(currentOptions.page && currentOptions.page > 2)"><a (click)="get()"><i class="fa fa-fast-backward"></i></a></li>
+                  <li [ngClass]="{'disabled': !previous}"><a [attr.disabled]="!previous" (click)="!previous || previousPage()"><i class="fa fa-chevron-left"></i></a></li>
+                  <li [ngClass]="{'disabled': !next}"><a [attr.disabled]="!next" (click)="!next || nextPage()"><i class="fa fa-chevron-right"></i></a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
 </div>

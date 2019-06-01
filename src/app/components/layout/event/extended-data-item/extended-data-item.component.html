@@ -1,22 +1,22 @@
 <div *ngIf="hasData">
-    <div class="pull-right hidden-print">
-        <button type="button" role="button" class="btn btn-dark btn-xs" title="{{ 'Copy to Clipboard' | translate }}" ngxClipboard [cbContent]="data | json" (cbOnSuccess)="copied()" [hidden]="!clipboardSupported" style="margin-right: 5px;">
-            <i class="fa fa-copy"></i>
-        </button>
-        <button type="button" role="button" class="btn btn-dark btn-xs" (click)="showRaw = !showRaw">{{ 'Toggle View' | translate }}</button>
-        <div class="btn-group btn-group-xs" appOpen style="margin-left: -4px;">
-            <button type="button" role="button" class="btn btn-dark btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" *ngIf="showOptions">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu pull-right" role="menu" *ngIf="showOptions">
-                <li *ngIf="!isPromoted"><a (click)="promoteTab()">{{ 'Promote to Tab' | translate }}</a></li>
-                <li *ngIf="isPromoted"><a (click)="demoteTab()">{{ 'Demote Tab' | translate }}</a></li>
-            </ul>
-        </div>
-    </div>
-    <h3>{{ title | translate}}</h3>
-    <div *ngIf="!showRaw">
-        <app-value-dump [content]="data" [isRoot]="true"></app-value-dump>
-    </div>
-    <pre *ngIf="showRaw">{{ data | json }}</pre>
+  <div class="pull-right hidden-print">
+      <button type="button" role="button" class="btn btn-dark btn-xs" title="{{ 'Copy to Clipboard' | translate }}" ngxClipboard [cbContent]="data | json" (cbOnSuccess)="copied()" [hidden]="!clipboardSupported" style="margin-right: 5px;">
+          <i class="fa fa-copy"></i>
+      </button>
+      <button type="button" role="button" class="btn btn-dark btn-xs" (click)="showRaw = !showRaw">{{ 'Toggle View' | translate }}</button>
+      <div class="btn-group btn-group-xs" appOpen style="margin-left: -4px;">
+          <button type="button" role="button" class="btn btn-dark btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" *ngIf="showOptions">
+              <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu pull-right" role="menu" *ngIf="showOptions">
+              <li *ngIf="!isPromoted"><a (click)="promoteTab()">{{ 'Promote to Tab' | translate }}</a></li>
+              <li *ngIf="isPromoted"><a (click)="demoteTab()">{{ 'Demote Tab' | translate }}</a></li>
+          </ul>
+      </div>
+  </div>
+  <h3>{{ title | translate}}</h3>
+  <div *ngIf="!showRaw">
+      <app-value-dump [content]="data" [isRoot]="true"></app-value-dump>
+  </div>
+  <pre *ngIf="showRaw">{{ data | json }}</pre>
 </div>

@@ -1,58 +1,58 @@
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-fixed b-t" appRefreshOn [refreshOn]="'OrganizationChanged UserChanged'" (refreshAction)="get(currentOptions)" [refreshThrottle]="10000">
-        <thead>
-            <tr>
-                <th>{{ 'Email Address' | translate }}</th>
-                <th>{{ 'Full Name' | translate }}</th>
-                <th class="action">{{ 'Actions' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of users">
-                <td>
-                    <span>{{ user['email_address'] }}</span>
-                    <span *ngIf="user['has_admin_role']" class="label label-info">{{ 'AdminRole' | translate }}</span>
-                    <span *ngIf="user['is_invite']" class="label label-default">{{ 'Invited' | translate }}</span>
-                </td>
-                <td>
-                    <span>{{ user['full_name'] }}</span>
-                </td>
-                <td>
-                    <div class="btn-group" open>
-                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li *ngIf="settings.organizationId"><a (click)="resendNotification(user)"><i class="fa fa-envelope"></i> {{ 'Resend Invite Email' | translate }}</a></li>
-                            <li *ngIf="settings.organizationId"><a (click)="remove(user)"><i class="fa fa-times"></i> {{ user['is_invite'] ? 'Revoke Invite' : 'Remove User' | translate }}</a></li>
-                            <li *ngIf="!user['is_invite'] && hasAdminRole(user)">
-                                <a (click)="updateAdminRole(user)"><i class="fa fa-user"></i> {{ hasAdminRole(user)? 'Add Admin Role' : 'Remove Admin Role' | translate }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
+  <table class="table table-striped table-bordered table-fixed b-t" appRefreshOn [refreshOn]="'OrganizationChanged UserChanged'" (refreshAction)="get(currentOptions)" [refreshThrottle]="10000">
+      <thead>
+          <tr>
+              <th>{{ 'Email Address' | translate }}</th>
+              <th>{{ 'Full Name' | translate }}</th>
+              <th class="action">{{ 'Actions' | translate }}</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let user of users">
+              <td>
+                  <span>{{ user['email_address'] }}</span>
+                  <span *ngIf="user['has_admin_role']" class="label label-info">{{ 'AdminRole' | translate }}</span>
+                  <span *ngIf="user['is_invite']" class="label label-default">{{ 'Invited' | translate }}</span>
+              </td>
+              <td>
+                  <span>{{ user['full_name'] }}</span>
+              </td>
+              <td>
+                  <div class="btn-group" open>
+                      <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                          <i class="fa fa-fw fa-edit"></i> <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                          <li *ngIf="settings.organizationId"><a (click)="resendNotification(user)"><i class="fa fa-envelope"></i> {{ 'Resend Invite Email' | translate }}</a></li>
+                          <li *ngIf="settings.organizationId"><a (click)="remove(user)"><i class="fa fa-times"></i> {{ user['is_invite'] ? 'Revoke Invite' : 'Remove User' | translate }}</a></li>
+                          <li *ngIf="!user['is_invite'] && hasAdminRole(user)">
+                              <a (click)="updateAdminRole(user)"><i class="fa fa-user"></i> {{ hasAdminRole(user)? 'Add Admin Role' : 'Remove Admin Role' | translate }}</a>
+                          </li>
+                      </ul>
+                  </div>
+              </td>
+          </tr>
 
-            <tr *ngIf="!hasUsers()">
-                <td colspan="3">
-                    <strong>{{ 'No users were found.' | translate }}</strong>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+          <tr *ngIf="!hasUsers()">
+              <td colspan="3">
+                  <strong>{{ 'No users were found.' | translate }}</strong>
+              </td>
+          </tr>
+      </tbody>
+  </table>
 
-    <div class="table-footer" *ngIf="previous || next">
-        <div class="row">
-            <div class="col-sm-8 col-xs-8 text-center" *ngIf="pageSummary">
-                <small class="text-muted inline m-t-xs">{{ pageSummary }}</small>
-            </div>
-            <div class="col-sm-4 col-xs-4 text-right">
-                <ul class="pagination pagination-sm m-t-none m-b-none">
-                    <li [hidden]="currentOptions['page'] && currentOptions['page'] > 2"><a (click)="get()"><i class="fa fa-fast-backward"></i></a></li>
-                    <li [ngClass]="{'disabled': !previous}"><a [attr.disabled]="!previous" (click)="!previous || previousPage()"><i class="fa fa-chevron-left"></i></a></li>
-                    <li [ngClass]="{'disabled': !next}"><a [attr.disabled]="!next" (click)="!next || nextPage()"><i class="fa fa-chevron-right"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+  <div class="table-footer" *ngIf="previous || next">
+      <div class="row">
+          <div class="col-sm-8 col-xs-8 text-center" *ngIf="pageSummary">
+              <small class="text-muted inline m-t-xs">{{ pageSummary }}</small>
+          </div>
+          <div class="col-sm-4 col-xs-4 text-right">
+              <ul class="pagination pagination-sm m-t-none m-b-none">
+                  <li [hidden]="currentOptions['page'] && currentOptions['page'] > 2"><a (click)="get()"><i class="fa fa-fast-backward"></i></a></li>
+                  <li [ngClass]="{'disabled': !previous}"><a [attr.disabled]="!previous" (click)="!previous || previousPage()"><i class="fa fa-chevron-left"></i></a></li>
+                  <li [ngClass]="{'disabled': !next}"><a [attr.disabled]="!next" (click)="!next || nextPage()"><i class="fa fa-chevron-right"></i></a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
 </div>

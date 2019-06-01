@@ -41,7 +41,10 @@
                             <tr *ngIf="organizations?.length === 0 || loading">
                                 <td colspan="6">
                                     <strong *ngIf="loading">{{ 'Loading...' | translate }}</strong>
+
+                                    <!-- TODO:YAG hasFilter?
                                     <strong *ngIf="!loading">{{ hasFilter ? 'No organizations were found with the current filter.': 'No organizations were found.' | translate }}</strong>
+                                    -->
                                 </td>
                             </tr>
                         </tbody>
@@ -64,12 +67,12 @@
                 </div>
 
                 <footer class="panel-footer">
-                    <div class="pull-right">
-                        <a routerLink="/dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
-                    </div>
-                    <button type="button" role="button" (click)="add()" class="btn btn-primary">New Organization</button>
-                </footer>
-            </div>
-        </div>
-    </div>
+                  <div class="pull-right">
+                      <a routerLink="/dashboard" class="btn btn-default" role="button">Go To Dashboard</a>
+                  </div>
+                  <button type="button" role="button" (click)="add()" class="btn btn-primary">New Organization</button>
+              </footer>
+          </div>
+      </div>
+  </div>
 </div>

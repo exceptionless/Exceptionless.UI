@@ -27,7 +27,10 @@
 
                                         <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || organizationForm.submitted">
                                             <small [hidden]="!name.errors?.required">{{ 'Organization Name is required.' | translate }}</small>
+
+                                            <!-- TODO:YAG organizationUnique?
                                             <small [hidden]="organizationUnique">{{ 'A organizations with this name already exists.' | translate }}</small>
+                                            -->
                                         </div>
                                     </div>
                                 </form>
@@ -79,7 +82,9 @@
                             <i class="fa fa-fw fa-remove"></i> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
+                            <!-- TODO:YAG authUser?
                             <li><a (click)="leaveOrganization(authUser)" role="button">{{ 'Leave Organization' | translate }}</a></li>
+                            -->
                             <li><a (click)="removeOrganization()" role="button">{{ 'Delete Organization' | translate }}</a></li>
                         </ul>
                     </div>

@@ -15,7 +15,7 @@
                                         <label for="project-name">{{ 'Project Name' | translate }}</label>
                                         <div [ngClass]="{'input-group': !!projectForm.pending }">
                                             <input id="project-name" name="project-name" type="text" class="form-control" placeholder="Project Name"
-                                                   [(ngModel)]="project?.name"
+                                                   [(ngModel)]="project.name"
                                                    (input)="save(projectForm.valid)"
                                                    project-name-available-validator
                                                    #name="ngModel"
@@ -27,15 +27,18 @@
                                             </span>
                                         </div>
 
+                                        <!-- TODO:YAG: submitted?
                                         <div class="error" *ngIf="(name.invalid && (name.dirty || name.touched)) || submitted">
                                             <small [hidden]="!name.errors?.required">{{ 'Full Name is required.' | translate }}</small>
+                                            <! -- TODO:YAG: nameUnique?
                                             <small [hidden]="nameUnique">{{ 'A project with this name already exists.' | translate }}</small>
                                         </div>
+                                        -->
                                     </div>
 
                                     <div class="form-group m-b-none">
                                         <label for="organization-name">Organization Name</label>
-                                        <input type="text" class="form-control" id="organization-name" name="organization-name" placeholder="Organization Name" [(ngModel)]="project?.organization_name" readonly />
+                                        <input type="text" class="form-control" id="organization-name" name="organization-name" placeholder="Organization Name" [(ngModel)]="project.organization_name" readonly />
                                     </div>
 
                                     <div *ngIf="hasMonthlyUsage">
@@ -73,8 +76,10 @@
                                             </td>
                                             <td>
                                                 <form name="rowform" editable-form [hidden]="!editable[i]" class="form-buttons form-inline" #rowform="ngForm">
+                                                    <!-- TODO:YAG rowform?
                                                     <button type="submit" role="button" [disabled]="rowform.waiting" class="btn btn-sm btn-primary" (click)="saveApiKeyNote(token); editable[i] = false;">{{ 'Save' | translate }}</button>
                                                     <button type="button" role="button" [disabled]="rowform.waiting" (click)="editable[i] = false" class="btn btn-sm btn-default">{{ 'Cancel' | translate }}</button>
+                                                     -->
                                                 </form>
                                                 <div class="buttons" [hidden]="editable[i]">
                                                     <button type="button" role="button" class="btn btn-sm btn-primary" title="{{ 'Copy to Clipboard' | translate }}" clipboard text="token.id" on-copied="copied()" supported="clipboardSupported" [hidden]="!clipboardSupported"><i class="fa fa-copy"></i></button>
@@ -134,7 +139,7 @@
                                 <div class="checkbox">
                                     <label class="checks">
                                         <input type="checkbox"
-                                               [(ngModel)]="project?.delete_bot_data_enabled"
+                                               [(ngModel)]="project.delete_bot_data_enabled"
                                                (change)="saveDeleteBotDataEnabled()">
                                         <i></i>
                                         {{ 'Reduce noise by automatically hiding high volumes of events coming from a single client IP address.' | translate }}
@@ -205,7 +210,7 @@
                                         <div class="checkbox">
                                             <label class="checks">
                                                 <input type="checkbox"
-                                                       [(ngModel)]="slackNotificationSettings?.send_daily_summary"
+                                                       [(ngModel)]="slackNotificationSettings.send_daily_summary"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
                                                 {{ 'Send daily project summary' | translate }} <strong>{{ '(Coming soon!)' | translate }}</strong>
@@ -215,7 +220,7 @@
                                         <div class="checkbox">
                                             <label class="checks">
                                                 <input type="checkbox"
-                                                       [(ngModel)]="slackNotificationSettings?.report_new_errors"
+                                                       [(ngModel)]="slackNotificationSettings.report_new_errors"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
                                                 {{ 'Notify me on new errors' | translate }}
@@ -225,7 +230,7 @@
                                         <div class="checkbox">
                                             <label class="checks">
                                                 <input type="checkbox"
-                                                       [(ngModel)]="slackNotificationSettings?.report_critical_errors"
+                                                       [(ngModel)]="slackNotificationSettings.report_critical_errors"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
                                                 {{ 'Notify me on critical errors' | translate }}
@@ -235,7 +240,7 @@
                                         <div class="checkbox">
                                             <label class="checks">
                                                 <input type="checkbox"
-                                                       [(ngModel)]="slackNotificationSettings?.report_event_regressions"
+                                                       [(ngModel)]="slackNotificationSettings.report_event_regressions"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
                                                 {{ 'Notify me on error regressions' | translate }}
@@ -245,7 +250,7 @@
                                         <div class="checkbox">
                                             <label class="checks">
                                                 <input type="checkbox"
-                                                       [(ngModel)]="slackNotificationSettings?.report_new_events"
+                                                       [(ngModel)]="slackNotificationSettings.report_new_events"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
                                                 {{ 'Notify me on new events' | translate }}
@@ -255,7 +260,7 @@
                                         <div class="checkbox">
                                             <label class="checks">
                                                 <input type="checkbox"
-                                                       [(ngModel)]="slackNotificationSettings?.report_critical_events"
+                                                       [(ngModel)]="slackNotificationSettings.report_critical_events"
                                                        (input)="saveSlackNotificationSettings()">
                                                 <i></i>
                                                 {{ 'Notify me on critical events' | translate }}

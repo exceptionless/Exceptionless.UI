@@ -146,7 +146,9 @@ export class ProjectFilterComponent implements OnInit {
     }
 
     public getProjectsByOrganizationId(id): Project[] {
-        return this.projects.filter(project => project.organization_id === id);
+        return this.projects
+          ? this.projects.filter(project => project.organization_id === id)
+          : [];
     }
 
     public update() {

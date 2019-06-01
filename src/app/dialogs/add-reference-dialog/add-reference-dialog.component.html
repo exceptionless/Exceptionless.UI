@@ -1,15 +1,15 @@
 <div class="form-group">
-    <label for="url">{{ 'Reference Link' | translate }}</label>
-    <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Please enter a valid URL"
-           [(ngModel)]="data.url"
-           (ngModelChange)="setUrl($event)"
-           [required]="true"
-           type = "url"
-           #url="ngModel"
-           autofocus />
+  <label for="url">{{ 'Reference Link' | translate }}</label>
+  <input id="url" name="url" type="url" class="form-control input-lg" placeholder="Please enter a valid URL"
+         [(ngModel)]="data.url"
+         (ngModelChange)="setUrl($event)"
+         [required]="true"
+         type = "url"
+         #url="ngModel"
+         autofocus />
 
-    <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched)) || submitted">
-        <small [hidden]="!url.errors?.required">{{ 'Reference Link is required.' | translate }}</small>
-        <small [hidden]="!url.errors?.url">{{ 'Reference Link is required.' | translate }}</small>
-    </div>
+  <div class="error" *ngIf="(url.invalid && (url.dirty || url.touched)) || submitted">
+      <small [hidden]="!url.errors?.required">{{ 'Reference Link is required.' | translate }}</small>
+      <small [hidden]="!url.errors?.url">{{ 'Reference Link is required.' | translate }}</small>
+  </div>
 </div>

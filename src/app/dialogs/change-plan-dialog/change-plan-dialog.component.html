@@ -1,54 +1,54 @@
 <div>
-    <div class="alert alert-danger" role="alert" *ngIf="paymentMessage">
-        <i class="fa fa-exclamation-circle"></i>
-        {{paymentMessage}}
-    </div>
+  <div class="alert alert-danger" role="alert" *ngIf="paymentMessage">
+      <i class="fa fa-exclamation-circle"></i>
+      {{paymentMessage}}
+  </div>
 
-    <div class="form-group" *ngIf="organizations?.length > 1">
-        <label for="organization">{{'Organization to change' | translate}}</label>
-        <select id="organization" class="form-control" [(ngModel)]="currentOrganizationId" (ngModelChange)="changeOrganization(currentOrganizationId)" [disabled]="!isBillingEnabled()">
-            <option *ngFor="let item of organizations" value="{{item.id}}">{{item.name}}</option>
-        </select>
-    </div>
+  <div class="form-group" *ngIf="organizations?.length > 1">
+      <label for="organization">{{'Organization to change' | translate}}</label>
+      <select id="organization" class="form-control" [(ngModel)]="currentOrganizationId" (ngModelChange)="changeOrganization(currentOrganizationId)" [disabled]="!isBillingEnabled()">
+          <option *ngFor="let item of organizations" value="{{item.id}}">{{item.name}}</option>
+      </select>
+  </div>
 
-    <p [innerHTML] = "'Organization_Payment_Plan' | translate:{organization: currentOrganization?.name, planName: currentOrganization?.plan_name}"></p>
+  <p [innerHTML] = "'Organization_Payment_Plan' | translate:{organization: currentOrganization?.name, planName: currentOrganization?.plan_name}"></p>
 
-    <div class="form-group">
-        <label for="plan" [innerHTML]="'Payment_Select_New_Plan' | translate"></label>
+  <div class="form-group">
+      <label for="plan" [innerHTML]="'Payment_Select_New_Plan' | translate"></label>
 
-        <select id="plan" class="form-control" [(ngModel)]="currentPlanId" [disabled]="!isBillingEnabled()" (ngModelChange)="changePlanObject(currentPlanId)">
-            <option *ngFor="let item of plans" value="{{item.id}}">{{item.description}}</option>
-        </select>
-    </div>
+      <select id="plan" class="form-control" [(ngModel)]="currentPlanId" [disabled]="!isBillingEnabled()" (ngModelChange)="changePlanObject(currentPlanId)">
+          <option *ngFor="let item of plans" value="{{item.id}}">{{item.description}}</option>
+      </select>
+  </div>
 
-    <div *ngIf="isPaidPlan()">
-        <div *ngIf="!hasAdminRole()">
-            <h4>{{'Credit Card' | translate}}</h4>
-            <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions" (change)="cardUpdated($event)" (error)="error = $event"></ngx-stripe-card>
-            <div class="row">
-                <div class="form-group col-xs-12">
-                    <label for="cardName">{{'Name on card' | translate}}</label>
-                    <input id="cardName" type="text" class="form-control" placeholder="{{'Name on card' | translate}}"
-                           x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
-                           [(ngModel)]="card.name"
-                           [disabled]="!isBillingEnabled()"
-                           required />
-                </div>
-            </div>
-        </div>
+  <div *ngIf="isPaidPlan()">
+      <div *ngIf="!hasAdminRole()">
+          <h4>{{'Credit Card' | translate}}</h4>
+          <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions" (change)="cardUpdated($event)" (error)="error = $event"></ngx-stripe-card>
+          <div class="row">
+              <div class="form-group col-xs-12">
+                  <label for="cardName">{{'Name on card' | translate}}</label>
+                  <input id="cardName" type="text" class="form-control" placeholder="{{'Name on card' | translate}}"
+                         x-autocompletetype="full-name" autocapitalize="words" autocorrect="off" spellcheck="false"
+                         [(ngModel)]="card.name"
+                         [disabled]="!isBillingEnabled()"
+                         required />
+              </div>
+          </div>
+      </div>
 
-        <div class="form-group"  *ngIf="!hasExistingCard()">
-            <label for="couponId">{{'Coupon code' | translate}}</label>
-            <input id="couponId" type="text" class="form-control" placeholder="{{'Coupon code' | translate}}" [(ngModel)]="coupon" [disabled]="!isBillingEnabled()" />
-        </div>
-    </div>
+      <div class="form-group"  *ngIf="!hasExistingCard()">
+          <label for="couponId">{{'Coupon code' | translate}}</label>
+          <input id="couponId" type="text" class="form-control" placeholder="{{'Coupon code' | translate}}" [(ngModel)]="coupon" [disabled]="!isBillingEnabled()" />
+      </div>
+  </div>
 
-    <div *ngIf="isCancellingPlan()">
-        <p><strong>{{'Help us improve Exceptionless!' | translate}}</strong></p>
-        <p>
-            We hate to see you downgrade, but we'll be more than happy to take care of that for you.
-            Use the <a (click)="showIntercom()">Contact Us</a> button below to let us know why you're downgrading,
-            so we can serve you better in the future.
-        </p>
-    </div>
+  <div *ngIf="isCancellingPlan()">
+      <p><strong>{{'Help us improve Exceptionless!' | translate}}</strong></p>
+      <p>
+          We hate to see you downgrade, but we'll be more than happy to take care of that for you.
+          Use the <a (click)="showIntercom()">Contact Us</a> button below to let us know why you're downgrading,
+          so we can serve you better in the future.
+      </p>
+  </div>
 </div>

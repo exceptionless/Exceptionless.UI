@@ -5,6 +5,7 @@
     "auchenberg.vscode-browser-preview",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
-    "johnpapa.angular-essentials"
+    "johnpapa.angular-essentials",
+    "ghaschel.vscode-angular-html"
   ]
 }

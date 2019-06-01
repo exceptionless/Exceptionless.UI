@@ -10,7 +10,6 @@ import { Tab } from "../../event.component";
     selector: "app-event-tabs",
     templateUrl: "./event-tabs.component.html"
 })
-
 export class EventTabsComponent {
     // TODO: Is there away to dynamically load tab controls how we were doing it before?
     // TODO: There are a ton of made up properties on the event that should not be there......... We need to fix all these :\

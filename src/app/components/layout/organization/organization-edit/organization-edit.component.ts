@@ -191,7 +191,11 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
 
     private async getOrganization() {
         try {
-            this.organization = await this.organizationService.getById(this._organizationId);
+            const response: any = await this.organizationService.getById(this._organizationId);
+            console.log(response);
+            this.organization = response.data;
+            console.log(this.organization);
+
             const getRemainingEventLimit = (organization) => {
                 if (!organization.max_events_per_month) {
                     return 0;
