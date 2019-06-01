@@ -7,10 +7,7 @@ import { Observable } from "rxjs/Observable";
 import { WordTranslateService } from "./word-translate.service";
 import { ChangePasswordModel, TokenResult, ResetPasswordModel } from "../models/auth";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class AuthAccountService {
     constructor(
         private router: Router,
@@ -43,7 +40,10 @@ export class AuthAccountService {
     }
 
     public async isEmailAddressAvailable(email): Promise<boolean> {
-        const response: any = await this.http.get(`auth/check-email-address/${email}`).toPromise();
+        const response: any = this.http
+          .get(`auth/check-email-address/${email}`, { observe: 'response' })
+          .toPromise();
+
         return response.status === 204;
     }
 
