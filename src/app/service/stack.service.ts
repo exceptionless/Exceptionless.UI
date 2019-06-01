@@ -4,10 +4,7 @@ import { FilterService } from "./filter.service";
 import { Stack } from "../models/stack";
 import { WorkInProgressResult } from "../models/network";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class StackService {
     constructor(
         private http: HttpClient,

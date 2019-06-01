@@ -7,9 +7,7 @@ interface LastMessage {
     showTime: Date;
 }
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class NotificationService {
     private _lastMessages: LastMessage[];
 

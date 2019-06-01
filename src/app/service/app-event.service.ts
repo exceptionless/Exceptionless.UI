@@ -4,9 +4,7 @@ import { NextObserver } from "rxjs/Observer";
 import { Subscription } from "rxjs/Subscription";
 import { TypedMessage } from "../models/messaging";
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class AppEventService {
     private _eventEmitter = new Subject();
 

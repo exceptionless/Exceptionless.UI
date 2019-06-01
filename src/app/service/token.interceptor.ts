@@ -10,7 +10,7 @@ import { throwError, EMPTY } from "rxjs";
 import { NotificationService } from "./notification.service";
 import { StatusService } from "./status.service";
 
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class TokenInterceptor implements HttpInterceptor {
     constructor(
         private auth: AuthService,

@@ -99,9 +99,7 @@ class ResilientWebSocket {
     }
   }
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class WebsocketService {
     private _connection: ResilientWebSocket;
     private _websocketTimeout;

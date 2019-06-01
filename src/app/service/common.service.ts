@@ -1,12 +1,8 @@
 import { Injectable } from "@angular/core";
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class CommonService {
-
-    constructor() {
-    }
+    constructor() {}
 
     public parseExpiry(value: string) {
         let month: string | number;

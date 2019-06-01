@@ -4,10 +4,7 @@ import { Observable } from "rxjs/Observable";
 import { User, UpdateEmailAddressResult, CurrentUser } from "../models/user";
 import { WorkInProgressResult, SuccessResult } from "../models/network";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class UserService {
     constructor(private http: HttpClient) {}
 

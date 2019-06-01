@@ -15,11 +15,8 @@ import { AppEventService } from "./app-event.service";
 import { $ExceptionlessClient } from "../exceptionlessclient";
 import { FormSubmitted } from "../models/messaging";
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class DialogService {
-
     constructor(
         private modalDialogService: ModalDialogService,
         private wordTranslateService: WordTranslateService,

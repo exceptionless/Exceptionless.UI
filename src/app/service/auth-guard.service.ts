@@ -3,10 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { AuthService } from "ng2-ui-auth";
 import { Observable } from "rxjs/Observable";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class AuthGuardService implements CanActivate {
     constructor(
         private authService: AuthService,

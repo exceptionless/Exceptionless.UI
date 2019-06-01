@@ -116,13 +116,13 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
       return !message;
     }
 
-    async get(options?: GetEventsParameters, isRefresh?: boolean) {
+    public async get(options?: GetEventsParameters, isRefresh?: boolean) {
         if (isRefresh && !this.canRefresh()) { // TODO: This is messed up, refresh is only ever supposed to take an entity changed type.
             return;
         }
 
         const onSuccess = async (response, link) => {
-            this.events = response
+            this.events = response;
 
             if (this.selectedIds) {
                 this.selectedIds = this.selectedIds.filter(id => {
@@ -140,6 +140,7 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
                 return await this.get();
             }
         };
+
         this.loading = true;
         this.currentOptions = options || this.settings.options;
 

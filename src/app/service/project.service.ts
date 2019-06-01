@@ -3,10 +3,7 @@ import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Project, NewProject, ClientConfiguration, NotificationSettings } from "../models/project";
 import { WorkInProgressResult } from "../models/network";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class ProjectService {
     constructor(
         private http: HttpClient,

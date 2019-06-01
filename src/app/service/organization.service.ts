@@ -12,11 +12,7 @@ export interface GetInvoiceParameters {
     after?: string;
 }
 
-
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class OrganizationService {
     constructor(
         private http: HttpClient, // TODO: Caching...

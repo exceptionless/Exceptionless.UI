@@ -3,9 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { NewWebHook, WebHook } from "../models/webhook";
 import { WorkInProgressResult } from "../models/network";
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class WebHookService {
     constructor(private http: HttpClient) {}
 

@@ -1,11 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Angulartics2 } from 'angulartics2';
+import { Angulartics2 } from "angulartics2";
 import { Locker, DRIVERS } from "angular-safeguard";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class AnalyticsService {
     constructor(
         private locker: Locker,

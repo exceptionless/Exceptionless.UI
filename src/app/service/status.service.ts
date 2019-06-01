@@ -2,10 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { AboutResult } from "../models/network";
 
-
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class StatusService {
 
     constructor(

@@ -1,10 +1,7 @@
 import { Injectable } from "@angular/core";
 import ObjectID from "bson-objectid";
 
-@Injectable({
-  providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class ObjectIdService {
   constructor() {}
 

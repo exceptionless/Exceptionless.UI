@@ -2,9 +2,7 @@ import { Injectable } from "@angular/core";
 import { Locker, DRIVERS } from "angular-safeguard";
 import { Router } from "@angular/router";
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class StateService {
 
     constructor(

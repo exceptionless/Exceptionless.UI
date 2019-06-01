@@ -20,10 +20,7 @@ export interface GetEventParameters {
     after?: string;
 }
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class EventService {
     constructor(
         private http: HttpClient,

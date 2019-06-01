@@ -9,10 +9,7 @@ export interface StackAction {
     run(ids: string[], viewRef: ViewContainerRef, callback: () => void): Promise<void>;
 }
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class StacksActionsService {
     private markFixedAction: StackAction = {
         name: "Mark Fixed",

@@ -3,10 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
 import { QueryProcessResult } from "../models/network";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class SearchService {
     constructor(
         private http: HttpClient,

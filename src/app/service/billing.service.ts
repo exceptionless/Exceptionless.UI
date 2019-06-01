@@ -3,12 +3,8 @@ import { AnalyticsService } from "./analytics.service";
 import { DialogService } from "./dialog.service";
 import { $ExceptionlessClient } from "../exceptionlessclient";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class BillingService {
-
     private source = "exceptionless.billing.billingService";
 
     constructor(

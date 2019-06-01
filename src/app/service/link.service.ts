@@ -1,10 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as li from "li";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class LinkService {
     constructor() {}
 

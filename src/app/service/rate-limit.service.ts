@@ -1,8 +1,6 @@
 import {Injectable} from "@angular/core";
 
-@Injectable({
-    providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class RateLimitService {
     private _rateLimit: number = -1;
     private _rateLimitExceeded: boolean = false;

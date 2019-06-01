@@ -7,7 +7,7 @@ import * as moment from "moment";
 import { Moment } from "moment"; // TODO Fix moment
 import { FilterChanged } from "../models/messaging";
 
-@Injectable()
+@Injectable({ providedIn: "root" })
 
 export class FilterService implements OnInit {
     DEFAULT_TIME_FILTER = "last week";

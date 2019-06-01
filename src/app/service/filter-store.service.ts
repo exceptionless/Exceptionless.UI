@@ -3,10 +3,7 @@ import {DRIVERS, Locker} from "angular-safeguard";
 import {AppEventService} from "./app-event.service";
 import { FilterChanged } from "../models/messaging";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class FilterStoreService {
     private timeFilterEventFire: EventEmitter<string>  = new EventEmitter();
     private projectFilterEventFire: EventEmitter<{ type: string, id: string }>  = new EventEmitter();

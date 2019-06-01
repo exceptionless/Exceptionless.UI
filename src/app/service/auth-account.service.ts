@@ -41,7 +41,7 @@ export class AuthAccountService {
 
     public async isEmailAddressAvailable(email): Promise<boolean> {
         const response: any = this.http
-          .get(`auth/check-email-address/${email}`, { observe: 'response' })
+          .get(`auth/check-email-address/${email}`, { observe: "response" })
           .toPromise();
 
         return response.status === 204;

@@ -3,10 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Token, NewToken } from "../models/token";
 import { WorkInProgressResult } from "../models/network";
 
-@Injectable({
-    providedIn: "root"
-})
-
+@Injectable({ providedIn: "root" })
 export class TokenService {
     constructor(
         private http: HttpClient

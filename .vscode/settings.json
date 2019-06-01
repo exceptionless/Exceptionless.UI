@@ -43,6 +43,7 @@
     "daterangepicker",
     "devkit",
     "gravatar",
+    "hbox",
     "jasminewd",
     "nomadreservations",
     "objectid",
@@ -51,7 +52,8 @@
     "toastr",
     "tslib",
     "twix",
-    "webhook"
+    "webhook",
+    "webhooks"
   ],
 
   "git.ignoreLimitWarning": true
