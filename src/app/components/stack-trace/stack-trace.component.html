@@ -1,5 +1,5 @@
 <div class="pull-right m-t-xs hidden-print">
-    <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()"[hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Stack Trace to Clipboard' | translate }}"></a>
+  <a ngxClipboard [cbContent]="textStackTrace" (cbOnSuccess)="copied()"[hidden]="!(textStackTrace && clipboardSupported)" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Stack Trace to Clipboard' | translate }}"></a>
 </div>
 <h3 *ngIf="!isOverview">{{ 'Stack Trace' | translate }}</h3>
 <h4 *ngIf="isOverview">{{ 'Stack Trace' | translate }}</h4>

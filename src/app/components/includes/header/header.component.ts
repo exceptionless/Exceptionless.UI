@@ -13,11 +13,11 @@ import { CurrentUser } from "src/app/models/user";
     selector: "app-header",
     templateUrl: "./header.component.html"
 })
-
 export class HeaderComponent implements OnInit {
     @Output() navigationCollapseToggle: EventEmitter<null> = new EventEmitter();
     @Output() showResponsiveSideToggle: EventEmitter<null> = new EventEmitter();
     @Output() showResponsiveNavToggle: EventEmitter<null> = new EventEmitter();
+
     public user: CurrentUser;
     public gravatarStyle = {
         "border-style": "solid",

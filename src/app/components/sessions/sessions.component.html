@@ -1,50 +1,50 @@
 <div class="table-responsive" appRefreshOn  [refreshOn]="'FilterChanged'" (refreshAction)="get()">
-    <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable"
-           appRefreshOn [refreshOn]="'StackChanged PlanChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
-        <thead appRefreshOn [refreshOn]="'PersistentEventChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
-            <tr>
-                <th>{{ 'Summary' | translate }}</th>
-                <th class="date">{{ 'Created' | translate }}</th>
-                <th class="date">{{ 'Duration' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="row-clickable" *ngFor="let event of events">
-                <td (click)="open(event.id, $event)">
-                    <div>
-                        <span *ngIf="event.data && !event.data.SessionEnd" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
-                        <app-summary [source]="event" [showType]="showType"></app-summary>
-                    </div>
-                </td>
-                <td (click)="open(event.id, $event)"><abbr title="{{ event.date }}">
-                    <app-timeago [date]="event.date"></app-timeago>
-                </abbr></td>
-                <td (click)="open(event.id, $event)"><abbr title="{{ event.duration }} seconds">
-                    <app-duration [value]="getDuration(event)"></app-duration>
-                </abbr></td>
-            </tr>
+  <table class="table table-striped table-bordered table-selectable table-fixed b-t table-hover table-clickable"
+         appRefreshOn [refreshOn]="'StackChanged PlanChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
+      <thead appRefreshOn [refreshOn]="'PersistentEventChanged'" (refreshAction)="get(currentOptions, $event)" [refreshThrottle]="10000">
+          <tr>
+              <th>{{ 'Summary' | translate }}</th>
+              <th class="date">{{ 'Created' | translate }}</th>
+              <th class="date">{{ 'Duration' | translate }}</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="row-clickable" *ngFor="let event of events">
+              <td (click)="open(event.id, $event)">
+                  <div>
+                      <span *ngIf="event.data && !event.data.SessionEnd" class="glyphicon glyphicon-one-fine-dot glyphicon-green" title="Online"></span>
+                      <app-summary [source]="event" [showType]="showType"></app-summary>
+                  </div>
+              </td>
+              <td (click)="open(event.id, $event)"><abbr title="{{ event.date }}">
+                  <app-timeago [date]="event.date"></app-timeago>
+              </abbr></td>
+              <td (click)="open(event.id, $event)"><abbr title="{{ event.duration }} seconds">
+                  <app-duration [value]="getDuration(event)"></app-duration>
+              </abbr></td>
+          </tr>
 
-            <tr *ngIf="events.length === 0 || loading">
-                <td colspan="3">
-                    <strong *ngIf="loading">Loading...</strong>
-                    <strong *ngIf="!loading">{{ hasFilter() ? 'No sessions were found with the current filter.': 'No sessions were found.' | translate }}</strong>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+          <tr *ngIf="events.length === 0 || loading">
+              <td colspan="3">
+                  <strong *ngIf="loading">Loading...</strong>
+                  <strong *ngIf="!loading">{{ hasFilter() ? 'No sessions were found with the current filter.': 'No sessions were found.' | translate }}</strong>
+              </td>
+          </tr>
+      </tbody>
+  </table>
 
-    <div class="table-footer">
-        <div class="row">
-            <div class="text-center" [ngClass]="previous || next ? 'col-sm-8 col-xs-8': 'col-sm-12 col-xs-12'" *ngIf="pageSummary">
-                <small class="text-muted inline m-t-xs">{{ pageSummary }}</small>
-            </div>
-            <div class="col-sm-4 col-xs-4 text-right" *ngIf="previous || next">
-                <ul class="pagination pagination-sm m-t-none m-b-none">
-                    <li [hidden]="!(currentOptions.page && currentOptions.page > 2)"><a (click)="get()"><i class="fa fa-fast-backward"></i></a></li>
-                    <li [ngClass]="{'disabled': !previous}"><a [attr.disabled]="!previous" (click)="!previous || previousPage()"><i class="fa fa-chevron-left"></i></a></li>
-                    <li [ngClass]="{'disabled': !next}"><a [attr.disabled]="!next" (click)="!next || nextPage()"><i class="fa fa-chevron-right"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+  <div class="table-footer">
+      <div class="row">
+          <div class="text-center" [ngClass]="previous || next ? 'col-sm-8 col-xs-8': 'col-sm-12 col-xs-12'" *ngIf="pageSummary">
+              <small class="text-muted inline m-t-xs">{{ pageSummary }}</small>
+          </div>
+          <div class="col-sm-4 col-xs-4 text-right" *ngIf="previous || next">
+              <ul class="pagination pagination-sm m-t-none m-b-none">
+                  <li [hidden]="!(currentOptions.page && currentOptions.page > 2)"><a (click)="get()"><i class="fa fa-fast-backward"></i></a></li>
+                  <li [ngClass]="{'disabled': !previous}"><a [attr.disabled]="!previous" (click)="!previous || previousPage()"><i class="fa fa-chevron-left"></i></a></li>
+                  <li [ngClass]="{'disabled': !next}"><a [attr.disabled]="!next" (click)="!next || nextPage()"><i class="fa fa-chevron-right"></i></a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
 </div>

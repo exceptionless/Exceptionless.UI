@@ -131,7 +131,7 @@ export class StackComponent implements OnInit, OnDestroy {
             mode: "summary"
         }
     };
-    private stack: Stack;
+    stack: Stack;
     public stats = {
         count: 0,
         users: this.buildUserStat(0, 0),

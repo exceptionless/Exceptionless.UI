@@ -192,6 +192,7 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
     private async getOrganization() {
         try {
             const response: any = await this.organizationService.getById(this._organizationId);
+            console.log(response);
             this.organization = response.data;
             console.log(this.organization);
 
