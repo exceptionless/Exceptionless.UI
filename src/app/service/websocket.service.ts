@@ -122,7 +122,7 @@ export class WebsocketService {
     }
 
     startImpl() {
-        this._connection = new ResilientWebSocket(this.getPushUrl(), null);
+        this._connection = new ResilientWebSocket(this.getPushUrl());
         this._connection.onmessage = (ev: MessageEvent) => {
             const data: TypedMessage = ev.data ? JSON.parse(ev.data) : null;
             if (!data || !data.type) {
