@@ -7,7 +7,7 @@ import { EventService } from "../../../service/event.service";
 import { StackService } from "../../../service/stack.service";
 import { OrganizationService } from "../../../service/organization.service";
 import { NotificationService } from "../../../service/notification.service";
-import { $ExceptionlessClient } from "../../../exceptionlessclient";
+import { $ExceptionlessClient } from "../../../exceptionless-client";
 import { formatNumber } from "@angular/common";
 import { ThousandSuffixPipe } from "../../../pipes/thousand-suffix.pipe";
 import { AppEventService } from "../../../service/app-event.service";
@@ -168,7 +168,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         try {
             await this.getOrganizations();
             await this.getStats();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
@@ -187,7 +189,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         try {
             this.organizations = (await this.organizationService.getAll()).body;
         } catch (ex) {
-            this.notificationService.error("", "Error Occurred!");
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", "Error Occurred!");
         }
     }
 

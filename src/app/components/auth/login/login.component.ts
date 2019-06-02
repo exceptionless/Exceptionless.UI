@@ -4,7 +4,7 @@ import { AuthService } from "ng2-ui-auth";
 import { NotificationService } from "../../../service/notification.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
 import { FilterService } from "../../../service/filter.service";
-import { $ExceptionlessClient } from "../../../exceptionlessclient";
+import { $ExceptionlessClient } from "../../../exceptionless-client";
 import { LoginModel } from "src/app/models/auth";
 
 export class ExternalLoginEnabled {
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
             await this.redirectOnLogin();
         } catch (ex) {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.authenticate.error`).setProperty("error", ex).addTags(provider).submit();
-            this.notificationService.error("", await this.wordTranslateService.translate("Loggin_Failed_Message"));
+            this.notificationService.error("", await this.wordTranslateService.translate("Login_Failed_Message"));
         }
     }
 
@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
             await this.redirectOnLogin();
         } catch (ex) {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.login.error`).setUserIdentity(this.model.email).submit();
-            this.notificationService.error("", await this.wordTranslateService.translate("Loggin_Failed_Message"));
+            this.notificationService.error("", await this.wordTranslateService.translate("Login_Failed_Message"));
         }
     }
 }

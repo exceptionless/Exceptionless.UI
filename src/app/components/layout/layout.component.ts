@@ -3,6 +3,7 @@ import { WebsocketService } from "../../service/websocket.service";
 import { Router, NavigationEnd } from "@angular/router";
 import { StatusService } from "../../service/status.service";
 import { AboutResult } from "src/app/models/network";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-layout",
@@ -20,11 +21,11 @@ export class LayoutComponent implements OnInit {
         private router: Router,
         private statusService: StatusService
     ) {
-        this.router.events.subscribe((val) => {
-            if ((val instanceof NavigationEnd) && this.router.url === "/") {
-                this.router.navigate(["/dashboard"]);
-            }
-        });
+      this.router.events.subscribe((val) => {
+        if ((val instanceof NavigationEnd) && this.router.url === "/") {
+          this.router.navigate(["/dashboard"]);
+        }
+      });
     }
 
     public async ngOnInit() {
@@ -34,10 +35,10 @@ export class LayoutComponent implements OnInit {
 
     public async getServerVersionNumber() {
         try {
-            const result: AboutResult = await this.statusService.get();
-            this.apiVersionNumber = result.informational_version.split("+")[0];
+          const result: AboutResult = await this.statusService.get();
+          this.apiVersionNumber = result.informational_version.split("+")[0];
         } catch (ex) {
-            debugger;
+          $ExceptionlessClient.submitException(ex);
         }
     }
 

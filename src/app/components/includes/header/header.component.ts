@@ -8,7 +8,7 @@ import { AppEventService } from "../../../service/app-event.service";
 import { Intercom } from "ng-intercom";
 import { FilterStoreService } from "../../../service/filter-store.service";
 import { CurrentUser } from "src/app/models/user";
-import { $ExceptionlessClient } from "src/app/exceptionlessclient";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-header",
@@ -60,7 +60,8 @@ export class HeaderComponent implements OnInit {
             this.filterStoreService.removeProjectName();
             this.router.navigate(["/login"]);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         }
     }
 
@@ -70,7 +71,8 @@ export class HeaderComponent implements OnInit {
             // this.appEvent.fireEvent({type: "UPDATE_USER"}); // TODO: Why is this here.
             $ExceptionlessClient.config.setUserIdentity({ identity: this.user.email_address, name: this.user.full_name, data: { user: this.user }});
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         }
     }
 

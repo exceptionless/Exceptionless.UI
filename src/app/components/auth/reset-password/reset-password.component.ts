@@ -4,6 +4,7 @@ import { AuthAccountService } from "../../../service/auth-account.service";
 import { NotificationService } from "../../../service/notification.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
 import { ResetPasswordModel } from "src/app/models/auth";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-reset-password",
@@ -43,7 +44,8 @@ export class ResetPasswordComponent implements OnInit {
             this.notificationService.info("", await this.wordTranslateService.translate("You have successfully changed your password."));
             await this.router.navigate(["/login"]);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to change your password."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to change your password."));
         }
     }
 
@@ -52,7 +54,8 @@ export class ResetPasswordComponent implements OnInit {
             await this.authAccountService.cancelResetPassword(this.model.password_reset_token);
             await this.router.navigate(["/login"]);
         } catch (ex) {
-            await this.router.navigate(["/login"]);
+          $ExceptionlessClient.submitException(ex);
+          await this.router.navigate(["/login"]);
         }
     }
 }

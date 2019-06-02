@@ -8,6 +8,7 @@ import { WordTranslateService } from "../../service/word-translate.service";
 import * as moment from "moment";
 import { PersistentEvent } from "src/app/models/event";
 import { EntityChanged, ChangeType } from "src/app/models/messaging";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-sessions-replace-me-with-app-events",
@@ -93,7 +94,8 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
                 return await this.get();
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {
             this.loading = false;
         }
@@ -109,7 +111,7 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
     }
 
     public open(id: string, event: MouseEvent) {
-        const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        const openInNewTab = (event.ctrlKey || event.metaKey);
         if (openInNewTab) {
             window.open(`/event/${id}`, "_blank");
         } else {

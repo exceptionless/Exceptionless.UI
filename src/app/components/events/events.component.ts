@@ -12,6 +12,7 @@ import { Subscription } from "rxjs";
 import { TypedMessage, EntityChanged, ChangeType } from "src/app/models/messaging";
 import { GetEventParameters as GetEventsParameters } from "src/app/service/event.service";
 import { HttpResponse } from "@angular/common/http";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 export interface EventsSettings {
     relativeTo: Date;
@@ -146,7 +147,8 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
                   return await this.get();
               }
             } catch (ex) {
-                this.notificationService.error("", "Error Occurred!");
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", "Error Occurred!");
             } finally {
                 this.loading = false;
             }
@@ -162,7 +164,7 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     public open(id: string, event: MouseEvent) {
-        const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        const openInNewTab = (event.ctrlKey || event.metaKey);
         if (openInNewTab) {
             window.open(`/event/${id}`, "_blank");
         } else {

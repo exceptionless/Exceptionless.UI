@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { ProjectService } from "../../../../service/project.service";
 import { Subscription } from "rxjs";
 import { Project } from "src/app/models/project";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 interface ProjectType {
     key: string;
@@ -76,7 +77,8 @@ export class ProjectConfigureComponent implements OnInit, OnDestroy {
             const token = await this.tokenService.getProjectDefault(this._projectId);
             this.apiKey = token.id;
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while getting the API key for your project."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while getting the API key for your project."));
         }
     }
 
@@ -85,8 +87,9 @@ export class ProjectConfigureComponent implements OnInit, OnDestroy {
             this.project = await this.projectService.getById(this._projectId);
             this.projectName = this.project.name ? ("\"" + this.project.name + "\"") : "";
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Project"));
-            await this.router.navigate(["/dashboard"]);
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Project"));
+          await this.router.navigate(["/dashboard"]);
         }
     }
 

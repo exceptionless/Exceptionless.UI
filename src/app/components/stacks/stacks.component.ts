@@ -12,6 +12,7 @@ import { Subscription } from "rxjs";
 import { Stack } from "src/app/models/stack";
 import { EntityChanged, TypedMessage } from "src/app/models/messaging";
 import { HttpResponse } from "@angular/common/http";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-stacks",
@@ -113,7 +114,8 @@ export class StacksComponent implements OnChanges, OnInit, OnDestroy {
               return;
             }
         } catch (ex) {
-            this.notificationService.error("", "Error Occurred!");
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", "Error Occurred!");
         } finally {
             this.loading = false;
         }
@@ -154,7 +156,7 @@ export class StacksComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     public open(id: string, event: MouseEvent) {
-        const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        const openInNewTab = (event.ctrlKey || event.metaKey);
         if (openInNewTab) {
             window.open(`/stack/${id}`, "_blank");
         } else {

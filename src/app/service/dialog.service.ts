@@ -12,7 +12,7 @@ import { AddWebHookDialogComponent } from "../dialogs/add-web-hook-dialog/add-we
 import { AddOrganizationDialogComponent } from "../dialogs/add-organization-dialog/add-organization-dialog.component";
 import { CustomDateRangeDialogComponent } from "../dialogs/custom-date-range-dialog/custom-date-range-dialog.component";
 import { AppEventService } from "./app-event.service";
-import { $ExceptionlessClient } from "../exceptionlessclient";
+import { $ExceptionlessClient } from "../exceptionless-client";
 import { FormSubmitted } from "../models/messaging";
 
 @Injectable({ providedIn: "root" })

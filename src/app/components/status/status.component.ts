@@ -7,6 +7,7 @@ import { AuthService } from "ng2-ui-auth";
 import { StateService } from "../../service/state.service";
 import { timer } from "rxjs";
 import { AboutResult } from "src/app/models/network";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-status",
@@ -36,7 +37,7 @@ export class StatusComponent implements OnInit {
         this.contactSupport = await this.wordTranslateService.translate("Please contact support for more information.");
         this.message = await this.getMessage();
 
-        timer(0, 30 * 1000).subscribe(val => { // TODO: I notice we subscribe in a lot of places. Are we destorying these subscriptions everywhere?
+        timer(0, 30 * 1000).subscribe(val => { // TODO: I notice we subscribe in a lot of places. Are we destroying these subscriptions everywhere?
             this.updateStatus();
         });
     }
@@ -65,7 +66,8 @@ export class StatusComponent implements OnInit {
 
             updateMessage(response);
         } catch (ex) {
-            updateMessage();
+          $ExceptionlessClient.submitException(ex);
+          updateMessage();
         }
     }
 

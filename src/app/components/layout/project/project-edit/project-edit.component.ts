@@ -20,6 +20,7 @@ import { Token, NewToken } from "src/app/models/token";
 import { EntityChanged, ChangeType } from "src/app/models/messaging";
 import { WebHook } from "src/app/models/webhook";
 import { NgForm } from "@angular/forms";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-project-edit",
@@ -107,7 +108,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
     public config: {key: string, value: string, is_editable: boolean}[];
     public commonMethods: string;
     public dataExclusions: string;
-    public hasMonthlyUsage : boolean= true;
+    public hasMonthlyUsage: boolean = true;
     public hasPremiumFeatures: boolean = false;
     public isSlackEnabled: boolean = !!environment.SLACK_APPID;
     public nextBillingDate: Date = moment().startOf("month").add(1, "months").toDate();
@@ -165,7 +166,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         try {
             this.projectService.setConfig(this._projectId, data.key, data.value);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the configuration setting."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the configuration setting."));
         }
     }
 
@@ -184,7 +186,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             await this.projectService.addSlack(this._projectId);
             this.notificationService.success("", await this.wordTranslateService.translate("Successfully added"));
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while adding Slack to your project."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while adding Slack to your project."));
         }
     }
 
@@ -198,7 +201,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             const res = await this.tokenService.create(mewToken);
             this.tokens.push(res);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while creating a new API key for your project."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while creating a new API key for your project."));
         }
     }
 
@@ -246,7 +250,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             await this.getSlackNotificationSettings();
             await this.getWebHooks();
         } catch (ex) {
-            await this.router.navigate(["/project/list"]);
+          $ExceptionlessClient.submitException(ex);
+          await this.router.navigate(["/project/list"]);
         }
     }
 
@@ -313,8 +318,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 })
             });
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Organization", {organizationId: this.project.organization_id}));
-            throw ex;
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Organization", {organizationId: this.project.organization_id}));
+          throw ex;
         }
     }
 
@@ -332,8 +338,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
 
             this.project.usage = this.project.usage || [{ date: moment.utc().startOf("month").toISOString(), total: 0, blocked: 0, limit: 3000, too_big: 0 }];
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Project", {projectId: this._projectId}));
-            throw ex;
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Project", {projectId: this._projectId}));
+          throw ex;
         }
     }
 
@@ -344,8 +351,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 this.editable[key] = false;
             });
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the api keys."));
-            throw ex;
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the api keys."));
+          throw ex;
         }
     }
 
@@ -370,8 +378,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             });
 
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the notification settings."));
-            throw ex;
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the notification settings."));
+          throw ex;
         }
     }
 
@@ -383,7 +392,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 await this.projectService.removeConfig(this._projectId, "@@IncludePrivateInformation");
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the include private information setting."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the include private information setting."));
         }
     }
 
@@ -392,8 +402,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         try {
             this.slackNotificationSettings = await this.projectService.getIntegrationNotificationSettings(this._projectId, "slack");
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while loading the slack notification settings."));
-            throw ex;
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while loading the slack notification settings."));
+          throw ex;
         }
     }
 
@@ -401,8 +412,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         try {
             this.webHooks = await this.webHookService.getByProjectId(this._projectId);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the notification settings."));
-            throw ex;
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred loading the notification settings."));
+          throw ex;
         }
     }
 
@@ -411,8 +423,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             try {
                 await this.projectService.removeConfig(this._projectId, config.key);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the configuration setting."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the configuration setting."));
+              throw ex;
             }
         };
 
@@ -426,9 +439,10 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 await this.projectService.remove(this._projectId);
                 await this.router.navigate(["/project/list"]);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the project."));
-                this._ignoreRefresh = false;
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the project."));
+              this._ignoreRefresh = false;
+              throw ex;
             }
         };
 
@@ -440,8 +454,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             try {
                 await this.projectService.removeSlack(this._projectId);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove slack."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove slack."));
+              throw ex;
             }
         };
 
@@ -453,8 +468,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             try {
                 await this.tokenService.remove(token.id);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the API Key."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the API Key."));
+              throw ex;
             }
         };
 
@@ -466,8 +482,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             try {
                 await this.webHookService.remove(hook.id);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the web hook."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the web hook."));
+              throw ex;
             }
         };
 
@@ -479,8 +496,9 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
             try {
                 await this.projectService.resetData(this._projectId);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while resetting project data."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while resetting project data."));
+              throw ex;
             }
         };
 
@@ -495,7 +513,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
         try {
             await this.projectService.update(this._projectId, this.project);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the project."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the project."));
         }
     }
 
@@ -515,7 +534,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 await this.projectService.removeData(this._projectId, "CommonMethods");
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the common methods."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the common methods."));
         }
     }
 
@@ -547,7 +567,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 await this.projectService.removeConfig(this._projectId, "@@UserAgentBotPatterns");
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the user agents."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the user agents."));
         }
     }
 
@@ -559,7 +580,8 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                 await this.projectService.removeData(this._projectId, "UserNamespaces");
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the user namespaces."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the user namespaces."));
         }
     }
 
@@ -573,6 +595,7 @@ export class ProjectEditComponent implements OnInit, OnDestroy {
                         return this.saveSlackNotificationSettings();
                     });
                 } catch (ex) {
+                    $ExceptionlessClient.submitException(ex);
                     return this.getSlackNotificationSettings();
                 }
             }

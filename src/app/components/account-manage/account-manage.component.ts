@@ -13,6 +13,7 @@ import { Project, NotificationSettings } from "src/app/models/project";
 import { ChangePasswordModel } from "src/app/models/auth";
 import { CurrentUser, User, OAuthAccount } from "src/app/models/user";
 import { EntityChanged, ChangeType } from "src/app/models/messaging";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-account-manage",
@@ -71,8 +72,9 @@ export class AccountManageComponent implements OnInit {
         try {
             await this.authService.authenticate(provider).toPromise();
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while adding external login.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while adding external login.");
+          this.notificationService.error("", message);
         }
     }
 
@@ -90,8 +92,9 @@ export class AccountManageComponent implements OnInit {
             this.confirmPassword = null;
             form.reset(true);
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while trying to change your password.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while trying to change your password.");
+          this.notificationService.error("", message);
         }
 
         this.submitted = false;
@@ -107,7 +110,9 @@ export class AccountManageComponent implements OnInit {
             await this.getUser();
             await this.getProjects();
             await this.getEmailNotificationSettings();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     public async getEmailNotificationSettings() {
@@ -119,7 +124,8 @@ export class AccountManageComponent implements OnInit {
         try {
             this.emailNotificationSettings = await this.projectService.getNotificationSettings(this.currentProject.id, this.user.id);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while loading the notification settings."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while loading the notification settings."));
         }
     }
 
@@ -141,7 +147,8 @@ export class AccountManageComponent implements OnInit {
 
             this.hasPremiumFeatures = this.currentProject && this.currentProject.has_premium_features;
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while loading the projects."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while loading the projects."));
         }
     }
 
@@ -151,8 +158,9 @@ export class AccountManageComponent implements OnInit {
             this.user.o_auth_accounts = this.user.o_auth_accounts || [];
             this.hasLocalAccount = this.user.has_local_account === true;
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while loading your user profile.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while loading your user profile.");
+          this.notificationService.error("", message);
         }
     }
 
@@ -163,7 +171,8 @@ export class AccountManageComponent implements OnInit {
                 this.notificationService.success("", await this.wordTranslateService.translate("Successfully removed your user account."));
                 this.authAccountService.logout();
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying remove your user account."));
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying remove your user account."));
             }
         };
 
@@ -197,8 +206,9 @@ export class AccountManageComponent implements OnInit {
         try {
             await this.userService.resendVerificationEmail(this.user.id);
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while sending your verification email.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while sending your verification email.");
+          this.notificationService.error("", message);
         }
     }
 
@@ -226,8 +236,9 @@ export class AccountManageComponent implements OnInit {
             this.user.is_email_address_verified = response.is_verified;
             this._canSaveEmailAddress = true;
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while saving your email address.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while saving your email address.");
+          this.notificationService.error("", message);
         }
     }
 
@@ -235,8 +246,9 @@ export class AccountManageComponent implements OnInit {
         try {
             await this.projectService.setNotificationSettings(this.currentProject.id, this.user.id, this.emailNotificationSettings);
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while saving your notification settings.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while saving your notification settings.");
+          this.notificationService.error("", message);
         }
     }
 
@@ -244,8 +256,9 @@ export class AccountManageComponent implements OnInit {
         try {
             await this.userService.update(this.user.id, { email_notifications_enabled: this.user.email_notifications_enabled } as User);
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while saving your email notification preferences.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while saving your email notification preferences.");
+          this.notificationService.error("", message);
         }
     }
 
@@ -257,8 +270,9 @@ export class AccountManageComponent implements OnInit {
         try {
             await this.userService.update(this.user.id, this.user);
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while saving your full name.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while saving your full name.");
+          this.notificationService.error("", message);
         }
     }
 
@@ -271,8 +285,9 @@ export class AccountManageComponent implements OnInit {
             await this.authService.unlink(account.provider, account.provider_user_id).toPromise();
             this.user.o_auth_accounts.splice(this.user.o_auth_accounts.indexOf(account), 1);
         } catch (ex) {
-            const message = await this.wordTranslateService.translate("An error occurred while removing the external login.");
-            this.notificationService.error("", message);
+          $ExceptionlessClient.submitException(ex);
+          const message = await this.wordTranslateService.translate("An error occurred while removing the external login.");
+          this.notificationService.error("", message);
         }
     }
 }

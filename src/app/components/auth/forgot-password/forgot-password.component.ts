@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { NotificationService } from "../../../service/notification.service";
 import { AuthAccountService } from "../../../service/auth-account.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-forgot-password",
@@ -32,7 +33,8 @@ export class ForgotPasswordComponent implements OnInit {
             this.notificationService.info("", await this.wordTranslateService.translate("ResetPassword_Success_Message"));
             return this.router.navigate(["/login"]);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("ResetPassword_Failed_Message"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("ResetPassword_Failed_Message"));
         }
     }
 }

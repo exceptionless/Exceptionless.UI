@@ -7,6 +7,7 @@ import { UserService } from "../../service/user.service";
 import { WordTranslateService } from "../../service/word-translate.service";
 import { DialogService } from "../../service/dialog.service";
 import { User } from "src/app/models/user";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-user",
@@ -55,7 +56,8 @@ export class UserComponent implements OnInit {
                 return await this.get();
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {
             this.loading = false;
         }
@@ -83,8 +85,9 @@ export class UserComponent implements OnInit {
                 await this.organizationService.removeUser(this.settings.organizationId, user.email_address);
                 this.users.splice(this.users.indexOf(user), 1);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove the user."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove the user."));
+              throw ex;
             }
         };
 
@@ -93,9 +96,10 @@ export class UserComponent implements OnInit {
 
     public async resendNotification(user) {
         try {
-            await this.organizationService.addUser(this.settings.organizationId, user.email_address);
+          await this.organizationService.addUser(this.settings.organizationId, user.email_address);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to resend the notification."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to resend the notification."));
         }
     }
 
@@ -108,16 +112,18 @@ export class UserComponent implements OnInit {
                     await this.userService.addAdminRole(user.id);
                     this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the user for change role."));
                 } catch (ex) {
-                    this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to change user role."));
-                    throw ex;
+                  $ExceptionlessClient.submitException(ex);
+                  this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to change user role."));
+                  throw ex;
                 }
             }
 
             try {
-                await this.userService.removeAdminRole(user.id);
+              await this.userService.removeAdminRole(user.id);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove the user."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove the user."));
+              throw ex;
             }
         };
         this.dialogService.confirm(this.viewRef, message, btnTxt, modalCallBackFunction);

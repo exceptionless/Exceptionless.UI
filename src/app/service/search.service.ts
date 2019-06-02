@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
 import { QueryProcessResult } from "../models/network";
+import { $ExceptionlessClient } from "../exceptionless-client";
 
 @Injectable({ providedIn: "root" })
 export class SearchService {
@@ -21,8 +22,9 @@ export class SearchService {
         try {
             return await this.http.get<QueryProcessResult>("search/validate", { params: {query } }).toPromise();
         } catch (ex) {
-            this.toastr.error("Error Occurred!", "Failed");
-            throw ex;
+          $ExceptionlessClient.submitException(ex);
+          this.toastr.error("Error Occurred!", "Failed");
+          throw ex;
         }
     }
 }

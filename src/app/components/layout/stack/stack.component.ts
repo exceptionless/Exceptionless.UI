@@ -18,6 +18,7 @@ import { Subscription } from "rxjs";
 import { Project } from "src/app/models/project";
 import { Stack } from "src/app/models/stack";
 import { EntityChanged } from "src/app/models/messaging";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-stack",
@@ -217,8 +218,9 @@ export class StackComponent implements OnInit, OnDestroy {
                     await this.stackService.addLink(this._stackId, url);
                     this.stack.references.push(url);
                 } catch (ex) {
-                    this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while adding the reference link."));
-                    throw ex;
+                  $ExceptionlessClient.submitException(ex);
+                  this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while adding the reference link."));
+                  throw ex;
                 }
             }
         };
@@ -290,14 +292,17 @@ export class StackComponent implements OnInit, OnDestroy {
             await this.getStack();
             await this.updateStats();
             await this.getProject();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     private async getProject() {
         try {
             this.project = await this.projectService.getById(this.stack.project_id);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         }
     }
 
@@ -306,10 +311,11 @@ export class StackComponent implements OnInit, OnDestroy {
             this.stack = await this.stackService.getById(this._stackId);
             this.stack.references = this.stack.references || [];
         } catch (ex) {
-            if (ex.status === 404) {
+            if (ex.status === 404) { // TODO: Ensure this is working as expected
                 this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Stack"));
             } else {
-                this.notificationService.error("", await this.wordTranslateService.translate("Error_Load_Stack"));
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("Error_Load_Stack"));
             }
 
             this.router.navigate(["/type/events/dashboard"]);
@@ -334,7 +340,8 @@ export class StackComponent implements OnInit, OnDestroy {
             this.stats.users = this.buildUserStat(this.users, this.totalUsers);
             this.stats.usersTitle = this.buildUserStatTitle(this.users, this.totalUsers);
         } catch (ex) {
-            // TODO: Log or throw or empty?
+          $ExceptionlessClient.submitException(ex);
+          // TODO: Log or throw or empty?
         }
     }
 
@@ -364,7 +371,7 @@ export class StackComponent implements OnInit, OnDestroy {
 
             await this.getStats();
         } catch (ex) {
-            debugger;
+          $ExceptionlessClient.submitException(ex);
         }
     }
 
@@ -439,7 +446,8 @@ export class StackComponent implements OnInit, OnDestroy {
 
             this.getProjectUserStats();
         } catch (ex) {
-            // TODO: Should we log or rethrow this? What were we doing before?
+          $ExceptionlessClient.submitException(ex);
+          // TODO: Should we log or rethrow this? What were we doing before?
         }
     }
 
@@ -476,6 +484,7 @@ export class StackComponent implements OnInit, OnDestroy {
                 });
             }
 
+            $ExceptionlessClient.submitException(ex);
             this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while promoting this stack."));
         }
     }
@@ -501,8 +510,9 @@ export class StackComponent implements OnInit, OnDestroy {
                 this.notificationService.error("", await this.wordTranslateService.translate("Successfully queued the stack for deletion."));
                 await this.router.navigate([`/project/${this.stack.project_id}/dashboard`]);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while deleting this stack."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while deleting this stack."));
+              throw ex;
             }
         };
 
@@ -520,7 +530,8 @@ export class StackComponent implements OnInit, OnDestroy {
             this.stack.occurrences_are_critical = !this.stack.occurrences_are_critical;
             // TODO: Verify that we didn't previously have a success toast.
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate(this.stack.occurrences_are_critical ? "An error occurred while marking future occurrences as not critical." : "An error occurred while marking future occurrences as critical."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate(this.stack.occurrences_are_critical ? "An error occurred while marking future occurrences as not critical." : "An error occurred while marking future occurrences as critical."));
         }
     }
 
@@ -541,7 +552,8 @@ export class StackComponent implements OnInit, OnDestroy {
                 this.stack.date_fixed = null;
                 await onSuccess();
             } catch (ex) {
-                await onFailure();
+              $ExceptionlessClient.submitException(ex);
+              await onFailure();
             }
         } else {
             await this.dialogService.markFixed(this.viewRef, async versionNumber => {
@@ -551,7 +563,8 @@ export class StackComponent implements OnInit, OnDestroy {
                     this.stack.fixed_in_version = versionNumber;
                     await onSuccess();
                 } catch (ex) {
-                    await onFailure();
+                  $ExceptionlessClient.submitException(ex);
+                  await onFailure();
                 }
             });
         }
@@ -568,7 +581,8 @@ export class StackComponent implements OnInit, OnDestroy {
             this.stack.is_hidden = !this.stack.is_hidden;
             this.notificationService.info("", await this.wordTranslateService.translate(this.stack.is_hidden ? "Successfully queued the stack to be marked as shown." : "Successfully queued the stack to be marked as hidden."));
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate(this.stack.is_hidden ? "An error occurred while marking this stack as shown." : "An error occurred while marking this stack as hidden."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate(this.stack.is_hidden ? "An error occurred while marking this stack as shown." : "An error occurred while marking this stack as hidden."));
         }
     }
 
@@ -585,7 +599,8 @@ export class StackComponent implements OnInit, OnDestroy {
                 this.notificationService.info("", await this.wordTranslateService.translate(this.stack.disable_notifications ? "Successfully enabled stack notifications." : "Successfully disabled stack notifications."));
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate(this.stack.disable_notifications ? "An error occurred while enabling stack notifications." : "An error occurred while disabling stack notifications."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate(this.stack.disable_notifications ? "An error occurred while enabling stack notifications." : "An error occurred while disabling stack notifications."));
         }
     }
 }

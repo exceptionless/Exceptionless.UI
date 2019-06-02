@@ -7,7 +7,7 @@ import { Ng2UiAuthModule } from "ng2-ui-auth";
 import { ToastrModule } from "ngx-toastr";
 import { LockerModule } from "angular-safeguard";
 import { HotkeyModule } from "angular2-hotkeys";
-import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2Module } from "angulartics2";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { IntercomModule } from "ng-intercom";
@@ -37,7 +37,7 @@ import {AddWebHookDialogComponent} from "./dialogs/add-web-hook-dialog/add-web-h
 import {SemverDirective} from "./directives/semver.directive";
 import {SemanticVersionValidatorDirective} from "./validators/semantic-version.validator";
 import {ThousandSuffixPipe} from "./pipes/thousand-suffix.pipe";
-import { ExceptionlessErrorHandler } from "./exceptionlessclient";
+import { ExceptionlessErrorHandler } from "./exceptionless-client";
 
 export const AUTH_CONFIG = {
     defaultHeaders: {"Content-Type": "application/json"},

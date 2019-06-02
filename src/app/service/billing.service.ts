@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AnalyticsService } from "./analytics.service";
 import { DialogService } from "./dialog.service";
-import { $ExceptionlessClient } from "../exceptionlessclient";
+import { $ExceptionlessClient } from "../exceptionless-client";
 
 @Injectable({ providedIn: "root" })
 export class BillingService {

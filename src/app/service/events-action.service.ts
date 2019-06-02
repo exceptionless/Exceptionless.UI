@@ -2,6 +2,7 @@ import { Injectable, ViewContainerRef } from "@angular/core";
 import { NotificationService } from "./notification.service";
 import { DialogService } from "./dialog.service";
 import { EventService } from "./event.service";
+import { $ExceptionlessClient } from "../exceptionless-client";
 
 export interface EventAction {
     name: string;
@@ -33,7 +34,8 @@ export class EventsActionService {
                     await this.removeEvent(ids, 0);
                     onSuccess();
                 } catch (ex) {
-                    onFailure();
+                  $ExceptionlessClient.submitException(ex);
+                  onFailure();
                 }
                 return true;
             });
@@ -46,8 +48,9 @@ export class EventsActionService {
             try {
                 await this.eventService.remove(temporary.join(","));
                 return this.removeEvent(ids, startingPoint + 10);
-            } catch (e) {
-                return false;
+            } catch (ex) {
+              $ExceptionlessClient.submitException(ex);
+              return false;
             }
         } else {
             return true;

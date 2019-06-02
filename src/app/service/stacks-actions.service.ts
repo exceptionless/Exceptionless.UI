@@ -3,6 +3,7 @@ import { StackService } from "./stack.service";
 import { NotificationService } from "./notification.service";
 import { DialogService } from "./dialog.service";
 import { chunk } from "lodash-es";
+import { $ExceptionlessClient } from "../exceptionless-client";
 
 export interface StackAction {
     name: string;
@@ -113,8 +114,9 @@ export class StacksActionsService {
             onSuccess();
             return res;
         } catch (ex) {
-            onFailure();
-            return ex;
+          $ExceptionlessClient.submitException(ex);
+          onFailure();
+          return ex;
         }
     }
 

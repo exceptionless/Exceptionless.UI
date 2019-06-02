@@ -12,7 +12,7 @@ import { NotificationService } from "../../../service/notification.service";
 import { ProjectService } from "../../../service/project.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
 import { NgbTabset } from "@ng-bootstrap/ng-bootstrap";
-import { $ExceptionlessClient } from "../../../exceptionlessclient";
+import { $ExceptionlessClient } from "../../../exceptionless-client";
 import { UrlService } from "../../../service/url.service";
 import { PersistentEvent } from "src/app/models/event";
 import { Project } from "src/app/models/project";
@@ -151,7 +151,9 @@ export class EventComponent implements OnInit, OnDestroy {
             await this.getEvent();
             await this.getProject();
             await this.buildTabs(this.activeTab);
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     private addHotKeys() {
@@ -469,11 +471,12 @@ export class EventComponent implements OnInit, OnDestroy {
                     return this.billingService.confirmUpgradePlan(this.viewRef, ex.error.message, this.project.organization_id, () => {
                         return this.getEvent();
                     });
-                } catch (err) {
+                } catch (ex) {
                     this.router.navigate(["/type/events/dashboard"]);
                 }
             }
 
+            $ExceptionlessClient.submitException(ex);
             this.router.navigate(["/type/events/dashboard"]);
             this.notificationService.error("Failed!", "Cannot_Find_Event");
         }
@@ -500,8 +503,9 @@ export class EventComponent implements OnInit, OnDestroy {
             this.project = await this.projectService.getById(this.event.project_id);
             this.project.promoted_tabs = this.project.promoted_tabs || [];
         } catch (ex) {
-            // TODO: what did we do before?
-            this.router.navigate(["/type/events/dashboard"]);
+          $ExceptionlessClient.submitException(ex);
+          // TODO: what did we do before?
+          this.router.navigate(["/type/events/dashboard"]);
         }
     }
 

@@ -6,6 +6,7 @@ import { FilterStoreService } from "../../../service/filter-store.service";
 import * as moment from "moment"; // TODO: Are we properly importing moment throughout the app.
 import { Subscription } from "rxjs";
 import { Organization } from "src/app/models/organization";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-sessions",
@@ -180,7 +181,8 @@ export class SessionComponent implements OnInit, OnDestroy { // TODO: This shoul
             this.timeFilter = this.filterStoreService.getTimeFilter();
             this.projectFilter = this.filterService.getProjectTypeId();
         } catch (ex) {
-            this.notificationService.error("", "Error occurred while trying to get event service");
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", "Error occurred while trying to get event service");
         }
     }
 

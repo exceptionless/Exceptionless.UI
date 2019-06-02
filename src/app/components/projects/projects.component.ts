@@ -8,6 +8,7 @@ import { WordTranslateService } from "../../service/word-translate.service";
 import { DialogService } from "../../service/dialog.service";
 import { EntityChanged, ChangeType } from "src/app/models/messaging";
 import { Project } from "src/app/models/project";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-projects",
@@ -63,9 +64,10 @@ export class ProjectsComponent implements OnInit {
                 return await this.get();
             }
         } catch (ex) {
-            this.loading = false;
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
-            return ex;
+          $ExceptionlessClient.submitException(ex);
+          this.loading = false;
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          return ex;
         } finally {
             this.loading = false;
         }
@@ -125,7 +127,7 @@ export class ProjectsComponent implements OnInit {
     }
 
     public open(id: string, event: MouseEvent) {
-        const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        const openInNewTab = (event.ctrlKey || event.metaKey);
         if (openInNewTab) {
             window.open(`/project/${id}/manage`, "_blank");
         } else {
@@ -150,8 +152,9 @@ export class ProjectsComponent implements OnInit {
                 this.projects.splice(this.projects.indexOf(project), 1);
                 this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the project for deletion."));
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove the project."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to remove the project."));
+              throw ex;
             }
         };
 

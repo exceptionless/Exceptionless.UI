@@ -9,6 +9,7 @@ import { BillingService } from "../../service/billing.service";
 import { Organization } from "src/app/models/organization";
 import { Project } from "src/app/models/project";
 import { EntityChanged } from "src/app/models/messaging";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-organization-notification",
@@ -59,7 +60,9 @@ export class OrganizationNotificationComponent implements OnInit {
             await this.getProjects();
             await this.getFilterUsesPremiumFeatures();
             await this.getOrganizationNotifications();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     public canRefresh(message: EntityChanged) { // TODO: This needs to be hooked up to the can refresh.
@@ -113,7 +116,8 @@ export class OrganizationNotificationComponent implements OnInit {
             const result = await this.searchService.validate(this.filterService.getFilter());
             this.filterUsesPremiumFeatures = result.uses_premium_features === true;
         } catch (ex) {
-            this.notificationService.error("Error Occurred!", "Failed");
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("Error Occurred!", "Failed");
         }
     }
 
@@ -223,7 +227,8 @@ export class OrganizationNotificationComponent implements OnInit {
                 const organization = await this.organizationService.getById(organizationId);
                 this.organizations.push(organization);
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
             }
         };
 
@@ -231,7 +236,8 @@ export class OrganizationNotificationComponent implements OnInit {
             try {
                 this.organizations = (await this.organizationService.getAll()).body;
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
             }
         };
 
@@ -243,7 +249,8 @@ export class OrganizationNotificationComponent implements OnInit {
         try {
             this.projects = (await this.projectService.getAll()).body;
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         }
     }
 
@@ -299,7 +306,9 @@ export class OrganizationNotificationComponent implements OnInit {
         try {
             await this.getFilterUsesPremiumFeatures();
             await this.getOrganizationNotifications();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     public async showChangePlanDialog(organizationId: string) {

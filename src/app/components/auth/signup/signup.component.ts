@@ -6,7 +6,7 @@ import { ProjectService } from "../../../service/project.service";
 import { WordTranslateService } from "../../../service/word-translate.service";
 import { SignupModel } from "src/app/models/auth";
 import { ExternalLoginEnabled } from "../login/login.component";
-import { $ExceptionlessClient } from "src/app/exceptionlessclient";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-signup",
@@ -63,7 +63,7 @@ export class SignupComponent implements OnInit {
             await this.redirectOnSignup();
         } catch (ex) {
             $ExceptionlessClient.createFeatureUsage(`${this._source}.authenticate.error`).setProperty("error", ex).addTags(provider).submit();
-            this.notificationService.error("", await this.wordTranslateService.translate("Loggin_Failed_Message"));
+            this.notificationService.error("", await this.wordTranslateService.translate("Login_Failed_Message"));
         }
     }
 
@@ -79,7 +79,8 @@ export class SignupComponent implements OnInit {
             this.ng2Auth.setToken(response.token);
             await this.redirectOnSignup();
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while signing up.  Please contact support for more information."))
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while signing up.  Please contact support for more information."));
         }
     }
 
@@ -92,7 +93,8 @@ export class SignupComponent implements OnInit {
                 await this.router.navigateByUrl("/project/add");
             }
         } catch (ex) {
-            await this.router.navigateByUrl("/project/add");
+          $ExceptionlessClient.submitException(ex);
+          await this.router.navigateByUrl("/project/add");
         }
     }
 }

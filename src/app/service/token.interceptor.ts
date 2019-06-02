@@ -9,6 +9,7 @@ import "rxjs/add/observable/empty";
 import { throwError, EMPTY } from "rxjs";
 import { NotificationService } from "./notification.service";
 import { StatusService } from "./status.service";
+import { $ExceptionlessClient } from "../exceptionless-client";
 
 @Injectable({ providedIn: "root" })
 export class TokenInterceptor implements HttpInterceptor {
@@ -48,7 +49,7 @@ export class TokenInterceptor implements HttpInterceptor {
                 this.router.navigate(["/status"], { queryParams: { redirect: true }});
             }
         } catch (ex) {
-            debugger;
+          $ExceptionlessClient.submitException(ex);
         }
     }
 

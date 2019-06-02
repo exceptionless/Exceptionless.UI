@@ -8,6 +8,7 @@ import { User } from "src/app/models/user";
 import { InvoiceGridModel } from "src/app/models/organization";
 import { GetInvoiceParameters } from "src/app/service/organization.service";
 import { HttpResponse } from "@angular/common/http";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 export interface InvoiceSettings {
     hideActions?: boolean;
@@ -62,7 +63,8 @@ export class InvoicesComponent implements OnInit {
                 return await this.get();
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {
             this.loading = false;
         }

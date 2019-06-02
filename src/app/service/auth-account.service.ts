@@ -5,7 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { NotificationService } from "./notification.service";
 import { WordTranslateService } from "./word-translate.service";
 import { ChangePasswordModel, TokenResult, ResetPasswordModel } from "../models/auth";
-import { $ExceptionlessClient } from "../exceptionlessclient";
+import { $ExceptionlessClient } from "../exceptionless-client";
 import { IUserInfo } from "exceptionless";
 
 @Injectable({ providedIn: "root" })
@@ -65,6 +65,7 @@ export class AuthAccountService {
               this.router.navigate(["/login"]);
           }
         } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
           this.notificationService.error("Failed!", "Error Occurred");
         }
     }
@@ -78,7 +79,8 @@ export class AuthAccountService {
             const response: any = await this.http.post<TokenResult>(`auth/unlink/${providerName}`, providerUserId).toPromise();
             this.authService.setToken(response);
         } catch (ex) {
-            this.notificationService.error("Failed!", "Error Occurred");
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("Failed!", "Error Occurred");
         }
     }
 }

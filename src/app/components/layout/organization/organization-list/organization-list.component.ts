@@ -13,6 +13,7 @@ import { Subscription } from "rxjs";
 import { Organization } from "src/app/models/organization";
 import { CurrentUser, User } from "src/app/models/user";
 import { TypedMessage } from "src/app/models/messaging";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-organization-list",
@@ -92,6 +93,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
                 // TODO: need to implement later(billing service)
             }
 
+            $ExceptionlessClient.submitException(ex);
             let message = await this.wordTranslateService.translate("An error occurred while creating the organization.");
             if (ex.error && ex.error.message) {
                 message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
@@ -121,7 +123,8 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
                 return await this.get();
             }
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {
             this.loading = false;
         }
@@ -134,12 +137,13 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
                 this.organizations.splice(this.organizations.indexOf(organization), 1);
                 this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
             } catch (ex) {
-                let message: any = this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
-                if (ex.status === 400) {
-                    message += " " + this.wordTranslateService.translate("Message:") + " " + ex.error.message;
-                }
+              $ExceptionlessClient.submitException(ex);
+              let message: any = this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
+              if (ex.status === 400) {
+                  message += " " + this.wordTranslateService.translate("Message:") + " " + ex.error.message;
+              }
 
-                this.notificationService.error("", message);
+              this.notificationService.error("", message);
             }
         };
 
@@ -147,7 +151,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     }
 
     public open(id: string, event: MouseEvent) {
-        const openInNewTab = (event.ctrlKey || event.metaKey || event.which === 2);
+        const openInNewTab = (event.ctrlKey || event.metaKey);
         if (openInNewTab) {
             window.open(`/organization/${id}/manage`, "_blank");
         } else {
@@ -173,8 +177,9 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
                 this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
                 this.notificationService.success("", await this.wordTranslateService.translate("Successfully queued the organization for deletion."));
             } catch (ex) {
-                this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the organization."));
-                throw ex;
+              $ExceptionlessClient.submitException(ex);
+              this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while trying to delete the organization."));
+              throw ex;
             }
         };
 

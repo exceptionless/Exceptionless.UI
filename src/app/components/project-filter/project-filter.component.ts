@@ -9,6 +9,7 @@ import { AppEventService } from "../../service/app-event.service";
 import { Project } from "src/app/models/project";
 import { Organization } from "src/app/models/organization";
 import { FilterChanged } from "src/app/models/messaging";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-project-filter",
@@ -38,7 +39,9 @@ export class ProjectFilterComponent implements OnInit {
         try {
             await this.getOrganizations();
             await this.getProjects();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
 
         this.filteredDisplayName = this.filterService.getProjectName();
         if (!this.filteredDisplayName || this.filteredDisplayName === "All Projects") {
@@ -66,14 +69,17 @@ export class ProjectFilterComponent implements OnInit {
         try {
             await this.getOrganizations();
             await this.getProjects();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     private async getOrganizations() {
         try {
             this.organizations = (await this.organizationService.getAll()).body;
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {
             this.isLoadingOrganizations = false;
         }
@@ -83,7 +89,8 @@ export class ProjectFilterComponent implements OnInit {
         try {
             this.projects = (await this.projectService.getAll()).body;
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {
             this.isLoadingProjects = false;
         }

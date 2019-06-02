@@ -14,21 +14,22 @@ export class ExceptionlessClientInit {
         client.config.serverUrl = environment.EXCEPTIONLESS_SERVER_URL;
     }
 
-    client.config.defaultTags.push('UI');
+    client.config.defaultTags.push("UI");
     client.config.setVersion("@@version"); // TODO: Set this a better way.
-    client.config.setVersion('@@version');
     client.config.useReferenceIds();
     client.config.useSessions();
-    //client.config.useDebugLogger();
+    // client.config.useDebugLogger();
 
     // TODO: Subscribe to user updates and set the user; Currently setting this in the header component..
-    //const user = await userService.getCurrentUser();
-    //client.config.setUserIdentity({ identity: user.email_address, name: user.full_name, data: { user }});
+    // const user = await userService.getCurrentUser();
+    // client.config.setUserIdentity({ identity: user.email_address, name: user.full_name, data: { user }});
   }
+
+  public init() {}
 }
 
 export class ExceptionlessErrorHandler implements ErrorHandler {
   public handleError(ex: any) {
-    $ExceptionlessClient.submitUnhandledException(ex, 'ExceptionlessErrorHandler');
+    $ExceptionlessClient.submitUnhandledException(ex, "ExceptionlessErrorHandler");
   }
 }

@@ -13,6 +13,7 @@ import { DialogService } from "../../../../service/dialog.service";
 import { Subscription } from "rxjs";
 import { Organization } from "src/app/models/organization";
 import { NgForm } from "@angular/forms";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-organization-edit",
@@ -171,7 +172,8 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
         try {
             await this.organizationService.addUser(this._organizationId, emailAddress);
         } catch (ex) {
-            onFailure(ex);
+          $ExceptionlessClient.submitException(ex);
+          onFailure(ex);
         }
     }
 
@@ -237,8 +239,9 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 data: this.organization.usage.map(item => [moment.utc(item.date), item.limit])
             });
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Organization", {organizationId: this._organizationId}));
-            await this.router.navigate(["/organization/list"]);
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("Cannot_Find_Organization", {organizationId: this._organizationId}));
+          await this.router.navigate(["/organization/list"]);
         }
     }
 
@@ -250,13 +253,14 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 this.router.navigate(["/organization/list"]);
                 return res;
             } catch (ex) {
-                let message = await this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
-                if (ex.status === 400) {
-                    message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.data.message;
-                }
+              $ExceptionlessClient.submitException(ex);
+              let message = await this.wordTranslateService.translate("An error occurred while trying to leave the organization.");
+              if (ex.status === 400) {
+                  message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.data.message;
+              }
 
-                this.notificationService.error("", message);
-                this._ignoreRefresh = false;
+              this.notificationService.error("", message);
+              this._ignoreRefresh = false;
             }
         };
 
@@ -273,13 +277,14 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
                 this.router.navigate(["/organization/list"]);
                 return res;
             } catch (ex) {
-                let message = await this.wordTranslateService.translate("An error occurred while trying to delete the organization.");
-                if (ex.status === 400) {
-                    message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
-                }
+              $ExceptionlessClient.submitException(ex);
+              let message = await this.wordTranslateService.translate("An error occurred while trying to delete the organization.");
+              if (ex.status === 400) {
+                  message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
+              }
 
-                this.notificationService.error("", message);
-                this._ignoreRefresh = false;
+              this.notificationService.error("", message);
+              this._ignoreRefresh = false;
             }
         };
 
@@ -294,7 +299,8 @@ export class OrganizationEditComponent implements OnInit, OnDestroy {
         try {
             await this.organizationService.update(this._organizationId, this.organization);
         } catch (ex) {
-            this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the organization."));
+          $ExceptionlessClient.submitException(ex);
+          this.notificationService.error("", await this.wordTranslateService.translate("An error occurred while saving the organization."));
         }
     }
 }

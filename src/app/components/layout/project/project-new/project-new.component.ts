@@ -8,6 +8,7 @@ import { WordTranslateService } from "../../../../service/word-translate.service
 import { BillingService } from "../../../../service/billing.service";
 import { Organization } from "src/app/models/organization";
 import { Subscription } from "rxjs";
+import { $ExceptionlessClient } from "src/app/exceptionless-client";
 
 @Component({
     selector: "app-project-new",
@@ -82,13 +83,17 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
                 await this.createOrganization(this.organizationName);
                 await this.createProject();
                 await resetCanAdd();
-            } catch (ex) {}
+            } catch (ex) {
+              $ExceptionlessClient.submitException(ex);
+            }
         }
 
         try {
             await this.createProject(this.currentOrganization);
             await resetCanAdd();
-        } catch (ex) {}
+        } catch (ex) {
+          $ExceptionlessClient.submitException(ex);
+        }
     }
 
     public canCreateOrganization(): boolean {
@@ -107,6 +112,7 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
                 });
             }
 
+            $ExceptionlessClient.submitException(ex);
             let message = await this.wordTranslateService.translate("An error occurred while creating the organization.");
             if (ex.error) {
                 message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
@@ -132,6 +138,7 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
                 });
             }
 
+            $ExceptionlessClient.submitException(ex);
             let message = await this.wordTranslateService.translate("An error occurred while creating the project.");
             if (ex.error) {
                 message += " " + await this.wordTranslateService.translate("Message:") + " " + ex.error.message;
@@ -152,9 +159,10 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
                 this.currentOrganization = this.organizations.length > 0 ? this.organizations[0] : {} as Organization;
             }
         } catch (ex) {
-            if (!this.notificationService) {
-                this.notificationService.error("", "Error occurred while get organizations");
-            }
+          $ExceptionlessClient.submitException(ex);
+          if (!this.notificationService) {
+              this.notificationService.error("", "Error occurred while get organizations");
+          }
         }
     }
 
