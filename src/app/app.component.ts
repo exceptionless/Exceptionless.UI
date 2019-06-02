@@ -3,6 +3,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
+import { ExceptionlessClientInit } from "./exceptionlessclient";
 
 @Component({
     selector: "app-root",
@@ -11,6 +12,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 export class AppComponent implements OnInit {
     constructor(
+      exceptionlessClientInit: ExceptionlessClientInit,
       angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
       private hotkeysService: HotkeysService,
       private router: Router,

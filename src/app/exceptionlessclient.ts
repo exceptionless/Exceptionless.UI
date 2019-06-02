@@ -1,17 +1,31 @@
 import { ExceptionlessClient } from "exceptionless";
-import { ErrorHandler } from "@angular/core";
+import { ErrorHandler, Injectable } from "@angular/core";
+import { UserService } from "./service/user.service";
 
 export const $ExceptionlessClient = ExceptionlessClient.default;
 
-// TODO: Is there a better way to initialize this logic.
-$ExceptionlessClient.config.apiKey = environment.EXCEPTIONLESS_API_KEY;
-if (environment.EXCEPTIONLESS_SERVER_URL) {
-    $ExceptionlessClient.config.serverUrl = environment.EXCEPTIONLESS_SERVER_URL;
-}
-$ExceptionlessClient.config.setVersion("@@version"); // TODO: Set this a better way.
-//$ExceptionlessClient.config.useDebugLogger();
+@Injectable({ providedIn: "root" })
+export class ExceptionlessClientInit {
+  constructor(private userService: UserService) {
+    const client = $ExceptionlessClient;
 
-// TODO: We need to inject the current user service and call set user..
+    client.config.apiKey = environment.EXCEPTIONLESS_API_KEY;
+    if (environment.EXCEPTIONLESS_SERVER_URL) {
+        client.config.serverUrl = environment.EXCEPTIONLESS_SERVER_URL;
+    }
+
+    client.config.defaultTags.push('UI');
+    client.config.setVersion("@@version"); // TODO: Set this a better way.
+    client.config.setVersion('@@version');
+    client.config.useReferenceIds();
+    client.config.useSessions();
+    //client.config.useDebugLogger();
+
+    // TODO: Subscribe to user updates and set the user; Currently setting this in the header component..
+    //const user = await userService.getCurrentUser();
+    //client.config.setUserIdentity({ identity: user.email_address, name: user.full_name, data: { user }});
+  }
+}
 
 export class ExceptionlessErrorHandler implements ErrorHandler {
   public handleError(ex: any) {

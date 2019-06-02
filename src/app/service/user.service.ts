@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpResponse, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
+import { HttpClient } from "@angular/common/http";
 import { User, UpdateEmailAddressResult, CurrentUser } from "../models/user";
 import { WorkInProgressResult, SuccessResult } from "../models/network";
 

@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "ng2-ui-auth";
-import { HttpClient, HttpResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { NotificationService } from "./notification.service";
-import { Observable } from "rxjs/Observable";
 import { WordTranslateService } from "./word-translate.service";
 import { ChangePasswordModel, TokenResult, ResetPasswordModel } from "../models/auth";
+import { $ExceptionlessClient } from "../exceptionlessclient";
+import { IUserInfo } from "exceptionless";
 
 @Injectable({ providedIn: "root" })
 export class AuthAccountService {
@@ -40,24 +41,31 @@ export class AuthAccountService {
     }
 
     public async isEmailAddressAvailable(email): Promise<boolean> {
-        const response: any = this.http
-          .get(`auth/check-email-address/${email}`, { observe: "response" })
-          .toPromise();
+      const response: any = this.http
+        .get(`auth/check-email-address/${email}`, { observe: "response" })
+        .toPromise();
 
-        return response.status === 204;
+      return response.status === 204;
     }
 
     public async logout(withRedirect?: boolean, params?) {
         try {
-            await this.http.get<never>("auth/logout").toPromise();
-            await this.authService.logout().toPromise();
-            if (withRedirect) {
-                this.router.navigate([withRedirect], params);
-            } else {
-                this.router.navigate(["/login"]);
-            }
+          await this.http.get<never>("auth/logout").toPromise();
+
+          const user: IUserInfo = $ExceptionlessClient.config.defaultData["@user"];
+          if (user && user.identity) {
+            $ExceptionlessClient.submitSessionEnd(user.identity);
+          }
+
+          $ExceptionlessClient.config.setUserIdentity({});
+          await this.authService.logout().toPromise();
+          if (withRedirect) {
+              this.router.navigate([withRedirect], params);
+          } else {
+              this.router.navigate(["/login"]);
+          }
         } catch (ex) {
-            this.notificationService.error("Failed!", "Error Occurred");
+          this.notificationService.error("Failed!", "Error Occurred");
         }
     }
 
