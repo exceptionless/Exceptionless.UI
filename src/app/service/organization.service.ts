@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams, HttpResponse } from "@angular/common/http";
 import { ObjectIdService } from "./object-id.service";
 import * as moment from "moment";
 import { WorkInProgressResult } from "../models/network";
 import { Organization, BillingPlan, InvoiceGridModel, NewOrganization, ChangePlanResult } from "../models/organization";
 import { User } from "../models/user";
+import { Observable } from "rxjs";
 
 export interface GetInvoiceParameters {
     limit?: number;
@@ -70,9 +71,9 @@ export class OrganizationService {
         ]).toDate();
     }
 
-    public getAll(options?) {
+    public getAll(options?): Promise<HttpResponse<Organization[]>> {
         const mergedOptions = Object.assign({ limit: 100 }, options);
-        return this.http.get<Organization[]>("organizations", { params: mergedOptions }).toPromise();
+        return this.http.get<Organization[]>("organizations", { params: mergedOptions, observe: "response" }).toPromise();
     }
 
     public getById(id: string) {
@@ -83,9 +84,9 @@ export class OrganizationService {
         return this.http.get<InvoiceGridModel>(`organizations/invoice/${id}`).toPromise();
     }
 
-    public getInvoices(id: string, options?: GetInvoiceParameters) {
+    public getInvoices(id: string, options?: GetInvoiceParameters): Promise<HttpResponse<InvoiceGridModel[]>> {
         const params: any = options || {};
-        return this.http.get<InvoiceGridModel[]>(`organizations/${id}/invoices`, { params }).toPromise();
+        return this.http.get<InvoiceGridModel[]>(`organizations/${id}/invoices`, { params, observe: "response" }).toPromise();
     }
 
     public getPlans(id: string) {

@@ -43,9 +43,8 @@ export class UserComponent implements OnInit {
         this.currentOptions = options || this.settings.options;
 
         try {
-            // this.users = await this.settings.get(this.currentOptions).toPromise();
-            const response: any = await this.settings.get(this.currentOptions).toPromise();
-            this.users = response.data;
+            const response = await this.settings.get(this.currentOptions);
+            this.users = response.body;
 
             const links: any = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;

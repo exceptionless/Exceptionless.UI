@@ -125,7 +125,7 @@ export class AccountManageComponent implements OnInit {
 
     private async getProjects() {
         try {
-            this.projects = await this.projectService.getAll();
+            this.projects = (await this.projectService.getAll()).body;
             this.organizationNames = [];
             this.projects.forEach(project => {
                 if (!this.organizationNames.find(name => name === project.organization_name)) {

@@ -299,7 +299,7 @@ export class ChangePlanDialogComponent implements IModalDialog {
 
         this.organizations = [];
         try {
-            this.organizations = await this.organizationService.getAll();
+            this.organizations = (await this.organizationService.getAll()).body;
             await getSelectedOrganization();
 
             this.currentOrganization = this.organizations.filter((o) => o.id === (this.currentOrganization.id || this.organizationId) )[0];

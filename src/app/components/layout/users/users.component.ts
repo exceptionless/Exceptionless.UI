@@ -13,8 +13,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     public timeFilter = "";
     public projectFilter = ""; // TODO: I don't know why time filter and project filter are passed here. this should be coming from the filter service.
     public mostUsers: any = {
-        get: this.stackService.getUsers,
-        type: "get-users",
+        get: options => this.stackService.getUsers(options),
         options: {
             limit: 20,
             mode: "summary"
@@ -40,5 +39,4 @@ export class UsersComponent implements OnInit, OnDestroy {
             subscription.unsubscribe();
         }
     }
-
 }

@@ -11,6 +11,7 @@ import { AppEventService } from "../../service/app-event.service";
 import { Subscription } from "rxjs";
 import { Stack } from "src/app/models/stack";
 import { EntityChanged, TypedMessage } from "src/app/models/messaging";
+import { HttpResponse } from "@angular/common/http";
 
 @Component({
     selector: "app-stacks",
@@ -92,17 +93,8 @@ export class StacksComponent implements OnChanges, OnInit, OnDestroy {
         this.currentOptions = options || this.settings.options;
 
         try {
-            let response : any;
-
-            if (this.settings.type === "get-users") {
-              response = await this.stackService.getUsers(this.currentOptions);
-            } else if (this.settings.type === "get-frequent") {
-              response = await this.stackService.getFrequent(this.currentOptions);
-            } else if (this.settings.type === "get-new") {
-              response = await this.stackService.getNew(this.currentOptions);
-            }
-
-            this.stacks = response.data;
+            const response = await this.settings.get(this.currentOptions);
+            this.stacks = response.body;
 
             if (this.selectedIds) {
                 this.selectedIds = this.selectedIds.filter((id) => {
@@ -115,9 +107,10 @@ export class StacksComponent implements OnChanges, OnInit, OnDestroy {
             this.previous = links.previous;
             this.next = links.next;
 
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(this.stacks, this.currentOptions.page, this.currentOptions.limit);
             if (this.stacks.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
-                return await this.get();
+              await this.get();
+              return;
             }
         } catch (ex) {
             this.notificationService.error("", "Error Occurred!");

@@ -85,7 +85,7 @@ export class SignupComponent implements OnInit {
 
     private async redirectOnSignup() {
         try {
-            const projects = await this.projectService.getAll();
+            const projects = (await this.projectService.getAll()).body;
             if (projects && projects.length > 0) {
                 await this.router.navigateByUrl("/type/error/dashboard");
             } else {

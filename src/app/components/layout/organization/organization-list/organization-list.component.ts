@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { LinkService } from "../../../../service/link.service";
 import { PaginationService } from "../../../../service/pagination.service";
@@ -107,10 +106,8 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         this.currentOptions = options || this._settings;
 
         try {
-            // this.organizations = await this.organizationService.getAll(this.currentOptions);
-
-            const response: any = await this.organizationService.getAll(this.currentOptions);
-            this.organizations = response.data;
+            const response = await this.organizationService.getAll(this.currentOptions);
+            this.organizations = response.body;
 
             this.canChangePlan = !!environment.STRIPE_PUBLISHABLE_KEY && this.organizations.length > 0;
 
@@ -118,7 +115,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
             this.previous = links.previous;
             this.next = links.next;
 
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(this.organizations, this.currentOptions.page, this.currentOptions.limit);
 
             if (this.organizations.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
                 return await this.get();

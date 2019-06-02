@@ -13,9 +13,7 @@ export class RecentComponent implements OnInit, OnDestroy {
     public timeFilter: string;
     public projectFilter: string;
     public mostRecent: any = {
-        get: (options) => {
-            return this.eventService.getAll(options);
-        },
+        get: (options) => this.eventService.getAll(options),
         options: {
             limit: 20,
             mode: "summary"

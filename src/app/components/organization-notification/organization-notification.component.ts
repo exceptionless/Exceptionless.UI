@@ -229,7 +229,7 @@ export class OrganizationNotificationComponent implements OnInit {
 
         const getAllOrganizations = async () => {
             try {
-                this.organizations = await this.organizationService.getAll();
+                this.organizations = (await this.organizationService.getAll()).body;
             } catch (ex) {
                 this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
             }
@@ -241,7 +241,7 @@ export class OrganizationNotificationComponent implements OnInit {
 
     private async getProjects() {
         try {
-            this.projects = await this.projectService.getAll();
+            this.projects = (await this.projectService.getAll()).body;
         } catch (ex) {
             this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         }

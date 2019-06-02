@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Project, NewProject, ClientConfiguration, NotificationSettings } from "../models/project";
 import { WorkInProgressResult } from "../models/network";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class ProjectService {
@@ -28,17 +29,17 @@ export class ProjectService {
     }
 
     // TODO: How do we better handle large amounts of projects (e.g. 250 projects)
-    public getAll(options?) {
+    public getAll(options?): Promise<HttpResponse<Project[]>> {
         const mergedOptions = Object.assign({ limit: 100 }, options);
-        return this.http.get<Project[]>("projects", { params: mergedOptions }).toPromise();
+        return this.http.get<Project[]>("projects", { params: mergedOptions, observe: "response" }).toPromise();
     }
 
     public getById(id: string) {
         return this.http.get<Project>(`projects/${id}`).toPromise();
     }
 
-    public getByOrganizationId(id: string, options) {
-        return this.http.get<Project[]>(`organizations/${id}/projects`, { params: options || {} }).toPromise();
+    public getByOrganizationId(id: string, options): Promise<HttpResponse<Project[]>> {
+        return this.http.get<Project[]>(`organizations/${id}/projects`, { params: options || {}, observe: "response" }).toPromise();
     }
 
     public getConfig(id: string) {

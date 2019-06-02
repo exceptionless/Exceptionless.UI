@@ -80,15 +80,14 @@ export class SessionsComponent implements OnChanges { // TODO: THIS SHOULD HAVE 
         this.currentOptions = options || this.settings.options;
 
         try {
-            // this.events = await this.settings.get(this.currentOptions).toPromise();
-            const response: any = await this.settings.get(this.currentOptions).toPromise();
-            this.events = response.data;
+            const response = await this.settings.get(this.currentOptions);
+            this.events = response.body;
 
             const links: any = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
 
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(this.events, this.currentOptions.page, this.currentOptions.limit);
 
             if (this.events.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
                 return await this.get();

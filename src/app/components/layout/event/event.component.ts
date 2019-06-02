@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { HttpErrorResponse } from "@angular/common/http";
 import { HotkeysService, Hotkey } from "angular2-hotkeys";
 import { ClipboardService } from "ngx-clipboard";
 import * as moment from "moment";
@@ -64,16 +63,15 @@ export class EventComponent implements OnInit, OnDestroy {
 
     public project: Project;
     public sessionEvents = {
-        get: (options, event?) => {
-            let curEvent = event;
-            if (!curEvent) {
-                curEvent = this.event;
+        get: (options, currentEvent?: PersistentEvent) => {
+            if (!currentEvent) {
+                currentEvent = this.event;
             }
             const optionsCallback = (option) => {
                 option.filter = "-type:heartbeat";
 
-                const start = moment.utc(curEvent.date).local();
-                const end = (curEvent.data && curEvent.data.sessionend) ? moment.utc(curEvent.data.sessionend).add(1, "seconds").local().format("YYYY-MM-DDTHH:mm:ss") : "now";
+                const start = moment.utc(currentEvent.date).local();
+                const end = (currentEvent.data && currentEvent.data.sessionend) ? moment.utc(currentEvent.data.sessionend).add(1, "seconds").local().format("YYYY-MM-DDTHH:mm:ss") : "now";
                 option.time = start.format("YYYY-MM-DDTHH:mm:ss") + "-" + end;
                 return option;
             };
@@ -91,7 +89,7 @@ export class EventComponent implements OnInit, OnDestroy {
             let requestOptions: any = this.filterService.getDefaultOptions(false);
             Object.assign(requestOptions, optionsCallback(options));
             requestOptions = serialize(requestOptions);
-            return this.eventService.getBySessionId(curEvent.project_id, curEvent.reference_id, requestOptions);
+            return this.eventService.getBySessionId(currentEvent.project_id, currentEvent.reference_id, requestOptions);
         },
         options: {
             limit: 10,
@@ -429,9 +427,8 @@ export class EventComponent implements OnInit, OnDestroy {
         }
 
         try {
-            // this.event = await this.eventService.getById(this.eventId, {}, optionsCallback);
-            const response: any = await this.eventService.getById(this.eventId, {}, optionsCallback);
-            this.event = response.data;
+            const response = await this.eventService.getById(this.eventId, {}, optionsCallback);
+            this.event = response.body;
 
             this.eventJson = JSON.stringify(this.event);
             this.sessionEvents.relativeTo = this.event.date as any;

@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpResponse } from "@angular/common/http";
 import { FilterService } from "./filter.service";
 import { OrganizationService } from "./organization.service";
 import * as moment from "moment";
 import { CountResult, WorkInProgressResult } from "../models/network";
 import { Organization } from "../models/organization";
 import { PersistentEvent } from "../models/event";
+import { Observable } from "rxjs";
 
 
 export type EventParametersCallback = (parameters: { [param: string]: string | string[]; }) => { [param: string]: string | string[]; };
@@ -54,18 +55,18 @@ export class EventService {
         return this.http.get<CountResult>("events/count", { params: options }).toPromise();
     }
 
-    public getAll(options: GetEventParameters, optionsCallback?: EventParametersCallback, includeHiddenAndFixedFilter?: boolean) {
+    public getAll(options: GetEventParameters, optionsCallback?: EventParametersCallback, includeHiddenAndFixedFilter?: boolean): Promise<HttpResponse<PersistentEvent[]>> {
         optionsCallback = typeof optionsCallback === "function" ? optionsCallback : o => o;
         const mergedOptions = optionsCallback(this.filterService.apply(options, includeHiddenAndFixedFilter));
 
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get<PersistentEvent[]>(`organizations/${organization}/events`, { params: mergedOptions }).toPromise();
+            return this.http.get<PersistentEvent[]>(`organizations/${organization}/events`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
         const project = this.filterService.getProjectId();
         if (project) {
-            return this.http.get<PersistentEvent[]>(`projects/${project}/events`, { params: mergedOptions }).toPromise();
+            return this.http.get<PersistentEvent[]>(`projects/${project}/events`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
         // TODO: We need to be looking into if there is a good way to wrap this, so we can get status code (426 if needed, headers for paging (next, previous) and total)
@@ -77,33 +78,33 @@ export class EventService {
             total: number;
         }
         */
-        return this.http.get<PersistentEvent[]>("events", { params: mergedOptions }).toPromise();
+        return this.http.get<PersistentEvent[]>("events", { params: mergedOptions, observe: "response" }).toPromise();
     }
 
-    public getAllSessions(options: GetEventParameters, optionsCallback?: EventParametersCallback) {
+    public getAllSessions(options: GetEventParameters, optionsCallback?: EventParametersCallback): Promise<HttpResponse<PersistentEvent[]>> {
         optionsCallback = typeof optionsCallback === "function" ? optionsCallback : o => o;
         const mergedOptions = optionsCallback(this.filterService.apply(options, false));
 
         const organization = this.filterService.getOrganizationId();
         if (typeof organization === "string" && organization) {
-            return this.http.get<PersistentEvent[]>(`organizations/${organization}/events/sessions`, { params: mergedOptions }).toPromise();
+            return this.http.get<PersistentEvent[]>(`organizations/${organization}/events/sessions`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
         const projectType = this.filterService.getProjectType();
         if (typeof project === "string" && project && projectType === "project") {
-            return this.http.get<PersistentEvent[]>(`projects/${project}/events/sessions`, { params: mergedOptions }).toPromise();
+            return this.http.get<PersistentEvent[]>(`projects/${project}/events/sessions`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
-        return this.http.get<PersistentEvent[]>(`events/sessions`, { params: mergedOptions }).toPromise();
+        return this.http.get<PersistentEvent[]>(`events/sessions`, { params: mergedOptions, observe: "response" }).toPromise();
     }
 
-    public getById(id: string, options: GetEventParameters, optionsCallback?: EventParametersCallback) {
+    public getById(id: string, options: GetEventParameters, optionsCallback?: EventParametersCallback): Promise<HttpResponse<PersistentEvent>> {
         optionsCallback = typeof optionsCallback === "function" ? optionsCallback : o => o;
         const params = optionsCallback(this.filterService.apply(options));
 
         // TODO: We need to be looking into if there is a good way to wrap this, so we can get status code (426 if needed, headers for paging (next, previous, parent))
-        return this.http.get<PersistentEvent>(`events/${id}`, { params }).toPromise();
+        return this.http.get<PersistentEvent>(`events/${id}`, { params, observe: "response" }).toPromise();
     }
 
     public getByReferenceId(id: string, options: GetEventParameters) {

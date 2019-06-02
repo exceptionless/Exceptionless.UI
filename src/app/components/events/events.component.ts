@@ -11,6 +11,7 @@ import { PersistentEvent } from "src/app/models/event";
 import { Subscription } from "rxjs";
 import { TypedMessage, EntityChanged, ChangeType } from "src/app/models/messaging";
 import { GetEventParameters as GetEventsParameters } from "src/app/service/event.service";
+import { HttpResponse } from "@angular/common/http";
 
 export interface EventsSettings {
     relativeTo: Date;
@@ -20,7 +21,7 @@ export interface EventsSettings {
     summary?: { showType: boolean };
     timeHeaderText?: string;
     options?: GetEventsParameters;
-    get: (options?: GetEventsParameters) => Promise<PersistentEvent[]>;
+    get: (options?: GetEventsParameters, currentEvent?: PersistentEvent) => Promise<HttpResponse<PersistentEvent[]>>;
 }
 
 @Component({
@@ -121,35 +122,29 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
             return;
         }
 
-        const onSuccess = async (response, link) => {
-            this.events = response;
-
-            if (this.selectedIds) {
-                this.selectedIds = this.selectedIds.filter(id => {
-                    return this.events.filter(e => e.id === id).length > 0;
-                });
-            }
-
-            const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
-            this.previous = links.previous;
-            this.next = links.next;
-
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
-
-            if (this.events.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
-                return await this.get();
-            }
-        };
-
         this.loading = true;
         this.currentOptions = options || this.settings.options;
 
         if (!this.currentEvent || (this.currentEvent && this.currentEvent.project_id)) {
             try {
-                // const res: any = await this.settings.get(this.currentOptions this.currentEvent).toPromise();
-                const res: any = await this.settings.get(this.currentOptions);
-                onSuccess(res.body, res.headers.get("link"));
-                return this.events;
+              const response = await this.settings.get(this.currentOptions, this.currentEvent);
+              this.events = response.body;
+
+              if (this.selectedIds) {
+                  this.selectedIds = this.selectedIds.filter(id => {
+                      return this.events.filter(e => e.id === id).length > 0;
+                  });
+              }
+
+              const links = this.linkService.getLinksQueryParameters(response.headers.get("link"));
+              this.previous = links.previous;
+              this.next = links.next;
+
+              this.pageSummary = this.paginationService.getCurrentPageSummary(this.events, this.currentOptions.page, this.currentOptions.limit);
+
+              if (this.events.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
+                  return await this.get();
+              }
             } catch (ex) {
                 this.notificationService.error("", "Error Occurred!");
             } finally {

@@ -13,8 +13,7 @@ export class NewComponent implements OnInit, OnDestroy {
     public timeFilter: string;
     public projectFilter: string;
     public newest: any = {
-        get: this.stackService.getNew,
-        type: "get-new",
+        get: options => this.stackService.getNew(options),
         options: {
             limit: 20,
             mode: "summary"

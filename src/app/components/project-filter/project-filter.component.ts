@@ -71,7 +71,7 @@ export class ProjectFilterComponent implements OnInit {
 
     private async getOrganizations() {
         try {
-            this.organizations = await this.organizationService.getAll();
+            this.organizations = (await this.organizationService.getAll()).body;
         } catch (ex) {
             this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {
@@ -81,7 +81,7 @@ export class ProjectFilterComponent implements OnInit {
 
     private async getProjects() {
         try {
-            this.projects = await this.projectService.getAll();
+            this.projects = (await this.projectService.getAll()).body;
         } catch (ex) {
             this.notificationService.error("", await this.wordTranslateService.translate("Error Occurred!"));
         } finally {

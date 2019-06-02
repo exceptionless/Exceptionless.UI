@@ -7,8 +7,8 @@
                 <i class="fa fa-calendar"></i> {{ 'Event Occurrence' | translate }}
 
                 <div class="pull-right hidden-print">
-                    <a ngxClipboard [cbContent]="eventJson" (cbOnSuccess)="copied()" [hidden]="!event['stack_id'] || !clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Event JSON to Clipboard' | translate }}"></a>
-                    <a routerLink="/stack/{{ event['stack_id'] }}" [ngClass]="{'disabled': !event['stack_id']}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="{{ 'Go To Stack' | translate }}"></a>
+                    <a ngxClipboard [cbContent]="eventJson" (cbOnSuccess)="copied()" [hidden]="!event.stack_id || !clipboardSupported" class="btn btn-default btn-xs fa fa-code hidden-xs" role="button" title="{{ 'Copy Event JSON to Clipboard' | translate }}"></a>
+                    <a routerLink="/stack/{{ event.stack_id }}" [ngClass]="{'disabled': !event.stack_id}" class="btn btn-default btn-xs fa fa-fw fa-caret-up" role="button" title="{{ 'Go To Stack' | translate }}"></a>
                     <a routerLink="/event/{{ previous }}" [queryParams]="{ tab: getPreviousTab() }" [ngClass]="{'disabled': !previous}" class="btn btn-default btn-xs fa fa-fw fa-caret-left" role="button" title="{{ 'Previous Occurrence' | translate }}"></a>
                     <a routerLink="/event/{{ next }}" [queryParams]="{ tab: getNextTab() }" [ngClass]="{'disabled': !next}" class="btn btn-default btn-xs fa fa-fw fa-caret-right" role="button" title="{{ 'Next Occurrence' | translate }}"></a>
                 </div>
@@ -26,7 +26,7 @@
 
             <footer class="panel-footer hidden-xs">
                 <div class="pull-right">
-                    <a routerLink="/stack/{{ event['stack_id'] }}" [ngClass]="{'disabled': !event['stack_id']}" class="btn btn-default" role="button">{{ 'Go To Stack' | translate }}</a>
+                    <a routerLink="/stack/{{ event.stack_id }}" [ngClass]="{'disabled': !event.stack_id}" class="btn btn-default" role="button">{{ 'Go To Stack' | translate }}</a>
                 </div>
                 <a routerLink="/event/{{ previous }}" [queryParams]="{tab: getCurrentTab()}" [ngClass]="{'disabled': !previous}" class="btn btn-primary" role="button">{{ 'Previous Occurrence' | translate }}</a>
                 <a routerLink="/event/{{ next }}" [queryParams]="{tab: getCurrentTab()}" [ngClass]="{'disabled': !next}" class="btn btn-primary" role="button">{{ 'Next Occurrence' | translate }}</a>

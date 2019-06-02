@@ -143,7 +143,7 @@ export class ProjectNewComponent implements OnInit, OnDestroy {
 
     public async getOrganizations() {
         try {
-            this.organizations = await this.organizationService.getAll();
+            this.organizations = (await this.organizationService.getAll()).body;
             this.organizations.push({id: this._newOrganizationId, name: "<New Organization>"} as Organization);
 
             const currentOrganizationId = this.currentOrganization.id ? this.currentOrganization.id : this.organizationId;

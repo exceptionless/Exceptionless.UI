@@ -13,8 +13,7 @@ export class FrequentComponent implements OnInit, OnDestroy {
     public timeFilter: string;
     public projectFilter: string;
     public mostFrequent: any = {
-        get: this.stackService.getFrequent,
-        type: "get-frequent",
+        get: options => this.stackService.getFrequent(options),
         options: {
             limit: 20,
             mode: "summary"

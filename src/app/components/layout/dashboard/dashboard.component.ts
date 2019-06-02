@@ -104,8 +104,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         avg_per_hour: 0.0
     };
     public mostFrequent: any = {
-        get: this.stackService.getFrequent,
-        type: "get-frequent",
+        get: options => this.stackService.getFrequent(options),
         options: {
             limit: 10,
             mode: "summary"
@@ -113,7 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
     public mostRecent: any = {
         header: "Most Recent",
-        get: this.eventService.getAll,
+        get: (options) => this.eventService.getAll(options),
         options: {
             limit: 10,
             mode: "summary"
@@ -186,7 +185,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private async getOrganizations() {
         try {
-            this.organizations = await this.organizationService.getAll();
+            this.organizations = (await this.organizationService.getAll()).body;
         } catch (ex) {
             this.notificationService.error("", "Error Occurred!");
         }

@@ -7,6 +7,7 @@ import { WordTranslateService } from "../../service/word-translate.service";
 import { User } from "src/app/models/user";
 import { InvoiceGridModel } from "src/app/models/organization";
 import { GetInvoiceParameters } from "src/app/service/organization.service";
+import { HttpResponse } from "@angular/common/http";
 
 export interface InvoiceSettings {
     hideActions?: boolean;
@@ -15,7 +16,7 @@ export interface InvoiceSettings {
     summary?: { showType: boolean };
     timeHeaderText?: string;
     options?: GetInvoiceParameters;
-    get: (options?: GetInvoiceParameters) => Promise<InvoiceGridModel[]>;
+    get: (options?: GetInvoiceParameters) => Promise<HttpResponse<InvoiceGridModel[]>>;
 }
 
 @Component({
@@ -50,14 +51,13 @@ export class InvoicesComponent implements OnInit {
         this.currentOptions = options || this.settings.options;
 
         try {
-            // this.invoices = await this.settings.get(this.currentOptions);
-            const response: any = await this.settings.get(this.currentOptions);
-            this.invoices = response.data;
+            const response = await this.settings.get(this.currentOptions);
+            this.invoices = response.body;
 
             const links: any = this.linkService.getLinksQueryParameters(response.headers.get("link"));
             this.previous = links.previous;
             this.next = links.next;
-            this.pageSummary = this.paginationService.getCurrentPageSummary(response, this.currentOptions.page, this.currentOptions.limit);
+            this.pageSummary = this.paginationService.getCurrentPageSummary(this.invoices, this.currentOptions.page, this.currentOptions.limit);
             if (this.invoices.length === 0 && this.currentOptions.page && this.currentOptions.page > 1) {
                 return await this.get();
             }

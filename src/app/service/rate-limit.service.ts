@@ -13,6 +13,7 @@ export class RateLimitService {
         return this._rateLimitExceeded;
     }
 
+    // TODO: Hook into http interceptor.
     public updateFromResponseHeader(response) {
         const limit = parseInt(response.headers("X-RateLimit-Limit"), 10);
         this._rateLimit = !isNaN(limit) ? limit : -1;

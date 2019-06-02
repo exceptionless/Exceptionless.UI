@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpResponse } from "@angular/common/http";
 import { FilterService } from "./filter.service";
 import { Stack } from "../models/stack";
 import { WorkInProgressResult } from "../models/network";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class StackService {
@@ -42,50 +43,50 @@ export class StackService {
         return await this.http.get<Stack>(`stacks/${id}`).toPromise();
     }
 
-    public getFrequent(options?) {
+    public getFrequent(options?): Promise<HttpResponse<Stack[]>> {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (organization) {
-            return this.http.get<Stack[]>(`organizations/${organization}/stacks/frequent`, { params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`organizations/${organization}/stacks/frequent`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
         if (project) {
-            return this.http.get<Stack[]>(`projects/${project}/stacks/frequent`, { params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`projects/${project}/stacks/frequent`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
-        return this.http.get<Stack[]>("stacks/frequent", { params: mergedOptions }).toPromise();
+        return this.http.get<Stack[]>("stacks/frequent", { params: mergedOptions, observe: "response" }).toPromise();
     }
 
-    public getUsers(options) {
+    public getUsers(options): Promise<HttpResponse<Stack[]>> {
         const mergedOptions = this.filterService.apply(options);
 
         const organization = this.filterService.getOrganizationId();
         if (typeof organization === "string" && organization) {
-            return this.http.get<Stack[]>(`organizations/${organization}/stacks/users`, { params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`organizations/${organization}/stacks/users`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
         if (typeof project === "string" && project) {
-            return this.http.get<Stack[]>(`projects/${project}/stacks/users`, { params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`projects/${project}/stacks/users`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
-        return this.http.get<Stack[]>(`stacks/users`, { params: mergedOptions }).toPromise();
+        return this.http.get<Stack[]>(`stacks/users`, { params: mergedOptions, observe: "response" }).toPromise();
     }
 
-    public getNew(options) {
+    public getNew(options): Promise<HttpResponse<Stack[]>> {
         const mergedOptions = this.filterService.apply(options);
         const organization = this.filterService.getOrganizationId();
         if (typeof organization === "string" && organization) {
-            return this.http.get<Stack[]>(`organizations/${organization}/stacks/new`, { params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`organizations/${organization}/stacks/new`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
         const project = this.filterService.getProjectTypeId();
         if (typeof project === "string" && project) {
-            return this.http.get<Stack[]>(`projects/${project}/stacks/new`, { params: mergedOptions }).toPromise();
+            return this.http.get<Stack[]>(`projects/${project}/stacks/new`, { params: mergedOptions, observe: "response" }).toPromise();
         }
 
-        return this.http.get<Stack[]>(`stacks/new`, { params: mergedOptions }).toPromise();
+        return this.http.get<Stack[]>(`stacks/new`, { params: mergedOptions, observe: "response" }).toPromise();
     }
 
     public markCritical(id: string) {

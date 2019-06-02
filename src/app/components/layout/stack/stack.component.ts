@@ -120,9 +120,7 @@ export class StackComponent implements OnInit, OnDestroy {
     };
     public project: Project; // TODO: Fix all the view model binding where it's using object indexers... as well as use the elvis operator: project?.name
     public recentOccurrences = {
-        get: (options) => {
-            return this.eventService.getByStackId(this._stackId, options);
-        },
+        get: options => this.eventService.getByStackId(this._stackId, options),
         summary: {
             showType: false
         },
@@ -195,7 +193,7 @@ export class StackComponent implements OnInit, OnDestroy {
 
     public async ngOnInit() {
         this.subscriptions = [];
-        this.subscriptions.push(this.activatedRoute.params.subscribe( (params) => {
+        this.subscriptions.push(this.activatedRoute.params.subscribe((params) => {
             this._stackId = params.id;
             this.filterStoreService.setEventType(params.type);
         }));
