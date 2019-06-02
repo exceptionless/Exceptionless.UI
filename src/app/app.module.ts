@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { NgModule, ErrorHandler } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from "@angular/common/http"; // TODO: We need to inspect our http interceptor implementation and ensure it only redirects on server error >=500 or no server response
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -37,6 +37,7 @@ import {AddWebHookDialogComponent} from "./dialogs/add-web-hook-dialog/add-web-h
 import {SemverDirective} from "./directives/semver.directive";
 import {SemanticVersionValidatorDirective} from "./validators/semantic-version.validator";
 import {ThousandSuffixPipe} from "./pipes/thousand-suffix.pipe";
+import { ExceptionlessErrorHandler } from "./exceptionlessclient";
 
 export const AUTH_CONFIG = {
     defaultHeaders: {"Content-Type": "application/json"},
@@ -109,7 +110,11 @@ export function HttpLoaderFactory(http: HttpClient) {
             useClass: TokenInterceptor,
             multi: true
         },
-        ThousandSuffixPipe
+        ThousandSuffixPipe,
+        {
+          provide: ErrorHandler,
+          useClass: ExceptionlessErrorHandler
+        }
     ],
     bootstrap: [AppComponent],
     entryComponents: [
