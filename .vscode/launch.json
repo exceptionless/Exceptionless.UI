@@ -1,23 +1,44 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
         "type": "chrome",
         "request": "launch",
-        "preLaunchTask": "Run App",
-        "name": "angular: exceptionless",
+        "preLaunchTask": "serve",
+        "name": "ng serve",
         "userDataDir": "${workspaceRoot}/.chrome",
-        "url": "http://localhost:5000",
+        "url": "http://localhost:4200",
+        "webRoot": "${workspaceFolder}",
         "smartStep": true,
-        "sourceMaps": true,
         "breakOnLoad": true,
-        "sourceMapPathOverrides": {
-            "webpack:///src/*": "${webRoot}/*"
-        },
+        "showAsyncStacks": true,
         "trace": true
     },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "test",
+      "name": "ng test",
+      "userDataDir": "${workspaceRoot}/.chrome",
+      "url": "http://localhost:9876/debug.html",
+      "webRoot": "${workspaceFolder}",
+      "smartStep": true,
+      "breakOnLoad": true,
+      "showAsyncStacks": true,
+      "trace": true
+    },
+    {
+      "name": "ng e2e",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/protractor/bin/protractor",
+      "protocol": "inspector",
+      "args": [
+        "${workspaceRoot}/e2e/protractor.conf.js"
+      ],
+      "smartStep": true,
+      "showAsyncStacks": true,
+      "trace": true
+    }
   ]
 }

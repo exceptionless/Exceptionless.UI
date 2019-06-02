@@ -1,39 +1,97 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Build App",
-            "type": "npm",
-            "script": "build",
-            "problemMatcher": [
-                "$tsc"
-            ]
-        },
-        {
-            "label": "Run App",
-            "type": "npm",
-            "script": "start",
-            "problemMatcher": [
-                "$tsc"
-            ]
-        },
-        {
-            "label": "Test App",
-            "type": "npm",
-            "script": "test",
-            "problemMatcher": [
-                "$tsc"
-            ]
-        },
-        {
-            "label": "Lint App",
-            "type": "npm",
-            "script": "lint",
-            "problemMatcher": [
-                "$tsc"
-            ]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "npm",
+      "script": "build",
+      "presentation": {
+        "reveal": "always"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": {
+        "owner": "typescript",
+        "source": "ts",
+        "applyTo": "closedDocuments",
+        "fileLocation": [
+          "relative",
+          "${cwd}"
+        ],
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "Compiled |Failed to compile."
+          }
         }
-    ]
+      }
+    },
+    {
+      "label": "serve",
+      "type": "npm",
+      "script": "start",
+      "isBackground": true,
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": {
+        "owner": "typescript",
+        "source": "ts",
+        "applyTo": "closedDocuments",
+        "fileLocation": [
+          "relative",
+          "${cwd}"
+        ],
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "Compiled |Failed to compile."
+          }
+        }
+      }
+    },
+    {
+      "label": "test",
+      "type": "npm",
+      "script": "test",
+      "presentation": {
+        "reveal": "always"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "e2e",
+      "type": "npm",
+      "script": "e2e",
+    },
+    {
+      "label": "lint",
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": {
+          "base": "$tslint5",
+          "fileLocation": "relative"
+      }
+    }
+  ]
 }
