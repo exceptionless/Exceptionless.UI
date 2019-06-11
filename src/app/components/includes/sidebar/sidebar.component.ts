@@ -4,62 +4,62 @@ import { FilterStoreService } from "../../../service/filter-store.service";
 import { Intercom } from "ng-intercom";
 
 @Component({
-    selector: "app-sidebar",
-    templateUrl: "./sidebar.component.html"
+  selector: "app-sidebar",
+  templateUrl: "./sidebar.component.html"
 })
 
 export class SidebarComponent implements OnInit, OnDestroy {
-    public type: string = "type/";
-    public types = {
-        exceptions: "error",
-        log: "log",
-        broken: "404",
-        feature: "usage",
-        events: "events"
-    };
+  public type: string = "type/";
+  public types = {
+    exceptions: "error",
+    log: "log",
+    broken: "404",
+    feature: "usage",
+    events: "events"
+  };
 
-    public filterUrlPattern: string;
+  public filterUrlPattern: string;
 
-    constructor(
-        private filterStoreService: FilterStoreService,
-        private filterService: FilterService,
-        private intercom: Intercom
-    ) {}
+  constructor(
+    private filterStoreService: FilterStoreService,
+    private filterService: FilterService,
+    private intercom: Intercom
+  ) { }
 
-    public ngOnInit() {
-        this.filterStoreService.getProjectFilterEmitter().subscribe(item => {
-            this.setFilterUrlPattern();
-        });
+  public ngOnInit() {
+    this.filterStoreService.getProjectFilterEmitter().subscribe(item => {
+      this.setFilterUrlPattern();
+    });
 
-        this.setFilterUrlPattern();
-        if (this.isIntercomEnabled()) {
-            this.intercom.boot({
-                app_id: environment.INTERCOM_APPID
-            });
-        }
+    this.setFilterUrlPattern();
+    if (this.isIntercomEnabled()) {
+      this.intercom.boot({
+        app_id: environment.INTERCOM_APPID
+      });
     }
+  }
 
-    public ngOnDestroy() {
-        this.filterStoreService.getProjectFilterEmitter().unsubscribe();
-    }
+  public ngOnDestroy() {
+    this.filterStoreService.getProjectFilterEmitter().unsubscribe();
+  }
 
-    public setFilterUrlPattern() {
-        if (this.filterService.getProjectType() === "All Projects") {
-            this.type = "type/";
-            this.filterUrlPattern = "";
-        } else {
-            this.type = "";
-            const projectId = this.filterService.getProjectTypeId();
-            const projectType = this.filterService.getProjectType();
-            this.filterUrlPattern = `${projectType}/${projectId}/`;
-        }
+  public setFilterUrlPattern() {
+    if (this.filterService.getProjectType() === "All Projects") {
+      this.type = "type/";
+      this.filterUrlPattern = "";
+    } else {
+      this.type = "";
+      const projectId = this.filterService.getProjectTypeId();
+      const projectType = this.filterService.getProjectType();
+      this.filterUrlPattern = `${projectType}/${projectId}/`;
     }
+  }
 
-    public isIntercomEnabled() {
-        return !!environment.INTERCOM_APPID;
-    }
+  public isIntercomEnabled() {
+    return !!environment.INTERCOM_APPID;
+  }
 
-    public showIntercom() {
-        this.intercom.showNewMessage();
-    }
+  public showIntercom() {
+    this.intercom.showNewMessage();
+  }
 }
