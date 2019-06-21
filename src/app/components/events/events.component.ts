@@ -19,7 +19,10 @@ export interface EventsSettings {
     hideActions?: boolean;
     hideSessionStartTime?: boolean;
     sortByDateDescending?: boolean;
-    summary?: { showType: boolean };
+    summary?: {
+      showType: boolean,
+      showIPAddress: boolean
+     };
     timeHeaderText?: string;
     options?: GetEventsParameters;
     get: (options?: GetEventsParameters, currentEvent?: PersistentEvent) => Promise<HttpResponse<PersistentEvent[]>>;
@@ -46,6 +49,7 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
     public pageSummary: string;
     public loading: boolean = true;
     public showType: boolean;
+    public showIPAddress: boolean;
     public sortByDateDescending: boolean;
     public timeHeaderText: string;
     public hideSessionStartTime: boolean;
@@ -70,6 +74,7 @@ export class EventsComponent implements OnChanges, OnInit, OnDestroy {
         this.hideSessionStartTime = this.settings.hideSessionStartTime || false;
         this.actions = this.settings.hideActions ? [] : this.eventsActionService.getActions();
         this.showType = this.settings.summary ? this.settings.summary.showType : !this.filterService.getEventType();
+        this.showIPAddress = this.settings.summary ? this.settings.summary.showIPAddress : this.filterService.getEventType()  === "404";
         await this.get();
     }
 

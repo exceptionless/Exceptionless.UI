@@ -6,43 +6,29 @@ import { NgModel } from "@angular/forms";
     providers: [(NgModel)]
 })
 export class SemverDirective {
+    constructor(private model: NgModel) {}
 
-    constructor(private model: NgModel) {
-    }
-
-    @HostListener("ngModelChange", ["$event"]) onModelChange(event) {
+    @HostListener("ngModelChange", ["$event"])
+    public onModelChange(input) {
         const r = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
-        if (!r.test(event)) {
-            return event;
+        if (!input || !r.test(input)) {
+            return input;
         }
-        // TODO: Ensure this is copied over from the oiriginal project.
-        // var transformedInput = '';
-        // var isTwoPartVersion = /^(\d+)\.(\d+)$/;
-        // var isFourPartVersion = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
-        // if (isTwoPartVersion.test(inputValue)) {
-        //     transformedInput = inputValue.replace(isTwoPartVersion, '$1.$2.0');
-        // } else if (isFourPartVersion.test(inputValue)) {
-        //     transformedInput = inputValue.replace(isFourPartVersion, '$1.$2.$3-$4');
-        // }
-        //
-        // if (transformedInput !== '') {
-        //     modelCtrl.$setViewValue(transformedInput);
-        //     modelCtrl.$render();
-        // }
 
         // convert 4 part version to semver (1.2.3.4 to 1.2.3-4)
         let transformedInput = "";
         const isTwoPartVersion = /^(\d+)\.(\d+)$/;
         const isFourPartVersion = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
-        if (isTwoPartVersion.test(event)) {
-            transformedInput = event.replace(isTwoPartVersion, "$1.$2.0");
-        } else if (isFourPartVersion.test(event)) {
-            transformedInput = event.replace(isFourPartVersion, "$1.$2.$3-$4");
+        if (isTwoPartVersion.test(input)) {
+            transformedInput = input.replace(isTwoPartVersion, "$1.$2.0");
+        } else if (isFourPartVersion.test(input)) {
+            transformedInput = input.replace(isFourPartVersion, "$1.$2.$3-$4");
         }
 
-        if (transformedInput !== event) {
+        if (transformedInput !== input) {
             this.model.valueAccessor.writeValue(transformedInput);
         }
+
         return transformedInput;
     }
 }

@@ -9,7 +9,8 @@
                     </label>
                 </th>
                 <th>{{ 'Summary' | translate }}</th>
-                <th class="action-xl hidden-xs">User</th>
+                <th class="action-xl hidden-xs" *ngIf="showIPAddress">{{ 'IP Address' | translate }}</th>
+                <th class="action-xl hidden-xs">{{ 'User' | translate }}</th>
                 <th class="clickable" [ngClass]="{ 'relative-date': relativeTo(), 'date': !relativeTo(), 'dropup': !sortByDateDescending }" ng-click="vm.toggleDateSort()">
                     <abbr title="{{ sortByDateDescending ? 'Sort Descending' : 'Sort Ascending' | translate }}">
                         {{ timeHeaderText | translate }} <span class="caret"></span>
@@ -23,8 +24,14 @@
                 <td (click)="open(event.id, $event)">
                     <app-summary [source]="event" [showType]="showType"></app-summary>
                 </td>
+                <td class="hidden-xs" (click)="open(event.id, $event)"  *ngIf="showIPAddress">
+                    <span *ngIf="event.data && event.data.IpAddress">
+                        <span *ngIf="event.data.IpAddress.length === 1">{{event.data.IpAddress[0]}}</span>
+                        <abbr *ngIf="event.data.IpAddress.length > 1" title="{{event.data.IpAddress.join(',')}}">{{event.data.IpAddress[0]}}</abbr>
+                      </span>
+                </td>
                 <td class="hidden-xs" (click)="open(event.id, $event)">
-                    <abbr *ngIf="event.data.Name && event.data.Identity" title="{{ event.data.Name}} ({{ event.data.Identity }})" truncate overwrite-tooltip="false" [innerHtml]="event.data.Name"></abbr>
+                    <abbr *ngIf="event.data.Name && event.data.Identity" title="{{event.data.Name}} ({{event.data.Identity}})" truncate overwrite-tooltip="false" [innerHtml]="event.data.Name"></abbr>
                     <span *ngIf="!event.data.Name || !event.data.Identity" truncate [innerHtml]="event.data.Name || event.data.Identity"></span>
                 </td>
                 <td (click)="open(event.id, $event)">
