@@ -33,8 +33,7 @@ RUN sed -i 's/@@version/%UI_VERSION%/g' /app/src/app/exceptionless-client.ts
 RUN sed -i 's/@@version/%UI_VERSION%/g' /app/src/app/components/layout/layout.component.ts
 
 USER root
-#RUN ng build --prod --output-path=dist
-RUN ng build --output-path=dist
+RUN ng build --prod --output-path=dist
 
 #testrunner
 FROM build AS testrunner
