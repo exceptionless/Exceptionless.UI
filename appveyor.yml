@@ -1,43 +1,34 @@
 version: 3.0.{build}
+image: ubuntu
+clone_depth: 2
+
+services:
+  - docker
+
+pull_requests:
+  do_not_increment_build_number: true
+
+init:
+  - git config --global core.autocrlf input
 
 environment:
-    BUILD_REPO_URL:
-        secure: vuYBT6D5arel88+Py/H3nnMPd4hInIXvr2cwhJaZSSSvJnmg+9sX1P5+bTWaJskYpGztHVMg0Iq7hgUCMKjh23w8WBrutLiUsixRE0LBjroIVJaRsYG1okSko0fNKVOCyOLKGt19Qrk45/TrTFlGMQ==
-
-install:
-- ps: Install-Product node 12
-- npm install
-- npm install -g angular-cli-ghpages
-- npm install -g @angular/cli
-- npm install -g gzipper
+  UI_DOCKER_IMAGE: ui-ci
 
 build_script:
-- sed -i 's/@@version/%APPVEYOR_BUILD_VERSION%/g' src\app\exceptionlessclient.ts
-- sed -i 's/@@version/%APPVEYOR_BUILD_VERSION%/g' src\app\components\layout\layout.component.ts
-- node_modules\.bin\ng build --prod && gzipper ./dist
+  - docker build --target testrunner -t exceptionless:test .
+  - docker run -e APPVEYOR_API_URL --net=host exceptionless:test
 
-after_test:
-- tar -zcvf dist\exceptionless.zip dist\exceptionless
-- ps: Get-ChildItem .\*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName ReleaseArtifacts }
-- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" IF "%APPVEYOR_REPO_BRANCH%"=="" ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=feature/angular6 --repo=%BUILD_REPO_URL%
-- IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" IF not "%APPVEYOR_REPO_BRANCH%"=="" ngh --dir=dist\exceptionless --no-silent --name="AppVeyor CI" --email=builds@exceptionless.io --branch=%APPVEYOR_REPO_BRANCH%  --repo=%BUILD_REPO_URL%
-
-artifacts:
-- path: .\*.zip
-  name: ReleaseArtifacts
-
-deploy:
-    provider: GitHub
-    auth_token:
-        secure: 0s81q7bweVLTFSOKxnIhan7el6bIFiN8HJ1kYJzOkeFXX7wgGSq9bs/rV53X9qpf
-    artifact: ReleaseArtifacts
-    draft: true
-    on:
-        branch: master
-        appveyor_repo_tag: true
+after_build:
+  - docker build --build-arg UI_VERSION=$APPVEYOR_BUILD_VERSION --target ui -t $UI_DOCKER_IMAGE .
+  - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+  - |
+    for tag in {$APPVEYOR_BUILD_VERSION,latest}; do
+      docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
+      docker push exceptionless/$UI_DOCKER_IMAGE:$tag
+    done
 
 notifications:
-- provider: Slack
-  channel: '#notifications'
-  auth_token:
+  - provider: Slack
+    channel: '#notifications'
+    auth_token:
       secure: GniMpFE62HprSyQNQoej/VSBnxn2GNnTrca3BnF8+ikMdqduO4Ts4t297teZF6wDAmGwnOtXusctUla8+WxLFkIztvVCS2Z1RG/DvEDYoc0=

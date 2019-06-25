@@ -10,7 +10,5 @@ var environment = {
     SLACK_APPID: '',
     STRIPE_PUBLISHABLE_KEY: '',
     SYSTEM_NOTIFICATION_MESSAGE: '',
-    USE_HTML5_MODE: false,
-    USE_SSL: false,
-    ENABLE_ACCOUNT_CREATION: false
+    ENABLE_ACCOUNT_CREATION: true
 };

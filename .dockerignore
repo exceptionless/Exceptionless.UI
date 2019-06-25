@@ -1,0 +1,14 @@
+Dockerfile*
+docker-compose*
+.dockerignore
+.git
+.gitignore
+.circleci
+.editorconfig
+.prettier*
+.vscode
+**/node_modules/
+**/results/
+
+README.md
+LICENSE
