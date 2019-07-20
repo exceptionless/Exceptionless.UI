@@ -4,8 +4,6 @@
 /dist
 /tmp
 /out-tsc
-# Only exists if Bazel was run
-/bazel-out
 
 # dependencies
 /node_modules
@@ -19,6 +17,7 @@ speed-measure-plugin.json
 .project
 .classpath
 .c9/
+.chrome/
 *.launch
 .settings/
 *.sublime-workspace
@@ -44,3 +43,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# old project structure
+/src/node_modules
+/src/bower_modules

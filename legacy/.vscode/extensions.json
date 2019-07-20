@@ -1,12 +1,11 @@
 {
   "recommendations": [
-    "editorconfig.editorconfig",
     "ms-vscode.vscode-typescript-tslint-plugin",
     "msjsdiag.debugger-for-chrome",
     "auchenberg.vscode-browser-preview",
+    "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
     "johnpapa.angular-essentials",
-    "ghaschel.vscode-angular-html",
-    "angular.ng-template",
+    "ghaschel.vscode-angular-html"
   ]
 }

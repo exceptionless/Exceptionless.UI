@@ -18,7 +18,10 @@
         "owner": "typescript",
         "source": "ts",
         "applyTo": "closedDocuments",
-        "fileLocation": ["relative", "${cwd}"],
+        "fileLocation": [
+          "relative",
+          "${cwd}"
+        ],
         "pattern": "$tsc",
         "background": {
           "activeOnStart": true,
@@ -48,7 +51,10 @@
         "owner": "typescript",
         "source": "ts",
         "applyTo": "closedDocuments",
-        "fileLocation": ["relative", "${cwd}"],
+        "fileLocation": [
+          "relative",
+          "${cwd}"
+        ],
         "pattern": "$tsc",
         "background": {
           "activeOnStart": true,
@@ -76,15 +82,15 @@
     {
       "label": "e2e",
       "type": "npm",
-      "script": "e2e"
+      "script": "e2e",
     },
     {
       "label": "lint",
       "type": "npm",
       "script": "lint",
       "problemMatcher": {
-        "base": "$tslint5",
-        "fileLocation": "relative"
+          "base": "$tslint5",
+          "fileLocation": "relative"
       }
     }
   ]

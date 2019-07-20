@@ -1,13 +1,12 @@
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { environment } from './environments/environment';
+import { RootModule } from './root/root.module';
 
-import { AppModule } from "./app/app.module";
-import { enableProdMode } from "@angular/core";
-import { $ExceptionlessClient } from "./app/exceptionless-client";
+if (environment.production) {
+  enableProdMode();
+}
 
-enableProdMode();
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(ex => {
-    console.log(ex);
-    $ExceptionlessClient.submitException(ex);
-  });
+platformBrowserDynamic()
+  .bootstrapModule(RootModule)
+  .catch((err: any) => console.error(err));

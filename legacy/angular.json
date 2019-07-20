@@ -5,15 +5,15 @@
   "defaultProject": "exceptionless",
   "projects": {
     "exceptionless": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
       "root": "",
       "sourceRoot": "src",
+      "projectType": "application",
       "prefix": "app",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "less"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -22,33 +22,32 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/.deployment",
+              "src/deploy.sh",
+              "src/app_data",
+              "src/web.config",
+              "src/app-config.js",
+              "src/.htaccess"
             ],
-            "styles": [
-              "src/scss/main.scss"
-            ],
-            "scripts": []
+            "styles": ["src/assets/app.less", "src/styles.less"],
+            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"],
+            "es5BrowserSupport": true
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
+              "vendorChunk": true,
+              "commonChunk": true,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -82,31 +81,27 @@
           "options": {
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/scss/main.scss"
-            ],
-            "scripts": []
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "styles": ["src/styles.less"],
+            "scripts": [],
+            "assets": ["src/favicon.ico", "src/assets"]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
-        },
+        }
+      }
+    },
+    "exceptionless-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
@@ -118,7 +113,15 @@
               "devServerTarget": "exceptionless:serve:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**"]
+          }
         }
       }
-    }}
+    }
   }
+}
