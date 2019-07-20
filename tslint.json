@@ -1,5 +1,10 @@
 {
   "extends": "tslint:recommended",
+  "rulesDirectory": [
+    "node_modules/codelyzer",
+    "node_modules/tslint-lines-between-decorator-and-class",
+    "node_modules/tslint-lines-between-class-members"
+  ],
   "rules": {
     "array-type": false,
     "arrow-parens": false,
@@ -52,7 +57,8 @@
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
-  },
-  "rulesDirectory": ["codelyzer"]
+    "use-pipe-transform-interface": true,
+    "lines-between-decorator-and-class": [true, 0],
+    "lines-between-class-members": [true, 1]
+  }
 }
