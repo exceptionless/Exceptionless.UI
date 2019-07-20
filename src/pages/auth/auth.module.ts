@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { AppCommonModule } from 'src/shared/common/common.module';
+import { AppCommonModule } from '../../shared/common/common.module';
 import { AuthPageComponent } from './auth.component';
 
 @NgModule({
