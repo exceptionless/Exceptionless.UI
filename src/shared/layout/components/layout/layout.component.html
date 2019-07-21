@@ -12,16 +12,14 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="mat-elevation-z2">
-      <!--
-        <mat-toolbar-row>
-          <mat-slide-toggle
-            [checked]="(themeService.theme$ | async) === 'theme-dark'"
-            (change)="themeService.toggle(!$event.checked)"
-          >
-            Dark theme
-          </mat-slide-toggle>
-        </mat-toolbar-row>
-      -->
+      <mat-toolbar-row>
+        <mat-slide-toggle
+          [checked]="(themeService.theme$ | async) === 'dark'"
+          (change)="themeService.toggle(!$event.checked)"
+        >
+          Dark theme
+        </mat-slide-toggle>
+      </mat-toolbar-row>
     </mat-toolbar>
 
     <main role="main">

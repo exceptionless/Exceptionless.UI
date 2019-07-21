@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ThemeService } from '../../../common/services/theme/theme.service';
 
 @Component({
   selector: 'app-layout',
@@ -6,8 +7,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   styleUrls: ['./layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LayoutComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
+export class LayoutComponent {
+  constructor(public readonly themeService: ThemeService) {}
 }
