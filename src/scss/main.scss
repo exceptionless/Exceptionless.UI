@@ -3,11 +3,10 @@
 /* Reset styles */
 @import '~normalize.css/normalize.css';
 
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
-/* Todo: Themes
+/* Themes */
 @import './themes/core';
 @import './themes/light-theme';
-@import './themes/dark-theme'; */
+@import './themes/dark-theme';
 
 /* App styles */
 @import './misc';

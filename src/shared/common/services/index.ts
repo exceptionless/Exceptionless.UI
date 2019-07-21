@@ -1,3 +1,5 @@
-export {};
+import { ThemeService } from './theme/theme.service';
 
-export const SERVICES: any[] = [];
+export { ThemeService };
+
+export const SERVICES: any[] = [ThemeService];
