@@ -5,4 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss']
 })
-export class RootComponent {}
+export class RootComponent {
+  loggedIn: boolean = true;
+}

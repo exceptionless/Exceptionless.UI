@@ -1,0 +1,24 @@
+html,
+body {
+  min-height: 100%;
+  height: 100%;
+  line-height: normal;
+  font-family: Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -ms-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.5rem;
+  margin: 0 0 10px 0;
+}

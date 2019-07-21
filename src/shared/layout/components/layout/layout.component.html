@@ -1,0 +1,31 @@
+<mat-sidenav-container>
+  <mat-sidenav #drawer fixedInViewport="true" role="navigation" mode="side" [opened]="true">
+    <mat-toolbar color="primary" class="mat-elevation-z2">
+      <img class="logo" src="/assets/exceptionless-logo.png" alt="Exceptionless" />
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/">
+        <mat-icon>home</mat-icon>
+        Home
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="mat-elevation-z2">
+      <!--
+        <mat-toolbar-row>
+          <mat-slide-toggle
+            [checked]="(themeService.theme$ | async) === 'theme-dark'"
+            (change)="themeService.toggle(!$event.checked)"
+          >
+            Dark theme
+          </mat-slide-toggle>
+        </mat-toolbar-row>
+      -->
+    </mat-toolbar>
+
+    <main role="main">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

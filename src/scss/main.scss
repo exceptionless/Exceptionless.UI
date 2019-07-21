@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Reset styles */
+@import '~normalize.css/normalize.css';
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+/* Todo: Themes
+@import './themes/core';
+@import './themes/light-theme';
+@import './themes/dark-theme'; */
+
+/* App styles */
+@import './misc';

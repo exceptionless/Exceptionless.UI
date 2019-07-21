@@ -1,3 +1,6 @@
-export {};
+import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
+import { LayoutComponent } from './layout/layout.component';
 
-export const COMPONENTS: any[] = [];
+export { LayoutComponent, AuthLayoutComponent };
+
+export const COMPONENTS: any[] = [LayoutComponent, AuthLayoutComponent];

@@ -1,5 +1,5 @@
-<div style="text-align:center">
-  <h1>Welcome to Exceptionless!</h1>
-</div>
+<ng-template #authTpl>
+  <app-auth-layout></app-auth-layout>
+</ng-template>
 
-<router-outlet></router-outlet>
+<app-layout *ngIf="loggedIn; else authTpl"></app-layout>
