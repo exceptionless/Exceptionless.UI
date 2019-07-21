@@ -13,6 +13,7 @@ describe('RootComponent', () => {
   it('should create the app', () => {
     const fixture = TestBed.createComponent(RootComponent);
     const app = fixture.debugElement.componentInstance;
+
     expect(app).toBeTruthy();
   });
 
@@ -20,6 +21,7 @@ describe('RootComponent', () => {
     const fixture = TestBed.createComponent(RootComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
+
     expect(compiled.querySelector('h1').textContent).toContain('Welcome to Exceptionless!');
   });
 });
