@@ -14,15 +14,29 @@ init:
 environment:
   UI_DOCKER_IMAGE: ui-ci
 
+before_build:
+  - |
+    if [ $APPVEYOR_REPO_TAG != "true" ]; then
+      VERSION="$APPVEYOR_BUILD_VERSION-pre"
+      echo "Version: $VERSION"
+    else
+      UI_DOCKER_IMAGE=ui
+      VERSION=$APPVEYOR_BUILD_VERSION
+      echo "Version: $VERSION Tag: $APPVEYOR_REPO_TAG_NAME"
+    fi
+    if [ -z $APPVEYOR_PULL_REQUEST_NUMBER ]; then
+      appveyor UpdateBuild -Version $VERSION
+    fi
+
 build_script:
   - docker build --target testrunner -t exceptionless:test .
   - docker run -e APPVEYOR_API_URL --net=host exceptionless:test
 
 after_build:
-  - docker build --build-arg UI_VERSION=$APPVEYOR_BUILD_VERSION --target ui -t $UI_DOCKER_IMAGE .
+  - docker build --build-arg UI_VERSION=$VERSION --target ui -t $UI_DOCKER_IMAGE .
   - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
   - |
-    for tag in {$APPVEYOR_BUILD_VERSION,latest}; do
+    for tag in {$VERSION,latest}; do
       docker tag $UI_DOCKER_IMAGE exceptionless/$UI_DOCKER_IMAGE:$tag
       docker push exceptionless/$UI_DOCKER_IMAGE:$tag
     done
