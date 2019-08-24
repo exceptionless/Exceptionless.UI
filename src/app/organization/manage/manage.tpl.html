@@ -46,7 +46,7 @@
             <uib-tab heading="{{::'Projects' | translate}}">
               <projects settings="vm.projects"></projects>
 
-              <a ui-sref="app.project.add" class="btn btn-primary" role="button">{{::'Add New Project' | translate}}</a>
+              <a ui-sref="app.project.add({ organizationId: vm.organization.id })" class="btn btn-primary" role="button">{{::'Add New Project' | translate}}</a>
             </uib-tab>
             <uib-tab heading="{{::'UserManager' | translate}}">
               <users settings="vm.users"></users>
