@@ -3,7 +3,7 @@ module.exports = {
         sourceMap: true,
         sourceMapIncludeSources: false,
         mangle: {
-            except: ['$super']
+          reserved: ['$super']
         }
     },
     main: {
