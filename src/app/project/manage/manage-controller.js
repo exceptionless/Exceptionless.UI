@@ -101,6 +101,7 @@
           vm.remainingEventLimit = getRemainingEventLimit(vm.organization);
           vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organization;
 
+          vm.project.usage = vm.project.usage || [];
           vm.organization.usage = (vm.organization.usage || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: vm.organization.max_events_per_month, too_big: 0 }]).filter(function (usage) {
             return vm.project.usage.some(function(u) { return moment(u.date).isSame(usage.date); });
           });
