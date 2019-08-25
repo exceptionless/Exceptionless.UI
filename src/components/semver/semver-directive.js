@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('exceptionless.semver', [])
-    .directive('semver', function ($timeout) {
+    .directive('semver', function () {
       return {
         restrict: 'A',
         scope: false,
         require: '?ngModel',
         link: function (scope, element, attrs, modelCtrl) {
           modelCtrl.$parsers.push(function (inputValue) {
-            var isVersionRegex = /^(\d+)\.(\d+)\.?(\d+)?\.?(\d)?$/;
+            var isVersionRegex = /^(\d+)\.(\d+)\.?(\d+)?\.?(\d+)?$/;
             if (!inputValue || !isVersionRegex.test(inputValue)) {
               return inputValue;
             }
