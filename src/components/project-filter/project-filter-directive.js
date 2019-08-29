@@ -125,8 +125,36 @@
           return projectService.getAll().then(onSuccess, onFailure);
         }
 
-        function getProjectsByOrganizationId(id) {
-          return vm.projects.filter(function (project) { return project.organization_id === id; });
+        function getFilteredOrganizations() {
+          var filter = vm.filter && vm.filter.toLocaleLowerCase();
+
+          return vm.organizations.filter(function (organization) {
+            if (!filter || organization.name.toLocaleLowerCase().includes(filter))
+              return organization;
+
+            var hasProjectMatchingFilter = vm.projects.find(function (p) {
+              return p.organization_id === organization.id && p.name.toLocaleLowerCase().includes(filter);
+            });
+
+            if (hasProjectMatchingFilter)
+              return organization;
+
+            return null;
+          });
+        }
+
+        function getFilteredProjectsByOrganizationId(id) {
+          var filter = vm.filter && vm.filter.toLocaleLowerCase();
+
+          return vm.projects.filter(function (project) {
+            if (project.organization_id !== id)
+              return null;
+
+            if (!filter || project.name.toLocaleLowerCase().includes(filter) || project.organization_name.toLocaleLowerCase().includes(filter))
+              return project;
+
+            return null;
+          });
         }
 
         function getStateName() {
@@ -153,6 +181,10 @@
           return $state.current.name.contains('session-') || $state.current.name === 'app.session.dashboard';
         }
 
+        function showSearch() {
+          return vm.projects.length >= 20 || vm.organizations.length >= 20;
+        }
+
         function update() {
           vm.filteredDisplayName = getFilterName();
           vm.urls = buildUrls();
@@ -174,11 +206,14 @@
 
           vm.filteredDisplayName = 'Loading';
           vm.get = get;
-          vm.getProjectsByOrganizationId = getProjectsByOrganizationId;
+          vm.getFilteredOrganizations = getFilteredOrganizations;
+          vm.getFilteredProjectsByOrganizationId = getFilteredProjectsByOrganizationId;
+          vm.filter = "";
           vm.isLoadingOrganizations = true;
           vm.isLoadingProjects = true;
           vm.organizations = [];
           vm.projects = [];
+          vm.showSearch = showSearch;
           vm.urls = buildUrls();
           vm.update = update;
 

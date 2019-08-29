@@ -38,10 +38,10 @@
 
       function getAll(options, useCache) {
         if (useCache === undefined || useCache) {
-          return _cachedRestangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
+          return _cachedRestangular.all('projects').getList(angular.extend({}, { limit: 1000 }, options));
         }
 
-        return Restangular.all('projects').getList(angular.extend({}, { limit: 100 }, options));
+        return Restangular.all('projects').getList(angular.extend({}, { limit: 1000 }, options));
       }
 
       function getById(id, useCache) {
