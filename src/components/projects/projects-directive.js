@@ -9,7 +9,8 @@
     'exceptionless.notification',
     'exceptionless.pagination',
     'exceptionless.project',
-    'exceptionless.refresh'
+    'exceptionless.refresh',
+    'exceptionless.validators'
   ])
     .directive('projects', function () {
       return {
@@ -20,8 +21,9 @@
           settings: "="
         },
         templateUrl: 'components/projects/projects-directive.tpl.html',
-        controller: function ($ExceptionlessClient, $window, $state, dialogService, filterService, linkService, notificationService, paginationService, projectService, translateService) {
+        controller: function ($ExceptionlessClient, $window, $scope, $state, dialogService, filterService, linkService, notificationService, paginationService, projectService, translateService) {
           var vm = this;
+
           function get(options, useCache) {
             function onSuccess(response) {
               vm.projects = response.data.plain();
@@ -39,9 +41,18 @@
               return vm.projects;
             }
 
+            function onFailure() {
+              vm.projects = [];
+              vm.previous = null;
+              vm.next = null;
+              vm.pageSummary = paginationService.getCurrentPageSummary(vm.projects, vm.currentOptions.page, vm.currentOptions.limit);
+
+              return vm.projects;
+            }
+
             vm.loading = vm.projects.length === 0;
             vm.currentOptions = options || vm.settings.options;
-            return vm.settings.get(vm.currentOptions, useCache).then(onSuccess).finally(function() {
+            return vm.settings.get(vm.currentOptions, useCache).then(onSuccess, onFailure).finally(function() {
               vm.loading = false;
             });
           }
@@ -137,6 +148,7 @@
 
           this.$onInit = function $onInit() {
             vm._source = 'exceptionless.projects';
+            vm.form = {};
             vm.canRefresh = canRefresh;
             vm.currentOptions = {};
             vm.get = get;
@@ -153,6 +165,16 @@
             $ExceptionlessClient.submitFeatureUsage(vm._source);
             get();
           };
+
+          var watcher = $scope.$watch("vm.settings.options.filter", function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+              vm.get();
+            }
+          });
+
+          $scope.$on('$destroy', function () {
+            watcher();
+          });
         },
         controllerAs: 'vm'
       };
