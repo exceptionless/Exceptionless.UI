@@ -4,12 +4,12 @@
     <th>{{::'API Key' | translate}}</th>
     <th class="hidden-xs">{{::'Notes' | translate}}</th>
     <th class="action-lg visible-xs">{{::'Actions' | translate}}</th>
-    <th class="hidden-xs action-xl">{{::'Actions' | translate}}</th>
+    <th class="hidden-xs action-xxl">{{::'Actions' | translate}}</th>
   </tr>
   </thead>
   <tbody>
   <tr ng-repeat="token in vm.tokens track by token.id">
-    <td><div class="control-group">{{::token.id}}</div></td>
+    <td><div class="control-group" ng-class="{'text-l-t': token.is_disabled}">{{::token.id}}</div></td>
     <td class="hidden-xs" ng-class="{'row-clickable': !rowform.$visible}" ng-click="rowform.$show()">
       <div editable-text="token.notes" e-name="notes" e-form="rowform"
            onbeforesave="vm.validateApiKeyNote(token.notes, $data)"
@@ -27,6 +27,8 @@
       <div class="buttons" ng-show="!rowform.$visible">
         <button type="button" role="button" class="btn btn-sm btn-primary" title="{{::'Copy to Clipboard' | translate}}" clipboard text="token.id" on-copied="vm.copied()" supported="vm.clipboardSupported" ng-show="vm.clipboardSupported"><i class="fa fa-copy"></i></button>
         <button type="button" role="button" class="btn btn-sm btn-default hidden-xs" ng-click="rowform.$show()">{{::'Edit' | translate}}</button>
+        <button ng-if="token.is_disabled" type="button" role="button" class="btn btn-sm btn-default hidden-xs" ng-click="vm.enable(token)">{{::'Enable' | translate}}</button>
+        <button ng-if="!token.is_disabled" type="button" role="button" class="btn btn-sm btn-default hidden-xs" ng-click="vm.disable(token)">{{::'Disable' | translate}}</button>
         <button type="button" role="button" ng-click="vm.removeToken(token)" class="btn btn-sm btn-danger" title="{{::'Delete' | translate}}"><i class="fa fa-times"></i></button>
       </div>
     </td>
