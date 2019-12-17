@@ -48,8 +48,8 @@
         return eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback, false).then(onSuccess).catch(function(e){});
       }
 
-      function updateLiveFilter(isLive) {
-        vm.includeLiveFilter = isLive;
+      function updateLiveFilter() {
+        vm.includeLiveFilter = !vm.includeLiveFilter;
         filterService.fireFilterChanged(false);
       }
 

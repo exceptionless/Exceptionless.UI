@@ -59,10 +59,10 @@
           <i class="fa fa-bar-chart-o"></i> {{::'Sessions and Users' | translate}}
           <div class="pull-right">
             <label class="switch bg-success">
-              <input type="checkbox" ng-model="vm.includeLiveFilter" ng-click="vm.updateLiveFilter(vm.includeLiveFilter)">
+              <input type="checkbox" ng-model="vm.includeLiveFilter" ng-click="vm.updateLiveFilter()">
               <i></i>
             </label>
-            <div class="switch-text" ng-class="{'text-success': vm.includeLiveFilter}" ng-click="vm.updateLiveFilter(!vm.includeLiveFilter)">{{::'View Active' | translate}}</div>
+            <div class="switch-text" ng-class="{'text-success': vm.includeLiveFilter}" ng-click="vm.updateLiveFilter()">{{::'View Active' | translate}}</div>
           </div>
         </div>
         <div class="panel-body">
