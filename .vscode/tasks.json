@@ -43,7 +43,6 @@
         {
             "type": "shell",
             "label": "serve",
-            "dependsOn": "build",
             "command": "node_modules/.bin/grunt",
             "args": [
                 "serve"
