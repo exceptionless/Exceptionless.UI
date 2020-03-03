@@ -11,12 +11,8 @@
       return Restangular.one('stacks', id).one('add-link').customPOST({ value: url }, undefined, undefined, {});
     }
 
-    function disableNotifications(id) {
-      return Restangular.one('stacks', id).one('notifications').remove();
-    }
-
-    function enableNotifications(id) {
-      return Restangular.one('stacks', id).one('notifications').post();
+    function changeStatus(id, status) {
+      return Restangular.one('stacks', id).post('change-status', null, { status: status });
     }
 
     function getAll(options) {
@@ -95,16 +91,8 @@
       return Restangular.one('stacks', id).post('mark-fixed', null, { version: version });
     }
 
-    function markNotFixed(id) {
-      return Restangular.one('stacks', id).one('mark-fixed').remove();
-    }
-
-    function markHidden(id) {
-      return Restangular.one('stacks', id).one('mark-hidden').post();
-    }
-
-    function markNotHidden(id) {
-      return Restangular.one('stacks', id).one('mark-hidden').remove();
+    function markSnoozed(id, snoozeUntilUtc) {
+      return Restangular.one('stacks', id).post('mark-snoozed', null, { snoozeUntilUtc: snoozeUntilUtc });
     }
 
     function promote(id) {
@@ -121,8 +109,7 @@
 
     var service = {
       addLink: addLink,
-      disableNotifications: disableNotifications,
-      enableNotifications: enableNotifications,
+      changeStatus: changeStatus,
       getAll: getAll,
       getById: getById,
       getFrequent: getFrequent,
@@ -131,9 +118,7 @@
       markCritical: markCritical,
       markNotCritical: markNotCritical,
       markFixed: markFixed,
-      markNotFixed: markNotFixed,
-      markHidden: markHidden,
-      markNotHidden: markNotHidden,
+      markSnoozed: markSnoozed,
       promote: promote,
       remove: remove,
       removeLink: removeLink
