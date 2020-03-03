@@ -7,12 +7,12 @@
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
 
-      function apply(source, includeHiddenAndFixedFilter) {
-        return angular.extend({}, getDefaultOptions(includeHiddenAndFixedFilter), source);
+      function apply(source, includeDiscardedFixedIgnoredSnoozedFilter) {
+        return angular.extend({}, getDefaultOptions(includeDiscardedFixedIgnoredSnoozedFilter), source);
       }
 
-      function buildFilter(includeHiddenAndFixedFilter) {
-        includeHiddenAndFixedFilter = (typeof includeHiddenAndFixedFilter !== 'undefined') ?  includeHiddenAndFixedFilter : true;
+      function buildFilter(includeDiscardedFixedIgnoredSnoozedFilter) {
+        includeDiscardedFixedIgnoredSnoozedFilter = (typeof includeDiscardedFixedIgnoredSnoozedFilter !== 'undefined') ?  includeDiscardedFixedIgnoredSnoozedFilter : true;
         var filters = [];
 
         if (_organizationId) {
@@ -29,15 +29,10 @@
 
         var filter = _raw || '';
         var isWildCardFilter = filter.trim() === '*';
-        if (includeHiddenAndFixedFilter && !isWildCardFilter) {
-          var hasFixed = filter.search(/\bfixed:/i) !== -1;
-          if (!hasFixed) {
-            filters.push('fixed:false');
-          }
-
-          var hasHidden = filter.search(/\bhidden:/i) !== -1;
-          if (!hasHidden) {
-            filters.push('hidden:false');
+        if (includeDiscardedFixedIgnoredSnoozedFilter && !isWildCardFilter) {
+          var hasStatus = filter.search(/\bstatus:/i) !== -1;
+          if (!hasStatus) {
+            filters.push('status:open', 'status:regressed');
           }
         }
 
