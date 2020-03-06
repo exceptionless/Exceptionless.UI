@@ -1,9 +1,0 @@
-{
-  "name": "config-job",
-  "version": "2.0.0",
-  "private": true,
-  "dependencies": {
-    "md5": "2.2.1",
-    "replace": "0.3.0"
-  }
-}
