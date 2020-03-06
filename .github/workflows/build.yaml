@@ -39,7 +39,7 @@ jobs:
           docker push exceptionless/ui-ci:$tag
         done
     - name: Publish Release Packages
-      if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-')
+      if: startsWith(github.ref, 'refs/tags/v')
       run: |
         # tag and push docker image
         for tag in {${{ steps.version.outputs.version }},latest}; do
