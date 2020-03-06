@@ -33,8 +33,8 @@ jobs:
       run: |
         # tag and push docker image
         for tag in {${{ steps.version.outputs.version }},latest}; do
-          docker tag ex-ui docker.pkg.github.com/exceptionless/exceptionless/ui:$tag
-          docker push docker.pkg.github.com/exceptionless/exceptionless/ui:$tag
+          docker tag ex-ui docker.pkg.github.com/exceptionless/exceptionless.ui/ui:$tag
+          docker push docker.pkg.github.com/exceptionless/exceptionless.ui/ui:$tag
         done
         for tag in {${{ steps.version.outputs.version }},latest}; do
           docker tag ex-ui exceptionless/ui-ci:$tag
