@@ -18,9 +18,11 @@ jobs:
         tag-prefix: v
     - name: Build
       run: |
+        docker build --build-arg UI_VERSION=${{ steps.version.outputs.version }} --target ui -t ex-ui .
+    - name: Run Tests
+      run: |
         docker build --target testrunner -t exceptionless:test .
         docker run exceptionless:test
-        docker build --build-arg UI_VERSION=${{ steps.version.outputs.version }} --target ui -t ex-ui .
     - name: Log in to GitHub Packages
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
     - name: Log in to Docker Hub

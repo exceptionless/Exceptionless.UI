@@ -45,9 +45,7 @@ COPY --from=build /app/dist ./
 COPY bootstrap /usr/local/bin/bootstrap
 COPY nginx-site.conf /etc/nginx/conf.d/default.conf
 
-RUN rm -rf /app/app_data && \
-  rm /app/web.config && \
-  chmod +x /usr/local/bin/bootstrap && \
+RUN chmod +x /usr/local/bin/bootstrap && \
   echo "daemon off;" >> /etc/nginx/nginx.conf
 
 ENTRYPOINT [ "bootstrap" ]
