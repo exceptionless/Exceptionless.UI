@@ -52,7 +52,7 @@ jobs:
       if: github.event_name != 'pull_request'
       uses: azure/setup-kubectl@v1
     - name: Deploy Changes to Development Environment
-      if: github.ref == 'refs/heads/feature/discard' && github.event_name != 'pull_request'
+      if: github.ref == 'refs/heads/feature/snooze' && github.event_name != 'pull_request'
       run: |
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
