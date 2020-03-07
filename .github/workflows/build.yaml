@@ -63,8 +63,3 @@ jobs:
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
         kubectl set image --namespace ex-prod deployment/ex-prod-app exceptionless-app=exceptionless/ui:${{ steps.version.outputs.version }}
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: artifacts
-        path: artifacts
