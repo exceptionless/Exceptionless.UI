@@ -419,7 +419,7 @@
             return;
           }
 
-          notificationService.info(translateService.T(vm.stack.status === 'fixed' ? 'Successfully queued the stack to be marked as open.' : 'Successfully queued the stack to be marked as fixed.'));
+          notificationService.info(translateService.T(vm.stack.status === 'fixed' ? 'Successfully marked the stack as open.' : 'Successfully marked the stack as fixed.'));
         }
 
         function onFailure(response) {
