@@ -29,7 +29,7 @@
           })
           .add({
             combo: 'shift+f',
-            description: translateService.T((vm.stack.date_fixed && vm.stack.status !== 'regressed') ? 'Mark Stack Not fixed' : 'Mark Stack Fixed'),
+            description: translateService.T(vm.stack.status === 'fixed' ? 'Mark Stack Not fixed' : 'Mark Stack Fixed'),
             callback: function markFixed() {
               logFeatureUsage('Fixed');
               vm.updateIsFixed();
@@ -109,11 +109,11 @@
 
       function executeAction() {
         var action = $stateParams.action;
-        if (action === 'mark-fixed' && !(vm.stack.date_fixed && vm.stack.status !== 'regressed')) {
+        if (action === 'mark-fixed' && vm.stack.status !== 'fixed') {
           return updateFixed(true);
         }
 
-        if (action === 'stop-notifications' && !vm.stack.disable_notifications) {
+        if (action === 'stop-notifications' && vm.stack.status !== 'ignored') {
           return updateIgnore(true);
         }
       }
@@ -391,6 +391,27 @@
         return stackService.markCritical(vm._stackId).catch(onSuccess, onFailure);
       }
 
+      function updateDiscard() {
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateDiscard.success').setProperty('id', vm._stackId).submit();
+        }
+
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateDiscard.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
+          notificationService.error(translateService.T(vm.stack.status === 'discarded' ? 'An error occurred while marking this stack as open.' : 'An error occurred while marking this stack as discarded.'));
+        }
+
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.updateDiscard').setProperty('id', vm._stackId).submit();
+        if (vm.stack.status === 'discarded') {
+          return stackService.changeStatus(vm._stackId, 'open').then(onSuccess, onFailure);
+        }
+
+        var message = translateService.T('Are you sure you want to all current stack events and discard any future stack events?') + ' ' + translateService.T('All future occurrences will be discarded and will not count against your event limit.');
+        return dialogService.confirmDanger(message, translateService.T('Discard')).then(function () {
+          return stackService.changeStatus(vm._stackId, 'discarded').then(onSuccess, onFailure);
+          }).catch(function(e){});
+      }
+
       function updateFixed(showSuccessNotification) {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateFixed.success').setProperty('id', vm._stackId).submit();
@@ -398,17 +419,17 @@
             return;
           }
 
-          notificationService.info(translateService.T((vm.stack.date_fixed && vm.stack.status !== 'regressed') ? 'Successfully queued the stack to be marked as not fixed.' : 'Successfully queued the stack to be marked as fixed.'));
+          notificationService.info(translateService.T(vm.stack.status === 'fixed' ? 'Successfully queued the stack to be marked as open.' : 'Successfully queued the stack to be marked as fixed.'));
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateFixed.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          notificationService.error(translateService.T((vm.stack.date_fixed && vm.stack.status !== 'regressed') ? 'An error occurred while marking this stack as not fixed.' : 'An error occurred while marking this stack as fixed.'));
+          notificationService.error(translateService.T(vm.stack.status === 'fixed' ? 'An error occurred while marking this stack as open.' : 'An error occurred while marking this stack as fixed.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateFixed').setProperty('id', vm._stackId).submit();
-        if (vm.stack.date_fixed && vm.stack.status !== 'regressed') {
-          return stackService.markNotFixed(vm._stackId).then(onSuccess, onFailure);
+        if (vm.stack.status === 'fixed') {
+          return stackService.changeStatus(vm._stackId, 'open').then(onSuccess, onFailure);
         }
 
         return stackDialogService.markFixed().then(function (version) {
@@ -416,35 +437,49 @@
         }).catch(function(e){});
       }
 
-      function updateSnooze() {
+      function updateSnooze(timePeriod) {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateSnooze.success').setProperty('id', vm._stackId).submit();
-          notificationService.info(translateService.T(vm.stack.status === 'snoozed' ? 'Successfully queued the stack to be marked as shown.' : 'Successfully queued the stack to be marked as hidden.'));
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateSnooze.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          notificationService.error(translateService.T(vm.stack.status === 'snoozed' ? 'An error occurred while marking this stack as shown.' : 'An error occurred while marking this stack as hidden.'));
+          notificationService.error(translateService.T(vm.stack.status === 'snoozed' ? 'An error occurred while marking this stack as open.' : 'An error occurred while marking this stack as snoozed.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateSnooze').setProperty('id', vm._stackId).submit();
-        var snoozed = vm.stack.status === 'snoozed';
-        return stackService.changeStatus(vm._stackId, snoozed ? 'open' : 'snoozed').then(onSuccess, onFailure);
+        if (!timePeriod && vm.stack.status === 'snoozed') {
+          return stackService.changeStatus(vm._stackId, 'open').then(onSuccess, onFailure);
+        }
+
+        var snoozeUntilUtc = moment();
+        switch (timePeriod) {
+          case "day":
+            snoozeUntilUtc = snoozeUntilUtc.add(1, 'days');
+            break;
+          case "week":
+            snoozeUntilUtc = snoozeUntilUtc.add(1, 'weeks');
+            break;
+          case "month":
+            snoozeUntilUtc = snoozeUntilUtc.add(1, 'months');
+            break;
+          case "year":
+          default:
+            snoozeUntilUtc = snoozeUntilUtc.add(1, 'years');
+            break;
+        }
+
+        return stackService.markSnoozed(vm._stackId, snoozeUntilUtc.format('YYYY-MM-DDTHH:mm:ssz')).then(onSuccess, onFailure);
       }
 
-      function updateIgnore(showSuccessNotification) {
+      function updateIgnore() {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIgnore.success').setProperty('id', vm._stackId).submit();
-          if (!showSuccessNotification) {
-            return;
-          }
-
-          notificationService.info(translateService.T(vm.stack.status === 'ignored' ? 'Successfully enabled stack notifications.' : 'Successfully disabled stack notifications.'));
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIgnore.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          notificationService.error(translateService.T(vm.stack.status === 'ignored' ? 'An error occurred while enabling stack notifications.' : 'An error occurred while disabling stack notifications.'));
+          notificationService.error(translateService.T(vm.stack.status === 'snoozed' ? 'An error occurred while marking this stack as open.' : 'An error occurred while marking this stack as ignored.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateIgnore').setProperty('id', vm._stackId).submit();
@@ -453,7 +488,11 @@
       }
 
       function showActionIcons() {
-        return vm.stack.occurrences_are_critical || vm.stack.status === 'snoozed' || vm.stack.status === 'ignored';
+        return vm.stack.occurrences_are_critical || vm.stack.status === 'snoozed' || vm.stack.status === 'ignored' || vm.stack.status === 'discarded';
+      }
+
+      function snoozedUntilFormatted() {
+        return moment(vm.stack.snooze_until_utc).format(translateService.T('DateTimeFormat'));
       }
 
       this.$onInit = function $onInit() {
@@ -571,9 +610,11 @@
           last_occurrence: undefined
         };
 
+        vm.snoozedUntilFormatted = snoozedUntilFormatted;
         vm._users = 0;
         vm._total_users = 0;
         vm.updateCritical = updateCritical;
+        vm.updateDiscard = updateDiscard;
         vm.updateFixed = updateFixed;
         vm.updateSnooze = updateSnooze;
         vm.updateIgnore = updateIgnore;
