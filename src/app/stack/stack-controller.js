@@ -21,7 +21,7 @@
         hotkeys.bindTo($scope)
           .add({
             combo: 'shift+h',
-            description: translateService.T(vm.stack.status === "discarded" ? 'Mark Stack Not Discarded' : 'Mark Stack Discarded'),
+            description: translateService.T(vm.stack.status === "discarded" ? 'Mark Stack Open' : 'Mark Stack Discarded'),
             callback: function markIgnored() {
               logFeatureUsage('Ignored');
               vm.updateIgnored();
@@ -29,7 +29,7 @@
           })
           .add({
             combo: 'shift+f',
-            description: translateService.T(vm.stack.status === 'fixed' ? 'Mark Stack Not fixed' : 'Mark Stack Fixed'),
+            description: translateService.T(vm.stack.status === 'fixed' ? 'Mark Stack Open' : 'Mark Stack Fixed'),
             callback: function markFixed() {
               logFeatureUsage('Fixed');
               vm.updateIsFixed();
