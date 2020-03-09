@@ -48,18 +48,24 @@ jobs:
           docker tag ex-ui exceptionless/ui:$tag
           docker push exceptionless/ui:$tag
         done
-    - name: Install Kubectl
+    - name: Install Helm
       if: github.event_name != 'pull_request'
-      uses: azure/setup-kubectl@v1
+      uses: azure/setup-helm@v1
+      with:
+        version: v3.1.0
+    - name: Checkout Helm Chart
+      if: github.event_name != 'pull_request'
+      run: |
+        git clone https://github.com/exceptionless/Exceptionless.git helm
     - name: Deploy Changes to Development Environment
       if: github.ref == 'refs/heads/feature/snooze' && github.event_name != 'pull_request'
       run: |
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
-        kubectl set image --namespace ex-dev deployment/ex-dev-app exceptionless-app=exceptionless/ui-ci:${{ steps.version.outputs.version }}
+        helm upgrade --set "app.image.tag=${{ steps.version.outputs.version }}" --reuse-values ex-dev --namespace ex-dev ./helm/k8s/exceptionless
     - name: Deploy Changes to Production Environment
       if: startsWith(github.ref, 'refs/tags/v')
       run: |
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
-        kubectl set image --namespace ex-prod deployment/ex-prod-app exceptionless-app=exceptionless/ui:${{ steps.version.outputs.version }}
+        helm upgrade --set "app.image.tag=${{ steps.version.outputs.version }}" --reuse-values ex-prod --namespace ex-prod ./helm/k8s/exceptionless
