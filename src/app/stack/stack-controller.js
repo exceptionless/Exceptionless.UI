@@ -488,7 +488,7 @@
       }
 
       function showActionIcons() {
-        return vm.stack.occurrences_are_critical || vm.stack.status === 'snoozed' || vm.stack.status === 'ignored' || vm.stack.status === 'discarded';
+        return vm.stack.occurrences_are_critical || (vm.stack.status !== 'open' || vm.stack.status !== 'regressed');
       }
 
       function snoozedUntilFormatted() {
