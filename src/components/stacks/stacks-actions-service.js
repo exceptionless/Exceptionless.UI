@@ -44,7 +44,7 @@
           $ExceptionlessClient.createFeatureUsage(source + '.mark-fixed').setProperty('count', ids.length).submit();
           return stackDialogService.markFixed().then(function (version) {
             function onSuccess() {
-              notificationService.info(translateService.T('Successfully queued the stacks to be marked as fixed.'));
+              notificationService.info(translateService.T('Successfully marked the stacks as fixed.'));
             }
 
             function onFailure() {
@@ -61,7 +61,7 @@
         name: 'Mark Not Fixed',
         run: function (ids) {
           function onSuccess() {
-            notificationService.info(translateService.T('Successfully queued the stacks to be marked as not fixed.'));
+            notificationService.info(translateService.T('Successfully marked the stacks as open.'));
           }
 
           function onFailure() {
@@ -78,7 +78,7 @@
         name: 'Mark Ignored',
         run: function (ids) {
           function onSuccess() {
-            notificationService.info(translateService.T('Successfully queued the stacks to be marked as ignored.'));
+            notificationService.info(translateService.T('Successfully marked the stacks as ignored.'));
           }
 
           function onFailure() {
@@ -95,12 +95,12 @@
         name: 'Mark Not Ignored',
         run: function (ids) {
           function onSuccess() {
-            notificationService.info(translateService.T('Successfully queued the stacks to be marked as not ignored.'));
+            notificationService.info(translateService.T('Successfully marked the stacks as open.'));
           }
 
           function onFailure() {
             $ExceptionlessClient.createFeatureUsage(source + '.mark-not-ignored.error').setProperty('count', ids.length).submit();
-            notificationService.error(translateService.T('An error occurred while marking stacks as not ignored.'));
+            notificationService.error(translateService.T('An error occurred while marking stacks as open.'));
           }
 
           $ExceptionlessClient.createFeatureUsage(source + '.mark-not-ignored').setProperty('count', ids.length).submit();
@@ -112,7 +112,7 @@
         name: 'Mark Discarded',
         run: function (ids) {
           function onSuccess() {
-            notificationService.info(translateService.T('Successfully queued the stacks to be marked as discarded.'));
+            notificationService.info(translateService.T('Successfully marked the stacks as discarded.'));
           }
 
           function onFailure() {
@@ -129,12 +129,12 @@
         name: 'Mark Not Discarded',
         run: function (ids) {
           function onSuccess() {
-            notificationService.info(translateService.T('Successfully queued the stacks to be marked as not discarded.'));
+            notificationService.info(translateService.T('Successfully marked the stacks as open.'));
           }
 
           function onFailure() {
             $ExceptionlessClient.createFeatureUsage(source + '.mark-not-discarded.error').setProperty('count', ids.length).submit();
-            notificationService.error(translateService.T('An error occurred while marking stacks as not discarded.'));
+            notificationService.error(translateService.T('An error occurred while marking stacks as open.'));
           }
 
           $ExceptionlessClient.createFeatureUsage(source + '.mark-not-discarded').setProperty('count', ids.length).submit();
