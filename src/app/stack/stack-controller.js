@@ -373,6 +373,24 @@
         }).catch(function(e){});
       }
 
+      function updateOpen() {
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateOpen.success').setProperty('id', vm._stackId).submit();
+        }
+
+        function onFailure(response) {
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.updateOpen.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
+          notificationService.error(translateService.T('An error occurred while marking this stack as open.'));
+        }
+
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.updateOpen').setProperty('id', vm._stackId).submit();
+        if (vm.stack.status === 'open') {
+          return;
+        }
+
+        return stackService.changeStatus(vm._stackId, 'open').then(onSuccess, onFailure);
+      }
+
       function updateCritical() {
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateCritical.success').setProperty('id', vm._stackId).submit();
@@ -392,20 +410,20 @@
       }
 
       function updateDiscard() {
+        if (vm.stack.status === 'discarded') {
+          return updateOpen();
+        }
+
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateDiscard.success').setProperty('id', vm._stackId).submit();
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateDiscard.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          notificationService.error(translateService.T(vm.stack.status === 'discarded' ? 'An error occurred while marking this stack as open.' : 'An error occurred while marking this stack as discarded.'));
+          notificationService.error(translateService.T('An error occurred while marking this stack as discarded.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateDiscard').setProperty('id', vm._stackId).submit();
-        if (vm.stack.status === 'discarded') {
-          return stackService.changeStatus(vm._stackId, 'open').then(onSuccess, onFailure);
-        }
-
         var message = translateService.T('Are you sure you want to all current stack events and discard any future stack events?') + ' ' + translateService.T('All future occurrences will be discarded and will not count against your event limit.');
         return dialogService.confirmDanger(message, translateService.T('Discard')).then(function () {
           return stackService.changeStatus(vm._stackId, 'discarded').then(onSuccess, onFailure);
@@ -413,31 +431,35 @@
       }
 
       function updateFixed(showSuccessNotification) {
+        if (vm.stack.status === 'fixed') {
+          return updateOpen();
+        }
+
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateFixed.success').setProperty('id', vm._stackId).submit();
           if (!showSuccessNotification) {
             return;
           }
 
-          notificationService.info(translateService.T(vm.stack.status === 'fixed' ? 'Successfully marked the stack as open.' : 'Successfully marked the stack as fixed.'));
+          notificationService.info(translateService.T('Successfully marked the stack as fixed.'));
         }
 
         function onFailure(response) {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateFixed.error').setProperty('id', vm._stackId).setProperty('response', response).submit();
-          notificationService.error(translateService.T(vm.stack.status === 'fixed' ? 'An error occurred while marking this stack as open.' : 'An error occurred while marking this stack as fixed.'));
+          notificationService.error(translateService.T('An error occurred while marking this stack as fixed.'));
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateFixed').setProperty('id', vm._stackId).submit();
-        if (vm.stack.status === 'fixed') {
-          return stackService.changeStatus(vm._stackId, 'open').then(onSuccess, onFailure);
-        }
-
         return stackDialogService.markFixed().then(function (version) {
           return stackService.markFixed(vm._stackId, version).then(onSuccess, onFailure).catch(function(e){});
         }).catch(function(e){});
       }
 
       function updateSnooze(timePeriod) {
+        if (!timePeriod && vm.stack.status === 'snoozed') {
+          return updateOpen();
+        }
+
         function onSuccess() {
           $ExceptionlessClient.createFeatureUsage(vm._source + '.updateSnooze.success').setProperty('id', vm._stackId).submit();
         }
@@ -448,12 +470,11 @@
         }
 
         $ExceptionlessClient.createFeatureUsage(vm._source + '.updateSnooze').setProperty('id', vm._stackId).submit();
-        if (!timePeriod && vm.stack.status === 'snoozed') {
-          return stackService.changeStatus(vm._stackId, 'open').then(onSuccess, onFailure);
-        }
-
         var snoozeUntilUtc = moment();
         switch (timePeriod) {
+          case "6hours":
+            snoozeUntilUtc = snoozeUntilUtc.add(6, 'hours');
+            break;
           case "day":
             snoozeUntilUtc = snoozeUntilUtc.add(1, 'days');
             break;
@@ -461,11 +482,8 @@
             snoozeUntilUtc = snoozeUntilUtc.add(1, 'weeks');
             break;
           case "month":
-            snoozeUntilUtc = snoozeUntilUtc.add(1, 'months');
-            break;
-          case "year":
           default:
-            snoozeUntilUtc = snoozeUntilUtc.add(1, 'years');
+            snoozeUntilUtc = snoozeUntilUtc.add(1, 'months');
             break;
         }
 
@@ -488,12 +506,9 @@
       }
 
       function showActionIcons() {
-        return vm.stack.occurrences_are_critical || (vm.stack.status !== 'open' || vm.stack.status !== 'regressed');
+        return vm.stack.occurrences_are_critical;
       }
 
-      function snoozedUntilFormatted() {
-        return moment(vm.stack.snooze_until_utc).format(translateService.T('DateTimeFormat'));
-      }
 
       this.$onInit = function $onInit() {
         vm._organizations = [];
@@ -610,9 +625,9 @@
           last_occurrence: undefined
         };
 
-        vm.snoozedUntilFormatted = snoozedUntilFormatted;
         vm._users = 0;
         vm._total_users = 0;
+        vm.updateOpen = updateOpen;
         vm.updateCritical = updateCritical;
         vm.updateDiscard = updateDiscard;
         vm.updateFixed = updateFixed;
