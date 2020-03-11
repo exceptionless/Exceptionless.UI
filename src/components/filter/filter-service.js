@@ -61,17 +61,17 @@
         fireFilterChanged();
       }
 
-      function fireFilterChanged(includeHiddenAndFixedFilter) {
+      function fireFilterChanged(includeDiscardedFixedIgnoredSnoozedFilter) {
         var options = {
           organization_id: _organizationId,
           project_id: _projectId,
           type: _eventType
         };
 
-        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeHiddenAndFixedFilter)));
+        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeDiscardedFixedIgnoredSnoozedFilter)));
       }
 
-      function getDefaultOptions(includeHiddenAndFixedFilter) {
+      function getDefaultOptions(includeDiscardedFixedIgnoredSnoozedFilter) {
         var options = {};
 
         var offset = getTimeOffset();
@@ -79,7 +79,7 @@
           angular.extend(options, { offset: offset });
         }
 
-        var filter = buildFilter(includeHiddenAndFixedFilter);
+        var filter = buildFilter(includeDiscardedFixedIgnoredSnoozedFilter);
         if (filter) {
           angular.extend(options, { filter: filter });
         }
