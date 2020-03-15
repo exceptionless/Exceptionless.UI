@@ -154,7 +154,7 @@
           header: 'Events',
           get: eventService.getAll,
           options: {
-            limit: 10,
+            limit: 15,
             mode: 'summary'
           },
           source: vm._source + '.Events'
