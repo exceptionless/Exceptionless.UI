@@ -135,10 +135,10 @@
     });
 
     var routes = [
-      { key: 'dashboard', title: 'Dashboard', controller: 'app.Dashboard' },
       { key: 'frequent', title: 'Most Frequent', controller: 'app.Frequent' },
       { key: 'new', title: 'New', controller: 'app.New' },
-      { key: 'users', title: 'Most Users', controller: 'app.Users' }
+      { key: 'users', title: 'Most Users', controller: 'app.Users' },
+      { key: 'timeline', title: 'Timeline', controller: 'app.Timeline' }
     ];
     var resetEventTypeOnExit = ['filterService', function (filterService) { filterService.setEventType(null, true); }];
     routes.forEach(function(route) {
@@ -167,7 +167,7 @@
         url: '/project/{projectId:[0-9a-fA-F]{24}}/:type/'+ route.key,
         onEnter: ['$state', '$stateParams', 'filterService', function ($state, $stateParams, filterService) {
           if ($stateParams.type === 'session') {
-            return $state.go('app.session-project-dashboard', $stateParams);
+            return $state.go('app.session-project-timeline', $stateParams);
           }
 
           setRouteFilter(filterService, null, $stateParams.projectId, $stateParams.type);
@@ -186,7 +186,7 @@
         url: '/organization/{organizationId:[0-9a-fA-F]{24}}/:type/' + route.key,
         onEnter: ['$state', '$stateParams', 'filterService', function ($state, $stateParams, filterService) {
           if ($stateParams.type === 'session') {
-            return $state.go('app.session-organization-dashboard', $stateParams);
+            return $state.go('app.session-organization-timeline', $stateParams);
           }
 
           setRouteFilter(filterService, $stateParams.organizationId, null, $stateParams.type);
@@ -198,7 +198,7 @@
         url: '/type/:type/' + route.key,
         onEnter: ['$state', '$stateParams', 'filterService', function ($state, $stateParams, filterService) {
           if ($stateParams.type === 'session') {
-            return $state.go('app.session-dashboard', $stateParams);
+            return $state.go('app.session-timeline', $stateParams);
           }
 
           setRouteFilter(filterService, null, null, $stateParams.type);
@@ -214,7 +214,7 @@
 
       return $timeout(function () {
         if (authService.isAuthenticated()) {
-          $state.transitionTo('app.type-dashboard', {type: 'error'});
+          $state.transitionTo('app.type-frequent', {type: 'error'});
         } else {
           $state.transitionTo('auth.login');
         }

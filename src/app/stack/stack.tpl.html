@@ -139,7 +139,7 @@
             </tr>
             <tr>
               <th>{{::'Project' | translate}}</th>
-              <td><a ui-sref="app.project-dashboard({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
+              <td><a ui-sref="app.project-frequent({ projectId: vm.project.id })">{{vm.project.name}}</a></td>
             </tr>
             <tr ng-if="(vm.stack.date_fixed && vm.stack.status !== 'regressed')">
               <th>{{::'Date Fixed' | translate}}</th>

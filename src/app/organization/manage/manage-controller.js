@@ -55,7 +55,7 @@
         }
 
         if (data && data.type === 'Organization' && data.deleted && data.id === vm._organizationId) {
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
           notificationService.error(translateService.T('Organization_Deleted', {organizationId : vm._organizationId}));
           return;
         }
@@ -106,7 +106,7 @@
         }
 
         function onFailure() {
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
           notificationService.error(translateService.T('Cannot_Find_Organization', {organizationId : vm._organizationId}));
         }
 
@@ -254,7 +254,7 @@
                   .setProperty('end', end)
                   .submit();
 
-                $state.go('app.organization-dashboard', { organizationId: vm.organization.id });
+                $state.go('app.organization-frequent', { organizationId: vm.organization.id });
                 return false;
               }
             },

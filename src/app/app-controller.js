@@ -58,10 +58,10 @@
           })
           .add({
             combo: 'g d',
-            description: translateService.T('Go To Dashboard'),
-            callback: function goToDashboard() {
-              logFeatureUsage('Dashboard');
-              $window.open(vm.dashboardUrl.all, '_self');
+            description: translateService.T('Go To Most Frequent'),
+            callback: function goToMostFrequent() {
+              logFeatureUsage('Most Frequent');
+              $window.open(vm.timelineUrl.all, '_self');
             }
           })
           .add({
@@ -105,8 +105,8 @@
 
         function buildUrls() {
           var result = {
-            dashboard: {},
-            sessionDashboard: urlService.buildFilterUrl({ route: 'dashboard', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() }),
+            timeline: {},
+            sessionTimeline: urlService.buildFilterUrl({ route: 'timeline', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() }),
             frequent: {},
             users: {},
             new: {}
@@ -114,7 +114,7 @@
 
           [undefined, 'error', 'log', '404', 'usage'].forEach(function(type) {
             var key = !type ? 'all' : type;
-            result.dashboard[key] = getFilterUrl('dashboard', type);
+            result.timeline[key] = getFilterUrl('timeline', type);
             result.frequent[key] = getFilterUrl('frequent', type);
             result.users[key] = getFilterUrl('users', type);
             result.new[key] = getFilterUrl('new', type);
@@ -143,9 +143,9 @@
         }
 
         function isReportsMenuActive(state, params) {
-          return state.includes('app.session-dashboard', params) ||
-            state.includes('app.session-project-dashboard', params) ||
-            state.includes('app.session-organization-dashboard', params);
+          return state.includes('app.session-timeline', params) ||
+            state.includes('app.session-project-timeline', params) ||
+            state.includes('app.session-organization-timeline', params);
         }
 
         function isTypeMenuActive(state, params, type) {
@@ -161,7 +161,7 @@
           }).length > 0;
         }
 
-        var dashboards = ['dashboard', 'frequent', 'new', 'users'];
+        var dashboards = ['frequent', 'new', 'users', 'timeline'];
         vm.urls = buildUrls();
         vm.isMenuActive = {
           all: isAllMenuActive($state, $stateParams),
@@ -252,8 +252,8 @@
         vm.canChangePlan = false;
         vm.changePlan = changePlan;
         vm.urls = {
-          dashboard: {},
-          sessionDashboard: '',
+          timeline: {},
+          sessionTimeline: '',
           frequent: {},
           users: {},
           new: {}

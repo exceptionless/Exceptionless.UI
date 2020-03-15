@@ -143,7 +143,7 @@
 
       function get(data) {
         if (data && data.type === 'Stack' && data.deleted) {
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
           notificationService.error(translateService.T('Stack_Deleted', {stackId: vm._stackId}));
           return;
         }
@@ -181,7 +181,7 @@
         }
 
         function onFailure(response) {
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
 
           if (response.status === 404) {
             notificationService.error(translateService.T('Cannot_Find_Stack', {stackId: vm._stackId}));
@@ -361,7 +361,7 @@
           function onSuccess() {
             notificationService.info(translateService.T('Successfully queued the stack for deletion.'));
             $ExceptionlessClient.createFeatureUsage(vm._source + '.remove.success').setProperty('id', vm._stackId).submit();
-            $state.go('app.project-dashboard', { projectId: vm.stack.project_id });
+            $state.go('app.project-frequent', { projectId: vm.stack.project_id });
           }
 
           function onFailure(response) {

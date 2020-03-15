@@ -26,9 +26,9 @@
         </div>
         <footer class="panel-footer">
           <div class="pull-right">
-            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">
-              <span class="visible-xs" title="{{::'Go To Dashboard' | translate}}"><i class="fa fa-fw fa-dashboard"></i></span>
-              <span class="hidden-xs">{{::'Go To Dashboard' | translate}}</span></a>
+            <a ui-sref="app.project-frequent({ projectId: vm.project.id })" class="btn btn-default" role="button">
+              <span class="visible-xs" title="{{::'Go To Most Frequent' | translate}}"><i class="fa fa-fw fa-signal"></i></span>
+              <span class="hidden-xs">{{::'Go To Most Frequent' | translate}}</span></a>
           </div>
 
           <a ui-sref="app.organization.manage({ id: vm.project.organization_id })" class="btn btn-primary" role="button" title="{{::'Manage Organization' | translate}}">

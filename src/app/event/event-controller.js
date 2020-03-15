@@ -317,12 +317,12 @@
             return billingService.confirmUpgradePlan(response.data.message).then(function () {
                 return getEvent();
               }, function () {
-                $state.go('app.dashboard');
+                $state.go('app.frequent');
               }
             );
           }
 
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
           notificationService.error(translateService.T('Cannot_Find_Event', {eventId : $stateParams.id}));
         }
 
@@ -342,7 +342,7 @@
         }
 
         function onFailure() {
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
         }
 
         if (!vm.event || !vm.event.project_id) {

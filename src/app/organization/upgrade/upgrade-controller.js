@@ -7,7 +7,7 @@
 
       function get() {
         function onFailure() {
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
           notificationService.error(translateService.T('Cannot_Find_Organization',{organizationId : vm._organizationId}));
         }
 
