@@ -138,7 +138,6 @@
       { key: 'dashboard', title: 'Dashboard', controller: 'app.Dashboard' },
       { key: 'frequent', title: 'Most Frequent', controller: 'app.Frequent' },
       { key: 'new', title: 'New', controller: 'app.New' },
-      { key: 'recent', title: 'Most Recent', controller: 'app.Recent' },
       { key: 'users', title: 'Most Users', controller: 'app.Users' }
     ];
     var resetEventTypeOnExit = ['filterService', function (filterService) { filterService.setEventType(null, true); }];

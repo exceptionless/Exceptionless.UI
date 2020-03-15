@@ -613,7 +613,7 @@
             limit: 10,
             mode: 'summary'
           },
-          source: vm._source + '.Recent'
+          source: vm._source + '.Events'
         };
         vm.showActionIcons = showActionIcons;
         vm.stack = {};

@@ -159,14 +159,14 @@
           source: vm._source + '.Frequent'
         };
 
-        vm.mostRecent = {
-          header: 'Most Recent',
+        vm.events = {
+          header: 'Events',
           get: eventService.getAll,
           options: {
             limit: 10,
             mode: 'summary'
           },
-          source: vm._source + '.Recent'
+          source: vm._source + '.Events'
         };
         vm.stats = {
           count: 0,

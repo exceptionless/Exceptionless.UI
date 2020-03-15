@@ -166,10 +166,6 @@
             return 'new';
           }
 
-          if ($state.current.name.endsWith('recent')) {
-            return 'recent';
-          }
-
           if ($state.current.name.endsWith('users')) {
             return 'users';
           }

@@ -447,7 +447,7 @@
             limit: 10,
             mode: 'summary'
           },
-          source: vm._source + '.Recent',
+          source: vm._source + '.Events',
           timeHeaderText: 'Session Time',
           hideActions: true,
           hideSessionStartTime: true

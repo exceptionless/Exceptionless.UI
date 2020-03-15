@@ -157,7 +157,7 @@
             limit: 10,
             mode: 'summary'
           },
-          source: vm._source + '.Recent',
+          source: vm._source + '.Events',
           hideActions: true
         };
         vm.stats = {

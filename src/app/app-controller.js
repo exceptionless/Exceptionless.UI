@@ -107,7 +107,6 @@
           var result = {
             dashboard: {},
             sessionDashboard: urlService.buildFilterUrl({ route: 'dashboard', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() }),
-            recent: {},
             frequent: {},
             users: {},
             new: {}
@@ -116,7 +115,6 @@
           [undefined, 'error', 'log', '404', 'usage'].forEach(function(type) {
             var key = !type ? 'all' : type;
             result.dashboard[key] = getFilterUrl('dashboard', type);
-            result.recent[key] = getFilterUrl('recent', type);
             result.frequent[key] = getFilterUrl('frequent', type);
             result.users[key] = getFilterUrl('users', type);
             result.new[key] = getFilterUrl('new', type);
@@ -163,7 +161,7 @@
           }).length > 0;
         }
 
-        var dashboards = ['dashboard', 'frequent', 'new', 'recent', 'users'];
+        var dashboards = ['dashboard', 'frequent', 'new', 'users'];
         vm.urls = buildUrls();
         vm.isMenuActive = {
           all: isAllMenuActive($state, $stateParams),
@@ -256,7 +254,6 @@
         vm.urls = {
           dashboard: {},
           sessionDashboard: '',
-          recent: {},
           frequent: {},
           users: {},
           new: {}
