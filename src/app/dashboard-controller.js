@@ -150,15 +150,6 @@
         };
         vm.get = get;
 
-        vm.mostFrequent = {
-          get: stackService.getFrequent,
-          options: {
-            limit: 10,
-            mode: 'summary'
-          },
-          source: vm._source + '.Frequent'
-        };
-
         vm.events = {
           header: 'Events',
           get: eventService.getAll,
