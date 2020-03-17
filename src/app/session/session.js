@@ -49,12 +49,12 @@
         onExit: onExitRemoveTypeFilter
       });
 
-      $stateProvider.state('app.session-frequent', {
+      $stateProvider.state('app.session-timeline', {
         title: title,
-        url: '/session/frequent',
-        controller: 'session.Frequent',
+        url: '/session/timeline',
+        controller: 'session.Timeline',
         controllerAs: 'vm',
-        templateUrl: 'app/session/frequent.tpl.html',
+        templateUrl: 'app/session/timeline.tpl.html',
         onEnter: onEnterSetTypeFilter,
         onExit: onExitRemoveTypeFilter
       });

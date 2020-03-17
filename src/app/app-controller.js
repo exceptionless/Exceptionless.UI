@@ -143,7 +143,8 @@
         }
 
         function isReportsMenuActive(state, params) {
-          return state.includes('app.session-timeline', params) ||
+          return state.includes('app.session.timeline', params) ||
+            state.includes('app.session-timeline', params) ||
             state.includes('app.session-project-timeline', params) ||
             state.includes('app.session-organization-timeline', params);
         }
