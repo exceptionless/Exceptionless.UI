@@ -2,7 +2,6 @@
   "Change Plan":"Change Plan",
   "Change Password":"Change Password",
   "Logout":"Logout",
-
   "Exceptions":"Exceptions",
   "Log Messages":"Log Messages",
   "Broken Links":"Broken Links",
@@ -32,7 +31,6 @@
   "My Account":"My Account",
   "Documentation":"Documentation",
   "Support":"Support",
-
   "Count":"Count",
   "Unique":"Unique",
   "New":"New",
@@ -43,7 +41,6 @@
   "Session":"Session",
   "Session End":"Session End",
   "Session Heartbeat":"Session Heartbeat",
-
   "Feature":"Feature",
   "Go To Documentation":"Go To Documentation",
   "Focus Search Bar":"Focus Search Bar",
@@ -62,7 +59,7 @@
 
   "Service Status":"Service Status",
   "We're sorry but the website is currently undergoing maintenance.":"We're sorry but the website is currently undergoing maintenance.",
-  "You’ll be automatically redirected when the maintenance is completed.":"You’ll be automatically redirected when the maintenance is completed.",
+  "You'll be automatically redirected when the maintenance is completed.":"You'll be automatically redirected when the maintenance is completed.",
 
   "Please enter a Reference Link":"Please enter a Reference Link",
   "Reference Link":"Reference Link",
@@ -89,7 +86,9 @@
   "Method":"Method",
   "Chart Options":"Chart Options",
   "Show Average Value":"Show Average Value",
+  "Average Value":"Average Value",
   "Show Value Sum":"Show Value Sum",
+  "Value Sum":"Value Sum",
   "Recent Occurrences":"Recent Occurrences",
   "Reference Links":"Reference Links",
   "Mark Not Fixed":"Mark Not Fixed",
@@ -248,7 +247,7 @@
   "All future occurrences will be discarded and will not count against your event limit.": "All future occurrences will be discarded and will not count against your event limit.",
   "An error occurred while marking future occurrences as not critical.":"An error occurred while marking future occurrences as not critical.",
   "An error occurred while marking future occurrences as critical.":"An error occurred while marking future occurrences as critical.",
-  "Successfully marked the stack as open.":"SSuccessfully marked the stack as open.",
+  "Successfully marked the stack as open.":"Successfully marked the stack as open.",
   "Successfully marked the stack as fixed.":"Successfully marked the stack as fixed.",
   "Successfully marked the stacks as ignored.": "Successfully marked the stacks as ignored.",
   "An error occurred while marking this stack as fixed.":"An error occurred while marking this stack as fixed.",
@@ -278,6 +277,7 @@
   "1 Day": "1 Day",
   "1 Week": "1 Week",
   "1 Month": "1 Month",
+
   "All Projects":"All Projects",
   "Loading Organizations...":"Loading Organizations...",
   "Loading Projects...":"Loading Projects...",
@@ -663,8 +663,6 @@
   "Limit":"Limit",
   "Allowed in Organization":"Allowed in Organization",
   "Occurrences":"Occurrences",
-  "Average Value":"Average Value",
-  "Value Sum":"Value Sum",
   "Log source":"Log source",
   "Add":"Add",
   "Total":"Total",
