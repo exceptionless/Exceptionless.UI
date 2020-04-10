@@ -113,8 +113,12 @@
           return updateFixed(true);
         }
 
-        if (action === 'stop-notifications' && vm.stack.status !== 'ignored') {
-          return updateIgnore(true);
+        if ((action === 'ignored' || action === 'stop-notifications') && vm.stack.status !== 'ignored') {
+          return updateIgnore();
+        }
+
+        if (action === 'discarded' && vm.stack.status !== 'discarded') {
+          return updateDiscard();
         }
       }
 
