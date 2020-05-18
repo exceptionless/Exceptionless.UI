@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ApiUrl="${EX_ApiUrl:-http://ex-api.localtest.me:5000}"
+ApiUrl="${EX_ApiUrl:-}"
 Html5Mode="${EX_Html5Mode:-false}"
 EnableSsl="${EX_EnableSsl:-false}"
 EnableAccountCreation="${EX_EnableAccountCreation:-true}"
@@ -36,7 +36,7 @@ config="(function () {
   'use strict';
 
   angular.module('app.config', [])
-    .constant('BASE_URL', '$ApiUrl')
+    .constant('BASE_URL', '$ApiUrl' || window.location.origin)
     .constant('EXCEPTIONLESS_API_KEY', '$EX_ExceptionlessApiKey')
     .constant('EXCEPTIONLESS_SERVER_URL', '$EX_ExceptionlessServerUrl')
     .constant('FACEBOOK_APPID', '$FacebookAppId')
