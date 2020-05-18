@@ -32,7 +32,7 @@
         if (includeDiscardedFixedIgnoredSnoozedFilter && !isWildCardFilter) {
           var hasStatus = filter.search(/\bstatus:/i) !== -1;
           if (!hasStatus) {
-            filters.push('status:open', 'status:regressed');
+            filters.push('@stack(status:open status:regressed)');
           }
         }
 
