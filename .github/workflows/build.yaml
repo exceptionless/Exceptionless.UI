@@ -63,8 +63,4 @@ jobs:
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
         #helm upgrade --set "api.image.tag=${{ steps.version.outputs.version }}" --set "jobs.image.tag=${{ steps.version.outputs.version }}" --reuse-values --values ./k8s/ex-prod-values.yaml ex-prod --namespace ex-prod ./k8s/exceptionless
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: artifacts
-        path: artifacts
+
