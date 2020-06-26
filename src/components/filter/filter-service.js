@@ -7,12 +7,12 @@
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
 
-      function apply(source, includeDiscardedFixedIgnoredSnoozedFilter) {
-        return angular.extend({}, getDefaultOptions(includeDiscardedFixedIgnoredSnoozedFilter), source);
+      function apply(source, includeStatusFilter) {
+        return angular.extend({}, getDefaultOptions(includeStatusFilter), source);
       }
 
-      function buildFilter(includeDiscardedFixedIgnoredSnoozedFilter) {
-        includeDiscardedFixedIgnoredSnoozedFilter = (typeof includeDiscardedFixedIgnoredSnoozedFilter !== 'undefined') ?  includeDiscardedFixedIgnoredSnoozedFilter : true;
+      function buildFilter(includeStatusFilter) {
+        includeStatusFilter = (typeof includeStatusFilter !== 'undefined') ?  includeStatusFilter : true;
         var filters = [];
 
         if (_organizationId) {
@@ -29,10 +29,10 @@
 
         var filter = _raw || '';
         var isWildCardFilter = filter.trim() === '*';
-        if (includeDiscardedFixedIgnoredSnoozedFilter && !isWildCardFilter) {
+        if (includeStatusFilter && !isWildCardFilter) {
           var hasStatus = filter.search(/\bstatus:/i) !== -1;
           if (!hasStatus) {
-            filters.push('@stack(status:open status:regressed)');
+            filters.push('@stack:(status:open OR status:regressed)');
           }
         }
 
@@ -61,17 +61,17 @@
         fireFilterChanged();
       }
 
-      function fireFilterChanged(includeDiscardedFixedIgnoredSnoozedFilter) {
+      function fireFilterChanged(includeStatusFilter) {
         var options = {
           organization_id: _organizationId,
           project_id: _projectId,
           type: _eventType
         };
 
-        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeDiscardedFixedIgnoredSnoozedFilter)));
+        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeStatusFilter)));
       }
 
-      function getDefaultOptions(includeDiscardedFixedIgnoredSnoozedFilter) {
+      function getDefaultOptions(includeStatusFilter) {
         var options = {};
 
         var offset = getTimeOffset();
@@ -79,7 +79,7 @@
           angular.extend(options, { offset: offset });
         }
 
-        var filter = buildFilter(includeDiscardedFixedIgnoredSnoozedFilter);
+        var filter = buildFilter(includeStatusFilter);
         if (filter) {
           angular.extend(options, { filter: filter });
         }

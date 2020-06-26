@@ -18,7 +18,7 @@
     }
 
     function count(aggregations, optionsCallback) {
-      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, false);
+      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, true);
       options = angular.isFunction(optionsCallback) ? optionsCallback(options) : options;
 
       var organization = filterService.getOrganizationId();
@@ -36,7 +36,7 @@
 
     function getAll(options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
-      var mergedOptions = optionsCallback(filterService.apply(options, false));
+      var mergedOptions = optionsCallback(filterService.apply(options));
 
       var organization = filterService.getOrganizationId();
       if (organization) {
