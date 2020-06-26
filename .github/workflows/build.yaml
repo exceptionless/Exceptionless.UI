@@ -12,13 +12,14 @@ jobs:
     - name: Build Reason
       run: "echo ref: ${{github.ref}} event: ${{github.event_name}}"
     - name: Build Version
-      id: version
-      uses: thefringeninja/action-minver@2.0.0-preview1
-      with:
-        tag-prefix: v
+      run: |
+        dotnet tool install --global minver-cli --version 2.3.0
+        version=$(minver --tag-prefix v)
+        echo "::set-env name=MINVERVERSIONOVERRIDE::$version"
+        echo "::set-env name=VERSION::$version"
     - name: Build
       run: |
-        docker build --build-arg UI_VERSION=${{ steps.version.outputs.version }} --target ui -t ex-ui .
+        docker build --build-arg UI_VERSION=${VERSION} --target ui -t ex-ui .
     - name: Run Tests
       run: |
         docker build --target testrunner -t exceptionless:test .
@@ -32,11 +33,11 @@ jobs:
       if: github.event_name != 'pull_request'
       run: |
         # tag and push docker image
-        for tag in {${{ steps.version.outputs.version }},latest}; do
+        for tag in {${VERSION},latest}; do
           docker tag ex-ui docker.pkg.github.com/exceptionless/exceptionless.ui/ui:$tag
           docker push docker.pkg.github.com/exceptionless/exceptionless.ui/ui:$tag
         done
-        for tag in {${{ steps.version.outputs.version }},latest}; do
+        for tag in {${VERSION},latest}; do
           docker tag ex-ui exceptionless/ui-ci:$tag
           docker push exceptionless/ui-ci:$tag
         done
@@ -44,7 +45,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/v')
       run: |
         # tag and push docker image
-        for tag in {${{ steps.version.outputs.version }},latest}; do
+        for tag in {${VERSION},latest}; do
           docker tag ex-ui exceptionless/ui:$tag
           docker push exceptionless/ui:$tag
         done
@@ -52,20 +53,22 @@ jobs:
       if: github.event_name != 'pull_request'
       uses: azure/setup-helm@v1
       with:
-        version: v3.1.0
+        version: v3.2.4
     - name: Checkout Helm Chart
       if: github.event_name != 'pull_request'
       run: |
         git clone https://github.com/exceptionless/Exceptionless.git helm
+        cd helm
+        git checkout $(echo ${GITHUB_REF#refs/heads/})
     - name: Deploy Changes to Development Environment
       if: github.ref == 'refs/heads/feature/snooze' && github.event_name != 'pull_request'
       run: |
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
-        helm upgrade --set "app.image.tag=${{ steps.version.outputs.version }}" --reuse-values ex-dev --namespace ex-dev ./helm/k8s/exceptionless
+        helm upgrade --set "app.image.tag=${VERSION}" --reuse-values ex-dev --namespace ex-dev ./helm/k8s/exceptionless
     - name: Deploy Changes to Production Environment
       if: startsWith(github.ref, 'refs/tags/v')
       run: |
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
-        helm upgrade --set "app.image.tag=${{ steps.version.outputs.version }}" --reuse-values ex-prod --namespace ex-prod ./helm/k8s/exceptionless
+        helm upgrade --set "app.image.tag=${VERSION}" --reuse-values ex-prod --namespace ex-prod ./helm/k8s/exceptionless
