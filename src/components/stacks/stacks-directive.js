@@ -44,7 +44,8 @@
             }
 
             function onFailure(response) {
-              $ExceptionlessClient.createLog(vm._source + '.get', 'Error while loading events', 'Error').setProperty('options', options).setProperty('response', response).submit();
+              notificationService.error("Error loading stacks: " + response.data);
+              $ExceptionlessClient.createLog(vm._source + '.get', 'Error while loading stacks', 'Error').setProperty('options', options).setProperty('response', response).submit();
               return response;
             }
 
