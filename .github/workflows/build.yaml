@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       with:
         fetch-depth: 0
     - name: Build Reason
@@ -72,3 +72,4 @@ jobs:
         az login --service-principal --username ${{ secrets.AZ_USERNAME }} --password ${{ secrets.AZ_PASSWORD }} --tenant ${{ secrets.AZ_TENANT }} --output none
         az aks get-credentials --resource-group exceptionless-v6 --name ex-k8s-v6
         helm upgrade --set "app.image.tag=${VERSION}" --reuse-values ex-prod --namespace ex-prod ./helm/k8s/exceptionless
+

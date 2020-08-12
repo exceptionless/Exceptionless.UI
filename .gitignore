@@ -9,5 +9,4 @@ src/results
 .idea
 src/.idea/
 .DS_Store
-
 src/html-angular-validate-report-checkstyle.xml

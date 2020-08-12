@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.project')
-    .controller('project.Configure', function ($rootScope, $state, $stateParams, notificationService, projectService, tokenService, translateService) {
+    .controller('project.Configure', function ($rootScope, $state, $stateParams, BASE_URL, EXCEPTIONLESS_SERVER_URL, notificationService, projectService, tokenService, translateService) {
       var vm = this;
       function canRedirect(data) {
         return vm._canRedirect && !!data && data.project_id === vm._projectId;
@@ -58,6 +58,8 @@
 
       function getProjectTypes() {
         return [
+          { key: 'Bash Shell', name: 'Bash Shell', platform: 'Command Line' },
+          { key: 'PowerShell', name: 'PowerShell', platform: 'Command Line' },
           { key: 'Exceptionless', name: translateService.T('Console and Service applications'), platform: '.NET' },
           { key: 'Exceptionless.AspNetCore', name: 'ASP.NET Core', platform: '.NET' },
           { key: 'Exceptionless.Mvc', name: 'ASP.NET MVC', config: 'web.config', platform: '.NET' },
@@ -69,6 +71,10 @@
           { key: 'Exceptionless.JavaScript', name: translateService.T('Browser applications'), platform: 'JavaScript' },
           { key: 'Exceptionless.Node', name: 'Node.js', platform: 'JavaScript' }
         ];
+      }
+
+      function isCommandLine() {
+        return vm.currentProjectType.platform === 'Command Line';
       }
 
       function isDotNet() {
@@ -83,6 +89,10 @@
         return vm.currentProjectType.key === 'Exceptionless.Node';
       }
 
+      function isBashShell() {
+        return vm.currentProjectType.key === 'Bash Shell';
+      }
+
       function navigateToDashboard() {
         $state.go('app.project-frequent', { projectId: vm._projectId } );
       }
@@ -94,6 +104,8 @@
         vm.canRedirect = canRedirect;
         vm.copied = copied;
         vm.currentProjectType = {};
+        vm.isBashShell = isBashShell;
+        vm.isCommandLine = isCommandLine;
         vm.isDotNet = isDotNet;
         vm.isJavaScript = isJavaScript;
         vm.isNode = isNode;
@@ -101,6 +113,7 @@
         vm.onCopyError = onCopyError;
         vm.project = {};
         vm.projectTypes = getProjectTypes();
+        vm.serverUrl = EXCEPTIONLESS_SERVER_URL || BASE_URL;
 
         getDefaultApiKey().then(getProject);
       };
