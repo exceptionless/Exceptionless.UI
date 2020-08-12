@@ -8,3 +8,4 @@ src/results
 .chrome
 .idea
 src/.idea/
+src/html-angular-validate-report-checkstyle.xml
