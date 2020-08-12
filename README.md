@@ -1,8 +1,8 @@
 # Exceptionless.UI
 
-[![Build status](https://ci.appveyor.com/api/projects/status/18th2gqmbt86p5y0/branch/master?svg=true)](https://ci.appveyor.com/project/Exceptionless/exceptionless-ui)
-[![Slack Status](https://slack.exceptionless.com/badge.svg)](https://slack.exceptionless.com)
-[![Donate](https://img.shields.io/badge/donorbox-donate-blue.svg)](https://donorbox.org/exceptionless)
+[![Build](https://github.com/exceptionless/Exceptionless.UI/workflows/Build/badge.svg)](https://github.com/exceptionless/Exceptionless.UI/actions)
+[![Discord](https://img.shields.io/discord/715744504891703319)](https://discord.gg/6HxgFCx)
+[![Donate](https://img.shields.io/badge/donorbox-donate-blue.svg)](https://donorbox.org/exceptionless?recurring=true)
 
 Exceptionless User Interface
 
