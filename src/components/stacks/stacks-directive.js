@@ -49,6 +49,9 @@
               }
 
               $ExceptionlessClient.createLog(vm._source + '.get', 'Error while loading stacks', 'Error').setProperty('options', options).setProperty('response', response).submit();
+              vm.stacks = [];
+              vm.previous = null;
+              vm.next = null;
               return response;
             }
 
