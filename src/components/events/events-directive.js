@@ -59,7 +59,7 @@
 
             function onFailure(response) {
               if (response.status !== 404 && response.data) {
-                notificationService.error("Error loading events: " + response.data.message);
+                notificationService.error("Error loading events: " + (response.data.message || response.data));
               }
 
               $ExceptionlessClient.createLog(vm._source + '.get', 'Error while loading events', 'Error').setProperty('options', options).setProperty('response', response).submit();
