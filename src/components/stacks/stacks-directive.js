@@ -44,7 +44,10 @@
             }
 
             function onFailure(response) {
-              notificationService.error("Error loading stacks: " + response.data);
+              if (response.status !== 404 && response.data) {
+                notificationService.error("Error loading stacks: " + response.data.message);
+              }
+
               $ExceptionlessClient.createLog(vm._source + '.get', 'Error while loading stacks', 'Error').setProperty('options', options).setProperty('response', response).submit();
               return response;
             }
