@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   'use strict';
 
   angular.module('exceptionless.filter')
@@ -32,7 +32,7 @@
         if (includeStatusFilter && !isWildCardFilter) {
           var hasStatus = filter.search(/\bstatus:/i) !== -1;
           if (!hasStatus) {
-            filters.push('@stack:(status:open OR status:regressed)');
+            filters.push('(status:open OR status:regressed)');
           }
         }
 
