@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, websocketService, stateService, SLACK_APPID, STRIPE_PUBLISHABLE_KEY, urlService, userService, translateService) {
+    .controller('App', function ($rootScope, $scope, $state, $stateParams, $window, authService, billingService, $ExceptionlessClient, filterService, hotkeys, INTERCOM_APPID, $intercom, locker, notificationService, organizationService, websocketService, stateService, statusService, SLACK_APPID, STRIPE_PUBLISHABLE_KEY, urlService, userService, translateService) {
       var vm = this;
       function addHotkeys() {
         function logFeatureUsage(name) {
@@ -184,6 +184,16 @@
         return billingService.changePlan(organizationId).catch(function(e){});
       }
 
+      function getApiVersion() {
+        function onSuccess(response) {
+          var aboutResponse = response.data.plain();
+          vm.apiVersionNumber = aboutResponse && aboutResponse.informational_version.split("+")[0];
+          return response;
+        }
+
+        return statusService.about().then(onSuccess);
+      }
+
       function getOrganizations() {
         function onSuccess(response) {
           vm.organizations = response.data.plain();
@@ -250,6 +260,7 @@
         vm._source = 'app.App';
         vm._store = locker.driver('local').namespace('app');
 
+        vm.apiVersionNumber = "";
         vm.canChangePlan = false;
         vm.changePlan = changePlan;
         vm.urls = {
@@ -272,7 +283,7 @@
 
         addHotkeys();
         buildMenus();
-        getUser().then(getOrganizations).then(startWebSocket);
+        getUser().then(getOrganizations).then(startWebSocket).then(getApiVersion);
       };
     });
 }());
