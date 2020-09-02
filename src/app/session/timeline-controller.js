@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Dashboard', function ($ExceptionlessClient, eventService, $filter, filterService, translateService) {
+    .controller('session.Timeline', function ($ExceptionlessClient, eventService, $filter, filterService, translateService) {
       var vm = this;
       function get() {
         function optionsCallback(options) {
@@ -45,7 +45,7 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback, false).then(onSuccess).catch(function(e){});
+        return eventService.count('avg:value cardinality:user date:(date' + (offset ? '^' + offset : '') + ' cardinality:user)', optionsCallback).then(onSuccess).catch(function(e){});
       }
 
       function updateLiveFilter() {
@@ -54,7 +54,7 @@
       }
 
       this.$onInit = function $onInit() {
-        vm._source = 'app.session.Dashboard';
+        vm._source = 'app.session.Timeline';
         vm.chart = {
           options: {
             padding: {top: 0.085},
@@ -157,7 +157,7 @@
             limit: 10,
             mode: 'summary'
           },
-          source: vm._source + '.Recent',
+          source: vm._source + '.Events',
           hideActions: true
         };
         vm.stats = {

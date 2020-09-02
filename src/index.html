@@ -17,10 +17,9 @@
         <meta name="msapplication-TileImage" content="/img/exceptionless-144.png"/>
         <meta name="msapplication-navbutton-color" content="#73C03A" />
         <meta name="msapplication-starturl" content="/project"/>
-        <meta name="msapplication-task" content="name=Dashboard; action-uri=/; icon-uri=/img/icons/dashboard.ico" />
-        <meta name="msapplication-task" content="name=Most Recent; action-uri=/recent; icon-uri=/img/icons/recent.ico" />
         <meta name="msapplication-task" content="name=Most Frequent; action-uri=/frequent; icon-uri=/img/icons/frequent.ico" />
         <meta name="msapplication-task" content="name=New Events; action-uri=/new; icon-uri=/img/icons/new.ico" />
+        <meta name="msapplication-task" content="name=Timeline; action-uri=/; icon-uri=/img/icons/timeline.ico" />
 
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
         <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -210,10 +209,9 @@
         <script src="components/websocket/websocket-service.js"></script>
 
         <script src="app/app-controller.js"></script>
-        <script src="app/dashboard-controller.js"></script>
+        <script src="app/timeline-controller.js"></script>
         <script src="app/frequent-controller.js"></script>
         <script src="app/new-controller.js"></script>
-        <script src="app/recent-controller.js"></script>
         <script src="app/users-controller.js"></script>
 
         <script src="app/auth/auth.js"></script>
@@ -254,7 +252,7 @@
         <script src="app/project/list-controller.js"></script>
 
         <script src="app/session/session.js"></script>
-        <script src="app/session/dashboard-controller.js"></script>
+        <script src="app/session/timeline-controller.js"></script>
         <script src="app/session/sessions-directive.js"></script>
 
         <script src="app/stack/stack.js"></script>

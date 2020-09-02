@@ -20,7 +20,7 @@
         var vm = this;
         function buildUrls() {
           function getOrganizationUrl(organization) {
-            if (isOnSessionDashboard()) {
+            if (isOnSessionTimeline()) {
               return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', organizationId: organization.id });
             }
 
@@ -28,7 +28,7 @@
           }
 
           function getAllProjectsUrl() {
-            if (isOnSessionDashboard()) {
+            if (isOnSessionTimeline()) {
               return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session' });
             }
 
@@ -36,7 +36,7 @@
           }
 
           function getProjectUrl(project) {
-            if (isOnSessionDashboard()) {
+            if (isOnSessionTimeline()) {
               return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', projectId: project.id });
             }
 
@@ -166,10 +166,6 @@
             return 'new';
           }
 
-          if ($state.current.name.endsWith('recent')) {
-            return 'recent';
-          }
-
           if ($state.current.name.endsWith('users')) {
             return 'users';
           }
@@ -177,8 +173,8 @@
           return 'dashboard';
         }
 
-        function isOnSessionDashboard() {
-          return $state.current.name.contains('session-') || $state.current.name === 'app.session.dashboard';
+        function isOnSessionTimeline() {
+          return $state.current.name.contains('session-') || $state.current.name === 'app.session.timeline';
         }
 
         function showSearch() {

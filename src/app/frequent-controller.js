@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Frequent', function (stackService) {
+    .controller('app.Frequent', function (eventService) {
       var vm = this;
       this.$onInit = function $onInit() {
         vm.mostFrequent = {
-          get: stackService.getFrequent,
+          get: eventService.getAll,
           options: {
             limit: 20,
-            mode: 'summary'
+            mode: 'stack_frequent'
           },
           source: 'app.Frequent'
         };

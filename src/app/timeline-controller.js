@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Dashboard', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService, translateService) {
+    .controller('app.Timeline', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService, translateService) {
       var vm = this;
       function canRefresh(data) {
         if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
@@ -68,7 +68,7 @@
 
       this.$onInit = function $onInit() {
         vm._organizations = [];
-        vm._source = 'app.Dashboard';
+        vm._source = 'app.Timeline';
         vm.canRefresh = canRefresh;
         vm.chart = {
           options: {
@@ -150,23 +150,14 @@
         };
         vm.get = get;
 
-        vm.mostFrequent = {
-          get: stackService.getFrequent,
-          options: {
-            limit: 10,
-            mode: 'summary'
-          },
-          source: vm._source + '.Frequent'
-        };
-
-        vm.mostRecent = {
-          header: 'Most Recent',
+        vm.events = {
+          header: 'Events',
           get: eventService.getAll,
           options: {
-            limit: 10,
+            limit: 15,
             mode: 'summary'
           },
-          source: vm._source + '.Recent'
+          source: vm._source + '.Events'
         };
         vm.stats = {
           count: 0,

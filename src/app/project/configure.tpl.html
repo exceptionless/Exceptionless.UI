@@ -110,7 +110,7 @@ Invoke-RestMethod -Uri "{{::vm.serverUrl}}/api/v2/events" -Method 'Post' -Body $
         </div>
         <footer class="panel-footer">
           <div class="pull-right">
-            <a ui-sref="app.project-dashboard({ projectId: vm.project.id })" class="btn btn-default" role="button">{{::'Go To Dashboard' | translate}}</a>
+            <a ui-sref="app.project-frequent({ projectId: vm.project.id })" class="btn btn-default" role="button">{{::'Go To Most Frequent' | translate}}</a>
           </div>
           <a ui-sref="app.account.manage({ tab: 'notifications', projectId: vm.project.id })" class="btn btn-primary" role="button" title="{{::'Manage Notification Settings' | translate}}">
             <i class="fa fa-fw fa-envelope"></i> <span class="hidden-xs">{{::'Manage Notification Settings' | translate}}</span>

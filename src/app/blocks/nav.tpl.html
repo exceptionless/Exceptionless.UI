@@ -11,18 +11,6 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">{{::'Exceptions' | translate}}</li>
       <li>
-        <a ng-href="{{appVm.urls.dashboard.error}}">
-          <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{::"Exception Dashboard" | translate}}</span>
-        </a>
-      </li>
-      <li>
-        <a ng-href="{{appVm.urls.recent.error}}">
-          <i class="fa fa-calendar fa-fw"></i>
-          <span>{{::'Most Recent Exceptions' | translate}}</span>
-        </a>
-      </li>
-      <li>
         <a ng-href="{{appVm.urls.frequent.error}}">
           <i class="fa fa-signal fa-fw"></i>
           <span>{{::'Most Frequent Exceptions' | translate}}</span>
@@ -40,6 +28,12 @@
           <span>{{::'New Exception' |translate}}</span>
         </a>
       </li>
+      <li>
+        <a ng-href="{{appVm.urls.timeline.error}}">
+          <i class="fa fa-bar-chart-o fa-fw"></i>
+          <span>{{::"Exception Timeline" | translate}}</span>
+        </a>
+      </li>
     </ul>
   </li>
   <li ng-class="{active: appVm.isMenuActive.log}">
@@ -53,18 +47,6 @@
     </a>
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">{{::'Log Messages' | translate}}</li>
-      <li>
-        <a ng-href="{{appVm.urls.dashboard.log}}">
-          <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{::'Message Dashboard' | translate}}</span>
-        </a>
-      </li>
-      <li>
-        <a ng-href="{{appVm.urls.recent.log}}">
-          <i class="fa fa-calendar fa-fw"></i>
-          <span>{{::'Most Recent Messages' | translate}}</span>
-        </a>
-      </li>
       <li>
         <a ng-href="{{appVm.urls.frequent.log}}">
           <i class="fa fa-signal fa-fw"></i>
@@ -83,6 +65,12 @@
           <span>{{::'New LogMessage' | translate}}</span>
         </a>
       </li>
+      <li>
+        <a ng-href="{{appVm.urls.timeline.log}}">
+          <i class="fa fa-bar-chart-o fa-fw"></i>
+          <span>{{::'Message Timeline' | translate}}</span>
+        </a>
+      </li>
     </ul>
   </li>
   <li ng-class="{active: appVm.isMenuActive['404']}">
@@ -96,18 +84,6 @@
     </a>
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">{{::'Broken Links' | translate}}</li>
-      <li>
-        <a ng-href="{{appVm.urls.dashboard['404']}}">
-          <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{::'Broken Links Dashboard' | translate}}</span>
-        </a>
-      </li>
-      <li>
-        <a ng-href="{{appVm.urls.recent['404']}}">
-          <i class="fa fa-calendar fa-fw"></i>
-          <span>{{::'Most Recent Links' | translate}}</span>
-        </a>
-      </li>
       <li>
         <a ng-href="{{appVm.urls.frequent['404']}}">
           <i class="fa fa-signal fa-fw"></i>
@@ -126,6 +102,12 @@
           <span>{{::'New BrokenLink' | translate}}</span>
         </a>
       </li>
+      <li>
+        <a ng-href="{{appVm.urls.timeline['404']}}">
+          <i class="fa fa-bar-chart-o fa-fw"></i>
+          <span>{{::'Broken Links Timeline' | translate}}</span>
+        </a>
+      </li>
     </ul>
   </li>
   <li ng-class="{active: appVm.isMenuActive.usage}">
@@ -139,18 +121,6 @@
     </a>
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">{{::'Feature Usages' | translate}}</li>
-      <li>
-        <a ng-href="{{appVm.urls.dashboard.usage}}">
-          <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{::'Feature Dashboard' | translate}}</span>
-        </a>
-      </li>
-      <li>
-        <a ng-href="{{appVm.urls.recent.usage}}">
-          <i class="fa fa-calendar fa-fw"></i>
-          <span>{{::'Most Recent Features' | translate}}</span>
-        </a>
-      </li>
       <li>
         <a ng-href="{{appVm.urls.frequent.usage}}">
           <i class="fa fa-signal fa-fw"></i>
@@ -169,6 +139,12 @@
           <span>{{::'New FeatureUsage' | translate}}</span>
         </a>
       </li>
+      <li>
+        <a ng-href="{{appVm.urls.timeline.usage}}">
+          <i class="fa fa-bar-chart-o fa-fw"></i>
+          <span>{{::'Feature Timeline' | translate}}</span>
+        </a>
+      </li>
     </ul>
   </li>
   <li ng-class="{active: appVm.isMenuActive.all}">
@@ -182,18 +158,6 @@
     </a>
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">{{::'All Events' | translate}}</li>
-      <li>
-        <a ng-href="{{appVm.urls.dashboard.all}}">
-          <i class="fa fa-dashboard fa-fw"></i>
-          <span>{{::'Event Dashboard' | translate}}</span>
-        </a>
-      </li>
-      <li>
-        <a ng-href="{{appVm.urls.recent.all}}">
-          <i class="fa fa-calendar fa-fw"></i>
-          <span>{{::'Most Recent' | translate}}</span>
-        </a>
-      </li>
       <li>
         <a ng-href="{{appVm.urls.frequent.all}}">
           <i class="fa fa-signal fa-fw"></i>
@@ -212,6 +176,12 @@
           <span>{{::'New Event' | translate}}</span>
         </a>
       </li>
+      <li>
+        <a ng-href="{{appVm.urls.timeline.all}}">
+          <i class="fa fa-bar-chart-o fa-fw"></i>
+          <span>{{::'Event Timeline' | translate}}</span>
+        </a>
+      </li>
     </ul>
   </li>
   <li ng-class="{active: appVm.isMenuActive.reports}">
@@ -226,7 +196,7 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">{{::'Reports' | translate}}</li>
       <li>
-        <a ng-href="{{appVm.urls.sessionDashboard}}">
+        <a ng-href="{{appVm.urls.sessionTimeline}}">
           <i class="fa fa-heartbeat fa-fw"></i>
           <span>{{::'Sessions' | translate}}</span>
         </a>

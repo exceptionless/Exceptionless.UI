@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   'use strict';
 
   angular.module('exceptionless.filter')
@@ -7,12 +7,12 @@
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
       var _eventType, _organizationId, _projectId, _raw;
 
-      function apply(source, includeHiddenAndFixedFilter) {
-        return angular.extend({}, getDefaultOptions(includeHiddenAndFixedFilter), source);
+      function apply(source, includeStatusFilter) {
+        return angular.extend({}, getDefaultOptions(includeStatusFilter), source);
       }
 
-      function buildFilter(includeHiddenAndFixedFilter) {
-        includeHiddenAndFixedFilter = (typeof includeHiddenAndFixedFilter !== 'undefined') ?  includeHiddenAndFixedFilter : true;
+      function buildFilter(includeStatusFilter) {
+        includeStatusFilter = (typeof includeStatusFilter !== 'undefined') ?  includeStatusFilter : true;
         var filters = [];
 
         if (_organizationId) {
@@ -29,15 +29,10 @@
 
         var filter = _raw || '';
         var isWildCardFilter = filter.trim() === '*';
-        if (includeHiddenAndFixedFilter && !isWildCardFilter) {
-          var hasFixed = filter.search(/\bfixed:/i) !== -1;
-          if (!hasFixed) {
-            filters.push('fixed:false');
-          }
-
-          var hasHidden = filter.search(/\bhidden:/i) !== -1;
-          if (!hasHidden) {
-            filters.push('hidden:false');
+        if (includeStatusFilter && !isWildCardFilter) {
+          var hasStatus = filter.search(/\bstatus:/i) !== -1;
+          if (!hasStatus) {
+            filters.push('(status:open OR status:regressed)');
           }
         }
 
@@ -66,17 +61,17 @@
         fireFilterChanged();
       }
 
-      function fireFilterChanged(includeHiddenAndFixedFilter) {
+      function fireFilterChanged(includeStatusFilter) {
         var options = {
           organization_id: _organizationId,
           project_id: _projectId,
           type: _eventType
         };
 
-        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeHiddenAndFixedFilter)));
+        $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeStatusFilter)));
       }
 
-      function getDefaultOptions(includeHiddenAndFixedFilter) {
+      function getDefaultOptions(includeStatusFilter) {
         var options = {};
 
         var offset = getTimeOffset();
@@ -84,7 +79,7 @@
           angular.extend(options, { offset: offset });
         }
 
-        var filter = buildFilter(includeHiddenAndFixedFilter);
+        var filter = buildFilter(includeStatusFilter);
         if (filter) {
           angular.extend(options, { filter: filter });
         }

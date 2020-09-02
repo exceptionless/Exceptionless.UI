@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Users', function (stackService) {
+    .controller('app.Users', function (eventService) {
       var vm = this;
       this.$onInit = function $onInit() {
         vm.mostUsers = {
-          get: stackService.getUsers,
+          get: eventService.getAll,
           options: {
             limit: 20,
-            mode: 'summary'
+            mode: 'stack_users'
           },
           source: 'app.MostUsers'
         };

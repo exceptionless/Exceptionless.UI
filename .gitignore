@@ -8,4 +8,5 @@ src/results
 .chrome
 .idea
 src/.idea/
+.DS_Store
 src/html-angular-validate-report-checkstyle.xml

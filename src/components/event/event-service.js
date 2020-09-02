@@ -17,8 +17,8 @@
       return !isNaN(parseFloat(result)) && isFinite(result) ? result : 0.0;
     }
 
-    function count(aggregations, optionsCallback, includeHiddenAndFixedFilter) {
-      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, includeHiddenAndFixedFilter);
+    function count(aggregations, optionsCallback) {
+      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, true);
       options = angular.isFunction(optionsCallback) ? optionsCallback(options) : options;
 
       var organization = filterService.getOrganizationId();
@@ -34,9 +34,9 @@
       return Restangular.one('events', 'count').get(options);
     }
 
-    function getAll(options, optionsCallback, includeHiddenAndFixedFilter) {
+    function getAll(options, optionsCallback) {
       optionsCallback = angular.isFunction(optionsCallback) ? optionsCallback : function(o){ return o; };
-      var mergedOptions = optionsCallback(filterService.apply(options, includeHiddenAndFixedFilter));
+      var mergedOptions = optionsCallback(filterService.apply(options));
 
       var organization = filterService.getOrganizationId();
       if (organization) {

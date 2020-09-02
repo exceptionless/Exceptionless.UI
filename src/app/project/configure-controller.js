@@ -49,7 +49,7 @@
         }
 
         function onFailure() {
-          $state.go('app.dashboard');
+          $state.go('app.frequent');
           notificationService.error(translateService.T('Cannot_Find_Project', { projectId : vm._projectId }));
         }
 
@@ -94,7 +94,7 @@
       }
 
       function navigateToDashboard() {
-        $state.go('app.project-dashboard', { projectId: vm._projectId } );
+        $state.go('app.project-frequent', { projectId: vm._projectId } );
       }
 
       this.$onInit = function $onInit() {
