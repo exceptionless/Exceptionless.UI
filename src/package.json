@@ -1,6 +1,5 @@
 {
   "name": "exceptionless",
-  "version": "2.9.2",
   "private": true,
   "devDependencies": {
     "bower": "1.8.8",
