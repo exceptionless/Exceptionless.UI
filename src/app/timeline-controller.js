@@ -155,8 +155,7 @@
           get: eventService.getAll,
           options: {
             limit: 15,
-            mode: 'summary',
-            sort: '-date'
+            mode: 'summary'
           },
           source: vm._source + '.Events'
         };
