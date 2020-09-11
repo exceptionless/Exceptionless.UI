@@ -170,11 +170,11 @@
             return 'users';
           }
 
-          return 'dashboard';
+          return 'timeline';
         }
 
         function isOnSessionTimeline() {
-          return $state.current.name.contains('session-') || $state.current.name === 'app.session.timeline';
+          return $state.current.name.contains('app.session-') || $state.current.name === 'app.session.timeline';
         }
 
         function showSearch() {
