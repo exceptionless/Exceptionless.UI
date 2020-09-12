@@ -61,6 +61,7 @@
     'app.organization',
     'app.payment',
     'app.project',
+    'app.reports',
     'app.session',
     'app.stack',
     'app.status'

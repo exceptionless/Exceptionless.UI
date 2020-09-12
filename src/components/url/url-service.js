@@ -3,7 +3,7 @@
 
   angular.module('exceptionless.url', [])
     .factory('urlService', function ($state) {
-      function buildFilterUrl(options) {
+      function buildFilterUrl(options, routeParameters) {
         var routeParts = [];
         var routeParams = {};
 
@@ -26,7 +26,9 @@
 
         routeParts.push(options.route);
 
-        return $state.href('app.' + routeParts.join('-'), routeParams, { absolute: true });
+        var moduleName = options.moduleName || 'app';
+        var parameters = angular.extend({}, routeParameters || {}, routeParams);
+        return $state.href(moduleName + '.' + routeParts.join('-'), parameters, { absolute: true });
       }
 
       function buildUrl(isSecure, host, port, path, queryString) {

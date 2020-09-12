@@ -100,16 +100,16 @@
 
       function buildMenus() {
         function getFilterUrl(route, type) {
-          return urlService.buildFilterUrl({ route: route, projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(),  type: type });
+          return urlService.buildFilterUrl({ route: route, projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId(), type: type });
         }
 
         function buildUrls() {
           var result = {
             timeline: {},
-            sessionTimeline: urlService.buildFilterUrl({ route: 'timeline', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() }),
             frequent: {},
             users: {},
-            new: {}
+            new: {},
+            reports: {}
           };
 
           [undefined, 'error', 'log', '404', 'usage'].forEach(function(type) {
@@ -118,6 +118,11 @@
             result.frequent[key] = getFilterUrl('frequent', type);
             result.users[key] = getFilterUrl('users', type);
             result.new[key] = getFilterUrl('new', type);
+          });
+
+          result.reports.sessions = urlService.buildFilterUrl({ route: 'timeline', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() });
+          ['regressed', 'fixed', 'snoozed', 'ignored', 'discarded'].forEach(function(status) {
+            result.reports[status] = urlService.buildFilterUrl({ moduleName: 'app.reports', route: 'status', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() }, { status: status });
           });
 
           return result;
@@ -146,7 +151,8 @@
           return state.includes('app.session.timeline', params) ||
             state.includes('app.session-timeline', params) ||
             state.includes('app.session-project-timeline', params) ||
-            state.includes('app.session-organization-timeline', params);
+            state.includes('app.session-organization-timeline', params) ||
+            state.current.name.contains('app.reports.');
         }
 
         function isTypeMenuActive(state, params, type) {
@@ -265,10 +271,10 @@
         vm.changePlan = changePlan;
         vm.urls = {
           timeline: {},
-          sessionTimeline: '',
           frequent: {},
           users: {},
-          new: {}
+          new: {},
+          reports: {}
         };
         vm.getOrganizations = getOrganizations;
         vm.getUser = getUser;

@@ -196,9 +196,39 @@
     <ul class="nav nav-sub dk" auto-active>
       <li class="nav-sub-header">{{::'Reports' | translate}}</li>
       <li>
-        <a ng-href="{{appVm.urls.sessionTimeline}}">
+        <a ng-href="{{appVm.urls.reports.sessions}}">
           <i class="fa fa-heartbeat fa-fw"></i>
           <span>{{::'Sessions' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.urls.reports.regressed}}">
+          <i class="fa fa-bug fa-fw"></i>
+          <span>{{::'regressed' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.urls.reports.fixed}}">
+          <i class="fa fa-wrench fa-fw"></i>
+          <span>{{::'fixed' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.urls.reports.snoozed}}">
+          <i class="fa fa-clock-o fa-fw"></i>
+          <span>{{::'snoozed' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.urls.reports.ignored}}">
+          <i class="fa fa-trash-o fa-fw"></i>
+          <span>{{::'ignored' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a ng-href="{{appVm.urls.reports.discarded}}">
+          <i class="fa fa-ban fa-fw"></i>
+          <span>{{::'discarded' | translate}}</span>
         </a>
       </li>
     </ul>

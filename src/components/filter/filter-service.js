@@ -5,7 +5,7 @@
     .factory('filterService', function ($rootScope, dateRangeParserService, filterStoreService, objectIDService, organizationService) {
       var DEFAULT_TIME_FILTER = 'last week';
       var _time = filterStoreService.getTimeFilter() || DEFAULT_TIME_FILTER;
-      var _eventType, _organizationId, _projectId, _raw;
+      var _eventType, _organizationId, _projectId, _raw, _status;
 
       function apply(source, includeStatusFilter) {
         return angular.extend({}, getDefaultOptions(includeStatusFilter), source);
@@ -27,9 +27,13 @@
           filters.push('type:' + _eventType);
         }
 
+        if (_status) {
+          filters.push('status:' + _status);
+        }
+
         var filter = _raw || '';
         var isWildCardFilter = filter.trim() === '*';
-        if (includeStatusFilter && !isWildCardFilter) {
+        if (includeStatusFilter && !isWildCardFilter && !_status) {
           var hasStatus = filter.search(/\bstatus:/i) !== -1;
           if (!hasStatus) {
             filters.push('(status:open OR status:regressed)');
@@ -65,7 +69,8 @@
         var options = {
           organization_id: _organizationId,
           project_id: _projectId,
-          type: _eventType
+          type: _eventType,
+          status: _status
         };
 
         $rootScope.$emit('filterChanged', angular.extend(options, getDefaultOptions(includeStatusFilter)));
@@ -105,6 +110,10 @@
 
       function getEventType() {
         return _eventType;
+      }
+
+      function getStatus() {
+        return _status;
       }
 
       function getOldestPossibleEventDate() {
@@ -174,6 +183,18 @@
         }
 
         _eventType = eventType;
+
+        if (!suspendNotifications) {
+          fireFilterChanged();
+        }
+      }
+
+      function setStatus(status, suspendNotifications) {
+        if (angular.equals(status, _status)) {
+          return;
+        }
+
+        _status = status;
 
         if (!suspendNotifications) {
           fireFilterChanged();
@@ -253,6 +274,7 @@
         getProjectId: getProjectId,
         getOrganizationId: getOrganizationId,
         getOldestPossibleEventDate: getOldestPossibleEventDate,
+        getStatus: getStatus,
         getTime: getTime,
         getTimeRange: getTimeRange,
         getTimeOffset: getTimeOffset,
@@ -262,6 +284,7 @@
         setFilter: setFilter,
         setOrganizationId: setOrganizationId,
         setProjectId: setProjectId,
+        setStatus: setStatus,
         setTime: setTime
       };
 
