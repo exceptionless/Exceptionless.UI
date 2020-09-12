@@ -24,7 +24,7 @@
 
       this.$onInit = function $onInit() {
         vm.status = $stateParams.status;
-        vm.icon = getIcon(vm.status),
+        vm.icon = getIcon(vm.status);
         vm.stacks = {
           get: stackService.getAll,
           options: {
