@@ -151,6 +151,7 @@
             return eventService.getAllSessions(options, optionsCallback);
           },
           summary: {
+            showStatus: false,
             showType: false
           },
           options: {

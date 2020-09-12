@@ -1,4 +1,6 @@
 <div>
+  <span ng-if="showBadge" class="label label-default {{badgeClass}}">{{::source.status | translate}}</span>
+
   <strong>
     <abbr title="{{::source.data.TypeFullName}}">{{::source.data.Type}}</abbr>
     <span ng-if="!source.data.Method">:</span>

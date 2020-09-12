@@ -7,6 +7,7 @@
         restrict: 'E',
         scope: {
           source: '=',
+          showStatus: '=',
           showType: '='
         },
         template: '<ng-include src="templateUrl" />',
@@ -16,6 +17,9 @@
           scope.isLevelInfo = level === 'info';
           scope.isLevelWarning = level === 'warn';
           scope.isLevelError = level === 'error';
+
+          scope.showBadge = scope.showStatus && scope.source.status && scope.source.status !== 'open';
+          scope.badgeClass = 'label-' + (scope.source.status || 'open');
 
           scope.templateUrl = 'components/summary/templates/' + scope.source.template_key + '.tpl.html';
         }

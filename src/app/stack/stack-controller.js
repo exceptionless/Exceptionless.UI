@@ -611,6 +611,7 @@
             return eventService.getByStackId(vm._stackId, options);
           },
           summary: {
+            showStatus: false,
             showType: false
           },
           options: {

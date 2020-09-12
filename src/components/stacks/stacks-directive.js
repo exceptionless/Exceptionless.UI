@@ -120,6 +120,7 @@
             vm.previousPage = previousPage;
             vm.save = save;
             vm.selectedIds = [];
+            vm.showStatus = vm.settings.summary ? vm.settings.showStatus : !filterService.getStatus();
             vm.showType = vm.settings.summary ? vm.settings.showType : !filterService.getEventType();
             vm.stacks = [];
             vm.updateSelection = updateSelection;
