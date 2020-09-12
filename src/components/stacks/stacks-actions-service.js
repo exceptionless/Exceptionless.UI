@@ -19,6 +19,23 @@
         return promise;
       }
 
+      var markOpenAction = {
+        name: 'Mark Open',
+        run: function (ids) {
+          function onSuccess() {
+            notificationService.info(translateService.T('Successfully marked the stacks as open.'));
+          }
+
+          function onFailure() {
+            $ExceptionlessClient.createFeatureUsage(source + '.mark-open.error').setProperty('count', ids.length).submit();
+            notificationService.error(translateService.T('An error occurred while marking stacks as open.'));
+          }
+
+          $ExceptionlessClient.createFeatureUsage(source + '.mark-open').setProperty('count', ids.length).submit();
+          return executeAction(ids, actionWithParameter(stackService.changeStatus, "open"), onSuccess, onFailure);
+        }
+      };
+
       var deleteAction = {
         name: 'Delete',
         run: function (ids) {
@@ -57,23 +74,6 @@
         }
       };
 
-      var markNotFixedAction = {
-        name: 'Mark Not Fixed',
-        run: function (ids) {
-          function onSuccess() {
-            notificationService.info(translateService.T('Successfully marked the stacks as open.'));
-          }
-
-          function onFailure() {
-            $ExceptionlessClient.createFeatureUsage(source + '.mark-not-fixed.error').setProperty('count', ids.length).submit();
-            notificationService.error(translateService.T('An error occurred while marking stacks as not fixed.'));
-          }
-
-          $ExceptionlessClient.createFeatureUsage(source + '.mark-not-fixed').setProperty('count', ids.length).submit();
-          return executeAction(ids, actionWithParameter(stackService.changeStatus, "open"), onSuccess, onFailure);
-        }
-      };
-
       var markIgnoredAction = {
         name: 'Mark Ignored',
         run: function (ids) {
@@ -88,23 +88,6 @@
 
           $ExceptionlessClient.createFeatureUsage(source + '.mark-ignored').setProperty('count', ids.length).submit();
           return executeAction(ids, actionWithParameter(stackService.changeStatus, "ignored"), onSuccess, onFailure);
-        }
-      };
-
-      var markNotIgnoredAction = {
-        name: 'Mark Not Ignored',
-        run: function (ids) {
-          function onSuccess() {
-            notificationService.info(translateService.T('Successfully marked the stacks as open.'));
-          }
-
-          function onFailure() {
-            $ExceptionlessClient.createFeatureUsage(source + '.mark-not-ignored.error').setProperty('count', ids.length).submit();
-            notificationService.error(translateService.T('An error occurred while marking stacks as open.'));
-          }
-
-          $ExceptionlessClient.createFeatureUsage(source + '.mark-not-ignored').setProperty('count', ids.length).submit();
-          return executeAction(ids, actionWithParameter(stackService.changeStatus, "open"), onSuccess, onFailure);
         }
       };
 
@@ -125,25 +108,8 @@
         }
       };
 
-      var markNotDiscardedAction = {
-        name: 'Mark Not Discarded',
-        run: function (ids) {
-          function onSuccess() {
-            notificationService.info(translateService.T('Successfully marked the stacks as open.'));
-          }
-
-          function onFailure() {
-            $ExceptionlessClient.createFeatureUsage(source + '.mark-not-discarded.error').setProperty('count', ids.length).submit();
-            notificationService.error(translateService.T('An error occurred while marking stacks as open.'));
-          }
-
-          $ExceptionlessClient.createFeatureUsage(source + '.mark-not-discarded').setProperty('count', ids.length).submit();
-          return executeAction(ids, actionWithParameter(stackService.changeStatus, "open"), onSuccess, onFailure);
-        }
-      };
-
       function getActions() {
-        return [markFixedAction, markNotFixedAction, markIgnoredAction, markNotIgnoredAction, markDiscardedAction, markNotDiscardedAction, deleteAction];
+        return [markOpenAction, markFixedAction, markIgnoredAction, markDiscardedAction, deleteAction];
       }
 
       var service = {
