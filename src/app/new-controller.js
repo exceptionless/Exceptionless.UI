@@ -151,7 +151,7 @@
         vm.get = get;
 
         vm.newest = {
-          header: 'Newest',
+          header: 'New Stacks',
           get: eventService.getAll,
           options: {
             limit: 15,

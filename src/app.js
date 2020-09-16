@@ -138,7 +138,7 @@
     var routes = [
       { key: 'frequent', title: 'Most Frequent', controller: 'app.Frequent' },
       { key: 'recent', title: 'Most Frequent', controller: 'app.Frequent', templateUrl: 'app/frequent.tpl.html', redirectToKey: 'frequent'  },
-      { key: 'new', title: 'New', controller: 'app.New' },
+      { key: 'new', title: 'New Stacks', controller: 'app.New' },
       { key: 'users', title: 'Most Users', controller: 'app.Users' },
       { key: 'timeline', title: 'Timeline', controller: 'app.Timeline' },
       { key: 'dashboard', title: 'Timeline', controller: 'app.Timeline', templateUrl: 'app/timeline.tpl.html', redirectToKey: 'timeline' }
