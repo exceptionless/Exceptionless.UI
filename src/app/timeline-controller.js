@@ -38,7 +38,7 @@
           var count = getAggregationValue(results, 'sum_count', 0);
           vm.stats = {
             count: $filter('number')(count, 0),
-            unique: $filter('number')(getAggregationValue(results, 'cardinality_stack', 0), 0),
+            stacks: $filter('number')(getAggregationValue(results, 'cardinality_stack', 0), 0),
             new: $filter('number')(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
             avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(count, vm._organizations), 1)
           };
@@ -75,7 +75,7 @@
             padding: {top: 0.085},
             renderer: 'stack',
             series: [{
-              name: translateService.T('Unique'),
+              name: translateService.T('Stacks'),
               color: 'rgba(60, 116, 0, .9)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }, {
@@ -161,7 +161,7 @@
         };
         vm.stats = {
           count: 0,
-          unique: 0,
+          stacks: 0,
           new: 0,
           avg_per_hour: 0.0
         };
