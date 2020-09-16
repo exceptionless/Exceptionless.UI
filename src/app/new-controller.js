@@ -39,7 +39,7 @@
           vm.stats = {
             events: $filter('number')(count, 0),
             stacks: $filter('number')(getAggregationValue(results, 'cardinality_stack', 0), 0),
-            new: $filter('number')(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
+            newStacks: $filter('number')(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
             avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(count, vm._organizations), 1)
           };
 
@@ -162,7 +162,7 @@
         vm.stats = {
           events: 0,
           stacks: 0,
-          new: 0,
+          newStacks: 0,
           avg_per_hour: 0.0
         };
         vm.type = $stateParams.type;
