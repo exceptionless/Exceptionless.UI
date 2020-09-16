@@ -248,7 +248,7 @@
           var results = response.data.plain();
           vm._users = getAggregationValue(results, 'cardinality_user', 0);
           vm.stats = {
-            count: $filter('number')(getAggregationValue(results, 'sum_count', 0), 0),
+            events: $filter('number')(getAggregationValue(results, 'sum_count', 0), 0),
             users: buildUserStat(vm._users, vm._total_users),
             usersTitle: buildUserStatTitle(vm._users, vm._total_users),
             first_occurrence: getAggregationValue(results, 'min_date'),
@@ -623,7 +623,7 @@
         vm.showActionIcons = showActionIcons;
         vm.stack = {};
         vm.stats = {
-          count: 0,
+          events: 0,
           users: buildUserStat(0, 0),
           usersTitle: buildUserStatTitle(0, 0),
           first_occurrence: undefined,

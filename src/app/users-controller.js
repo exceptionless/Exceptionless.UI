@@ -37,7 +37,7 @@
           var termsAggregation = getAggregationItems(results, 'terms_first', []);
           var count = getAggregationValue(results, 'sum_count', 0);
           vm.stats = {
-            count: $filter('number')(count, 0),
+            events: $filter('number')(count, 0),
             stacks: $filter('number')(getAggregationValue(results, 'cardinality_stack', 0), 0),
             new: $filter('number')(termsAggregation.length > 0 ? termsAggregation[0].total : 0, 0),
             avg_per_hour: $filter('number')(eventService.calculateAveragePerHour(count, vm._organizations), 1)
@@ -79,7 +79,7 @@
               color: 'rgba(60, 116, 0, .9)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }, {
-              name: translateService.T('Count'),
+              name: translateService.T('Events'),
               color: 'rgba(124, 194, 49, .7)',
               stroke: 'rgba(0, 0, 0, 0.15)'
             }
@@ -160,7 +160,7 @@
           source: vm._source + '.Events'
         };
         vm.stats = {
-          count: 0,
+          events: 0,
           stacks: 0,
           new: 0,
           avg_per_hour: 0.0
