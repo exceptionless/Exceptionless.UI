@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app.session')
-    .controller('session.Timeline', function ($ExceptionlessClient, eventService, $filter, filterService, translateService) {
+    .controller('session.Events', function ($ExceptionlessClient, eventService, $filter, filterService, translateService) {
       var vm = this;
       function get() {
         function optionsCallback(options) {
@@ -54,7 +54,7 @@
       }
 
       this.$onInit = function $onInit() {
-        vm._source = 'app.session.Timeline';
+        vm._source = 'app.session.Events';
         vm.chart = {
           options: {
             padding: {top: 0.085},

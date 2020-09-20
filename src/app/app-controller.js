@@ -61,7 +61,7 @@
             description: translateService.T('Go To Most Frequent'),
             callback: function goToMostFrequent() {
               logFeatureUsage('Most Frequent');
-              $window.open(vm.timelineUrl.all, '_self');
+              $window.open(vm.eventsUrl.all, '_self');
             }
           })
           .add({
@@ -105,7 +105,7 @@
 
         function buildUrls() {
           var result = {
-            timeline: {},
+            events: {},
             frequent: {},
             users: {},
             new: {},
@@ -114,13 +114,13 @@
 
           [undefined, 'error', 'log', '404', 'usage'].forEach(function(type) {
             var key = !type ? 'all' : type;
-            result.timeline[key] = getFilterUrl('timeline', type);
+            result.events[key] = getFilterUrl('events', type);
             result.frequent[key] = getFilterUrl('frequent', type);
             result.users[key] = getFilterUrl('users', type);
             result.new[key] = getFilterUrl('new', type);
           });
 
-          result.reports.sessions = urlService.buildFilterUrl({ route: 'timeline', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() });
+          result.reports.sessions = urlService.buildFilterUrl({ route: 'events', routePrefix: 'session', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() });
           ['regressed', 'fixed', 'snoozed', 'ignored', 'discarded'].forEach(function(status) {
             result.reports[status] = urlService.buildFilterUrl({ moduleName: 'app.reports', route: 'status', projectId: filterService.getProjectId(), organizationId: filterService.getOrganizationId() }, { status: status });
           });
@@ -148,10 +148,10 @@
         }
 
         function isReportsMenuActive(state, params) {
-          return state.includes('app.session.timeline', params) ||
-            state.includes('app.session-timeline', params) ||
-            state.includes('app.session-project-timeline', params) ||
-            state.includes('app.session-organization-timeline', params) ||
+          return state.includes('app.session.events', params) ||
+            state.includes('app.session-events', params) ||
+            state.includes('app.session-project-events', params) ||
+            state.includes('app.session-organization-events', params) ||
             state.current.name.contains('app.reports.');
         }
 
@@ -168,7 +168,7 @@
           }).length > 0;
         }
 
-        var dashboards = ['frequent', 'new', 'users', 'timeline'];
+        var dashboards = ['frequent', 'new', 'users', 'events'];
         vm.urls = buildUrls();
         vm.isMenuActive = {
           all: isAllMenuActive($state, $stateParams),
@@ -270,7 +270,7 @@
         vm.canChangePlan = false;
         vm.changePlan = changePlan;
         vm.urls = {
-          timeline: {},
+          events: {},
           frequent: {},
           users: {},
           new: {},

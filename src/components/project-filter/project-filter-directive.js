@@ -20,7 +20,7 @@
         var vm = this;
         function buildUrls() {
           function getOrganizationUrl(organization) {
-            if (isOnSessionTimeline()) {
+            if (isOnSessionEvents()) {
               return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', organizationId: organization.id });
             } else if (isOnReports()) {
               return urlService.buildFilterUrl({ moduleName: 'app.reports', route: 'status', organizationId: organization.id }, { status: filterService.getStatus() });
@@ -30,7 +30,7 @@
           }
 
           function getAllProjectsUrl() {
-            if (isOnSessionTimeline()) {
+            if (isOnSessionEvents()) {
               return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session' });
             } else if (isOnReports()) {
               return urlService.buildFilterUrl({ moduleName: 'app.reports', route: 'status' }, { status: filterService.getStatus() });
@@ -40,7 +40,7 @@
           }
 
           function getProjectUrl(project) {
-            if (isOnSessionTimeline()) {
+            if (isOnSessionEvents()) {
               return urlService.buildFilterUrl({ route: getStateName(), routePrefix: 'session', projectId: project.id });
             } else if (isOnReports()) {
               return urlService.buildFilterUrl({ moduleName: 'app.reports', route: 'status', projectId: project.id }, { status: filterService.getStatus() });
@@ -176,11 +176,11 @@
             return 'users';
           }
 
-          return 'timeline';
+          return 'events';
         }
 
-        function isOnSessionTimeline() {
-          return $state.current.name.contains('app.session-') || $state.current.name === 'app.session.timeline';
+        function isOnSessionEvents() {
+          return $state.current.name.contains('app.session-') || $state.current.name === 'app.session.events';
         }
 
         function isOnReports() {

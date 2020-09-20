@@ -140,8 +140,9 @@
       { key: 'recent', title: 'Most Frequent', controller: 'app.Frequent', templateUrl: 'app/frequent.tpl.html', redirectToKey: 'frequent'  },
       { key: 'new', title: 'New Stacks', controller: 'app.New' },
       { key: 'users', title: 'Most Users', controller: 'app.Users' },
-      { key: 'timeline', title: 'Timeline', controller: 'app.Timeline' },
-      { key: 'dashboard', title: 'Timeline', controller: 'app.Timeline', templateUrl: 'app/timeline.tpl.html', redirectToKey: 'timeline' }
+      { key: 'events', title: 'Events', controller: 'app.Events' },
+      { key: 'timeline', title: 'Events', controller: 'app.Events', templateUrl: 'app/events.tpl.html', redirectToKey: 'events' },
+      { key: 'dashboard', title: 'Events', controller: 'app.Events', templateUrl: 'app/events.tpl.html', redirectToKey: 'events' }
     ];
     var resetEventTypeOnExit = ['filterService', function (filterService) { filterService.setEventType(null, true); }];
     routes.forEach(function(route) {
@@ -183,7 +184,7 @@
         onEnter: ['$state', '$stateParams', '$timeout', 'filterService', function ($state, $stateParams, $timeout, filterService) {
           if ($stateParams.type === 'session') {
             return $timeout(function () {
-              $state.transitionTo('app.session-project-timeline', $stateParams);
+              $state.transitionTo('app.session-project-events', $stateParams);
             });
           }
 
@@ -216,7 +217,7 @@
         onEnter: ['$state', '$stateParams', '$timeout', 'filterService', function ($state, $stateParams, $timeout, filterService) {
           if ($stateParams.type === 'session') {
             return $timeout(function () {
-              $state.transitionTo('app.session-organization-timeline', $stateParams);
+              $state.transitionTo('app.session-organization-events', $stateParams);
             });
           }
 
@@ -236,7 +237,7 @@
         onEnter: ['$state', '$stateParams', '$timeout', 'filterService', function ($state, $stateParams, $timeout, filterService) {
           if ($stateParams.type === 'session') {
             return $timeout(function () {
-              $state.transitionTo('app.session-timeline', $stateParams);
+              $state.transitionTo('app.session-events', $stateParams);
             });
           }
 

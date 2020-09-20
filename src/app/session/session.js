@@ -32,39 +32,39 @@
         filterService.setEventType(null, true);
       }];
 
-      var title = 'Session Timeline';
+      var title = 'Session Events';
       $stateProvider.state('app.session', {
         abstract: true,
         url: '/session',
         template: '<ui-view autoscroll="true" />'
       });
 
-      $stateProvider.state('app.session.timeline', {
+      $stateProvider.state('app.session.events', {
         title: title,
-        url: '/timeline',
-        controller: 'session.Timeline',
+        url: '/events',
+        controller: 'session.Events',
         controllerAs: 'vm',
-        templateUrl: 'app/session/timeline.tpl.html',
+        templateUrl: 'app/session/events.tpl.html',
         onEnter: onEnterSetTypeFilter,
         onExit: onExitRemoveTypeFilter
       });
 
-      $stateProvider.state('app.session-timeline', {
+      $stateProvider.state('app.session-events', {
         title: title,
-        url: '/session/timeline',
-        controller: 'session.Timeline',
+        url: '/session/events',
+        controller: 'session.Events',
         controllerAs: 'vm',
-        templateUrl: 'app/session/timeline.tpl.html',
+        templateUrl: 'app/session/events.tpl.html',
         onEnter: onEnterSetTypeFilter,
         onExit: onExitRemoveTypeFilter
       });
 
-      $stateProvider.state('app.session-project-timeline', {
+      $stateProvider.state('app.session-project-events', {
         title: title,
-        url: '/project/{projectId:[0-9a-fA-F]{24}}/session/timeline',
-        controller: 'session.Timeline',
+        url: '/project/{projectId:[0-9a-fA-F]{24}}/session/events',
+        controller: 'session.Events',
         controllerAs: 'vm',
-        templateUrl: 'app/session/timeline.tpl.html',
+        templateUrl: 'app/session/events.tpl.html',
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setProjectId($stateParams.projectId, true);
           filterService.setEventType('session', true);
@@ -77,12 +77,12 @@
         }
       });
 
-      $stateProvider.state('app.session-organization-timeline', {
+      $stateProvider.state('app.session-organization-events', {
         title: title,
-        url: '/organization/{organizationId:[0-9a-fA-F]{24}}/session/timeline',
-        controller: 'session.Timeline',
+        url: '/organization/{organizationId:[0-9a-fA-F]{24}}/session/events',
+        controller: 'session.Events',
         controllerAs: 'vm',
-        templateUrl: 'app/session/timeline.tpl.html',
+        templateUrl: 'app/session/events.tpl.html',
         onEnter: ['$stateParams', 'filterService', function ($stateParams, filterService) {
           filterService.setOrganizationId($stateParams.organizationId, true);
           filterService.setEventType('session', true);

@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app')
-    .controller('app.Timeline', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService, translateService) {
+    .controller('app.Events', function ($ExceptionlessClient, $filter, $stateParams, eventService, filterService, notificationService, organizationService, stackService, translateService) {
       var vm = this;
       function canRefresh(data) {
         if (!!data && data.type === 'PersistentEvent' || data.type === 'Stack') {
@@ -68,7 +68,7 @@
 
       this.$onInit = function $onInit() {
         vm._organizations = [];
-        vm._source = 'app.Timeline';
+        vm._source = 'app.Events';
         vm.canRefresh = canRefresh;
         vm.chart = {
           options: {
