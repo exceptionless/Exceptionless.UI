@@ -165,7 +165,7 @@
           newStacks: 0,
           avg_per_hour: 0.0
         };
-        vm.type = $stateParams.type;
+        vm.type = $stateParams.type || 'all';
 
         get();
       };
