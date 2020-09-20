@@ -7,7 +7,7 @@
         <div class="col-sm-12">
           <div class="row row-sm text-center">
             <div class="col-md-3 col-sm-6 col-xs-6">
-              <div class="dashboard-block">
+              <a ng-href="{{appVm.urls.events[vm.type]}}" class="dashboard-block">
                 <div class="rotate">
                   <i class="fa fa-calendar fa-4x"></i>
                 </div>
@@ -15,7 +15,8 @@
                   <span class="title">{{::'Events' | translate}}</span>
                   <span class="sub">{{vm.stats.events}}</span>
                 </div>
-              </div>
+                <i class="fa fa-chevron-right fa-2x more"></i>
+              </a>
             </div>
             <div class="col-md-3 col-sm-6 col-xs-6">
               <a ng-href="{{appVm.urls.frequent[vm.type]}}" class="dashboard-block">
