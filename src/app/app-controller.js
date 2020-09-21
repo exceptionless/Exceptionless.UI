@@ -140,7 +140,7 @@
           }).length > 0;
         }
 
-        function isAdminMenuActive(state, params) {
+        function isSettingsMenuActive(state, params) {
           return state.includes('app.project.list', params) ||
             state.includes('app.organization.list', params) ||
             state.includes('app.account.manage', params) ||
@@ -176,7 +176,7 @@
           log: isTypeMenuActive($state, $stateParams, 'log'),
           '404': isTypeMenuActive($state, $stateParams, '404'),
           usage: isTypeMenuActive($state, $stateParams, 'usage'),
-          admin: isAdminMenuActive($state, $stateParams),
+          settings: isSettingsMenuActive($state, $stateParams),
           reports: isReportsMenuActive($state, $stateParams)
         };
       }

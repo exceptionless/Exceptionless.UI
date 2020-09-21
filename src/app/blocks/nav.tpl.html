@@ -234,27 +234,27 @@
       </li>
     </ul>
   </li>
-  <li ng-class="{active: appVm.isMenuActive.admin}">
+  <li ng-class="{active: appVm.isMenuActive.settings}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
         <i class="fa fa-fw fa-angle-down text-active"></i>
       </span>
       <i class="fa fa-cog fa-fw"></i>
-      <span>{{::'Admin' | translate}}</span>
+      <span>{{::'Settings' | translate}}</span>
     </a>
     <ul class="nav nav-sub dk" auto-active>
-      <li class="nav-sub-header">{{::'Admin' | translate}}</li>
-      <li>
-        <a ui-sref="app.project.list">
-          <i class="fa fa-briefcase fa-fw"></i>
-          <span>{{::'Project Manager' | translate}}</span>
-        </a>
-      </li>
+      <li class="nav-sub-header">{{::'Settings' | translate}}</li>
       <li>
         <a ui-sref="app.organization.list">
           <i class="fa fa-group fa-fw"></i>
           <span>{{::'Organization Manager' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="app.project.list">
+          <i class="fa fa-briefcase fa-fw"></i>
+          <span>{{::'Project Manager' | translate}}</span>
         </a>
       </li>
       <li>
