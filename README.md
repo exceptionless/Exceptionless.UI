@@ -45,4 +45,4 @@ Please read the [contributing document](https://github.com/exceptionless/Excepti
 
 Thanks to all the people who have contributed!
 
-[![contributors](https://contributors-img.web.app/image?repo=exceptionless/exceptionless.net)](https://github.com/exceptionless/exceptionless.net/graphs/contributors)
+[![contributors](https://contributors-img.web.app/image?repo=exceptionless/exceptionless.ui)](https://github.com/exceptionless/exceptionless.ui/graphs/contributors)
