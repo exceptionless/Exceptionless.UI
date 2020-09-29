@@ -40,3 +40,9 @@ Please read the [contributing document](https://github.com/exceptionless/Excepti
    ```javascript
    npx grunt serve
    ```
+
+## Thanks
+
+Thanks to all the people who have contributed!
+
+[![contributors](https://contributors-img.web.app/image?repo=exceptionless/exceptionless.net)](https://github.com/exceptionless/exceptionless.net/graphs/contributors)
