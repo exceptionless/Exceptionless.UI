@@ -170,7 +170,8 @@
 
         var dashboards = ['frequent', 'new', 'users', 'events'];
         vm.urls = buildUrls();
-        vm.isMenuActive = {
+
+        var isMenuActive = {
           all: isAllMenuActive($state, $stateParams),
           error: isTypeMenuActive($state, $stateParams, 'error'),
           log: isTypeMenuActive($state, $stateParams, 'log'),
@@ -179,6 +180,14 @@
           settings: isSettingsMenuActive($state, $stateParams),
           reports: isReportsMenuActive($state, $stateParams)
         };
+
+        var hasActiveMenu = Object.keys(isMenuActive).some(function(prop) { return isMenuActive[prop]; });
+        if (hasActiveMenu) {
+          vm.isMenuActive = isMenuActive;
+        } else if (Object.keys(vm.isMenuActive).length === 0) {
+          isMenuActive.all = true;
+          vm.isMenuActive = isMenuActive;
+        }
       }
 
       function changePlan(organizationId) {
