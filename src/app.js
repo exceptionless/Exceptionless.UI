@@ -114,7 +114,7 @@
 
     RestangularProvider.setBaseUrl(BASE_URL + '/api/v2');
     RestangularProvider.setFullResponse(true);
-    //RestangularProvider.setDefaultHttpFields({ timeout: 10 * 1000 });
+    RestangularProvider.setDefaultHttpFields({ timeout: 10 * 1000 });
 
     if (!!STRIPE_PUBLISHABLE_KEY) {
       stripeProvider.setPublishableKey(STRIPE_PUBLISHABLE_KEY);
