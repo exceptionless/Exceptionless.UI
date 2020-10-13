@@ -21,8 +21,12 @@
                 } else {
                   deferred.resolve(true);
                 }
-              }, function() {
-                deferred.reject('An error occurred while validating the email address.');
+              }, function(response) {
+                if (response && response.status < 0) {
+                  deferred.resolve(true);
+                } else {
+                  deferred.reject('An error occurred while validating the email address.');
+                }
               });
             }
 
