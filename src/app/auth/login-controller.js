@@ -2,13 +2,16 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Login', function ($ExceptionlessClient, $state, $stateParams, translateService, authService, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, ENABLE_ACCOUNT_CREATION, notificationService, projectService, stateService) {
+    .controller('auth.Login', function ($ExceptionlessClient, $state, $stateParams, translateService, authService, BASE_URL, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, ENABLE_ACCOUNT_CREATION, notificationService, projectService, stateService) {
       var vm = this;
 
       function getMessage(response) {
         var message = translateService.T("Loggin_Failed_Message");
-        if (response.data && response.data.message)
+        if (response.data && response.data.message) {
           message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
+        } else if (response.status < 0) {
+          return translateService.T('Unable_to_connect_to') + ' ' + BASE_URL + '.';
+        }
 
         return message;
       }

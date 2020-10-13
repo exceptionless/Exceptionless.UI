@@ -2,12 +2,15 @@
   'use strict';
 
   angular.module('app.auth')
-    .controller('auth.Signup', function ($ExceptionlessClient, $location, $state, $stateParams, $timeout, analyticsService, authService, ENABLE_ACCOUNT_CREATION, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService, translateService) {
+    .controller('auth.Signup', function ($ExceptionlessClient, $location, $state, $stateParams, $timeout, analyticsService, authService, BASE_URL, ENABLE_ACCOUNT_CREATION, FACEBOOK_APPID, GOOGLE_APPID, GITHUB_APPID, LIVE_APPID, notificationService, projectService, stateService, translateService) {
       var vm = this;
       function getMessage(response) {
         var message = translateService.T('An error occurred while signing up.  Please contact support for more information.');
-        if (response.data && response.data.message)
+        if (response.data && response.data.message) {
           message += ' ' + translateService.T('Message:') + ' ' + response.data.message;
+        } else if (response.status < 0) {
+          return translateService.T('Unable_to_connect_to') + ' ' + BASE_URL + '.';
+        }
 
         return message;
       }
