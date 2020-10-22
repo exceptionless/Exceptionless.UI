@@ -15,6 +15,7 @@
     'exceptionless.event',
     'exceptionless.events',
     'exceptionless.filter',
+    'exceptionless.log-level',
     'exceptionless.organization',
     'exceptionless.organization-notifications',
     'exceptionless.promise-button',

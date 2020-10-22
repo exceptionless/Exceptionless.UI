@@ -662,6 +662,16 @@
   "Add":"Add",
   "Total":"Total",
 
+  "Log Level": "Log Level",
+  "trace": "Trace",
+  "debug": "Debug",
+  "info": "Info",
+  "warn": "Warn",
+  "error": "Error",
+  "fatal": "Fatal",
+  "off": "Off",
+  "Default": "Default",
+
   "DIALOGS_ERROR": "Error",
   "DIALOGS_ERROR_MSG": "An unknown error has occurred.",
   "DIALOGS_CLOSE": "Close",
