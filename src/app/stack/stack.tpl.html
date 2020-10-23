@@ -106,7 +106,7 @@
         <div class="btn-toolbar pull-right hidden-print" style="margin-right: 10px" role="toolbar" aria-label="Status">
           <div class="btn-group btn-group-sm" role="group">
             <button type="button" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              <span>{{vm.stack.status | translate}}</span>
+              <span>{{::'Status' | translate}}: {{vm.stack.status | translate}}</span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -128,6 +128,8 @@
             </ul>
           </div>
         </div>
+
+        <log-level ng-if="vm.stack.type == 'log'" class="pull-right" project-id="vm.project.id" source="vm.stack.signature_info.Source"></log-level>
       </div>
 
       <div class="panel-body">

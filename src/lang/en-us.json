@@ -662,6 +662,17 @@
   "Add":"Add",
   "Total":"Total",
 
+  "Log Level": "Log Level",
+  "trace": "Trace",
+  "debug": "Debug",
+  "info": "Info",
+  "warn": "Warn",
+  "error": "Error",
+  "fatal": "Fatal",
+  "off": "Off",
+  "Default": "Default",
+  "Notice_Default_Log_Level": "The default log level controls the minimum log level that should be accepted for log events. Log levels can also be overridden at the log stack level.",
+
   "DIALOGS_ERROR": "Error",
   "DIALOGS_ERROR_MSG": "An unknown error has occurred.",
   "DIALOGS_CLOSE": "Close",

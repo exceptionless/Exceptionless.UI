@@ -14,6 +14,7 @@
     'exceptionless.autofocus',
     'exceptionless.billing',
     'exceptionless.dialog',
+    'exceptionless.log-level',
     'exceptionless.organization-notifications',
     'exceptionless.project',
     'exceptionless.organization',

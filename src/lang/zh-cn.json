@@ -663,6 +663,17 @@
     "Add":"新增",
     "Total":"总计",
 
+    "Log Level": "日志级别",
+    "trace": "跟踪",
+    "debug": "除错",
+    "info": "信息",
+    "warn": "警告",
+    "error": "错误",
+    "fatal": "致命",
+    "off": "关",
+    "Default": "默认",
+    "Notice_Default_Log_Level": "默认日志级别控制日志事件应接受的最低日志级别。 日志级别也可以在日志堆栈级别覆盖。",
+
     "DIALOGS_ERROR": "错误",
     "DIALOGS_ERROR_MSG": "出现未知错误。",
     "DIALOGS_CLOSE": "关闭",
