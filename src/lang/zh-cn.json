@@ -672,7 +672,7 @@
     "fatal": "致命",
     "off": "关",
     "Default": "默认",
-    "Notice_Default_Log_Level": "A default log level that controls what logs are sent in. This can be overridden on each stack.",
+    "Notice_Default_Log_Level": "默认日志级别控制日志事件应接受的最低日志级别。 日志级别也可以在日志堆栈级别覆盖。",
 
     "DIALOGS_ERROR": "错误",
     "DIALOGS_ERROR_MSG": "出现未知错误。",
