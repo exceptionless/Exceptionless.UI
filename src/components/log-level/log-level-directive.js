@@ -25,31 +25,56 @@
         function get() {
           function onSuccess(response) {
             var configSettings = response.data.plain().settings;
-            console.log(configSettings);
-            vm.level = getMinLogLevel(configSettings, vm.source);
-            vm.defaultLevel = getMinLogLevel(configSettings) || 'Trace';
+            vm.level = getSourceLogLevel(configSettings, vm.source);
+            vm.defaultLevel = getDefaultLogLevel(configSettings, vm.source);
+            vm.loading = false;
           }
 
-          function onFailure(response) {
+          function onFailure() {
+            notificationService.error(translateService.T('An error occurred while loading the projects.'));
           }
 
           return projectService.getConfig(vm.projectId).then(onSuccess, onFailure);
         }
 
+        function canRefresh(data) {
+          if (!data || !data.type || !vm.projectId) {
+            return true;
+          }
+
+          return data.type === 'Project' && (!data.id || data.id === vm.projectId);
+        }
+
         function setLogLevel(level) {
+          function onSuccess() {
+            vm.level = level;
+          }
+
           function onFailure() {
             notificationService.error(translateService.T('An error occurred while saving the configuration setting.'));
           }
 
-          return projectService.setConfig(vm.projectId, '@@log:' + vm.source, level).catch(onFailure);
+          if (vm.loading) {
+            return;
+          }
+
+          return projectService.setConfig(vm.projectId, '@@log:' + vm.source, level).then(onSuccess, onFailure);
         }
 
         function setDefaultLogLevel() {
+          function onSuccess() {
+            vm.level = null;
+          }
+
           function onFailure() {
             notificationService.error(translateService.T('An error occurred while trying to delete the configuration setting.'));
           }
 
-          return projectService.removeConfig(vm.projectId, '@@log:' + vm.source).catch(onFailure);
+          if (vm.loading) {
+            return;
+          }
+
+          return projectService.removeConfig(vm.projectId, '@@log:' + vm.source).then(onSuccess, onFailure);
         }
 
         function getLogLevel(level) {
@@ -79,43 +104,55 @@
           }
         }
 
-        function getMinLogLevel(configSettings, loggerName) {
-          if (!loggerName) {
-            loggerName = '*';
-          }
-
-          return getLogLevel(getTypeAndSourceSetting(configSettings, 'log', loggerName) + '');
-        }
-
-        function getTypeAndSourceSetting(configSettings, type, source) {
-          if (!type) {
-            return null;
-          }
-
+        function getSourceLogLevel(configSettings, source) {
           if (!configSettings) {
             configSettings = {};
           }
 
-          var isLog = type === 'log';
-          var sourcePrefix = '@@' + type + ':';
-
-          var value = configSettings[sourcePrefix + source];
-          if (value) {
-            return !isLog ? toBoolean(value) : value;
+          if (source === undefined) {
+            source = '';
           }
 
-          // check for wildcard match
-          for (var key in configSettings) {
-            if (startsWith(key.toLowerCase(), sourcePrefix.toLowerCase()) && isMatch(source, [key.substring(sourcePrefix.length)])) {
-              return !isLog ? toBoolean(configSettings[key]) : configSettings[key];
+          return getLogLevel(configSettings['@@log:' + source]);
+        }
+
+        function getDefaultLogLevel(configSettings, source) {
+          if (!configSettings) {
+            configSettings = {};
+          }
+
+          if (source === undefined) {
+            source = '';
+          }
+
+          var sourcePrefix = '@@log:';
+          // sort object keys longest first, then alphabetically.
+          var sortedKeys  = Object.keys(configSettings).sort(function(a, b) {
+            return  b.length - a.length || a.localeCompare(b);
+          });
+
+          for (var index in sortedKeys) {
+            var key = sortedKeys[index];
+            if (!startsWith(key.toLowerCase(), sourcePrefix)) {
+              continue;
+            }
+
+            var cleanKey = key.substring(sourcePrefix.length);
+            if (cleanKey.toLowerCase() === vm.source.toLowerCase()) {
+              continue;
+            }
+
+            // check for wildcard match
+            if (isMatch(source, [cleanKey])) {
+              return getLogLevel(configSettings[key]);
             }
           }
 
-          return null;
+          return getLogLevel(null);
         }
 
         function isMatch(input, patterns, ignoreCase) {
-          if (!input || typeof input !== 'string') {
+          if (typeof input !== 'string') {
             return false;
           }
 
@@ -126,7 +163,7 @@
           var trim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
           input = (ignoreCase ? input.toLowerCase() : input).replace(trim, '');
 
-          return (patterns || []).some((pattern) => {
+          return (patterns || []).some(function(pattern) {
             if (typeof pattern !== 'string') {
               return false;
             }
@@ -162,10 +199,6 @@
           });
         }
 
-        function isEmpty(input) {
-          return input === null || (typeof (input) === 'object' && Object.keys(input).length === 0);
-        }
-
         function startsWith(input, prefix) {
           return input.substring(0, prefix.length) === prefix;
         }
@@ -174,39 +207,23 @@
           return input.indexOf(suffix, input.length - suffix.length) !== -1;
         }
 
-        function toBoolean(input) {
-          if (typeof input === 'boolean') {
-            return input;
-          }
-
-          if (input === null || typeof input !== 'number' && typeof input !== 'string') {
-            return false;
-          }
-
-          switch ((input + '').toLowerCase().trim()) {
-            case 'true':
-            case 'yes':
-            case '1':
-              return true;
-            case 'false':
-            case 'no':
-            case '0':
-            case null:
-              return false;
-          }
-
-          return false;
-        }
-
         this.$onInit = function $onInit() {
+          vm.canRefresh = canRefresh;
+          vm.loading = true;
           vm.level = null;
           vm.defaultLevel = null;
+          vm.get = get;
           vm.projectId = $scope.projectId;
           vm.setLogLevel = setLogLevel;
           vm.setDefaultLogLevel = setDefaultLogLevel;
-          vm.source = $scope.source;
+          vm.source = $scope.source || '';
 
-          return get();
+          $scope.$watch('projectId', function(projectId) {
+            if (projectId) {
+              vm.projectId = projectId;
+              return get();
+            }
+          });
         };
       },
       controllerAs: 'vm'

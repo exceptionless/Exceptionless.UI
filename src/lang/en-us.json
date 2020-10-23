@@ -671,6 +671,7 @@
   "fatal": "Fatal",
   "off": "Off",
   "Default": "Default",
+  "Notice_Default_Log_Level": "A default log level that controls what logs are sent in. This can be overridden on each stack.",
 
   "DIALOGS_ERROR": "Error",
   "DIALOGS_ERROR_MSG": "An unknown error has occurred.",

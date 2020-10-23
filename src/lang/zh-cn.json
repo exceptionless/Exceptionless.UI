@@ -672,6 +672,7 @@
     "fatal": "致命",
     "off": "关",
     "Default": "默认",
+    "Notice_Default_Log_Level": "A default log level that controls what logs are sent in. This can be overridden on each stack.",
 
     "DIALOGS_ERROR": "错误",
     "DIALOGS_ERROR_MSG": "出现未知错误。",
