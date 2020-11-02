@@ -373,7 +373,6 @@
     "Add the script to your HTML page:":"将下面的脚本放到您的 HTML 页面中",
     "Configure the ExceptionlessClient with your Exceptionless API key:":"通过您的 API 密钥配置 ExceptionlessClient ：",
     "Notice_Install_Nuget_Package":"在 Visual Studio 中的<a href=\"http://docs.nuget.org/docs/start-here/using-the-package-manager-console\">程序包管理器控制台</a>运行如下命令可以将 Exceptionless 的 <a href=\"http://nuget.org\" target=\"_blank\">NuGet</a> 程序包安装到您的项目中：",
-    "Notice_Strong_Named_Package":"也可以从 Nuget 上安装强名称程序包 <code>{{key}}.Signed</code>。",
     "Notice_Install_Bower_Package":"通过 <a href=\"http://bower.io\" target=\"_blank\">Bower</a> 安装 Exceptionless ：",
     "Notice_Install_Manually":"如果您希望手动安装或者从 CDN 引用，请仔细阅读 <a href=\"https://github.com/exceptionless/Exceptionless.JavaScript\" target=\"_blank\">详细说明</a>。",
     "Notice_Install_Node_Package":"通过 <a href=\"https://www.npmjs.com\" target=\"_blank\">Node 程序包管理器</a> 安装 Exceptionless ：",

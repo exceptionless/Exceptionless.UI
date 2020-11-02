@@ -373,7 +373,6 @@
   "Add the script to your HTML page:":"Add the script to your HTML page:",
   "Configure the ExceptionlessClient with your Exceptionless API key:":"Configure the ExceptionlessClient with your Exceptionless API key:",
   "Notice_Install_Nuget_Package":"Add the Exceptionless <a href=\"http://nuget.org\" target=\"_blank\">NuGet</a> package to your Visual Studio project by running this command in the <a href=\"http://docs.nuget.org/docs/start-here/using-the-package-manager-console\">Package Manager Console</a>:",
-  "Notice_Strong_Named_Package":"A Strong-Named <code>{{key}}.Signed</code> package is also available on NuGet.",
   "Notice_Install_Bower_Package":"Install Exceptionless using <a href=\"http://bower.io\" target=\"_blank\">Bower</a>:",
   "Notice_Install_Manually":"If you wish to install manually or from a CDN please view the <a href=\"https://github.com/exceptionless/Exceptionless.JavaScript\" target=\"_blank\">readme</a>.",
   "Notice_Install_Node_Package":"Install Exceptionless using the <a href=\"https://www.npmjs.com\" target=\"_blank\">Node Package Manager</a>:",
