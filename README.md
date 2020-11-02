@@ -8,13 +8,13 @@ Exceptionless User Interface
 
 ## Using Exceptionless
 
-Refer to the [Exceptionless documentation wiki](https://github.com/exceptionless/Exceptionless/wiki/Getting-Started).
+Refer to the [Exceptionless documentation](https://exceptionless.com/docs/getting-started/).
 
 ## Hosting Options
 
 We provide very reasonably priced hosting at [Exceptionless](https://exceptionless.com). By using our hosted service, you are supporting the project and helping it get better! We also provide set up and support services.
 
-If you would rather host Exceptionless yourself, you will need to follow the [self hosting documentation](https://github.com/exceptionless/Exceptionless/wiki/Self-Hosting).
+If you would rather host Exceptionless yourself, you will need to follow the [self hosting documentation](https://exceptionless.com/docs/self-hosting/).
 
 ## Contributing
 

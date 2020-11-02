@@ -27,7 +27,7 @@
             description: translateService.T('Go To Documentation'),
             callback: function goToDocumention() {
               logFeatureUsage('Documentation');
-              $window.open('https://github.com/exceptionless/Exceptionless/wiki', '_blank');
+              $window.open('https://exceptionless.com/docs/', '_blank');
             }
           })
           .add({
