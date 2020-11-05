@@ -387,7 +387,7 @@
     "That's it!":"就是这样！",
     "Your project should now automatically be sending all unhandled exceptions to Exceptionless!":"现在您的项目可以自动将所有未处理异常发送到 Exceptionless 了！",
     "Notice_Submit_Exception":"您也可以通过 <code>{{sampleCode}}</code> <a href=\"{{docUrl}}\" target=\"_blank\">向 Exceptionless 发送已处理的异常</a>。",
-    "Notice_CommandLine_Application":"请查看 <a target=\"_blank\" href=\"https://exceptionless.com/docs/api-usage/\">Exceptionless 使用说明</a>以获取更多的信息和故障排除提示。",
+    "Notice_CommandLine_Application":"请查看 <a target=\"_blank\" href=\"https://exceptionless.com/docs/api/\">Exceptionless 使用说明</a>以获取更多的信息和故障排除提示。",
     "Notice_DotNet_Application":"请查看 <a target=\"_blank\" href=\"https://exceptionless.com/docs/clients/dotnet/\">Exceptionless 使用说明</a>以获取更多的信息和故障排除提示。",
     "Notice_JavaScript_Application":"请查看 <a target=\"_blank\" href=\"https://exceptionless.com/docs/clients/javascript/\">Exceptionless 使用说明</a>以获取更多的信息以及基于特定平台的集成方法（例如 AngularJS, Express.js）。",
     "Copy not supported.":"不支持复制。",

@@ -387,7 +387,7 @@
   "That's it!":"That's it!",
   "Your project should now automatically be sending all unhandled exceptions to Exceptionless!":"Your project should now automatically be sending all unhandled exceptions to Exceptionless!",
   "Notice_Submit_Exception":"You can also <a href=\"{{docUrl}}\" target=\"_blank\">send handled exceptions to Exceptionless</a> using <code>{{sampleCode}}</code>.",
-  "Notice_CommandLine_Application":"For more information and troubleshooting tips, view the <a target=\"_blank\" href=\"https://exceptionless.com/docs/api-usage/\">Exceptionless docs</a>.",
+  "Notice_CommandLine_Application":"For more information and troubleshooting tips, view the <a target=\"_blank\" href=\"https://exceptionless.com/docs/api/\">Exceptionless docs</a>.",
   "Notice_DotNet_Application":"For more information and troubleshooting tips, view the <a target=\"_blank\" href=\"https://exceptionless.com/docs/clients/dotnet/\">Exceptionless docs</a>.",
   "Notice_JavaScript_Application":"For more information and platform specific integrations (E.G., AngularJS, Express.js) view the <a target=\"_blank\" href=\"https://exceptionless.com/docs/clients/javascript/\">Exceptionless docs</a>.",
   "Copy not supported.":"Copy not supported.",
