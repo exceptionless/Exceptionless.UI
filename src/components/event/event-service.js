@@ -17,8 +17,8 @@
       return !isNaN(parseFloat(result)) && isFinite(result) ? result : 0.0;
     }
 
-    function count(aggregations, optionsCallback) {
-      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, true);
+    function count(aggregations, includeStatusFilter, optionsCallback) {
+      var options = filterService.apply((aggregations && aggregations.length > 0) ? { aggregations: aggregations } : {}, includeStatusFilter);
       options = angular.isFunction(optionsCallback) ? optionsCallback(options) : options;
 
       var organization = filterService.getOrganizationId();
