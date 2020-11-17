@@ -264,7 +264,7 @@
         if (INTERCOM_APPID) {
           $intercom.showNewMessage();
         } else {
-          $window.open('http://exceptionless.com/contact/', '_blank');
+          $window.open('https://exceptionless.com', '_blank');
         }
       }
 
