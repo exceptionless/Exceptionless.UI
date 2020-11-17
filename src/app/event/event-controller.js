@@ -103,7 +103,11 @@
         vm.references = [];
 
         var referencePrefix = '@ref:';
-        angular.forEach(vm.event.data, function(data, key) {
+        angular.forEach(vm.event.data, function (data, key) {
+          if (key === '@ref:session') {
+            vm.referenceId = data;
+          }
+
           if (key.startsWith(referencePrefix)) {
             vm.references.push({ id: data, name: toSpacedWords(key.slice(5)) });
           }
@@ -113,10 +117,6 @@
       function buildTabs(tabNameToActivate) {
         var tabIndex = 0;
         var tabs = [{index: tabIndex, title: translateService.T('Overview'), template_key: 'overview'}];
-
-        if (vm.event.reference_id && vm.isSessionStart) {
-          tabs.push({index: ++tabIndex, title: translateService.T('Session Events'), template_key: 'session'});
-        }
 
         if (vm.event.data && vm.event.data['@error']) {
           tabs.push({index: ++tabIndex, title: translateService.T('Exception'), template_key: 'error'});
@@ -151,6 +151,10 @@
 
         if (extendedDataItems.length > 0) {
           tabs.push({index: ++tabIndex, title: translateService.T('Extended Data'), template_key: 'extended-data', data: extendedDataItems});
+        }
+
+        if (vm.event.reference_id || vm.referenceId) {
+          tabs.push({ index: ++tabIndex, title: translateService.T('Session Events'), template_key: 'session' });
         }
 
         vm.tabs = tabs;
@@ -283,6 +287,7 @@
           vm.message = getMessage(vm.event);
           vm.hasError = vm.event.data && (vm.event.data['@error'] || vm.event.data['@simple_error']);
           vm.isSessionStart = vm.event.type === 'session';
+          vm.referenceId = vm.event.reference_id;
           vm.level = vm.event.data && !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
           vm.isLevelSuccess = vm.level === 'trace' || vm.level === 'debug';
           vm.isLevelInfo = vm.level === 'info';
@@ -430,18 +435,20 @@
         vm.project = {};
         vm.promoteTab = promoteTab;
         vm.references = [];
+        vm.referenceId = null;
         vm.sessionEvents = {
           get: function (options) {
             function optionsCallback(options) {
               options.filter = '-type:heartbeat';
 
-              var start = moment.utc(vm.event.date).local();
+              var start = vm.isSessionStart ? moment.utc(vm.event.date).local() : moment.utc(vm.event.date).subtract(180, 'days').local();
               var end = (vm.event.data && vm.event.data.sessionend) ? moment.utc(vm.event.data.sessionend).add(1, 'seconds').local().format('YYYY-MM-DDTHH:mm:ss') : 'now';
               options.time = start.format('YYYY-MM-DDTHH:mm:ss') + '-' + end;
+
               return options;
             }
 
-            return eventService.getBySessionId(vm.event.project_id, vm.event.reference_id, options, optionsCallback);
+            return eventService.getBySessionId(vm.event.project_id, vm.referenceId || vm.event.reference_id, options, optionsCallback);
           },
           options: {
             limit: 10,

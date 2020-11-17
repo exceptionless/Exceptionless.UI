@@ -18,7 +18,7 @@
     </tr>
     </thead>
     <tbody>
-      <tr class="row-clickable" ng-repeat="event in vm.events track by event.id" ng-if="vm.events.length > 0">
+      <tr ng-repeat="event in vm.events track by event.id" ng-if="vm.events.length > 0" ng-class="{ 'row-clickable': vm.currentId !== event.id, 'row-selected': vm.currentId === event.id }">
         <td class="hidden-xs" ng-if="vm.actions.length > 0"><label class="checks m-b-none"><input type="checkbox" checklist-model="vm.selectedIds" checklist-value="event.id"><i></i></label></td>
         <td ng-click="vm.open(event.id, $event)">
           <summary source="event" show-type="vm.showType"></summary>

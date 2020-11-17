@@ -8,7 +8,8 @@
         restrict: 'E',
         replace: true,
         scope: {
-          settings: '='
+          settings: '=',
+          currentId: '='
         },
         templateUrl: 'components/events/events-directive.tpl.html',
         controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'translateService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService, translateService) {
