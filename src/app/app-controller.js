@@ -90,10 +90,10 @@
           })
           .add({
             combo: 'g s',
-            description: translateService.T('Go to public slack channel'),
-            callback: function goToSlack() {
-              logFeatureUsage('Slack');
-              $window.open('http://slack.exceptionless.com', '_blank');
+            description: translateService.T('Go to public Discord channel'),
+            callback: function goToDiscord() {
+              logFeatureUsage('Discord');
+              $window.open('https://discord.gg/6HxgFCx', '_blank');
             }
           });
       }
