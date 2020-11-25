@@ -607,6 +607,35 @@
         vm.remove = remove;
         vm.removeReferenceLink = removeReferenceLink;
         vm.recentOccurrences = {
+          canRefresh: function canRefresh(events, data) {
+            if (data.type === 'PersistentEvent') {
+              // We are already listening to the stack changed event... This prevents a double refresh.
+              if (!data.deleted) {
+                return false;
+              }
+
+              // Refresh if the event id is set (non bulk) and the deleted event matches one of the events.
+              if (!!data.id && !!events) {
+                return events.filter(function (e) { return e.id === data.id; }).length > 0;
+              }
+
+              if (data.stack_id === vm._stackId) {
+                return true;
+              }
+
+              return data.project_id ? vm.stack.project_id === data.project_id : vm.stack.organization_id === data.organization_id;
+            }
+
+            if (data.type === 'Stack') {
+              return data.id === vm._stackId;
+            }
+
+            if (data.type === 'Project') {
+              return vm.stack.project_id === data.id;
+            }
+
+            return data.type === 'Organization' && vm.stack.organization_id === data.id;
+          },
           get: function (options) {
             return eventService.getByStackId(vm._stackId, options);
           },

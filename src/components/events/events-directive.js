@@ -15,7 +15,16 @@
         controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'translateService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService, translateService) {
           var vm = this;
           function canRefresh(data) {
-            if (!!data && data.type === 'PersistentEvent') {
+            if (vm.refreshing || !data) {
+              return false;
+            }
+
+            var settingsCanRefresh = vm.settings.canRefresh;
+            if (settingsCanRefresh) {
+              return settingsCanRefresh(vm.events, data);
+            }
+
+            if (data.type === 'PersistentEvent') {
               // We are already listening to the stack changed event... This prevents a double refresh.
               if (!data.deleted) {
                 return false;
@@ -29,11 +38,11 @@
               return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
             }
 
-            if (!!data && data.type === 'Stack') {
+            if (data.type === 'Stack') {
               return filterService.includedInProjectOrOrganizationFilter({ organizationId: data.organization_id, projectId: data.project_id });
             }
 
-            if (!!data && data.type === 'Organization' || data.type === 'Project') {
+            if (data.type === 'Organization' || data.type === 'Project') {
               return filterService.includedInProjectOrOrganizationFilter({organizationId: data.id, projectId: data.id});
             }
 
@@ -70,9 +79,11 @@
               return response;
             }
 
+            vm.refreshing = true;
             vm.loading = vm.events.length === 0;
             vm.currentOptions = options || vm.settings.options;
             return vm.settings.get(vm.currentOptions).then(onSuccess, onFailure).finally(function() {
+              vm.refreshing = false;
               vm.loading = false;
             });
           }
@@ -142,6 +153,7 @@
             vm.get = get;
             vm.hasFilter = filterService.hasFilter;
             vm.hideSessionStartTime = vm.settings.hideSessionStartTime || false;
+            vm.refreshing = true;
             vm.loading = true;
             vm.open = open;
             vm.nextPage = nextPage;

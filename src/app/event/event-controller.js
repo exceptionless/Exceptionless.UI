@@ -453,6 +453,31 @@
         vm.references = [];
         vm.referenceId = null;
         vm.sessionEvents = {
+          canRefresh: function canRefresh(events, data) {
+            if (data.type === 'PersistentEvent') {
+              // We are already listening to the stack changed event... This prevents a double refresh.
+              if (!data.deleted) {
+                return false;
+              }
+
+              // Refresh if the event id is set (non bulk) and the deleted event matches one of the events.
+              if (!!data.id && !!events) {
+                return events.filter(function (e) { return e.id === data.id; }).length > 0;
+              }
+
+              return data.project_id ? vm.event.project_id === data.project_id : vm.event.organization_id === data.organization_id;
+            }
+
+            if (data.type === 'Stack') {
+              return data.project_id ? vm.event.project_id === data.project_id : vm.event.organization_id === data.organization_id;
+            }
+
+            if (data.type === 'Project') {
+              return vm.event.project_id === data.id;
+            }
+
+            return data.type === 'Organization' && vm.event.organization_id === data.id;
+          },
           get: function (options) {
             function optionsCallback(options) {
               options.filter = '-type:heartbeat';
