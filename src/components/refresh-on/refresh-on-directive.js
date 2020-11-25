@@ -32,9 +32,9 @@
 
         var action = $parse(attrs.refreshAction);
         if (attrs.refreshDebounce) {
-          action = debounce(action, attrs.refreshDebounce || 1000, true);
+          action = debounce(action, parseInt(attrs.refreshDebounce || 1000), true);
         } else if (attrs.refreshThrottle) {
-          action = _.throttle(action, attrs.refreshThrottle || 1000);
+          action = _.throttle(action, parseInt(attrs.refreshThrottle || 1000));
         }
 
         if (attrs.refreshOn) {
