@@ -291,7 +291,7 @@
           vm.message = getMessage(vm.event);
           vm.hasError = vm.event.data && (vm.event.data['@error'] || vm.event.data['@simple_error']);
           vm.isSessionStart = vm.event.type === 'session';
-          vm.referenceId = vm.event.reference_id;
+          vm.referenceId = vm.isSessionStart ? vm.event.reference_id : null;
           vm.level = vm.event.data && !!vm.event.data['@level'] ? vm.event.data['@level'].toLowerCase() : null;
           vm.isLevelSuccess = vm.level === 'trace' || vm.level === 'debug';
           vm.isLevelInfo = vm.level === 'info';
@@ -490,7 +490,7 @@
               return options;
             }
 
-            return eventService.getBySessionId(vm.event.project_id, vm.referenceId || vm.event.reference_id, options, optionsCallback);
+            return eventService.getBySessionId(vm.event.project_id, vm.referenceId, options, optionsCallback);
           },
           options: {
             limit: 10,
