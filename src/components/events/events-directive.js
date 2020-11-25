@@ -8,8 +8,7 @@
         restrict: 'E',
         replace: true,
         scope: {
-          settings: '=',
-          currentId: '='
+          settings: '='
         },
         templateUrl: 'components/events/events-directive.tpl.html',
         controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'translateService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService, translateService) {
@@ -149,6 +148,7 @@
             vm._source = vm.settings.source + '.events';
             vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
             vm.canRefresh = canRefresh;
+            vm.currentEventId = vm.settings.eventId;
             vm.events = [];
             vm.get = get;
             vm.hasFilter = filterService.hasFilter;

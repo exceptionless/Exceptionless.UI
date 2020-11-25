@@ -453,6 +453,7 @@
         vm.references = [];
         vm.referenceId = null;
         vm.sessionEvents = {
+          eventId: vm._eventId,
           canRefresh: function canRefresh(events, data) {
             if (data.type === 'PersistentEvent') {
               // We are already listening to the stack changed event... This prevents a double refresh.
