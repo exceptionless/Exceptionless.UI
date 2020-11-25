@@ -5,6 +5,10 @@
     .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, $window, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService, translateService) {
       var vm = this;
 
+      function activateSessionEventsTab() {
+        activateTab(translateService.T('Session Events'));
+      }
+
       function activateTab(tabName) {
         for(var index = 0; index < vm.tabs.length; index++) {
           var tab = vm.tabs[index];
@@ -157,7 +161,7 @@
           tabs.push({index: ++tabIndex, title: translateService.T('Extended Data'), template_key: 'extended-data', data: extendedDataItems});
         }
 
-        if (vm.event.reference_id || vm.referenceId) {
+        if (vm.referenceId) {
           tabs.push({ index: ++tabIndex, title: translateService.T('Session Events'), template_key: 'session' });
         }
 
@@ -422,6 +426,7 @@
         vm.demoteTab = demoteTab;
         vm.event = {};
         vm.event_json = '';
+        vm.activateSessionEventsTab = activateSessionEventsTab;
         vm.textStackTrace = '';
         vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
         vm.getCurrentTab = getCurrentTab;

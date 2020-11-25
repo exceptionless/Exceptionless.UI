@@ -19,7 +19,10 @@
   </tr>
   <tr ng-if="vm.event.reference_id">
     <th>{{::'Reference' | translate}}</th>
-    <td>{{vm.event.reference_id}}</td>
+    <td>
+      <a ng-if="vm.isSessionStart" ng-click="vm.activateSessionEventsTab()">{{vm.event.reference_id}}</a>
+      <span ng-if="!vm.isSessionStart">{{vm.event.reference_id}}</span>
+    </td>
   </tr>
   <tr ng-repeat="reference in vm.references | orderBy: 'name'">
     <th>{{reference.name}}</th>
