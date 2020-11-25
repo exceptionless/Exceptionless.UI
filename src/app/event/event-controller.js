@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService, translateService) {
+    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, $window, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService, translateService) {
       var vm = this;
 
       function activateTab(tabName) {
@@ -398,7 +398,19 @@
         return projectService.promoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
 
+      function updateIsAccordionVisible() {
+        vm.isAccordionVisible = $window.innerWidth < 768;
+      }
+
       this.$onInit = function $onInit() {
+        var window = angular.element($window);
+        window.bind('resize', updateIsAccordionVisible);
+
+        var unbind = $scope.$on('$destroy', function () {
+          unbind();
+          window.unbind('resize', updateIsAccordionVisible);
+        });
+
         vm._source = 'app.event.Event';
         vm._eventId = $stateParams.id;
         vm._knownDataKeys = ['error', '@error', '@simple_error', '@request', '@trace', '@environment', '@user', '@user_description', '@version', '@level', '@location', '@submission_method', '@submission_client', 'session_id', 'sessionend', 'haserror', '@stack'];
