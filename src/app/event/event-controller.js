@@ -332,7 +332,7 @@
           }
 
           $state.go('app.frequent');
-          notificationService.error(translateService.T('Cannot_Find_Event', {eventId : $stateParams.id}));
+          notificationService.error(translateService.T('Cannot_Find_Event', { eventId : $stateParams.id }));
         }
 
         if (!vm._eventId) {

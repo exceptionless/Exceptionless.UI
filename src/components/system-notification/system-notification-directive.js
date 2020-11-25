@@ -11,7 +11,6 @@
       controller: function() {
         var svm = this;
         function processSystemNotification(notification) {
-          console.log(notification);
           if (notification) {
             svm.systemNotificationMessage = notification.message || SYSTEM_NOTIFICATION_MESSAGE;
           }
