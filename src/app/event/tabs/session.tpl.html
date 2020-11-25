@@ -1,4 +1,4 @@
-<div class="hidden-print">
+<div class="hidden-print" ng-if="vm.sessionEventsTabActivated">
   <div ng-if="!vm.project.has_premium_features">
     <div class="alert alert-danger alert-banner m-b-none">
       <h4><a ng-click="appVm.changePlan(vm.project.organization_id)">{{vm.project.organization_name}}</a> {{::'is attempting to use a premium feature.' | translate}}</h4>

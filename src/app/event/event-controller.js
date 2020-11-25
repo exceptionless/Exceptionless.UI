@@ -13,6 +13,10 @@
             continue;
           }
 
+          if (tab.template_key === 'session') {
+            vm.sessionEventsTabActivated = true;
+          }
+
           tab.active = true;
           vm.activeTabIndex = tab.index;
           break;
@@ -459,6 +463,7 @@
           hideActions: true,
           hideSessionStartTime: true
         };
+        vm.sessionEventsTabActivated = false;
         vm.tabs = [];
 
         return getEvent().then(getProject).then(function () {
