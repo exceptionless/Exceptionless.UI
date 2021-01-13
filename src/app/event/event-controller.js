@@ -407,6 +407,7 @@
       }
 
       this.$onInit = function $onInit() {
+        updateIsAccordionVisible();
         var window = angular.element($window);
         window.bind('resize', updateIsAccordionVisible);
 
