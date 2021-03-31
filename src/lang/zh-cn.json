@@ -360,7 +360,7 @@
     "(Coming soon!)":"（即将推出！）",
     "Add Slack Notifications":"新增 Slack 通知",
     "Remove Slack":"移除 Slack",
-    "Notice_Web_hooks":"此项目会调用下面表格中的Web Hook。与此同时我们还支持 <a href=\"http://zapier.com/\" target=\"_blank\">Zapier</a>，它可以更加容易地将 Exceptionless 与很多各种各样的服务（750+）进行整合，例如 JIRA、HipChat、Twilio、Basecamp 等等。",
+    "Notice_Web_hooks":"此项目会调用下面表格中的Web Hook",
     "Notice_Zapier":"Exceptionless具有本地Zapier集成。 您可以使用Zapier将您的Exceptionless帐户连接到3,000多个其他应用程序，而无需编写任何代码。",
     "This project does not contain any integrations.":"此项目不包含任何外部整合。",
     "An error occurred while loading your projects.":"在加载您的项目的过程中发生了错误。",
