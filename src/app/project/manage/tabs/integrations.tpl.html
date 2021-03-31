@@ -2,6 +2,12 @@
   <a ng-click="vm.showChangePlanDialog()">{{::'Upgrade now' | translate}}</a> {{::'to enable integrations!' | translate}}
 </div>
 
+<div>
+  <h4>Zapier</h4>
+  <p ng-bind-html="'Notice_Zapier' | translate"></p>
+  <a role="button" href="https://zapier.com/apps/exceptionless/integrations" target="_blank" rel="noopener noreferrer" class="btn btn-primary">{{::'Connect Zapier' | translate}}</a>
+</div>
+
 <div ng-if="appVm.isSlackEnabled">
   <h4>Slack</h4>
 
