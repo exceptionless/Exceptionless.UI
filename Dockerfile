@@ -42,7 +42,7 @@ ENTRYPOINT [ "npx", "grunt", "test" ]
 FROM nginx:stable as ui
 WORKDIR /app
 COPY --from=build /app/dist ./
-COPY bootstrap /usr/local/bin/bootstrap
+COPY bootstrap.sh /usr/local/bin/bootstrap
 COPY nginx-site.conf /etc/nginx/conf.d/default.conf
 
 RUN chmod +x /usr/local/bin/bootstrap && \
