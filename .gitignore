@@ -10,4 +10,3 @@ src/results
 src/.idea/
 .DS_Store
 src/html-angular-validate-report-checkstyle.xml
-package-lock.json
