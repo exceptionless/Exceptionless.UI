@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, $window, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, simpleErrorService, urlService, translateService) {
+    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, $window, billingService, clipboard, dialogService, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, simpleErrorService, urlService, translateService) {
       var vm = this;
 
       function activateSessionEventsTab() {
@@ -312,7 +312,7 @@
           }
 
           vm.event = response.data.plain();
-          vm.event_json = angular.toJson(vm.event);
+          vm.event_json = angular.toJson(vm.event, true);
           vm.sessionEvents.relativeTo = vm.event.date;
           vm.errorData = getErrorData(vm.event);
           vm.errorType = getErrorType(vm.event);
@@ -428,6 +428,26 @@
         return projectService.promoteTab(vm.project.id, tabName).then(onSuccess, onFailure);
       }
 
+      function viewJSON() {
+        function onSuccess() {
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.viewJSON.success')
+            .setProperty('id', vm._eventId)
+            .submit();
+        }
+
+        function onFailure() {
+          $ExceptionlessClient.createFeatureUsage(vm._source + '.viewJSON.error')
+            .setProperty('id', vm._eventId)
+            .submit();
+        }
+
+        $ExceptionlessClient.createFeatureUsage(vm._source + '.viewJSON')
+          .setProperty('id', vm._eventId)
+          .submit();
+
+        return dialogService.viewJSON(vm.event_json).then(onSuccess, onFailure)
+      }
+
       function updateIsAccordionVisible() {
         vm.isAccordionVisible = $window.innerWidth < 768;
       }
@@ -535,6 +555,7 @@
           hideSessionStartTime: true
         };
         vm.sessionEventsTabActivated = false;
+        vm.viewJSON = viewJSON;
         vm.tabs = [];
 
         return getEvent().then(getProject).then(function () {

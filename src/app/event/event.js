@@ -9,6 +9,7 @@
 
     'exceptionless',
     'exceptionless.billing',
+    'exceptionless.dialog',
     'exceptionless.error',
     'exceptionless.event',
     'exceptionless.events',

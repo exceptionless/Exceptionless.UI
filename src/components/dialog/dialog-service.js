@@ -18,11 +18,17 @@
         }).result;
       }
 
-      var service = {
-        confirm: confirm,
-        confirmDanger: confirmDanger
-      };
+      function viewJSON(json, copyButtonText) {
+        return dialogs.create('components/dialog/json-dialog.tpl.html', 'jsonDialog as vm', {
+          copyButtonText: copyButtonText,
+          json: json
+        }).result;
+      }
 
-      return service;
+      return {
+        confirm: confirm,
+        confirmDanger: confirmDanger,
+        viewJSON: viewJSON
+      };
     });
 }());
