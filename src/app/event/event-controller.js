@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.event')
-    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, $window, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, urlService, translateService) {
+    .controller('Event', function ($ExceptionlessClient, $scope, $state, $stateParams, $timeout, $window, billingService, clipboard, errorService, eventService, filterService, hotkeys, linkService, notificationService, projectService, simpleErrorService, urlService, translateService) {
       var vm = this;
 
       function activateSessionEventsTab() {
@@ -250,6 +250,31 @@
         }
 
         function onSuccess(response) {
+          function getExceptions(event) {
+            var error = event.data && event.data['@error'];
+            if (error) {
+              return errorService.getExceptions(error);
+            }
+
+            var simpleError = event.data && event.data['@simple_error'];
+            return simpleErrorService.getExceptions(simpleError);
+          }
+
+          function getErrorData(event) {
+            var exceptions = getExceptions(event);
+            return exceptions
+              .map(function (ex, index, errors) {
+                var errorType = ex.type || 'Unknown';
+                return {
+                  title: index === 0 ? 'Additional Data' : errorType + ' Additional Data',
+                  type: errorType,
+                  message: ex.message,
+                  data: ex.data && ex.data['@ext']
+                };
+              })
+              .filter(function (errorData) { return !!errorData.data });
+          }
+
           function getErrorType(event) {
             var error = event.data && event.data['@error'];
             if (error) {
@@ -289,6 +314,7 @@
           vm.event = response.data.plain();
           vm.event_json = angular.toJson(vm.event);
           vm.sessionEvents.relativeTo = vm.event.date;
+          vm.errorData = getErrorData(vm.event);
           vm.errorType = getErrorType(vm.event);
           vm.environment = vm.event.data && vm.event.data['@environment'];
           vm.location = getLocation(vm.event);
@@ -432,6 +458,7 @@
         vm.excludedAdditionalData = ['@browser', '@browser_version', '@browser_major_version', '@device', '@os', '@os_version', '@os_major_version', '@is_bot'];
         vm.getCurrentTab = getCurrentTab;
         vm.getDuration = getDuration;
+        vm.errorData = [];
         vm.errorType = 'Unknown';
         vm.environment = {};
         vm.location = '';

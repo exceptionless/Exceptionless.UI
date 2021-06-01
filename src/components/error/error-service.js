@@ -33,12 +33,11 @@
         return target && target.Message ? target.Message : null;
       }
 
-      var service = {
+      return {
         getExceptions: getExceptions,
         getTargetInfoExceptionType: getTargetInfoExceptionType,
         getTargetInfoMethod: getTargetInfoMethod,
         getTargetInfoMessage: getTargetInfoMessage
       };
-      return service;
     });
 }());
