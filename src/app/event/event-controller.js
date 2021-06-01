@@ -272,7 +272,7 @@
                   data: ex.data && ex.data['@ext']
                 };
               })
-              .filter(function (errorData) { return !!errorData.data });
+              .filter(function (errorData) { return !!errorData.data; });
           }
 
           function getErrorType(event) {
@@ -445,7 +445,7 @@
           .setProperty('id', vm._eventId)
           .submit();
 
-        return dialogService.viewJSON(vm.event_json).then(onSuccess, onFailure)
+        return dialogService.viewJSON(vm.event_json).then(onSuccess, onFailure);
       }
 
       function updateIsAccordionVisible() {
