@@ -14,10 +14,8 @@
         return exceptions;
       }
 
-      var service = {
+      return {
         getExceptions: getExceptions
       };
-
-      return service;
     });
 }());

@@ -24,4 +24,8 @@
 <h3>{{::'Stack Trace' | translate}}</h3>
 <simple-stack-trace exception="vm.event.data['@simple_error']" text-stack-trace="vm.textStackTrace"></simple-stack-trace>
 
-<extended-data-item can-promote="false" title="'Additional Data'" data="vm.event.data['@error'].data"></extended-data-item>
+<extended-data-item ng-repeat="ed in vm.errorData"
+  can-promote="false"
+  title="ed.title"
+  data="ed.data">
+</extended-data-item>
