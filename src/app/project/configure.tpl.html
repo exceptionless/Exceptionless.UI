@@ -41,29 +41,25 @@ Invoke-RestMethod -Uri "{{::vm.serverUrl}}/api/v2/events" -Method "Post" -Body $
               <div ng-if="vm.isJavaScript()">
                 <div ng-if="!vm.isNode()">
                   <p>
-                    <span ng-bind-html="'Notice_Install_Bower_Package' | translate"></span>
-                    <pre><a href="http://bower.io/search/?q=exceptionless" target="_blank">bower install exceptionless</a></pre>
+                    <span ng-bind-html="'Notice_Install_Node_Package' | translate"></span>
+                    <pre><a href="https://www.npmjs.com/package/@exceptionless/browser" target="_blank">npm install @exceptionless/browser --save</a></pre>
                     <span ng-bind-html="'Notice_Install_Manually' | translate"></span>
                   </p>
                 </div>
                 <div ng-if="vm.isNode()">
                   <p><span ng-bind-html="'Notice_Install_Node_Package' | translate"></span>
-                  <pre><a href="https://www.npmjs.com/package/exceptionless" target="_blank">npm install exceptionless --save</a></pre></p>
+                  <pre><a href="https://www.npmjs.com/package/@exceptionless/node" target="_blank">npm install @exceptionless/node --save</a></pre></p>
                 </div>
               </div>
-            </li>
-            <li ng-if="vm.isJavaScript() && !vm.isNode()" style="margin-top: 15px;">
-              <p>{{::'Add the script to your HTML page:' | translate}}
-              <pre>&ltscript src="bower_components/exceptionless/dist/exceptionless.min.js"&gt&lt/script&gt</pre>
             </li>
             <li ng-if="vm.isJavaScript()" style="margin-top: 15px;">
               <div ng-if="!vm.isNode()">
                 <p>{{::'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
-                <pre>var client = exceptionless.ExceptionlessClient.default;<br />client.config.apiKey = '{{::vm.apiKey}}';</pre></p>
+                <pre>import { Exceptionless } from "@exceptionless/browser";<br /><br />await Exceptionless.startup(c => {<br />&nbsp;&nbsp;c.apiKey = "{{::vm.apiKey}}";<br />});</pre></p>
               </div>
               <div ng-if="vm.isNode()">
                 <p>{{::'Configure the ExceptionlessClient with your Exceptionless API key:' | translate}}
-                <pre>var client = require('exceptionless').ExceptionlessClient.default;<br />client.config.apiKey = '{{::vm.apiKey}}';</pre></p>
+                <pre>import { Exceptionless } from "@exceptionless/node";<br /><br />await Exceptionless.startup(c => {<br />&nbsp;&nbsp;c.apiKey = "{{::vm.apiKey}}";<br />});</pre></p>
               </div>
             </li>
             <li ng-if="vm.isDotNet()" style="margin-top: 15px;" >
@@ -98,7 +94,7 @@ Invoke-RestMethod -Uri "{{::vm.serverUrl}}/api/v2/events" -Method "Post" -Body $
           <p ng-if="vm.currentProjectType.key"><strong>{{::"That's it!" | translate}}</strong>
             <span ng-if="vm.isDotNet() || vm.isJavaScript()">{{::'Your project should now automatically be sending all unhandled exceptions to Exceptionless!' | translate}}</span>
             <span ng-if="vm.isDotNet()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://exceptionless.com/docs/clients/dotnet/sending-events/', sampleCode: 'ex.ToExceptionless().Submit()'}"></span>
-            <span ng-if="vm.isJavaScript()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://exceptionless.com/docs/clients/javascript/sending-events/', sampleCode: 'client.submitException(ex);'}"></span>
+            <span ng-if="vm.isJavaScript()" ng-bind-html="'Notice_Submit_Exception' | translate:{docUrl: 'https://exceptionless.com/docs/clients/javascript/sending-events/', sampleCode: 'await Exceptionless.submitException(ex);'}"></span>
           </p>
 
           <div class="alert alert-success" ng-if="vm.currentProjectType.key">
