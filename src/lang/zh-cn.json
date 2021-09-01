@@ -554,6 +554,8 @@
     "An error occurred while remove the admin role.":"在移除管理员角色的过程中出现了错误。",
 
     "Log in":"登录",
+    "after": "后",
+    "before": "以前",
     "with":"与",
     "OR":"或者",
     "Login with":"登录",

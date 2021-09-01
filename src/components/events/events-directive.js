@@ -11,8 +11,16 @@
           settings: '='
         },
         templateUrl: 'components/events/events-directive.tpl.html',
-        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'translateService', function ($ExceptionlessClient, $window, $state, $stateParams, eventsActionsService, filterService, linkService, notificationService, paginationService, translateService) {
+        controller: ['$ExceptionlessClient', '$window', '$state', '$stateParams', '$translate', 'eventsActionsService', 'filterService', 'linkService', 'notificationService', 'paginationService', 'translateService', function ($ExceptionlessClient, $window, $state, $stateParams, $translate, eventsActionsService, filterService, linkService, notificationService, paginationService, translateService) {
           var vm = this;
+          function afterRelativeText(ev) {
+            return moment(ev.date).diff(vm.settings.relativeTo, 'milliseconds') >= 0 ? $translate.instant('after') + ' ' : '';
+          }
+
+          function beforeRelativeText(ev) {
+            return moment(ev.date).diff(vm.settings.relativeTo, 'milliseconds') < 0 ? ' ' + $translate.instant('before') : '';
+          }
+
           function canRefresh(data) {
             if (vm.refreshing || !data) {
               return false;
@@ -147,6 +155,8 @@
           this.$onInit = function $onInit() {
             vm._source = vm.settings.source + '.events';
             vm.actions = vm.settings.hideActions ? [] : eventsActionsService.getActions();
+            vm.afterRelativeText = afterRelativeText;
+            vm.beforeRelativeText = beforeRelativeText;
             vm.canRefresh = canRefresh;
             vm.currentEventId = vm.settings.eventId;
             vm.events = [];
