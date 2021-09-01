@@ -215,7 +215,7 @@
           return response;
         }
 
-        return eventService.count('cardinality:user', true, optionsCallback).then(onSuccess);
+        return eventService.count('cardinality:user', false, optionsCallback).then(onSuccess);
       }
 
       function updateStats() {
@@ -296,7 +296,7 @@
         }
 
         var offset = filterService.getTimeOffset();
-        return eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(vm.chartOptions) + ') min:date max:date cardinality:user sum:count~1', true, optionsCallback).then(onSuccess).then(getProjectUserStats);
+        return eventService.count('date:(date' + (offset ? '^' + offset : '') + buildFields(vm.chartOptions) + ') min:date max:date cardinality:user sum:count~1', false, optionsCallback).then(onSuccess).then(getProjectUserStats);
       }
 
       function hasSelectedChartOption() {
