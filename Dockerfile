@@ -1,4 +1,4 @@
-FROM buildkite/puppeteer:v1.15.0 AS base
+FROM buildkite/puppeteer:10.0.0 AS base
 WORKDIR /app
 
 RUN apt-get update \
