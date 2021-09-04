@@ -40,6 +40,6 @@
     "traceur": "0.0.111"
   },
   "dependencies": {
-    "grunt": "^1.4.1"
+    "gulp": "4.0.2"
   }
 }

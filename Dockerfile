@@ -1,7 +1,7 @@
-FROM buildkite/puppeteer:10.0.0 AS base
+FROM buildkite/puppeteer:v1.15.0 AS base
 WORKDIR /app
 
-RUN apt-get update -y --allow-releaseinfo-change \
+RUN apt-get update -y \
      && apt-get install -y git --no-install-recommends
 
 COPY src/package.json src/package-lock.json src/bower.json src/.bowerrc ./
