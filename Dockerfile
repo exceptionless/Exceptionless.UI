@@ -47,6 +47,7 @@ COPY update-config.sh /usr/local/bin/update-config
 COPY nginx-site.conf /etc/nginx/conf.d/default.conf
 
 RUN chmod +x /usr/local/bin/bootstrap && \
+  chmod +x /usr/local/bin/update-config && \
   echo "daemon off;" >> /etc/nginx/nginx.conf
 
 ENTRYPOINT [ "bootstrap" ]
