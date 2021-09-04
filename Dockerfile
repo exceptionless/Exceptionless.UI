@@ -43,6 +43,7 @@ FROM nginx:stable as ui
 WORKDIR /app
 COPY --from=build /app/dist ./
 COPY bootstrap.sh /usr/local/bin/bootstrap
+COPY update-config.sh /usr/local/bin/update-config
 COPY nginx-site.conf /etc/nginx/conf.d/default.conf
 
 RUN chmod +x /usr/local/bin/bootstrap && \
