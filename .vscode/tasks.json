@@ -8,8 +8,9 @@
                 "npm install",
                 "bower install"
             ],
-            "command": "node_modules/.bin/grunt",
+            "command": "npx",
             "args": [
+                "grunt",
                 "build"
             ],
             "group": {
@@ -28,8 +29,9 @@
             "type": "shell",
             "label": "test",
             "dependsOn": "build",
-            "command": "node_modules/.bin/grunt",
+            "command": "npx",
             "args": [
+                "grunt",
                 "test"
             ],
             "group": {
@@ -43,8 +45,9 @@
         {
             "type": "shell",
             "label": "serve",
-            "command": "node_modules/.bin/grunt",
+            "command": "npx",
             "args": [
+                "grunt",
                 "serve"
             ],
             "options": {
@@ -63,8 +66,9 @@
             "type": "shell",
             "label": "bower install",
             "dependsOn": "npm install",
-            "command": "node_modules/.bin/bower",
+            "command": "npx",
             "args": [
+                "bower",
                 "install"
             ],
             "options": {
