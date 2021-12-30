@@ -56,9 +56,11 @@
           vm.copied = copied;
           vm.canPromote = $scope.canPromote !== false;
           vm.demoteTab = demoteTab;
-          vm.data = getData($scope.data, $scope.excludedKeys);
+          vm.data = $scope.data;
           vm.hasData = typeof vm.data !== 'undefined' && !angular.equals({}, vm.data);
           vm.data_json = (vm.hasData ? angular.toJson(vm.data) : '');
+          vm.filteredData = getData(vm.data, $scope.excludedKeys);
+          vm.hasFilteredData = typeof vm.filteredData !== 'undefined' && !angular.equals({}, vm.filteredData);
           vm.isPromoted = $scope.isPromoted === true;
           vm.promoteTab = promoteTab;
           vm.showRaw = false;
