@@ -381,7 +381,7 @@
     "Notice_Install_Node_Package":"通过 <a href=\"https://www.npmjs.com\" target=\"_blank\">Node 程序包管理器</a> 安装 Exceptionless ：",
     "Notice_Update_ApiKey":"在项目中的 {{config}} 文件中找到 <code>&lt;exceptionless apiKey=\"API_KEY_HERE\" /&gt;</code> 部分并使用您的 Exceptionless 相应项目的 API 密钥替换：",
     "Notice_Application_Startup_NetFx":"在您的应用程序的启动文件中引入 <code>Exceptionless</code> 命名空间，然后通过 API 密钥执行 <code>ExceptionlessClient.Default.Startup(\"{{apiKey}}\")</code> 方法。",
-    "Notice_Application_Startup_NetCore":"在您的应用程序的启动文件中引入 <code>Exceptionless</code> 命名空间，然后通过 API 密钥执行 <code>app.UseExceptionless(\"{{apiKey}}\")</code> 方法。",
+    "Notice_Application_Startup_NetCore":"导入 <code>Exceptionless</code> 命名空间并在 ConfigureServices 方法中调用 <code>services.AddExceptionless(\"{{apiKey}}\")</code> 方法。 接下来，在应用程序启动期间调用配置中的 <code>app.UseExceptionless()</code> 方法。",
     "Notice_Application_Startup_Nancy":"在您的 Nancy 引导程序中引入 <code>Exceptionless</code> 命名空间，然后在 ApplicationStartup 方法中通过 Nancy.Bootstrapper.IPipelines 类型的实例调用 <code>Exceptionless.ExceptionlessClient.Default.RegisterNancy(pipelines)</code> 方法。",
     "Notice_Application_Startup_Windows":"在您的应用程序的启动文件中引入 <code>Exceptionless</code> 命名空间， 然后执行 <code>ExceptionlessClient.Default.Register()</code> 方法。",
     "Notice_Application_Startup_WebApi":"在您的应用程序的启动文件中引入 <code>Exceptionless</code> 命名空间， 然后通过 HttpConfiguration 类型的实例调用 <code>ExceptionlessClient.Default.RegisterWebApi(config)</code> 方法。",
