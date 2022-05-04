@@ -60,4 +60,6 @@ echo "$config"
 
 checksum=`echo -n $config | md5sum | cut -c 1-32`
 echo "$config_header$config$config_footer" > "app.config.$checksum.js"
-sed -i -E "s/app\.config\..+\.js/app.config.$checksum.js/" index.html
+
+CONTENT=$(cat index.html)
+echo "$CONTENT" | sed -E "s/app\.config\..+\.js/app.config.$checksum.js/" > index.html
