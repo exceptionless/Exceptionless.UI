@@ -112,7 +112,7 @@
               return;
             }
 
-            if (organization.is_over_hourly_limit === true) {
+            if (organization.is_throttled === true || organization.is_over_hourly_limit === true) {
               vm.hourlyOverageOrganizations.push(organization);
               return;
             }
