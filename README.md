@@ -20,7 +20,7 @@ If you would rather host Exceptionless yourself, you will need to follow the [se
 
 _In appreciation for anyone who submits a non-trivial pull request, we will give you a free [Exceptionless](https://exceptionless.io) paid plan for a year. After your pull request is accepted, simply send an email to team@exceptionless.io with the name of your organization and we will upgrade you to a paid plan._
 
-Please read the [contributing document](https://github.com/exceptionless/Exceptionless/blob/master/CONTRIBUTING.md) and follow the steps below to start configuring your Exceptionless development environment.
+Please read the [contributing document](https://github.com/exceptionless/Exceptionless/blob/main/CONTRIBUTING.md) and follow the steps below to start configuring your Exceptionless development environment.
 
 1. You will need to clone this repo.
 2. Change into the `src` directory: `cd src`.

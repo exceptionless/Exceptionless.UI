@@ -71,7 +71,7 @@ jobs:
       run: |
         git clone https://github.com/exceptionless/Exceptionless.git helm
         cd helm
-        git checkout master
+        git checkout main
     - name: Deploy Changes to Production Environment
       if: startsWith(github.ref, 'refs/tags/v')
       run: |

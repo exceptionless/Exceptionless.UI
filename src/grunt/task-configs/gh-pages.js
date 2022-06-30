@@ -1,6 +1,6 @@
 /* jslint node: true */
 module.exports = function () {
-  var branch = process.env.APPVEYOR_REPO_BRANCH || 'master';
+  var branch = process.env.APPVEYOR_REPO_BRANCH || 'main';
   if (process.env.APPVEYOR_PULL_REQUEST_NUMBER) {
     branch = 'pull/' + process.env.APPVEYOR_PULL_REQUEST_NUMBER;
   }
