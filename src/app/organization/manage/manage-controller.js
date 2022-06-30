@@ -73,7 +73,7 @@
             var bonusEvents = moment.utc().isBefore(moment.utc(organization.bonus_expiration)) ? organization.bonus_events_per_month : 0;
             var usage = organization.usage && organization.usage[vm.organization.usage.length - 1];
             if (usage && moment.utc(usage.date).isSame(moment.utc().startOf('month'))) {
-              var remaining = usage.limit - (usage.total - usage.blocked);
+              var remaining = usage.limit - usage.total;
               return remaining > 0 ? remaining : 0;
             }
 
@@ -81,24 +81,28 @@
           }
 
           vm.organization = response.data.plain();
-          vm.organization.usage = vm.organization.usage || [{ date: moment.utc().startOf('month').toISOString(), total: 0, blocked: 0, limit: vm.organization.max_events_per_month, too_big: 0 }];
+          vm.organization.usage = vm.organization.usage || [{ date: moment.utc().startOf('month').toISOString(), total: 0, discarded: 0, blocked: 0, limit: vm.organization.max_events_per_month, too_big: 0 }];
           vm.hasMonthlyUsage = vm.organization.max_events_per_month > 0;
           vm.remainingEventLimit = getRemainingEventLimit(vm.organization);
           vm.canChangePlan = !!STRIPE_PUBLISHABLE_KEY && vm.organization;
 
           vm.chart.options.series[0].data = vm.organization.usage.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.total - item.blocked - item.too_big, data: item};
+            return {x: moment.utc(item.date).unix(), y: item.total, data: item};
           });
 
           vm.chart.options.series[1].data = vm.organization.usage.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.blocked, data: item};
+            return { x: moment.utc(item.date).unix(), y: item.discarded, data: item };
           });
 
           vm.chart.options.series[2].data = vm.organization.usage.map(function (item) {
-            return {x: moment.utc(item.date).unix(), y: item.too_big, data: item};
+            return {x: moment.utc(item.date).unix(), y: item.blocked, data: item};
           });
 
           vm.chart.options.series[3].data = vm.organization.usage.map(function (item) {
+            return {x: moment.utc(item.date).unix(), y: item.too_big, data: item};
+          });
+
+          vm.chart.options.series[4].data = vm.organization.usage.map(function (item) {
             return {x: moment.utc(item.date).unix(), y: item.limit, data: item};
           });
 
@@ -187,8 +191,12 @@
             padding: {top: 0.085},
             renderer: 'multi',
             series: [{
-              name: translateService.T('Allowed'),
+              name: translateService.T('Total'),
               color: '#a4d56f',
+              renderer: 'stack'
+            }, {
+              name: translateService.T('Discarded'),
+              color: '#c9c9c9',
               renderer: 'stack'
             }, {
               name: translateService.T('Blocked'),
@@ -218,8 +226,6 @@
                   var swatch = '<span class="detail-swatch" style="background-color: ' + d.series.color.replace('0.5', '1') + '"></span>';
                   content += swatch + $filter('number')(d.formattedYValue) + ' ' + d.series.name + '<br />';
                 }, this);
-
-                content += '<span class="detail-swatch"></span>' + $filter('number')(args.detail[0].value.data.total) + ' Total<br />';
 
                 var xLabel = document.createElement('div');
                 xLabel.className = 'x_label';
