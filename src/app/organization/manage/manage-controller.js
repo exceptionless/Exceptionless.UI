@@ -289,7 +289,7 @@
         };
         vm.leaveOrganization = leaveOrganization;
         // NOTE: this is currently the end of each month until we change our system to use the plan changed date.
-        vm.next_billing_date = moment().startOf('month').add(1, 'months').toDate();
+        vm.next_billing_date = moment.utc().startOf('month').add(1, 'months').toDate();
         vm.organization = {};
         vm.organizationForm = {};
         vm.projects = {

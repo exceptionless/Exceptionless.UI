@@ -570,7 +570,7 @@
         vm.hasMonthlyUsage = true;
         vm.hasPremiumFeatures = false;
         vm.exclude_private_information = false;
-        vm.next_billing_date = moment().startOf('month').add(1, 'months').toDate();
+        vm.next_billing_date = moment.utc().startOf('month').add(1, 'months').toDate();
         vm.organization = {};
         vm.project = {};
         vm.projectForm = {};
