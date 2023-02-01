@@ -514,7 +514,7 @@
       }
 
       function showAllTimeEvents() {
-        return vm.stats.events != vm.stack.total_occurrences;
+        return vm.stats.events !== vm.stack.total_occurrences;
       }
 
       function showAllTimeFirstOccurrence() {
