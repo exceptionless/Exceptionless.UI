@@ -513,6 +513,21 @@
         return vm.stack.occurrences_are_critical;
       }
 
+      function showAllTimeEvents() {
+        return vm.stats.events != vm.stack.total_occurrences;
+      }
+
+      function showAllTimeFirstOccurrence() {
+        return !moment(vm.stats.first_occurrence).isSame(moment(vm.stack.first_occurrence));
+      }
+
+      function showAllTimeLastOccurrence() {
+        return showAllTimeFirstOccurrence() || !moment(vm.stats.last_occurrence).isSame(moment(vm.stack.last_occurrence));
+      }
+
+      function showAllTimeRow() {
+        return vm.stack.first_occurrence && showAllTimeEvents() || showAllTimeFirstOccurrence() || showAllTimeLastOccurrence();
+      }
 
       this.$onInit = function $onInit() {
         vm._organizations = [];
@@ -650,6 +665,11 @@
           source: vm._source + '.Events'
         };
         vm.showActionIcons = showActionIcons;
+        vm.showAllTimeEvents = showAllTimeEvents;
+        vm.showAllTimeFirstOccurrence = showAllTimeFirstOccurrence;
+        vm.showAllTimeLastOccurrence = showAllTimeLastOccurrence;
+        vm.showAllTimeRow = showAllTimeRow;
+
         vm.stack = {};
         vm.stats = {
           events: 0,
