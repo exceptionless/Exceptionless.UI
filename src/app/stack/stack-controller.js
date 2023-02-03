@@ -248,7 +248,7 @@
           var results = response.data.plain();
           vm._users = getAggregationValue(results, 'cardinality_user', 0);
           vm.stats = {
-            events: $filter('number')(getAggregationValue(results, 'sum_count', 0), 0),
+            events: getAggregationValue(results, 'sum_count', 0),
             users: buildUserStat(vm._users, vm._total_users),
             usersTitle: buildUserStatTitle(vm._users, vm._total_users),
             first_occurrence: getAggregationValue(results, 'min_date'),

@@ -14,7 +14,7 @@
                 <span class="title">{{::'Events' | translate}}</span>
                 <span class="sub">
                   <abbr title="{{::'In Date Range' | translate}}">
-                    {{vm.stats.events}}
+                    {{vm.stats.events | number:0}}
                   </abbr>
                   <span class="subAlternative" ng-if="vm.showAllTimeRow()">
                     <abbr title="{{::'All Time' | translate}}" ng-if="vm.showAllTimeEvents()">{{vm.stack.total_occurrences | number:0}}</abbr>&nbsp
