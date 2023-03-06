@@ -6,6 +6,8 @@
 
 Exceptionless User Interface
 
+> __Warning__ This repository has been archived and is no longer maintained. All the source code and issues have been moved to https://github.com/exceptionless/Exceptionless. Please use the new repository for any future inquiries or contributions. Thank you for your interest and support. 
+
 ## Using Exceptionless
 
 Refer to the [Exceptionless documentation](https://exceptionless.com/docs/getting-started/).
